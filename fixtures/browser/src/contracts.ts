@@ -15,5 +15,7 @@ declare global {
     __fixture?: FixtureControl;
     __beforeHydrate?: Element[];
     __mounted?: boolean;
+    __hmrSetups?: number;
+    __hmrToken?: string;
   }
 }

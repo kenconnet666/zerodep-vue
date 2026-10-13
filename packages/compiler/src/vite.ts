@@ -7,6 +7,8 @@ import { createFilter, normalizePath } from 'vite';
 import type { FilterPattern, Plugin } from 'vite';
 import jsx from './index.ts';
 import type { CompilerOptions } from './index.ts';
+import { transformHot } from './hot-transform.ts';
+import type { HotTransform } from './hot-transform.ts';
 
 /** Vue VDOM TSX 的 Vite 入口；与 Babel 入口共享全部 JSX 选项。 */
 export interface ViteOptions extends CompilerOptions {
@@ -21,6 +23,7 @@ export interface ViteOptions extends CompilerOptions {
 interface ComponentExport {
   local: string;
   exported: string;
+  own: boolean;
 }
 
 const ssrId = '\0zerodep-vue:ssr-register';
@@ -39,7 +42,10 @@ export function register(component, filename) {
  * HMR/SSR 的组件发现参考官方 vite-plugin-vue-jsx 的固定快照。
  * 使用 import binding 身份识别 defineComponent，避免误改同名业务函数。
  */
-function componentMetadata(exports: ComponentExport[]): PluginObject {
+function componentMetadata(
+  exports: ComponentExport[],
+  hot?: (value: HotTransform | undefined) => void,
+): PluginObject {
   return {
     visitor: {
       Program: {
@@ -73,7 +79,7 @@ function componentMetadata(exports: ComponentExport[]): PluginObject {
               t.exportDefaultDeclaration(t.cloneNode(name)),
             ]);
           }
-          const locals = new Set<string>();
+          const locals = new Map<string, boolean>();
           for (const statement of program.node.body) {
             const declaration = t.isExportNamedDeclaration(statement)
               ? statement.declaration
@@ -81,7 +87,14 @@ function componentMetadata(exports: ComponentExport[]): PluginObject {
             if (!t.isVariableDeclaration(declaration)) continue;
             for (const item of declaration.declarations) {
               if (!t.isIdentifier(item.id) || !isComponent(item.init)) continue;
-              locals.add(item.id.name);
+              const binding =
+                t.isCallExpression(item.init) && t.isIdentifier(item.init.callee)
+                  ? program.scope.getBinding(item.init.callee.name)
+                  : undefined;
+              const own =
+                binding?.path.parentPath?.isImportDeclaration() &&
+                binding.path.parentPath.node.source.value !== 'vue';
+              locals.set(item.id.name, !!own);
               if (item.init) t.addComment(item.init, 'leading', '#__PURE__');
             }
           }
@@ -91,12 +104,20 @@ function componentMetadata(exports: ComponentExport[]): PluginObject {
               t.isIdentifier(statement.declaration) &&
               locals.has(statement.declaration.name)
             ) {
-              exports.push({ local: statement.declaration.name, exported: 'default' });
+              exports.push({
+                local: statement.declaration.name,
+                exported: 'default',
+                own: locals.get(statement.declaration.name)!,
+              });
             } else if (t.isExportNamedDeclaration(statement)) {
               if (t.isVariableDeclaration(statement.declaration)) {
                 for (const item of statement.declaration.declarations) {
                   if (t.isIdentifier(item.id) && locals.has(item.id.name))
-                    exports.push({ local: item.id.name, exported: item.id.name });
+                    exports.push({
+                      local: item.id.name,
+                      exported: item.id.name,
+                      own: locals.get(item.id.name)!,
+                    });
                 }
               }
               if (statement.source) continue;
@@ -111,10 +132,12 @@ function componentMetadata(exports: ComponentExport[]): PluginObject {
                     exported: t.isIdentifier(specifier.exported)
                       ? specifier.exported.name
                       : specifier.exported.value,
+                    own: locals.get(specifier.local.name)!,
                   });
               }
             }
           }
+          hot?.(transformHot(program));
         },
       },
     },
@@ -162,13 +185,26 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
       if (!filter(file)) return;
       if (!/\.[jt]sx$/.test(file) && !code.includes('@zerodep-vue/')) return;
       const exports: ComponentExport[] = [];
+      let hot: HotTransform | undefined;
       const result = await transformAsync(code, {
         filename: file,
         sourceFileName: normalizePath(file),
         configFile: false,
         babelrc: false,
         sourceMaps,
-        plugins: [[jsx, jsxOptions], ...babelPlugins, () => componentMetadata(exports)],
+        plugins: [
+          [jsx, jsxOptions],
+          ...babelPlugins,
+          () =>
+            componentMetadata(
+              exports,
+              development && !context?.ssr
+                ? (value) => {
+                    hot = value;
+                  }
+                : undefined,
+            ),
+        ],
         presets: /\.tsx?$/.test(file) ? [presetTypeScript] : [],
       });
       if (!result?.code) return;
@@ -178,8 +214,12 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
         for (const component of new Set(exports.map((item) => item.local))) {
           output += `\n__zdRegister(${component}, ${JSON.stringify(normalizePath(relative(root, file)))});`;
         }
-      } else if (development && exports.length) {
+      } else if (development && (exports.length || hot?.managed)) {
         const updates: string[] = [];
+        if (exports.length)
+          updates.push(
+            `if (${exports.map((item) => `!updated[${JSON.stringify(item.exported)}]`).join(' || ')}) { import.meta.hot.invalidate('Component exports changed'); return; }`,
+          );
         for (const item of exports) {
           const key = createHash('sha256')
             .update(normalizePath(file) + ':' + item.exported)
@@ -188,10 +228,17 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
           output += `\n${item.local}.__file = ${JSON.stringify(normalizePath(file))};`;
           output += `\n${item.local}.__hmrId = ${JSON.stringify(key)};`;
           output += `\n__VUE_HMR_RUNTIME__.createRecord(${JSON.stringify(key)}, ${item.local});`;
+          const reload = `__VUE_HMR_RUNTIME__.reload(${JSON.stringify(key)}, updated[${JSON.stringify(item.exported)}]);`;
           updates.push(
-            `__VUE_HMR_RUNTIME__.reload(${JSON.stringify(key)}, updated[${JSON.stringify(item.exported)}]);`,
+            item.own && hot?.managed
+              ? `if (!${hot.compatible}(import.meta.hot, ${JSON.stringify(hot.signature)})) ${reload}`
+              : reload,
           );
         }
+        if (!exports.length && hot)
+          updates.push(
+            `if (!${hot.compatible}(import.meta.hot, ${JSON.stringify(hot.signature)})) import.meta.hot.invalidate();`,
+          );
         output += `\nif (import.meta.hot) import.meta.hot.accept((updated) => { if (updated) { ${updates.join('\n')} } });`;
       }
       return { code: output, map: result.map ? JSON.stringify(result.map) : null };

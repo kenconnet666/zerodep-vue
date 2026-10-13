@@ -9,3 +9,5 @@ Naive 声明从同一上游生产源码用 TypeScript 6.0.3 发射，供夹具�
 完整浏览器测试在远程执行。本地需要定点排查时，先取得对应提交的 Naive artifact，再用 `pnpm --filter @zerodep-vue/fixture-browser test --project chromium -g "用例名称"` 运行单项。服务仅监听 127.0.0.1:4178，测试框架负责启停，不复用不明来源的服务。完整包消费、HMR 状态保留和长期压力验证有独立验收边界，此夹具的现有通过不能代替它们。
 
 配置依据：[Playwright 服务生命周期](https://playwright.dev/docs/test-webserver)、[浏览器项目](https://playwright.dev/docs/test-projects)。
+
+HMR 使用 `PW_SUITE=hmr` 选择独立用例；服务将 `hmr/Subject.tsx` 复制到 `.generated/hmr` 后才启动，测试修改副本并在 finally 恢复。CI 分开运行 Chromium/Firefox，防止故意制造的语法错误影响普通混用验收。需要本地定点验证时可通过 `PW_CHANNEL=msedge` 使用已安装的 Edge，仅作用于 Chromium 项目；远程继续使用锁定的 Playwright 浏览器。

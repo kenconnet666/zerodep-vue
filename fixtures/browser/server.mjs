@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile } from 'node:fs/promises';
 import { createServer as httpServer } from 'node:http';
 import { extname, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -52,6 +52,8 @@ if (production) {
   ({ render } = await import(pathToFileURL(resolve(root, '.generated/server/render.js')).href));
   template = await readFile(resolve(clientRoot, 'index.html'), 'utf8');
 } else {
+  await mkdir(resolve(root, '.generated/hmr'), { recursive: true });
+  await copyFile(resolve(root, 'hmr/Subject.tsx'), resolve(root, '.generated/hmr/Subject.tsx'));
   vite = await createServer({ configFile, server: { middlewareMode: true } });
   template = await readFile(resolve(root, 'index.html'), 'utf8');
 }
@@ -71,7 +73,11 @@ const handler = async (request, response) => {
       response.end('ready');
       return;
     }
-    if (url.pathname !== '/' && url.pathname !== '/ssr') {
+    if (
+      url.pathname !== '/' &&
+      url.pathname !== '/ssr' &&
+      !(url.pathname === '/hmr' && !production)
+    ) {
       const path = resolve(clientRoot, '.' + decodeURIComponent(url.pathname));
       if (production && path.startsWith(clientRoot + sep)) {
         try {
@@ -95,7 +101,9 @@ const handler = async (request, response) => {
     const renderer =
       render ?? (hydrate ? (await vite.ssrLoadModule('/src/render.ts')).render : undefined);
     const result = hydrate ? await renderer(initial) : { html: '', styles: '', teleports: '' };
-    let html = production ? template : await vite.transformIndexHtml(request.url, template);
+    const source =
+      url.pathname === '/hmr' ? template.replace('/src/client.ts', '/src/hmr-client.ts') : template;
+    let html = production ? source : await vite.transformIndexHtml(request.url, source);
     html = html
       .replace('<!--app-->', result.html)
       .replace('<!--styles-->', result.styles)

@@ -10,6 +10,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./hmr": {
+      "zerodep-vue-source": "./src/hmr.ts",
+      "types": "./dist/hmr.d.ts",
+      "import": "./dist/hmr.js"
+    },
     "./runtime": {
       "zerodep-vue-source": "./src/runtime.ts",
       "types": "./dist/runtime.d.ts",

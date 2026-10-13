@@ -9,6 +9,7 @@ export default defineConfig({
   resolve: {
     conditions: ['zerodep-vue-source', 'module', 'browser', 'development|production'],
     alias: {
+      '@fixture/hmr': fileURLToPath(new URL('./.generated/hmr/Subject.tsx', import.meta.url)),
       '@fixture/naive': fileURLToPath(
         new URL('../naive-ui/.generated/fork/bundle/naive.mjs', import.meta.url),
       ),

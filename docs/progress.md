@@ -15,6 +15,10 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前实施
 
+c5a7a6bcf0c5a2a79864f06169445c64a7f3caf4 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38472077730) 全部成功，包括可写模型约束、旧基线与四组真实浏览器混用。
+
+HMR 已实现独立 render/样式函数与原实例环境接线，初始化签名改变时交给 Vue reload。运行时保留 CSS 快照语义、稳定具名样式/变量/动画引用，模块级全局注册随签名变化或 prune 释放。编译及运行短测通过；本机已安装的 Edge 使用一个定点浏览器用例（5.5 秒测试主体）验证输入与 Select 展开状态、render/事件修改、语法错误恢复、12 次规则变化、setup 重建和卸载。远程新增独立 Chromium/Firefox HMR 两组，完整结果待本次提交。
+
 55a4c03fd244622cf7b8b2e59163c11ada4c1ea2 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38471174414) 全部成功，包含新增 development/production × Chromium/Firefox 四组实际交互、CSS 计算、Teleport 和 SSR/hydrate。每组使用同一提交转换的 Naive fork 产物并校验报告及 bundle SHA-256；未安装 Naive 预编译包代替。默认值词法作用域与局部类型修复也通过完整回归。
 
 可编辑 Ref 边界已进入验证：自有 JSX 复用 Vue computed 的类型标记排除 getter-only computed，保留可写 computed、明确只读展示输入和普通泛型回调推断。直接 .value 编辑及 v-model 的 prop 在读取时用 Vue isReadonly 检查来源，抛出带 prop 名的 ZV_READONLY_MODEL。局部类型正反例、编译识别及 Vue 原生只读/可写来源的短运行测试通过，完整回归交给本次提交。
@@ -57,9 +61,9 @@ bc109b70ee7a8ba4626e69c429e7cf818bbfb8be 的 [远程回归](https://github.com/k
 
 ## 后续工作
 
-运行时 CSS 已有对象/条件声明、完整属性组覆盖、null 清除、有序组合、结构化多绑定模板、关键字撤销/恢复、宿主、继承主题、变量组、动画与全局规则实现。完整浏览器及发布包验收仍未完成，不能把阶段性实现当作完整 CSS 产品验收。
+运行时 CSS 及四组混用浏览器验收已有通过证据；HMR 新任务、开发检查、发布包安装消费与最终稳定性审查仍需完成。
 
 - 完成组件边界回归：默认值依赖/诊断、局部类型与泛型、可写/只读 Ref、异步与 expose 的源码及发布类型体验。
 - 通过真实浏览器核实 CSS 组合、状态优先级、跨组件元数据、动画/全局资源生命周期及稳定性。
-- 建立真实浏览器混用、SSR/hydrate、主题 Teleport、HMR 状态保留和来源调试的完整验收。
+- 核对 HMR 远程结果，完成样式来源检查、source map 和稳定性审查。
 - 验证打包后安装消费、声明与注释、上游差异、接入文档及最终回归。不能将阶段性绿色结果标记为生产交付完成。
