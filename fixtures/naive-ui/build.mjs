@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile, copyFile } from 'node:fs/promises';
 import { basename, dirname, relative, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
+import { createHash } from 'node:crypto';
 import { transformAsync, types as t } from '@babel/core';
 import presetTypeScript from '@babel/preset-typescript';
 import officialJsx from '@vue/babel-plugin-jsx';
@@ -12,6 +13,7 @@ import { renderToString } from '@vue/server-renderer';
 import forkJsx from '../../packages/compiler/src/index.ts';
 import { fixtureRoot, prepare, root, source, sourceRoot } from './prepare.mjs';
 import { inventory, productionFiles } from './inventory.mjs';
+import { emitDeclarations } from './declarations.mjs';
 
 const mode = process.argv[2];
 assert(['classic', 'official', 'fork'].includes(mode), 'Choose classic, official, or fork.');
@@ -140,6 +142,10 @@ try {
   );
   assert(html.includes('Source compiled button'));
   assert(html.includes('shared-state'));
+  if (mode === 'fork') report.declarations = emitDeclarations(output);
+  report.bundleSha256 = createHash('sha256')
+    .update(await readFile(resolve(output, 'bundle/naive.mjs')))
+    .digest('hex');
   report.success = true;
   report.exports = Object.keys(library).length;
   report.ssr = true;

@@ -30,6 +30,7 @@
     "@babel/preset-typescript": "catalog:",
     "@modelcontextprotocol/sdk": "catalog:languageServices",
     "@types/node": "catalog:",
+    "@playwright/test": "catalog:",
     "@vue/server-renderer": "catalog:",
     "@zerodep-vue/compiler": "workspace:*",
     "prettier": "catalog:",

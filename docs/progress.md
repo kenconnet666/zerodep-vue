@@ -15,6 +15,12 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前实施
 
+6922299124943a12e92a8403e0c263e476e1d9d8 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38468559537) 全部成功，全局规则生命周期、SSR 读取停止和现有全部回归通过。
+
+真实浏览器混用夹具已建立，待本次 CI 首次完整执行：同一提交的 Naive fork 产物经来源与 SHA-256 核验后用于开发/生产 × Chromium/Firefox 四组。新增源码声明发射仅服务真实接口消费检查，不替代上游类型或运行验收。交互、实际 CSS 计算、主题 Teleport、请求隔离和 hydration 的失败轨迹会作为独立 artifact 保存，未取得结果前不宣称这些场景通过。
+
+浏览器夹具本地尚无本轮生成的 Naive 声明 artifact，因此 App.tsx 的 LSP 报告缺少 @fixture/naive 以及由此产生的回调上下文类型错误；没有用手写 any 声明掩盖。真实声明消费检查安排在远程 Naive fork 完成后的 browser 任务，服务脚本语法和 Actions 配置已做短检查。
+
 4fa7863a4b043914b65359344c74e72c4a5defb0 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38467772874) 全部成功，变量组、关键帧、发布类型构建、两种作者模式及旧 TSX 基线没有退化。
 
 css.global 已接入 Vue effectScope 与样式宿主，支持命名规则原位更新、源 Ref 替换、显式提前释放、作用域/宿主清理、名称冲突诊断与 SSR 采用。请求收集器保持全局/普通规则顺序，SSR watcher 在渲染结束停止但结果仍可输出。局部测试覆盖作用域停止、首次求值失败无遗留订阅、多所有者保护、请求隔离及原节点采用；完整回归交给本次提交的远程 CI。

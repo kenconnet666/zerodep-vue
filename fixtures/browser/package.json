@@ -1,0 +1,23 @@
+{
+  "name": "@zerodep-vue/fixture-browser",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit -p tsconfig.json",
+    "test": "playwright test --config playwright.config.ts"
+  },
+  "dependencies": {
+    "@zerodep-vue/css": "workspace:*",
+    "@zerodep-vue/tsx": "workspace:*",
+    "vue": "catalog:",
+    "@vue/server-renderer": "catalog:",
+    "@css-render/vue3-ssr": "catalog:naive"
+  },
+  "devDependencies": {
+    "@playwright/test": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}
