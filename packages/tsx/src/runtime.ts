@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance } from 'vue';
+import { defineComponent, getCurrentInstance, shallowReadonly } from 'vue';
 import type { ComponentOptions, SetupContext } from 'vue';
 
 /** 编译器与 CSS 边界共享标记，不通过组件名称猜测作者协议。 */
@@ -60,31 +60,35 @@ export function resolveProps(raw: Props, context: SetupContext, defaults: Defaul
 /** @internal rest 每次枚举当前 props/attrs，保留新增、删除和属性读取的 Vue 语义。 */
 export function restProps(props: Props, context: SetupContext, excluded: readonly string[]): Props {
   const omitted = new Set(excluded);
-  return new Proxy(Object.create(null) as Record<string, unknown>, {
-    get(_target, key) {
-      if (typeof key === 'string' && omitted.has(key)) return undefined;
-      return own(props, key) ? Reflect.get(props, key) : Reflect.get(context.attrs, key);
-    },
-    has(_target, key) {
-      return (
-        !(typeof key === 'string' && omitted.has(key)) &&
-        (own(props, key) || own(context.attrs, key))
-      );
-    },
-    ownKeys() {
-      return [...new Set([...Reflect.ownKeys(props), ...Reflect.ownKeys(context.attrs)])].filter(
-        (key) => typeof key !== 'string' || !omitted.has(key),
-      );
-    },
-    getOwnPropertyDescriptor(_target, key) {
-      if (
-        (typeof key !== 'string' || !omitted.has(key)) &&
-        (own(props, key) || own(context.attrs, key))
-      )
-        return { configurable: true, enumerable: true };
-    },
-    set() {
-      throw new TypeError('组件 rest props 只读。');
-    },
-  });
+  // Vue 对公开的只读代理会在构造 VNode 时复制 props。否则两个 VNode 共用实时对象，
+  // diff 时旧值已消失，属性删除和监听移除就无法被观察到。
+  return shallowReadonly(
+    new Proxy(Object.create(null) as Record<string, unknown>, {
+      get(_target, key) {
+        if (typeof key === 'string' && omitted.has(key)) return undefined;
+        return own(props, key) ? Reflect.get(props, key) : Reflect.get(context.attrs, key);
+      },
+      has(_target, key) {
+        return (
+          !(typeof key === 'string' && omitted.has(key)) &&
+          (own(props, key) || own(context.attrs, key))
+        );
+      },
+      ownKeys() {
+        return [...new Set([...Reflect.ownKeys(props), ...Reflect.ownKeys(context.attrs)])].filter(
+          (key) => typeof key !== 'string' || !omitted.has(key),
+        );
+      },
+      getOwnPropertyDescriptor(_target, key) {
+        if (
+          (typeof key !== 'string' || !omitted.has(key)) &&
+          (own(props, key) || own(context.attrs, key))
+        )
+          return { configurable: true, enumerable: true };
+      },
+      set() {
+        throw new TypeError('组件 rest props 只读。');
+      },
+    }),
+  );
 }

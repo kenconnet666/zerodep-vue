@@ -221,6 +221,13 @@ describe('_component', () => {
     props.value = {};
     await nextTick();
     expect(wrapper.get('button').attributes('title')).toBeUndefined();
+    await wrapper.get('button').trigger('click');
+    expect(calls).toBe(1);
+    props.value = { title: 'second', onClick: () => (calls += 2) };
+    await nextTick();
+    expect(wrapper.get('button').attributes('title')).toBe('second');
+    await wrapper.get('button').trigger('click');
+    expect(calls).toBe(3);
   });
 
   test('keeps early returns reactive and nested functions ordinary', async () => {
