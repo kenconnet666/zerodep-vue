@@ -9,6 +9,7 @@ import jsx from './index.ts';
 import type { CompilerOptions } from './index.ts';
 import { transformHot } from './hot-transform.ts';
 import type { HotTransform } from './hot-transform.ts';
+import { instrumentDevtools } from './devtools-transform.ts';
 
 /** Vue VDOM TSX 的 Vite 入口；与 Babel 入口共享全部 JSX 选项。 */
 export interface ViteOptions extends CompilerOptions {
@@ -44,6 +45,7 @@ export function register(component, filename) {
  */
 function componentMetadata(
   exports: ComponentExport[],
+  filename: string,
   hot?: (value: HotTransform | undefined) => void,
 ): PluginObject {
   return {
@@ -137,7 +139,10 @@ function componentMetadata(
               }
             }
           }
-          hot?.(transformHot(program));
+          if (hot) {
+            instrumentDevtools(program, normalizePath(filename));
+            hot(transformHot(program));
+          }
         },
       },
     },
@@ -198,6 +203,7 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
           () =>
             componentMetadata(
               exports,
+              file,
               development && !context?.ssr
                 ? (value) => {
                     hot = value;

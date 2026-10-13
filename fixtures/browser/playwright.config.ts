@@ -5,7 +5,12 @@ const browser = process.env.PW_BROWSER ?? 'local';
 const suite = process.env.PW_SUITE ?? 'mixed';
 export default defineConfig({
   testDir: './tests',
-  testMatch: suite === 'hmr' ? '**/hmr.spec.ts' : '**/mixed.spec.ts',
+  testMatch:
+    suite === 'hmr'
+      ? '**/hmr.spec.ts'
+      : suite === 'inspector'
+        ? '**/inspector.spec.ts'
+        : '**/mixed.spec.ts',
   fullyParallel: suite !== 'hmr',
   workers: suite === 'hmr' ? 1 : 2,
   forbidOnly: !!process.env.CI,

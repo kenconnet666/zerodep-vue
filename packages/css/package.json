@@ -10,6 +10,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./devtools": {
+      "zerodep-vue-source": "./src/devtools.ts",
+      "types": "./dist/devtools.d.ts",
+      "import": "./dist/devtools.js"
+    },
     "./hmr": {
       "zerodep-vue-source": "./src/hmr.ts",
       "types": "./dist/hmr.d.ts",
@@ -36,6 +41,7 @@
     "csstype": "catalog:",
     "@csstools/css-tokenizer": "catalog:",
     "@emotion/unitless": "catalog:",
+    "@vue/devtools-api": "catalog:",
     "postcss-selector-parser": "catalog:"
   },
   "peerDependencies": {
@@ -43,6 +49,7 @@
   },
   "devDependencies": {
     "typescript": "catalog:",
+    "vue-router": "catalog:",
     "vue": "catalog:"
   }
 }

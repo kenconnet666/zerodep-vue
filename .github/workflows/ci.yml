@@ -175,7 +175,7 @@ jobs:
           retention-days: 7
 
   hmr:
-    name: HMR (${{ matrix.browser }})
+    name: Development tools (${{ matrix.browser }})
     needs: naive
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -197,14 +197,22 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "naive-fork-$GITHUB_SHA" --dir .
-      - run: pnpm exec playwright install --with-deps "$PW_BROWSER"
+      - id: browser
+        run: pnpm exec playwright install --with-deps "$PW_BROWSER"
       - name: Verify preserved state, error recovery and resource cleanup
+        run: pnpm --filter @zerodep-vue/fixture-browser test --project "$PW_BROWSER"
+      - name: Verify real Vue DevTools inspector protocol and passive snapshots
+        if: always() && steps.browser.outcome == 'success'
+        env:
+          PW_SUITE: inspector
         run: pnpm --filter @zerodep-vue/fixture-browser test --project "$PW_BROWSER"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
-          name: hmr-${{ matrix.browser }}-${{ github.sha }}
-          path: test-results/browser/hmr/
+          name: development-tools-${{ matrix.browser }}-${{ github.sha }}
+          path: |
+            test-results/browser/hmr/
+            test-results/browser/inspector/
           if-no-files-found: warn
           retention-days: 7
 

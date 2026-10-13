@@ -76,7 +76,7 @@ const handler = async (request, response) => {
     if (
       url.pathname !== '/' &&
       url.pathname !== '/ssr' &&
-      !(url.pathname === '/hmr' && !production)
+      !(['/hmr', '/inspector'].includes(url.pathname) && !production)
     ) {
       const path = resolve(clientRoot, '.' + decodeURIComponent(url.pathname));
       if (production && path.startsWith(clientRoot + sep)) {
@@ -101,8 +101,13 @@ const handler = async (request, response) => {
     const renderer =
       render ?? (hydrate ? (await vite.ssrLoadModule('/src/render.ts')).render : undefined);
     const result = hydrate ? await renderer(initial) : { html: '', styles: '', teleports: '' };
-    const source =
-      url.pathname === '/hmr' ? template.replace('/src/client.ts', '/src/hmr-client.ts') : template;
+    const entry =
+      url.pathname === '/hmr'
+        ? '/src/hmr-client.ts'
+        : url.pathname === '/inspector'
+          ? '/src/inspector-client.ts'
+          : '/src/client.ts';
+    const source = template.replace('/src/client.ts', entry);
     let html = production ? source : await vite.transformIndexHtml(request.url, source);
     html = html
       .replace('<!--app-->', result.html)

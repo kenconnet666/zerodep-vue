@@ -19,6 +19,7 @@ import { cssHostKey } from './host.ts';
 import type { CssHost, GlobalLease } from './host.ts';
 import { hostFor } from './context.ts';
 import { validateFragment } from './syntax.ts';
+import { inspectionHooks } from './inspection.ts';
 
 /** 显式全局选择器映射；每个选择器内部沿用普通属性、状态分组和媒体条件。 */
 export type GlobalRules<T extends SystemKeywords = SystemKeywords> = Readonly<
@@ -29,7 +30,7 @@ export interface GlobalOptions {
   host?: CssHost;
 }
 
-function renderGlobal<T extends SystemKeywords>(rules: GlobalRules<T>): string {
+function renderGlobal<T extends SystemKeywords>(rules: GlobalRules<T>) {
   const entries: Declaration[] = [];
   for (const [selector, style] of Object.entries(rules)) {
     validateFragment(selector);
@@ -50,7 +51,7 @@ function renderGlobal<T extends SystemKeywords>(rules: GlobalRules<T>): string {
   const resolved = resolveClass({ [CLASS]: [{ declarations: entries }] }, new Map(), {
     literal: true,
   });
-  return resolved.resources.map((rule) => rule.cssText).join('') + resolved.cssText;
+  return resolved;
 }
 
 /**
@@ -76,19 +77,24 @@ export function globalCss<T extends SystemKeywords>(
   const effect = effectScope(true);
   let unregister: (() => void) | undefined;
   let stopped = false;
+  const inspection = inspectionHooks() ? {} : undefined;
   const stop = () => {
     if (stopped) return;
     stopped = true;
     effect.stop();
     lease?.release();
     unregister?.();
+    if (inspection) inspectionHooks()?.removeGlobal(inspection);
   };
   try {
     effect.run(() =>
       watchSyncEffect(() => {
-        const text = renderGlobal(unref(source));
+        const rules = unref(source);
+        const result = renderGlobal(rules);
+        const text = result.resources.map((rule) => rule.cssText).join('') + result.cssText;
         if (lease) lease.update(text);
         else lease = host.acquireGlobal(name, text, origin);
+        if (inspection) inspectionHooks()?.global(inspection, host, name, rules, result, instance);
       }),
     );
     unregister = host.onDispose(stop);

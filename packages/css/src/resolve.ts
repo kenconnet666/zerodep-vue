@@ -12,6 +12,7 @@ import type { ThemeReference } from './tokens.ts';
 import { ANIMATION, VARIABLE, isAnimation, isVariable } from './resource-tokens.ts';
 import type { CssAnimation } from './resource-tokens.ts';
 import type { CssRule } from './host.ts';
+import { inspectionHooks } from './inspection.ts';
 
 const wide = new Set(['initial', 'inherit', 'unset', 'revert', 'revert-layer']);
 type Part = string | { variable: number };
@@ -95,6 +96,9 @@ export function resolveClass(
   options: { namespace?: string; literal?: boolean } = {},
 ): ResolvedClass {
   const parts: ClassPart[] = [];
+  const observer = inspectionHooks();
+  const observedValues = observer ? new Map<Declaration, readonly string[]>() : undefined;
+  const observedFrames: ResolvedClass[] | undefined = observer ? [] : undefined;
   let hasCss = false;
   const flatten = (item: ClassValue): void => {
     if (item == null || item === false) return;
@@ -129,6 +133,7 @@ export function resolveClass(
         namespace: `${options.namespace ?? ''}animation:${ordinal}:${frame.at}`,
         ...(options.literal ? { literal: true } : {}),
       });
+      observedFrames?.push(frameStyle);
       dynamic ||= frameStyle.dynamic;
       Object.assign(resourceVariables, frameStyle.variables);
       const content = frameStyle.cssText
@@ -214,6 +219,12 @@ export function resolveClass(
         property: propertyName(property),
         parts,
       });
+    observedValues?.set(
+      declaration,
+      values.map((parts) =>
+        parts.map((part) => (typeof part === 'string' ? part : variables[part.variable])).join(''),
+      ),
+    );
   }
   const ruleName = prepared.length
     ? 'zv-' + hash((options.namespace ?? '') + JSON.stringify(prepared))
@@ -247,7 +258,7 @@ export function resolveClass(
       return block;
     })
     .join('');
-  return {
+  const result: ResolvedClass = {
     className: normalizeClass([...composed.classes, ruleName]),
     ruleName,
     cssText,
@@ -257,4 +268,6 @@ export function resolveClass(
     dynamic,
     declarations: composed.declarations,
   };
+  if (observer) observer.resolved(result, parts, observedValues!, reads, observedFrames!);
+  return result;
 }

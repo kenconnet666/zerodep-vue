@@ -64,8 +64,9 @@ test('HMR retains state for style/render edits, recovers after errors and remoun
     syntaxError = true;
     await writeFile(file, source + '\n const broken = ;');
     await expect(page.locator('vite-error-overlay')).toBeAttached();
-    await writeFile(file, source);
+    await change(source.replace('更新标题', '恢复标题'));
     await expect(page.locator('vite-error-overlay')).toHaveCount(0);
+    await expect(page.getByRole('heading')).toHaveText('恢复标题');
     await expect(input).toHaveValue('保持输入');
     syntaxError = false;
 

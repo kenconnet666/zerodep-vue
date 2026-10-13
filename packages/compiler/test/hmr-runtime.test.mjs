@@ -16,6 +16,14 @@ const context = () => ({
   },
 });
 
+test('test runners with an incomplete hot context retain ordinary evaluation', () => {
+  const style = css({ color: 'red' });
+  const runtime = registerModule({}, 'unit', { style: () => style, render: (env) => env.value });
+  assert.equal(runtime.style('style', {}, 'class'), style);
+  assert.equal(runtime.render('render', { value: 7 })(), 7);
+  assert.equal(compatible({}, 'unit'), false);
+});
+
 test('hot factories preserve closure writes and setup CSS snapshot semantics', () => {
   const hot = context();
   const count = ref(1);

@@ -4,9 +4,9 @@
 
 CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提供，主题通过继承扩展，并提供贯穿对象样式和关键字视图的泛型 T 入口。属性、关键字与主题成员的类型提示、中文说明及声明消费体验是交付要求；作者仍使用 class，绑定对应的内联 style 由编译器隐式接线。
 
-官方 JSX 源码 fork、Vite 入口、上游双基线和 Naive UI 301 个生产 TSX 的三条编译/构建/SSR 路径已通过远程验证。_component、For、props/default/children、class/bx 接线已有实现与阶段证据；当前继续验证系统关键字、继承主题和完整工具，最终浏览器验收仍在实施。准确进度见 [实施记录](docs/progress.md)，作者写法见 [authoring.md](docs/authoring.md)、[CSS 文档](docs/css.md) 和 [主题文档](docs/themes.md)。
+官方 JSX 源码 fork、Vite 入口、上游双基线和 Naive UI 301 个生产 TSX 的三条编译/构建/SSR 路径已通过远程验证。_component、For、props/default/children、class/bx、系统/继承主题、变量组、动画和全局规则已有实现。开发/生产 × Chromium/Firefox 的实际混用和 SSR/hydrate 已通过；HMR 与开发检查继续独立验收，发布包安装消费和最终审查仍需完成。准确进度见 [实施记录](docs/progress.md)，作者写法见 [authoring.md](docs/authoring.md)、[CSS 文档](docs/css.md) 和 [主题文档](docs/themes.md)。
 
-已有 Vue TSX 项目可将 Vite 配置中的 JSX 插件替换为 `@zerodep-vue/compiler/vite` 的默认导出；Babel 直接使用 `@zerodep-vue/compiler`。选项沿用官方 JSX，Vite 入口另提供 include、exclude 和 babelPlugins。不要同时保留另一份 Vue JSX 转换；原有 Vue SFC 插件不受此限制。开发态提供普通 Vue 组件 HMR 和 SSR 模块登记，增强的状态保留体验随作者能力继续实施。
+已有 Vue TSX 项目可将 Vite 配置中的 JSX 插件替换为 `@zerodep-vue/compiler/vite` 的默认导出；Babel 直接使用 `@zerodep-vue/compiler`。选项沿用官方 JSX，Vite 入口另提供 include、exclude 和 babelPlugins。不要同时保留另一份 Vue JSX 转换；原有 Vue SFC 插件不受此限制。开发态更新行为见 [HMR](docs/hmr.md)，源码定位、绑定消费值和 Vue DevTools 集成见 [开发检查](docs/devtools.md)。
 
 ## 环境
 
@@ -35,7 +35,7 @@ pnpm exec prettier --check README.md .github/workflows/ci.yml
 
 上面的文件路径是示例，按本次改动选择对应文件。修改完成后，本地只查相关 LSP 诊断或运行必要的少量短测试；小型、确定性修改通过即可提交。不要将全仓类型检查、完整构建或全量 LSP 验证作为每次本地提交的前置步骤。
 
-完整验证由 [GitHub Actions CI](.github/workflows/ci.yml) 负责：格式、四包类型、编译/SSR、构建入口，以及 Linux/Windows LSP 使用独立 job 并行运行，最后由 CI result 汇总。当前覆盖现有实现，完整上游、Naive UI 和浏览器验收按蓝图建立，不能用当前基础 CI 的绿色结果代替最终产品验收。
+完整验证由 [GitHub Actions CI](.github/workflows/ci.yml) 负责：包与夹具类型、编译/SSR、上游分片、运行时 CSS、Naive 三组完整源码构建、四组浏览器、开发工具、包入口及 Linux/Windows LSP 分工运行，最后由 CI result 汇总。每个任务覆盖的行为及准确提交见实施记录，最终交付还要完成蓝图的全部退出条件。
 
 每个可审阅阶段提交并推送。准备下一次提交时，先按 SHA 检查上一轮 CI，读取失败日志并修复实际问题。推送后继续工作，不等待长测试、不反复轮询；pending、取消与通过分别报告。操作与任务划分见 [远程 CI 工作流](docs/ci.md)。
 

@@ -20,6 +20,8 @@ catalog:
   '@vue/compiler-sfc': 3.5.43
   '@vue/server-renderer': 3.5.43
   '@vue/shared': 3.5.43
+  '@vue/devtools-api': 8.2.1
+  '@vue/devtools-kit': 8.2.1
   '@vue/test-utils': 2.4.11
   csstype: 3.2.3
   '@csstools/css-tokenizer': 4.0.2
@@ -31,6 +33,8 @@ catalog:
   vite: 8.3.1
   vitest: 4.1.9
   vue: 3.5.43
+  # DevTools 上游声明引用路由类型，仅供工具库自身的开发期类型检查。
+  vue-router: 4.6.4
 
 catalogs:
   naive:

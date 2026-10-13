@@ -17,6 +17,11 @@
       "import": "./dist/vite.js",
       "default": "./dist/vite.js"
     },
+    "./devtools": {
+      "zerodep-vue-source": "./src/devtools.ts",
+      "types": "./dist/devtools.d.ts",
+      "import": "./dist/devtools.js"
+    },
     "./hmr": {
       "zerodep-vue-source": "./src/hmr.ts",
       "types": "./dist/hmr.d.ts",

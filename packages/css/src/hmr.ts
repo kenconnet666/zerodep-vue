@@ -26,7 +26,22 @@ function dispose(state: ModuleState | undefined) {
 }
 
 /** @internal 当前 Vite module.data 保存单个版本，不建立模块或实例历史表。 */
-export function registerModule(hot: HotContext, signature: string, factories: Factories) {
+export function registerModule(
+  hot: HotContext | undefined,
+  signature: string,
+  factories: Factories,
+) {
+  // Vitest 等执行器可能提供不完整的 import.meta.hot；此时保持普通求值，不建立更新记录。
+  if (!hot?.data || typeof hot.dispose !== 'function' || typeof hot.prune !== 'function')
+    return {
+      render:
+        (site: string, environment: Environment) =>
+        (...args: unknown[]) =>
+          factories[site]!(environment, ...args),
+      style: (site: string, environment: Environment, _kind: string) =>
+        factories[site]!(environment),
+      onceGlobal: (_site: string, register: () => () => void) => register(),
+    };
   let state = hot.data[stateKey] as ModuleState | undefined;
   if (!state || state.signature !== signature) {
     dispose(state);
@@ -138,8 +153,8 @@ export function registerModule(hot: HotContext, signature: string, factories: Fa
 }
 
 /** @internal 由旧模块的 accept 回调与新模块的注册签名共同决定是否保留实例。 */
-export function compatible(hot: HotContext, signature: string): boolean {
-  const state = hot.data[stateKey] as ModuleState | undefined;
+export function compatible(hot: HotContext | undefined, signature: string): boolean {
+  const state = hot?.data?.[stateKey] as ModuleState | undefined;
   if (state && !state.fresh) dispose(state);
   return !!state?.fresh && state.signature === signature;
 }

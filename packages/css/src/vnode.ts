@@ -245,6 +245,14 @@ function planOf(vnode: VNode): Plan | undefined {
   );
 }
 
+/** @internal 开发检查读取当前 VNode 的已求值计划，不重新解析 class 或执行绑定。 */
+export function inspectCssVNode(vnode: VNode) {
+  const plan = planOf(vnode);
+  return plan?.resolved.hasCss
+    ? { result: plan.resolved, owner: plan.owner, host: leases.get(vnode)?.host ?? plan.host }
+    : undefined;
+}
+
 function snapshot(raw: Props | null | undefined): Props {
   const source = guardReactiveProps(raw ?? null);
   const result: Props = {};

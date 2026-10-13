@@ -17,6 +17,7 @@
   "devDependencies": {
     "@playwright/test": "catalog:",
     "@types/node": "catalog:",
+    "@vue/devtools-kit": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:"
   }

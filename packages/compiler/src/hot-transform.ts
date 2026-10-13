@@ -69,18 +69,20 @@ function signature(node: t.Program): string {
   return createHash('sha256')
     .update(
       JSON.stringify(program, (key, value) =>
-        [
-          'start',
-          'end',
-          'loc',
-          'extra',
-          'leadingComments',
-          'innerComments',
-          'trailingComments',
-          'comments',
-        ].includes(key)
-          ? undefined
-          : value,
+        value?.extra?.zerodepSource
+          ? { type: 'ObjectExpression', properties: [] }
+          : [
+                'start',
+                'end',
+                'loc',
+                'extra',
+                'leadingComments',
+                'innerComments',
+                'trailingComments',
+                'comments',
+              ].includes(key)
+            ? undefined
+            : value,
       ),
     )
     .digest('hex')
@@ -166,8 +168,10 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
     CallExpression(call) {
       if (call.findParent((parent) => roots.has(parent.node))) return;
       const callee = call.node.callee;
-      let kind: string | undefined;
-      if (author(call.scope, callee)) kind = 'class';
+      let kind = call.node.extra?.zerodepCssKind as string | undefined;
+      if (kind) {
+        /* 开发来源包装与原 CSS 调用一起热替换。 */
+      } else if (author(call.scope, callee)) kind = 'class';
       else if (t.isMemberExpression(callee) && author(call.scope, callee.object)) {
         const method = property(callee);
         if (method === 'createTheme') kind = 'class';
@@ -336,3 +340,5 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
   );
   return { signature: stamp, compatible: compatible.name, managed };
 }
+
+export { author as isCssAuthor, imported as isImported };

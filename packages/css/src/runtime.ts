@@ -8,4 +8,5 @@ export {
   getCssHost,
   renderCss,
   cloneCssVNode,
+  inspectCssVNode,
 } from './vnode.ts';
