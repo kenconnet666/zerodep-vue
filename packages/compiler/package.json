@@ -20,12 +20,14 @@
     "./devtools": {
       "zerodep-vue-source": "./src/devtools.ts",
       "types": "./dist/devtools.d.ts",
-      "import": "./dist/devtools.js"
+      "import": "./dist/devtools.js",
+      "default": "./dist/devtools.js"
     },
     "./hmr": {
       "zerodep-vue-source": "./src/hmr.ts",
       "types": "./dist/hmr.d.ts",
-      "import": "./dist/hmr.js"
+      "import": "./dist/hmr.js",
+      "default": "./dist/hmr.js"
     },
     "./runtime": {
       "zerodep-vue-source": "./src/runtime.ts",
@@ -38,7 +40,10 @@
     "dist",
     "LICENSE",
     "VITE-LICENSE",
-    "upstream.json"
+    "upstream.json",
+    "src",
+    "README.md",
+    "ZERODEP-VUE-LICENSE"
   ],
   "engines": {
     "node": ">=24.11 <25"
@@ -79,5 +84,10 @@
     "vite": {
       "optional": true
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kenconnet666/zerodep-vue.git",
+    "directory": "packages/compiler"
   }
 }

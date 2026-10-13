@@ -15,6 +15,12 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前实施
 
+4e3d189ae9df8e6b9d431083073edcf5f56872ff 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38479626139) 中，旧基线和四组普通浏览器继续通过。类型/构建被路由开发依赖的 exactOptionalPropertyTypes 声明错误阻断；HMR 连续写入被 Chokidar 50ms 去重吞掉了文件事件；Chromium 检查页冷启动再优化时，trace 记录到两个 Vue URL，导致一次 setup 的响应式作用域错配。已增加最小声明补丁、为自动化启用真实文件轮询，并让插件预先优化生成代码的第三方依赖，保留原有断言及运行时 scope 检查。补丁的定点类型检查与 HMR/inspector 单例浏览器验证通过。
+
+包分发链已建立，待本次远程首次完整执行：打包检查源/发射对应关系、导出目标、声明映射、源码、README 和许可；Linux/Windows 在 checkout 外安装同一提交的 tarball，核对默认 dist 解析、Vue 身份、ESM/CJS、Babel/Vite/异步 SSR，以及公开声明的泛型、中文 hover、补全详情和定义跳转。成功后使用所有权标记逐文件清理临时消费者，失败保留复现目录与报告。
+
+包场景复现了独立 runtime 模块各自持有请求 WeakMap 导致外部 CSS 收集入口漏收的问题，已改为同一运行环境中以真实 app/context 为弱键的共享登记表。真实 Vue SSR 定点测试确认不同模块共享同一请求宿主、不同请求不混用、冻结 context 可用；没有放宽包消费者的跨 bundle 验收。
+
 e21c1e79b110e875b93297d956ce3159c1754c2d 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38474909227) 中，Firefox HMR、四组普通浏览器及其他基线通过；两个作者任务因 Vitest 的不完整 import.meta.hot 缺少 data 失败，Chromium HMR 在错误遮罩关闭后过早进行下一次写入，恢复同步检查失败。已对不完整 hot context 保留普通求值路径，并让恢复用例等待新标题真实显示后继续；相关短测通过，完整结果待修复提交。
 
 Vue DevTools 样式检查已接入开发编译，展示来源、声明覆盖/清除、消费值、动画帧和全局租约。Node 定点测试确认重复检查不执行 getter、覆盖绑定保持未消费、全局释放及 SSR 不留记录；真实 DevTools 后端协议的本机 Edge 浏览器用例通过（2.4 秒测试主体），并核对作者行列、更新值和卸载。开发/生产/SSR 的事件代码 source map 定点测试通过；远程新增真实 inspector 协议及生产模块排除检查。

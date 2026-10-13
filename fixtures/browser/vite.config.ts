@@ -43,6 +43,11 @@ export default defineConfig({
     noExternal: ['@zerodep-vue/css', '@zerodep-vue/tsx'],
     resolve: { conditions: ['zerodep-vue-source', 'module', 'node', 'development|production'] },
   },
-  server: { host: '127.0.0.1' },
+  optimizeDeps: { include: ['@vue/devtools-kit'] },
+  server: {
+    host: '127.0.0.1',
+    // 自动化保存比用户编辑快；100ms 的真实文件轮询避开 Chokidar 的 50ms change 去重。
+    ...(process.env.PW_SUITE === 'hmr' ? { watch: { usePolling: true, interval: 100 } } : {}),
+  },
   build: { sourcemap: true, outDir: '.generated/client', emptyOutDir: false },
 });

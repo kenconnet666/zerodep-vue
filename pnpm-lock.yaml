@@ -168,6 +168,9 @@ catalogs:
 overrides:
   typescript: 6.0.3
 
+patchedDependencies:
+  vue-router@4.6.4: 800dfd18701201272aab38271ad3404384a9a9f8576d7ff84b0f1f40e0ede6e6
+
 importers:
 
   .:
@@ -455,7 +458,7 @@ importers:
         version: 3.5.43(typescript@6.0.3)
       vue-router:
         specifier: 'catalog:'
-        version: 4.6.4(vue@3.5.43(typescript@6.0.3))
+        version: 4.6.4(patch_hash=800dfd18701201272aab38271ad3404384a9a9f8576d7ff84b0f1f40e0ede6e6)(vue@3.5.43(typescript@6.0.3))
 
   packages/tsx:
     dependencies:
@@ -3440,7 +3443,7 @@ snapshots:
 
   vue-component-type-helpers@3.3.13: {}
 
-  vue-router@4.6.4(vue@3.5.43(typescript@6.0.3)):
+  vue-router@4.6.4(patch_hash=800dfd18701201272aab38271ad3404384a9a9f8576d7ff84b0f1f40e0ede6e6)(vue@3.5.43(typescript@6.0.3)):
     dependencies:
       '@vue/devtools-api': 6.6.4
       vue: 3.5.43(typescript@6.0.3)

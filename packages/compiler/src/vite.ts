@@ -159,10 +159,28 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
   return {
     name: 'zerodep-vue:tsx',
     enforce: 'pre',
-    config(config) {
+    config(config, environment) {
       return {
         oxc: { jsx: 'preserve' },
         resolve: { dedupe: ['vue'] },
+        ...(environment.command === 'serve'
+          ? {
+              // 保持 CSS render frame 等模块状态唯一；生成代码的依赖提前进入同一优化批次，
+              // 防止冷启动后再发现 DevTools/CJS 依赖时短暂混用两个 Vue URL。
+              optimizeDeps: {
+                exclude: ['@zerodep-vue/compiler', '@zerodep-vue/css', '@zerodep-vue/tsx'],
+                include: [
+                  'vue',
+                  ...[
+                    '@emotion/unitless',
+                    'postcss-selector-parser',
+                    '@csstools/css-tokenizer',
+                    '@vue/devtools-api',
+                  ].map((name) => `@zerodep-vue/compiler > @zerodep-vue/css > ${name}`),
+                ],
+              },
+            }
+          : {}),
         define: {
           __VUE_OPTIONS_API__: config.define?.__VUE_OPTIONS_API__ ?? true,
           __VUE_PROD_DEVTOOLS__: config.define?.__VUE_PROD_DEVTOOLS__ ?? false,

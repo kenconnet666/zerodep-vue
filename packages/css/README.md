@@ -1,0 +1,20 @@
+# @zerodep-vue/css
+
+运行时 CSS 声明、组合、系统/继承主题、变量、动画和 Vue 样式宿主。作者使用 class；编译器捕获 bx 并隐式接入内联变量。
+
+```tsx
+import { ref } from 'vue';
+import { _component } from '@zerodep-vue/tsx';
+import { bx, css } from '@zerodep-vue/css';
+
+export const Panel = _component(() => {
+  const width = ref(120);
+  return <div class={css({ width: bx(width.value), ':hover': { color: 'blue' } })} />;
+});
+```
+
+配合 `@zerodep-vue/compiler` 使用。css 返回可组合的 class 描述；样式、主题和绑定值都在运行时处理。系统关键字有类型提示与中文说明，继承主题通过 `createCss<T>(实际来源)` 绑定。
+
+完整组合、覆盖、关键字撤销和资源生命周期见 [CSS 文档](https://github.com/kenconnet666/zerodep-vue/blob/master/docs/css.md)，继承和泛型用法见 [主题文档](https://github.com/kenconnet666/zerodep-vue/blob/master/docs/themes.md)。SSR 每个请求独立收集，使用 `getCssHost(context)?.renderStyles()` 输出样式。
+
+默认导出条件使用 dist，包内源码供映射与导航。Node 24 下支持 ESM 和 CommonJS 加载。项目采用 MIT；生成类型与说明的数据来源及保留许可见 THIRD_PARTY_NOTICES.md。

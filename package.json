@@ -23,7 +23,9 @@
     "test:authoring": "vitest run --config vitest.authoring.config.ts",
     "test:css": "node --test packages/css/test/*.test.mjs",
     "css:generate": "node scripts/css/generate.mjs",
-    "css:generate:check": "node scripts/css/generate.mjs --check"
+    "css:generate:check": "node scripts/css/generate.mjs --check",
+    "packages:pack": "node scripts/packages/pack.mjs",
+    "test:packages": "node scripts/packages/verify.mjs"
   },
   "devDependencies": {
     "@babel/core": "catalog:",

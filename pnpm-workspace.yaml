@@ -74,5 +74,9 @@ autoInstallPeers: false
 overrides:
   typescript: 6.0.3
 
+# DevTools 的类型依赖：Group 明确允许 undefined，基类须兼容 exactOptionalPropertyTypes。
+patchedDependencies:
+  vue-router@4.6.4: patches/vue-router@4.6.4.patch
+
 allowBuilds:
   esbuild: true

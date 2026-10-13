@@ -18,6 +18,8 @@ CSS 仍在运行时求值。热替换样式时只重算该段声明，普通 set
 
 语法错误由 Vite 显示源码位置；修复后重新接入原模块的数据和闭包。生产转换和 SSR 转换不插入 HMR 导入、函数表或实例环境。HMR 模块只在 `import.meta.hot.data` 中保存当前版本，使用 Vite dispose/prune 与 Vue 生命周期清理，不保存更新历史。
 
+Vite 入口保持本库运行时模块的 ESM 边界，并提前优化生成代码使用的第三方依赖，避免冷启动后再次优化时混用两个 Vue URL。自动化连续写入使用真实文件轮询，以避开监听器的事件去重；普通应用的文件监听方式不因此被全局改变。
+
 CI 的独立 Chromium/Firefox HMR 任务在生成副本中修改源码，保留原仓库文件。用例填写输入、打开真实 Naive Select 弹层，验证样式修改与 render 修改后的状态、事件行为、错误修复、连续 12 次规则变化的缓存上限、setup 变化后的重建及最终卸载。它与普通交互任务分开运行，语法错误测试不会干扰其他页面。
 
 实现复用 [Vite HMR API](https://vite.dev/guide/api-hmr.html) 和 Vue 既有更新机制。准确的提交与测试证据见 [progress.md](progress.md)。

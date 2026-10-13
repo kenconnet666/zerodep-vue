@@ -63,6 +63,8 @@ const styles = getCssHost(context)?.renderStyles() ?? '';
 
 将 styles 写入页面 head。客户端按规则内容采用已有 style 标签，多个请求不共享变量或收集结果。宿主可配置固定 layer 和 nonce；它们属于宿主配置，不按每次组合新建层。
 
+同一运行环境中的独立 CSS 模块实例，通过以实际 app/context 为弱键的登记表共享宿主。因此 SSR runtime 被打入另一 bundle 后，外部 getCssHost 仍能取得完整请求结果；不同请求和冻结的 context 保持独立，不增加请求历史表。
+
 ## 变量组与动画
 
 ```tsx

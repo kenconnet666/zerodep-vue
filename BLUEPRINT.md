@@ -143,7 +143,7 @@ BLUEPRINT.md
 - Vue 作为共享 peer dependency，发布构建 externalize。fixture 保证唯一且兼容的 Vue 运行时；不能打包另一份 Vue 后宣称 Ref 可以可靠共享。
 - 不生成无关的自有组件运行时导入。class 来源可静态确认是普通值时保留上游路径；需要判断动态 class 来源时，可以由编译器引入薄 CSS 助手，对普通值走等价的快速旁路，不能要求作者额外手写接线。
 
-本仓库按用户决定精确使用 TypeScript 6.0.3，并通过 catalog、锁文件和 override 统一版本。当前开发基线为 Node 24.18.0、pnpm 11.22.0、Vue 3.5.43、Babel 8.0.6，Vite 开发依赖固定 8.3.1；Vite 自有适配仍待实现。相邻 `zerodep-js` 的 TypeScript 7.1 dev 约束不继承到本仓库。
+本仓库按用户决定精确使用 TypeScript 6.0.3，并通过 catalog、锁文件和 override 统一版本。当前开发基线为 Node 24.18.0、pnpm 11.22.0、Vue 3.5.43、Babel 8.0.6，Vite 自有适配固定验证 8.3.1。相邻 `zerodep-js` 的 TypeScript 7.1 dev 约束不继承到本仓库。
 
 ### 3.1 项目 LSP
 
@@ -151,7 +151,7 @@ BLUEPRINT.md
 
 运行 `pnpm lsp:setup` 从 `.codex/config.example.toml` 生成被忽略的本机配置；`pnpm lsp:verify` 验证错误→修复、依赖刷新、语义工具和工作区隔离。WebStorm 与工作区编辑器配置使用本地 TypeScript SDK。重启前的独立检查不能代替重启后本会话原生 MCP 调用的确认。
 
-LSP 当前只承诺已有标准 TSX 的 TypeScript 能力。作者宏的声明、默认值/children 类型和 CSS 提示按对应阶段实施，不把基础语言服务配置当成这些新语法的完成证据。
+源码消费中的作者宏、默认值/children、系统/主题关键字和泛型已有类型夹具及 MCP 查询证据。发布声明模式必须另做独立安装后的诊断、hover、补全详情与定义跳转检查，不能用工作区源码结果代替。
 
 2026-10-13 重启后，已在本项目会话直接调用五个 MCP 工具：普通 TSX 诊断返回 TypeScript 6.0.3、complete=true、errors=0，Ref 类型查看、定义跳转、引用和补全均得到实际结果。此记录证明基础 LSP 已加载，不代表尚未实现的 CSS API 已通过类型验收。
 
@@ -955,6 +955,8 @@ return <div class={css({ width: bx(width.value) })} />;
 历史项目的绑定事故只用来选回归用例：prop 读取提升、条件列表隐藏读取、同名宏遮蔽、CSS-wide keyword、回调局部绑定和重复表达式 source map。不能据此声称本项目已经出现或修好了这些问题。
 
 ## 10 升级与维护约束
+
+分发验收通过实际 tarball 完成：检查发射源码一致性、全部 export/types/默认条件目标、源码映射和许可；在仓库外安装并核对真实解析路径、单一 Vue、Babel/Vite 和 SSR 消费。打包保留源码供导航，默认运行和类型检查使用 dist。Node 24 的 ESM/CommonJS 都有真实入口验收，Linux/Windows 独立执行并保存包哈希及消费者锁文件。流程见 docs/packages.md。
 
 - fork 记录上游 tag/SHA、来源路径、许可证、核心差异和相应测试。
 - 升级上游先运行未修改的新版本对照，再移植小范围差异，最后重跑旧 TSX、Naive 源码和混用验收。

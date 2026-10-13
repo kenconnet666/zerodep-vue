@@ -8,17 +8,20 @@
     ".": {
       "zerodep-vue-source": "./src/index.ts",
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./devtools": {
       "zerodep-vue-source": "./src/devtools.ts",
       "types": "./dist/devtools.d.ts",
-      "import": "./dist/devtools.js"
+      "import": "./dist/devtools.js",
+      "default": "./dist/devtools.js"
     },
     "./hmr": {
       "zerodep-vue-source": "./src/hmr.ts",
       "types": "./dist/hmr.d.ts",
-      "import": "./dist/hmr.js"
+      "import": "./dist/hmr.js",
+      "default": "./dist/hmr.js"
     },
     "./runtime": {
       "zerodep-vue-source": "./src/runtime.ts",
@@ -31,7 +34,10 @@
     "dist",
     "CSSTYPE-LICENSE",
     "ZERODEP-JS-LICENSE",
-    "THIRD_PARTY_NOTICES.md"
+    "THIRD_PARTY_NOTICES.md",
+    "src",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "check": "tsc --noEmit -p tsconfig.json",
@@ -51,5 +57,14 @@
     "typescript": "catalog:",
     "vue-router": "catalog:",
     "vue": "catalog:"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=24.11 <25"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kenconnet666/zerodep-vue.git",
+    "directory": "packages/css"
   }
 }

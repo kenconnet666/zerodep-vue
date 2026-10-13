@@ -4,25 +4,29 @@
 
 ## 任务划分
 
-| 任务                    | 验证内容                                      | 并行方式                                   |
-| ----------------------- | --------------------------------------------- | ------------------------------------------ |
-| Format                  | 全仓已支持格式的文件检查                      | 独立 job                                   |
-| Types                   | 三包及 legacy-tsx、authoring 类型夹具         | 五个矩阵 job，fail-fast=false              |
-| Compiler and SSR        | 普通 TSX 编译和 Vue SSR 对照                  | 独立 job                                   |
-| Upstream                | 原始 JSX/resolve-type 断言与快照              | official/fork × 两个 shard，共四个 job     |
-| TSX authoring           | 初始化、props/default、Ref、内容、attrs、For  | default/optimized 两个 job                 |
-| Naive production TSX    | 301 个生产 TSX 清单、全量发射、库构建与 SSR   | classic/official/fork 三个独立 job         |
-| Build and package entry | 三包构建、实际导入 compiler、检查 JS/声明入口 | 独立 job，构建完成后顺序检查产物           |
-| LSP                     | 错误修复、依赖刷新、语义查询、补全和隔离      | Linux/Windows 两个矩阵 job                 |
-| CI result               | 所有验证任务必须成功                          | 等待依赖完成后汇总，不吞掉失败、取消或跳过 |
+| 任务                    | 验证内容                                     | 并行方式                                   |
+| ----------------------- | -------------------------------------------- | ------------------------------------------ |
+| Format                  | 全仓已支持格式的文件检查                     | 独立 job                                   |
+| Types                   | 三包及 legacy-tsx、authoring 类型夹具        | 五个矩阵 job，fail-fast=false              |
+| Compiler and SSR        | 普通 TSX 编译和 Vue SSR 对照                 | 独立 job                                   |
+| Upstream                | 原始 JSX/resolve-type 断言与快照             | official/fork × 两个 shard，共四个 job     |
+| TSX authoring           | 初始化、props/default、Ref、内容、attrs、For | default/optimized 两个 job                 |
+| Naive production TSX    | 301 个生产 TSX 清单、全量发射、库构建与 SSR  | classic/official/fork 三个独立 job         |
+| Runtime CSS             | 生成一致性、组合、绑定、主题及宿主生命周期   | 独立 job                                   |
+| Browser                 | 真实 Naive 产物混用、CSS 计算与 SSR/hydrate  | development/production × Chromium/Firefox  |
+| Development tools       | HMR 状态保留、错误恢复、真实 DevTools 协议   | Chromium/Firefox，依赖 Naive 构建产物      |
+| Build and package entry | 三包构建、入口、来源一致性和 tarball 内容    | 构建后顺序验证与打包                       |
+| Installed packages      | 仓库外安装、ESM/CJS、SSR、声明和中文提示     | Linux/Windows，依赖当前提交的 tarball      |
+| LSP                     | 错误修复、依赖刷新、语义查询、补全和隔离     | Linux/Windows 两个矩阵 job                 |
+| CI result               | 所有验证任务必须成功                         | 等待依赖完成后汇总，不吞掉失败、取消或跳过 |
 
-现有验证共二十个执行任务和一个汇总任务。LSP 自检会改写自己的临时源码，因此与类型检查隔离在不同 runner 中；不要为了并行把它们放进同一个工作目录。任务之间没有不必要的 needs 依赖，矩阵设置并发上限以控制资源使用。
+LSP 自检会改写自己的临时源码，因此与类型检查隔离在不同 runner 中；不要为了并行把它们放进同一个工作目录。浏览器与包消费者分别下载同一提交的 Naive／包产物并核对来源。矩阵设置并发上限，HMR 与 inspector 使用独立服务进程，避免语法错误恢复用例干扰普通页面。
 
 构建产物及成功生成的 LSP 报告按 SHA/平台上传，保留七天。Actions 固定到已核对的提交 SHA。工作流只申请读取仓库权限，不执行包发布或生产部署；需要发布能力时另行定义目标和权限。
 
 这些任务覆盖当前已经存在的实现。增加编译规则、运行时 CSS、Naive UI、浏览器或稳定性测试后，按职责补入真实 job，再接入 CI result。不能将尚未实现的测试声明为已覆盖，也不能用 continue-on-error 或删除必要断言换取绿色状态。
 
-CSS 规则与宿主的完整契约在独立 Runtime CSS job 运行；浏览器计算样式、Vue 生命周期和 SSR/hydrate 接线仍需后续真实集成验收。
+CSS 单元契约、浏览器行为、开发工具和发布声明分别保留证据，任何一项都不能代替其他层。HMR 自动化采用 100ms 文件轮询，避开 Chokidar 对 50ms 内 change 事件的去重；仍通过真实文件变化和 Vite 更新协议验证，每次修改都要求浏览器显示相应结果。
 
 ## 提交节奏
 
