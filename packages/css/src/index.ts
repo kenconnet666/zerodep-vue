@@ -9,3 +9,4 @@ export type { CssClass, CssObject, ClassValue, CssInput } from './types.ts';
 export type { CssBinding } from './values.ts';
 export type { CssVariable, VariableGroup, CssAnimation } from './resource-tokens.ts';
 export type { VariableOverrides, KeyframeStyle, Keyframes } from './resources.ts';
+export type { GlobalRules, GlobalOptions } from './global.ts';

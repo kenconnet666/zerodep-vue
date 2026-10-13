@@ -90,4 +90,23 @@ const Fade = _component(() => {
 
 关键帧接受 from/to、百分比和逗号分隔的位置。内部只写声明，可使用主题、bx 和 animationTimingFunction；嵌套选择器及其他动画控制属性会被拒绝。也可直接写 `animationName: fade` 并分别提供 duration 等属性。动画引用在实际消费时解析，更新变量复用规则；多个元素共享资源但保有独立动态值，最后一个消费者移除后按宿主缓存策略释放。
 
-基础声明、bx、Vue 接线、变量/动画及系统/主题入口已建立，主题用法见 [themes.md](themes.md)。全局规则与源码调试仍在实施中。生产兼容声明以 BLUEPRINT.md 的最终验收和 docs/progress.md 的实际证据为准。
+## 全局规则
+
+```tsx
+const Page = _component(() => {
+  const color = ref('#111827');
+  css.global('page-base', {
+    'body, main': {
+      color: bx(color.value),
+      '@media (prefers-reduced-motion: reduce)': { scrollBehavior: 'auto' },
+    },
+  });
+  return <main>内容</main>;
+});
+```
+
+根键是全局选择器，内部沿用普通 CSS 对象和条件分组。`css.global` 返回可提前撤销的函数，组件作用域销毁时也会停止订阅并释放规则。组件之外提供 `css.global(name, rules, { host })`，由该宿主负责最终清理；rules 也可为 Vue Ref，替换整个选择器映射。
+
+全局规则没有接收内联变量的元素，因此 bx、主题和动画在独立 Vue effect 中输出当前字面 CSS。更新保留同一 style 节点及插入位置。相同静态定义可共用同一名称，动态命名规则应在应用或区域入口只注册一次；多个所有者不能争写不同内容。SSR 按请求隔离并保持与普通规则的收集顺序，客户端采用已有标签。
+
+主题用法见 [themes.md](themes.md)。完整浏览器、源码调试和生产验收仍在推进；兼容声明以 BLUEPRINT.md 的最终验收和 docs/progress.md 的实际证据为准。

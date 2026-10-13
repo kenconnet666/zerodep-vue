@@ -2,6 +2,11 @@ import { css, bx } from '@zerodep-vue/css';
 import { themed } from './theme-types.tsx';
 
 const vars = css.defineVars('button', { color: 'red', gap: '8px', opacity: 1 });
+themed.global('page', {
+  body: { color: themed.keywords.color._brand, ':hover': { display: css.keywords.display.flex } },
+});
+// @ts-expect-error 全局选择器内仍检查属性与主题引用。
+themed.global('invalid', { body: { padding: themed.keywords.color._brand } });
 css.createTheme(vars, { color: themed.keywords.color._brand, ':hover': { gap: bx('12px') } });
 css({ color: vars.color, gap: vars.gap, opacity: vars.opacity });
 // @ts-expect-error 变量成员需要精确名称。

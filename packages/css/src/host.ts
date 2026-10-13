@@ -29,6 +29,21 @@ interface Registry {
   unused: Map<string, Entry>;
   names: Map<string, { text: string; entries: number }>;
   limit: number;
+  globals: Map<string, GlobalEntry>;
+}
+
+interface GlobalEntry {
+  identity: string;
+  rule: CssRule;
+  text: string;
+  references: number;
+  node?: HTMLStyleElement;
+  nonce?: string;
+}
+/** 可更新的命名全局规则；更新保留原 style 节点及层叠位置。 */
+export interface GlobalLease {
+  update(cssText: string): void;
+  release(): void;
 }
 
 const STORE = Symbol.for('@zerodep-vue/css/registry/v1');
@@ -58,6 +73,7 @@ function registry(target: HTMLElement | ShadowRoot, limit: number): Registry {
         unused: new Map(),
         names: new Map(),
         limit,
+        globals: new Map(),
       } satisfies Registry,
     });
   const result = owner[STORE]!;
@@ -76,12 +92,15 @@ function prune(store: Registry) {
   }
 }
 
-/** 宿主只保留规则文本及租约，不保存组件 getter 或主题 Ref。 */
+/** 宿主拥有样式租约与显式全局副作用的停止句柄，不保留已释放的消费者。 */
 export class CssHost {
   private readonly options: CssHostOptions;
   private readonly owned = new Set<() => void>();
   private readonly collected = new Map<string, { rule: CssRule; text: string; nonce?: string }>();
   private readonly collectedNames = new Map<string, string>();
+  private readonly collectedGlobals = new Map<string, GlobalEntry>();
+  private readonly disposers = new Set<() => void>();
+  private readonly collectionOrder = new Map<string, 'rule' | 'global'>();
   private store: Registry | undefined;
   private readonly installed = new WeakSet<App>();
   private installations = 0;
@@ -118,7 +137,9 @@ export class CssHost {
     if (previous && previous !== rule.cssText) throw new Error(`CSS 名称碰撞：${rule.name}`);
     const text = origin.text(rule);
     this.collectedNames.set(rule.name, rule.cssText);
-    this.collected.set(hash(text), {
+    const key = hash(text);
+    this.collectionOrder.set(key, 'rule');
+    this.collected.set(key, {
       rule: { name: rule.name, cssText: rule.cssText },
       text,
       ...(origin.options.nonce === undefined ? {} : { nonce: origin.options.nonce }),
@@ -170,17 +191,100 @@ export class CssHost {
     return release;
   }
 
+  /** 注册显式全局副作用的清理；返回值只撤销注册，便于作用域提前释放。 */
+  onDispose(stop: () => void): () => void {
+    this.disposers.add(stop);
+    return () => this.disposers.delete(stop);
+  }
+
+  /**
+   * 命名规则保持固定插入位置。相同静态定义可共享；多个所有者不能争写不同内容。
+   * origin 仅用于 SSR 将局部宿主的 layer/nonce 写入本次请求收集器。
+   */
+  acquireGlobal(name: string, cssText: string, origin: CssHost = this): GlobalLease {
+    if (!name.trim()) throw new Error('全局规则需要稳定的非空名称。');
+    const target =
+      this.options.target === undefined ? globalThis.document?.head : this.options.target;
+    const store = target
+      ? (this.store = registry(target, this.options.maxUnusedRules!))
+      : undefined;
+    const entries = store?.globals ?? this.collectedGlobals;
+    const identity = JSON.stringify([name, origin.options.layer ?? '']);
+    const key = hash(identity);
+    const text = origin.text({ name, cssText });
+    let entry = entries.get(key);
+    if (entry && (entry.identity !== identity || entry.text !== text))
+      throw new Error(`全局规则名称冲突：${name}`);
+    if (!entry) {
+      const existing = target?.querySelector<HTMLStyleElement>(`style[data-zv-global="${key}"]`);
+      if (existing && existing.textContent !== text)
+        throw new Error(`SSR 全局规则与客户端不一致：${name}`);
+      const node = existing ?? target?.ownerDocument.createElement('style');
+      if (node && !existing) {
+        node.dataset.zvGlobal = key;
+        if (origin.options.nonce !== undefined) node.nonce = origin.options.nonce;
+        node.textContent = text;
+        target!.appendChild(node);
+      }
+      entry = {
+        identity,
+        rule: { name, cssText },
+        text,
+        references: 0,
+        ...(node ? { node } : {}),
+        ...(origin.options.nonce !== undefined ? { nonce: origin.options.nonce } : {}),
+      };
+      entries.set(key, entry);
+      if (!store) this.collectionOrder.set(`global:${key}`, 'global');
+    }
+    entry.references++;
+    let released = false;
+    const release = () => {
+      if (released) return;
+      released = true;
+      this.owned.delete(release);
+      if (--entry.references === 0) {
+        entries.delete(key);
+        if (!store) this.collectionOrder.delete(`global:${key}`);
+        if (entry.node && entry.node.parentNode === target) entry.node.remove();
+      }
+    };
+    this.owned.add(release);
+    return {
+      update: (cssText) => {
+        if (released) throw new Error(`全局规则已释放：${name}`);
+        const text = origin.text({ name, cssText });
+        if (entry.text === text) return;
+        if (entry.references > 1)
+          throw new Error(`全局规则 ${name} 有多个所有者；动态规则应只注册一次。`);
+        entry.rule = { name, cssText };
+        entry.text = text;
+        if (entry.node) entry.node.textContent = text;
+      },
+      release,
+    };
+  }
+
+  private orderedCollection() {
+    return [...this.collectionOrder].map(([key, kind]) => {
+      const id = kind === 'global' ? key.slice(7) : key;
+      const entry = kind === 'global' ? this.collectedGlobals.get(id)! : this.collected.get(id)!;
+      return { ...entry, id, kind };
+    });
+  }
   snapshot(): CssRule[] {
-    return [...this.collected.values()].map(({ rule }) => ({ ...rule }));
+    return this.orderedCollection().map(({ rule }) => ({ ...rule }));
   }
   cssText(): string {
-    return [...this.collected.values()].map(({ text }) => text).join('');
+    return this.orderedCollection()
+      .map(({ text }) => text)
+      .join('');
   }
   renderStyles(): string {
-    return [...this.collected.values()]
+    return this.orderedCollection()
       .map(
-        ({ text, nonce }) =>
-          `<style data-zv-rule="${hash(text)}"${nonce === undefined ? '' : ` nonce="${escapeAttribute(nonce)}"`}>${text}</style>`,
+        ({ text, nonce, id, kind }) =>
+          `<style data-zv-${kind}="${id}"${nonce === undefined ? '' : ` nonce="${escapeAttribute(nonce)}"`}>${text}</style>`,
       )
       .join('');
   }
@@ -192,12 +296,17 @@ export class CssHost {
       unusedRules: this.store?.unused.size ?? 0,
       ownedReferences: this.owned.size,
       collectedRules: this.collected.size,
+      globalRules: this.store?.globals.size ?? this.collectedGlobals.size,
     };
   }
   dispose(): void {
+    for (const stop of [...this.disposers]) stop();
+    this.disposers.clear();
     for (const release of [...this.owned]) release();
     this.collected.clear();
     this.collectedNames.clear();
+    this.collectedGlobals.clear();
+    this.collectionOrder.clear();
   }
 }
 

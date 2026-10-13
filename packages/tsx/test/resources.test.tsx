@@ -6,6 +6,63 @@ import { renderToString } from '@vue/server-renderer';
 import { _component } from '@zerodep-vue/tsx';
 import { bx, css, createCssHost, getCssHost } from '@zerodep-vue/css';
 
+test('component global rules use its host and unmount stops all updates', async () => {
+  const target = document.createElement('div');
+  document.head.appendChild(target);
+  const host = createCssHost({ target, maxUnusedRules: 0 });
+  const color = ref('red');
+  let reads = 0;
+  const read = () => {
+    reads++;
+    return color.value;
+  };
+  const App = _component(() => {
+    css.global('document-colors', { ':root': { color: bx(read()) } });
+    return <div class={css({ opacity: 1 })} />;
+  });
+  const wrapper = mount(App, { global: { plugins: [host] } });
+  try {
+    expect(host.stats().globalRules).toBe(1);
+    const node = target.firstElementChild;
+    color.value = 'blue';
+    await nextTick();
+    expect(node?.textContent).toBe(':root{color:blue;}');
+    expect(target.firstElementChild).toBe(node);
+  } finally {
+    wrapper.unmount();
+    const before = reads;
+    color.value = 'green';
+    expect(reads).toBe(before);
+    expect(target.children.length).toBe(0);
+    target.remove();
+  }
+});
+
+test('SSR global effects stop after rendering while request-specific styles remain collectible', async () => {
+  const color = ref('red');
+  const App = _component(() => {
+    css.global('request', { body: { color: bx(color.value) } });
+    return <div class={css({ opacity: 1 })} />;
+  });
+  const first = {};
+  await renderToString(
+    createSSRApp(App).use(createCssHost({ target: null, layer: 'base', nonce: 'example' })),
+    first,
+  );
+  const saved = getCssHost(first)!.renderStyles();
+  color.value = 'blue';
+  expect(getCssHost(first)!.renderStyles()).toBe(saved);
+  expect(saved).toContain('@layer base{body{color:red;}}');
+  expect(saved).toContain('nonce="example"');
+  expect(saved.indexOf('data-zv-global')).toBeLessThan(saved.indexOf('data-zv-rule'));
+  const second = {};
+  await renderToString(createSSRApp(App), second);
+  expect(getCssHost(second)!.cssText()).toContain('body{color:blue;}');
+  expect(getCssHost(second)!.cssText()).not.toContain('color:red');
+  getCssHost(first)?.dispose();
+  getCssHost(second)?.dispose();
+});
+
 test('keyframes share rule leases, update inline values and release on the last removal', async () => {
   const target = document.createElement('div');
   document.head.appendChild(target);

@@ -12,6 +12,8 @@ import { defineVars, createTheme, keyframes } from './resources.ts';
 import type { VariableOverrides, Keyframes } from './resources.ts';
 import type { VariableGroup, CssAnimation } from './resource-tokens.ts';
 import type { Scalar } from './values.ts';
+import { globalCss } from './global.ts';
+import type { GlobalRules, GlobalOptions } from './global.ts';
 
 type ThemeMembers<Group, Key extends PropertyName> = {
   readonly [Name in keyof Group]: Name extends string ? ThemeReference<Key, Name> : never;
@@ -36,6 +38,12 @@ export interface Css<T extends SystemKeywords = SystemKeywords> {
   ): CssClass;
   /** 声明动画资源；使用时才求值和登记，支持 bx 和主题引用。 */
   keyframes(frames: Keyframes<T>): CssAnimation;
+  /** 注册显式全局规则，返回清理函数；bx/主题更新保留节点及层叠位置。 */
+  global(
+    name: string,
+    rules: GlobalRules<T> | Ref<GlobalRules<T>>,
+    options?: GlobalOptions,
+  ): () => void;
 }
 
 /** 共享工具可沿用此类型接收主题来源，同时保留成员名称和值域校验。 */
@@ -167,6 +175,7 @@ export function createCss<T extends SystemKeywords>(source: ThemeSource<T>): Css
     defineVars,
     createTheme,
     keyframes,
+    global: globalCss,
   }) as Css<T>;
 }
 
