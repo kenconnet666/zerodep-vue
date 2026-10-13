@@ -41,7 +41,9 @@
     "@vue/babel-helper-vue-transform-on": "catalog:",
     "@vue/babel-plugin-resolve-type": "catalog:",
     "@vue/shared": "catalog:",
-    "@babel/preset-typescript": "catalog:"
+    "@babel/preset-typescript": "catalog:",
+    "@vue/compiler-sfc": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0",
@@ -51,9 +53,7 @@
     "@babel/core": "catalog:",
     "@types/convert-source-map": "catalog:",
     "@types/node": "catalog:",
-    "@vue/compiler-sfc": "catalog:",
     "@vue/server-renderer": "catalog:",
-    "typescript": "catalog:",
     "vite": "catalog:",
     "vue": "catalog:"
   },

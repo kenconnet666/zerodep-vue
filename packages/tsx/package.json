@@ -3,12 +3,30 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Reserved Vue TSX authoring package; public APIs are planned in BLUEPRINT.md.",
+  "description": "Vue VDOM TSX authoring APIs and component runtime.",
   "exports": {
     ".": {
       "zerodep-vue-source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./runtime": {
+      "zerodep-vue-source": "./src/runtime.ts",
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js",
+      "default": "./dist/runtime.js"
+    },
+    "./jsx-runtime": {
+      "zerodep-vue-source": "./src/jsx-runtime.ts",
+      "types": "./dist/jsx-runtime.d.ts",
+      "import": "./dist/jsx-runtime.js",
+      "default": "./dist/jsx-runtime.js"
+    },
+    "./jsx-dev-runtime": {
+      "zerodep-vue-source": "./src/jsx-runtime.ts",
+      "types": "./dist/jsx-runtime.d.ts",
+      "import": "./dist/jsx-runtime.js",
+      "default": "./dist/jsx-runtime.js"
     }
   },
   "files": [

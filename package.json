@@ -19,7 +19,8 @@
     "lsp:inspect": "node scripts/language-services/inspect.mjs .",
     "test:upstream": "vitest run --config vitest.upstream.config.ts",
     "naive:inventory": "node fixtures/naive-ui/inventory.mjs",
-    "test:naive": "node fixtures/naive-ui/build.mjs"
+    "test:naive": "node fixtures/naive-ui/build.mjs",
+    "test:authoring": "vitest run --config vitest.authoring.config.ts"
   },
   "devDependencies": {
     "@babel/core": "catalog:",
@@ -43,6 +44,8 @@
     "@vue/test-utils": "catalog:",
     "jsdom": "catalog:",
     "vitest": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "@zerodep-vue/tsx": "workspace:*",
+    "@zerodep-vue/css": "workspace:*"
   }
 }

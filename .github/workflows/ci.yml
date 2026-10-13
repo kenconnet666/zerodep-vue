@@ -36,6 +36,7 @@ jobs:
           - '@zerodep-vue/css'
           - '@zerodep-vue/tsx'
           - '@zerodep-vue/fixture-legacy-tsx'
+          - '@zerodep-vue/fixture-authoring'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
@@ -78,6 +79,22 @@ jobs:
           path: test-results/upstream-*.json
           if-no-files-found: warn
           retention-days: 7
+
+  authoring:
+    name: TSX authoring (${{ matrix.mode }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [default, optimized]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - name: Run component authoring contracts
+        env:
+          AUTHORING_MODE: ${{ matrix.mode }}
+        run: pnpm test:authoring --mode "$AUTHORING_MODE"
 
   naive:
     name: Naive production TSX (${{ matrix.mode }})
@@ -165,7 +182,7 @@ jobs:
   ci:
     name: CI result
     if: always()
-    needs: [format, types, compiler, upstream, naive, build, language]
+    needs: [format, types, compiler, upstream, authoring, naive, build, language]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:

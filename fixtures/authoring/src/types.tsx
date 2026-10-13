@@ -1,0 +1,64 @@
+import { _component, For } from '@zerodep-vue/tsx';
+import { defineComponent, ref } from 'vue';
+import type { Ref, VNodeChild } from 'vue';
+
+export const Select = _component(
+  <T,>({ items, renderItem }: { items: readonly T[]; renderItem: (item: T) => VNodeChild }) => (
+    <div>{items.map(renderItem)}</div>
+  ),
+);
+
+const users = [{ id: 'a', name: 'Ada' }];
+export const selected = <Select items={users} renderItem={(user) => <span>{user.name}</span>} />;
+export const wrongRenderer = (
+  <Select
+    items={users}
+    renderItem={(user) => {
+      // @ts-expect-error renderer 的 item 来自 items，不得退化为 any。
+      return user.unknown;
+    }}
+  />
+);
+
+export const Field = _component(({ value = ref('') }: { value?: Ref<string> }) => (
+  <input v-model={value.value} />
+));
+export const field = <Field />;
+export const explicitDefault = <Field value={undefined} />;
+// @ts-expect-error Ref 的值类型在跨组件传递时保持。
+export const wrongField = <Field value={ref(123)} />;
+
+export const Panel = _component(({ children }: { children?: VNodeChild }) => (
+  <section>{children}</section>
+));
+export const panel = (
+  <Panel>
+    <span>content</span>
+  </Panel>
+);
+// @ts-expect-error 无参数内容是 VNodeChild，不接受 renderer 函数。
+export const wrongPanel = <Panel>{() => <span>content</span>}</Panel>;
+
+export const rows = (
+  <For each={users}>
+    {(user, index) => (
+      <span>
+        {user.name}:{index.toFixed()}
+      </span>
+    )}
+  </For>
+);
+// @ts-expect-error For 的 item 与 each 保持一致。
+export const wrongRows = <For each={users}>{(user) => <span>{user.unknown}</span>}</For>;
+
+const Legacy = defineComponent({
+  setup(_props, { slots }) {
+    return () => <div>{slots.default?.()}</div>;
+  },
+});
+export const legacyChildren = (
+  <Legacy>
+    <span>ordinary Vue slot</span>
+  </Legacy>
+);
+export const legacyFunction = <Legacy>{() => <span>ordinary Vue function slot</span>}</Legacy>;

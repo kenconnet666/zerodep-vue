@@ -55,7 +55,9 @@ function componentMetadata(exports: ComponentExport[]): PluginObject {
             const name = t.isIdentifier(imported) ? imported.name : imported.value;
             return (
               (parent.node.source.value === 'vue' && name === 'defineComponent') ||
-              (parent.node.source.value === '@zerodep-vue/tsx' && name === '_component')
+              (parent.node.source.value === '@zerodep-vue/tsx' && name === '_component') ||
+              (parent.node.source.value === '@zerodep-vue/tsx/runtime' &&
+                name === 'createComponent')
             );
           };
 

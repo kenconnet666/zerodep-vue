@@ -1,0 +1,66 @@
+# Vue TSX 作者入口
+
+本页描述当前已接入的组件作者能力。运行时 CSS 及最终混用验收仍按 BLUEPRINT.md 实施；完整进度和远程证据见 [progress.md](progress.md)。
+
+Vite 使用 `@zerodep-vue/compiler/vite`，Babel 使用 `@zerodep-vue/compiler`。TypeScript 保持 `jsx: preserve`；自有作者文件选择 `jsxImportSource: @zerodep-vue/tsx`，也可以用文件顶部的 `/** @jsxImportSource @zerodep-vue/tsx */`。普通 Vue 文件继续选择原来的 Vue JSX 类型入口。
+
+## 初始化与更新
+
+```tsx
+import { ref } from 'vue';
+import { _component } from '@zerodep-vue/tsx';
+
+export const Counter = _component(() => {
+  const count = ref(0);
+  return <button onClick={() => count.value++}>{count.value}</button>;
+});
+```
+
+setup 初始化一次，返回内容在 Vue render 中持续求值。普通局部计算仍是快照；持续派生用 computed。带提前 return 的渲染分支可以更新；Vue 初始化操作应位于渲染分支之前，不能在一个可能提前返回的分支之后再创建持久状态或注册生命周期。
+
+宏按导入身份识别，支持导入别名和 namespace。局部命名 setup 可以复用，编译器不会改变该函数在其他普通调用位置的语义。没有编译插件时调用 _component 会明确报错，不提供只能渲染一次的伪兼容实现。
+
+## Props、默认值与内容
+
+```tsx
+import { ref, type Ref, type VNodeChild } from 'vue';
+
+type Props = {
+  value?: Ref<string>;
+  disabled?: boolean;
+  footer?: VNodeChild;
+  children?: VNodeChild;
+  onCommit?: (value: string) => void;
+};
+
+export const Editor = _component(
+  ({ value = ref(''), disabled = false, footer, children, onCommit }: Props) => (
+    <section>
+      <input disabled={disabled} v-model={value.value} />
+      {children}
+      <button onClick={() => onCommit?.(value.value)}>保存</button>
+      <footer>{footer}</footer>
+    </section>
+  ),
+);
+```
+
+解构别名读取最新 prop，父级可以替换 Ref。默认值仅由缺省或 undefined 触发，按实例缓存第一次需要的结果；null、false、0 和空字符串保留。对象、数组和 Ref 的默认值不会在实例间共享，函数默认值也不会被误当成回调立即执行。参数使用可选类型声明可省略输入。
+
+直接 JSX 内容使用 VNodeChild，带数据内容使用真实回调参数。自有 children 读取 Vue 默认 slot；具名 footer/header 是普通 props，不自动猜测同名 slot。旧组件的具名/作用域 slot 继续使用 v-slots。增强 JSX 类型保留普通 Vue 的 slot 写法，同时检查自有组件声明的 children 类型。
+
+Vue 的 ref、computed、watch、v-model、DOM ref 和 setup context 直接使用。需要公开方法时，通过 setup 第二参数的 expose；调用方可用显式接口为自己的组件引用标注类型。
+
+## 属性透传与列表
+
+单根组件保留 Vue 自动 attrs 透传。显式通过参数 rest 或 setup context attrs 转发时，编译器关闭重复的自动透传。需要手工控制时可用 `_component(setup, { inheritAttrs: false })`；name 也沿用 Vue 选项。
+
+```tsx
+import { For } from '@zerodep-vue/tsx';
+
+<For each={users.value} getKey={(user) => user.id} fallback={<p>暂无用户</p>}>
+  {(user, index) => <UserRow user={user} position={index + 1} />}
+</For>;
+```
+
+For 使用 Vue Fragment，不增加 DOM。稳定 key 保留重排后的行身份；省略 getKey 时按位置更新。回调参数是普通数据，持久状态放在行组件中。空列表或空值显示直接传入的 fallback。普通 map、if、三元和短路表达式仍遵循 JavaScript。
