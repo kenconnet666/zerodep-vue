@@ -1,9 +1,13 @@
 import type { NativeElements, ReservedProps, VNode, VNodeChild } from 'vue';
 import type { ManagedProps } from './component.ts';
+import type { ClassValue } from '@zerodep-vue/css';
 export { Fragment, h as jsx, h as jsxs, h as jsxDEV } from 'vue';
 
 type Elements = {
-  [Name in keyof NativeElements]: NativeElements[Name] & { children?: VNodeChild };
+  [Name in keyof NativeElements]: Omit<NativeElements[Name], 'class'> & {
+    children?: VNodeChild;
+    class?: ClassValue;
+  };
 };
 
 /** 按文件或工程选择的 JSX 类型入口，不修改全局 Vue JSX 声明。 */

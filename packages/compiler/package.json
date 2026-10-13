@@ -16,6 +16,12 @@
       "types": "./dist/vite.d.ts",
       "import": "./dist/vite.js",
       "default": "./dist/vite.js"
+    },
+    "./runtime": {
+      "zerodep-vue-source": "./src/runtime.ts",
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js",
+      "default": "./dist/runtime.js"
     }
   },
   "files": [
@@ -43,7 +49,8 @@
     "@vue/shared": "catalog:",
     "@babel/preset-typescript": "catalog:",
     "@vue/compiler-sfc": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "@zerodep-vue/css": "workspace:*"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0",

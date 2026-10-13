@@ -1,12 +1,69 @@
 import { defineComponent, getCurrentInstance, shallowReadonly } from 'vue';
 import type { ComponentOptions, SetupContext } from 'vue';
+import { CLASS_PROP, hasIncomingClass, inheritClass, renderCss } from '@zerodep-vue/css/runtime';
+import type { ClassValue } from '@zerodep-vue/css';
+export {
+  createCssVNode,
+  cloneCssVNode,
+  mergeCssProps,
+  binding,
+  piece,
+  template,
+  add,
+} from '@zerodep-vue/css/runtime';
 
 /** 编译器与 CSS 边界共享标记，不通过组件名称猜测作者协议。 */
 export const componentMarker = Symbol.for('@zerodep-vue/component');
 
 /** @internal 编译器目标；继续使用 Vue 的真实 stateful component。 */
 export function createComponent(options: ComponentOptions) {
-  const component = defineComponent(options);
+  const declared = Array.isArray(options.props)
+    ? Object.fromEntries(options.props.map((key) => [key, null]))
+    : { ...options.props };
+  if (Object.prototype.hasOwnProperty.call(declared, CLASS_PROP))
+    throw new Error(`${CLASS_PROP} 是编译器保留字段。`);
+  const declaresClass = Object.prototype.hasOwnProperty.call(declared, 'class');
+  if (declaresClass)
+    declared.class = { ...(typeof declared.class === 'object' ? declared.class : {}), type: null };
+  declared[CLASS_PROP] = { type: null };
+  const setup = options.setup;
+  const component = defineComponent({
+    ...options,
+    props: declared,
+    setup(raw, context) {
+      const instance = getCurrentInstance()!;
+      const wrapped: SetupContext = {
+        get attrs() {
+          return new Proxy(context.attrs, {
+            get(target, key) {
+              return key === 'class' && hasIncomingClass(instance)
+                ? (raw as Props)[CLASS_PROP]
+                : Reflect.get(target, key);
+            },
+          });
+        },
+        get slots() {
+          return context.slots;
+        },
+        emit: context.emit,
+        expose: context.expose,
+      };
+      const finish = (value: unknown): unknown => {
+        if (typeof value !== 'function') return value;
+        return (...args: unknown[]) =>
+          renderCss(() => {
+            const result = value(...args);
+            return options.inheritAttrs !== false && !declaresClass && hasIncomingClass(instance)
+              ? inheritClass(result, (raw as Props)[CLASS_PROP] as ClassValue)
+              : result;
+          });
+      };
+      const result = setup?.(raw, wrapped);
+      return (result instanceof Promise ? result.then(finish) : finish(result)) as ReturnType<
+        NonNullable<ComponentOptions['setup']>
+      >;
+    },
+  });
   Object.defineProperty(component, componentMarker, { value: true });
   return component;
 }
@@ -28,6 +85,7 @@ export function resolveProps(raw: Props, context: SetupContext, defaults: Defaul
   }
   return new Proxy(raw, {
     get(target, key) {
+      if (key === CLASS_PROP) return undefined;
       if (
         key === 'children' &&
         !own(instance?.vnode.props ?? {}, 'children') &&
@@ -35,7 +93,10 @@ export function resolveProps(raw: Props, context: SetupContext, defaults: Defaul
       ) {
         return context.slots.default();
       }
-      const value = Reflect.get(target, key);
+      const value =
+        key === 'class' && instance && hasIncomingClass(instance)
+          ? raw[CLASS_PROP]
+          : Reflect.get(target, key);
       if (value !== undefined || !own(defaults, key)) return value;
       if (!fallback.has(key)) {
         if (evaluating.has(key)) throw new TypeError(`组件默认值存在循环依赖：${String(key)}。`);
@@ -54,12 +115,22 @@ export function resolveProps(raw: Props, context: SetupContext, defaults: Defaul
     deleteProperty() {
       throw new TypeError('组件 props 只读，不能删除。');
     },
+    ownKeys(target) {
+      return Reflect.ownKeys(target).filter((key) => key !== CLASS_PROP);
+    },
+    has(target, key) {
+      return key !== CLASS_PROP && Reflect.has(target, key);
+    },
+    getOwnPropertyDescriptor(target, key) {
+      return key === CLASS_PROP ? undefined : Reflect.getOwnPropertyDescriptor(target, key);
+    },
   });
 }
 
 /** @internal rest 每次枚举当前 props/attrs，保留新增、删除和属性读取的 Vue 语义。 */
 export function restProps(props: Props, context: SetupContext, excluded: readonly string[]): Props {
   const omitted = new Set(excluded);
+  omitted.add(CLASS_PROP);
   // Vue 对公开的只读代理会在构造 VNode 时复制 props。否则两个 VNode 共用实时对象，
   // diff 时旧值已消失，属性删除和监听移除就无法被观察到。
   return shallowReadonly(

@@ -168,6 +168,8 @@ LSP 当前只承诺已有标准 TSX 的 TypeScript 能力。作者宏的声明�
 
 作者始终使用 `class={css(...)}`、`class={styles.root}` 或 `class={[styles.root, external]}`。`css` 和 `bx` 保留原名，不增加专用 JSX 样式属性，也不要求手写 props 展开适配。编译器的内部承载方式不成为组件使用者需要维护的 API。
 
+直接导入 CSS/TSX 工具的文件自动启用 class 协议。普通 Vue 文件只从项目共享模块取得 class 值时，可在编译/Vite 配置中统一开启 `zerodep.css`；这只选择需要接线的文件，不改变作者 JSX。明确关闭的普通文件继续使用官方路径。增强文件需要保留 class/style 增删所需的完整 props 比较，不能让 optimize 模式漏掉隐式变量更新或分支切换清理。
+
 ### 4.2 旧 TSX 回归范围
 
 必须继承上游对以下内容的处理：

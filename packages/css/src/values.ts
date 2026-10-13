@@ -65,3 +65,10 @@ export function firstThatWorks<const T extends Scalar>(...values: readonly T[]):
   if (!values.length) throw new Error('firstThatWorks 至少需要一个候选值。');
   return Object.freeze({ [FALLBACK]: Object.freeze([...values]) });
 }
+
+/** @internal 普通输入完整保留 JS +；含绑定的字符串拼接保留独立片段。 */
+export function add(left: any, right: any): any {
+  if (isBinding(left) || isTemplate(left) || isBinding(right) || isTemplate(right))
+    return template([piece(left), piece(right)]);
+  return left + right;
+}

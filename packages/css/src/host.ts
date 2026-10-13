@@ -80,8 +80,11 @@ function prune(store: Registry) {
 export class CssHost {
   private readonly options: CssHostOptions;
   private readonly owned = new Set<() => void>();
-  private readonly collected = new Map<string, { rule: CssRule; text: string }>();
+  private readonly collected = new Map<string, { rule: CssRule; text: string; nonce?: string }>();
+  private readonly collectedNames = new Map<string, string>();
   private store: Registry | undefined;
+  private readonly installed = new WeakSet<App>();
+  private installations = 0;
 
   constructor(options: CssHostOptions = {}) {
     const limit = options.maxUnusedRules ?? 256;
@@ -92,8 +95,13 @@ export class CssHost {
   }
 
   install(app: App): void {
+    if (this.installed.has(app)) return;
+    this.installed.add(app);
+    this.installations++;
     app.provide(cssHostKey, this);
-    app.onUnmount(() => this.dispose());
+    app.onUnmount(() => {
+      if (--this.installations === 0) this.dispose();
+    });
   }
 
   private text(rule: CssRule): string {
@@ -104,14 +112,16 @@ export class CssHost {
   }
 
   /** SSR 在实际消费时收集；为每个请求创建宿主，不接触浏览器 DOM。 */
-  collect(rule: CssRule): void {
+  collect(rule: CssRule, origin: CssHost = this): void {
     if (!rule.cssText) return;
-    const previous = this.collected.get(rule.name);
-    if (previous && previous.rule.cssText !== rule.cssText)
-      throw new Error(`CSS 名称碰撞：${rule.name}`);
-    this.collected.set(rule.name, {
+    const previous = this.collectedNames.get(rule.name);
+    if (previous && previous !== rule.cssText) throw new Error(`CSS 名称碰撞：${rule.name}`);
+    const text = origin.text(rule);
+    this.collectedNames.set(rule.name, rule.cssText);
+    this.collected.set(hash(text), {
       rule: { name: rule.name, cssText: rule.cssText },
-      text: this.text(rule),
+      text,
+      ...(origin.options.nonce === undefined ? {} : { nonce: origin.options.nonce }),
     });
   }
 
@@ -167,10 +177,11 @@ export class CssHost {
     return [...this.collected.values()].map(({ text }) => text).join('');
   }
   renderStyles(): string {
-    const nonce =
-      this.options.nonce === undefined ? '' : ` nonce="${escapeAttribute(this.options.nonce)}"`;
     return [...this.collected.values()]
-      .map(({ text }) => `<style data-zv-rule="${hash(text)}"${nonce}>${text}</style>`)
+      .map(
+        ({ text, nonce }) =>
+          `<style data-zv-rule="${hash(text)}"${nonce === undefined ? '' : ` nonce="${escapeAttribute(nonce)}"`}>${text}</style>`,
+      )
       .join('');
   }
   stats() {
@@ -186,6 +197,7 @@ export class CssHost {
   dispose(): void {
     for (const release of [...this.owned]) release();
     this.collected.clear();
+    this.collectedNames.clear();
   }
 }
 

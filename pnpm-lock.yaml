@@ -235,6 +235,9 @@ importers:
 
   fixtures/authoring:
     dependencies:
+      '@zerodep-vue/css':
+        specifier: workspace:*
+        version: link:../../packages/css
       '@zerodep-vue/tsx':
         specifier: workspace:*
         version: link:../../packages/tsx
@@ -351,6 +354,9 @@ importers:
       '@vue/shared':
         specifier: 'catalog:'
         version: 3.5.43
+      '@zerodep-vue/css':
+        specifier: workspace:*
+        version: link:../css
       typescript:
         specifier: 6.0.3
         version: 6.0.3

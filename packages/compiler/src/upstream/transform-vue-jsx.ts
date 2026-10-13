@@ -552,13 +552,17 @@ function transformJSXElement(
     }
   }
 
+  // 自有接线只接管可能携带 class 元数据的节点；普通字面量保留上游工厂。
+  const cssFactory = state.get('zerodep:createVNode')
+  // CSS 可隐式增加或撤去 class/style；跨 JSX 分支复用节点时也必须完整比较 props。
+  const effectivePatchFlag = cssFactory && patchFlag > 0 ? patchFlag | PatchFlags.FULL_PROPS : patchFlag
   const createVNode = t.callExpression(
-    createIdentifier(state, 'createVNode'),
+    cssFactory ? cssFactory(path) : createIdentifier(state, 'createVNode'),
     [
       tag,
       props,
       VNodeChild || t.nullLiteral(),
-      !!patchFlag && optimize && t.numericLiteral(patchFlag),
+      !!effectivePatchFlag && optimize && t.numericLiteral(effectivePatchFlag),
       !!dynamicPropNames.size &&
         optimize &&
         t.arrayExpression(

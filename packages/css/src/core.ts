@@ -81,12 +81,12 @@ export function css(...inputs: readonly CssInput[]): CssClass {
 }
 
 /** 具名 class 集合；保留精确成员名供补全和组件间复用。 */
-export function create<const Styles extends Record<string, CssInput>>(
-  styles: Styles,
-): { readonly [Key in keyof Styles]: CssClass } {
+export function create<const Name extends string>(
+  styles: Record<Name, CssInput>,
+): { readonly [Key in Name]: CssClass } {
   return Object.freeze(
     Object.fromEntries(Object.entries(styles).map(([key, value]) => [key, css(value)])),
-  ) as { readonly [Key in keyof Styles]: CssClass };
+  ) as { readonly [Key in Name]: CssClass };
 }
 
 /** 后项替换同一目标/属性的完整声明组；保留清除标记的来源，保证组合可结合。 */

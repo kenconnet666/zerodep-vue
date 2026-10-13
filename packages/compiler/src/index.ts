@@ -5,8 +5,15 @@ import type * as t from '@babel/types';
 import upstream from './upstream/index.ts';
 import type { State, VueJSXPluginOptions } from './upstream/interface.ts';
 import { transformComponents } from './component.ts';
+import { connectCss, transformCss } from './css.ts';
+import type { CssOptions } from './css.ts';
 
-const plugin = declare<State, VueJSXPluginOptions>((api, options, dirname) => {
+export interface CompilerOptions extends VueJSXPluginOptions {
+  /** 自有增强的配置；普通上游选项保持原有含义。 */
+  zerodep?: CssOptions;
+}
+
+const plugin = declare<State, CompilerOptions>((api, options, dirname) => {
   const base = upstream(api, options, dirname);
   // 固定上游在 Program.enter 注册 helper；自有 lowering 必须在其 JSX visitor 消费节点前完成。
   const program = base.visitor!.Program as { enter(path: NodePath<t.Program>, state: State): void };
@@ -18,7 +25,9 @@ const plugin = declare<State, VueJSXPluginOptions>((api, options, dirname) => {
       Program: {
         enter(path, state) {
           transformComponents(path, state);
+          const runtime = transformCss(path, state, options.zerodep);
           program.enter(path, state);
+          if (runtime) connectCss(path, state, runtime);
         },
       },
     } as Visitor<State>,

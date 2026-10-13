@@ -6,10 +6,10 @@ import { relative } from 'node:path';
 import { createFilter, normalizePath } from 'vite';
 import type { FilterPattern, Plugin } from 'vite';
 import jsx from './index.ts';
-import type { VueJSXPluginOptions } from './index.ts';
+import type { CompilerOptions } from './index.ts';
 
 /** Vue VDOM TSX 的 Vite 入口；与 Babel 入口共享全部 JSX 选项。 */
-export interface ViteOptions extends VueJSXPluginOptions {
+export interface ViteOptions extends CompilerOptions {
   /** 需要处理的文件；默认接入 JS/TSX，普通 TS 仅在引用自有工具时处理。 */
   include?: FilterPattern;
   /** 显式排除的源文件。 */

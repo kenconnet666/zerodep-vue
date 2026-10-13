@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "@zerodep-vue/tsx": "workspace:*",
-    "vue": "catalog:"
+    "vue": "catalog:",
+    "@zerodep-vue/css": "workspace:*"
   },
   "devDependencies": {
     "typescript": "catalog:"
