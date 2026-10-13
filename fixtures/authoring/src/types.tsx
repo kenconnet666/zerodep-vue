@@ -1,5 +1,5 @@
 import { _component, For } from '@zerodep-vue/tsx';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, toRef } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 
 export const Select = _component(
@@ -25,6 +25,36 @@ export const Field = _component(({ value = ref('') }: { value?: Ref<string> }) =
 ));
 export const field = <Field />;
 export const explicitDefault = <Field value={undefined} />;
+const source = ref('source');
+const readOnly = computed(() => source.value);
+const writable = computed({
+  get: () => source.value,
+  set: (value: string) => {
+    source.value = value;
+  },
+});
+export const computedInput = <Field value={writable} />;
+// @ts-expect-error getter-only computed 不能传给可编辑 Ref prop。
+export const readonlyInput = <Field value={readOnly} />;
+const ReadonlyDisplay = _component(({ value }: { value: Readonly<Ref<string>> }) => (
+  <span>{value.value}</span>
+));
+export const readonlyDisplay = <ReadonlyDisplay value={readOnly} />;
+export const getterDisplay = <ReadonlyDisplay value={toRef(() => source.value)} />;
+
+const Echo = _component(<T,>({ value, render }: { value: T; render: (value: T) => VNodeChild }) => (
+  <div>{render(value)}</div>
+));
+export const echo = <Echo value="typed" render={(value) => value.toUpperCase()} />;
+export const wrongEcho = (
+  <Echo
+    value="typed"
+    render={(value) => {
+      // @ts-expect-error 模型约束不能破坏普通泛型值的回调推断。
+      return value.toFixed();
+    }}
+  />
+);
 // @ts-expect-error Ref 的值类型在跨组件传递时保持。
 export const wrongField = <Field value={ref(123)} />;
 

@@ -329,6 +329,8 @@ form.value = { name: '新用户', age: 20 };
 
 可编辑位置不能接受只读 computed。需要同时核对 TypeScript 的可赋值性边界和 Vue 可识别只读对象的开发期诊断，不能仅凭接口名字 `Ref` 声称已经排除所有只读来源。
 
+自有 JSX 的可写 Ref 输入复用 Vue computed 的类型标记，排除 getter-only computed，接受普通 Ref 和带 get/set 的 computed；声明为 `Readonly<Ref<T>>` 的展示输入仍允许只读来源。TypeScript 的结构可赋值性不能排除所有 `Readonly<Ref<T>>`，因此编译器识别直接 `.value` 赋值、更新、解构赋值和 v-model，在读取对应 prop 时通过 Vue isReadonly 诊断实际只读对象。间接业务函数或任意强制类型转换仍受 Vue 自身边界约束，不承诺静态证明所有读写路径。
+
 ### 5.4 props 默认值、参数、回调和属性透传
 
 默认值是自有组件的基础能力。作者在 `_component` 参数解构中集中设置默认值，直接使用 TypeScript 的 `=` 写法；普通 Vue 组件已有的 `props.default` 及工厂函数写法继续原样支持。

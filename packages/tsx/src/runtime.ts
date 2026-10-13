@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, shallowReadonly } from 'vue';
+import { defineComponent, getCurrentInstance, isReadonly, shallowReadonly } from 'vue';
 import type { ComponentOptions, SetupContext } from 'vue';
 import { CLASS_PROP, hasIncomingClass, inheritClass, renderCss } from '@zerodep-vue/css/runtime';
 import type { ClassValue } from '@zerodep-vue/css';
@@ -76,10 +76,23 @@ const own = (value: object, key: PropertyKey) => Object.prototype.hasOwnProperty
  * @internal 默认值缓存属于本次 setup，父级更换/撤去输入不会创建共享 Ref。
  * 只在消费位置读取 props 或 slot，避免把 Vue 的依赖追踪提前到初始化阶段。
  */
-export function resolveProps(raw: Props, context: SetupContext, defaults: Defaults = {}): Props {
+export function resolveProps(
+  raw: Props,
+  context: SetupContext,
+  defaults: Defaults = {},
+  writable: readonly string[] = [],
+): Props {
   const instance = getCurrentInstance();
   const fallback = new Map<PropertyKey, unknown>();
   const evaluating = new Set<PropertyKey>();
+  const editable = new Set<PropertyKey>(writable);
+  const checked = (key: PropertyKey, value: unknown) => {
+    if (editable.has(key) && isReadonly(value))
+      throw new TypeError(
+        `[ZV_READONLY_MODEL] ${String(key)} 用于 .value 编辑，不能接收只读 computed、getter toRef 或 readonly 来源；请传入 Ref 或带 get/set 的 computed。`,
+      );
+    return value;
+  };
   if (own(instance?.vnode.props ?? {}, 'children') && context.slots.default) {
     throw new TypeError('组件不能同时接收显式 children prop 和嵌套 children。');
   }
@@ -97,7 +110,7 @@ export function resolveProps(raw: Props, context: SetupContext, defaults: Defaul
         key === 'class' && instance && hasIncomingClass(instance)
           ? raw[CLASS_PROP]
           : Reflect.get(target, key);
-      if (value !== undefined || !own(defaults, key)) return value;
+      if (value !== undefined || !own(defaults, key)) return checked(key, value);
       if (!fallback.has(key)) {
         if (evaluating.has(key)) throw new TypeError(`组件默认值存在循环依赖：${String(key)}。`);
         evaluating.add(key);
@@ -107,7 +120,7 @@ export function resolveProps(raw: Props, context: SetupContext, defaults: Defaul
           evaluating.delete(key);
         }
       }
-      return fallback.get(key);
+      return checked(key, fallback.get(key));
     },
     set() {
       throw new TypeError('组件 props 只读；需要写入共享状态时修改传入 Ref 的 .value。');

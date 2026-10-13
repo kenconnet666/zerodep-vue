@@ -2,7 +2,16 @@
 import { afterEach, describe, expect, test } from 'vitest';
 import { mount } from '@vue/test-utils';
 import type { VueWrapper } from '@vue/test-utils';
-import { computed, defineComponent, nextTick, ref, shallowReactive } from 'vue';
+import {
+  computed,
+  createApp,
+  defineComponent,
+  nextTick,
+  readonly,
+  ref,
+  shallowReactive,
+  toRef,
+} from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import { _component, For } from '@zerodep-vue/tsx';
 import type { Choices, SharedProps } from './props.ts';
@@ -13,6 +22,56 @@ afterEach(() => {
 });
 
 describe('_component', () => {
+  test('editable models diagnose native readonly sources while writable computed keeps writeback', async () => {
+    const Edit = _component(({ model: state }: { model: Ref<string> }) => (
+      <input v-model={state.value} />
+    ));
+    const Direct = _component((props: { model: Ref<string> }) => (
+      <button
+        onClick={() => {
+          props.model.value += '!';
+        }}
+      >
+        {props.model.value}
+      </button>
+    ));
+    const value = ref('start');
+    const writable = computed({
+      get: () => value.value,
+      set: (next: string) => {
+        value.value = next;
+      },
+    });
+    const wrapper = mount(Edit, { props: { model: writable } });
+    mounted.push(wrapper);
+    await wrapper.get('input').setValue('updated');
+    expect(value.value).toBe('updated');
+    for (const source of [computed(() => value.value), toRef(() => value.value), readonly(value)]) {
+      for (const View of [Edit, Direct]) {
+        const errors: unknown[] = [];
+        const app = createApp(View, { model: source });
+        app.config.errorHandler = (error) => {
+          errors.push(error);
+        };
+        try {
+          app.mount(document.createElement('div'));
+          expect(errors.some((error) => String(error).includes('[ZV_READONLY_MODEL] model'))).toBe(
+            true,
+          );
+        } finally {
+          app.unmount();
+        }
+      }
+    }
+    expect(value.value).toBe('updated');
+    const Display = _component(({ model }: { model: Readonly<Ref<string>> }) => (
+      <span>{model.value}</span>
+    ));
+    const display = mount(Display, { props: { model: computed(() => value.value) } });
+    mounted.push(display);
+    expect(display.text()).toBe('updated');
+  });
+
   test('default expressions keep their parameter scope and cache earlier dependencies per instance', async () => {
     const outer = 'outer';
     const number = ref(2);

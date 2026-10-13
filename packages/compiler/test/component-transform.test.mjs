@@ -85,3 +85,13 @@ test('lexical type scopes preserve local shadows, outer aliases and enclosing ge
   assert.equal((code.match(/inner:\s*\{/g) ?? []).length, 1);
   assert.equal((code.match(/outer:\s*\{/g) ?? []).length, 1);
 });
+
+test('editable model discovery respects prop aliases and nested shadowing', async () => {
+  const code = await compile(`import {_component} from '@zerodep-vue/tsx';
+    const Edit=_component(({model:state,other})=>{
+      const change=(other)=>other.value++;
+      return <><input v-model={state.value}/><span>{other.value}</span></>;
+    });`);
+  assert.match(code, /resolveProps\([^;]+\["model"\]/s);
+  assert(!code.includes('["model", "other"]'));
+});

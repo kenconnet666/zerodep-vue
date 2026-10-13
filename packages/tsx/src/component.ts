@@ -1,4 +1,12 @@
-import type { ComponentOptions, DefineSetupFnComponent, SetupContext, VNodeChild } from 'vue';
+import type {
+  ComponentOptions,
+  ComputedRef,
+  DefineSetupFnComponent,
+  Ref,
+  SetupContext,
+  VNodeChild,
+  WritableComputedRef,
+} from 'vue';
 
 declare const authorProps: unique symbol;
 
@@ -8,8 +16,27 @@ export interface AuthorProps {
 }
 
 type SlotContent = (...args: any[]) => VNodeChild;
+type Same<Left, Right> =
+  (<Value>() => Value extends Left ? 1 : 2) extends <Value>() => Value extends Right ? 1 : 2
+    ? true
+    : false;
+type ComputedBrand = Exclude<keyof ComputedRef<unknown>, keyof Ref<unknown> | 'effect'>;
+type WritableBrand = Exclude<keyof WritableComputedRef<unknown>, keyof ComputedRef<unknown>>;
+/** 复用 Vue 的 computed 标记，拒绝 getter-only computed，不创造新的状态容器。 */
+// 先检查原始 value 修饰符；先收窄为 Ref 会把只读成员交叉成可写成员，丢失区别。
+type ModelInput<Value> = Value extends unknown
+  ? Same<Pick<Value, 'value' & keyof Value>, { value: Value['value' & keyof Value] }> extends true
+    ? Value extends Ref
+      ? Value &
+          (
+            | { readonly [Key in ComputedBrand]?: never }
+            | Pick<WritableComputedRef<unknown>, WritableBrand>
+          )
+      : Value
+    : Value
+  : never;
 type OptionalInputs<P> = {
-  [Key in keyof P]: {} extends Pick<P, Key> ? P[Key] | undefined : P[Key];
+  [Key in keyof P]: {} extends Pick<P, Key> ? ModelInput<P[Key]> | undefined : ModelInput<P[Key]>;
 };
 
 /** 普通 Vue 组件保留原有 VNode / 函数 / 对象 slots，不放宽自有组件的内容类型。 */

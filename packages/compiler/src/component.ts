@@ -3,6 +3,7 @@ import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
 import { runtimeProps } from './component-types.ts';
 import { prepareDefaults } from './component-defaults.ts';
+import { writableModels } from './component-writes.ts';
 import type { State } from './upstream/interface.ts';
 
 const runtime = '@zerodep-vue/tsx/runtime';
@@ -141,6 +142,7 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
       '[ZV_SETUP] setup 不能是 generator；异步初始化使用 async 与 Vue Suspense。',
     );
   prepareDefaults(fn);
+  const writable = writableModels(fn);
   const metadata = runtimeProps(call, fn.node, state);
   const first = fn.node.params[0];
   const contextParam = fn.node.params[1];
@@ -311,6 +313,7 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
           t.cloneNode(raw),
           t.cloneNode(context),
           t.objectExpression(defaults),
+          t.arrayExpression(writable.map((name) => t.stringLiteral(name))),
         ]),
       ),
     ]),

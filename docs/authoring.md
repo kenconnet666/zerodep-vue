@@ -55,6 +55,8 @@ export const Editor = _component(
 
 Vue 的 ref、computed、watch、v-model、DOM ref 和 setup context 直接使用。需要公开方法时，通过 setup 第二参数的 expose；调用方可用显式接口为自己的组件引用标注类型。
 
+编辑输入声明 `Ref<T>`，展示输入可声明 `Readonly<Ref<T>>`。自有 JSX 会排除传给可编辑输入的 getter-only computed，带 get/set 的 computed 继续可用。组件直接写 `.value` 或使用 v-model 时，编译接线还会用 Vue isReadonly 检查实际来源，发现只读 computed、getter toRef 或 readonly 包装时报告 `ZV_READONLY_MODEL`。TypeScript 的结构类型无法证明所有只读容器，任意业务函数内的间接写入也不会被跨函数重新分析；这些路径保留 Vue 自身的只读语义。
+
 ## 属性透传与列表
 
 单根组件保留 Vue 自动 attrs 透传。显式通过参数 rest 或 setup context attrs 转发时，编译器关闭重复的自动透传。需要手工控制时可用 `_component(setup, { inheritAttrs: false })`；name 也沿用 Vue 选项。
