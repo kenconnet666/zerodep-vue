@@ -2,6 +2,7 @@ import { addNamed } from '@babel/helper-module-imports';
 import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
 import { runtimeProps } from './component-types.ts';
+import { prepareDefaults } from './component-defaults.ts';
 import type { State } from './upstream/interface.ts';
 
 const runtime = '@zerodep-vue/tsx/runtime';
@@ -135,6 +136,11 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
       '[ZV_SETUP] _component 的 setup 必须是可分析的函数或局部常量函数。',
     );
   const fn = setup as NodePath<t.ArrowFunctionExpression | t.FunctionExpression>;
+  if (fn.node.generator)
+    throw fn.buildCodeFrameError(
+      '[ZV_SETUP] setup 不能是 generator；异步初始化使用 async 与 Vue Suspense。',
+    );
+  prepareDefaults(fn);
   const metadata = runtimeProps(call, fn.node, state);
   const first = fn.node.params[0];
   const contextParam = fn.node.params[1];

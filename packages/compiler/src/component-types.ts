@@ -1,7 +1,12 @@
 import type { NodePath } from '@babel/core';
 import template from '@babel/template';
 import * as t from '@babel/types';
-import { babelParse, extractRuntimeProps, registerTS } from '@vue/compiler-sfc';
+import {
+  babelParse,
+  extractRuntimeProps,
+  registerTS,
+  resolveTypeElements,
+} from '@vue/compiler-sfc';
 import type { SimpleTypeResolveContext } from '@vue/compiler-sfc';
 import ts from 'typescript';
 import type { State } from './upstream/interface.ts';
@@ -17,17 +22,19 @@ function originalNode(
   tree: object,
   start: number | null | undefined,
   type: string,
-): TypeNode | undefined {
+): { node: TypeNode; ancestors: Record<string, unknown>[] } | undefined {
   if (start == null) return;
-  const pending: unknown[] = [tree];
+  const pending: { value: unknown; ancestors: Record<string, unknown>[] }[] = [
+    { value: tree, ancestors: [] },
+  ];
   const visited = new WeakSet<object>();
   while (pending.length) {
-    const value = pending.pop();
+    const { value, ancestors } = pending.pop()!;
     if (!value || typeof value !== 'object') continue;
     if (visited.has(value)) continue;
     visited.add(value);
     const node = value as Record<string, unknown>;
-    if (node.start === start && node.type === type) return value as TypeNode;
+    if (node.start === start && node.type === type) return { node: value as TypeNode, ancestors };
     for (const [key, item] of Object.entries(node)) {
       if (
         !key.startsWith('_') &&
@@ -36,7 +43,7 @@ function originalNode(
         item &&
         typeof item === 'object'
       )
-        pending.push(item);
+        pending.push({ value: item, ancestors: [...ancestors, node] });
     }
   }
 }
@@ -69,31 +76,16 @@ export function runtimeProps(
   const parsed = structuredClone(pristine);
   const original = originalNode(parsed, type.start ?? type.loc?.start.index, type.type);
   if (!original) throw call.buildCodeFrameError('[ZV_PROPS_TYPE] 无法定位 props 的原始类型声明。');
-  const parameterNode =
-    setup.typeParameters &&
-    originalNode(
-      parsed,
-      setup.typeParameters.start ?? setup.typeParameters.loc?.start.index,
-      setup.typeParameters.type,
-    );
-  const generics: ParserStatement[] =
-    parameterNode?.type === 'TSTypeParameterDeclaration'
-      ? parameterNode.params.map((parameter) => ({
-          type: 'TSTypeAliasDeclaration',
-          id: { type: 'Identifier', name: parameter.name },
-          typeAnnotation: parameter.constraint ?? { type: 'TSUnknownKeyword' },
-        }))
-      : [];
   const context: Omit<SimpleTypeResolveContext, 'ast' | 'propsTypeDecl'> & {
     ast: ParserStatement[];
     propsTypeDecl: TypeNode;
   } = {
     filename: (state.file.opts.filename ?? 'component.tsx').replaceAll('\\', '/'),
     source: state.file.code,
-    ast: [...generics, ...parsed.program.body],
+    ast: parsed.program.body,
     options: { fs: { fileExists: ts.sys.fileExists, readFile: ts.sys.readFile }, isProd: false },
     isCE: false,
-    propsTypeDecl: original,
+    propsTypeDecl: original.node,
     propsRuntimeDefaults: undefined,
     propsDestructuredBindings: {},
     emitsTypeDecl: undefined,
@@ -110,6 +102,35 @@ export function runtimeProps(
       return state.file.code.slice(node.start ?? 0, node.end ?? 0);
     },
   };
+  // 逐级让 Vue 建立真实词法作用域。直接把局部接口拼到根 ast 会错误地合并同名接口，
+  // 还会让外层别名意外改用内层声明；各级 _ownerScope 必须保持独立。
+  const bodies: ParserStatement[][] = [parsed.program.body];
+  for (const ancestor of original.ancestors) {
+    const parameters = ancestor.typeParameters as TypeNode | undefined;
+    if (parameters?.type === 'TSTypeParameterDeclaration') {
+      bodies.push(
+        parameters.params.map((parameter) => ({
+          type: 'TSTypeAliasDeclaration',
+          id: { type: 'Identifier', name: parameter.name },
+          typeAnnotation: parameter.constraint ?? { type: 'TSUnknownKeyword' },
+        })),
+      );
+    }
+    if (ancestor.type === 'BlockStatement' || ancestor.type === 'TSModuleBlock')
+      bodies.push(ancestor.body as ParserStatement[]);
+  }
+  let parent: SimpleTypeResolveContext['scope'];
+  for (const body of bodies) {
+    const current = { ...context, ast: body } as unknown as SimpleTypeResolveContext;
+    resolveTypeElements(current, { type: 'TSTypeLiteral', members: [] });
+    if (parent) {
+      Object.setPrototypeOf(current.scope!.types, parent.types);
+      Object.setPrototypeOf(current.scope!.declares, parent.declares);
+      Object.setPrototypeOf(current.scope!.imports, parent.imports);
+    }
+    parent = current.scope;
+  }
+  if (parent) context.scope = parent;
   // 固定 Vue 运行时读取 Babel 7 字段，声明中的 @babel/types 可能解析到 Babel 8。
   // 只在已校验 parser 来源的调用边界适配声明，绝不将 Babel 8 节点直接传进去。
   const code = extractRuntimeProps(context as unknown as SimpleTypeResolveContext);

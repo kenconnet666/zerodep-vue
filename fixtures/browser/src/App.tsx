@@ -101,7 +101,7 @@ const Content = _component(({ initial }: { initial: InitialState }) => {
         <section>
           <NInput
             value={holder.text.value}
-            onUpdateValue={(value) => {
+            onUpdateValue={(value: string) => {
               holder.text.value = value;
             }}
             inputProps={{ 'aria-label': 'Naive 输入' }}

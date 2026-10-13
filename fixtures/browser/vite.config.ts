@@ -14,7 +14,10 @@ export default defineConfig({
       ),
     },
   },
-  ssr: { noExternal: ['@zerodep-vue/css', '@zerodep-vue/tsx'] },
+  ssr: {
+    noExternal: ['@zerodep-vue/css', '@zerodep-vue/tsx'],
+    resolve: { conditions: ['zerodep-vue-source', 'module', 'node', 'development|production'] },
+  },
   server: { host: '127.0.0.1' },
   build: { sourcemap: true, outDir: '.generated/client', emptyOutDir: false },
 });

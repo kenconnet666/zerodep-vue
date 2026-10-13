@@ -47,6 +47,10 @@ export const Editor = _component(
 
 解构别名读取最新 prop，父级可以替换 Ref。默认值仅由缺省或 undefined 触发，按实例缓存第一次需要的结果；null、false、0 和空字符串保留。对象、数组和 Ref 的默认值不会在实例间共享，函数默认值也不会被误当成回调立即执行。参数使用可选类型声明可省略输入。
 
+默认表达式保留参数位置原有的词法作用域，setup 内的同名局部变量不会遮蔽它捕获的外层值。`b = a` 可以引用更早参数；直接引用自身或后续参数会得到 `ZV_DEFAULT_ORDER` 诊断。延后执行的普通回调仍可捕获后面的参数，执行时读取最新输入。依赖另一个 prop 的默认值只缓存首次结果，持续派生请使用 computed。
+
+组件类型可以使用模块导入、局部接口/别名和外围泛型约束。局部同名接口按词法作用域遮蔽，外层别名保留其定义位置的含义。运行时属性解析沿用固定 Vue 类型解析器，无法解析的类型会给出源码位置，而不是丢弃为任意 attrs。setup 支持普通或 async 函数，generator 不是 Vue 的初始化协议，会在编译时诊断。
+
 直接 JSX 内容使用 VNodeChild，带数据内容使用真实回调参数。自有 children 读取 Vue 默认 slot；具名 footer/header 是普通 props，不自动猜测同名 slot。旧组件的具名/作用域 slot 继续使用 v-slots。增强 JSX 类型保留普通 Vue 的 slot 写法，同时检查自有组件声明的 children 类型。
 
 Vue 的 ref、computed、watch、v-model、DOM ref 和 setup context 直接使用。需要公开方法时，通过 setup 第二参数的 expose；调用方可用显式接口为自己的组件引用标注类型。

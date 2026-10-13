@@ -17,9 +17,11 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 6922299124943a12e92a8403e0c263e476e1d9d8 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38468559537) 全部成功，全局规则生命周期、SSR 读取停止和现有全部回归通过。
 
-真实浏览器混用夹具已建立，待本次 CI 首次完整执行：同一提交的 Naive fork 产物经来源与 SHA-256 核验后用于开发/生产 × Chromium/Firefox 四组。新增源码声明发射仅服务真实接口消费检查，不替代上游类型或运行验收。交互、实际 CSS 计算、主题 Teleport、请求隔离和 hydration 的失败轨迹会作为独立 artifact 保存，未取得结果前不宣称这些场景通过。
+2fd1ab72fc016a1703581c283f64beb384051bb2 的 [首轮浏览器 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38469640274) 中，已有全部任务及 Naive 源码声明发射成功，Firefox 开发模式的四项交互/CSS/主题用例通过。SSR 入口缺少独立的 Vite server source condition，开发 SSR 和生产 SSR 构建因此失败；Chromium 开发任务被 Naive NInput 的联合监听类型导致的回调隐式 any 阻断。已分别补充 ssr.resolve.conditions 和单值输入的 string 参数类型，原验收断言保持。
 
-浏览器夹具本地尚无本轮生成的 Naive 声明 artifact，因此 App.tsx 的 LSP 报告缺少 @fixture/naive 以及由此产生的回调上下文类型错误；没有用手写 any 声明掩盖。真实声明消费检查安排在远程 Naive fork 完成后的 browser 任务，服务脚本语法和 Actions 配置已做短检查。
+已下载上述同一提交的 Naive 库、真实声明和报告，用于定点复现。修复后的 App.tsx LSP 为零错误，直接通过 Vite SSR 加载真实混用页的短测确认 HTML、全局 CSS 和 Teleport 内容生成成功。完整浏览器与 hydration 结果仍以修复提交的远程四组任务为准。
+
+组件语义审查修复默认值移入 setup 后被函数体同名变量遮蔽的问题，增加直接前向/自依赖的源码诊断，保留延后回调的捕获语义。局部 props 类型改为复用 Vue 的独立词法作用域，局部同名接口、外层别名及外围泛型约束不再被混到根作用域。定点编译测试、实例默认值运行测试与修改文件 LSP 均通过，完整 default/optimized 回归交给远程。
 
 4fa7863a4b043914b65359344c74e72c4a5defb0 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38467772874) 全部成功，变量组、关键帧、发布类型构建、两种作者模式及旧 TSX 基线没有退化。
 

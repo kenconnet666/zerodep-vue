@@ -44,3 +44,44 @@ test('invalid prop reassignment and ambiguous initialization have located errors
     /ZV_RENDER_INIT/,
   );
 });
+
+test('default parameter order has located diagnostics but deferred callbacks can read later props', async () => {
+  for (const code of ['{a=a}', '{a=b,b=1}', '{a=ctx},ctx']) {
+    await assert.rejects(
+      compile(
+        `import {_component} from '@zerodep-vue/tsx'; const C=_component((${code})=><div>{a}</div>);`,
+      ),
+      /ZV_DEFAULT_ORDER/,
+    );
+  }
+  const allowed = await compile(
+    `import {_component} from '@zerodep-vue/tsx'; const C=_component(({a=1,b=a,read=()=>later,later=2})=><div>{b}{read()}</div>);`,
+  );
+  assert(allowed.includes('createComponent'));
+  await assert.rejects(
+    compile(
+      `import {_component} from '@zerodep-vue/tsx'; const C=_component(function*(){return <div/>;});`,
+    ),
+    /setup 不能是 generator/,
+  );
+});
+
+test('lexical type scopes preserve local shadows, outer aliases and enclosing generic constraints', async () => {
+  const code = await compile(`
+    import {_component} from '@zerodep-vue/tsx';
+    interface Model { outer: string }
+    type Captured = Model;
+    function create<T extends { generic: number }>() {
+      interface Model { inner: boolean }
+      const Inner = _component((props: Model) => <div>{props.inner}</div>);
+      const Outer = _component((props: Captured) => <div>{props.outer}</div>);
+      const Generic = _component((props: T) => <div>{props.generic}</div>);
+      return { Inner, Outer, Generic };
+    }
+  `);
+  assert.match(code, /inner:\s*\{\s*type: Boolean/);
+  assert.match(code, /outer:\s*\{\s*type: String/);
+  assert.match(code, /generic:\s*\{\s*type: Number/);
+  assert.equal((code.match(/inner:\s*\{/g) ?? []).length, 1);
+  assert.equal((code.match(/outer:\s*\{/g) ?? []).length, 1);
+});

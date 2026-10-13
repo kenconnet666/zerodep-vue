@@ -13,6 +13,41 @@ afterEach(() => {
 });
 
 describe('_component', () => {
+  test('default expressions keep their parameter scope and cache earlier dependencies per instance', async () => {
+    const outer = 'outer';
+    const number = ref(2);
+    const Card = _component(
+      ({
+        title = outer,
+        read = () => outer,
+        first = number.value,
+        second = first + 1,
+      }: {
+        title?: string;
+        read?: () => string;
+        first?: number;
+        second?: number;
+      }) => {
+        const outer = 'body';
+        return (
+          <p>
+            {title}/{read()}/{outer}/{first}/{second}
+          </p>
+        );
+      },
+    );
+    const one = mount(Card);
+    const two = mount(Card, { props: { first: 5 } });
+    mounted.push(one, two);
+    expect(one.text()).toBe('outer/outer/body/2/3');
+    expect(two.text()).toBe('outer/outer/body/5/6');
+    number.value = 8;
+    await nextTick();
+    expect(one.text()).toBe('outer/outer/body/2/3');
+    await two.setProps({ first: undefined });
+    expect(two.text()).toBe('outer/outer/body/8/6');
+  });
+
   test('resolves imported generic props and callback values', async () => {
     const List = _component(<T,>({ items, renderItem }: Choices<T>) => (
       <div>{items.map(renderItem)}</div>
