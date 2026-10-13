@@ -22,23 +22,25 @@ CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提�
 - scripts/language-services：仅 TS/TSX 的项目 LSP 与 MCP 桥接。
 - docs/upstream.md：来源与实现边界。
 
-## 本地命令
+## 本地开发与远程验证
 
 ```powershell
 pnpm install --frozen-lockfile
-pnpm check
-pnpm test
-pnpm build
-pnpm format:check
+pnpm lsp:setup
+pnpm lsp:inspect fixtures/legacy-tsx/src/Counter.tsx
+pnpm exec prettier --check README.md .github/workflows/ci.yml
 ```
 
-check 检查四个有源码的子项目；test 只运行普通 TSX 的编译与 Vue SSR 对照；build 只生成三个工具包的 JS 和声明。它们不等同于完整上游或 Naive UI 兼容验收。
+上面的文件路径是示例，按本次改动选择对应文件。修改完成后，本地只查相关 LSP 诊断或运行必要的少量短测试；小型、确定性修改通过即可提交。不要将全仓类型检查、完整构建或全量 LSP 验证作为每次本地提交的前置步骤。
+
+完整验证由 [GitHub Actions CI](.github/workflows/ci.yml) 负责：格式、四包类型、编译/SSR、构建入口，以及 Linux/Windows LSP 使用独立 job 并行运行，最后由 CI result 汇总。当前覆盖现有实现，完整上游、Naive UI 和浏览器验收按蓝图建立，不能用当前基础 CI 的绿色结果代替最终产品验收。
+
+每个可审阅阶段提交并推送。准备下一次提交时，先按 SHA 检查上一轮 CI，读取失败日志并修复实际问题。推送后继续工作，不等待长测试、不反复轮询；pending、取消与通过分别报告。操作与任务划分见 [远程 CI 工作流](docs/ci.md)。
 
 ## 项目 LSP
 
 ```powershell
 pnpm lsp:setup
-pnpm lsp:verify
 pnpm lsp:inspect fixtures/legacy-tsx/src/Counter.tsx
 ```
 
@@ -46,7 +48,7 @@ setup 从已跟踪的 .codex/config.example.toml 生成当前机器的 .codex/co
 
 MCP 名为 zerodep_vue_lsp，提供 diagnostics、hover、definitions、references、completions 五个只读工具。底层固定使用当前仓库 TypeScript 6.0.3 和 typescript-language-server，不需要模板语言服务。位置参数按 1 起始，补全编辑使用 LSP 的 0 起始 UTF-16 坐标。
 
-verify 通过生成的真实启动配置验证类型错误→修复、语法错误→修复、依赖刷新、TSX 属性补全、语义查询和工作区隔离。临时源码会清除，结果保留在忽略的 test-results/language-services/verification.json。
+`pnpm lsp:verify` 是完整语言服务自检，由远程 LSP job 执行：通过生成的真实启动配置验证类型错误→修复、语法错误→修复、依赖刷新、TSX 属性补全、语义查询和工作区隔离。它会创建并清理临时源码，不与同一 checkout 的类型检查并行。本地日常使用按文件的 inspect；完整自检只在用户明确要求的排障中手动运行。结果保留在忽略的 test-results/language-services/verification.json，CI 同时上传报告。
 
 完成配置后，重新加载或重启以本仓库为工作目录的 Codex 会话。重启前的独立验证与重启后会话实际出现 MCP 工具是两个验收步骤；不要只依据配置存在就宣称客户端已加载。
 
