@@ -191,6 +191,16 @@ Babel 的 visitor 会按遍历过程交错执行，插件数组顺序不等于�
 
 类型擦除不能先于宏所需的类型提取。属性、回调及模型表达式求值一次，source map 指向作者表达式；条件分支和列表回调内的绑定不得被提到作用域之外。
 
+### 4.4 源码诊断与开发更新
+
+编译增强必须同时降低书写和排错成本。转换错误指向原始 TSX 表达式，说明实际语义与可用写法；不能只暴露生成代码中的 helper 名称。对初始化快照、在渲染中使用的非响应式局部值等情况，只在有明确依据时提供可抑制的提示，不将合法的初始化计算判为错误，也不静默改写普通 JS。
+
+开发态保留组件、样式声明及绑定的源码位置。复用 Vue DevTools 的组件树和 inspector 扩展，展示本库样式的组合来源、被覆盖或清除的声明、绑定最近一次实际消费值与所属实例。检查界面不能额外执行用户表达式来猜测依赖；记录随组件和样式宿主释放，生产产物不携带调试历史。第三方普通 CSS 的最终层叠继续由浏览器检查工具负责。
+
+HMR 区分样式、渲染和初始化变更。能够独立更新的样式应保留表单值、展开状态和组件实例；渲染更新在闭包及实例状态兼容时复用实例，初始化逻辑变化采用明确的重建策略。复用 Vite/Vue 更新与清理机制，不重新执行任意 setup 来取得新渲染函数，也不保留已经失效的闭包。运行时 CSS 仍在运行时求值，不为实现热更新引入静态 CSS 提取要求。
+
+开发体验验收使用真实有状态页面：填写表单并打开弹层，修改样式后内容和状态保持，错误修复后恢复更新，多次更新不积累无主规则、绑定或监听。不能仅以 dev server 成功启动代替 HMR 验收。
+
 ## 5 自有 TSX 作者契约
 
 ### 5.1 初始化一次，渲染表达式持续更新
@@ -632,7 +642,13 @@ return <button class={styles.root}>确认</button>;
 - `css.defineVars` / `css.createTheme` 与继承主题复用同一变量引用和宿主协议，不维护相互竞争的主题系统。
 - 原生 CSS 字符串和主题关键字引用须区分。保留原生自由输入时，不能让不存在的主题成员通过；如果提供主题名短写，也必须有独立的字面量校验和运行时诊断，不能被宽泛 string 类型吞掉。
 
-#### 7.1.3 类型提示与说明注释
+#### 7.1.3 主题归属与弹层
+
+运行时主题来源与实际消费节点保持明确关联。同一应用内的嵌套主题、独立页面及同时展示的不同主题互不串值；使用本库 CSS 的内容经 Vue Teleport 移动后，继续消费原来的主题来源。不能仅依赖原 DOM 祖先上的 CSS 变量，也不能将局部主题写入全局 body 而污染其他弹层。
+
+实现优先复用已有 `createCss<T>(source)`、Vue 组件上下文和样式宿主，不因这个场景新增一套主题组件或样式 props。第三方组件使用自身公开主题入口，不猜测其内部节点。SSR 按请求与消费位置输出对应变量，hydrate 不以延迟补样式掩盖服务端缺失。验收至少包含两个主题区域同时打开 Teleport 内容、运行时切换主题和销毁其中一个区域。
+
+#### 7.1.4 类型提示与说明注释
 
 良好的类型提示和注释属于交付条件。参考老项目的属性文档、系统关键字数据、继承类型及生成流程，只复用适用于当前对象 API 的部分；链式方法、旧返回值说明和旧编译限制不能照搬。
 
@@ -872,7 +888,8 @@ return <div class={css({ width: bx(width.value) })} />;
 - 新 API、Ref/default/rest、内容/slots、For、DOM ref/expose 的运行及类型验收通过。
 - 运行时 CSS 的 class 返回、跨组件组合与转发、内联 style 隐式合并、伪类、bx 多变量、关键字撤销与恢复、资源清理通过，作者无需额外接线 API。
 - 系统关键字、主题继承、显式及推断的泛型 T、主题运行时切换与 SSR 隔离通过；嵌套对象的补全、负向类型检查及源码/发布声明中的说明注释均有实际验证。
-- VDOM 开发/生产、HMR、SSR/hydrate、source map 和发布包消费通过约定检查。
+- VDOM 开发/生产、HMR、SSR/hydrate、source map 和发布包消费通过约定检查；样式热更新保留兼容实例状态，源码诊断及开发态样式来源可检查，生产产物不携带调试记录。
+- 嵌套主题、不同主题区域的 Teleport 内容、主题更新与卸载，以及对应 SSR/hydrate 用例通过。
 - 文档说明接入、模型/slot 边界、模板非目标及验证过的版本，不把未实现能力写成可用 API。
 
 基础模板冒烟可以附在报告中；它不能替代任何 TSX 必需用例，也不能扩大成另一套模板工具链任务。
@@ -943,3 +960,4 @@ return <div class={css({ width: bx(width.value) })} />;
 - [CSS Custom Properties](https://www.w3.org/TR/css-variables-1/)与[CSS Cascade](https://www.w3.org/TR/css-cascade-5/)：变量、系统关键字、层叠与 layer 的原始语义。
 - [旧项目注释组织](../zerodep-js/scripts/css-author-docs.mjs)、[属性与系统关键字类型](../zerodep-js/packages/css/src/generated/keywords.ts)、[主题类型夹具](../zerodep-js/packages/css/test/types/theme.ts)、[项目扩展类型夹具](../zerodep-js/packages/css/test/types/project-extension.ts)：参考属性说明、继承与泛型检查，不照搬旧链式作者接口。
 - [历史 Vue TSX 研究](../zerodep-js/VUE_TSX_RESEARCH.md)：保留状态、内容和 CSS 用例作为参考，不继承已取消的后端与兼容目标。
+- [Vue DevTools 插件 API](https://devtools.vuejs.org/plugins/api)、[Vite HMR API](https://vite.dev/guide/api-hmr)、[Vue Teleport](https://vuejs.org/guide/built-ins/teleport)：复用开发工具与组件逻辑上下文，验证样式资源和 DOM 位置变化。
