@@ -21,6 +21,9 @@ catalog:
   '@vue/shared': 3.5.43
   '@vue/test-utils': 2.4.11
   csstype: 3.2.3
+  '@csstools/css-tokenizer': 4.0.2
+  '@emotion/unitless': 0.10.0
+  postcss-selector-parser: 7.1.6
   jsdom: 29.1.1
   prettier: 3.9.9
   typescript: 6.0.3

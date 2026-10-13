@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Reserved runtime CSS package; css/bx are not implemented yet.",
+  "description": "Runtime CSS values, composition and Vue binding integration.",
   "exports": {
     ".": {
       "zerodep-vue-source": "./src/index.ts",
@@ -19,7 +19,10 @@
     "build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "csstype": "catalog:"
+    "csstype": "catalog:",
+    "@csstools/css-tokenizer": "catalog:",
+    "@emotion/unitless": "catalog:",
+    "postcss-selector-parser": "catalog:"
   },
   "peerDependencies": {
     "vue": "^3.5.43"

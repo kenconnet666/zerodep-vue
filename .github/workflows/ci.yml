@@ -80,6 +80,15 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
+  css:
+    name: Runtime CSS contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - run: pnpm test:css
+
   authoring:
     name: TSX authoring (${{ matrix.mode }})
     runs-on: ubuntu-latest
@@ -182,7 +191,7 @@ jobs:
   ci:
     name: CI result
     if: always()
-    needs: [format, types, compiler, upstream, authoring, naive, build, language]
+    needs: [format, types, compiler, upstream, css, authoring, naive, build, language]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:

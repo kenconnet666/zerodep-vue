@@ -20,7 +20,8 @@
     "test:upstream": "vitest run --config vitest.upstream.config.ts",
     "naive:inventory": "node fixtures/naive-ui/inventory.mjs",
     "test:naive": "node fixtures/naive-ui/build.mjs",
-    "test:authoring": "vitest run --config vitest.authoring.config.ts"
+    "test:authoring": "vitest run --config vitest.authoring.config.ts",
+    "test:css": "node --test packages/css/test/*.test.mjs"
   },
   "devDependencies": {
     "@babel/core": "catalog:",

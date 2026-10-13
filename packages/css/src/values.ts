@@ -1,0 +1,67 @@
+/** 值标记与 class 标记分开，普通对象永远不会因键名相似被当作 CSS。 */
+export const BINDING = Symbol.for('@zerodep-vue/css/binding/v1');
+export const TEMPLATE = Symbol.for('@zerodep-vue/css/template/v1');
+export const FALLBACK = Symbol.for('@zerodep-vue/css/fallback/v1');
+export type Scalar = string | number;
+
+/** 动态属性值。由编译器捕获表达式，读取归实际消费节点所有。 */
+export interface CssBinding<out T> {
+  readonly [BINDING]: () => T;
+}
+export interface CssTemplate {
+  readonly [TEMPLATE]: readonly (string | CssBinding<unknown>)[];
+}
+export interface CssFallback<out T> {
+  readonly [FALLBACK]: readonly T[];
+}
+
+export function isBinding(value: unknown): value is CssBinding<unknown> {
+  return value !== null && typeof value === 'object' && BINDING in value;
+}
+export function isTemplate(value: unknown): value is CssTemplate {
+  return value !== null && typeof value === 'object' && TEMPLATE in value;
+}
+export function isFallback(value: unknown): value is CssFallback<Scalar> {
+  return value !== null && typeof value === 'object' && FALLBACK in value;
+}
+
+/** @internal 编译目标；不在声明时执行 getter，也不在这里建立订阅。 */
+export function binding<T>(read: () => T): CssBinding<T> {
+  return Object.freeze({
+    [BINDING]: read,
+    [Symbol.toPrimitive](): never {
+      throw new Error('bx 值需要 CSS 编译接线，不能被普通字符串拼接提前丢弃。');
+    },
+  });
+}
+
+/** 显式标记持续读取的 CSS 值；作者无需手写 getter。 */
+export function bx<T>(value: T): CssBinding<T> {
+  void value;
+  throw new Error('[bx] 此调用需要 @zerodep-vue/compiler 转换。');
+}
+
+/** @internal 按原模板的顺序完成普通片段的字符串转换，绑定仍保持结构化。 */
+export function piece(value: unknown): string | CssBinding<unknown> | CssTemplate {
+  return isBinding(value) || isTemplate(value) ? value : `${value}`;
+}
+
+/** @internal 多个 bx 片段保留独立的变量位置，不使用全局字符串 token 注册表。 */
+export function template(
+  parts: readonly (string | CssBinding<unknown> | CssTemplate)[],
+): string | CssTemplate {
+  const flattened = parts.flatMap((part) => (isTemplate(part) ? [...part[TEMPLATE]] : [part]));
+  if (flattened.every((part) => typeof part === 'string')) return flattened.join('');
+  return Object.freeze({
+    [TEMPLATE]: Object.freeze(flattened),
+    [Symbol.toPrimitive](): never {
+      throw new Error('含 bx 的模板需要直接交给 CSS 属性。');
+    },
+  });
+}
+
+/** 从首选到备选传值，输出时按 CSS 后声明优先的规则反向排列。 */
+export function firstThatWorks<const T extends Scalar>(...values: readonly T[]): CssFallback<T> {
+  if (!values.length) throw new Error('firstThatWorks 至少需要一个候选值。');
+  return Object.freeze({ [FALLBACK]: Object.freeze([...values]) });
+}
