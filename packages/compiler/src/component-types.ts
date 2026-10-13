@@ -20,12 +20,24 @@ function originalNode(
 ): TypeNode | undefined {
   if (start == null) return;
   const pending: unknown[] = [tree];
+  const visited = new WeakSet<object>();
   while (pending.length) {
     const value = pending.pop();
     if (!value || typeof value !== 'object') continue;
+    if (visited.has(value)) continue;
+    visited.add(value);
     const node = value as Record<string, unknown>;
     if (node.start === start && node.type === type) return value as TypeNode;
-    pending.push(...Object.values(node).filter((item) => item && typeof item === 'object'));
+    for (const [key, item] of Object.entries(node)) {
+      if (
+        !key.startsWith('_') &&
+        key !== 'loc' &&
+        key !== 'extra' &&
+        item &&
+        typeof item === 'object'
+      )
+        pending.push(item);
+    }
   }
 }
 
@@ -44,11 +56,17 @@ export function runtimeProps(
   if (!type) return t.objectExpression([]);
   // Babel 8 改变了类型参数字段。用 Vue 自己导出的 parser 读取同一源码并按位置对应，
   // 避免把不兼容 AST 强制断言后交给类型解析器；每个文件仅补充解析一次。
-  let parsed = state.file.get('zerodep:vue-type-ast') as ReturnType<typeof babelParse> | undefined;
-  if (!parsed) {
-    parsed = babelParse(state.file.code, { sourceType: 'module', plugins: ['typescript', 'jsx'] });
-    state.file.set('zerodep:vue-type-ast', parsed);
+  let pristine = state.file.get('zerodep:vue-type-ast') as
+    ReturnType<typeof babelParse> | undefined;
+  if (!pristine) {
+    pristine = babelParse(state.file.code, {
+      sourceType: 'module',
+      plugins: ['typescript', 'jsx'],
+    });
+    state.file.set('zerodep:vue-type-ast', pristine);
   }
+  // Vue 类型解析会附加 _ownerScope 等循环引用；各组件使用私有副本，不能污染原始缓存。
+  const parsed = structuredClone(pristine);
   const original = originalNode(parsed, type.start ?? type.loc?.start.index, type.type);
   if (!original) throw call.buildCodeFrameError('[ZV_PROPS_TYPE] 无法定位 props 的原始类型声明。');
   const parameterNode =

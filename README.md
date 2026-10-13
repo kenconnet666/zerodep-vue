@@ -4,7 +4,7 @@
 
 CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提供，主题通过继承扩展，并提供贯穿对象样式和关键字视图的泛型 T 入口。属性、关键字与主题成员的类型提示、中文说明及声明消费体验是交付要求；作者仍使用 class，绑定对应的内联 style 由编译器隐式接线。
 
-官方 JSX 源码 fork、Vite 入口、上游双基线和 Naive UI 301 个生产 TSX 的三条编译/构建/SSR 路径已通过远程验证。_component、For、props/default/children 和 CSS 核心已有实现与阶段证据；当前正在验证 class/bx 的完整 Vue 接线，主题和最终浏览器验收仍在实施。准确进度见 [实施记录](docs/progress.md)，作者写法见 [authoring.md](docs/authoring.md) 与 [CSS 文档](docs/css.md)。
+官方 JSX 源码 fork、Vite 入口、上游双基线和 Naive UI 301 个生产 TSX 的三条编译/构建/SSR 路径已通过远程验证。_component、For、props/default/children、class/bx 接线已有实现与阶段证据；当前继续验证系统关键字、继承主题和完整工具，最终浏览器验收仍在实施。准确进度见 [实施记录](docs/progress.md)，作者写法见 [authoring.md](docs/authoring.md)、[CSS 文档](docs/css.md) 和 [主题文档](docs/themes.md)。
 
 已有 Vue TSX 项目可将 Vite 配置中的 JSX 插件替换为 `@zerodep-vue/compiler/vite` 的默认导出；Babel 直接使用 `@zerodep-vue/compiler`。选项沿用官方 JSX，Vite 入口另提供 include、exclude 和 babelPlugins。不要同时保留另一份 Vue JSX 转换；原有 Vue SFC 插件不受此限制。开发态提供普通 Vue 组件 HMR 和 SSR 模块登记，增强的状态保留体验随作者能力继续实施。
 

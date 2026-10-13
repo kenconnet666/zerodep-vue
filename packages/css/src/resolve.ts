@@ -7,6 +7,8 @@ import type { ClassPart, ClassValue, Declaration } from './types.ts';
 import { BINDING, FALLBACK, TEMPLATE, isBinding, isFallback, isTemplate } from './values.ts';
 import type { CssBinding, Scalar } from './values.ts';
 import { scopedSelector, validateFragment } from './syntax.ts';
+import { KEYWORD, THEME, isKeyword, isThemeReference } from './tokens.ts';
+import type { ThemeReference } from './tokens.ts';
 
 const wide = new Set(['initial', 'inherit', 'unset', 'revert', 'revert-layer']);
 type Part = string | { variable: number };
@@ -59,10 +61,12 @@ export function propertyName(property: string): string {
 }
 
 function scalar(value: unknown, property?: string): string {
+  if (isKeyword(value)) value = value[KEYWORD].value;
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) throw new Error(`CSS ${property ?? '片段'} 不能使用非有限数字。`);
-    const normalized = property?.replace(/^(?:Webkit|Moz|ms|O)([A-Z])/, (_match, first: string) =>
-      first.toLowerCase(),
+    const normalized = property?.replace(
+      /^(?:Webkit|Moz|ms|O|Khtml)([A-Z])/,
+      (_match, first: string) => first.toLowerCase(),
     );
     return value === 0 ||
       !property ||
@@ -79,10 +83,7 @@ function scalar(value: unknown, property?: string): string {
 }
 
 /** 只在当前消费中求值；同一绑定被多个声明引用时共享一次读取，不共享元素变量。 */
-export function resolveClass(
-  value: ClassValue,
-  reads = new Map<CssBinding<unknown>, unknown>(),
-): ResolvedClass {
+export function resolveClass(value: ClassValue, reads = new Map<object, unknown>()): ResolvedClass {
   const parts: ClassPart[] = [];
   let hasCss = false;
   const flatten = (item: ClassValue): void => {
@@ -104,27 +105,42 @@ export function resolveClass(
   const variables: string[] = [];
   const prepared: Prepared[] = [];
   let dynamic = false;
-  const read = (input: CssBinding<unknown>): unknown => {
+  const evaluating = new Set<object>();
+  const read = (input: CssBinding<unknown> | ThemeReference): unknown => {
     dynamic = true;
-    if (!reads.has(input)) reads.set(input, input[BINDING]());
+    if (!reads.has(input)) {
+      if (evaluating.has(input)) throw new Error('CSS 绑定或主题引用包含循环。');
+      evaluating.add(input);
+      try {
+        let value = isThemeReference(input) ? input[THEME].read() : input[BINDING]();
+        if (isThemeReference(value) || isBinding(value)) value = read(value);
+        reads.set(input, isKeyword(value) ? value[KEYWORD].value : value);
+      } finally {
+        evaluating.delete(input);
+      }
+    }
     return reads.get(input);
   };
   for (const declaration of composed.declarations) {
     const { value: input, property } = declaration;
     if (input === null) continue;
     let values: Part[][];
-    if (isBinding(input)) {
+    if (isBinding(input) || isThemeReference(input)) {
       const current = read(input);
       if (current == null) continue;
       const text = scalar(current, property);
       const keyword = cssWide(text);
       values = keyword ? [[keyword]] : [[{ variable: variables.push(text) - 1 }]];
     } else if (isTemplate(input)) {
-      const evaluated = input[TEMPLATE].map((part) => (isBinding(part) ? read(part) : part));
+      const evaluated = input[TEMPLATE].map((part) =>
+        isBinding(part) || isThemeReference(part) ? read(part) : part,
+      );
       if (evaluated.some((part) => part == null)) continue;
       // 静态模板片段可以是不完整的括号前缀；单个绑定值与最终声明才需要完整语法。
       const strings = evaluated.map((part, index) =>
-        isBinding(input[TEMPLATE][index]) ? scalar(part) : String(part),
+        isBinding(input[TEMPLATE][index]) || isThemeReference(input[TEMPLATE][index])
+          ? scalar(part)
+          : String(part),
       );
       const keyword = cssWide(strings.join(''));
       if (keyword) values = [[keyword]];
@@ -132,7 +148,7 @@ export function resolveClass(
         values = [
           input[TEMPLATE].map((part, index) => {
             const text = strings[index]!;
-            if (!isBinding(part)) return text;
+            if (!isBinding(part) && !isThemeReference(part)) return text;
             if (cssWide(text))
               throw new Error(`CSS ${property} 的复合值不能把 CSS-wide keyword 当作普通片段。`);
             return { variable: variables.push(text) - 1 };
@@ -141,7 +157,9 @@ export function resolveClass(
         validateFragment(strings.join(''));
       }
     } else if (isFallback(input))
-      values = [...input[FALLBACK]].reverse().map((item) => [scalar(item, property)]);
+      values = [...input[FALLBACK]]
+        .reverse()
+        .map((item) => [scalar(isThemeReference(item) ? read(item) : item, property)]);
     else values = [[scalar(input, property)]];
     for (const parts of values)
       prepared.push({

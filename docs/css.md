@@ -63,4 +63,4 @@ const styles = getCssHost(context)?.renderStyles() ?? '';
 
 将 styles 写入页面 head。客户端按规则内容采用已有 style 标签，多个请求不共享变量或收集结果。宿主可配置固定 layer 和 nonce；它们属于宿主配置，不按每次组合新建层。
 
-当前基础声明、bx 和 Vue 接线已建立；继承主题、系统关键字视图、完整工具与源码调试仍在实施中。生产兼容声明以 BLUEPRINT.md 的最终验收和 docs/progress.md 的实际证据为准。
+基础声明、bx、Vue 接线及系统/主题入口已建立，主题用法见 [themes.md](themes.md)。完整工具与源码调试仍在实施中。生产兼容声明以 BLUEPRINT.md 的最终验收和 docs/progress.md 的实际证据为准。

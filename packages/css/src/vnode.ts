@@ -19,7 +19,6 @@ import type { ResolvedClass } from './resolve.ts';
 import { isCssClass } from './types.ts';
 import type { ClassValue } from './types.ts';
 import { CLASS } from './types.ts';
-import type { CssBinding } from './values.ts';
 
 /** 仅由编译器和自有组件消费，不进入作者 JSX 或第三方组件的 props。 */
 export const CLASS_PROP = '__zerodepVueClass';
@@ -51,7 +50,7 @@ const requests = new WeakMap<object, CssHost>();
 const observers = new WeakMap<Node, { leases: Set<Lease>; observer: MutationObserver }>();
 interface RenderFrame {
   pending: Map<VNode, Props>;
-  reads: Map<CssBinding<unknown>, unknown>;
+  reads: Map<object, unknown>;
   owner: ComponentInternalInstance | null;
 }
 let frame: RenderFrame | undefined;

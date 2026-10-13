@@ -1,0 +1,55 @@
+# 系统关键字、继承主题与泛型
+
+默认 css 具有系统关键字，没有业务主题名。createCss 将主题类型与真实实例或 Vue Ref 一起绑定，主题成员使用 _ 前缀，避免覆盖系统值。
+
+```tsx
+import { shallowRef } from 'vue';
+import { SystemKeywords, createCss } from '@zerodep-vue/css';
+
+class AppTheme extends SystemKeywords {
+  override readonly color = {
+    /** 品牌主色，用于强调内容。 */
+    _brand: '#2563eb',
+  };
+  override readonly padding = {
+    /** 常规控件的纵向与横向内边距。 */
+    _control: '8px 12px',
+  };
+}
+
+const theme = shallowRef(new AppTheme());
+const css = createCss<AppTheme>(theme);
+const styles = css.create({
+  root: {
+    display: css.keywords.display.flex,
+    color: css.keywords.color._brand,
+    padding: css.keywords.padding._control,
+    ':hover': { borderColor: css.keywords.color._brand },
+  },
+});
+```
+
+`createCss(new AppTheme())` 可推断 T；显式泛型适用于固定库边界。仅写 `createCss<AppTheme>()` 没有真实来源会被拒绝。Css<T>、CssObject<T>、具名声明和嵌套条件保留主题约束，不使用全局 module augmentation。
+
+系统关键字引用是固定值，在 CSS 中直接发射。主题引用在消费时读取真实来源，并使用元素级变量。替换 theme.value 会更新实际消费元素，定义 styles 时不会冻结初始颜色。普通非响应式主题对象仍遵循 JavaScript；需要自动更新时使用 Vue 的 ref/reactive。成员值也可以使用 Vue Ref。
+
+颜色主题建议集中放在 color 组，可在 color、backgroundColor、borderColor 等兼容位置复用。兼容位置由固定属性类型中的颜色取值生成，不把所有字符串型属性混为同一组；例如颜色主题不能用作 padding。系统引用也按目标属性实际允许的关键字集合检查，普通 CSS 字符串输入仍然可用。
+
+类继承遵循 TypeScript/JavaScript 的正常语义。继承而未覆盖的属性组自然保留；重写整个对象字段时，明确合并要保留的基础成员：
+
+```ts
+class DarkTheme extends AppTheme {
+  override readonly color = {
+    ...new AppTheme().color,
+    _brand: '#93c5fd',
+    /** 危险操作的强调色。 */
+    _danger: '#f87171',
+  };
+}
+```
+
+这里不隐式改变类字段覆盖规则。如果基础主题有构造参数或资源，按普通业务代码组织基础值，不为了合并对象重复创建不必要的实例。
+
+主题来源属于每个 createCss 作者；没有全局可变的“当前主题”。多个区域可以使用不同来源，Teleport 中的元素继续消费原来绑定的主题来源。SSR 每次请求分别收集规则，变量值写入相应内容，而不是依赖原 DOM 祖先或写入全局 body。
+
+属性、系统关键字和主题成员提供 JSDoc。当前数据生成覆盖 857 个属性，包含 72 个可接收单一颜色的属性位置；源码和生成文件由固定依赖复现，说明与许可来源见 CSS 包的 THIRD_PARTY_NOTICES.md。

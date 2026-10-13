@@ -2,6 +2,8 @@
 export const BINDING = Symbol.for('@zerodep-vue/css/binding/v1');
 export const TEMPLATE = Symbol.for('@zerodep-vue/css/template/v1');
 export const FALLBACK = Symbol.for('@zerodep-vue/css/fallback/v1');
+import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
+import type { SystemKeyword, ThemeReference } from './tokens.ts';
 export type Scalar = string | number;
 
 /** 动态属性值。由编译器捕获表达式，读取归实际消费节点所有。 */
@@ -9,7 +11,7 @@ export interface CssBinding<out T> {
   readonly [BINDING]: () => T;
 }
 export interface CssTemplate {
-  readonly [TEMPLATE]: readonly (string | CssBinding<unknown>)[];
+  readonly [TEMPLATE]: readonly (string | CssBinding<unknown> | ThemeReference)[];
 }
 export interface CssFallback<out T> {
   readonly [FALLBACK]: readonly T[];
@@ -21,7 +23,9 @@ export function isBinding(value: unknown): value is CssBinding<unknown> {
 export function isTemplate(value: unknown): value is CssTemplate {
   return value !== null && typeof value === 'object' && TEMPLATE in value;
 }
-export function isFallback(value: unknown): value is CssFallback<Scalar> {
+export function isFallback(
+  value: unknown,
+): value is CssFallback<Scalar | SystemKeyword | ThemeReference> {
   return value !== null && typeof value === 'object' && FALLBACK in value;
 }
 
@@ -42,13 +46,14 @@ export function bx<T>(value: T): CssBinding<T> {
 }
 
 /** @internal 按原模板的顺序完成普通片段的字符串转换，绑定仍保持结构化。 */
-export function piece(value: unknown): string | CssBinding<unknown> | CssTemplate {
-  return isBinding(value) || isTemplate(value) ? value : `${value}`;
+export function piece(value: unknown): string | CssBinding<unknown> | CssTemplate | ThemeReference {
+  if (isKeyword(value)) return value[KEYWORD].value;
+  return isBinding(value) || isTemplate(value) || isThemeReference(value) ? value : `${value}`;
 }
 
 /** @internal 多个 bx 片段保留独立的变量位置，不使用全局字符串 token 注册表。 */
 export function template(
-  parts: readonly (string | CssBinding<unknown> | CssTemplate)[],
+  parts: readonly (string | CssBinding<unknown> | CssTemplate | ThemeReference)[],
 ): string | CssTemplate {
   const flattened = parts.flatMap((part) => (isTemplate(part) ? [...part[TEMPLATE]] : [part]));
   if (flattened.every((part) => typeof part === 'string')) return flattened.join('');
@@ -61,14 +66,23 @@ export function template(
 }
 
 /** 从首选到备选传值，输出时按 CSS 后声明优先的规则反向排列。 */
-export function firstThatWorks<const T extends Scalar>(...values: readonly T[]): CssFallback<T> {
+export function firstThatWorks<const T extends Scalar | SystemKeyword | ThemeReference>(
+  ...values: readonly T[]
+): CssFallback<T> {
   if (!values.length) throw new Error('firstThatWorks 至少需要一个候选值。');
   return Object.freeze({ [FALLBACK]: Object.freeze([...values]) });
 }
 
 /** @internal 普通输入完整保留 JS +；含绑定的字符串拼接保留独立片段。 */
 export function add(left: any, right: any): any {
-  if (isBinding(left) || isTemplate(left) || isBinding(right) || isTemplate(right))
+  if (
+    isBinding(left) ||
+    isTemplate(left) ||
+    isThemeReference(left) ||
+    isBinding(right) ||
+    isTemplate(right) ||
+    isThemeReference(right)
+  )
     return template([piece(left), piece(right)]);
   return left + right;
 }

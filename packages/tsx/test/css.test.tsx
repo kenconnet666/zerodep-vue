@@ -2,10 +2,20 @@
 import { afterEach, expect, test } from 'vitest';
 import { mount } from '@vue/test-utils';
 import type { VueWrapper } from '@vue/test-utils';
-import { cloneVNode, createSSRApp, defineComponent, h, nextTick, ref } from 'vue';
+import {
+  cloneVNode,
+  createSSRApp,
+  defineComponent,
+  h,
+  nextTick,
+  ref,
+  shallowRef,
+  Teleport,
+} from 'vue';
+import type { Ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { _component } from '@zerodep-vue/tsx';
-import { bx, css, createCssHost, getCssHost } from '@zerodep-vue/css';
+import { bx, css, createCss, createCssHost, getCssHost, SystemKeywords } from '@zerodep-vue/css';
 import type { ClassValue } from '@zerodep-vue/css';
 
 const mounted: VueWrapper[] = [];
@@ -275,4 +285,72 @@ test('different JSX branches remove implicit style while preserving the DOM node
   expect(wrapper.element.className).toBe('plain');
   expect(variables(wrapper.element)).toEqual({});
   expect(host.stats().ownedReferences).toBe(0);
+});
+
+class RegionTheme extends SystemKeywords {
+  override readonly color: { _brand: string };
+  constructor(value: string) {
+    super();
+    this.color = { _brand: value };
+  }
+}
+
+test('independent runtime themes retain their values through Teleport and one region removal', async () => {
+  const first = shallowRef(new RegionTheme('red'));
+  const second = shallowRef(new RegionTheme('blue'));
+  const showFirst = ref(true);
+  const Region = _component(({ theme, name }: { theme: Ref<RegionTheme>; name: string }) => {
+    const themed = createCss(theme);
+    const style = themed({
+      color: themed.keywords.color._brand,
+      display: themed.keywords.display.block,
+    });
+    return (
+      <Teleport to="body">
+        <div data-theme-region={name} class={style} />
+      </Teleport>
+    );
+  });
+  const App = _component(() => (
+    <>
+      {showFirst.value && <Region theme={first} name="a" />}
+      <Region theme={second} name="b" />
+    </>
+  ));
+  const host = setupHost();
+  const wrapper = mount(App, { global: { plugins: [host] } });
+  mounted.push(wrapper);
+  const a = document.querySelector('[data-theme-region=a]')!;
+  const b = document.querySelector('[data-theme-region=b]')!;
+  expect(Object.values(variables(a))).toEqual(['red']);
+  expect(Object.values(variables(b))).toEqual(['blue']);
+  expect(a.className).toBe(b.className);
+  first.value = new RegionTheme('green');
+  await nextTick();
+  expect(Object.values(variables(a))).toEqual(['green']);
+  expect(Object.values(variables(b))).toEqual(['blue']);
+  showFirst.value = false;
+  await nextTick();
+  expect(document.querySelector('[data-theme-region=a]')).toBeNull();
+  expect(host.stats().ownedReferences).toBe(1);
+  expect(Object.values(variables(b))).toEqual(['blue']);
+});
+
+test('SSR Teleport emits the correct per-request theme variables', async () => {
+  const Page = _component(({ color }: { color: string }) => {
+    const themed = createCss(new RegionTheme(color));
+    return (
+      <Teleport to="#dialogs">
+        <div class={themed({ color: themed.keywords.color._brand })}>theme</div>
+      </Teleport>
+    );
+  });
+  const a: { teleports?: Record<string, string> } = {};
+  const b: { teleports?: Record<string, string> } = {};
+  await renderToString(createSSRApp(Page, { color: 'red' }), a);
+  await renderToString(createSSRApp(Page, { color: 'blue' }), b);
+  expect(a.teleports?.['#dialogs']).toContain('red');
+  expect(a.teleports?.['#dialogs']).not.toContain('blue');
+  expect(b.teleports?.['#dialogs']).toContain('blue');
+  expect(getCssHost(a)?.cssText()).toBe(getCssHost(b)?.cssText());
 });

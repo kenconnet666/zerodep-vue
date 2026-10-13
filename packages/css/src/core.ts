@@ -1,27 +1,29 @@
 import { CLASS, isCssClass } from './types.ts';
-import type { ClassPart, CssClass, CssInput, CssObject, Declaration } from './types.ts';
+import type { ClassPart, CssClass, Declaration } from './types.ts';
 import { isBinding, isFallback, isTemplate } from './values.ts';
 import { selectors, validateFragment } from './syntax.ts';
 import type { SelectorContext } from './syntax.ts';
+import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
 
-function declarations(object: CssObject): readonly Declaration[] {
+function declarations(object: object): readonly Declaration[] {
   const result: Declaration[] = [];
   const active = new Set<object>();
-  const visit = (style: CssObject, context: SelectorContext) => {
+  const visit = (style: object, context: SelectorContext) => {
     if (active.has(style)) throw new Error('CSS 声明包含循环对象。');
     active.add(style);
     try {
-      for (const [property, value] of Object.entries(style)) {
+      for (const [property, input] of Object.entries(style)) {
+        const value = isKeyword(input) ? input[KEYWORD].value : input;
         if (value === undefined) continue;
         if (property.startsWith('@')) {
           if (!/^@(media|supports|container)\s+\S|^@starting-style$/.test(property))
             throw new Error(`不支持的局部条件：${property}`);
           validateFragment(property);
           if (!value || typeof value !== 'object') throw new Error(`${property} 需要 CSS 对象。`);
-          visit(value as CssObject, { ...context, conditions: [...context.conditions, property] });
+          visit(value, { ...context, conditions: [...context.conditions, property] });
         } else if (property.startsWith(':') || property.includes('&') || property.startsWith('[')) {
           if (!value || typeof value !== 'object') throw new Error(`${property} 需要 CSS 对象。`);
-          for (const selected of selectors(context, property)) visit(value as CssObject, selected);
+          for (const selected of selectors(context, property)) visit(value, selected);
         } else {
           if (!/^(?:--[\w-]+|[a-zA-Z][\w-]*)$/.test(property))
             throw new Error(`无效 CSS 属性：${property}`);
@@ -31,7 +33,8 @@ function declarations(object: CssObject): readonly Declaration[] {
             typeof value !== 'number' &&
             !isBinding(value) &&
             !isTemplate(value) &&
-            !isFallback(value)
+            !isFallback(value) &&
+            !isThemeReference(value)
           )
             throw new Error(`CSS 属性 ${property} 需要值；嵌套选择器请用 &。`);
           result.push(Object.freeze({ ...context, property, value }));
@@ -46,10 +49,10 @@ function declarations(object: CssObject): readonly Declaration[] {
 }
 
 /** 运行时声明与有序组合。创建 class 不要求 DOM，也不立即写入样式。 */
-export function css(...inputs: readonly CssInput[]): CssClass {
+export function css(...inputs: readonly unknown[]): CssClass {
   const parts: ClassPart[] = [];
-  const arrays = new Set<readonly CssInput[]>();
-  const collect = (input: CssInput): void => {
+  const arrays = new Set<readonly unknown[]>();
+  const collect = (input: unknown): void => {
     if (input == null || input === false || input === 0) return;
     if (typeof input === 'string') {
       if (input) parts.push(input);
@@ -69,7 +72,16 @@ export function css(...inputs: readonly CssInput[]): CssClass {
       }
       return;
     }
-    parts.push(Object.freeze({ declarations: declarations(input as CssObject) }));
+    if (
+      typeof input !== 'object' ||
+      isKeyword(input) ||
+      isThemeReference(input) ||
+      isBinding(input) ||
+      isTemplate(input) ||
+      isFallback(input)
+    )
+      throw new Error('css 需要声明对象或 class 值，属性值请放入对应属性。');
+    parts.push(Object.freeze({ declarations: declarations(input) }));
   };
   for (const input of inputs) collect(input);
   return Object.freeze({
@@ -82,7 +94,7 @@ export function css(...inputs: readonly CssInput[]): CssClass {
 
 /** 具名 class 集合；保留精确成员名供补全和组件间复用。 */
 export function create<const Name extends string>(
-  styles: Record<Name, CssInput>,
+  styles: Record<Name, unknown>,
 ): { readonly [Key in Name]: CssClass } {
   return Object.freeze(
     Object.fromEntries((Object.keys(styles) as Name[]).map((key) => [key, css(styles[key])])),

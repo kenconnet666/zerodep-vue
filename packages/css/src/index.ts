@@ -1,8 +1,6 @@
-import { css as compose, create } from './core.ts';
-import { firstThatWorks } from './values.ts';
-
-/** 运行时 class 声明与组合；通过编译插件隐式接入对应的内联变量。 */
-export const css = Object.assign(compose, { create, firstThatWorks });
+export { css, createCss } from './theme.ts';
+export { SystemKeywords } from './generated/system.ts';
+export type { Css, KeywordView, ThemeSource } from './theme.ts';
 export { bx } from './values.ts';
 export { createCssHost, cssHostKey } from './host.ts';
 export { getCssHost } from './vnode.ts';
