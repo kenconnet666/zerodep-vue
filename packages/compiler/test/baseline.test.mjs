@@ -14,7 +14,7 @@ const filename = resolve(root, 'fixtures/legacy-tsx/src/Counter.tsx');
 
 for (const optimize of [false, true]) {
   test(
-    'official JSX baseline compiles ordinary TSX and renders with optimize=' + optimize,
+    'Vue JSX source fork compiles ordinary TSX and renders with optimize=' + optimize,
     async () => {
       const transformed = await transformAsync(await readFile(filename, 'utf8'), {
         filename,

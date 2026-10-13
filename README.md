@@ -4,7 +4,7 @@
 
 CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提供，主题通过继承扩展，并提供贯穿对象样式和关键字视图的泛型 T 入口。属性、关键字与主题成员的类型提示、中文说明及声明消费体验是交付要求；作者仍使用 class，绑定对应的内联 style 由编译器隐式接线。
 
-当前阶段已建立工作区和工具链。compiler 入口仅转发官方 JSX v3.0.0，作为后续 fork 的对照；tsx 和 css 仍是空模块。还没有 _component、For、css/bx 或自有 Vite 插件的实现，也没有通过 Naive UI 最终验收。
+当前阶段已建立工作区、工具链和官方 JSX v3.0.0 的真实源码 fork，并保留同一套上游断言、快照及官方插件差分对照；tsx 和 css 仍是空模块。还没有 _component、For、css/bx 或自有 Vite 插件的实现，也没有通过 Naive UI 最终验收。
 
 ## 环境
 
@@ -15,7 +15,7 @@ CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提�
 
 ## 目录
 
-- packages/compiler：官方 JSX 编译对照，后续小范围 fork。
+- packages/compiler：官方 JSX 小范围 fork、来源清单与兼容性对照。
 - packages/tsx：未来作者 API 与 Vue 组件接线。
 - packages/css：未来运行时 CSS、class 组合与 bx 接线。
 - fixtures/legacy-tsx：普通 Vue TSX 对照；其余 fixture 目录为后续验收预留。

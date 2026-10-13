@@ -11,12 +11,13 @@
   "scripts": {
     "check": "pnpm -r --if-present run check",
     "build": "pnpm -r --filter \"./packages/*\" run build",
-    "test": "node --test packages/compiler/test/baseline.test.mjs",
+    "test": "node --test packages/compiler/test/*.test.mjs",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
     "lsp:setup": "node scripts/language-services/setup.mjs",
     "lsp:verify": "node scripts/language-services/verify.mjs .",
-    "lsp:inspect": "node scripts/language-services/inspect.mjs ."
+    "lsp:inspect": "node scripts/language-services/inspect.mjs .",
+    "test:upstream": "vitest run --config vitest.upstream.config.ts"
   },
   "devDependencies": {
     "@babel/core": "catalog:",
@@ -31,6 +32,15 @@
     "typescript-language-server": "catalog:languageServices",
     "vscode-jsonrpc": "catalog:languageServices",
     "vue": "catalog:",
-    "zod": "catalog:languageServices"
+    "zod": "catalog:languageServices",
+    "@babel/plugin-syntax-jsx": "catalog:",
+    "@babel/plugin-syntax-typescript": "catalog:",
+    "@vue/babel-plugin-jsx": "catalog:",
+    "@vue/babel-plugin-resolve-type": "catalog:",
+    "@vue/babel-helper-vue-transform-on": "catalog:",
+    "@vue/test-utils": "catalog:",
+    "jsdom": "catalog:",
+    "vitest": "catalog:",
+    "vite": "catalog:"
   }
 }

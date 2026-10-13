@@ -1,0 +1,93 @@
+{
+  "repository": "https://github.com/vuejs/babel-plugin-jsx",
+  "tag": "v3.0.0",
+  "commit": "11b8af5db89c189008d14418c1bca482281e1692",
+  "license": "MIT",
+  "files": [
+    {
+      "source": "packages/babel-plugin-jsx/src/index.ts",
+      "target": "packages/compiler/src/upstream/index.ts",
+      "sha256": "96ec4395ae310e58adf12e61faeaf88b5f6baded68be7605809e29efdc762685"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/src/interface.ts",
+      "target": "packages/compiler/src/upstream/interface.ts",
+      "sha256": "63a75a3db6b7f3a05cc873d1c6cc50d792a9dd7b00cea44cce3c92abfdfc8eb1"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/src/parseDirectives.ts",
+      "target": "packages/compiler/src/upstream/parseDirectives.ts",
+      "sha256": "b4fe1a3047740a23b6ae80ea2bf5134d45f769b309f5c7bacd6024c2e84ebaf3"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/src/patchFlags.ts",
+      "target": "packages/compiler/src/upstream/patchFlags.ts",
+      "sha256": "7e6cd8f04167fb39f916af266ef04ecbf6be0e76b1f05f85f4f764e0a27247a7"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/src/slotFlags.ts",
+      "target": "packages/compiler/src/upstream/slotFlags.ts",
+      "sha256": "a63f51c07fc0b23d2aef2092ccaf8b5e14803b9e3b95d9fbf7c04bb7ce45c9e0"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/src/sugar-fragment.ts",
+      "target": "packages/compiler/src/upstream/sugar-fragment.ts",
+      "sha256": "5836e8086d4d613139359ee35afbafe3f85efd6fca1b2ceb8b4e4822ffe917af"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/src/transform-vue-jsx.ts",
+      "target": "packages/compiler/src/upstream/transform-vue-jsx.ts",
+      "sha256": "1c3025ca9b19ad37a4abbdd5e71d0050889beb05b9462991cad8c540f560b85d"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/src/utils.ts",
+      "target": "packages/compiler/src/upstream/utils.ts",
+      "sha256": "9eaa02f8fc81d2ea6a74c90488b5425188a18e620820c3ef890bb38f88c45746"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/test/__snapshots__/resolve-type.test.tsx.snap",
+      "target": "packages/compiler/test/upstream/__snapshots__/resolve-type.test.tsx.snap",
+      "sha256": "1cba3995b289a2bcecae1fe5be22f1b515c2b9ae6478961b418609003167a064"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/test/__snapshots__/snapshot.test.ts.snap",
+      "target": "packages/compiler/test/upstream/__snapshots__/snapshot.test.ts.snap",
+      "sha256": "8301035fa8afc615bab902e73f0102abc6c6f862d5023700c4a727c5e431910a"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/test/index.test.tsx",
+      "target": "packages/compiler/test/upstream/index.test.tsx",
+      "sha256": "bbb3aa726559f0799d078682b64a3c6acc01c0da08eaa9d73d46aca8ed4ff018"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/test/resolve-type.test.tsx",
+      "target": "packages/compiler/test/upstream/resolve-type.test.tsx",
+      "sha256": "1211d2c8a097398e40780d797ebb67ee8304ad9d43a817fc99b6cd51401ab0c3"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/test/snapshot.test.ts",
+      "target": "packages/compiler/test/upstream/snapshot.test.ts",
+      "sha256": "f9f0b9f66c34e543ade95c709ccb513681c3bc38bc589bfa32ab8c83446151d7"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/test/v-model.test.tsx",
+      "target": "packages/compiler/test/upstream/v-model.test.tsx",
+      "sha256": "7b04ec04bd89735e1eb59a78ce97131885be527e407c948167ffc5e9789093aa"
+    },
+    {
+      "source": "packages/babel-plugin-jsx/test/v-models.test.tsx",
+      "target": "packages/compiler/test/upstream/v-models.test.tsx",
+      "sha256": "ce66b14dca7a4d5c15bddac85110174b8094c2d7ad07b7eafbb3b27cebf9ddfc"
+    },
+    {
+      "source": "packages/babel-plugin-resolve-type/test/__snapshots__/resolve-type.test.tsx.snap",
+      "target": "packages/compiler/test/upstream-resolve-type/__snapshots__/resolve-type.test.tsx.snap",
+      "sha256": "66dd432b52cfb8824ea05f30ecb09d7a0e9cc4aa03ef904e46bfbd99fee0be20"
+    },
+    {
+      "source": "packages/babel-plugin-resolve-type/test/resolve-type.test.tsx",
+      "target": "packages/compiler/test/upstream-resolve-type/resolve-type.test.tsx",
+      "sha256": "6d9a3dc0dd935673eba6c50dd8b56ea700ea4ade199c419f426af76e09521e7e"
+    }
+  ]
+}

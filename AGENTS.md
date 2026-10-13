@@ -3,7 +3,7 @@
 - 以 BLUEPRINT.md 为当前设计依据；仅维护 Vue VDOM、纯 TSX 工具和运行时 CSS，不扩展模板编译或其他 renderer。
 - 最终目标是成熟可用；阶段只组织实施顺序，不能用演示通过或缩减约定能力代替最终验收。
 - TypeScript 精确使用 6.0.3，Node 24，pnpm 11.22.0。包依赖经 pnpm catalog 固定，保留唯一锁文件。
-- packages/compiler 是官方 Vue JSX v3.0.0 的对照与后续 fork 入口；packages/tsx 和 packages/css 当前仅建立边界，不把蓝图 API 写成已实现。
+- packages/compiler 已保留官方 Vue JSX v3.0.0 的真实源码 fork 和对照测试；packages/tsx 和 packages/css 当前仅建立边界，不把蓝图 API 写成已实现。实现状态与证据随阶段更新。
 - 状态直接使用 Vue API。CSS 作者入口为 class，编译器负责 bx 的隐式 style 接线，不新增独立 JSX 样式属性。
 - CSS 采用运行时处理加辅助编译：基础层提供系统关键字，主题通过继承增加，泛型 T 贯穿作者入口、对象样式和关键字视图。
 - 属性、系统/主题关键字需有准确补全和有用的中文 JSDoc；参考老项目的说明与生成方式，适配对象 API，并验证发布声明不丢失类型或注释。

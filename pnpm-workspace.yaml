@@ -4,16 +4,28 @@ packages:
 
 catalog:
   '@babel/core': 8.0.6
+  '@babel/helper-module-imports': 8.0.0
+  '@babel/helper-plugin-utils': 8.0.1
+  '@babel/plugin-syntax-jsx': 8.0.1
+  '@babel/plugin-syntax-typescript': 8.0.3
   '@babel/preset-typescript': 8.0.1
+  '@babel/template': 8.0.0
+  '@babel/types': 8.0.6
   '@types/node': 24.13.5
   '@types/convert-source-map': 2.0.3
   '@vue/babel-plugin-jsx': 3.0.0
+  '@vue/babel-plugin-resolve-type': 3.0.0
+  '@vue/babel-helper-vue-transform-on': 3.0.0
   '@vue/compiler-sfc': 3.5.43
   '@vue/server-renderer': 3.5.43
+  '@vue/shared': 3.5.43
+  '@vue/test-utils': 2.4.11
   csstype: 3.2.3
+  jsdom: 29.1.1
   prettier: 3.9.9
   typescript: 6.0.3
   vite: 8.3.1
+  vitest: 4.1.9
   vue: 3.5.43
 
 catalogs:

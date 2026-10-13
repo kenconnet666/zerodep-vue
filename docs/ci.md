@@ -9,11 +9,12 @@
 | Format                  | 全仓已支持格式的文件检查                      | 独立 job                                   |
 | Types                   | compiler、css、tsx、legacy-tsx 四个项目       | 四个矩阵 job，fail-fast=false              |
 | Compiler and SSR        | 普通 TSX 编译和 Vue SSR 对照                  | 独立 job                                   |
+| Upstream                | 原始 JSX/resolve-type 断言与快照              | official/fork × 两个 shard，共四个 job     |
 | Build and package entry | 三包构建、实际导入 compiler、检查 JS/声明入口 | 独立 job，构建完成后顺序检查产物           |
 | LSP                     | 错误修复、依赖刷新、语义查询、补全和隔离      | Linux/Windows 两个矩阵 job                 |
 | CI result               | 所有验证任务必须成功                          | 等待依赖完成后汇总，不吞掉失败、取消或跳过 |
 
-现有验证共九个执行任务和一个汇总任务。LSP 自检会改写自己的临时源码，因此与类型检查隔离在不同 runner 中；不要为了并行把它们放进同一个工作目录。任务之间没有不必要的 needs 依赖，矩阵设置并发上限以控制资源使用。
+现有验证共十三个执行任务和一个汇总任务。LSP 自检会改写自己的临时源码，因此与类型检查隔离在不同 runner 中；不要为了并行把它们放进同一个工作目录。任务之间没有不必要的 needs 依赖，矩阵设置并发上限以控制资源使用。
 
 构建产物及成功生成的 LSP 报告按 SHA/平台上传，保留七天。Actions 固定到已核对的提交 SHA。工作流只申请读取仓库权限，不执行包发布或生产部署；需要发布能力时另行定义目标和权限。
 

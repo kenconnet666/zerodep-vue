@@ -2,7 +2,13 @@
 
 官方编译基线为 [vuejs/babel-plugin-jsx v3.0.0](https://github.com/vuejs/babel-plugin-jsx/tree/11b8af5db89c189008d14418c1bca482281e1692)，提交为 11b8af5db89c189008d14418c1bca482281e1692。
 
-当前 compiler 根入口只转发精确锁定的 @vue/babel-plugin-jsx@3.0.0，用于建立 Babel 8 + TypeScript 6.0.3 的普通 TSX 对照。它还不是完成自有增强的 fork，尚未提供自有 Vite 适配器。后续复制上游源码时保留上游 MIT 许可、源码对应关系和回归测试。
+compiler 根入口已使用 `packages/compiler/src/upstream` 内的真实 fork 源码，不再转发官方 npm 插件。`packages/compiler/upstream.json` 记录来源提交、每个原始文件的 SHA-256 和本地对应路径；MIT 许可随 compiler 包保留。官方 npm 插件仍作为开发依赖，用于相同输入与选项的差分对照。
+
+当前相对上游的变化仅为 TypeScript 6.0.3 严格检查适配：在已有长度/正则匹配条件保证的位置补充非空断言，将实际只产生表达式的 props AST 类型收窄为 Expression。没有改变普通 JSX 的转换流程或默认选项。自有增强尚未接入，也尚未提供自有 Vite 适配器。
+
+`@vue/babel-plugin-resolve-type@3.0.0` 与 `@vue/babel-helper-vue-transform-on@3.0.0` 保持精确依赖，直接复用，不复制一套无必要的辅助实现。更新这些版本时必须与 JSX 基线一同验收。
+
+上游 JSX 五个测试文件、全部快照及 resolve-type 的测试已复制到 compiler 的 test/upstream 与 test/upstream-resolve-type。只调整被测插件的导入位置；断言与快照保持原样。`vitest.upstream.config.ts` 将同一套测试分别交给官方版和 fork 版，运行时 TSX 使用对应插件实际编译。完整回归在远程按编译器和两份 shard 并行执行，本地只选必要短例。
 
 tsx 与 css 包目前为空模块，没有 _component、For、css 或 bx 的可用实现。其作者语义和最终 Naive UI 验收以根目录 BLUEPRINT.md 为准。
 

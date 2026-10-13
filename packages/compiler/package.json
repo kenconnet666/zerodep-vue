@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Vue JSX v3 baseline; custom fork extensions are not implemented yet.",
+  "description": "Vue JSX v3.0.0 source fork with isolated TSX authoring extensions.",
   "exports": {
     ".": {
       "zerodep-vue-source": "./src/index.ts",
@@ -12,7 +12,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=24.11 <25"
@@ -23,7 +24,14 @@
     "test": "node --test test/baseline.test.mjs"
   },
   "dependencies": {
-    "@vue/babel-plugin-jsx": "catalog:"
+    "@babel/helper-module-imports": "catalog:",
+    "@babel/helper-plugin-utils": "catalog:",
+    "@babel/plugin-syntax-jsx": "catalog:",
+    "@babel/template": "catalog:",
+    "@babel/types": "catalog:",
+    "@vue/babel-helper-vue-transform-on": "catalog:",
+    "@vue/babel-plugin-resolve-type": "catalog:",
+    "@vue/shared": "catalog:"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0"
@@ -38,5 +46,6 @@
     "typescript": "catalog:",
     "vite": "catalog:",
     "vue": "catalog:"
-  }
+  },
+  "license": "MIT"
 }

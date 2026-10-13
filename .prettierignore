@@ -6,3 +6,7 @@ test-results/
 .codex/config.toml
 pnpm-lock.yaml
 licenses/
+# 保留固定上游的排版，后续差异可直接对照源码与快照。
+packages/compiler/src/upstream/
+packages/compiler/test/upstream/
+packages/compiler/test/upstream-resolve-type/

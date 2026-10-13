@@ -53,6 +53,32 @@ jobs:
       - uses: ./.github/actions/setup
       - run: pnpm test
 
+  upstream:
+    name: Upstream (${{ matrix.mode }}, ${{ matrix.shard }}/2)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        mode: [official, fork]
+        shard: [1, 2]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - name: Run original Vue JSX assertions and snapshots
+        env:
+          TEST_MODE: ${{ matrix.mode }}
+          TEST_SHARD: ${{ matrix.shard }}
+        run: pnpm test:upstream --mode "$TEST_MODE" --shard "$TEST_SHARD/2" --reporter default --reporter json --outputFile "test-results/upstream-$TEST_MODE-$TEST_SHARD.json"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: upstream-${{ matrix.mode }}-${{ matrix.shard }}-${{ github.sha }}
+          path: test-results/upstream-*.json
+          if-no-files-found: warn
+          retention-days: 7
+
   build:
     name: Build and package entry
     runs-on: ubuntu-latest
@@ -106,7 +132,7 @@ jobs:
   ci:
     name: CI result
     if: always()
-    needs: [format, types, compiler, build, language]
+    needs: [format, types, compiler, upstream, build, language]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
