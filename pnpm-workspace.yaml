@@ -29,6 +29,24 @@ catalog:
   vue: 3.5.43
 
 catalogs:
+  naive:
+    '@css-render/plugin-bem': 0.15.14
+    '@css-render/vue3-ssr': 0.15.14
+    '@types/lodash': 4.17.20
+    '@types/lodash-es': 4.17.12
+    'async-validator': 4.2.5
+    'css-render': 0.15.14
+    'date-fns': 4.1.0
+    'date-fns-tz': 3.2.0
+    'evtd': 0.2.4
+    'highlight.js': 11.8.0
+    'lodash': 4.17.21
+    'lodash-es': 4.17.21
+    'seemly': 0.3.10
+    'treemate': 0.3.11
+    'vdirs': 0.1.8
+    'vooks': 0.2.12
+    'vueuc': 0.4.66
   languageServices:
     '@modelcontextprotocol/sdk': 1.30.0
     smol-toml: 1.9.0

@@ -8,12 +8,21 @@
     ".": {
       "zerodep-vue-source": "./src/index.ts",
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./vite": {
+      "zerodep-vue-source": "./src/vite.ts",
+      "types": "./dist/vite.d.ts",
+      "import": "./dist/vite.js",
+      "default": "./dist/vite.js"
     }
   },
   "files": [
     "dist",
-    "LICENSE"
+    "LICENSE",
+    "VITE-LICENSE",
+    "upstream.json"
   ],
   "engines": {
     "node": ">=24.11 <25"
@@ -31,14 +40,15 @@
     "@babel/types": "catalog:",
     "@vue/babel-helper-vue-transform-on": "catalog:",
     "@vue/babel-plugin-resolve-type": "catalog:",
-    "@vue/shared": "catalog:"
+    "@vue/shared": "catalog:",
+    "@babel/preset-typescript": "catalog:"
   },
   "peerDependencies": {
-    "@babel/core": "^8.0.0"
+    "@babel/core": "^8.0.0",
+    "vite": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "catalog:",
-    "@babel/preset-typescript": "catalog:",
     "@types/convert-source-map": "catalog:",
     "@types/node": "catalog:",
     "@vue/compiler-sfc": "catalog:",
@@ -47,5 +57,10 @@
     "vite": "catalog:",
     "vue": "catalog:"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "peerDependenciesMeta": {
+    "vite": {
+      "optional": true
+    }
+  }
 }

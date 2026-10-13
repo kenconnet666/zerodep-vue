@@ -1,0 +1,27 @@
+{
+  "name": "@zerodep-vue/fixture-naive-ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@css-render/plugin-bem": "catalog:naive",
+    "@css-render/vue3-ssr": "catalog:naive",
+    "@types/lodash": "catalog:naive",
+    "@types/lodash-es": "catalog:naive",
+    "async-validator": "catalog:naive",
+    "css-render": "catalog:naive",
+    "csstype": "catalog:",
+    "date-fns": "catalog:naive",
+    "date-fns-tz": "catalog:naive",
+    "evtd": "catalog:naive",
+    "highlight.js": "catalog:naive",
+    "lodash": "catalog:naive",
+    "lodash-es": "catalog:naive",
+    "seemly": "catalog:naive",
+    "treemate": "catalog:naive",
+    "vdirs": "catalog:naive",
+    "vooks": "catalog:naive",
+    "vueuc": "catalog:naive",
+    "vue": "catalog:"
+  }
+}

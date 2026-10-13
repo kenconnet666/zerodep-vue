@@ -10,3 +10,5 @@ licenses/
 packages/compiler/src/upstream/
 packages/compiler/test/upstream/
 packages/compiler/test/upstream-resolve-type/
+.cache/
+fixtures/*/.generated/

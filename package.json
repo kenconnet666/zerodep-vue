@@ -17,7 +17,9 @@
     "lsp:setup": "node scripts/language-services/setup.mjs",
     "lsp:verify": "node scripts/language-services/verify.mjs .",
     "lsp:inspect": "node scripts/language-services/inspect.mjs .",
-    "test:upstream": "vitest run --config vitest.upstream.config.ts"
+    "test:upstream": "vitest run --config vitest.upstream.config.ts",
+    "naive:inventory": "node fixtures/naive-ui/inventory.mjs",
+    "test:naive": "node fixtures/naive-ui/build.mjs"
   },
   "devDependencies": {
     "@babel/core": "catalog:",

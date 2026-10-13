@@ -4,7 +4,9 @@
 
 compiler 根入口已使用 `packages/compiler/src/upstream` 内的真实 fork 源码，不再转发官方 npm 插件。`packages/compiler/upstream.json` 记录来源提交、每个原始文件的 SHA-256 和本地对应路径；MIT 许可随 compiler 包保留。官方 npm 插件仍作为开发依赖，用于相同输入与选项的差分对照。
 
-当前相对上游的变化仅为 TypeScript 6.0.3 严格检查适配：在已有长度/正则匹配条件保证的位置补充非空断言，将实际只产生表达式的 props AST 类型收窄为 Expression。没有改变普通 JSX 的转换流程或默认选项。自有增强尚未接入，也尚未提供自有 Vite 适配器。
+当前 JSX 核心相对上游的变化仅为 TypeScript 6.0.3 严格检查适配：在已有长度/正则匹配条件保证的位置补充非空断言，将实际只产生表达式的 props AST 类型收窄为 Expression。没有改变普通 JSX 的转换流程或默认选项。自有组件和 CSS 增强尚未接入。
+
+`@zerodep-vue/compiler/vite` 提供 Vite 8 接入。HMR 与 SSR 模块登记参考官方 vite-plugin-vue 的 a03675e92eb55c02a6a393e311d610ddb3603744 快照；文件筛选、JSX 转换、TypeScript 擦除、source map、导入别名与默认导出由本项目适配，组件发现按导入身份判断。普通 Vue 组件使用 Vue HMR reload，不能将其表述为增强 TSX 已实现保留状态的样式更新。
 
 `@vue/babel-plugin-resolve-type@3.0.0` 与 `@vue/babel-helper-vue-transform-on@3.0.0` 保持精确依赖，直接复用，不复制一套无必要的辅助实现。更新这些版本时必须与 JSX 基线一同验收。
 

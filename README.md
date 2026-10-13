@@ -4,7 +4,9 @@
 
 CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提供，主题通过继承扩展，并提供贯穿对象样式和关键字视图的泛型 T 入口。属性、关键字与主题成员的类型提示、中文说明及声明消费体验是交付要求；作者仍使用 class，绑定对应的内联 style 由编译器隐式接线。
 
-当前阶段已建立工作区、工具链和官方 JSX v3.0.0 的真实源码 fork，并保留同一套上游断言、快照及官方插件差分对照；tsx 和 css 仍是空模块。还没有 _component、For、css/bx 或自有 Vite 插件的实现，也没有通过 Naive UI 最终验收。
+当前已建立官方 JSX v3.0.0 的真实源码 fork、自有 Vite 入口和同一套上游断言/快照对照。Naive UI 固定来源的 301 个生产 TSX 已纳入完整清单，三条编译/构建路径交给远程验证。tsx 和 css 仍是空模块，尚无 _component、For、css/bx 的实现；源码对照也不代表 Naive UI 混用最终验收已经通过。
+
+已有 Vue TSX 项目可将 Vite 配置中的 JSX 插件替换为 `@zerodep-vue/compiler/vite` 的默认导出；Babel 直接使用 `@zerodep-vue/compiler`。选项沿用官方 JSX，Vite 入口另提供 include、exclude 和 babelPlugins。不要同时保留另一份 Vue JSX 转换；原有 Vue SFC 插件不受此限制。开发态提供普通 Vue 组件 HMR 和 SSR 模块登记，增强的状态保留体验随作者能力继续实施。
 
 ## 环境
 

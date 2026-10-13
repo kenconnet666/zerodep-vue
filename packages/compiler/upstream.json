@@ -7,87 +7,88 @@
     {
       "source": "packages/babel-plugin-jsx/src/index.ts",
       "target": "packages/compiler/src/upstream/index.ts",
-      "sha256": "96ec4395ae310e58adf12e61faeaf88b5f6baded68be7605809e29efdc762685"
+      "sha256": "88af625894920b535914fc7900204e824f901622dac170aedabc7a5a3a4ccd80"
     },
     {
       "source": "packages/babel-plugin-jsx/src/interface.ts",
       "target": "packages/compiler/src/upstream/interface.ts",
-      "sha256": "63a75a3db6b7f3a05cc873d1c6cc50d792a9dd7b00cea44cce3c92abfdfc8eb1"
+      "sha256": "8a7236b05c773917c9433cca730b4c70519b13cf952fd5174329b7605238f95c"
     },
     {
       "source": "packages/babel-plugin-jsx/src/parseDirectives.ts",
       "target": "packages/compiler/src/upstream/parseDirectives.ts",
-      "sha256": "b4fe1a3047740a23b6ae80ea2bf5134d45f769b309f5c7bacd6024c2e84ebaf3"
+      "sha256": "02bb757f8ae8216e8bf6296b1c58e1dc5d961bc7af27c63b43b77abe6eacbc4c"
     },
     {
       "source": "packages/babel-plugin-jsx/src/patchFlags.ts",
       "target": "packages/compiler/src/upstream/patchFlags.ts",
-      "sha256": "7e6cd8f04167fb39f916af266ef04ecbf6be0e76b1f05f85f4f764e0a27247a7"
+      "sha256": "5b9dc67c9982ccc147611ea6a23d603d351c5feccea2f9d40a2ffcf68dcdf89a"
     },
     {
       "source": "packages/babel-plugin-jsx/src/slotFlags.ts",
       "target": "packages/compiler/src/upstream/slotFlags.ts",
-      "sha256": "a63f51c07fc0b23d2aef2092ccaf8b5e14803b9e3b95d9fbf7c04bb7ce45c9e0"
+      "sha256": "241acc3305622cfd5088d108f2a15d3b3cc8a846493621e3f7542df1f4ac4cdc"
     },
     {
       "source": "packages/babel-plugin-jsx/src/sugar-fragment.ts",
       "target": "packages/compiler/src/upstream/sugar-fragment.ts",
-      "sha256": "5836e8086d4d613139359ee35afbafe3f85efd6fca1b2ceb8b4e4822ffe917af"
+      "sha256": "88a63115a4231ce935703c0345f2064dc407c2f08befbb5b23a3daf9407cd698"
     },
     {
       "source": "packages/babel-plugin-jsx/src/transform-vue-jsx.ts",
       "target": "packages/compiler/src/upstream/transform-vue-jsx.ts",
-      "sha256": "1c3025ca9b19ad37a4abbdd5e71d0050889beb05b9462991cad8c540f560b85d"
+      "sha256": "973b27542efcc6c02aa9b4bc5134ceeb6f7cd6e5b2801a3faa4be349332f7535"
     },
     {
       "source": "packages/babel-plugin-jsx/src/utils.ts",
       "target": "packages/compiler/src/upstream/utils.ts",
-      "sha256": "9eaa02f8fc81d2ea6a74c90488b5425188a18e620820c3ef890bb38f88c45746"
+      "sha256": "0727d9fd8b457c8346ba843d053b80dc278638ef49269e2c01a60ee863193daf"
     },
     {
       "source": "packages/babel-plugin-jsx/test/__snapshots__/resolve-type.test.tsx.snap",
       "target": "packages/compiler/test/upstream/__snapshots__/resolve-type.test.tsx.snap",
-      "sha256": "1cba3995b289a2bcecae1fe5be22f1b515c2b9ae6478961b418609003167a064"
+      "sha256": "64aad8a87d656071e0734f2b6fc6a19a98caaaa1f1fe9fdfccbf9b77d7b992ef"
     },
     {
       "source": "packages/babel-plugin-jsx/test/__snapshots__/snapshot.test.ts.snap",
       "target": "packages/compiler/test/upstream/__snapshots__/snapshot.test.ts.snap",
-      "sha256": "8301035fa8afc615bab902e73f0102abc6c6f862d5023700c4a727c5e431910a"
+      "sha256": "7a2a2c70650bd6a37369f6929644d9b356c72705209b4dbb2a79baea90409f1a"
     },
     {
       "source": "packages/babel-plugin-jsx/test/index.test.tsx",
       "target": "packages/compiler/test/upstream/index.test.tsx",
-      "sha256": "bbb3aa726559f0799d078682b64a3c6acc01c0da08eaa9d73d46aca8ed4ff018"
+      "sha256": "a93aba653cd0bd3f84a65f9601df15db2b077da143233dbb3061c4c85fb5ea21"
     },
     {
       "source": "packages/babel-plugin-jsx/test/resolve-type.test.tsx",
       "target": "packages/compiler/test/upstream/resolve-type.test.tsx",
-      "sha256": "1211d2c8a097398e40780d797ebb67ee8304ad9d43a817fc99b6cd51401ab0c3"
+      "sha256": "bc089991a87ba3718bbba15e54b3c1f3963ff04e1b18738dce6f8b14401b866a"
     },
     {
       "source": "packages/babel-plugin-jsx/test/snapshot.test.ts",
       "target": "packages/compiler/test/upstream/snapshot.test.ts",
-      "sha256": "f9f0b9f66c34e543ade95c709ccb513681c3bc38bc589bfa32ab8c83446151d7"
+      "sha256": "85f65ee711dd0e5f2a08ac236c9520de8df5d30aa68602ca9498415f9e673872"
     },
     {
       "source": "packages/babel-plugin-jsx/test/v-model.test.tsx",
       "target": "packages/compiler/test/upstream/v-model.test.tsx",
-      "sha256": "7b04ec04bd89735e1eb59a78ce97131885be527e407c948167ffc5e9789093aa"
+      "sha256": "c7a377be0b07c94728f1acc339d47020a8adf99756973e486169b1a595ad2771"
     },
     {
       "source": "packages/babel-plugin-jsx/test/v-models.test.tsx",
       "target": "packages/compiler/test/upstream/v-models.test.tsx",
-      "sha256": "ce66b14dca7a4d5c15bddac85110174b8094c2d7ad07b7eafbb3b27cebf9ddfc"
+      "sha256": "cd27f1f01b846be03abbeb2655f1e7de0802a24f1c83f9ca64f57d83716457b9"
     },
     {
       "source": "packages/babel-plugin-resolve-type/test/__snapshots__/resolve-type.test.tsx.snap",
       "target": "packages/compiler/test/upstream-resolve-type/__snapshots__/resolve-type.test.tsx.snap",
-      "sha256": "66dd432b52cfb8824ea05f30ecb09d7a0e9cc4aa03ef904e46bfbd99fee0be20"
+      "sha256": "f3c53808ea7da67e7d04ec0f7df5d4f2f83913260f419c6258bf0dd47d024a10"
     },
     {
       "source": "packages/babel-plugin-resolve-type/test/resolve-type.test.tsx",
       "target": "packages/compiler/test/upstream-resolve-type/resolve-type.test.tsx",
-      "sha256": "6d9a3dc0dd935673eba6c50dd8b56ea700ea4ade199c419f426af76e09521e7e"
+      "sha256": "9b00c4a328423acdd0a1ebee7fff330ffd2afd3508fb216d1ec54345fae0c1ba"
     }
-  ]
+  ],
+  "normalization": "UTF-8 with LF line endings"
 }

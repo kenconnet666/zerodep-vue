@@ -143,3 +143,4 @@ dist
 .codex/config.toml
 test-results/
 .tmp/
+fixtures/*/.generated/
