@@ -4,8 +4,12 @@ import { isBinding, isFallback, isTemplate } from './values.ts';
 import { selectors, validateFragment } from './syntax.ts';
 import type { SelectorContext } from './syntax.ts';
 import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
+import { isAnimation, isVariable } from './resource-tokens.ts';
 
-function declarations(object: object): readonly Declaration[] {
+export function declarations(
+  object: object,
+  context: SelectorContext = { selector: '&', target: '&', conditions: [] },
+): readonly Declaration[] {
   const result: Declaration[] = [];
   const active = new Set<object>();
   const visit = (style: object, context: SelectorContext) => {
@@ -34,7 +38,9 @@ function declarations(object: object): readonly Declaration[] {
             !isBinding(value) &&
             !isTemplate(value) &&
             !isFallback(value) &&
-            !isThemeReference(value)
+            !isThemeReference(value) &&
+            !isAnimation(value) &&
+            !isVariable(value)
           )
             throw new Error(`CSS 属性 ${property} 需要值；嵌套选择器请用 &。`);
           result.push(Object.freeze({ ...context, property, value }));
@@ -44,7 +50,7 @@ function declarations(object: object): readonly Declaration[] {
       active.delete(style);
     }
   };
-  visit(object, { selector: '&', target: '&', conditions: [] });
+  visit(object, context);
   return Object.freeze(result);
 }
 
@@ -77,6 +83,8 @@ export function css(...inputs: readonly unknown[]): CssClass {
       isKeyword(input) ||
       isThemeReference(input) ||
       isBinding(input) ||
+      isVariable(input) ||
+      isAnimation(input) ||
       isTemplate(input) ||
       isFallback(input)
     )

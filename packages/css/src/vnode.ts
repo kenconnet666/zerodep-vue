@@ -13,7 +13,7 @@ import {
 } from 'vue';
 import type { ComponentInternalInstance, ObjectDirective, VNode, VNodeChild } from 'vue';
 import { createCssHost, cssHostKey } from './host.ts';
-import type { CssHost } from './host.ts';
+import type { CssHost, CssRule } from './host.ts';
 import { resolveClass } from './resolve.ts';
 import type { ResolvedClass } from './resolve.ts';
 import { isCssClass } from './types.ts';
@@ -181,40 +181,56 @@ function release(vnode: VNode) {
   leases.get(vnode)?.release();
   leases.delete(vnode);
 }
+function rulesOf(resolved: ResolvedClass): CssRule[] {
+  return [...resolved.resources, { name: resolved.ruleName, cssText: resolved.cssText }];
+}
+function collect(plan: Plan) {
+  if (!plan.owner) return;
+  for (const rule of rulesOf(plan.resolved)) hostFor(plan.owner).collect(rule, plan.host);
+}
 function consume(plan: Plan, vnode: VNode, previous?: VNode | null) {
   if (!plan.resolved.cssText || !plan.owner) {
     if (previous) release(previous);
     return;
   }
   const host = plan.host ?? hostFor(plan.owner);
+  const rules = rulesOf(plan.resolved);
+  const text = JSON.stringify(rules);
   const old = previous && leases.get(previous);
   if (
     old &&
     old.host === host &&
     old.owner === plan.owner &&
     old.name === plan.resolved.ruleName &&
-    old.text === plan.resolved.cssText
+    old.text === text
   ) {
     leases.delete(previous!);
     old.vnode = vnode;
     leases.set(vnode, old);
     return;
   }
+  // 先取得整组新租约，失败时回滚；共用规则不会因更新先释放而改变插入顺序。
+  const releases: (() => void)[] = [];
+  try {
+    for (const rule of rules) releases.push(host.acquire(rule));
+  } catch (error) {
+    for (const done of releases) done();
+    throw error;
+  }
   if (previous) release(previous);
-  const done = host.acquire({ name: plan.resolved.ruleName, cssText: plan.resolved.cssText });
   const owned = ownerLeases(plan.owner);
   let released = false;
   const lease: Lease = {
     host,
     owner: plan.owner,
     name: plan.resolved.ruleName,
-    text: plan.resolved.cssText,
+    text,
     vnode,
     release() {
       if (released) return;
       released = true;
       lease.stopObserving?.();
-      done();
+      for (const done of releases) done();
       owned.delete(lease);
     },
     present() {
@@ -243,12 +259,7 @@ const styleDirective: ObjectDirective<Element, Plan> & { [DIRECTIVE]: true } = {
     release(vnode);
   },
   getSSRProps(binding) {
-    const { owner, resolved } = binding.value;
-    if (owner && resolved.cssText)
-      hostFor(owner).collect(
-        { name: resolved.ruleName, cssText: resolved.cssText },
-        binding.value.host,
-      );
+    collect(binding.value);
     return {};
   },
 };
@@ -318,10 +329,7 @@ function attach(vnode: VNode, plan: Plan): VNode {
     chain('onVnodeUnmounted', (node: VNode) => release(node));
     // SSR 组件不会运行客户端 VNode hook，收集属于当前请求的规则即可。
     if (plan.owner?.appContext.provides[ssrContextKey as symbol] && plan.resolved.cssText)
-      hostFor(plan.owner).collect(
-        { name: plan.resolved.ruleName, cssText: plan.resolved.cssText },
-        plan.host,
-      );
+      collect(plan);
   }
   return vnode;
 }

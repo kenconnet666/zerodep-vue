@@ -8,6 +8,10 @@ import { systemValues } from './generated/keywords.ts';
 import { THEME, THEME_SOURCE, keyword } from './tokens.ts';
 import type { CheckedTheme, ThemeReference } from './tokens.ts';
 import type { CssInput, CssClass, PropertyName } from './types.ts';
+import { defineVars, createTheme, keyframes } from './resources.ts';
+import type { VariableOverrides, Keyframes } from './resources.ts';
+import type { VariableGroup, CssAnimation } from './resource-tokens.ts';
+import type { Scalar } from './values.ts';
 
 type ThemeMembers<Group, Key extends PropertyName> = {
   readonly [Name in keyof Group]: Name extends string ? ThemeReference<Key, Name> : never;
@@ -23,6 +27,15 @@ export interface Css<T extends SystemKeywords = SystemKeywords> {
   ): { readonly [Key in Name]: CssClass };
   readonly keywords: KeywordView<T>;
   readonly firstThatWorks: typeof firstThatWorks;
+  /** 声明稳定命名空间的变量组；长度默认值应明确写单位。 */
+  readonly defineVars: typeof defineVars;
+  /** 覆盖变量组，返回可组合 class；允许状态分组、主题值和 bx。 */
+  createTheme<Values extends Record<string, Scalar>>(
+    group: VariableGroup<Values>,
+    overrides: VariableOverrides<Values, T>,
+  ): CssClass;
+  /** 声明动画资源；使用时才求值和登记，支持 bx 和主题引用。 */
+  keyframes(frames: Keyframes<T>): CssAnimation;
 }
 
 /** 共享工具可沿用此类型接收主题来源，同时保留成员名称和值域校验。 */
@@ -151,6 +164,9 @@ export function createCss<T extends SystemKeywords>(source: ThemeSource<T>): Css
     create,
     keywords: keywordView<T>(source),
     firstThatWorks,
+    defineVars,
+    createTheme,
+    keyframes,
   }) as Css<T>;
 }
 

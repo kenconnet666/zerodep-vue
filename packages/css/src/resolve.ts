@@ -9,6 +9,9 @@ import type { CssBinding, Scalar } from './values.ts';
 import { scopedSelector, validateFragment } from './syntax.ts';
 import { KEYWORD, THEME, isKeyword, isThemeReference } from './tokens.ts';
 import type { ThemeReference } from './tokens.ts';
+import { ANIMATION, VARIABLE, isAnimation, isVariable } from './resource-tokens.ts';
+import type { CssAnimation } from './resource-tokens.ts';
+import type { CssRule } from './host.ts';
 
 const wide = new Set(['initial', 'inherit', 'unset', 'revert', 'revert-layer']);
 type Part = string | { variable: number };
@@ -25,6 +28,8 @@ export interface ResolvedClass {
   /** 自有规则类，空声明时为空字符串。 */
   ruleName: string;
   cssText: string;
+  /** 同一消费拥有的动画等附属规则，与主规则一同取得和释放租约。 */
+  resources: readonly CssRule[];
   /** 元素级变量，值变化不参与普通规则缓存键。 */
   variables: Record<string, string>;
   hasCss: boolean;
@@ -61,6 +66,7 @@ export function propertyName(property: string): string {
 }
 
 function scalar(value: unknown, property?: string): string {
+  if (isVariable(value)) return `var(${value.name},${scalar(value[VARIABLE].initial)})`;
   if (isKeyword(value)) value = value[KEYWORD].value;
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) throw new Error(`CSS ${property ?? '片段'} 不能使用非有限数字。`);
@@ -83,7 +89,11 @@ function scalar(value: unknown, property?: string): string {
 }
 
 /** 只在当前消费中求值；同一绑定被多个声明引用时共享一次读取，不共享元素变量。 */
-export function resolveClass(value: ClassValue, reads = new Map<object, unknown>()): ResolvedClass {
+export function resolveClass(
+  value: ClassValue,
+  reads = new Map<object, unknown>(),
+  options: { namespace?: string; literal?: boolean } = {},
+): ResolvedClass {
   const parts: ClassPart[] = [];
   let hasCss = false;
   const flatten = (item: ClassValue): void => {
@@ -105,6 +115,35 @@ export function resolveClass(value: ClassValue, reads = new Map<object, unknown>
   const variables: string[] = [];
   const prepared: Prepared[] = [];
   let dynamic = false;
+  const resources: CssRule[] = [];
+  const resourceVariables: Record<string, string> = {};
+  const animations = new Map<CssAnimation, string>();
+  const animation = (value: CssAnimation, property: string): string => {
+    if (!/^(?:-[a-z]+-)?animation(?:-name)?$/.test(propertyName(property)))
+      throw new Error('动画引用只能用于 animation 或 animationName。');
+    const existing = animations.get(value);
+    if (existing) return existing;
+    const ordinal = animations.size;
+    const body = value[ANIMATION].map((frame) => {
+      const frameStyle = resolveClass(frame.style, reads, {
+        namespace: `${options.namespace ?? ''}animation:${ordinal}:${frame.at}`,
+        ...(options.literal ? { literal: true } : {}),
+      });
+      dynamic ||= frameStyle.dynamic;
+      Object.assign(resourceVariables, frameStyle.variables);
+      const content = frameStyle.cssText
+        ? frameStyle.cssText.slice(frameStyle.cssText.indexOf('{') + 1, -1)
+        : '';
+      if (/!\s*important/i.test(content)) throw new Error('关键帧不能使用 !important。');
+      return `${frame.at}{${content}}`;
+    }).join('');
+    const name = 'zva-' + hash(body);
+    animations.set(value, name);
+    resources.push({ name, cssText: `@keyframes ${name}{${body}}` });
+    return name;
+  };
+  const renderValue = (value: unknown, property?: string): string =>
+    isAnimation(value) ? animation(value, property ?? '') : scalar(value, property);
   const evaluating = new Set<object>();
   const read = (input: CssBinding<unknown> | ThemeReference): unknown => {
     dynamic = true;
@@ -128,9 +167,12 @@ export function resolveClass(value: ClassValue, reads = new Map<object, unknown>
     if (isBinding(input) || isThemeReference(input)) {
       const current = read(input);
       if (current == null) continue;
-      const text = scalar(current, property);
+      const text = renderValue(current, property);
       const keyword = cssWide(text);
-      values = keyword ? [[keyword]] : [[{ variable: variables.push(text) - 1 }]];
+      values =
+        keyword || options.literal
+          ? [[keyword ?? text]]
+          : [[{ variable: variables.push(text) - 1 }]];
     } else if (isTemplate(input)) {
       const evaluated = input[TEMPLATE].map((part) =>
         isBinding(part) || isThemeReference(part) ? read(part) : part,
@@ -139,8 +181,12 @@ export function resolveClass(value: ClassValue, reads = new Map<object, unknown>
       // 静态模板片段可以是不完整的括号前缀；单个绑定值与最终声明才需要完整语法。
       const strings = evaluated.map((part, index) =>
         isBinding(input[TEMPLATE][index]) || isThemeReference(input[TEMPLATE][index])
-          ? scalar(part)
-          : String(part),
+          ? isAnimation(part)
+            ? animation(part, property)
+            : renderValue(part)
+          : isAnimation(part)
+            ? animation(part, property)
+            : String(part),
       );
       const keyword = cssWide(strings.join(''));
       if (keyword) values = [[keyword]];
@@ -151,7 +197,7 @@ export function resolveClass(value: ClassValue, reads = new Map<object, unknown>
             if (!isBinding(part) && !isThemeReference(part)) return text;
             if (cssWide(text))
               throw new Error(`CSS ${property} 的复合值不能把 CSS-wide keyword 当作普通片段。`);
-            return { variable: variables.push(text) - 1 };
+            return options.literal ? text : { variable: variables.push(text) - 1 };
           }),
         ];
         validateFragment(strings.join(''));
@@ -160,7 +206,7 @@ export function resolveClass(value: ClassValue, reads = new Map<object, unknown>
       values = [...input[FALLBACK]]
         .reverse()
         .map((item) => [scalar(isThemeReference(item) ? read(item) : item, property)]);
-    else values = [[scalar(input, property)]];
+    else values = [[renderValue(input, property)]];
     for (const parts of values)
       prepared.push({
         selector: declaration.selector,
@@ -169,7 +215,9 @@ export function resolveClass(value: ClassValue, reads = new Map<object, unknown>
         parts,
       });
   }
-  const ruleName = prepared.length ? 'zv-' + hash(JSON.stringify(prepared)) : '';
+  const ruleName = prepared.length
+    ? 'zv-' + hash((options.namespace ?? '') + JSON.stringify(prepared))
+    : '';
   const cssVariables = Object.fromEntries(
     variables.map((value, index) => [`--${ruleName}-${index}`, value]),
   );
@@ -203,7 +251,8 @@ export function resolveClass(value: ClassValue, reads = new Map<object, unknown>
     className: normalizeClass([...composed.classes, ruleName]),
     ruleName,
     cssText,
-    variables: cssVariables,
+    resources,
+    variables: { ...resourceVariables, ...cssVariables },
     hasCss,
     dynamic,
     declarations: composed.declarations,

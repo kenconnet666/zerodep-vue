@@ -4,6 +4,8 @@ export const TEMPLATE = Symbol.for('@zerodep-vue/css/template/v1');
 export const FALLBACK = Symbol.for('@zerodep-vue/css/fallback/v1');
 import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
 import type { SystemKeyword, ThemeReference } from './tokens.ts';
+import { isAnimation } from './resource-tokens.ts';
+import type { CssAnimation } from './resource-tokens.ts';
 export type Scalar = string | number;
 
 /** 动态属性值。由编译器捕获表达式，读取归实际消费节点所有。 */
@@ -11,7 +13,7 @@ export interface CssBinding<out T> {
   readonly [BINDING]: () => T;
 }
 export interface CssTemplate {
-  readonly [TEMPLATE]: readonly (string | CssBinding<unknown> | ThemeReference)[];
+  readonly [TEMPLATE]: readonly (string | CssBinding<unknown> | ThemeReference | CssAnimation)[];
 }
 export interface CssFallback<out T> {
   readonly [FALLBACK]: readonly T[];
@@ -46,14 +48,18 @@ export function bx<T>(value: T): CssBinding<T> {
 }
 
 /** @internal 按原模板的顺序完成普通片段的字符串转换，绑定仍保持结构化。 */
-export function piece(value: unknown): string | CssBinding<unknown> | CssTemplate | ThemeReference {
+export function piece(
+  value: unknown,
+): string | CssBinding<unknown> | CssTemplate | ThemeReference | CssAnimation {
   if (isKeyword(value)) return value[KEYWORD].value;
-  return isBinding(value) || isTemplate(value) || isThemeReference(value) ? value : `${value}`;
+  return isBinding(value) || isTemplate(value) || isThemeReference(value) || isAnimation(value)
+    ? value
+    : `${value}`;
 }
 
 /** @internal 多个 bx 片段保留独立的变量位置，不使用全局字符串 token 注册表。 */
 export function template(
-  parts: readonly (string | CssBinding<unknown> | CssTemplate | ThemeReference)[],
+  parts: readonly (string | CssBinding<unknown> | CssTemplate | ThemeReference | CssAnimation)[],
 ): string | CssTemplate {
   const flattened = parts.flatMap((part) => (isTemplate(part) ? [...part[TEMPLATE]] : [part]));
   if (flattened.every((part) => typeof part === 'string')) return flattened.join('');
@@ -79,9 +85,11 @@ export function add(left: any, right: any): any {
     isBinding(left) ||
     isTemplate(left) ||
     isThemeReference(left) ||
+    isAnimation(left) ||
     isBinding(right) ||
     isTemplate(right) ||
-    isThemeReference(right)
+    isThemeReference(right) ||
+    isAnimation(right)
   )
     return template([piece(left), piece(right)]);
   return left + right;

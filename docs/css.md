@@ -63,4 +63,31 @@ const styles = getCssHost(context)?.renderStyles() ?? '';
 
 将 styles 写入页面 head。客户端按规则内容采用已有 style 标签，多个请求不共享变量或收集结果。宿主可配置固定 layer 和 nonce；它们属于宿主配置，不按每次组合新建层。
 
-基础声明、bx、Vue 接线及系统/主题入口已建立，主题用法见 [themes.md](themes.md)。完整工具与源码调试仍在实施中。生产兼容声明以 BLUEPRINT.md 的最终验收和 docs/progress.md 的实际证据为准。
+## 变量组与动画
+
+```tsx
+const vars = css.defineVars('button', { color: '#2563eb', gap: '8px' });
+const dark = css.createTheme(vars, {
+  color: '#93c5fd',
+  ':hover': { color: 'white' },
+});
+const base = css({ color: vars.color, gap: vars.gap });
+<button class={[base, dark]}>保存</button>;
+```
+
+命名空间是组件库或应用中的稳定名称，同一命名空间和成员对应同一 CSS 变量。引用自带默认值，只有覆盖 class 实际被消费时才登记覆盖规则。变量遵循原生 CSS 继承；Teleport 的 DOM 移动不自动继承原 DOM 祖先变量，弹层需要将相同覆盖 class 应用于其容器，或直接使用保留 Vue 逻辑来源的继承主题引用。自定义变量的数字不补 px，长度应写 `'8px'`。
+
+```tsx
+const Fade = _component(() => {
+  const start = ref(0.2);
+  const fade = css.keyframes({
+    from: { opacity: bx(start.value) },
+    to: { opacity: 1 },
+  });
+  return <div class={css({ animation: `${fade} 1s ease` })}>内容</div>;
+});
+```
+
+关键帧接受 from/to、百分比和逗号分隔的位置。内部只写声明，可使用主题、bx 和 animationTimingFunction；嵌套选择器及其他动画控制属性会被拒绝。也可直接写 `animationName: fade` 并分别提供 duration 等属性。动画引用在实际消费时解析，更新变量复用规则；多个元素共享资源但保有独立动态值，最后一个消费者移除后按宿主缓存策略释放。
+
+基础声明、bx、Vue 接线、变量/动画及系统/主题入口已建立，主题用法见 [themes.md](themes.md)。全局规则与源码调试仍在实施中。生产兼容声明以 BLUEPRINT.md 的最终验收和 docs/progress.md 的实际证据为准。
