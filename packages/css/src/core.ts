@@ -85,7 +85,7 @@ export function create<const Name extends string>(
   styles: Record<Name, CssInput>,
 ): { readonly [Key in Name]: CssClass } {
   return Object.freeze(
-    Object.fromEntries(Object.entries(styles).map(([key, value]) => [key, css(value)])),
+    Object.fromEntries((Object.keys(styles) as Name[]).map((key) => [key, css(styles[key])])),
   ) as { readonly [Key in Name]: CssClass };
 }
 
