@@ -1,0 +1,42 @@
+{
+  "name": "@zerodep-vue/compiler",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Vue JSX v3 baseline; custom fork extensions are not implemented yet.",
+  "exports": {
+    ".": {
+      "zerodep-vue-source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=24.11 <25"
+  },
+  "scripts": {
+    "check": "tsc --noEmit -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "node --test test/baseline.test.mjs"
+  },
+  "dependencies": {
+    "@vue/babel-plugin-jsx": "catalog:"
+  },
+  "peerDependencies": {
+    "@babel/core": "^8.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "catalog:",
+    "@babel/preset-typescript": "catalog:",
+    "@types/convert-source-map": "catalog:",
+    "@types/node": "catalog:",
+    "@vue/compiler-sfc": "catalog:",
+    "@vue/server-renderer": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vue": "catalog:"
+  }
+}

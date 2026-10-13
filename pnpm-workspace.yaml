@@ -1,0 +1,40 @@
+packages:
+  - packages/*
+  - fixtures/*
+
+catalog:
+  '@babel/core': 8.0.6
+  '@babel/preset-typescript': 8.0.1
+  '@types/node': 24.13.5
+  '@types/convert-source-map': 2.0.3
+  '@vue/babel-plugin-jsx': 3.0.0
+  '@vue/compiler-sfc': 3.5.43
+  '@vue/server-renderer': 3.5.43
+  csstype: 3.2.3
+  prettier: 3.9.9
+  typescript: 6.0.3
+  vite: 8.3.1
+  vue: 3.5.43
+
+catalogs:
+  languageServices:
+    '@modelcontextprotocol/sdk': 1.30.0
+    smol-toml: 1.9.0
+    typescript-language-server: 6.0.0
+    vscode-jsonrpc: 8.2.1
+    zod: 4.6.5
+
+catalogMode: strict
+saveExact: true
+pmOnFail: error
+linkWorkspacePackages: false
+sharedWorkspaceLockfile: true
+strictPeerDependencies: true
+autoInstallPeers: false
+
+# 保持所有包和工具使用用户指定的 TypeScript 版本。
+overrides:
+  typescript: 6.0.3
+
+allowBuilds:
+  esbuild: true

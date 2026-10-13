@@ -1,0 +1,16 @@
+{
+  "name": "@zerodep-vue/fixture-legacy-tsx",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "vue": "catalog:"
+  },
+  "devDependencies": {
+    "@zerodep-vue/compiler": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

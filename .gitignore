@@ -6,9 +6,6 @@
 # TODO: where does this rule come from?
 docs/_book
 
-# TODO: where does this rule come from?
-test/
-
 ### Node template
 # Logs
 logs
@@ -141,3 +138,8 @@ dist
 .pnp.*
 
 .idea
+
+# 当前机器的 LSP 启动路径由 lsp:setup 生成；提交可移植模板。
+.codex/config.toml
+test-results/
+.tmp/

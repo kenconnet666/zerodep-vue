@@ -1,0 +1,17 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./packages/compiler"
+    },
+    {
+      "path": "./packages/tsx"
+    },
+    {
+      "path": "./packages/css"
+    },
+    {
+      "path": "./fixtures/legacy-tsx"
+    }
+  ]
+}

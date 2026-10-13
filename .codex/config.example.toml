@@ -1,0 +1,9 @@
+# 运行 pnpm lsp:setup 生成当前机器的 .codex/config.toml。
+# BEGIN ZERODEP VUE LANGUAGE SERVICES
+[mcp_servers.zerodep_vue_lsp]
+command = __NODE__
+args = ["scripts/language-services/server.mjs", "."]
+cwd = __ROOT__
+startup_timeout_sec = 30
+tool_timeout_sec = 90
+# END ZERODEP VUE LANGUAGE SERVICES

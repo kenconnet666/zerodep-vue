@@ -1,0 +1,122 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - run: pnpm format:check
+
+  types:
+    name: Types (${{ matrix.package }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        package:
+          - '@zerodep-vue/compiler'
+          - '@zerodep-vue/css'
+          - '@zerodep-vue/tsx'
+          - '@zerodep-vue/fixture-legacy-tsx'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - name: Check package types
+        env:
+          CHECK_PACKAGE: ${{ matrix.package }}
+        run: pnpm --filter "$CHECK_PACKAGE" run check
+
+  compiler:
+    name: Compiler and SSR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - run: pnpm test
+
+  build:
+    name: Build and package entry
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - run: pnpm build
+      - name: Verify the built compiler export
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { access } from 'node:fs/promises';
+          import compiler from '@zerodep-vue/compiler';
+          assert.equal(typeof compiler, 'function');
+          for (const name of ['compiler', 'css', 'tsx']) {
+            await access(`packages/${name}/dist/index.js`);
+            await access(`packages/${name}/dist/index.d.ts`);
+          }
+          console.log('Built package entries and declarations are available.');
+          NODE
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: packages-${{ github.sha }}
+          path: packages/*/dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  language:
+    name: LSP (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - run: pnpm lsp:setup
+      - run: pnpm lsp:verify
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: lsp-${{ matrix.os }}-${{ github.sha }}
+          path: test-results/language-services/verification.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+  ci:
+    name: CI result
+    if: always()
+    needs: [format, types, compiler, build, language]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require every validation job to succeed
+        env:
+          CI_JOB_RESULTS: ${{ toJSON(needs) }}
+        run: |
+          node --input-type=module <<'NODE'
+          const jobs = JSON.parse(process.env.CI_JOB_RESULTS);
+          const failed = Object.entries(jobs).filter(([, job]) => job.result !== 'success');
+          for (const [name, job] of Object.entries(jobs)) console.log(name + ': ' + job.result);
+          if (failed.length) process.exit(1);
+          NODE
