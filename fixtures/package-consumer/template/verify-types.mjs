@@ -3,6 +3,7 @@ import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import ts from 'typescript';
 import { createRequire } from 'node:module';
+import { languageServicePlugin } from '@zerodep-vue/compiler';
 import { languageServiceHost } from './language-service-host.mjs';
 
 assert.equal(ts.version, '6.0.3');
@@ -20,7 +21,14 @@ assert(
 );
 assert(!options.customConditions?.includes('zerodep-vue-source'));
 const host = languageServiceHost(ts, root, paths, options);
-const init = createRequire(import.meta.url)('@zerodep-vue/core/language-service');
+const init = createRequire(import.meta.url)(
+  ts.resolveJSModule('@zerodep-vue/compiler/src/editor/plugin.cjs', root, ts.sys),
+);
+assert.equal(
+  init,
+  languageServicePlugin,
+  'Root export and tsserver must share one editor implementation.',
+);
 const service = init({ typescript: ts }).create({
   languageService: ts.createLanguageService(host),
 });

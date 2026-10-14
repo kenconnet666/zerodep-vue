@@ -43,9 +43,8 @@ export function transformCss(
   state: State,
   options?: CssOptions,
 ): string | undefined {
-  const imports = program.node.body.filter(t.isImportDeclaration).map((node) => node.source.value);
-  const hasRuntime = imports.some(
-    (source) => source === '@zerodep-vue/core' || source === '@zerodep-vue/core/runtime',
+  const hasRuntime = program.node.body.some(
+    (node) => t.isImportDeclaration(node) && node.source.value === '@zerodep-vue/core',
   );
   if (options?.css === false || (options?.css !== true && !hasRuntime)) return;
   if (
@@ -55,7 +54,7 @@ export function transformCss(
     throw program.buildCodeFrameError(
       '[ZV_CSS_PRAGMA] CSS 接线需要标准 Vue VNode 工厂；普通自定义 pragma 文件可关闭 zerodep.css。',
     );
-  const runtime = '@zerodep-vue/core/runtime';
+  const runtime = '@zerodep-vue/core';
   const helpers = new Map<string, t.Identifier>();
   const helper = (name: string) => {
     let identifier = helpers.get(name);

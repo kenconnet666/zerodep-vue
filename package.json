@@ -11,7 +11,7 @@
   "scripts": {
     "check": "pnpm -r --if-present run check",
     "build": "pnpm -r --filter \"./packages/*\" run build",
-    "test": "node --test packages/compiler/test/*.test.mjs",
+    "test": "pnpm --filter @zerodep-vue/compiler test",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
     "lsp:setup": "node scripts/language-services/setup.mjs",
@@ -21,11 +21,11 @@
     "naive:inventory": "node fixtures/naive-ui/inventory.mjs",
     "test:naive": "node fixtures/naive-ui/build.mjs",
     "test:authoring": "vitest run --config vitest.authoring.config.ts",
-    "test:css": "node --test packages/core/test/css/*.test.mjs",
     "css:generate": "node scripts/css/generate.mjs",
     "css:generate:check": "node scripts/css/generate.mjs --check",
     "packages:pack": "node scripts/packages/pack.mjs",
-    "test:packages": "node scripts/packages/verify.mjs"
+    "test:packages": "node scripts/packages/verify.mjs",
+    "test:core": "pnpm --filter @zerodep-vue/core test"
   },
   "devDependencies": {
     "@babel/core": "catalog:",

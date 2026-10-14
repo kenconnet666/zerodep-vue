@@ -1,4 +1,4 @@
-import { css as compose } from './core.ts';
+import { css as compose } from './composition.ts';
 import { CLASS } from './types.ts';
 import type { CssObject } from './types.ts';
 import type { CssProperties } from './generated/properties.ts';

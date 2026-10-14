@@ -103,7 +103,7 @@ module.exports = function init({ typescript: ts }) {
             const origin = declaration.getSourceFile().fileName.replaceAll('\\', '/');
             if (!/\/generated\/properties(\.d)?\.ts$/.test(origin)) continue;
             const bindingFile = program.getSourceFile(
-              origin.replace(/generated\/properties(\.d)?\.ts$/, 'values$1.ts'),
+              origin.replace(/generated\/properties(\.d)?\.ts$/, 'bindings$1.ts'),
             );
             if (calls.some((call) => !isBindingCall(checker, call, bindingFile))) continue;
             const valuesFile = program.getSourceFile(

@@ -13,11 +13,15 @@ export default defineConfig({
         if (process.env.BROWSER_MODE !== 'production') return;
         for (const output of Object.values(bundle)) {
           if (output.type !== 'chunk') continue;
-          const debug = Object.keys(output.modules).filter((id) =>
-            /(?:packages\/core\/src\/css\/(?:devtools|hmr)\.ts|@vue[+/]devtools)/.test(
-              id.replaceAll('\\', '/'),
-            ),
-          );
+          const debug = Object.entries(output.modules)
+            .filter(
+              ([id, module]) =>
+                module.renderedLength > 0 &&
+                /(?:packages\/core\/src\/development\/|@vue[+/]devtools)/.test(
+                  id.replaceAll('\\', '/'),
+                ),
+            )
+            .map(([id]) => id);
           if (
             debug.length ||
             output.code.includes('__zerodepHmr') ||

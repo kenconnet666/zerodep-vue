@@ -1,5 +1,5 @@
 import type * as CSS from 'csstype';
-import type { CssBinding, CssTemplate, Scalar } from './values.ts';
+import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
 import type { AllowedSystem, AllowedTheme, SystemKeyword, ThemeReference } from './tokens.ts';
 import type { SystemKeywords } from './generated/system.ts';
 import type { CssProperties } from './generated/properties.ts';

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { css, create } from '../../src/css/core.ts';
+import { css, create } from '../../src/css/composition.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
-import { binding, template } from '../../src/css/values.ts';
+import { binding, template } from '../../src/css/bindings.ts';
 
 test('later declarations replace only the same selector, condition and property', () => {
   const base = css({

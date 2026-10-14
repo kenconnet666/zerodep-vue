@@ -118,12 +118,20 @@ UI 产品库和 docs 站点不在本项目交付范围内。文中的 RefInput�
 
 ```text
 packages/
-  compiler/                 # index 导出 babelPlugin、vitePlugin
+  compiler/
+    src/index.ts            # 唯一包入口
+    src/babel/              # Babel 接入与选项
+    src/vite/               # Vite 接入与模块集成
+    src/editor/             # 字面量文档、补全和跳转
     src/transforms/         # 组件、CSS、开发检查与 HMR 转换
+    src/transforms/component/ # 组件类型、默认值和写入检查
     src/upstream/           # 固定官方 JSX fork 与来源记录
-  core/                     # index 统一导出 CSS 与 TSX 作者 API
+  core/
+    src/index.ts            # 唯一包入口
     src/css/                # 样式描述、主题、解析和宿主
-    src/tsx/                # 组件作者类型与 Vue 运行时桥接
+    src/css/generated/      # 可复现的属性和关键字声明
+    src/tsx/                # 组件作者类型、JSX 声明与 Vue 接线
+    src/development/        # 按需启用的 HMR 与检查器
 fixtures/
   legacy-tsx/               # 普通 Vue TSX，含选项组合
   authoring/                # 我们的新写法
@@ -141,8 +149,8 @@ BLUEPRINT.md
 工作区仅有 `@zerodep-vue/compiler`、`@zerodep-vue/core` 两个工具包。各自 index 统一导出公开 API；保留 private 标记，通过 CI tarball 交付，不代表已发布到 npm。原 mixed-tsx/ssr 空预留目录已移除，验证职责由 browser 夹具和包内运行契约承担。
 
 - `compiler` 只运行在构建环境，持有 Babel 和必要的类型分析依赖。
-- compiler 根入口命名导出 babelPlugin 与 vitePlugin，生成代码使用 core/runtime；HMR 与 DevTools 只在开发转换中使用 core 的技术入口。独立包消费检查生产外部导入与 bundle 模块，拒绝构建依赖泄漏。
-- core 使用 Vue 组件机制，内部按 CSS 和 TSX 组织实现。组件与样式接线共用 core/runtime，公开作者 API 共用根入口，不维护重复转导。
+- compiler 根入口命名导出 babelPlugin、vitePlugin 与 languageServicePlugin；生成代码统一从 core 根入口导入助手。独立包消费检查生产外部导入与 bundle 模块，拒绝构建依赖泄漏。
+- 两个包的 exports 均只保留根入口，src 根目录只有 index.ts。core 使用 Vue 组件机制，内部按 css、tsx、development 组织；编译助手标记 @internal，开发检查仅在实际调用时安装，未使用的模块由生产打包移除。
 - core 内部区分纯描述/组合、Vue 接线、浏览器宿主和服务端宿主，不依赖 compiler、Babel、Vite 或 TypeScript 编译实现。
 - Vue 作为共享 peer dependency，发布构建 externalize。fixture 保证唯一且兼容的 Vue 运行时；不能打包另一份 Vue 后宣称 Ref 可以可靠共享。
 - 不生成无关的自有组件运行时导入。class 来源可静态确认是普通值时保留上游路径；需要判断动态 class 来源时，可以由编译器引入薄 CSS 助手，对普通值走等价的快速旁路，不能要求作者额外手写接线。
@@ -460,7 +468,7 @@ DOM `ref` 复用 Vue 已有的 Ref 对象和函数 ref，沿用挂载、更新�
 
 ### 5.7 TSX 类型与编辑器体验
 
-普通旧 TSX 保留 Vue 原有类型入口。自有工具提供基于 Vue JSX 类型的增强入口，优先验证按文件或消费工程选择它的方式，不向所有用户全局注入宽泛的 JSX 声明。
+普通旧 TSX 保留显式 `jsxImportSource: vue` 或文件 pragma 的 Vue 类型入口。为保持单一包入口，core 的 index 以类型导入载入精确的全局 JSX 声明；使用增强作者能力的工程保留 `jsx: preserve` 并移除 jsxImportSource。声明复用 Vue 类型，只调整 children、结构化 class 和 ManagedProps，不增加任意属性索引。显式 Vue 类型文件继续使用 Vue 命名空间，不再提供自有 jsx-runtime 子入口。
 
 阶段 2 的类型验收必须同时覆盖：
 

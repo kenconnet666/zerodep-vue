@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { JSDOM } from 'jsdom';
 import { createCssHost } from '../../src/css/host.ts';
-import { css } from '../../src/css/core.ts';
+import { css } from '../../src/css/composition.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
 
 const rule = (color) => {

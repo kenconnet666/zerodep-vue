@@ -1,4 +1,3 @@
-/** @jsxImportSource @zerodep-vue/core */
 import { createApp, KeepAlive, nextTick, onScopeDispose, ref, Transition } from 'vue';
 import type { Ref } from 'vue';
 import { _component, bx, css, createCssHost, keyframes } from '@zerodep-vue/core';

@@ -1,4 +1,3 @@
-/** @jsxImportSource @zerodep-vue/core */
 import { ref, shallowRef, Suspense } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import {

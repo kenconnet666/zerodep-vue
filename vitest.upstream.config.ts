@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@zerodep-vue/compiler-under-test': official
           ? fileURLToPath(import.meta.resolve('@vue/babel-plugin-jsx'))
-          : fileURLToPath(new URL('./packages/compiler/src/babel.ts', import.meta.url)),
+          : fileURLToPath(new URL('./packages/compiler/src/babel/index.ts', import.meta.url)),
       },
     },
     plugins: [

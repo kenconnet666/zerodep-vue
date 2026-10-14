@@ -30,10 +30,9 @@ export default defineConfig({
 
 现有 `@vitejs/plugin-vue` 可保留处理 `.vue` 文件；一个 TSX 文件只执行一次 JSX lowering，不再同时调用旧 JSX 插件。原来的 `optimize`、`mergeProps`、`transformOn`、`enableObjectSlots`、`isCustomElement`、`pragma` 和 `resolveType` 仍可传给 `vitePlugin`，默认值不变。
 
-TypeScript 保持 `jsx: "preserve"`。现有项目的 Vue JSX 类型入口可以保留，只在新页面顶部选择自有类型：
+TypeScript 保持 `jsx: "preserve"` 并移除 jsxImportSource。core 的根入口自动载入本工程的增强 JSX 声明：
 
 ```tsx
-/** @jsxImportSource @zerodep-vue/core */
 import { ref } from 'vue';
 import { _component, bx, css } from '@zerodep-vue/core';
 
@@ -50,7 +49,7 @@ export default _component(() => {
 });
 ```
 
-整个工程都使用自有类型时，可将 `jsxImportSource` 统一设为 `@zerodep-vue/core`，其中仍可调用普通 Vue 和 Naive 组件。不设置工作区专用的 `zerodep-vue-source` 条件；正常安装使用包内 dist。
+增强 JSX 类型中仍可调用普通 Vue 和 Naive 组件。需要保持原生 Vue 类型的旧文件使用 `/** @jsxImportSource vue */`，独立旧项目可在自己的 tsconfig 中设置 `jsxImportSource: "vue"`。不要额外载入 vue/jsx 的全局声明；显式 Vue 类型入口与 core 的全局 JSX 声明可并存。不设置工作区专用的 `zerodep-vue-source` 条件；正常安装使用包内 dist。
 
 直接导入 CSS/TSX 工具的文件自动接入 class 协议。只通过项目共享模块取得 class 值的普通文件，可使用 `vitePlugin({ zerodep: { css: true } })` 统一接线。普通 class 字符串、条件对象和 style 继续按 Vue 规则处理。
 
@@ -59,8 +58,10 @@ export default _component(() => {
 用 `@zerodep-vue/compiler` 替换 `@vue/babel-plugin-jsx`，保留 TypeScript 擦除：
 
 ```js
+import { babelPlugin } from '@zerodep-vue/compiler';
+
 export default {
-  plugins: [['@zerodep-vue/compiler', { optimize: false }]],
+  plugins: [[babelPlugin, { optimize: false }]],
   presets: ['@babel/preset-typescript'],
 };
 ```

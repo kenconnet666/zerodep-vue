@@ -23,7 +23,7 @@ export interface InspectionHooks {
   removeGlobal(token: object): void;
 }
 let observer: InspectionHooks | undefined;
-/** @internal 仅开发专用入口安装；生产消费不导入安装者及其数据。 */
+/** @internal 仅开发检查实际启用时安装；生产打包移除安装者及其数据。 */
 export function setInspectionHooks(value: InspectionHooks): void {
   observer = value;
 }

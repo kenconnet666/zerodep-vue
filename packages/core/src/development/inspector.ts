@@ -11,16 +11,16 @@ import {
 } from 'vue';
 import type { App, ComponentInternalInstance, VNode } from 'vue';
 import { setupDevToolsPlugin } from '@vue/devtools-api';
-import { CLASS, isCssClass } from './types.ts';
-import type { Declaration } from './types.ts';
-import { ANIMATION, isAnimation } from './animation-token.ts';
-import { TEMPLATE, isBinding, isTemplate } from './values.ts';
-import { isThemeReference } from './tokens.ts';
-import { setInspectionHooks } from './inspection.ts';
-import type { ResolvedClass } from './resolve.ts';
-import type { CssHost } from './host.ts';
-import { cssHostKey } from './host.ts';
-import { cloneCssVNode as clone, createCssVNode as create, inspectCssVNode } from './vnode.ts';
+import { CLASS, isCssClass } from '../css/types.ts';
+import type { Declaration } from '../css/types.ts';
+import { ANIMATION, isAnimation } from '../css/animation-token.ts';
+import { TEMPLATE, isBinding, isTemplate } from '../css/bindings.ts';
+import { isThemeReference } from '../css/tokens.ts';
+import { setInspectionHooks } from '../css/inspection-hooks.ts';
+import type { ResolvedClass } from '../css/resolve.ts';
+import type { CssHost } from '../css/host.ts';
+import { cssHostKey } from '../css/host.ts';
+import { cloneCssVNode as clone, createCssVNode as create, inspectCssVNode } from '../css/vnode.ts';
 
 export interface SourceLocation {
   file: string;
@@ -110,67 +110,72 @@ function bindingSnapshot(
       };
     });
 }
-setInspectionHooks({
-  resolved(result, parts, values, reads, frames) {
-    const active = new Set<Declaration>(result.declarations);
-    snapshots.set(result, {
-      className: result.className,
-      ruleName: result.ruleName,
-      cssText: result.cssText,
-      variables: { ...result.variables },
-      resources: result.resources.map((rule) => ({ ...rule })),
-      frames: frames.flatMap((frame) => {
-        const snapshot = snapshots.get(frame);
-        return snapshot ? [snapshot] : [];
-      }),
-      sources: parts
-        .filter((part) => typeof part !== 'string')
-        .map((part) => {
-          const source = locations.get(part);
-          return {
-            ...(source ? { source } : {}),
-            declarations: part.declarations.map((declaration) => ({
-              property: declaration.property,
-              selector: declaration.selector,
-              conditions: [...declaration.conditions],
-              status:
-                declaration.value === null
-                  ? '清除标记'
-                  : !active.has(declaration)
-                    ? '被覆盖'
-                    : values.has(declaration)
-                      ? '生效'
-                      : '当前省略',
-              values: values.get(declaration) ?? [],
-              bindings: bindingSnapshot(declaration.value, reads, active.has(declaration)),
-            })),
-          };
+let installed = false;
+function installInspectionHooks() {
+  if (installed) return;
+  installed = true;
+  setInspectionHooks({
+    resolved(result, parts, values, reads, frames) {
+      const active = new Set<Declaration>(result.declarations);
+      snapshots.set(result, {
+        className: result.className,
+        ruleName: result.ruleName,
+        cssText: result.cssText,
+        variables: { ...result.variables },
+        resources: result.resources.map((rule) => ({ ...rule })),
+        frames: frames.flatMap((frame) => {
+          const snapshot = snapshots.get(frame);
+          return snapshot ? [snapshot] : [];
         }),
-    });
-  },
-  global(token, host, name, source, result, owner) {
-    if (owner?.appContext.provides[ssrContextKey as symbol]) return;
-    const snapshot = snapshots.get(result);
-    if (!snapshot) return;
-    const location = locations.get(source);
-    globals.set(token, {
-      id: globals.get(token)?.id ?? `global:${globalId++}`,
-      name,
-      host: new WeakRef(host),
-      ...(owner ? { owner: new WeakRef(owner) } : {}),
-      ...(location ? { source: location } : {}),
-      snapshot,
-    });
-    const app = owner?.appContext.app;
-    if (app) {
-      const record = applications.get(app);
-      if (record) refresh(record);
-    }
-  },
-  removeGlobal(token) {
-    globals.delete(token);
-  },
-});
+        sources: parts
+          .filter((part) => typeof part !== 'string')
+          .map((part) => {
+            const source = locations.get(part);
+            return {
+              ...(source ? { source } : {}),
+              declarations: part.declarations.map((declaration) => ({
+                property: declaration.property,
+                selector: declaration.selector,
+                conditions: [...declaration.conditions],
+                status:
+                  declaration.value === null
+                    ? '清除标记'
+                    : !active.has(declaration)
+                      ? '被覆盖'
+                      : values.has(declaration)
+                        ? '生效'
+                        : '当前省略',
+                values: values.get(declaration) ?? [],
+                bindings: bindingSnapshot(declaration.value, reads, active.has(declaration)),
+              })),
+            };
+          }),
+      });
+    },
+    global(token, host, name, source, result, owner) {
+      if (owner?.appContext.provides[ssrContextKey as symbol]) return;
+      const snapshot = snapshots.get(result);
+      if (!snapshot) return;
+      const location = locations.get(source);
+      globals.set(token, {
+        id: globals.get(token)?.id ?? `global:${globalId++}`,
+        name,
+        host: new WeakRef(host),
+        ...(owner ? { owner: new WeakRef(owner) } : {}),
+        ...(location ? { source: location } : {}),
+        snapshot,
+      });
+      const app = owner?.appContext.app;
+      if (app) {
+        const record = applications.get(app);
+        if (record) refresh(record);
+      }
+    },
+    removeGlobal(token) {
+      globals.delete(token);
+    },
+  });
+}
 
 /** @internal 元数据包装不更改值，只标记已经创建的描述；绑定 getter 不在这里执行。 */
 export function traceCss<T>(value: T, source: SourceLocation): T {
@@ -258,6 +263,7 @@ export function inspectApp(app: App): InspectedNode[] {
 
 /** 在 Vue setup/render 的真实上下文中惰性注册一次，沿用 DevTools 组件树和 inspector。 */
 export function enableInspection(): void {
+  installInspectionHooks();
   const owner = getCurrentInstance();
   if (!owner || owner.appContext.provides[ssrContextKey as symbol]) return;
   const app = owner.appContext.app;

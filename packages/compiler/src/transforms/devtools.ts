@@ -3,14 +3,19 @@ import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
 import { cssCallKind, isImported } from './hmr.ts';
 
-const runtime = '@zerodep-vue/core/devtools';
-const sources = new Set(['@zerodep-vue/core/runtime']);
+const runtime = '@zerodep-vue/core';
 /** 只在 Vite 客户端开发转换中调用；位置常量与包装不进入生产及 SSR 输出。 */
 export function instrumentDevtools(program: NodePath<t.Program>, filename: string): void {
   program.scope.crawl();
   const helpers = new Map<string, t.Identifier>();
   const helper = (name: string) => {
-    if (!helpers.has(name)) helpers.set(name, addNamed(program, name, runtime));
+    const imported =
+      name === 'createCssVNode'
+        ? 'createInspectedVNode'
+        : name === 'cloneCssVNode'
+          ? 'cloneInspectedVNode'
+          : name;
+    if (!helpers.has(name)) helpers.set(name, addNamed(program, imported, runtime));
     return t.cloneNode(helpers.get(name)!);
   };
   const location = (node: t.Node, kind: string) => {
@@ -24,7 +29,7 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
     return value;
   };
   for (const statement of program.get('body')) {
-    if (!statement.isImportDeclaration() || !sources.has(statement.node.source.value)) continue;
+    if (!statement.isImportDeclaration() || statement.node.source.value !== runtime) continue;
     for (const specifier of statement.node.specifiers) {
       if (!t.isImportSpecifier(specifier)) continue;
       const name = t.isIdentifier(specifier.imported)
@@ -41,9 +46,7 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
     CallExpression: {
       exit(call) {
         if (call.node.extra?.zerodepTraced) return;
-        if (
-          isImported(call.scope, call.node.callee, '@zerodep-vue/core/runtime', 'createComponent')
-        ) {
+        if (isImported(call.scope, call.node.callee, '@zerodep-vue/core', 'createComponent')) {
           const options = call.get('arguments')[0];
           if (options?.isObjectExpression())
             for (const prop of options.get('properties')) {
@@ -62,13 +65,11 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
         }
         let kind = cssCallKind(call.scope, call.node.callee);
         let point: t.Node = call.node;
-        if (!kind)
-          for (const source of sources)
-            if (isImported(call.scope, call.node.callee, source, 'binding')) {
-              kind = 'binding';
-              const getter = call.node.arguments[0];
-              if (t.isArrowFunctionExpression(getter)) point = getter.body;
-            }
+        if (!kind && isImported(call.scope, call.node.callee, runtime, 'binding')) {
+          kind = 'binding';
+          const getter = call.node.arguments[0];
+          if (t.isArrowFunctionExpression(getter)) point = getter.body;
+        }
         if (!kind || !['class', 'create', 'keyframes', 'binding', 'global'].includes(kind)) return;
         call.node.extra = { ...call.node.extra, zerodepTraced: true };
         if (kind === 'global') {

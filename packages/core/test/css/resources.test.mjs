@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { css, createTheme, SystemKeywords, keywords, keyframes } from '../../src/index.ts';
-import { binding, template } from '../../src/css/values.ts';
+import { binding, template } from '../../src/css/bindings.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
 
 test('plain CSS custom properties retain native fallbacks and condition composition', () => {

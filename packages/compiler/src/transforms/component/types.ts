@@ -9,7 +9,7 @@ import {
 } from '@vue/compiler-sfc';
 import type { SimpleTypeResolveContext } from '@vue/compiler-sfc';
 import ts from 'typescript';
-import type { State } from '../upstream/interface.ts';
+import type { State } from '../../upstream/interface.ts';
 
 registerTS(() => ts);
 

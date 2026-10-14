@@ -2,11 +2,11 @@
 import { declare } from '@babel/helper-plugin-utils';
 import type { NodePath, Visitor } from '@babel/core';
 import type * as t from '@babel/types';
-import upstream from './upstream/index.ts';
-import type { State, VueJSXPluginOptions } from './upstream/interface.ts';
-import { transformComponents } from './transforms/component.ts';
-import { connectCss, transformCss } from './transforms/css.ts';
-import type { CssOptions } from './transforms/css.ts';
+import upstream from '../upstream/index.ts';
+import type { State, VueJSXPluginOptions } from '../upstream/interface.ts';
+import { transformComponents } from '../transforms/component/index.ts';
+import { connectCss, transformCss } from '../transforms/css.ts';
+import type { CssOptions } from '../transforms/css.ts';
 
 export interface CompilerOptions extends VueJSXPluginOptions {
   /** 自有增强的配置；普通上游选项保持原有含义。 */
@@ -34,4 +34,4 @@ const plugin = declare<State, CompilerOptions>((api, options, dirname) => {
   };
 });
 export default plugin;
-export type { VueJSXPluginOptions } from './upstream/interface.ts';
+export type { VueJSXPluginOptions } from '../upstream/interface.ts';

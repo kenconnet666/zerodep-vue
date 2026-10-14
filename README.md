@@ -21,12 +21,13 @@ CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提�
 
 ## 目录
 
-- packages/compiler：官方 JSX 小范围 fork、来源清单与兼容性对照。
-- packages/core：组件作者 API、For、Vue 组件接线和局部 JSX 类型入口。
-- packages/core：运行时 CSS、class 组合、绑定解析、Vue 接线与样式宿主。
+- packages/compiler：Babel/Vite 接入、TSX 转换、编辑器扩展和固定官方 JSX fork。
+- packages/core：运行时 CSS、继承主题、组件作者 API、For、JSX 类型与开发工具。
 - fixtures：普通 Vue TSX、作者类型、Naive 固定生产源码、真实浏览器混用和仓库外包消费。
 - scripts/language-services：仅 TS/TSX 的项目 LSP 与 MCP 桥接。
 - docs/upstream.md：来源与实现边界。
+
+两个包都只提供根入口；src 根目录只保留 index.ts，其余实现按职责放入子目录。运行时代码只导入 core，编译和编辑器能力由 compiler 提供。
 
 ## 本地开发与远程验证
 

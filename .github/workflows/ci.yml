@@ -81,15 +81,15 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
-  css:
-    name: Runtime CSS contracts
+  core:
+    name: Core runtime contracts
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
       - run: pnpm css:generate:check
-      - run: pnpm test:css
+      - run: pnpm test:core
 
   authoring:
     name: TSX authoring (${{ matrix.mode }})
@@ -328,7 +328,7 @@ jobs:
         types,
         compiler,
         upstream,
-        css,
+        core,
         authoring,
         naive,
         browser,

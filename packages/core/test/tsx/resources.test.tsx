@@ -1,4 +1,3 @@
-/** @jsxImportSource @zerodep-vue/core */
 import { expect, test } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { createSSRApp, nextTick, ref } from 'vue';

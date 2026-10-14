@@ -24,7 +24,7 @@ async function compile(command, ssr = false) {
 
 test('development traces keep source locations and the browser-only inspector entry', async () => {
   const result = await compile('serve');
-  assert(result.code.includes('@zerodep-vue/core/devtools'));
+  assert(result.code.includes('@zerodep-vue/core'));
   assert(!result.code.includes('@zerodep-vue/compiler'));
   assert(result.code.includes('enableInspection'));
   const column = source.split('\n')[5].indexOf('width.value') + 1;
@@ -34,7 +34,8 @@ test('development traces keep source locations and the browser-only inspector en
 });
 test('production and SSR contain no inspection imports or source-location metadata', async () => {
   for (const result of [await compile('build'), await compile('serve', true)]) {
-    assert(!result.code.includes('/devtools'));
+    assert(!result.code.includes('enableInspection'));
+    assert(!result.code.includes('createInspectedVNode'));
     assert(!result.code.includes('traceCss'));
     assert(!result.code.includes('kind: "binding"'));
   }

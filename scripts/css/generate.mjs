@@ -297,7 +297,7 @@ for (const property of properties) {
 const outputs = {
   'literal-values.ts':
     header +
-    `import type * as CSS from 'csstype';\nimport type { Scalar } from '../values.ts';\ntype NativeProperties = CSS.Properties<Scalar>;\n/** 保留字面量候选，同时接收原属性允许的自由 CSS 字符串。 */\ntype CssString = string & {};\n` +
+    `import type * as CSS from 'csstype';\nimport type { Scalar } from '../bindings.ts';\ntype NativeProperties = CSS.Properties<Scalar>;\n/** 保留字面量候选，同时接收原属性允许的自由 CSS 字符串。 */\ntype CssString = string & {};\n` +
     literalInterfaces.join('\n') +
     `\n/** 普通字符串作者入口：keyof 与同名关键词视图共享声明、注释和导航来源。 */\nexport interface KeywordValues {\n${literalProperties.join('\n')}\n}\n`,
   'system.ts':

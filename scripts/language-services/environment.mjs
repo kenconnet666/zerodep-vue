@@ -16,7 +16,7 @@ export function serviceConfig() {
     initializationOptions: {
       hostInfo: 'Codex zerodep-vue',
       disableAutomaticTypingAcquisition: true,
-      plugins: [{ name: '@zerodep-vue/core/language-service', location: root }],
+      plugins: [{ name: '@zerodep-vue/compiler/src/editor/plugin.cjs', location: root }],
       // 使用本仓库的完整语义服务，不回退到全局 SDK 或只做语法的进程。
       tsserver: {
         path: resolve(root, 'node_modules/typescript/lib'),

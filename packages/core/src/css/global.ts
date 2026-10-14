@@ -10,7 +10,7 @@ import {
 } from 'vue';
 import type { Ref } from 'vue';
 import selectorParser from 'postcss-selector-parser';
-import { declarations } from './core.ts';
+import { declarations } from './composition.ts';
 import { CLASS } from './types.ts';
 import type { CssObject, Declaration } from './types.ts';
 import type { SystemKeywords } from './generated/system.ts';
@@ -19,7 +19,7 @@ import { cssHostKey } from './host.ts';
 import type { CssHost, GlobalLease } from './host.ts';
 import { hostFor } from './context.ts';
 import { validateFragment } from './syntax.ts';
-import { inspectionHooks } from './inspection.ts';
+import { inspectionHooks } from './inspection-hooks.ts';
 
 /** 显式全局选择器映射；每个选择器内部沿用普通属性、状态分组和媒体条件。 */
 export type GlobalRules<T extends SystemKeywords = SystemKeywords> = Readonly<

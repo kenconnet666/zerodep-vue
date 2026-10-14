@@ -20,6 +20,17 @@ for (const entry of ['vite', 'runtime', 'hmr', 'devtools'])
   assert.throws(() => require.resolve(`@zerodep-vue/compiler/${entry}`), {
     code: 'ERR_PACKAGE_PATH_NOT_EXPORTED',
   });
+for (const entry of [
+  'runtime',
+  'hmr',
+  'devtools',
+  'jsx-runtime',
+  'jsx-dev-runtime',
+  'language-service',
+])
+  assert.throws(() => require.resolve(`@zerodep-vue/core/${entry}`), {
+    code: 'ERR_PACKAGE_PATH_NOT_EXPORTED',
+  });
 assert.equal(typeof require('@zerodep-vue/core').css, 'function');
 assert.equal(typeof require('@zerodep-vue/core').createTheme, 'function');
 assert.equal('createCss' in require('@zerodep-vue/core'), false);

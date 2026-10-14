@@ -1,4 +1,3 @@
-/** @jsxImportSource @zerodep-vue/core */
 import {
   computed,
   defineAsyncComponent,

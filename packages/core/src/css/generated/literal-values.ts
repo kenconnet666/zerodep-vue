@@ -1,6 +1,6 @@
 // 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成。说明只进入类型声明。
 import type * as CSS from 'csstype';
-import type { Scalar } from '../values.ts';
+import type { Scalar } from '../bindings.ts';
 type NativeProperties = CSS.Properties<Scalar>;
 /** 保留字面量候选，同时接收原属性允许的自由 CSS 字符串。 */
 type CssString = string & {};

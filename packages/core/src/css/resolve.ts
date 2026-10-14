@@ -1,18 +1,18 @@
 import unitless from '@emotion/unitless';
 import { TokenType, tokenizer } from '@csstools/css-tokenizer';
 import { normalizeClass } from 'vue';
-import { compose } from './core.ts';
+import { compose } from './composition.ts';
 import { CLASS, isCssClass } from './types.ts';
 import type { ClassPart, ClassValue, Declaration } from './types.ts';
-import { BINDING, TEMPLATE, isBinding, isTemplate } from './values.ts';
-import type { CssBinding, Scalar } from './values.ts';
+import { BINDING, TEMPLATE, isBinding, isTemplate } from './bindings.ts';
+import type { CssBinding, Scalar } from './bindings.ts';
 import { scopedSelector, validateFragment } from './syntax.ts';
 import { KEYWORD, THEME, isKeyword, isThemeReference } from './tokens.ts';
 import type { ThemeReference } from './tokens.ts';
 import { ANIMATION, isAnimation } from './animation-token.ts';
 import type { CssAnimation } from './animation-token.ts';
 import type { CssRule } from './host.ts';
-import { inspectionHooks } from './inspection.ts';
+import { inspectionHooks } from './inspection-hooks.ts';
 
 const wide = new Set(['initial', 'inherit', 'unset', 'revert', 'revert-layer']);
 type Part = string | { variable: number };

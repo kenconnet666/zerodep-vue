@@ -1,6 +1,6 @@
 import { CLASS, isCssClass } from './types.ts';
 import type { ClassPart, CssClass, Declaration } from './types.ts';
-import { isBinding, isTemplate } from './values.ts';
+import { isBinding, isTemplate } from './bindings.ts';
 import { selectors, validateFragment } from './syntax.ts';
 import type { SelectorContext } from './syntax.ts';
 import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';

@@ -35,4 +35,4 @@ parse(updated);
 await mkdir(dirname(configPath), { recursive: true });
 await writeFile(configPath, updated);
 console.log('Configured zerodep_vue_lsp in ' + configPath);
-console.log('Run pnpm lsp:verify before reloading the Codex session for this workspace.');
+console.log('Inspect affected files with pnpm lsp:inspect, then reload this workspace session.');

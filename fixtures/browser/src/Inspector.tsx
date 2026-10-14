@@ -1,4 +1,3 @@
-/** @jsxImportSource @zerodep-vue/core */
 import { ref } from 'vue';
 import { _component, bx, css, globalCss } from '@zerodep-vue/core';
 

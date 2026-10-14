@@ -1,6 +1,6 @@
 import { isRef, unref } from 'vue';
 import type { Ref } from 'vue';
-import { css as compose, create } from './core.ts';
+import { css as compose, create } from './composition.ts';
 import { SystemKeywords } from './generated/system.ts';
 import type { SystemViews } from './generated/system.ts';
 import { systemValues } from './generated/keywords.ts';

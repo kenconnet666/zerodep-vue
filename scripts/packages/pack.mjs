@@ -53,6 +53,7 @@ try {
     );
     const contents = new Set(listed.map((file) => file.slice(8)));
     const packed = JSON.parse(command('tar', ['-xOf', archive, 'package/package.json'], root));
+    assert.deepEqual(Object.keys(packed.exports), ['.'], 'Packages expose only their root index.');
     assert.equal(packed.license, 'MIT');
     assert(
       !JSON.stringify(packed).includes('workspace:') &&
@@ -68,7 +69,12 @@ try {
     ])
       assert(contents.has(required), `Missing ${name}/${required}`);
     if (name === 'compiler')
-      for (const required of ['VITE-LICENSE', 'ZERODEP-VUE-LICENSE', 'upstream.json'])
+      for (const required of [
+        'VITE-LICENSE',
+        'ZERODEP-VUE-LICENSE',
+        'upstream.json',
+        'src/editor/plugin.cjs',
+      ])
         assert(contents.has(required));
     if (name === 'core')
       for (const required of ['CSSTYPE-LICENSE', 'ZERODEP-JS-LICENSE', 'THIRD_PARTY_NOTICES.md'])

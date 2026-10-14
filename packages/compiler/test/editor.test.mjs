@@ -4,10 +4,12 @@ import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
-import { languageServiceHost } from '../../../../fixtures/package-consumer/template/language-service-host.mjs';
+import { languageServiceHost } from '../../../fixtures/package-consumer/template/language-service-host.mjs';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..');
-const init = createRequire(import.meta.url)('../../language-service/index.cjs');
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const init = createRequire(import.meta.url)(
+  ts.resolveJSModule('@zerodep-vue/compiler/src/editor/plugin.cjs', root, ts.sys),
+);
 
 test('CSS literal completion documentation and navigation use real generated declarations', () => {
   assert.equal(ts.version, '6.0.3');
@@ -191,8 +193,8 @@ css({ boxSizing: 'not-a-box-model' as const });
       sharedDefinitions[0].fileName.replaceAll('\\', '/').endsWith('/generated/literal-values.ts'),
     );
     assert.match(
-      ts.resolveJSModule('@zerodep-vue/core/language-service', root, ts.sys),
-      /index\.cjs$/,
+      ts.resolveJSModule('@zerodep-vue/compiler/src/editor/plugin.cjs', root, ts.sys),
+      /plugin\.cjs$/,
     );
     for (const [member, description] of [
       ['_brand', '品牌主色'],

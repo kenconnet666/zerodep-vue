@@ -1,4 +1,3 @@
-/** @jsxImportSource @zerodep-vue/core */
 import { afterEach, expect, test } from 'vitest';
 import { flushPromises, mount } from '@vue/test-utils';
 import type { VueWrapper } from '@vue/test-utils';

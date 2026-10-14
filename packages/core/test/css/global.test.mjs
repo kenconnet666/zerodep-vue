@@ -3,7 +3,7 @@ import test from 'node:test';
 import { JSDOM } from 'jsdom';
 import { effectScope, ref, shallowRef } from 'vue';
 import { createCssHost, keyframes, globalCss } from '../../src/index.ts';
-import { binding } from '../../src/css/values.ts';
+import { binding } from '../../src/css/bindings.ts';
 
 test('global reactive rules keep cascade position and stop when their scope ends', () => {
   const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>');

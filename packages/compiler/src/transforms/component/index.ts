@@ -1,12 +1,12 @@
 import { addNamed } from '@babel/helper-module-imports';
 import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
-import { runtimeProps } from './component-types.ts';
-import { prepareDefaults } from './component-defaults.ts';
-import { writableModels } from './component-writes.ts';
-import type { State } from '../upstream/interface.ts';
+import { runtimeProps } from './types.ts';
+import { prepareDefaults } from './defaults.ts';
+import { writableModels } from './writes.ts';
+import type { State } from '../../upstream/interface.ts';
 
-const runtime = '@zerodep-vue/core/runtime';
+const runtime = '@zerodep-vue/core';
 
 function fromComponentImport(call: NodePath<t.CallExpression>): boolean {
   const callee = call.node.callee;

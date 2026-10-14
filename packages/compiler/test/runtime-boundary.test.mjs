@@ -21,6 +21,8 @@ test('runtime boundary checks imports, re-exports and dynamic loading without ma
     "const module = import('typescript');",
     "const module = require('@zerodep-vue/compiler');",
     "import '@zerodep-vue/core/hmr';",
+    "import {registerModule as register} from '@zerodep-vue/core';",
+    "import {createInspectedVNode} from '@zerodep-vue/core';",
   ])
     await assert.rejects(assertRuntimeCode(code, 'rejected'), /dependency in/);
 });
@@ -44,8 +46,8 @@ test('runtime boundary also rejects bundled modules and external imports on eith
     'C:\\consumer\\node_modules\\@babel\\core\\lib\\index.js',
     '/consumer/node_modules/@zerodep-vue/compiler/dist/index.js',
     'C:\\code\\zerodep-vue\\packages\\compiler\\src\\runtime.ts',
-    '/consumer/node_modules/@zerodep-vue/core/dist/css/devtools.js',
-    'C:\\code\\zerodep-vue\\packages\\core\\src\\css\\hmr.ts',
+    '/consumer/node_modules/@zerodep-vue/core/dist/development/inspector.js',
+    'C:\\code\\zerodep-vue\\packages\\core\\src\\development\\hmr.ts',
   ]) {
     await assert.rejects(
       assertRuntimeChunks(build({ modules: { [id]: { renderedLength: 12 } } }), 'client'),

@@ -83,7 +83,7 @@ TypeScript 6 的原生服务没有自动为这些字符串候选返回成员注�
 ```json
 {
   "compilerOptions": {
-    "plugins": [{ "name": "@zerodep-vue/core/language-service" }]
+    "plugins": [{ "name": "@zerodep-vue/compiler/src/editor/plugin.cjs" }]
   }
 }
 ```

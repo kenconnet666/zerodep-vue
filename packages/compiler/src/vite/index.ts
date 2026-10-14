@@ -7,11 +7,11 @@ import { createRequire } from 'node:module';
 import { join, relative, resolve } from 'node:path';
 import { createFilter, normalizePath } from 'vite';
 import type { FilterPattern, Plugin } from 'vite';
-import jsx from './babel.ts';
-import type { CompilerOptions } from './babel.ts';
-import { transformHot } from './transforms/hmr.ts';
-import type { HotTransform } from './transforms/hmr.ts';
-import { instrumentDevtools } from './transforms/devtools.ts';
+import jsx from '../babel/index.ts';
+import type { CompilerOptions } from '../babel/index.ts';
+import { transformHot } from '../transforms/hmr.ts';
+import type { HotTransform } from '../transforms/hmr.ts';
+import { instrumentDevtools } from '../transforms/devtools.ts';
 
 /** Vue VDOM TSX 的 Vite 入口；与 Babel 入口共享全部 JSX 选项。 */
 export interface ViteOptions extends CompilerOptions {
@@ -65,9 +65,8 @@ function componentMetadata(
             const name = t.isIdentifier(imported) ? imported.name : imported.value;
             return (
               (parent.node.source.value === 'vue' && name === 'defineComponent') ||
-              (parent.node.source.value === '@zerodep-vue/core' && name === '_component') ||
-              (parent.node.source.value === '@zerodep-vue/core/runtime' &&
-                name === 'createComponent')
+              (parent.node.source.value === '@zerodep-vue/core' &&
+                (name === '_component' || name === 'createComponent'))
             );
           };
 

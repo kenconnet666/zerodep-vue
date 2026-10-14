@@ -1,7 +1,7 @@
 export { css, cx, keywords, createTheme, keyframes, globalCss } from './css/theme.ts';
 export { SystemKeywords } from './css/generated/system.ts';
 export type { Css, Cx, CssContext, KeywordView, ThemeSource } from './css/theme.ts';
-export { bx } from './css/values.ts';
+export { bx } from './css/bindings.ts';
 export { createCssHost, cssHostKey } from './css/host.ts';
 export { getCssHost } from './css/vnode.ts';
 export type { CssHost, CssHostOptions } from './css/host.ts';
@@ -13,7 +13,7 @@ export type {
   CssCondition,
   CssNestedInput,
 } from './css/types.ts';
-export type { CssBinding } from './css/values.ts';
+export type { CssBinding } from './css/bindings.ts';
 export type { CssAnimation } from './css/animation-token.ts';
 export type { KeyframeStyle, Keyframes } from './css/animation.ts';
 export type { GlobalRules, GlobalOptions } from './css/global.ts';
@@ -21,3 +21,33 @@ export type { GlobalRules, GlobalOptions } from './css/global.ts';
 export { _component } from './tsx/component.ts';
 export { For } from './tsx/For.ts';
 export type { ForProps } from './tsx/For.ts';
+import type {} from './tsx/jsx.ts';
+
+/** @internal 编译器生成代码与正常作者代码共用根入口。 */
+export { binding, piece, template, add } from './css/bindings.ts';
+/** @internal VNode 接线由编译器生成。 */
+export {
+  CLASS_PROP,
+  createCssVNode,
+  mergeCssProps,
+  inheritClass,
+  hasIncomingClass,
+  renderCss,
+  cloneCssVNode,
+  inspectCssVNode,
+} from './css/vnode.ts';
+/** @internal 组件初始化和属性接线由编译器生成。 */
+export { createComponent, resolveProps, restProps, componentMarker } from './tsx/runtime.ts';
+/** @internal 仅开发转换引用；导入根入口不会安装检查器或创建 HMR 状态。 */
+export { registerModule, compatible } from './development/hmr.ts';
+/** @internal 开发转换和检查器集成使用。 */
+export {
+  enableInspection,
+  traceCss,
+  traceGlobal,
+  inspectApp,
+  inspectionSnapshot,
+  createCssVNode as createInspectedVNode,
+  cloneCssVNode as cloneInspectedVNode,
+} from './development/inspector.ts';
+export type { InspectedNode, CssSnapshot, SourceLocation } from './development/inspector.ts';

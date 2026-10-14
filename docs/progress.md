@@ -15,6 +15,12 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前 CSS API 修订
 
+f1471f25561ce0a6570d97fe022ac33ef4ca2c05 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38522535347) 已全部成功，compiler/core 双包合并通过完整远程验证。
+
+本轮继续按用户要求收敛为两个根入口：各包 src 根目录仅保留 index.ts，compiler 分为 babel、vite、editor、transforms、upstream，组件转换内部按类型、默认值和写入职责分文件；core 分为 css、tsx、development。删除 runtime 中间转导及所有技术子入口，语言服务迁入 compiler/src/editor，TypeScript 插件加载器与根导出共用 CJS 实现。JSX 声明随 core 根类型导入载入，显式 Vue JSX 文件保留原生类型。
+
+合包遗留的重复导入判断和单元素集合已简化；开发检查改为按需安装，生产打包可移除 development 实现。HMR/检查器测试随实现迁到 core，编辑器测试移到 compiler；脚本由所属包管理，删除被完整 LSP 自检覆盖的旧 smoke 脚本，同步 CI、配置、消费者边界检查及接入文档。本地只进行相关短测、按文件 LSP 和最小生产 bundle 检查，完整包产物及跨平台回归仍以本轮新提交 CI 为准。
+
 ea1e69a8dca4903668718ba80ffee91fa36f74da 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38518103441) 已成功，编译器运行时转导清理、产物依赖边界检查及根 Vitest 配置修复通过完整回归。
 
 本次按用户确认合并为 compiler/core 两包：core 根入口统一导出原 CSS 与 TSX 作者 API，内部按 css/tsx 组织；组件与样式共用一个 runtime 技术入口。compiler 根入口命名导出 babelPlugin、vitePlugin，移除 /vite 子入口并明确 Vite 为必需构建 peer；转换实现集中到 transforms，上游来源继续独立保留。动画模块改用明确名称，删除合并后的重复转导、旧包目录与陈旧构建缓存。生成器、语言服务、JSX 类型、测试路径、消费者、锁文件和发布检查同步迁移，依赖版本与校验和保持；保留现有 JSX fork 行为。局部转换/运行/语言服务测试、ESM/CJS 源码入口及生成一致性检查通过，受影响入口和消费者 LSP 零错误。旧版本交付记录不改写为新包证据，本次完整产物仍以新提交 CI 为准。

@@ -1,4 +1,3 @@
-/** @jsxImportSource @zerodep-vue/core */
 import { computed, ref } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import {

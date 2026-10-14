@@ -7,7 +7,7 @@ const buildDependency = (id) =>
     normalized(id),
   ) || /(?:^|\/)packages\/compiler\/(?:src|dist)\//.test(normalized(id));
 const developmentDependency = (id) =>
-  /(?:^|\/)(?:@zerodep-vue\/core|packages\/core)\/(?:(?:src|dist)\/css\/)?(?:devtools|hmr)(?:\.|\/|$)/.test(
+  /(?:^|\/)(?:@zerodep-vue\/core|packages\/core)\/(?:(?:src|dist)\/development\/|(?:devtools|hmr)(?:\.|\/|$))/.test(
     normalized(id),
   );
 
@@ -28,6 +28,28 @@ export async function assertRuntimeCode(code, label) {
   });
   assert(ast, `No parsed runtime output: ${label}`);
   t.traverseFast(ast, (node) => {
+    if (t.isImportDeclaration(node) && node.source.value === '@zerodep-vue/core') {
+      for (const specifier of node.specifiers) {
+        if (!t.isImportSpecifier(specifier)) continue;
+        const name = t.isIdentifier(specifier.imported)
+          ? specifier.imported.name
+          : specifier.imported.value;
+        assert(
+          ![
+            'registerModule',
+            'compatible',
+            'enableInspection',
+            'traceCss',
+            'traceGlobal',
+            'inspectApp',
+            'inspectionSnapshot',
+            'createInspectedVNode',
+            'cloneInspectedVNode',
+          ].includes(name),
+          `${label}: development dependency in production output: ${name}`,
+        );
+      }
+    }
     let source;
     if (
       t.isImportDeclaration(node) ||

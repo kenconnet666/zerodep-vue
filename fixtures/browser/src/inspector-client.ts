@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import { devtoolsContext, initDevTools, toggleHighPerfMode } from '@vue/devtools-kit';
 import { createCssHost } from '@zerodep-vue/core';
-import { inspectApp } from '@zerodep-vue/core/devtools';
+import { inspectApp } from '@zerodep-vue/core';
 import Inspector from './Inspector.tsx';
 import type {} from './contracts.ts';
 

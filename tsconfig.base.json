@@ -5,7 +5,6 @@
     "module": "Preserve",
     "moduleResolution": "Bundler",
     "jsx": "preserve",
-    "jsxImportSource": "vue",
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
@@ -17,6 +16,10 @@
     "skipLibCheck": false,
     "types": [],
     "customConditions": ["zerodep-vue-source"],
-    "plugins": [{ "name": "@zerodep-vue/core/language-service" }]
+    "plugins": [
+      {
+        "name": "@zerodep-vue/compiler/src/editor/plugin.cjs"
+      }
+    ]
   }
 }

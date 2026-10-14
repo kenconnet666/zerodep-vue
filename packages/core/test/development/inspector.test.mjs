@@ -3,11 +3,21 @@ import test from 'node:test';
 import { createSSRApp, ref } from 'vue';
 import { css, createCssHost, getCssHost, keyframes, globalCss } from '../../src/index.ts';
 import { renderToString } from '@vue/server-renderer';
-import { binding } from '../../src/css/values.ts';
+import { binding } from '../../src/css/bindings.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
-import { inspectApp, inspectionSnapshot, traceCss, traceGlobal } from '../../src/css/devtools.ts';
+import {
+  inspectApp,
+  inspectionSnapshot,
+  traceCss,
+  traceGlobal,
+} from '../../src/development/inspector.ts';
+import { inspectionHooks } from '../../src/css/inspection-hooks.ts';
 
 const source = (line, kind = 'class') => ({ file: '/project/App.tsx', line, column: 3, kind });
+
+test('loading the root API leaves inspection disabled until explicitly used', () => {
+  assert.equal(inspectionHooks(), undefined);
+});
 
 test('inspection uses consumed values, records override/clear provenance and never re-reads getters', () => {
   let reads = 0;
