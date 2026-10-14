@@ -27,7 +27,7 @@ UI 产品库和 docs 站点不在本项目交付范围内。文中的 RefInput�
 ### 1.2 采用与排除
 
 - 同一个编译插件处理普通 Vue TSX 和我们的增强 TSX。接入时替换对应 JSX 编译入口，不在同一文件上再执行另一套 JSX lowering。
-- 普通 TSX 保留官方行为；新语义通过 `_component`、来自本库的宏绑定及 `class={css(...)}` 等明确的工具使用启用。
+- 普通 TSX 保留官方行为；新语义通过 `_component`、来自本库的宏绑定及 `class={cx(...)}` 等明确的工具使用启用。
 - 合理支持双向 TSX 嵌套、共享 Ref、普通 props、函数回调、Vue slots、公开方法和同一 Vue 应用内的 provide/inject。
 - 共享响应式不代表自动统一 model、slot、事件、样式协议；在组件边界使用双方实际提供的接口。
 - 我们的组件首先服务纯 TSX。模板编译、模板宏、模板 Ref 自动解包补偿和完整模板插槽适配不作为交付目标。
@@ -52,7 +52,7 @@ UI 产品库和 docs 站点不在本项目交付范围内。文中的 RefInput�
 | 表单               | 优先复用 JSX `v-model`；自有 Ref-prop 组件直接接收 Ref                                             |
 | CSS                | 运行时 CSS 加辅助编译工具；返回 class，编译器隐式接入绑定对应的内联 style                          |
 | 动态 CSS           | `bx(expression)`，作者无需写 `() => expression`                                                    |
-| 命名               | 容易与现有 Vue 概念混淆的新框架 API 加 `_`；`For`、`css`、`bx` 保留原名                            |
+| 命名               | 容易与现有 Vue 概念混淆的新框架 API 加 `_`；`For`、`useCss`、`cx`、`bx` 使用明确工具名             |
 
 旧蓝图中的“优先选择其他 JSX 后端，再决定是否 fork”已取消。全局 JSX 惰性化、全局改写 class 对象和另建 `bind:*` 指令不属于采用的设计；原因与替代方案见第 4、5、7 节。
 
@@ -173,14 +173,14 @@ BLUEPRINT.md
 
 ### 4.1 激活规则
 
-1. `_component`、`css`、`bx` 等工具按导入来源和 binding 身份识别，支持导入别名；同名局部变量、遮蔽绑定和其他库的同名函数不转换。
+1. `_component`、`useCss`、`cx`、`bx` 等工具按导入来源和 binding 身份识别，支持导入别名；同名局部变量、遮蔽绑定和其他库的同名函数不转换。
 2. `_component` 的组件参数和返回边界可以增强，普通 `defineComponent`、普通函数和其局部变量仍遵循上游行为。CSS 工具可以在普通 Vue TSX 中使用，不要求先改写组件声明。
-3. `css(...)` 返回用于 `class` 的值，`cx(...)` 的成员也是 class 值。运行时内部保留样式组合与绑定元数据，作者不需要另传样式描述 prop 或拆出 style。
+3. 属性链和 `cx(...)` 返回可直接用于 `class` 的值。运行时内部保留样式组合与绑定元数据，作者不需要另传样式描述 prop 或拆出 style。
 4. 编译器在 JSX class、spread 与 VNode props 接线处识别本库产生的 class，先保留其元数据，再交给 Vue 归一化。普通字符串、class 数组和条件对象保持原来的行为；不能只因普通对象具有某些键就把它当 CSS。
 5. 绑定信息随 class 的变量、数组组合和自有组件转发保留；在最终元素边界隐式解析并合并对应的内联 style。经过第三方组件边界时，由编译器先生成它能接收的常规 class/style。
 6. `For` 是有类型的 Vue 工具组件，不靠全局识别名称 `For` 改写任意 JSX。
 
-作者统一使用 `class={css(...)}`，具名样式和外部样式通过 `css(styles.root, external)` 组合。`css` 和 `bx` 保留原名，不增加专用 JSX 样式属性，也不要求手写 props 展开适配。编译器的内部承载方式不成为组件使用者需要维护的 API。
+作者使用 `class={style}` 或 `class={cx(...)}`，具名样式和外部样式通过 `cx(styles.root, external)` 组合。`useCss`、`cx` 和 `bx` 使用明确工具名，不增加专用 JSX 样式属性，也不要求手写 props 展开适配。编译器的内部承载方式不成为组件使用者需要维护的 API。
 
 直接导入 CSS/TSX 工具的文件自动启用 class 协议。普通 Vue 文件只从项目共享模块取得 class 值时，可在编译/Vite 配置中统一开启 `zerodep.css`；这只选择需要接线的文件，不改变作者 JSX。明确关闭的普通文件继续使用官方路径。增强文件需要保留 class/style 增删所需的完整 props 比较，不能让 optimize 模式漏掉隐式变量更新或分支切换清理。
 
@@ -475,7 +475,7 @@ DOM `ref` 复用 Vue 已有的 Ref 对象和函数 ref，沿用挂载、更新�
 - 同一 TSX 文件里调用普通 Vue 组件、Naive UI 组件和 `_component`，各自的必填属性与回调参数仍准确。
 - `children`、直接 JSX 内容和带参数 renderer 的区分，不通过允许所有组件接受任意 children 来消除错误。
 - `For` 与泛型 Select 的 item 推断、可写模型与只读来源、DOM ref 和 expose 的公开类型。
-- `css` 的返回值可直接赋给 `class`；自有组件的 class 转发、数组组合和内部目标的 class prop 有准确类型，普通 class 条件对象与第三方 props 不被整体拓宽成 `any`。
+- 链式样式和 `cx` 的返回值可直接赋给 `class`；自有组件的 class 转发、数组组合和内部目标的 class prop 有准确类型，普通 class 条件对象与第三方 props 不被整体拓宽成 `any`。
 - 引用已打包的声明文件仍能获得相同提示，不依赖编译源码时临时生成的隐藏文件。
 
 类型入口与 Babel 运行时 lowering 是两件事：不能因为采用某个 JSX 类型命名空间，就让 TypeScript 提前把 JSX 编译到另一种运行时。使用标准 TypeScript 声明与编辑器能力表达完整的作者契约；每项支持的语法都必须有可信类型与可验证的编辑器体验，不能只做到能运行。
@@ -528,19 +528,19 @@ export const OrdinaryTsxPage = defineComponent({
 
 ### 6.2 混用矩阵
 
-| 边界                                | 支持方式                                                | 必须验证                                    |
-| ----------------------------------- | ------------------------------------------------------- | ------------------------------------------- |
-| 增强 TSX 使用普通 Vue/Naive UI 组件 | 正常组件标签、原有 props/slots/events                   | 安装、更新、卸载、状态变化                  |
-| 普通 TSX 使用我们的组件             | 编译后是普通 Vue 组件，按声明传 props                   | 无需把父组件改成 `_component`               |
-| 两边共享 Ref/reactive               | 同一 Vue runtime；Ref prop 原样传递                     | 双向修改、对象替换、无额外解包              |
-| value/update 与 Ref 模型衔接        | `v-model` 或明确 value + update 回调                    | 写回一次、清空、外部重置、只读边界          |
-| children/default slot               | Vue 默认 slot 与自有 children 桥接                      | 延迟读取、转发、条件内容、清理              |
-| 具名或作用域 slot                   | 使用旧组件的 `v-slots` 接口                             | 由 slot 参数获得数据，不猜同名 prop         |
-| 普通回调与 emits                    | 按目标组件已声明的接口调用                              | 不重复触发、不误透传为 DOM 事件             |
-| provide/inject 与 Naive provider    | 保持同一 Vue 组件树和应用上下文                         | 自有包装层内外的 provider 仍生效            |
-| ref/expose、Teleport、异步组件      | 复用 Vue 的 VDOM 能力                                   | 引用时机、卸载和挂载位置                    |
-| 自有 CSS class 到旧组件             | 仍写 `class={css(...)}`，编译器隐式生成常规 class/style | 绑定更新、显式 style 优先、无内部元数据泄漏 |
-| 模板挂载我们的组件                  | Vue 自然支持的基础用法，可选冒烟                        | 不作为 TSX 核心 API 的设计约束              |
+| 边界                                | 支持方式                                               | 必须验证                                    |
+| ----------------------------------- | ------------------------------------------------------ | ------------------------------------------- |
+| 增强 TSX 使用普通 Vue/Naive UI 组件 | 正常组件标签、原有 props/slots/events                  | 安装、更新、卸载、状态变化                  |
+| 普通 TSX 使用我们的组件             | 编译后是普通 Vue 组件，按声明传 props                  | 无需把父组件改成 `_component`               |
+| 两边共享 Ref/reactive               | 同一 Vue runtime；Ref prop 原样传递                    | 双向修改、对象替换、无额外解包              |
+| value/update 与 Ref 模型衔接        | `v-model` 或明确 value + update 回调                   | 写回一次、清空、外部重置、只读边界          |
+| children/default slot               | Vue 默认 slot 与自有 children 桥接                     | 延迟读取、转发、条件内容、清理              |
+| 具名或作用域 slot                   | 使用旧组件的 `v-slots` 接口                            | 由 slot 参数获得数据，不猜同名 prop         |
+| 普通回调与 emits                    | 按目标组件已声明的接口调用                             | 不重复触发、不误透传为 DOM 事件             |
+| provide/inject 与 Naive provider    | 保持同一 Vue 组件树和应用上下文                        | 自有包装层内外的 provider 仍生效            |
+| ref/expose、Teleport、异步组件      | 复用 Vue 的 VDOM 能力                                  | 引用时机、卸载和挂载位置                    |
+| 自有 CSS class 到旧组件             | 仍写 `class={cx(...)}`，编译器隐式生成常规 class/style | 绑定更新、显式 style 优先、无内部元数据泄漏 |
+| 模板挂载我们的组件                  | Vue 自然支持的基础用法，可选冒烟                       | 不作为 TSX 核心 API 的设计约束              |
 
 普通 TSX 与增强 TSX 可以在同一模块中导出，也可以互相 import；不要求按目录使用两套互斥语言规则。是否增强由明确入口决定。
 
@@ -552,213 +552,80 @@ Transition、TransitionGroup、KeepAlive、Teleport 和 defineAsyncComponent 等
 
 ## 7 运行时 CSS 作者契约
 
-本库定位为**运行时 CSS 加辅助编译工具**。CSS 声明、系统/主题关键字解析、组合、规则生成、缓存和宿主生命周期属于运行时；CSS 部分的编译职责是捕获 `bx` 表达式、保留 class 元数据、隐式合并 style，并产生必要诊断。标准 TSX 的组件宏仍按第 4、5 节处理。
+CSS 作者使用不可变链式声明，cx 负责有序组合。运行时生成规则，编译器辅助捕获 bx 与接入 class/style；不增加独立 JSX 样式属性，不改写 Vue 响应式。
 
-普通 JS 函数、条件、对象和运行时主题值都可以参与样式。不能要求用户样式必须静态可求值，也不把运行时继承类实例化成构建期主题快照。生成属性类型、关键字元数据及 JSDoc 是库的维护工具，不等同于编译用户 CSS。
-
-### 7.1 声明与常用工具
+### 7.1 声明、主题与工具
 
 ```tsx
-const styles = cx({
-  root: {
-    display: 'inline-flex',
-    gap: '8px',
-    color: 'white',
-    backgroundColor: '#2563eb',
+const s = useCss();
+const base = s.display('inline-flex').alignItems('center').padding(8);
+const compact = base.padding(4);
+const styles = { root: base, compact };
 
-    ':hover': {
-      color: '#eff6ff',
-      backgroundColor: '#1d4ed8',
-    },
-
-    ':disabled': {
-      opacity: 0.5,
-      cursor: 'not-allowed',
-    },
-
-    '@media (max-width: 640px)': {
-      gap: '4px',
-    },
-  },
-});
+<button class={cx(styles.root, compactMode && styles.compact, external)} />;
 ```
 
-同一状态的多个属性按 `:hover`、`:disabled` 分组，支持伪元素、组合选择器及局部条件。常用选择器提供补全，复杂关系写 `&:hover:not(:disabled)` 等正常 CSS 形式。
+每次属性调用返回新值，原链和同一个 s 的其他分支不变。裸调用后丢弃结果不产生样式。内部共享不可变前缀，追加时不复制完整声明，消费/组合时才展开。具名集合用普通对象，删除旧 css({...})、cx({...}) 命名入口和对象作者类型，不建设兼容层。
 
-`css(...)` 返回 class 值，`cx(...)` 返回具名样式集合；作者通过 `class={css(styles.root, external)}` 应用。cx 只负责具名组织，使用相同的运行时描述协议。组合与绑定所需的描述由运行时在内部保留，不要求作者接触；创建时不要求 DOM、不立即插入样式。普通声明、条件与组合在运行时完成，不把 CSS API 变成必须静态求值的编译 DSL。
+属性方法通过固定 csstype 生成真实方法，T 贯穿 Css<T>、PropertyValue 和 keywords。保留 857 个属性、14 类说明、属性初始值及中文 JSDoc；不以宽泛索引或 any 代替精确提示。
 
-| API                      | 用途                                                |
-| ------------------------ | --------------------------------------------------- |
-| `css(...)`               | 单处对象声明、有序组合与条件项，返回 class          |
-| `cx({...})`              | 有类型的具名 class 集合                             |
-| `createTheme<T>(source)` | 绑定实际主题来源，提供类型明确的运行时 CSS 作者入口 |
-| `keywords`               | 按属性提供系统/主题关键字视图，保留成员类型和注释   |
-| `bx(expression)`         | 捕获动态值，作者不写 getter                         |
-| `keyframes`              | 可复用动画资源                                      |
-| `globalCss`              | 显式全局规则，注册和释放归宿主管理                  |
+select(condition, style) 追加相对选择器、伪类、伪元素、属性选择器或 media/supports/container/starting-style 条件。样式可为嵌套条件数组，可复用链和值；普通类名不能重新限定到嵌套条件。variable('--name', value) 声明原生自定义属性；名称和 fallback 显式书写，数字不补 px。
 
-recipes、庞大的变体 DSL、原子 CSS 和字符串选择器解析语言不作为基础前提。用普通 JS 条件、对象索引和数组组合即可表达常见 variants。
+默认 useCss() 只提供系统作者。业务主题继承 SystemKeywords，调用 createTheme(真实实例或 Vue Ref)，返回只包含 useCss()/provide(source) 的 CssTheme<T>。应用可以导出自己的 useCss 供组件使用；无来源的泛型 useCss<AppTheme>() 不成立。主题上下文各有独立 Vue 注入键；provide 必须在 setup 调用，返回当前组件可用的作者，子树通过 useCss 取得最近覆盖。组件外使用该上下文的默认来源。
 
-#### 7.1.1 系统关键字与主题关键字分层
+系统关键词写原生字符串或 s.keywords 的系统成员，主题关键词通过 s.keywords 的具名引用保留类型与来源。主题在消费时读取真实来源，不冻结初始值。颜色主题可复用于 72 个兼容颜色属性，不接受错误跨属性组引用。主题成员用 _ 前缀；继承与覆盖遵循普通类字段规则，替换整组时显式合并要保留的成员，不做隐式合并。
 
-系统基础层提供属性本身的标准值和关键字，而不只是 CSS-wide keywords：
+主题切换通过 Vue Ref，允许成员本身为 Ref。Teleport 跟随逻辑组件来源；SSR 的请求专属来源在请求根提供，或每个请求创建上下文，不能跨请求修改共享全局 Ref。独立主题区域不串值，不向全局 body 写入区域主题。详见 docs/themes.md。
 
-- 属性专属值，例如 display 的 `flex` / `grid` / `none`、position 的 `relative` / `absolute`、color 的 `currentColor`。候选根据当前属性提供，不把所有属性的值合成一个宽泛列表。
-- 通用的 `initial`、`inherit`、`unset`、`revert`、`revert-layer` 等 CSS-wide keywords，保留各自的原始含义和第 7.6 节的绑定回退规则。
-- 系统基类不内置 `brand`、`primary`、`surface` 等业务主题名。主题关键字由使用方继承关键字基类后增加，不能篡改系统关键字的意义。
-- 无自定义主题时，默认 `css` 仍具备基础属性提示、系统关键字和普通 CSS 值输入能力。
+keyframes({ from: s.opacity(0), to: s.opacity(1) }) 返回动画引用，可用于 animationName 或编译接线的 animation 模板；每帧主题/bx 在消费时读取，变量位置互相隔离，覆盖掉的动画不读取。帧位置、局部条件、外部类名、!important 和动画控制属性在运行时根据实际声明检查；仅 animationTimingFunction 允许作为帧内动画控制属性。属性方法继续保证属性值精确类型。
 
-采用 `SystemKeywords → AppTheme → 具体主题` 的继承方向。继承扩展的是关键字集合与主题约定，日常样式仍然使用对象，不要求作者回到属性方法链或 CSS 回调。
+globalCss('name', { body: s.margin(0) }) 在 setup 注册，组件外显式传 { host }。返回幂等清理函数；Vue 作用域或宿主销毁停止订阅并释放规则。source 可为 Ref。动态规则在独立 effect 中输出字面值、原位更新 style 节点，保持层叠位置；相同静态定义可共用名称，动态规则由应用/区域入口注册一次，多个所有者不能争写不同内容。SSR 保留实际收集顺序，并在渲染后停止读取。
 
-标准关键字集合与主题扩展槽分开维护。SystemKeywords 为各属性提供扩展边界；子类在 color 等组中声明主题成员时，不能覆盖或丢失该属性原有的系统值提示。运行时与类型层都必须保留这两类来源。
-
-#### 7.1.2 泛型 T 与运行时主题入口
-
-以 `T extends SystemKeywords = SystemKeywords` 作为主题类型入口，贯穿 `Css<T>`、`CssObject<T>`、属性值类型、主题关键字视图和具名样式。目标作者写法如下，实现必须在 TypeScript 6.0.3 上通过对应的类型与运行验收：
-
-```tsx
-class AppTheme extends SystemKeywords {
-  override readonly color = {
-    /** 品牌主色，用于正文中的强调内容。 */
-    _brand: '#2563eb',
-    /** 品牌交互色，用于相应的 hover 状态。 */
-    _brandHover: '#1d4ed8',
-  };
-
-  override readonly padding = {
-    /** 常规控件的纵向与横向内边距。 */
-    _control: '8px 12px',
-  };
-}
-
-const theme = shallowRef<AppTheme>(new AppTheme());
-const { css, cx, keywords } = createTheme<AppTheme>(theme);
-
-const styles = cx({
-  root: {
-    display: 'inline-flex',
-    color: keywords.color._brand,
-    padding: keywords.padding._control,
-
-    ':hover': {
-      color: keywords.color._brandHover,
-    },
-  },
-});
-
-return <button class={css(styles.root)}>确认</button>;
-```
-
-`createTheme<T>(source)` 返回 `CssContext<T>`，包含同一主题来源的 `css`、`cx`、`keywords` 以及按 T 校验的 `keyframes`、`globalCss`。`css` 是纯组合函数，工具使用 `cx`、`keyframes` 等，关键字独立使用 `keywords.xx`。`createTheme(new AppTheme())` 也应从实参推导 T；显式泛型用于共享工具、库边界和需要固定主题接口的场景。`createTheme` 属于 CSS 工具，不加下划线。
-
-`keywords` 是带类型和成员注释的关键字视图。系统值可以直接写字符串；主题成员通过具名引用保留来源、属性约束与说明，其结果是运行时主题引用，不能在定义样式时就冻结成第一次读取的颜色或间距。
-
-泛型与继承必须满足：
-
-- T 只影响类型，不能代替真实运行时数据。自定义 T 必须同时提供对应主题实例或 Vue Ref 来源；仅写 `createTheme<AppTheme>()` 而没有主题来源应被拒绝。
-- 默认入口的 T 为 `SystemKeywords`；应用主题不通过全局 module augmentation 污染其他组件库的补全。
-- 子主题保留继承的成员与类型，可以增加主题关键字或覆盖已有主题值；系统关键字不能被当作主题 token 重定义。
-- 类型化主题成员按兼容的 CSS 值域约束。颜色 token 应能在 color、backgroundColor、borderColor 等兼容的颜色位置复用，不要求复制同一主题值；不能把它用作 padding 的间距值。对应正反向用例必须验证，不能简单把所有主题值放宽为 string、数字或对象。
-- T 必须传入伪类、伪元素、媒体条件、`cx`、组合函数和可复用 `CssObject<T>`，不能进入嵌套对象后退化成 any。
-- 主题来源可在运行时通过 Vue Ref 替换。值在使用范围解析，嵌套使用及 SSR 请求互相隔离，不建立一个可变的全局“当前主题”。
-- 主题只有继承 SystemKeywords 的实例一种模型。多套实例由普通对象保存，通过 Vue Ref 选择当前实例；不另设变量组主题或全局主题注册表。
-
-底层 CSS 自定义属性直接用 `css({ "--control-gap": "8px", gap: "var(--control-gap, 4px)" })` 声明和引用，允许条件分组及 bx。名称与 fallback 由作者明确书写，数值不自动补单位。应用主题使用上面的继承模型和唯一 createTheme 入口。
-
-`keyframes({ from: {...}, to: {...} })` 返回动画引用，直接用于 animationName 或编译接线的 animation 模板。关键帧内主题和 bx 在使用动画的元素渲染时读取，各帧和各动画具有独立变量位置。资源随主规则一同收集、采用、取得与释放；覆盖掉的动画不求值，不维护永久全局动画表。
-
-`globalCss('稳定名称', { 'body, main': {...} })` 在组件 setup 注册显式全局规则；组件外必须提供 `{ host }`。返回幂等清理函数，Vue 作用域或宿主结束也会自动清理。它在自己的 Vue effect 中读取 bx/主题，写入字面 CSS 并原位更新同一 style 节点，保持层叠位置。相同静态定义可以共用；需要持续变化的命名规则由应用或区域入口注册一次，多个所有者争写不同值时报错。SSR 保持全局/普通规则的实际收集顺序，渲染结束停止读取，样式仍可从请求 context 输出。
-
-- 原生 CSS 字符串和主题关键字引用须区分。保留原生自由输入时，不能让不存在的主题成员通过；如果提供主题名短写，也必须有独立的字面量校验和运行时诊断，不能被宽泛 string 类型吞掉。
-
-#### 7.1.3 主题归属与弹层
-
-运行时主题来源与实际消费节点保持明确关联。同一应用内的嵌套主题、独立页面及同时展示的不同主题互不串值；使用本库 CSS 的内容经 Vue Teleport 移动后，继续消费原来的主题来源。不能仅依赖原 DOM 祖先上的 CSS 变量，也不能将局部主题写入全局 body 而污染其他弹层。
-
-实现优先复用已有 `createTheme<T>(source)`、Vue 组件上下文和样式宿主，不因这个场景新增一套主题组件或样式 props。第三方组件使用自身公开主题入口，不猜测其内部节点。SSR 按请求与消费位置输出对应变量，hydrate 不以延迟补样式掩盖服务端缺失。验收至少包含两个主题区域同时打开 Teleport 内容、运行时切换主题和销毁其中一个区域。
-
-#### 7.1.4 类型提示与说明注释
-
-良好的类型提示和注释属于交付条件。参考老项目的属性文档、系统关键字数据、继承类型及生成流程，只复用适用于当前对象 API 的部分；链式方法、旧返回值说明和旧编译限制不能照搬。
-
-需要落实以下要求：
-
-1. 属性名、当前属性的系统关键字、当前 T 中的主题成员、常用伪类和条件都有有意义的补全。写错属性、使用不存在的主题成员或跨属性组引用要有类型错误。
-2. 保留对象的上下文类型、具名样式的精确键、继承成员和泛型推断。不能靠开放的字符串索引或 any 让全部输入通过；也不能为严格校验引入导致常见样式补全明显迟滞的递归类型。
-3. 属性 JSDoc 说明用途、适用条件、重要交互和易错点；必要时提供 CSS 初始值，并区分规范初始值与浏览器默认样式。关键字说明解释它的实际效果，避免只把英文值翻译一遍。
-4. 保留主题成员自己写的 JSDoc，使继承后的关键字视图也能显示。例如上例的 `_control` 应显示控件间距说明，而不只是 string。
-5. 类型映射、包装和声明构建不能把注释丢失。普通字面量通过带 JSDoc 的具体值成员及 keyof 保留来源，同名具名视图共享声明；TypeScript 6 语言服务扩展补充字符串 hover、补全详情和定义位置。必须在源码消费和打包后 `.d.ts` 消费两种模式下验证，并分别核实实际 IDE、MCP 与独立 stdio 的结果，不能用工具层的成功替代编辑器验证。
-6. `bx`、class 组合、null 删除、CSS-wide keyword 回退与主题继承的注释应说明求值、覆盖及生命周期。实现注释解释为什么保留元数据、如何避免实例串值等原因，不逐行复述代码。
-7. 属性/关键字数据可基于已经固定的 `csstype` 维护或生成，中文解释单独维护并校验缺漏。保留数据来源、规范链接和必要许可；说明注释进入源码与声明，不为展示文档向浏览器打包整套解释文本。
-
-优先参考老项目的 `scripts/css-author-docs.mjs`、生成的 `KeywordValues` / 属性作者注释，以及主题和项目扩展类型夹具。新增对象类型需要自己的正反向用例；旧类型测试通过不等于新对象作者已经通过。
+属性方法、系统与主题关键词的补全、中文说明、导航均属于验收要求。TypeScript 6 编辑器扩展通过真实方法的 PropertyValue 声明定位字面值词典，覆盖 bx、括号、断言、satisfies、条件结果分支及未完成输入；不接管普通业务方法、同名函数或任意字符串拼接。源码和打包声明分别验证，IDE、MCP 和独立 stdio 分别记录。说明与编辑器扩展不作为浏览器运行依赖。
 
 ### 7.2 多样式组合与组件覆盖
 
 ```tsx
-css(base, appearance, disabled && disabledStyle, external);
-css(base, [size, [state, external]]);
-css(base, { padding: '12px' });
-
-<button class={css(styles.root, appearance, external)} />;
-```
-
-本库通过 `css(...)` 组合声明、具名样式、外部输入、普通类名、条件项和嵌套数组，最后交给 class。普通 Vue 的 class 条件对象继续保持兼容语义，但本库组件使用 `CssInput<T>`，条件类名写成 `enabled.value && 'active'` 后交给 css。本库样式及绑定信息在组合时保留。
-
-自有组件明确暴露可覆盖的目标：
-
-```tsx
 type ButtonProps = {
   class?: CssInput;
-  style?: StyleValue;
   iconClass?: CssInput;
   children?: VNodeChild;
 };
-
-const Button = _component(({ class: className, style, iconClass, children }: ButtonProps) => {
+const Button = _component(({ class: external, iconClass, children }: ButtonProps) => {
+  const s = useCss();
   return (
-    <button class={css(styles.root, className)} style={style}>
-      <span class={css(styles.icon, iconClass)} />
+    <button class={cx(s.padding(8).color('black'), external)}>
+      <span class={cx(s.width(20), iconClass)} />
       {children}
     </button>
   );
 });
-
-<Button
-  class={css({
-    color: 'black',
-    ':hover': { color: '#333' },
-  })}
-  iconClass={css({ width: '20px' })}
->
-  确认
-</Button>;
 ```
 
-`CssInput<T>` 是本库组件样式输入类型，覆盖声明、结构化样式、普通类名与条件组合，并保留当前主题 T；`ClassValue` 仅供 Vue 兼容边界使用；`StyleValue` 复用 Vue 类型。根样式最后组合外部 `class`，内部目标通过 `iconClass` 等明确的 class prop 暴露；绑定随该值转发，在对应元素上自动接入。示例中的 style 只用于作者需要显式传入的内联样式，不要求作者转交或拼装 bx 变量表。覆盖规则在同一工具的内部描述层完成；不通过猜测第三方内部 class 名实现任意节点穿透。
+cx 接收结构化样式、普通类名、条件项及嵌套数组，输出 CssClass。组件外部样式输入为 CssInput；泛型 T 在链式声明时检查，组合不重复携带主题泛型。ClassValue 只用于 Vue 兼容边界。具名样式使用普通对象，各成员独立声明和热替换。外部根 class 最后组合，内部目标通过 iconClass 等明确输入暴露，不猜测第三方内部节点。
 
-组合采用以下确定规则：
+组合规则：
 
-- 组合项 `false/null/undefined` 跳过。
-- 属性 `undefined` 表示不提供；属性 `null` 只清除同一选择器、条件路径与属性的先前声明。
-- 后项添加新声明；只有相同选择器、相同条件路径中的同名属性被后项覆盖。默认值、hover、disabled、媒体条件分别保留。
-- 后项只写 hover 颜色时，默认颜色、其他状态及 hover 内的其他属性继续保留；不提供整组替换模式。
-- 根元素、伪元素和不同后代目标分开合并；根 color 覆盖不自动删掉 before 的 color。
-- 中间结果保留清除标记和顺序，使 `css(css(a, b), c)` 与 `css(a, b, c)` 等价。
-- 简写/长写按应用顺序处理。先覆盖 border 再补 borderColor，与相反顺序可以不同；逻辑属性和物理属性不能靠不完整的手写展开表随意合并。
-- 普通外部 class 内部的规则不可被结构化重排，继续由浏览器层叠。
-
-组合使用一种声明位置语义，不增加 merge/patch 模式。后项根颜色不会删除已有 hover；组件需要覆盖状态时显式提供相同状态。嵌套条件可复用结构化样式及条件数组，普通类名不能重新限定到嵌套选择器。
+- false、0、null、undefined 组合项跳过。
+- 属性 undefined 不提供覆盖；null 只清除同一选择器、条件路径、属性位置的先前声明。
+- 后项仅覆盖相同位置同名属性；默认值、hover、disabled、媒体条件分别保留，根 color 不删除伪元素和后代颜色。
+- 中间结果保留清除标记和顺序，cx(cx(a, b), c) 与 cx(a, b, c) 等价。
+- 简写/长写依最后一次声明位置参与级联，不增加不完整的属性展开表或其他 merge/patch 模式。
+- 后项默认颜色不删除 hover/active；需要覆盖状态时显式提供相同状态。
+- 普通外部类名不被反向解析，仍遵循浏览器层叠。
 
 ### 7.3 class 的隐式内联 style 与第三方边界
 
 作者只传 class，需要自己的内联覆盖时再显式写 style：
 
 ```tsx
+import { useCss } from '@zerodep-vue/core';
+const s = useCss();
+
 <button
-  class={css(styles.root, override, 'analytics-target', active && 'is-active')}
+  class={cx(styles.root, override, 'analytics-target', active && 'is-active')}
   style={{ minWidth: '120px' }}
-/>
+/>;
 ```
 
 编译器生成内部接线，在当前 render 中解析最终 class 及其有效绑定，得到 Vue 可消费的常规 class 和变量 style，再与作者显式 style 合并。作者不用额外调用解析函数、不用展开 props、不用维护变量表。
@@ -772,8 +639,11 @@ const Button = _component(({ class: className, style, iconClass, children }: But
 普通 Vue TSX 和 Naive UI 调用处也保持相同作者写法：
 
 ```tsx
+import { useCss } from '@zerodep-vue/core';
+const s = useCss();
+
 return () => (
-  <NButton class={css(styles.root, { color: bx(color.value) })} style={{ minWidth: '120px' }}>
+  <NButton class={cx(styles.root, s.color(bx(color.value)))} style={{ minWidth: '120px' }}>
     保存
   </NButton>
 );
@@ -787,7 +657,7 @@ SSR 使用同样的 class/绑定解析协议，把变量 style 放入 VNode/HTML
 
 ### 7.4 规则生成、layer 与资源所有权
 
-作者拿到的是可传递、可组合的 class 值；内部解析最终组合后，输出一个可复用结果类，对应普通、伪类、伪元素和条件规则的集合。一次 `css` 调用不等于一个 style 标签，一个结果类也不等于只能有一个 CSS 规则块。
+作者拿到的是可传递、可组合的 class 值；内部解析最终组合后，输出一个可复用结果类，对应普通、伪类、伪元素和条件规则的集合。一次样式组合不等于一个 style 标签，一个结果类也不等于只能有一个 CSS 规则块。
 
 - 缓存依据有序规范化结果。静态值与条件结构参与键，`bx` 当前值不参与，避免随拖动数值生成无穷规则。
 - 每个消费元素有独立的变量输出，多个元素可共用同一规则类。规则缓存和绑定实例分开：不能只按 class 的规则哈希保存某个组件的 getter，否则相同样式的不同实例会串值。
@@ -802,23 +672,25 @@ SSR 使用同样的 class/绑定解析协议，把变量 style 放入 VNode/HTML
 ### 7.5 bx：无作者 getter，多变量与作用域
 
 ```tsx
+import { useCss } from '@zerodep-vue/core';
+const s = useCss();
+
 const x = ref(0);
 const y = ref(0);
 const color = ref('tomato');
 
 return (
   <div
-    class={css({
-      transform: `translate(${bx(x.value)}px, ${bx(y.value)}px)`,
-      border: `1px solid ${bx(color.value)}`,
-    })}
+    class={s
+      .transform(`translate(${bx(x.value)}px, ${bx(y.value)}px)`)
+      .border(`1px solid ${bx(color.value)}`)}
   />
 );
 ```
 
 - `bx(expression)` 是显式绑定标记。编译器保存表达式及词法作用域，作者不用手写 `() =>`。
 - 支持一条声明里的多个 bx、模板字符串/拼接、局部绑定别名，以及 class 经过变量、数组、函数返回值和自有组件转发；所需内联变量由编译器隐式接入。
-- 未包 bx 的值按普通 JS 求值。setup 中 `css({ width: width.value })` 是当时的值；需要保持绑定则写 `bx(width.value + 'px')`。
+- 未包 bx 的值按普通 JS 求值。setup 中 `s.width(width.value)` 是当时的值；需要保持绑定则写 `bx(width.value + 'px')`。
 - 条件组合撤去本库 class 或其某个样式来源时，移除相应变量输出；重新加入时正确建立消费关系。
 - 回调参数、参数别名、列表 item 和局部变量必须在实际作用域内读取，不能提升到模块或组件外。
 - 函数返回、条件分支、短路求值和同名遮蔽有回归测试。不得通过重复执行 getter 来推断依赖。
@@ -832,9 +704,12 @@ return (
 目标用例：
 
 ```tsx
+import { useCss } from '@zerodep-vue/core';
+const s = useCss();
+
 const width = ref('240px');
 
-return <div class={css({ width: bx(width.value) })} />;
+return <div class={s.width(bx(width.value))} />;
 
 // 之后：width.value = 'initial';
 // width 声明改为字面的 initial，撤去这条声明不再使用的变量输出。
@@ -889,19 +764,19 @@ return <div class={css({ width: bx(width.value) })} />;
 
 ### 8.4 纯 TSX 混用必验场景
 
-| 场景                                      | 行为要求                                                                                                 |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| NInput + 自有 RefInput + 同一个 Ref       | 任一输入修改、父级重置、外部替换后，显示与状态同步                                                       |
-| 普通 TSX 父 → 自有组件 → Naive 组件       | 正常挂载、更新、卸载，属性无重复透传                                                                     |
-| 自有父 → Naive 容器/slot → 自有组件       | VNode 上下文、slot 更新、生命周期保持正确                                                                |
-| 默认/具名/作用域 slots 与 render callback | 无参内容方便传递；带数据内容参数、更新与调用次数正确                                                     |
-| NConfigProvider 等 provider 跨自有包装层  | 同一应用里的配置与注入继续生效                                                                           |
-| key、For、动态组件与条件移除              | 实例身份合理，状态、DOM ref、样式使用正确清理                                                            |
-| Naive 弹层/选择/表格类交互                | 覆盖 Teleport、受控更新和内容回调等实际机制                                                              |
-| class/style 与自有 CSS                    | `class={css(...)}` 隐式接入变量 style；class 转发、spread、显式覆盖和绑定清理正确，Naive 普通 class 不变 |
-| DOM ref 与组件公开方法                    | 挂载后可用、卸载后正确清理、类型提示相符                                                                 |
-| 构建与开发                                | 开发、生产、动态加载、HMR、source map 不因混用失效                                                       |
-| SSR/hydrate                               | 选定混用页面无新增 hydration mismatch，样式正确收集与复用                                                |
+| 场景                                      | 行为要求                                                                                                |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| NInput + 自有 RefInput + 同一个 Ref       | 任一输入修改、父级重置、外部替换后，显示与状态同步                                                      |
+| 普通 TSX 父 → 自有组件 → Naive 组件       | 正常挂载、更新、卸载，属性无重复透传                                                                    |
+| 自有父 → Naive 容器/slot → 自有组件       | VNode 上下文、slot 更新、生命周期保持正确                                                               |
+| 默认/具名/作用域 slots 与 render callback | 无参内容方便传递；带数据内容参数、更新与调用次数正确                                                    |
+| NConfigProvider 等 provider 跨自有包装层  | 同一应用里的配置与注入继续生效                                                                          |
+| key、For、动态组件与条件移除              | 实例身份合理，状态、DOM ref、样式使用正确清理                                                           |
+| Naive 弹层/选择/表格类交互                | 覆盖 Teleport、受控更新和内容回调等实际机制                                                             |
+| class/style 与自有 CSS                    | `class={cx(...)}` 隐式接入变量 style；class 转发、spread、显式覆盖和绑定清理正确，Naive 普通 class 不变 |
+| DOM ref 与组件公开方法                    | 挂载后可用、卸载后正确清理、类型提示相符                                                                |
+| 构建与开发                                | 开发、生产、动态加载、HMR、source map 不因混用失效                                                      |
+| SSR/hydrate                               | 选定混用页面无新增 hydration mismatch，样式正确收集与复用                                               |
 
 具体 Naive 组件和用例在阶段 0 固定为清单，至少覆盖输入、按钮、配置容器、选择/弹层及一个数据渲染组件。不是要求替 Naive UI 重新证明全部业务功能，而是用完整生产源码编译、相关上游测试和明确交互路径检验我们的转换与混用。
 
@@ -918,7 +793,7 @@ return <div class={css({ width: bx(width.value) })} />;
 - 混用应用实际使用上述产物，与自有组件共同运行并通过本节交互检查。
 - 新 API、Ref/default/rest、内容/slots、For、DOM ref/expose 的运行及类型验收通过。
 - 运行时 CSS 的 class 返回、跨组件组合与转发、内联 style 隐式合并、伪类、bx 多变量、关键字撤销与恢复、资源清理通过，作者无需额外接线 API。
-- 系统关键字、主题继承、显式及推断的泛型 T、主题运行时切换与 SSR 隔离通过；嵌套对象的补全、负向类型检查及源码/发布声明中的说明注释均有实际验证。
+- 系统关键字、主题继承、显式及推断的泛型 T、主题运行时切换与 SSR 隔离通过；嵌套链式样式的补全、负向类型检查及源码/发布声明中的说明注释均有实际验证。
 - VDOM 开发/生产、HMR、SSR/hydrate、source map 和发布包消费通过约定检查；样式热更新保留兼容实例状态，源码诊断及开发态样式来源可检查，生产产物不携带调试记录。
 - 嵌套主题、不同主题区域的 Teleport 内容、主题更新与卸载，以及对应 SSR/hydrate 用例通过。
 - 文档说明接入、模型/slot 边界、模板非目标及验证过的版本，不把未实现能力写成可用 API。
@@ -991,6 +866,6 @@ return <div class={css({ width: bx(width.value) })} />;
 - [Babel plugin ordering](https://babeljs.io/docs/plugins#plugin-ordering)：转换阶段与 visitor 顺序不能混为一谈。
 - [StyleX 使用样式](https://stylexjs.com/docs/learn/using-styles/)：组合与工具体验参考；本项目的运行时生成策略、选择器分组和绑定机制另行实现。
 - [CSS Custom Properties](https://www.w3.org/TR/css-variables-1/)与[CSS Cascade](https://www.w3.org/TR/css-cascade-5/)：变量、系统关键字、层叠与 layer 的原始语义。
-- [旧项目注释组织](../zerodep-js/scripts/css-author-docs.mjs)、[属性与系统关键字类型](../zerodep-js/packages/css/src/generated/keywords.ts)、[主题类型夹具](../zerodep-js/packages/css/test/types/theme.ts)、[项目扩展类型夹具](../zerodep-js/packages/css/test/types/project-extension.ts)：参考属性说明、继承与泛型检查，不照搬旧链式作者接口。
+- [旧项目注释组织](../zerodep-js/scripts/css-author-docs.mjs)、[属性与系统关键字类型](../zerodep-js/packages/css/src/generated/keywords.ts)、[主题类型夹具](../zerodep-js/packages/css/test/types/theme.ts)、[项目扩展类型夹具](../zerodep-js/packages/css/test/types/project-extension.ts)：参考属性说明、继承与泛型检查，保留中文说明，使用不可变链式返回值。
 - [历史 Vue TSX 研究](../zerodep-js/VUE_TSX_RESEARCH.md)：保留状态、内容和 CSS 用例作为参考，不继承已取消的后端与兼容目标。
 - [Vue DevTools 插件 API](https://devtools.vuejs.org/plugins/api)、[Vite HMR API](https://vite.dev/guide/api-hmr)、[Vue Teleport](https://vuejs.org/guide/built-ins/teleport)：复用开发工具与组件逻辑上下文，验证样式资源和 DOM 位置变化。

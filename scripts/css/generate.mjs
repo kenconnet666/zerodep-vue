@@ -27,7 +27,6 @@ const declaration = ast.statements.find(
 const properties = checker
   .getPropertiesOfType(checker.getTypeAtLocation(declaration))
   .sort((a, b) => a.name.localeCompare(b.name, 'en'));
-const names = new Set(properties.map((property) => property.name));
 const interfaceNames = (name) =>
   new Set(
     checker
@@ -66,13 +65,9 @@ const normalize = (name) =>
   name.replace(/^(?:Webkit|Moz|ms|O|Khtml)([A-Z])/, (_match, first) => first.toLowerCase());
 const cssName = (name) =>
   name.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase()).replace(/^ms-/, '-ms-');
-const adapt = (text) =>
-  text.replace(/\b([a-zA-Z]\w*)\((['"][^'"()]+['"])\)/g, (original, name, value) =>
-    names.has(name) ? `${name}: ${value}` : original,
-  );
 const jsdoc = (text) =>
   '/**\n' +
-  adapt(text)
+  text
     .replaceAll('*/', '* /')
     .split('\n')
     .map((line) => ' * ' + line)
@@ -152,7 +147,7 @@ const slotLines = [];
 const viewLines = [];
 const runtimeLines = [];
 const colorNames = [];
-const header = '// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成。说明只进入类型声明。\n';
+const header = '// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。\n';
 const literalValues = (type) =>
   [
     ...new Set(
@@ -284,7 +279,10 @@ for (const property of properties) {
   slotLines.push(comment + `declare readonly ${name}: {};`);
   groups
     .get(propertyGroup(name, svg, obsolete))
-    .push(comment + `readonly ${name}?: PropertyValue<${JSON.stringify(name)}, T>;`);
+    .push(
+      comment +
+        `${name}(value: PropertyValue<${JSON.stringify(name)}, T>): this { return this.write(${JSON.stringify(name)}, value); }`,
+    );
   viewLines.push(comment + `readonly ${name}: ${typeName}<${JSON.stringify(name)}>;`);
   const runtimeSignature = JSON.stringify(members);
   let runtimeIndex = runtimeSets.findIndex((item) => JSON.stringify(item) === runtimeSignature);
@@ -310,16 +308,10 @@ const outputs = {
     `import type { PropertyName } from '../types.ts';\nimport type { SystemKeywordView, SystemKeyword } from '../tokens.ts';\nimport type * as Values from './literal-values.ts';\n` +
     interfaces.join('\n') +
     `\nexport interface SystemViews {\n${viewLines.join('\n')}\n}\n`,
-  'properties.ts':
+  'author.ts':
     header +
-    `import type { PropertyValue } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\n` +
-    propertyGroups
-      .map(
-        ([name, label]) =>
-          `/** ${label}；泛型 T 保留系统与继承主题关键字。 */\nexport interface ${name}Properties<T extends SystemKeywords = SystemKeywords> {\n${groups.get(name).join('\n')}\n}`,
-      )
-      .join('\n') +
-    `\nexport interface CssProperties<T extends SystemKeywords = SystemKeywords> extends ${propertyGroups.map(([name]) => `${name}Properties<T>`).join(', ')} {}\n`,
+    `import type { PropertyValue } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\nimport { CssAuthor } from '../author.ts';\n` +
+    `/** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */\nexport class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T> {\n${propertyGroups.map(([name]) => groups.get(name).join('\n')).join('\n')}\n}\n`,
   'keywords.ts':
     header +
     `const sets = ${JSON.stringify(runtimeSets)} as const;\nexport const systemValues = {\n${runtimeLines.join('\n')}\n} as const;\nexport type ColorProperty = ${colorNames.map(JSON.stringify).join(' | ')};\nexport type SystemValue<Key extends keyof typeof systemValues> = Extract<(typeof systemValues)[Key][keyof (typeof systemValues)[Key]], string>;\n`,

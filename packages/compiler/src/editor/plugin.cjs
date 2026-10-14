@@ -75,63 +75,54 @@ module.exports = function init({ typescript: ts }) {
             value = parent;
           } else break;
         }
-        const assignment = value.parent;
-        if (
-          !ts.isPropertyAssignment(assignment) ||
-          assignment.initializer !== value ||
-          !ts.isObjectLiteralExpression(assignment.parent)
-        )
-          return;
-        const property = assignment.name;
-        if (!ts.isIdentifier(property) && !ts.isStringLiteral(property)) return;
         const checker = program.getTypeChecker();
-        const contextual = checker.getContextualType(assignment.parent);
-        if (!contextual) return;
-        for (const type of contextual.isUnion() ? contextual.types : [contextual]) {
-          const symbol = checker.getPropertyOfType(type, property.text);
-          for (const declaration of symbol?.declarations ?? []) {
-            const declared = declaration.type;
-            if (
-              !declared ||
-              !ts.isTypeReferenceNode(declared) ||
-              declared.typeName.getText() !== 'PropertyValue' ||
-              !declared.typeArguments?.[0] ||
-              !ts.isLiteralTypeNode(declared.typeArguments[0]) ||
-              declared.typeArguments[0].literal.text !== property.text
-            )
-              continue;
-            const origin = declaration.getSourceFile().fileName.replaceAll('\\', '/');
-            if (!/\/generated\/properties(\.d)?\.ts$/.test(origin)) continue;
-            const bindingFile = program.getSourceFile(
-              origin.replace(/generated\/properties(\.d)?\.ts$/, 'bindings$1.ts'),
+        // 由真实方法声明定位属性，不按变量名 s 或方法文本猜测，普通业务方法不受影响。
+        for (const call of calls) {
+          const declaration = checker.getResolvedSignature(call.parent)?.declaration;
+          const declared = declaration?.parameters?.[0]?.type;
+          if (
+            !declared ||
+            !ts.isTypeReferenceNode(declared) ||
+            declared.typeName.getText() !== 'PropertyValue' ||
+            !ts.isLiteralTypeNode(declared.typeArguments?.[0])
+          )
+            continue;
+          const property = declared.typeArguments[0].literal.text;
+          const origin = declaration.getSourceFile().fileName.replaceAll('\\', '/');
+          if (!/\/generated\/author(\.d)?\.ts$/.test(origin)) continue;
+          const bindingFile = program.getSourceFile(
+            origin.replace(/generated\/author(\.d)?\.ts$/, 'bindings$1.ts'),
+          );
+          if (
+            calls
+              .slice(0, calls.indexOf(call))
+              .some((item) => !isBindingCall(checker, item, bindingFile))
+          )
+            continue;
+          const valuesFile = program.getSourceFile(
+            origin.replace(/author(\.d)?\.ts$/, 'literal-values$1.ts'),
+          );
+          const dictionary = valuesFile?.statements.find(
+            (node) => ts.isInterfaceDeclaration(node) && node.name.text === 'KeywordValues',
+          );
+          const member = dictionary?.members.find(
+            (node) => node.name?.getText(valuesFile) === property,
+          );
+          const keyType =
+            member?.type &&
+            (ts.isUnionTypeNode(member.type) ? member.type.types : [member.type]).find(
+              (node) => ts.isTypeOperatorNode(node) && node.operator === ts.SyntaxKind.KeyOfKeyword,
             );
-            if (calls.some((call) => !isBindingCall(checker, call, bindingFile))) continue;
-            const valuesFile = program.getSourceFile(
-              origin.replace(/properties(\.d)?\.ts$/, 'literal-values$1.ts'),
-            );
-            const dictionary = valuesFile?.statements.find(
-              (node) => ts.isInterfaceDeclaration(node) && node.name.text === 'KeywordValues',
-            );
-            const member = dictionary?.members.find(
-              (node) => node.name?.getText(valuesFile) === property.text,
-            );
-            const keyType =
-              member?.type &&
-              (ts.isUnionTypeNode(member.type) ? member.type.types : [member.type]).find(
-                (node) =>
-                  ts.isTypeOperatorNode(node) && node.operator === ts.SyntaxKind.KeyOfKeyword,
-              );
-            if (!keyType) continue;
-            return {
-              checker,
-              literal,
-              values: checker.getTypeFromTypeNode(keyType.type),
-              span: {
-                start: literal.getStart(source) + 1,
-                length: Math.max(0, literal.getWidth(source) - (literal.isUnterminated ? 1 : 2)),
-              },
-            };
-          }
+          if (!keyType) continue;
+          return {
+            checker,
+            literal,
+            values: checker.getTypeFromTypeNode(keyType.type),
+            span: {
+              start: literal.getStart(source) + 1,
+              length: Math.max(0, literal.getWidth(source) - (literal.isUnterminated ? 1 : 2)),
+            },
+          };
         }
       }
 

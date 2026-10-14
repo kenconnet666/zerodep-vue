@@ -17,7 +17,9 @@ const compile = async (source, options = {}) =>
 
 test('CSS captures aliased bindings before JSX and keeps multiple template pieces', async () => {
   const code = await compile(
-    'import {css,bx as bind} from "@zerodep-vue/core"; const x=1,y=2; export const render=()=> <div class={css({transform:`translate(${bind(x)}px, ${bind(y)}px)`})}/>;',
+    `import { bx as bind, useCss, cx } from "@zerodep-vue/core";
+const s = useCss();
+ const x=1,y=2; export const render=()=> <div class={s.transform(\`translate(\${bind(x)}px, \${bind(y)}px)\`)}/>;`,
   );
   assert(code.includes('createCssVNode as'));
   assert.equal((code.match(/_binding\(\(\) => /g) ?? []).length, 2);
@@ -33,16 +35,21 @@ test('ordinary Vue can explicitly enable shared-style wiring, and custom pragma 
   assert(code.includes('@zerodep-vue/core'));
   assert(!code.includes('@zerodep-vue/compiler'));
   await assert.rejects(
-    compile('import {css} from "@zerodep-vue/core"; <div class={css({color:"red"})}/>;', {
-      pragma: 'custom',
-    }),
+    compile(
+      `import { useCss, cx } from "@zerodep-vue/core";
+const s = useCss();
+ <div class={s.color("red")}/>;`,
+      {
+        pragma: 'custom',
+      },
+    ),
     /ZV_CSS_PRAGMA/,
   );
 });
 
 test('CSS lowering does not capture a shadowed bx or rewrite a tagged template', async () => {
   const code = await compile(
-    'import {bx,css} from "@zerodep-vue/core"; function use(bx){return bx(1);} const value=tag`a${1}`;',
+    'import { bx, useCss, cx } from "@zerodep-vue/core"; function use(bx){return bx(1);} const value=tag`a${1}`;',
   );
   assert(!code.includes('binding as'));
   assert(code.includes('tag`a${1}`'));

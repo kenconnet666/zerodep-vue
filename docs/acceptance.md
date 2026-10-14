@@ -1,5 +1,7 @@
 # 生产交付验收矩阵
 
+2026-10-14 不可变链式作者迁移：下表已通过证据属于历史提交；本轮 API、夹具及编辑器已迁移，完整验收等待对应新提交 CI，不据旧结果声明新 API 全部通过。
+
 本表记录下述旧三包基线的固定提交验收，保留当时的版本、路径及产物信息。当前已调整为 compiler/core 两包，CSS API 和主题模型也已修订；当前提交的验证状态以 [实施记录](progress.md) 及对应 CI 为准，不能把本表的历史结论归给新源码。
 
 1.0.0 已按 BLUEPRINT.md 的 Vue VDOM、纯 TSX 和运行时 CSS 范围完成交付验收。被验证的源码及 tarball 提交为 **de5973b42c181839a9735576a9ef901ab34cca6c**；[完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38497045742) 的 28 个验证任务与 CI result 均成功。核对日期为 2026-10-14。

@@ -3,15 +3,17 @@ import type { Ref, VNodeChild } from 'vue';
 import {
   _component,
   For,
-  css,
   bx as bind,
-  keywords,
   createTheme,
   SystemKeywords,
+  useCss,
+  cx,
 } from '@zerodep-vue/core';
 
-import type { CssContext, CssInput, CssObject } from '@zerodep-vue/core';
+import type { Css, CssInput } from '@zerodep-vue/core';
 import { Field, Palette, palettes, themed, themedKeywords } from './App';
+const s = useCss();
+const keywords = s.keywords;
 
 export function selectedTheme() {
   const current = ref(palettes.light);
@@ -21,7 +23,8 @@ export function selectedTheme() {
   current.value = new SystemKeywords();
   // @ts-expect-error 主题入口必须接收继承实例或对应 Ref。
   createTheme({ color: { _brand: 'red' } });
-  return context.css({ color: context.keywords.color._brand });
+  const s = context.useCss();
+  return s.color(s.keywords.color._brand);
 }
 
 const value = ref('typed');
@@ -35,52 +38,49 @@ export const input = <Field model={writable} />;
 // @ts-expect-error 公布的声明仍拒绝 getter-only computed 进入可编辑 Ref。
 export const readonlyInput = <Field model={computed(() => value.value)} />;
 // @ts-expect-error 系统关键字不能用于不兼容属性。
-css({ padding: keywords.display.flex });
+s.padding(keywords.display.flex);
 // @ts-expect-error 业务主题成员不能退化成任意字符串。
 themedKeywords.color._missing;
 
 const display = keywords.display.flex; /*hover:flex*/
 const brand = themedKeywords.color._brand; /*hover:brand*/
-export const literalStyles = css({
-  font: 'inherit', // literal:font
-  ':hover': { display: 'inline-flex' }, // literal:display
-});
+export const literalStyles = s
+  .font('inherit')
+  // literal:font
+  .select(':hover', s.display('inline-flex')); // literal:display
 export const transform = keywords.transformStyle.preserve3d; /*hover:preserve3d*/
 // @ts-expect-error 规范化成员只保留点访问拼写；CSS 字符串仍可使用 preserve-3d。
 keywords.transformStyle['preserve-3d'];
-export function expressionLiterals<T extends Palette>(
-  { css, keywords }: CssContext<T>,
-  active: boolean,
-) {
-  return css({
-    display: active ? 'none' : 'inline-flex', // literal:conditional
-    position: bind(active ? 'static' : 'relative'), // literal:binding
-    boxSizing: 'border-box' as const, // literal:assertion
-    transformStyle: 'preserve-3d', // literal:transform
-    color: keywords.color._brand,
-  });
+export function expressionLiterals<T extends Palette>(s: Css<T>, active: boolean) {
+  const keywords = s.keywords;
+  return (
+    s
+      .display(active ? 'none' : 'inline-flex')
+      // literal:conditional
+      .position(bind(active ? 'static' : 'relative'))
+      // literal:binding
+      .boxSizing('border-box' as const)
+      // literal:assertion
+      .transformStyle('preserve-3d')
+      // literal:transform
+      .color(keywords.color._brand)
+  );
 }
-themed({ display, color: brand, ':hover': { color: themedKeywords.color._brand } });
+themed.display(display).color(brand).select(':hover', themed.color(themedKeywords.color._brand));
 // @ts-expect-error 默认作者只声明系统关键字，业务主题值使用对应的泛型作者入口。
-css({ color: brand });
+s.color(brand);
 // 不同作者生成的 class 仍可直接组合。
-css(themed({ color: brand }), { padding: 4 });
+cx(themed.color(brand), s.padding(4));
 
-export function reusable<T extends Palette>(
-  { css, cx, keywords }: CssContext<T>,
-  external?: CssInput<T>,
-) {
+export function reusable<T extends Palette>(s: Css<T>, external?: CssInput) {
+  const keywords = s.keywords;
   const genericBrand = keywords.color._brand; /*hover:genericBrand*/
   const genericFlex = keywords.display.flex; /*hover:genericFlex*/
-  const named = cx({
-    root: { color: genericBrand, display: genericFlex },
-    active: { color: genericBrand },
-  });
-  const nested: CssObject<T> = {
-    ':hover': [named.active, { color: genericBrand }],
-    '@media (width < 600px)': { display: genericFlex },
-  };
-  return css(named.root, nested, external);
+  const named = { root: s.color(genericBrand).display(genericFlex), active: s.color(genericBrand) };
+  const nested = s
+    .select(':hover', [named.active, s.color(genericBrand)])
+    .select('@media (width < 600px)', s.display(genericFlex));
+  return cx(named.root, nested, external);
 }
 const List = _component(
   <T,>({ items, renderItem }: { items: readonly T[]; renderItem: (item: T) => VNodeChild }) => (

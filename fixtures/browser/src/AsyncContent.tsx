@@ -1,7 +1,8 @@
-import { _component, css } from '@zerodep-vue/core';
+import { _component, useCss } from '@zerodep-vue/core';
+const s = useCss();
 
 export default _component(() => (
-  <p data-testid="async" class={css({ color: 'purple' })}>
+  <p data-testid="async" class={s.color('purple')}>
     异步组件已加载
   </p>
 ));

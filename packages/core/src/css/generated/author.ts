@@ -1,8 +1,9 @@
-// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成。说明只进入类型声明。
+// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
 import type { PropertyValue } from '../types.ts';
 import type { SystemKeywords } from './system.ts';
-/** 布局与定位；泛型 T 保留系统与继承主题关键字。 */
-export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
+import { CssAuthor } from '../author.ts';
+/** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */
+export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T> {
   /**
    * 分配布局容器交叉轴或块轴上的剩余空间，控制内容整体的对齐。
    *
@@ -10,7 +11,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
    */
-  readonly alignContent?: PropertyValue<'alignContent', T>;
+  alignContent(value: PropertyValue<'alignContent', T>): this {
+    return this.write('alignContent', value);
+  }
   /**
    * 设置容器内项目在交叉轴或块轴上的默认对齐方式。
    *
@@ -22,11 +25,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", alignItems: "center" })
+   * s.display("flex").alignItems("center")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
    */
-  readonly alignItems?: PropertyValue<'alignItems', T>;
+  alignItems(value: PropertyValue<'alignItems', T>): this {
+    return this.write('alignItems', value);
+  }
   /**
    * 选择行内或 SVG 文本参与对齐时使用的基线。
    *
@@ -34,7 +39,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/alignment-baseline
    */
-  readonly alignmentBaseline?: PropertyValue<'alignmentBaseline', T>;
+  alignmentBaseline(value: PropertyValue<'alignmentBaseline', T>): this {
+    return this.write('alignmentBaseline', value);
+  }
   /**
    * 单独覆盖一个项目的交叉轴或块轴对齐方式。
    *
@@ -44,11 +51,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ alignSelf: "center" })
+   * s.alignSelf("center")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self
    */
-  readonly alignSelf?: PropertyValue<'alignSelf', T>;
+  alignSelf(value: PropertyValue<'alignSelf', T>): this {
+    return this.write('alignSelf', value);
+  }
   /**
    * 旧版瀑布流布局提案中沿块轴对齐轨道的属性；使用前核对实现与规范版本。
    *
@@ -56,7 +65,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
    */
-  readonly alignTracks?: PropertyValue<'alignTracks', T>;
+  alignTracks(value: PropertyValue<'alignTracks', T>): this {
+    return this.write('alignTracks', value);
+  }
   /**
    * 为元素声明锚点名称，供锚点定位的元素引用。
    *
@@ -64,7 +75,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-name
    */
-  readonly anchorName?: PropertyValue<'anchorName', T>;
+  anchorName(value: PropertyValue<'anchorName', T>): this {
+    return this.write('anchorName', value);
+  }
   /**
    * 限制锚点名称的可见范围，避免同名锚点跨组件互相影响。
    *
@@ -72,7 +85,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-scope
    */
-  readonly anchorScope?: PropertyValue<'anchorScope', T>;
+  anchorScope(value: PropertyValue<'anchorScope', T>): this {
+    return this.write('anchorScope', value);
+  }
   /**
    * 设置定位元素相对于其定位参照的下侧偏移。
    *
@@ -80,7 +95,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/bottom
    */
-  readonly bottom?: PropertyValue<'bottom', T>;
+  bottom(value: PropertyValue<'bottom', T>): this {
+    return this.write('bottom', value);
+  }
   /**
    * 要求元素避让指定侧的前置浮动元素。
    *
@@ -88,7 +105,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clear
    */
-  readonly clear?: PropertyValue<'clear', T>;
+  clear(value: PropertyValue<'clear', T>): this {
+    return this.write('clear', value);
+  }
   /**
    * 设置多栏布局的目标栏数。
    *
@@ -96,7 +115,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-count
    */
-  readonly columnCount?: PropertyValue<'columnCount', T>;
+  columnCount(value: PropertyValue<'columnCount', T>): this {
+    return this.write('columnCount', value);
+  }
   /**
    * 设置多栏内容顺序填充还是尽量均衡栏高。
    *
@@ -104,13 +125,17 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-fill
    */
-  readonly columnFill?: PropertyValue<'columnFill', T>;
+  columnFill(value: PropertyValue<'columnFill', T>): this {
+    return this.write('columnFill', value);
+  }
   /**
    * 同时设置多栏布局的首选栏宽和目标栏数。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/columns
    */
-  readonly columns?: PropertyValue<'columns', T>;
+  columns(value: PropertyValue<'columns', T>): this {
+    return this.write('columns', value);
+  }
   /**
    * 设置多栏布局中的元素是否跨越所有栏。
    *
@@ -118,7 +143,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-span
    */
-  readonly columnSpan?: PropertyValue<'columnSpan', T>;
+  columnSpan(value: PropertyValue<'columnSpan', T>): this {
+    return this.write('columnSpan', value);
+  }
   /**
    * 设置多栏布局的首选栏宽，实际栏宽由容器空间决定。
    *
@@ -126,7 +153,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-width
    */
-  readonly columnWidth?: PropertyValue<'columnWidth', T>;
+  columnWidth(value: PropertyValue<'columnWidth', T>): this {
+    return this.write('columnWidth', value);
+  }
   /**
    * 决定元素是否生成布局盒子，以及元素自身和内部内容如何排版。
    *
@@ -138,11 +167,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`inline`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", alignItems: "center", gap: "0.5rem" })
+   * s.display("flex").alignItems("center").gap("0.5rem")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
    */
-  readonly display?: PropertyValue<'display', T>;
+  display(value: PropertyValue<'display', T>): this {
+    return this.write('display', value);
+  }
   /**
    * 集中设置弹性项目的增长系数、收缩系数和基础尺寸。
    *
@@ -152,13 +183,15 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * 常用值：`auto`、`none`。
    * @example
-   * css({ flex: "1 1 0%" })
+   * s.flex("1 1 0%")
    * @example
-   * css({ flex: "none" })
+   * s.flex("none")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex
    */
-  readonly flex?: PropertyValue<'flex', T>;
+  flex(value: PropertyValue<'flex', T>): this {
+    return this.write('flex', value);
+  }
   /**
    * 设置弹性项目分配剩余空间之前的主轴基础尺寸。
    *
@@ -170,11 +203,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ flexBasis: "16rem" })
+   * s.flexBasis("16rem")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-basis
    */
-  readonly flexBasis?: PropertyValue<'flexBasis', T>;
+  flexBasis(value: PropertyValue<'flexBasis', T>): this {
+    return this.write('flexBasis', value);
+  }
   /**
    * 设置弹性容器的主轴方向及项目排列方向。
    *
@@ -184,17 +219,21 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`row`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", flexDirection: "column", gap: "1rem" })
+   * s.display("flex").flexDirection("column").gap("1rem")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-direction
    */
-  readonly flexDirection?: PropertyValue<'flexDirection', T>;
+  flexDirection(value: PropertyValue<'flexDirection', T>): this {
+    return this.write('flexDirection', value);
+  }
   /**
    * 同时设置弹性布局的主轴方向和换行方式。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow
    */
-  readonly flexFlow?: PropertyValue<'flexFlow', T>;
+  flexFlow(value: PropertyValue<'flexFlow', T>): this {
+    return this.write('flexFlow', value);
+  }
   /**
    * 设置弹性项目分配正剩余空间时的增长系数。
    *
@@ -204,11 +243,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`0`，不同于浏览器默认样式表。
    * @example
-   * css({ flexGrow: 1 })
+   * s.flexGrow(1)
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-grow
    */
-  readonly flexGrow?: PropertyValue<'flexGrow', T>;
+  flexGrow(value: PropertyValue<'flexGrow', T>): this {
+    return this.write('flexGrow', value);
+  }
   /**
    * 设置弹性项目空间不足时的收缩系数。
    *
@@ -218,11 +259,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`1`，不同于浏览器默认样式表。
    * @example
-   * css({ flexShrink: 0 })
+   * s.flexShrink(0)
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-shrink
    */
-  readonly flexShrink?: PropertyValue<'flexShrink', T>;
+  flexShrink(value: PropertyValue<'flexShrink', T>): this {
+    return this.write('flexShrink', value);
+  }
   /**
    * 设置弹性项目是否换行，以及多行的排列方向。
    *
@@ -232,11 +275,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`nowrap`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", flexWrap: "wrap", gap: "0.5rem" })
+   * s.display("flex").flexWrap("wrap").gap("0.5rem")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-wrap
    */
-  readonly flexWrap?: PropertyValue<'flexWrap', T>;
+  flexWrap(value: PropertyValue<'flexWrap', T>): this {
+    return this.write('flexWrap', value);
+  }
   /**
    * 将元素浮动到指定侧，使相邻行内内容围绕它排列。
    *
@@ -244,19 +289,25 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/float
    */
-  readonly float?: PropertyValue<'float', T>;
+  float(value: PropertyValue<'float', T>): this {
+    return this.write('float', value);
+  }
   /**
    * 集中设置显式和隐式网格的轨道、区域及自动放置方式。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid
    */
-  readonly grid?: PropertyValue<'grid', T>;
+  grid(value: PropertyValue<'grid', T>): this {
+    return this.write('grid', value);
+  }
   /**
    * 设置网格项目的区域名，或行起点、列起点、行终点、列终点。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-area
    */
-  readonly gridArea?: PropertyValue<'gridArea', T>;
+  gridArea(value: PropertyValue<'gridArea', T>): this {
+    return this.write('gridArea', value);
+  }
   /**
    * 设置隐式生成的网格列尺寸。
    *
@@ -264,7 +315,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-auto-columns
    */
-  readonly gridAutoColumns?: PropertyValue<'gridAutoColumns', T>;
+  gridAutoColumns(value: PropertyValue<'gridAutoColumns', T>): this {
+    return this.write('gridAutoColumns', value);
+  }
   /**
    * 设置网格自动放置算法的行列方向及是否密集填洞。
    *
@@ -276,11 +329,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`row`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "grid", gridAutoFlow: "row" })
+   * s.display("grid").gridAutoFlow("row")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-auto-flow
    */
-  readonly gridAutoFlow?: PropertyValue<'gridAutoFlow', T>;
+  gridAutoFlow(value: PropertyValue<'gridAutoFlow', T>): this {
+    return this.write('gridAutoFlow', value);
+  }
   /**
    * 设置隐式生成的网格行尺寸。
    *
@@ -288,13 +343,17 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-auto-rows
    */
-  readonly gridAutoRows?: PropertyValue<'gridAutoRows', T>;
+  gridAutoRows(value: PropertyValue<'gridAutoRows', T>): this {
+    return this.write('gridAutoRows', value);
+  }
   /**
    * 设置网格项目的列起点和列终点。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column
    */
-  readonly gridColumn?: PropertyValue<'gridColumn', T>;
+  gridColumn(value: PropertyValue<'gridColumn', T>): this {
+    return this.write('gridColumn', value);
+  }
   /**
    * 设置网格项目的列终止线或跨越范围。
    *
@@ -302,7 +361,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column-end
    */
-  readonly gridColumnEnd?: PropertyValue<'gridColumnEnd', T>;
+  gridColumnEnd(value: PropertyValue<'gridColumnEnd', T>): this {
+    return this.write('gridColumnEnd', value);
+  }
   /**
    * 设置网格项目的列起始线或跨越范围。
    *
@@ -310,13 +371,17 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column-start
    */
-  readonly gridColumnStart?: PropertyValue<'gridColumnStart', T>;
+  gridColumnStart(value: PropertyValue<'gridColumnStart', T>): this {
+    return this.write('gridColumnStart', value);
+  }
   /**
    * 设置网格项目的行起点和行终点。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row
    */
-  readonly gridRow?: PropertyValue<'gridRow', T>;
+  gridRow(value: PropertyValue<'gridRow', T>): this {
+    return this.write('gridRow', value);
+  }
   /**
    * 设置网格项目的行终止线或跨越范围。
    *
@@ -324,7 +389,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row-end
    */
-  readonly gridRowEnd?: PropertyValue<'gridRowEnd', T>;
+  gridRowEnd(value: PropertyValue<'gridRowEnd', T>): this {
+    return this.write('gridRowEnd', value);
+  }
   /**
    * 设置网格项目的行起始线或跨越范围。
    *
@@ -332,13 +399,17 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row-start
    */
-  readonly gridRowStart?: PropertyValue<'gridRowStart', T>;
+  gridRowStart(value: PropertyValue<'gridRowStart', T>): this {
+    return this.write('gridRowStart', value);
+  }
   /**
    * 集中设置显式网格的行、列和命名区域。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template
    */
-  readonly gridTemplate?: PropertyValue<'gridTemplate', T>;
+  gridTemplate(value: PropertyValue<'gridTemplate', T>): this {
+    return this.write('gridTemplate', value);
+  }
   /**
    * 用区域名称矩阵定义网格布局区域。
    *
@@ -346,7 +417,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-areas
    */
-  readonly gridTemplateAreas?: PropertyValue<'gridTemplateAreas', T>;
+  gridTemplateAreas(value: PropertyValue<'gridTemplateAreas', T>): this {
+    return this.write('gridTemplateAreas', value);
+  }
   /**
    * 定义显式网格的列轨道尺寸及网格线名称。
    *
@@ -356,11 +429,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" })
+   * s.gridTemplateColumns("repeat(3, minmax(0, 1fr))")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-columns
    */
-  readonly gridTemplateColumns?: PropertyValue<'gridTemplateColumns', T>;
+  gridTemplateColumns(value: PropertyValue<'gridTemplateColumns', T>): this {
+    return this.write('gridTemplateColumns', value);
+  }
   /**
    * 定义显式网格的行轨道尺寸及网格线名称。
    *
@@ -370,23 +445,29 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ gridTemplateRows: "auto minmax(0, 1fr)" })
+   * s.gridTemplateRows("auto minmax(0, 1fr)")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-rows
    */
-  readonly gridTemplateRows?: PropertyValue<'gridTemplateRows', T>;
+  gridTemplateRows(value: PropertyValue<'gridTemplateRows', T>): this {
+    return this.write('gridTemplateRows', value);
+  }
   /**
    * 同时设置定位元素的上、右、下、左偏移。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset
    */
-  readonly inset?: PropertyValue<'inset', T>;
+  inset(value: PropertyValue<'inset', T>): this {
+    return this.write('inset', value);
+  }
   /**
    * 设置定位元素沿逻辑块轴的起始和结束偏移。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-block
    */
-  readonly insetBlock?: PropertyValue<'insetBlock', T>;
+  insetBlock(value: PropertyValue<'insetBlock', T>): this {
+    return this.write('insetBlock', value);
+  }
   /**
    * 设置定位元素在逻辑块轴结束侧的偏移。
    *
@@ -394,7 +475,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-block-end
    */
-  readonly insetBlockEnd?: PropertyValue<'insetBlockEnd', T>;
+  insetBlockEnd(value: PropertyValue<'insetBlockEnd', T>): this {
+    return this.write('insetBlockEnd', value);
+  }
   /**
    * 设置定位元素在逻辑块轴起始侧的偏移。
    *
@@ -402,13 +485,17 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-block-start
    */
-  readonly insetBlockStart?: PropertyValue<'insetBlockStart', T>;
+  insetBlockStart(value: PropertyValue<'insetBlockStart', T>): this {
+    return this.write('insetBlockStart', value);
+  }
   /**
    * 设置定位元素沿逻辑行内轴的起始和结束偏移。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-inline
    */
-  readonly insetInline?: PropertyValue<'insetInline', T>;
+  insetInline(value: PropertyValue<'insetInline', T>): this {
+    return this.write('insetInline', value);
+  }
   /**
    * 设置定位元素在逻辑行内轴结束侧的偏移。
    *
@@ -416,7 +503,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-inline-end
    */
-  readonly insetInlineEnd?: PropertyValue<'insetInlineEnd', T>;
+  insetInlineEnd(value: PropertyValue<'insetInlineEnd', T>): this {
+    return this.write('insetInlineEnd', value);
+  }
   /**
    * 设置定位元素在逻辑行内轴起始侧的偏移。
    *
@@ -424,7 +513,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-inline-start
    */
-  readonly insetInlineStart?: PropertyValue<'insetInlineStart', T>;
+  insetInlineStart(value: PropertyValue<'insetInlineStart', T>): this {
+    return this.write('insetInlineStart', value);
+  }
   /**
    * 分配布局主轴或行内轴的剩余空间，控制内容整体对齐。
    *
@@ -434,11 +525,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", justifyContent: "space-between" })
+   * s.display("flex").justifyContent("space-between")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content
    */
-  readonly justifyContent?: PropertyValue<'justifyContent', T>;
+  justifyContent(value: PropertyValue<'justifyContent', T>): this {
+    return this.write('justifyContent', value);
+  }
   /**
    * 设置容器内项目在行内轴上的默认对齐方式；不控制 Flex 项目的主轴对齐。
    *
@@ -446,7 +539,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
    */
-  readonly justifyItems?: PropertyValue<'justifyItems', T>;
+  justifyItems(value: PropertyValue<'justifyItems', T>): this {
+    return this.write('justifyItems', value);
+  }
   /**
    * 单独设置项目在其布局区域内的行内轴对齐方式。
    *
@@ -454,7 +549,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
    */
-  readonly justifySelf?: PropertyValue<'justifySelf', T>;
+  justifySelf(value: PropertyValue<'justifySelf', T>): this {
+    return this.write('justifySelf', value);
+  }
   /**
    * 旧版瀑布流布局提案中沿行内轴对齐轨道的属性；使用前核对实现与规范版本。
    *
@@ -462,7 +559,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
    */
-  readonly justifyTracks?: PropertyValue<'justifyTracks', T>;
+  justifyTracks(value: PropertyValue<'justifyTracks', T>): this {
+    return this.write('justifyTracks', value);
+  }
   /**
    * 设置定位元素相对于其定位参照的左侧偏移。
    *
@@ -470,7 +569,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/left
    */
-  readonly left?: PropertyValue<'left', T>;
+  left(value: PropertyValue<'left', T>): this {
+    return this.write('left', value);
+  }
   /**
    * 设置 Flex 或 Grid 项目的视觉排列顺序，不改变 DOM 顺序。
    *
@@ -480,25 +581,33 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/order
    */
-  readonly order?: PropertyValue<'order', T>;
+  order(value: PropertyValue<'order', T>): this {
+    return this.write('order', value);
+  }
   /**
    * 同时设置 align-content 与 justify-content。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
    */
-  readonly placeContent?: PropertyValue<'placeContent', T>;
+  placeContent(value: PropertyValue<'placeContent', T>): this {
+    return this.write('placeContent', value);
+  }
   /**
    * 同时设置 align-items 与 justify-items。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
    */
-  readonly placeItems?: PropertyValue<'placeItems', T>;
+  placeItems(value: PropertyValue<'placeItems', T>): this {
+    return this.write('placeItems', value);
+  }
   /**
    * 同时设置 align-self 与 justify-self。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
    */
-  readonly placeSelf?: PropertyValue<'placeSelf', T>;
+  placeSelf(value: PropertyValue<'placeSelf', T>): this {
+    return this.write('placeSelf', value);
+  }
   /**
    * 设置元素的定位方式，并决定偏移属性如何参与布局。
    *
@@ -510,11 +619,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`static`，不同于浏览器默认样式表。
    * @example
-   * css({ position: "sticky", top: "0px" })
+   * s.position("sticky").top("0px")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position
    */
-  readonly position?: PropertyValue<'position', T>;
+  position(value: PropertyValue<'position', T>): this {
+    return this.write('position', value);
+  }
   /**
    * 选择绝对定位元素使用的默认锚点。
    *
@@ -522,7 +633,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-anchor
    */
-  readonly positionAnchor?: PropertyValue<'positionAnchor', T>;
+  positionAnchor(value: PropertyValue<'positionAnchor', T>): this {
+    return this.write('positionAnchor', value);
+  }
   /**
    * 选择相对于锚点的定位区域。
    *
@@ -530,13 +643,17 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
    */
-  readonly positionArea?: PropertyValue<'positionArea', T>;
+  positionArea(value: PropertyValue<'positionArea', T>): this {
+    return this.write('positionArea', value);
+  }
   /**
    * 同时设置锚点定位的候选回退方式及尝试顺序。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
    */
-  readonly positionTry?: PropertyValue<'positionTry', T>;
+  positionTry(value: PropertyValue<'positionTry', T>): this {
+    return this.write('positionTry', value);
+  }
   /**
    * 设置锚点定位溢出时尝试的替代位置。
    *
@@ -544,7 +661,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
    */
-  readonly positionTryFallbacks?: PropertyValue<'positionTryFallbacks', T>;
+  positionTryFallbacks(value: PropertyValue<'positionTryFallbacks', T>): this {
+    return this.write('positionTryFallbacks', value);
+  }
   /**
    * 设置锚点定位候选方案的尝试顺序。
    *
@@ -552,7 +671,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-order
    */
-  readonly positionTryOrder?: PropertyValue<'positionTryOrder', T>;
+  positionTryOrder(value: PropertyValue<'positionTryOrder', T>): this {
+    return this.write('positionTryOrder', value);
+  }
   /**
    * 设置锚点定位元素根据锚点可见性和溢出情况是否显示。
    *
@@ -560,7 +681,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-visibility
    */
-  readonly positionVisibility?: PropertyValue<'positionVisibility', T>;
+  positionVisibility(value: PropertyValue<'positionVisibility', T>): this {
+    return this.write('positionVisibility', value);
+  }
   /**
    * 设置定位元素相对于其定位参照的右侧偏移。
    *
@@ -568,7 +691,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/right
    */
-  readonly right?: PropertyValue<'right', T>;
+  right(value: PropertyValue<'right', T>): this {
+    return this.write('right', value);
+  }
   /**
    * 设置定位元素相对于其定位参照的上侧偏移。
    *
@@ -576,7 +701,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/top
    */
-  readonly top?: PropertyValue<'top', T>;
+  top(value: PropertyValue<'top', T>): this {
+    return this.write('top', value);
+  }
   /**
    * 设置行内级盒子或表格单元格的垂直对齐，不用于普通块盒居中。
    *
@@ -584,7 +711,9 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vertical-align
    */
-  readonly verticalAlign?: PropertyValue<'verticalAlign', T>;
+  verticalAlign(value: PropertyValue<'verticalAlign', T>): this {
+    return this.write('verticalAlign', value);
+  }
   /**
    * 设置元素在所属层叠上下文中的层叠级别。
    *
@@ -594,14 +723,13 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ position: "relative", zIndex: 1 })
+   * s.position("relative").zIndex(1)
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/z-index
    */
-  readonly zIndex?: PropertyValue<'zIndex', T>;
-}
-/** 尺寸与比例；泛型 T 保留系统与继承主题关键字。 */
-export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
+  zIndex(value: PropertyValue<'zIndex', T>): this {
+    return this.write('zIndex', value);
+  }
   /**
    * 设置盒子的首选宽高比，参与自动尺寸计算。
    *
@@ -611,11 +739,13 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ aspectRatio: "16 / 9", width: "100%" })
+   * s.aspectRatio("16 / 9").width("100%")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/aspect-ratio
    */
-  readonly aspectRatio?: PropertyValue<'aspectRatio', T>;
+  aspectRatio(value: PropertyValue<'aspectRatio', T>): this {
+    return this.write('aspectRatio', value);
+  }
   /**
    * 设置逻辑块轴尺寸；水平书写时通常对应高度。
    *
@@ -625,11 +755,13 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ blockSize: "10rem" })
+   * s.blockSize("10rem")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/block-size
    */
-  readonly blockSize?: PropertyValue<'blockSize', T>;
+  blockSize(value: PropertyValue<'blockSize', T>): this {
+    return this.write('blockSize', value);
+  }
   /**
    * 决定 width、height 等尺寸是否包含内边距和边框。
    *
@@ -639,11 +771,13 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`content-box`，不同于浏览器默认样式表。
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-sizing
    */
-  readonly boxSizing?: PropertyValue<'boxSizing', T>;
+  boxSizing(value: PropertyValue<'boxSizing', T>): this {
+    return this.write('boxSizing', value);
+  }
   /**
    * 设置元素的物理高度，盒子范围受 box-sizing 影响。
    *
@@ -653,11 +787,13 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ maxHeight: "20rem", overflowY: "auto" })
+   * s.maxHeight("20rem").overflowY("auto")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/height
    */
-  readonly height?: PropertyValue<'height', T>;
+  height(value: PropertyValue<'height', T>): this {
+    return this.write('height', value);
+  }
   /**
    * 设置逻辑行内轴尺寸；水平书写时通常对应宽度。
    *
@@ -667,11 +803,13 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ inlineSize: "20rem" })
+   * s.inlineSize("20rem")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inline-size
    */
-  readonly inlineSize?: PropertyValue<'inlineSize', T>;
+  inlineSize(value: PropertyValue<'inlineSize', T>): this {
+    return this.write('inlineSize', value);
+  }
   /**
    * 限制元素逻辑块轴的最大尺寸。
    *
@@ -679,7 +817,9 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-block-size
    */
-  readonly maxBlockSize?: PropertyValue<'maxBlockSize', T>;
+  maxBlockSize(value: PropertyValue<'maxBlockSize', T>): this {
+    return this.write('maxBlockSize', value);
+  }
   /**
    * 限制元素的最大物理高度。
    *
@@ -687,7 +827,9 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
    */
-  readonly maxHeight?: PropertyValue<'maxHeight', T>;
+  maxHeight(value: PropertyValue<'maxHeight', T>): this {
+    return this.write('maxHeight', value);
+  }
   /**
    * 限制元素逻辑行内轴的最大尺寸。
    *
@@ -695,7 +837,9 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-inline-size
    */
-  readonly maxInlineSize?: PropertyValue<'maxInlineSize', T>;
+  maxInlineSize(value: PropertyValue<'maxInlineSize', T>): this {
+    return this.write('maxInlineSize', value);
+  }
   /**
    * 限制分片上下文中的最大行数；属于需核对支持情况的截行能力。
    *
@@ -703,7 +847,9 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-lines
    */
-  readonly maxLines?: PropertyValue<'maxLines', T>;
+  maxLines(value: PropertyValue<'maxLines', T>): this {
+    return this.write('maxLines', value);
+  }
   /**
    * 限制元素的最大物理宽度。
    *
@@ -713,11 +859,13 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ width: "100%", maxWidth: "48rem" })
+   * s.width("100%").maxWidth("48rem")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
    */
-  readonly maxWidth?: PropertyValue<'maxWidth', T>;
+  maxWidth(value: PropertyValue<'maxWidth', T>): this {
+    return this.write('maxWidth', value);
+  }
   /**
    * 设置元素逻辑块轴的最小尺寸。
    *
@@ -725,7 +873,9 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-block-size
    */
-  readonly minBlockSize?: PropertyValue<'minBlockSize', T>;
+  minBlockSize(value: PropertyValue<'minBlockSize', T>): this {
+    return this.write('minBlockSize', value);
+  }
   /**
    * 设置元素的最小物理高度。
    *
@@ -733,7 +883,9 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
    */
-  readonly minHeight?: PropertyValue<'minHeight', T>;
+  minHeight(value: PropertyValue<'minHeight', T>): this {
+    return this.write('minHeight', value);
+  }
   /**
    * 设置元素逻辑行内轴的最小尺寸。
    *
@@ -741,7 +893,9 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-inline-size
    */
-  readonly minInlineSize?: PropertyValue<'minInlineSize', T>;
+  minInlineSize(value: PropertyValue<'minInlineSize', T>): this {
+    return this.write('minInlineSize', value);
+  }
   /**
    * 设置元素的最小物理宽度。
    *
@@ -751,11 +905,13 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ minWidth: "0px" })
+   * s.minWidth("0px")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
    */
-  readonly minWidth?: PropertyValue<'minWidth', T>;
+  minWidth(value: PropertyValue<'minWidth', T>): this {
+    return this.write('minWidth', value);
+  }
   /**
    * 设置元素的物理宽度，盒子范围受 box-sizing 影响。
    *
@@ -767,16 +923,15 @@ export interface SizingProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ width: "20rem" })
+   * s.width("20rem")
    * @example
-   * css({ width: "clamp(12rem, 50vw, 40rem)" })
+   * s.width("clamp(12rem, 50vw, 40rem)")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/width
    */
-  readonly width?: PropertyValue<'width', T>;
-}
-/** 内外间距；泛型 T 保留系统与继承主题关键字。 */
-export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
+  width(value: PropertyValue<'width', T>): this {
+    return this.write('width', value);
+  }
   /**
    * 设置布局中相邻列之间的间距。
    *
@@ -784,7 +939,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-gap
    */
-  readonly columnGap?: PropertyValue<'columnGap', T>;
+  columnGap(value: PropertyValue<'columnGap', T>): this {
+    return this.write('columnGap', value);
+  }
   /**
    * 设置行与列之间的间距，用于 Grid、Flex 和多栏等布局。
    *
@@ -792,11 +949,13 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * 适用场景：给 Flex/Grid 项目设置统一间隔，避免逐个项目添加 margin。
    * @example
-   * css({ gap: "8px 16px" })
+   * s.gap("8px 16px")
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/gap
    */
-  readonly gap?: PropertyValue<'gap', T>;
+  gap(value: PropertyValue<'gap', T>): this {
+    return this.write('gap', value);
+  }
   /**
    * 设置盒子四周的外边距，可使用负值或自动外边距。
    *
@@ -804,19 +963,23 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * 适用场景：控制盒子外侧与相邻内容的距离；布局项统一间隔可考虑容器 gap。
    * @example
-   * css({ margin: "8px 16px" })
+   * s.margin("8px 16px")
    * @example
-   * css({ margin: "0 auto" })
+   * s.margin("0 auto")
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin
    */
-  readonly margin?: PropertyValue<'margin', T>;
+  margin(value: PropertyValue<'margin', T>): this {
+    return this.write('margin', value);
+  }
   /**
    * 设置逻辑块轴起始侧和结束侧的外边距。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-block
    */
-  readonly marginBlock?: PropertyValue<'marginBlock', T>;
+  marginBlock(value: PropertyValue<'marginBlock', T>): this {
+    return this.write('marginBlock', value);
+  }
   /**
    * 设置逻辑块轴结束侧的外边距。
    *
@@ -824,7 +987,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-block-end
    */
-  readonly marginBlockEnd?: PropertyValue<'marginBlockEnd', T>;
+  marginBlockEnd(value: PropertyValue<'marginBlockEnd', T>): this {
+    return this.write('marginBlockEnd', value);
+  }
   /**
    * 设置逻辑块轴起始侧的外边距。
    *
@@ -832,7 +997,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-block-start
    */
-  readonly marginBlockStart?: PropertyValue<'marginBlockStart', T>;
+  marginBlockStart(value: PropertyValue<'marginBlockStart', T>): this {
+    return this.write('marginBlockStart', value);
+  }
   /**
    * 设置下外边距。
    *
@@ -840,13 +1007,17 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-bottom
    */
-  readonly marginBottom?: PropertyValue<'marginBottom', T>;
+  marginBottom(value: PropertyValue<'marginBottom', T>): this {
+    return this.write('marginBottom', value);
+  }
   /**
    * 设置逻辑行内轴起始侧和结束侧的外边距。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-inline
    */
-  readonly marginInline?: PropertyValue<'marginInline', T>;
+  marginInline(value: PropertyValue<'marginInline', T>): this {
+    return this.write('marginInline', value);
+  }
   /**
    * 设置逻辑行内轴结束侧的外边距。
    *
@@ -854,7 +1025,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-inline-end
    */
-  readonly marginInlineEnd?: PropertyValue<'marginInlineEnd', T>;
+  marginInlineEnd(value: PropertyValue<'marginInlineEnd', T>): this {
+    return this.write('marginInlineEnd', value);
+  }
   /**
    * 设置逻辑行内轴起始侧的外边距。
    *
@@ -862,7 +1035,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-inline-start
    */
-  readonly marginInlineStart?: PropertyValue<'marginInlineStart', T>;
+  marginInlineStart(value: PropertyValue<'marginInlineStart', T>): this {
+    return this.write('marginInlineStart', value);
+  }
   /**
    * 设置左外边距。
    *
@@ -870,7 +1045,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-left
    */
-  readonly marginLeft?: PropertyValue<'marginLeft', T>;
+  marginLeft(value: PropertyValue<'marginLeft', T>): this {
+    return this.write('marginLeft', value);
+  }
   /**
    * 设置右外边距。
    *
@@ -878,7 +1055,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-right
    */
-  readonly marginRight?: PropertyValue<'marginRight', T>;
+  marginRight(value: PropertyValue<'marginRight', T>): this {
+    return this.write('marginRight', value);
+  }
   /**
    * 设置上外边距。
    *
@@ -886,7 +1065,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-top
    */
-  readonly marginTop?: PropertyValue<'marginTop', T>;
+  marginTop(value: PropertyValue<'marginTop', T>): this {
+    return this.write('marginTop', value);
+  }
   /**
    * 控制容器边缘处子元素外边距的裁减。
    *
@@ -894,7 +1075,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-trim
    */
-  readonly marginTrim?: PropertyValue<'marginTrim', T>;
+  marginTrim(value: PropertyValue<'marginTrim', T>): this {
+    return this.write('marginTrim', value);
+  }
   /**
    * 设置内容与边框之间的四边内边距，不接受负值。
    *
@@ -902,17 +1085,21 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * 适用场景：控制文字或子元素与组件边框之间的留白。
    * @example
-   * css({ padding: "0.5rem 1rem" })
+   * s.padding("0.5rem 1rem")
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding
    */
-  readonly padding?: PropertyValue<'padding', T>;
+  padding(value: PropertyValue<'padding', T>): this {
+    return this.write('padding', value);
+  }
   /**
    * 设置逻辑块轴起始侧和结束侧的内边距。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-block
    */
-  readonly paddingBlock?: PropertyValue<'paddingBlock', T>;
+  paddingBlock(value: PropertyValue<'paddingBlock', T>): this {
+    return this.write('paddingBlock', value);
+  }
   /**
    * 设置逻辑块轴结束侧的内边距。
    *
@@ -920,7 +1107,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-block-end
    */
-  readonly paddingBlockEnd?: PropertyValue<'paddingBlockEnd', T>;
+  paddingBlockEnd(value: PropertyValue<'paddingBlockEnd', T>): this {
+    return this.write('paddingBlockEnd', value);
+  }
   /**
    * 设置逻辑块轴起始侧的内边距。
    *
@@ -928,7 +1117,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-block-start
    */
-  readonly paddingBlockStart?: PropertyValue<'paddingBlockStart', T>;
+  paddingBlockStart(value: PropertyValue<'paddingBlockStart', T>): this {
+    return this.write('paddingBlockStart', value);
+  }
   /**
    * 设置下内边距。
    *
@@ -936,13 +1127,17 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-bottom
    */
-  readonly paddingBottom?: PropertyValue<'paddingBottom', T>;
+  paddingBottom(value: PropertyValue<'paddingBottom', T>): this {
+    return this.write('paddingBottom', value);
+  }
   /**
    * 设置逻辑行内轴起始侧和结束侧的内边距。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-inline
    */
-  readonly paddingInline?: PropertyValue<'paddingInline', T>;
+  paddingInline(value: PropertyValue<'paddingInline', T>): this {
+    return this.write('paddingInline', value);
+  }
   /**
    * 设置逻辑行内轴结束侧的内边距。
    *
@@ -950,7 +1145,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-inline-end
    */
-  readonly paddingInlineEnd?: PropertyValue<'paddingInlineEnd', T>;
+  paddingInlineEnd(value: PropertyValue<'paddingInlineEnd', T>): this {
+    return this.write('paddingInlineEnd', value);
+  }
   /**
    * 设置逻辑行内轴起始侧的内边距。
    *
@@ -958,7 +1155,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-inline-start
    */
-  readonly paddingInlineStart?: PropertyValue<'paddingInlineStart', T>;
+  paddingInlineStart(value: PropertyValue<'paddingInlineStart', T>): this {
+    return this.write('paddingInlineStart', value);
+  }
   /**
    * 设置左内边距。
    *
@@ -966,7 +1165,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-left
    */
-  readonly paddingLeft?: PropertyValue<'paddingLeft', T>;
+  paddingLeft(value: PropertyValue<'paddingLeft', T>): this {
+    return this.write('paddingLeft', value);
+  }
   /**
    * 设置右内边距。
    *
@@ -974,7 +1175,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-right
    */
-  readonly paddingRight?: PropertyValue<'paddingRight', T>;
+  paddingRight(value: PropertyValue<'paddingRight', T>): this {
+    return this.write('paddingRight', value);
+  }
   /**
    * 设置上内边距。
    *
@@ -982,7 +1185,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-top
    */
-  readonly paddingTop?: PropertyValue<'paddingTop', T>;
+  paddingTop(value: PropertyValue<'paddingTop', T>): this {
+    return this.write('paddingTop', value);
+  }
   /**
    * 设置布局中相邻行之间的间距。
    *
@@ -990,10 +1195,9 @@ export interface SpacingProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/row-gap
    */
-  readonly rowGap?: PropertyValue<'rowGap', T>;
-}
-/** 文字与排版；泛型 T 保留系统与继承主题关键字。 */
-export interface TypographyProperties<T extends SystemKeywords = SystemKeywords> {
+  rowGap(value: PropertyValue<'rowGap', T>): this {
+    return this.write('rowGap', value);
+  }
   /**
    * 设置文本基本方向，参与双向文本及部分布局计算。
    *
@@ -1001,19 +1205,25 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/direction
    */
-  readonly direction?: PropertyValue<'direction', T>;
+  direction(value: PropertyValue<'direction', T>): this {
+    return this.write('direction', value);
+  }
   /**
    * 集中设置字体样式、粗细、大小、行高和字体族等信息。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font
    */
-  readonly font?: PropertyValue<'font', T>;
+  font(value: PropertyValue<'font', T>): this {
+    return this.write('font', value);
+  }
   /**
    * 设置按优先级排列的字体族及通用字体回退。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
    */
-  readonly fontFamily?: PropertyValue<'fontFamily', T>;
+  fontFamily(value: PropertyValue<'fontFamily', T>): this {
+    return this.write('fontFamily', value);
+  }
   /**
    * 通过 OpenType 特性标签控制字体的底层排版功能。
    *
@@ -1021,7 +1231,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-feature-settings
    */
-  readonly fontFeatureSettings?: PropertyValue<'fontFeatureSettings', T>;
+  fontFeatureSettings(value: PropertyValue<'fontFeatureSettings', T>): this {
+    return this.write('fontFeatureSettings', value);
+  }
   /**
    * 设置是否应用字体提供的字偶间距调整。
    *
@@ -1029,7 +1241,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-kerning
    */
-  readonly fontKerning?: PropertyValue<'fontKerning', T>;
+  fontKerning(value: PropertyValue<'fontKerning', T>): this {
+    return this.write('fontKerning', value);
+  }
   /**
    * 覆盖字体排版使用的语言系统标签，不改变文本实际语言。
    *
@@ -1037,7 +1251,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-language-override
    */
-  readonly fontLanguageOverride?: PropertyValue<'fontLanguageOverride', T>;
+  fontLanguageOverride(value: PropertyValue<'fontLanguageOverride', T>): this {
+    return this.write('fontLanguageOverride', value);
+  }
   /**
    * 控制支持光学尺寸轴的字体是否按字号优化字形。
    *
@@ -1045,7 +1261,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-optical-sizing
    */
-  readonly fontOpticalSizing?: PropertyValue<'fontOpticalSizing', T>;
+  fontOpticalSizing(value: PropertyValue<'fontOpticalSizing', T>): this {
+    return this.write('fontOpticalSizing', value);
+  }
   /**
    * 选择或覆盖彩色字体使用的调色板。
    *
@@ -1053,7 +1271,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-palette
    */
-  readonly fontPalette?: PropertyValue<'fontPalette', T>;
+  fontPalette(value: PropertyValue<'fontPalette', T>): this {
+    return this.write('fontPalette', value);
+  }
   /**
    * 设置字体大小，也影响 em 等相对单位的计算。
    *
@@ -1063,11 +1283,13 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    *
    * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
    * @example
-   * css({ fontSize: "1rem", lineHeight: 1.5 })
+   * s.fontSize("1rem").lineHeight(1.5)
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size
    */
-  readonly fontSize?: PropertyValue<'fontSize', T>;
+  fontSize(value: PropertyValue<'fontSize', T>): this {
+    return this.write('fontSize', value);
+  }
   /**
    * 按字体特征尺寸调整字号，减少字体回退造成的视觉变化。
    *
@@ -1075,7 +1297,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size-adjust
    */
-  readonly fontSizeAdjust?: PropertyValue<'fontSizeAdjust', T>;
+  fontSizeAdjust(value: PropertyValue<'fontSizeAdjust', T>): this {
+    return this.write('fontSizeAdjust', value);
+  }
   /**
    * 控制字体平滑的非标准属性；使用前核对目标浏览器。
    *
@@ -1083,7 +1307,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-smooth
    */
-  readonly fontSmooth?: PropertyValue<'fontSmooth', T>;
+  fontSmooth(value: PropertyValue<'fontSmooth', T>): this {
+    return this.write('fontSmooth', value);
+  }
   /**
    * 选择正常、斜体或倾斜字体样式。
    *
@@ -1091,7 +1317,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-style
    */
-  readonly fontStyle?: PropertyValue<'fontStyle', T>;
+  fontStyle(value: PropertyValue<'fontStyle', T>): this {
+    return this.write('fontStyle', value);
+  }
   /**
    * 控制缺少真实字体字形时浏览器可否合成粗体、斜体等样式。
    *
@@ -1099,7 +1327,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis
    */
-  readonly fontSynthesis?: PropertyValue<'fontSynthesis', T>;
+  fontSynthesis(value: PropertyValue<'fontSynthesis', T>): this {
+    return this.write('fontSynthesis', value);
+  }
   /**
    * 控制浏览器是否可以合成上标和下标字形。
    *
@@ -1107,7 +1337,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-position
    */
-  readonly fontSynthesisPosition?: PropertyValue<'fontSynthesisPosition', T>;
+  fontSynthesisPosition(value: PropertyValue<'fontSynthesisPosition', T>): this {
+    return this.write('fontSynthesisPosition', value);
+  }
   /**
    * 控制浏览器是否可以合成小型大写字形。
    *
@@ -1115,7 +1347,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-small-caps
    */
-  readonly fontSynthesisSmallCaps?: PropertyValue<'fontSynthesisSmallCaps', T>;
+  fontSynthesisSmallCaps(value: PropertyValue<'fontSynthesisSmallCaps', T>): this {
+    return this.write('fontSynthesisSmallCaps', value);
+  }
   /**
    * 控制浏览器是否可以合成倾斜字体。
    *
@@ -1123,7 +1357,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-style
    */
-  readonly fontSynthesisStyle?: PropertyValue<'fontSynthesisStyle', T>;
+  fontSynthesisStyle(value: PropertyValue<'fontSynthesisStyle', T>): this {
+    return this.write('fontSynthesisStyle', value);
+  }
   /**
    * 控制浏览器是否可以合成加粗字体。
    *
@@ -1131,7 +1367,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-weight
    */
-  readonly fontSynthesisWeight?: PropertyValue<'fontSynthesisWeight', T>;
+  fontSynthesisWeight(value: PropertyValue<'fontSynthesisWeight', T>): this {
+    return this.write('fontSynthesisWeight', value);
+  }
   /**
    * 集中设置字体的连字、大小写、数字及其他变体。
    *
@@ -1139,7 +1377,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
    */
-  readonly fontVariant?: PropertyValue<'fontVariant', T>;
+  fontVariant(value: PropertyValue<'fontVariant', T>): this {
+    return this.write('fontVariant', value);
+  }
   /**
    * 选择字体提供的替代字形。
    *
@@ -1147,7 +1387,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-alternates
    */
-  readonly fontVariantAlternates?: PropertyValue<'fontVariantAlternates', T>;
+  fontVariantAlternates(value: PropertyValue<'fontVariantAlternates', T>): this {
+    return this.write('fontVariantAlternates', value);
+  }
   /**
    * 设置小型大写等大小写字形变体。
    *
@@ -1155,7 +1397,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-caps
    */
-  readonly fontVariantCaps?: PropertyValue<'fontVariantCaps', T>;
+  fontVariantCaps(value: PropertyValue<'fontVariantCaps', T>): this {
+    return this.write('fontVariantCaps', value);
+  }
   /**
    * 设置东亚文字字形及宽度变体。
    *
@@ -1163,7 +1407,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
    */
-  readonly fontVariantEastAsian?: PropertyValue<'fontVariantEastAsian', T>;
+  fontVariantEastAsian(value: PropertyValue<'fontVariantEastAsian', T>): this {
+    return this.write('fontVariantEastAsian', value);
+  }
   /**
    * 设置字符优先采用文本字形还是 emoji 字形。
    *
@@ -1171,7 +1417,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-emoji
    */
-  readonly fontVariantEmoji?: PropertyValue<'fontVariantEmoji', T>;
+  fontVariantEmoji(value: PropertyValue<'fontVariantEmoji', T>): this {
+    return this.write('fontVariantEmoji', value);
+  }
   /**
    * 设置字体连字的启用方式。
    *
@@ -1179,7 +1427,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-ligatures
    */
-  readonly fontVariantLigatures?: PropertyValue<'fontVariantLigatures', T>;
+  fontVariantLigatures(value: PropertyValue<'fontVariantLigatures', T>): this {
+    return this.write('fontVariantLigatures', value);
+  }
   /**
    * 设置数字的等宽、比例、分数及其他排版变体。
    *
@@ -1187,7 +1437,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-numeric
    */
-  readonly fontVariantNumeric?: PropertyValue<'fontVariantNumeric', T>;
+  fontVariantNumeric(value: PropertyValue<'fontVariantNumeric', T>): this {
+    return this.write('fontVariantNumeric', value);
+  }
   /**
    * 选择字体提供的上标或下标字形。
    *
@@ -1195,7 +1447,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-position
    */
-  readonly fontVariantPosition?: PropertyValue<'fontVariantPosition', T>;
+  fontVariantPosition(value: PropertyValue<'fontVariantPosition', T>): this {
+    return this.write('fontVariantPosition', value);
+  }
   /**
    * 直接设置可变字体各个轴的数值。
    *
@@ -1203,7 +1457,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variation-settings
    */
-  readonly fontVariationSettings?: PropertyValue<'fontVariationSettings', T>;
+  fontVariationSettings(value: PropertyValue<'fontVariationSettings', T>): this {
+    return this.write('fontVariationSettings', value);
+  }
   /**
    * 设置字体粗细，实际可用字重取决于字体。
    *
@@ -1215,11 +1471,13 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ fontWeight: 600 })
+   * s.fontWeight(600)
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-weight
    */
-  readonly fontWeight?: PropertyValue<'fontWeight', T>;
+  fontWeight(value: PropertyValue<'fontWeight', T>): this {
+    return this.write('fontWeight', value);
+  }
   /**
    * 选择字体的宽窄字面，不是通过变换拉伸元素。
    *
@@ -1227,7 +1485,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-width
    */
-  readonly fontWidth?: PropertyValue<'fontWidth', T>;
+  fontWidth(value: PropertyValue<'fontWidth', T>): this {
+    return this.write('fontWidth', value);
+  }
   /**
    * 控制标点是否可以悬挂在行盒边缘之外。
    *
@@ -1235,7 +1495,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hanging-punctuation
    */
-  readonly hangingPunctuation?: PropertyValue<'hangingPunctuation', T>;
+  hangingPunctuation(value: PropertyValue<'hangingPunctuation', T>): this {
+    return this.write('hangingPunctuation', value);
+  }
   /**
    * 设置文字断词和连字符插入的方式；自动断词依赖语言和词典。
    *
@@ -1243,7 +1505,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hyphens
    */
-  readonly hyphens?: PropertyValue<'hyphens', T>;
+  hyphens(value: PropertyValue<'hyphens', T>): this {
+    return this.write('hyphens', value);
+  }
   /**
    * 设置段落首字下沉或抬升时占用的行数与对齐位置。
    *
@@ -1251,7 +1515,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/initial-letter
    */
-  readonly initialLetter?: PropertyValue<'initialLetter', T>;
+  initialLetter(value: PropertyValue<'initialLetter', T>): this {
+    return this.write('initialLetter', value);
+  }
   /**
    * 设置首字下沉时字形与正文使用的对齐基线。
    *
@@ -1259,7 +1525,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/initial-letter-align
    */
-  readonly initialLetterAlign?: PropertyValue<'initialLetterAlign', T>;
+  initialLetterAlign(value: PropertyValue<'initialLetterAlign', T>): this {
+    return this.write('initialLetterAlign', value);
+  }
   /**
    * 设置字符之间额外增加或减少的间距。
    *
@@ -1267,7 +1535,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/letter-spacing
    */
-  readonly letterSpacing?: PropertyValue<'letterSpacing', T>;
+  letterSpacing(value: PropertyValue<'letterSpacing', T>): this {
+    return this.write('letterSpacing', value);
+  }
   /**
    * 设置东亚文字标点等字符的换行严格程度。
    *
@@ -1275,7 +1545,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-break
    */
-  readonly lineBreak?: PropertyValue<'lineBreak', T>;
+  lineBreak(value: PropertyValue<'lineBreak', T>): this {
+    return this.write('lineBreak', value);
+  }
   /**
    * 限制块容器显示的行数及截断行为；使用前核对所需语法的支持情况。
    *
@@ -1283,7 +1555,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-clamp
    */
-  readonly lineClamp?: PropertyValue<'lineClamp', T>;
+  lineClamp(value: PropertyValue<'lineClamp', T>): this {
+    return this.write('lineClamp', value);
+  }
   /**
    * 设置行盒高度；无单位数值按元素自身字号计算。
    *
@@ -1293,11 +1567,13 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ lineHeight: 1.5 })
+   * s.lineHeight(1.5)
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-height
    */
-  readonly lineHeight?: PropertyValue<'lineHeight', T>;
+  lineHeight(value: PropertyValue<'lineHeight', T>): this {
+    return this.write('lineHeight', value);
+  }
   /**
    * 设置行盒高度向上取整使用的步长。
    *
@@ -1305,13 +1581,17 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-height-step
    */
-  readonly lineHeightStep?: PropertyValue<'lineHeightStep', T>;
+  lineHeightStep(value: PropertyValue<'lineHeightStep', T>): this {
+    return this.write('lineHeightStep', value);
+  }
   /**
    * 设置生成引号所用的开闭字符对。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/quotes
    */
-  readonly quotes?: PropertyValue<'quotes', T>;
+  quotes(value: PropertyValue<'quotes', T>): this {
+    return this.write('quotes', value);
+  }
   /**
    * 设置注音文字与基底文字之间剩余空间的分配方式。
    *
@@ -1319,7 +1599,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-align
    */
-  readonly rubyAlign?: PropertyValue<'rubyAlign', T>;
+  rubyAlign(value: PropertyValue<'rubyAlign', T>): this {
+    return this.write('rubyAlign', value);
+  }
   /**
    * 设置相邻注音容器的合并方式；使用前核对目标浏览器。
    *
@@ -1327,7 +1609,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-merge
    */
-  readonly rubyMerge?: PropertyValue<'rubyMerge', T>;
+  rubyMerge(value: PropertyValue<'rubyMerge', T>): this {
+    return this.write('rubyMerge', value);
+  }
   /**
    * 控制注音文字是否可以悬伸到相邻文本上方。
    *
@@ -1335,7 +1619,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-overhang
    */
-  readonly rubyOverhang?: PropertyValue<'rubyOverhang', T>;
+  rubyOverhang(value: PropertyValue<'rubyOverhang', T>): this {
+    return this.write('rubyOverhang', value);
+  }
   /**
    * 设置注音文字相对于基底文字的位置。
    *
@@ -1343,7 +1629,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-position
    */
-  readonly rubyPosition?: PropertyValue<'rubyPosition', T>;
+  rubyPosition(value: PropertyValue<'rubyPosition', T>): this {
+    return this.write('rubyPosition', value);
+  }
   /**
    * 设置保留制表符时每个制表位的宽度。
    *
@@ -1351,7 +1639,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/tab-size
    */
-  readonly tabSize?: PropertyValue<'tabSize', T>;
+  tabSize(value: PropertyValue<'tabSize', T>): this {
+    return this.write('tabSize', value);
+  }
   /**
    * 设置块容器中行内内容的水平或逻辑方向对齐。
    *
@@ -1363,11 +1653,13 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    *
    * CSS 规范初始值：`start`，不同于浏览器默认样式表。
    * @example
-   * css({ textAlign: "start" })
+   * s.textAlign("start")
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align
    */
-  readonly textAlign?: PropertyValue<'textAlign', T>;
+  textAlign(value: PropertyValue<'textAlign', T>): this {
+    return this.write('textAlign', value);
+  }
   /**
    * 设置段落最后一行或强制换行前一行的对齐方式。
    *
@@ -1375,7 +1667,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align-last
    */
-  readonly textAlignLast?: PropertyValue<'textAlignLast', T>;
+  textAlignLast(value: PropertyValue<'textAlignLast', T>): this {
+    return this.write('textAlignLast', value);
+  }
   /**
    * 设置 SVG 文本片段相对于定位点的锚定方式。
    *
@@ -1383,7 +1677,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-anchor
    */
-  readonly textAnchor?: PropertyValue<'textAnchor', T>;
+  textAnchor(value: PropertyValue<'textAnchor', T>): this {
+    return this.write('textAnchor', value);
+  }
   /**
    * 设置中西文、数字等不同文字系统之间的自动间距。
    *
@@ -1391,7 +1687,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-autospace
    */
-  readonly textAutospace?: PropertyValue<'textAutospace', T>;
+  textAutospace(value: PropertyValue<'textAutospace', T>): this {
+    return this.write('textAutospace', value);
+  }
   /**
    * 同时设置文本盒边缘参照及首尾空白裁减。
    *
@@ -1399,7 +1697,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box
    */
-  readonly textBox?: PropertyValue<'textBox', T>;
+  textBox(value: PropertyValue<'textBox', T>): this {
+    return this.write('textBox', value);
+  }
   /**
    * 选择文本盒裁减或对齐使用的字体边缘度量。
    *
@@ -1407,7 +1707,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-edge
    */
-  readonly textBoxEdge?: PropertyValue<'textBoxEdge', T>;
+  textBoxEdge(value: PropertyValue<'textBoxEdge', T>): this {
+    return this.write('textBoxEdge', value);
+  }
   /**
    * 裁减文本块开头或结尾的额外行高空白。
    *
@@ -1415,7 +1717,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-trim
    */
-  readonly textBoxTrim?: PropertyValue<'textBoxTrim', T>;
+  textBoxTrim(value: PropertyValue<'textBoxTrim', T>): this {
+    return this.write('textBoxTrim', value);
+  }
   /**
    * 设置竖排文字中多个字符是否合成为一个横排字形单元。
    *
@@ -1423,13 +1727,17 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-combine-upright
    */
-  readonly textCombineUpright?: PropertyValue<'textCombineUpright', T>;
+  textCombineUpright(value: PropertyValue<'textCombineUpright', T>): this {
+    return this.write('textCombineUpright', value);
+  }
   /**
    * 集中设置文本装饰线的位置、线型、颜色及粗细。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration
    */
-  readonly textDecoration?: PropertyValue<'textDecoration', T>;
+  textDecoration(value: PropertyValue<'textDecoration', T>): this {
+    return this.write('textDecoration', value);
+  }
   /**
    * 设置文本装饰线颜色。
    *
@@ -1437,7 +1745,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-color
    */
-  readonly textDecorationColor?: PropertyValue<'textDecorationColor', T>;
+  textDecorationColor(value: PropertyValue<'textDecorationColor', T>): this {
+    return this.write('textDecorationColor', value);
+  }
   /**
    * 设置下划线、上划线或删除线等装饰线位置。
    *
@@ -1445,7 +1755,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-line
    */
-  readonly textDecorationLine?: PropertyValue<'textDecorationLine', T>;
+  textDecorationLine(value: PropertyValue<'textDecorationLine', T>): this {
+    return this.write('textDecorationLine', value);
+  }
   /**
    * 设置文本装饰线跳过哪些内容；具体语法需核对支持情况。
    *
@@ -1453,7 +1765,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip
    */
-  readonly textDecorationSkip?: PropertyValue<'textDecorationSkip', T>;
+  textDecorationSkip(value: PropertyValue<'textDecorationSkip', T>): this {
+    return this.write('textDecorationSkip', value);
+  }
   /**
    * 设置装饰线是否避让字形的笔画。
    *
@@ -1461,7 +1775,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip-ink
    */
-  readonly textDecorationSkipInk?: PropertyValue<'textDecorationSkipInk', T>;
+  textDecorationSkipInk(value: PropertyValue<'textDecorationSkipInk', T>): this {
+    return this.write('textDecorationSkipInk', value);
+  }
   /**
    * 设置文本装饰线的实线、波浪线等线型。
    *
@@ -1469,7 +1785,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-style
    */
-  readonly textDecorationStyle?: PropertyValue<'textDecorationStyle', T>;
+  textDecorationStyle(value: PropertyValue<'textDecorationStyle', T>): this {
+    return this.write('textDecorationStyle', value);
+  }
   /**
    * 设置文本装饰线粗细。
    *
@@ -1477,13 +1795,17 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-thickness
    */
-  readonly textDecorationThickness?: PropertyValue<'textDecorationThickness', T>;
+  textDecorationThickness(value: PropertyValue<'textDecorationThickness', T>): this {
+    return this.write('textDecorationThickness', value);
+  }
   /**
    * 同时设置文字着重号的样式和颜色。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis
    */
-  readonly textEmphasis?: PropertyValue<'textEmphasis', T>;
+  textEmphasis(value: PropertyValue<'textEmphasis', T>): this {
+    return this.write('textEmphasis', value);
+  }
   /**
    * 设置文字着重号颜色。
    *
@@ -1491,7 +1813,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-color
    */
-  readonly textEmphasisColor?: PropertyValue<'textEmphasisColor', T>;
+  textEmphasisColor(value: PropertyValue<'textEmphasisColor', T>): this {
+    return this.write('textEmphasisColor', value);
+  }
   /**
    * 设置文字着重号位于文字的哪一侧。
    *
@@ -1499,7 +1823,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-position
    */
-  readonly textEmphasisPosition?: PropertyValue<'textEmphasisPosition', T>;
+  textEmphasisPosition(value: PropertyValue<'textEmphasisPosition', T>): this {
+    return this.write('textEmphasisPosition', value);
+  }
   /**
    * 设置文字着重号的形状和填充方式。
    *
@@ -1507,7 +1833,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-style
    */
-  readonly textEmphasisStyle?: PropertyValue<'textEmphasisStyle', T>;
+  textEmphasisStyle(value: PropertyValue<'textEmphasisStyle', T>): this {
+    return this.write('textEmphasisStyle', value);
+  }
   /**
    * 设置文本行的缩进距离。
    *
@@ -1515,7 +1843,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-indent
    */
-  readonly textIndent?: PropertyValue<'textIndent', T>;
+  textIndent(value: PropertyValue<'textIndent', T>): this {
+    return this.write('textIndent', value);
+  }
   /**
    * 设置两端对齐时增加间距的算法。
    *
@@ -1523,7 +1853,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-justify
    */
-  readonly textJustify?: PropertyValue<'textJustify', T>;
+  textJustify(value: PropertyValue<'textJustify', T>): this {
+    return this.write('textJustify', value);
+  }
   /**
    * 设置竖排模式下字符的方向。
    *
@@ -1531,7 +1863,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-orientation
    */
-  readonly textOrientation?: PropertyValue<'textOrientation', T>;
+  textOrientation(value: PropertyValue<'textOrientation', T>): this {
+    return this.write('textOrientation', value);
+  }
   /**
    * 设置被裁剪的行内溢出文本如何提示，例如显示省略号。
    *
@@ -1543,11 +1877,13 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    *
    * CSS 规范初始值：`clip`，不同于浏览器默认样式表。
    * @example
-   * css({ maxWidth: "12rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
+   * s.maxWidth("12rem").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-overflow
    */
-  readonly textOverflow?: PropertyValue<'textOverflow', T>;
+  textOverflow(value: PropertyValue<'textOverflow', T>): this {
+    return this.write('textOverflow', value);
+  }
   /**
    * 向渲染器提供文本速度、可读性或几何精度的偏好。
    *
@@ -1555,7 +1891,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-rendering
    */
-  readonly textRendering?: PropertyValue<'textRendering', T>;
+  textRendering(value: PropertyValue<'textRendering', T>): this {
+    return this.write('textRendering', value);
+  }
   /**
    * 设置文字及其装饰的阴影，可叠加多层。
    *
@@ -1563,7 +1901,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-shadow
    */
-  readonly textShadow?: PropertyValue<'textShadow', T>;
+  textShadow(value: PropertyValue<'textShadow', T>): this {
+    return this.write('textShadow', value);
+  }
   /**
    * 控制移动浏览器为提升可读性而进行的文字自动放大。
    *
@@ -1571,7 +1911,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-size-adjust
    */
-  readonly textSizeAdjust?: PropertyValue<'textSizeAdjust', T>;
+  textSizeAdjust(value: PropertyValue<'textSizeAdjust', T>): this {
+    return this.write('textSizeAdjust', value);
+  }
   /**
    * 设置东亚文字标点等字符周围空白的裁减。
    *
@@ -1579,7 +1921,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-spacing-trim
    */
-  readonly textSpacingTrim?: PropertyValue<'textSpacingTrim', T>;
+  textSpacingTrim(value: PropertyValue<'textSpacingTrim', T>): this {
+    return this.write('textSpacingTrim', value);
+  }
   /**
    * 设置文字显示时的大小写、全角或其他字形转换。
    *
@@ -1587,7 +1931,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-transform
    */
-  readonly textTransform?: PropertyValue<'textTransform', T>;
+  textTransform(value: PropertyValue<'textTransform', T>): this {
+    return this.write('textTransform', value);
+  }
   /**
    * 设置下划线相对于默认位置的偏移。
    *
@@ -1595,7 +1941,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-underline-offset
    */
-  readonly textUnderlineOffset?: PropertyValue<'textUnderlineOffset', T>;
+  textUnderlineOffset(value: PropertyValue<'textUnderlineOffset', T>): this {
+    return this.write('textUnderlineOffset', value);
+  }
   /**
    * 设置下划线相对于文字基线或竖排文字的放置方式。
    *
@@ -1603,7 +1951,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-underline-position
    */
-  readonly textUnderlinePosition?: PropertyValue<'textUnderlinePosition', T>;
+  textUnderlinePosition(value: PropertyValue<'textUnderlinePosition', T>): this {
+    return this.write('textUnderlinePosition', value);
+  }
   /**
    * 同时设置文本是否换行及换行策略。
    *
@@ -1611,7 +1961,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-wrap
    */
-  readonly textWrap?: PropertyValue<'textWrap', T>;
+  textWrap(value: PropertyValue<'textWrap', T>): this {
+    return this.write('textWrap', value);
+  }
   /**
    * 设置文本是否允许软换行。
    *
@@ -1619,7 +1971,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-wrap-mode
    */
-  readonly textWrapMode?: PropertyValue<'textWrapMode', T>;
+  textWrapMode(value: PropertyValue<'textWrapMode', T>): this {
+    return this.write('textWrapMode', value);
+  }
   /**
    * 设置文本换行的排版策略，例如平衡各行长度。
    *
@@ -1627,7 +1981,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-wrap-style
    */
-  readonly textWrapStyle?: PropertyValue<'textWrapStyle', T>;
+  textWrapStyle(value: PropertyValue<'textWrapStyle', T>): this {
+    return this.write('textWrapStyle', value);
+  }
   /**
    * 设置元素如何参与 Unicode 双向文本算法，通常与 direction 配合。
    *
@@ -1635,7 +1991,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/unicode-bidi
    */
-  readonly unicodeBidi?: PropertyValue<'unicodeBidi', T>;
+  unicodeBidi(value: PropertyValue<'unicodeBidi', T>): this {
+    return this.write('unicodeBidi', value);
+  }
   /**
    * 设置空白折叠和换行处理方式。
    *
@@ -1647,11 +2005,13 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ whiteSpace: "pre-wrap" })
+   * s.whiteSpace("pre-wrap")
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
    */
-  readonly whiteSpace?: PropertyValue<'whiteSpace', T>;
+  whiteSpace(value: PropertyValue<'whiteSpace', T>): this {
+    return this.write('whiteSpace', value);
+  }
   /**
    * 设置空格、制表符和换行符如何折叠或保留。
    *
@@ -1659,7 +2019,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space-collapse
    */
-  readonly whiteSpaceCollapse?: PropertyValue<'whiteSpaceCollapse', T>;
+  whiteSpaceCollapse(value: PropertyValue<'whiteSpaceCollapse', T>): this {
+    return this.write('whiteSpaceCollapse', value);
+  }
   /**
    * 设置单词内部或文字之间的断行规则。
    *
@@ -1669,11 +2031,13 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ wordBreak: "normal" })
+   * s.wordBreak("normal")
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/word-break
    */
-  readonly wordBreak?: PropertyValue<'wordBreak', T>;
+  wordBreak(value: PropertyValue<'wordBreak', T>): this {
+    return this.write('wordBreak', value);
+  }
   /**
    * 设置单词或词间分隔符的额外间距。
    *
@@ -1681,7 +2045,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/word-spacing
    */
-  readonly wordSpacing?: PropertyValue<'wordSpacing', T>;
+  wordSpacing(value: PropertyValue<'wordSpacing', T>): this {
+    return this.write('wordSpacing', value);
+  }
   /**
    * 设置长文本的额外换行行为；是 overflow-wrap 的兼容名称。
    *
@@ -1689,7 +2055,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/word-wrap
    */
-  readonly wordWrap?: PropertyValue<'wordWrap', T>;
+  wordWrap(value: PropertyValue<'wordWrap', T>): this {
+    return this.write('wordWrap', value);
+  }
   /**
    * 设置水平或竖直书写模式，以及行和块的推进方向。
    *
@@ -1697,10 +2065,9 @@ export interface TypographyProperties<T extends SystemKeywords = SystemKeywords>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/writing-mode
    */
-  readonly writingMode?: PropertyValue<'writingMode', T>;
-}
-/** 颜色与背景；泛型 T 保留系统与继承主题关键字。 */
-export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
+  writingMode(value: PropertyValue<'writingMode', T>): this {
+    return this.write('writingMode', value);
+  }
   /**
    * 设置复选框、单选框等原生控件的强调色；具体使用部位由浏览器决定。
    *
@@ -1708,13 +2075,17 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/accent-color
    */
-  readonly accentColor?: PropertyValue<'accentColor', T>;
+  accentColor(value: PropertyValue<'accentColor', T>): this {
+    return this.write('accentColor', value);
+  }
   /**
    * 集中设置背景颜色、图像、位置、尺寸、重复及绘制区域。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background
    */
-  readonly background?: PropertyValue<'background', T>;
+  background(value: PropertyValue<'background', T>): this {
+    return this.write('background', value);
+  }
   /**
    * 设置背景图像相对于视口、元素或局部滚动内容的固定方式。
    *
@@ -1722,7 +2093,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-attachment
    */
-  readonly backgroundAttachment?: PropertyValue<'backgroundAttachment', T>;
+  backgroundAttachment(value: PropertyValue<'backgroundAttachment', T>): this {
+    return this.write('backgroundAttachment', value);
+  }
   /**
    * 设置背景图层彼此之间以及与背景色之间的混合模式。
    *
@@ -1730,7 +2103,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
    */
-  readonly backgroundBlendMode?: PropertyValue<'backgroundBlendMode', T>;
+  backgroundBlendMode(value: PropertyValue<'backgroundBlendMode', T>): this {
+    return this.write('backgroundBlendMode', value);
+  }
   /**
    * 设置背景允许绘制到的边界区域。
    *
@@ -1738,7 +2113,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-clip
    */
-  readonly backgroundClip?: PropertyValue<'backgroundClip', T>;
+  backgroundClip(value: PropertyValue<'backgroundClip', T>): this {
+    return this.write('backgroundClip', value);
+  }
   /**
    * 设置元素背景颜色，位于背景图像下方。
    *
@@ -1746,7 +2123,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-color
    */
-  readonly backgroundColor?: PropertyValue<'backgroundColor', T>;
+  backgroundColor(value: PropertyValue<'backgroundColor', T>): this {
+    return this.write('backgroundColor', value);
+  }
   /**
    * 设置一个或多个背景图像或渐变图层。
    *
@@ -1754,7 +2133,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-image
    */
-  readonly backgroundImage?: PropertyValue<'backgroundImage', T>;
+  backgroundImage(value: PropertyValue<'backgroundImage', T>): this {
+    return this.write('backgroundImage', value);
+  }
   /**
    * 设置背景图像定位所依据的盒子区域。
    *
@@ -1762,7 +2143,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-origin
    */
-  readonly backgroundOrigin?: PropertyValue<'backgroundOrigin', T>;
+  backgroundOrigin(value: PropertyValue<'backgroundOrigin', T>): this {
+    return this.write('backgroundOrigin', value);
+  }
   /**
    * 设置背景图像在定位区域内的位置。
    *
@@ -1770,7 +2153,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position
    */
-  readonly backgroundPosition?: PropertyValue<'backgroundPosition', T>;
+  backgroundPosition(value: PropertyValue<'backgroundPosition', T>): this {
+    return this.write('backgroundPosition', value);
+  }
   /**
    * 设置背景图像的水平位置。
    *
@@ -1778,7 +2163,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-x
    */
-  readonly backgroundPositionX?: PropertyValue<'backgroundPositionX', T>;
+  backgroundPositionX(value: PropertyValue<'backgroundPositionX', T>): this {
+    return this.write('backgroundPositionX', value);
+  }
   /**
    * 设置背景图像的垂直位置。
    *
@@ -1786,7 +2173,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-y
    */
-  readonly backgroundPositionY?: PropertyValue<'backgroundPositionY', T>;
+  backgroundPositionY(value: PropertyValue<'backgroundPositionY', T>): this {
+    return this.write('backgroundPositionY', value);
+  }
   /**
    * 设置背景图像在水平和垂直方向上的重复方式。
    *
@@ -1794,7 +2183,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-repeat
    */
-  readonly backgroundRepeat?: PropertyValue<'backgroundRepeat', T>;
+  backgroundRepeat(value: PropertyValue<'backgroundRepeat', T>): this {
+    return this.write('backgroundRepeat', value);
+  }
   /**
    * 设置背景图像尺寸，以及覆盖或完整容纳图像的缩放方式。
    *
@@ -1806,11 +2197,13 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
    * @example
-   * css({ backgroundSize: "cover", backgroundPosition: "center" })
+   * s.backgroundSize("cover").backgroundPosition("center")
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-size
    */
-  readonly backgroundSize?: PropertyValue<'backgroundSize', T>;
+  backgroundSize(value: PropertyValue<'backgroundSize', T>): this {
+    return this.write('backgroundSize', value);
+  }
   /**
    * 设置可编辑内容中的文本插入光标颜色。
    *
@@ -1818,7 +2211,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret-color
    */
-  readonly caretColor?: PropertyValue<'caretColor', T>;
+  caretColor(value: PropertyValue<'caretColor', T>): this {
+    return this.write('caretColor', value);
+  }
   /**
    * 设置文字前景色，同时作为 currentColor 的来源。
    *
@@ -1826,13 +2221,15 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`canvastext`，不同于浏览器默认样式表。
    * @example
-   * css({ color: "rgb(255 0 0 / 0.5)" })
+   * s.color("rgb(255 0 0 / 0.5)")
    * @example
-   * css({ color: "oklch(0.7 0.15 250)" })
+   * s.color("oklch(0.7 0.15 250)")
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color
    */
-  readonly color?: PropertyValue<'color', T>;
+  color(value: PropertyValue<'color', T>): this {
+    return this.write('color', value);
+  }
   /**
    * 控制输出设备对颜色的自动调整；这是 print-color-adjust 的旧名称。
    *
@@ -1840,13 +2237,17 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-adjust
    */
-  readonly colorAdjust?: PropertyValue<'colorAdjust', T>;
+  colorAdjust(value: PropertyValue<'colorAdjust', T>): this {
+    return this.write('colorAdjust', value);
+  }
   /**
    * 设置 SVG 图形颜色插值所用的色彩空间。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-interpolation
    */
-  readonly colorInterpolation?: PropertyValue<'colorInterpolation', T>;
+  colorInterpolation(value: PropertyValue<'colorInterpolation', T>): this {
+    return this.write('colorInterpolation', value);
+  }
   /**
    * 设置 SVG 滤镜效果进行颜色计算时所用的色彩空间。
    *
@@ -1854,13 +2255,17 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-interpolation-filters
    */
-  readonly colorInterpolationFilters?: PropertyValue<'colorInterpolationFilters', T>;
+  colorInterpolationFilters(value: PropertyValue<'colorInterpolationFilters', T>): this {
+    return this.write('colorInterpolationFilters', value);
+  }
   /**
    * 向 SVG 渲染器提供颜色绘制质量与速度之间的偏好。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-rendering
    */
-  readonly colorRendering?: PropertyValue<'colorRendering', T>;
+  colorRendering(value: PropertyValue<'colorRendering', T>): this {
+    return this.write('colorRendering', value);
+  }
   /**
    * 声明元素支持的配色方案，影响原生控件、滚动条等浏览器绘制内容。
    *
@@ -1870,7 +2275,9 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-scheme
    */
-  readonly colorScheme?: PropertyValue<'colorScheme', T>;
+  colorScheme(value: PropertyValue<'colorScheme', T>): this {
+    return this.write('colorScheme', value);
+  }
   /**
    * 设置打印时浏览器是否可以为节墨或可读性调整颜色。
    *
@@ -1878,22 +2285,25 @@ export interface ColorsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/print-color-adjust
    */
-  readonly printColorAdjust?: PropertyValue<'printColorAdjust', T>;
-}
-/** 边框与轮廓；泛型 T 保留系统与继承主题关键字。 */
-export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
+  printColorAdjust(value: PropertyValue<'printColorAdjust', T>): this {
+    return this.write('printColorAdjust', value);
+  }
   /**
    * 同时设置四边边框的宽度、线型和颜色。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border
    */
-  readonly border?: PropertyValue<'border', T>;
+  border(value: PropertyValue<'border', T>): this {
+    return this.write('border', value);
+  }
   /**
    * 设置逻辑块轴起始侧和结束侧的边框。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block
    */
-  readonly borderBlock?: PropertyValue<'borderBlock', T>;
+  borderBlock(value: PropertyValue<'borderBlock', T>): this {
+    return this.write('borderBlock', value);
+  }
   /**
    * 设置逻辑块轴两侧边框颜色。
    *
@@ -1901,13 +2311,17 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-color
    */
-  readonly borderBlockColor?: PropertyValue<'borderBlockColor', T>;
+  borderBlockColor(value: PropertyValue<'borderBlockColor', T>): this {
+    return this.write('borderBlockColor', value);
+  }
   /**
    * 设置逻辑块轴结束侧边框的宽度、线型和颜色。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end
    */
-  readonly borderBlockEnd?: PropertyValue<'borderBlockEnd', T>;
+  borderBlockEnd(value: PropertyValue<'borderBlockEnd', T>): this {
+    return this.write('borderBlockEnd', value);
+  }
   /**
    * 设置逻辑块轴结束侧的边框颜色。
    *
@@ -1915,7 +2329,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-color
    */
-  readonly borderBlockEndColor?: PropertyValue<'borderBlockEndColor', T>;
+  borderBlockEndColor(value: PropertyValue<'borderBlockEndColor', T>): this {
+    return this.write('borderBlockEndColor', value);
+  }
   /**
    * 设置逻辑块轴结束侧的边框线型。
    *
@@ -1923,7 +2339,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
    */
-  readonly borderBlockEndStyle?: PropertyValue<'borderBlockEndStyle', T>;
+  borderBlockEndStyle(value: PropertyValue<'borderBlockEndStyle', T>): this {
+    return this.write('borderBlockEndStyle', value);
+  }
   /**
    * 设置逻辑块轴结束侧的边框宽度。
    *
@@ -1931,13 +2349,17 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-width
    */
-  readonly borderBlockEndWidth?: PropertyValue<'borderBlockEndWidth', T>;
+  borderBlockEndWidth(value: PropertyValue<'borderBlockEndWidth', T>): this {
+    return this.write('borderBlockEndWidth', value);
+  }
   /**
    * 设置逻辑块轴起始侧边框的宽度、线型和颜色。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start
    */
-  readonly borderBlockStart?: PropertyValue<'borderBlockStart', T>;
+  borderBlockStart(value: PropertyValue<'borderBlockStart', T>): this {
+    return this.write('borderBlockStart', value);
+  }
   /**
    * 设置逻辑块轴起始侧的边框颜色。
    *
@@ -1945,7 +2367,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-color
    */
-  readonly borderBlockStartColor?: PropertyValue<'borderBlockStartColor', T>;
+  borderBlockStartColor(value: PropertyValue<'borderBlockStartColor', T>): this {
+    return this.write('borderBlockStartColor', value);
+  }
   /**
    * 设置逻辑块轴起始侧的边框线型。
    *
@@ -1953,7 +2377,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
    */
-  readonly borderBlockStartStyle?: PropertyValue<'borderBlockStartStyle', T>;
+  borderBlockStartStyle(value: PropertyValue<'borderBlockStartStyle', T>): this {
+    return this.write('borderBlockStartStyle', value);
+  }
   /**
    * 设置逻辑块轴起始侧的边框宽度。
    *
@@ -1961,7 +2387,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-width
    */
-  readonly borderBlockStartWidth?: PropertyValue<'borderBlockStartWidth', T>;
+  borderBlockStartWidth(value: PropertyValue<'borderBlockStartWidth', T>): this {
+    return this.write('borderBlockStartWidth', value);
+  }
   /**
    * 设置逻辑块轴两侧的边框线型。
    *
@@ -1969,7 +2397,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
    */
-  readonly borderBlockStyle?: PropertyValue<'borderBlockStyle', T>;
+  borderBlockStyle(value: PropertyValue<'borderBlockStyle', T>): this {
+    return this.write('borderBlockStyle', value);
+  }
   /**
    * 设置逻辑块轴两侧的边框宽度。
    *
@@ -1977,13 +2407,17 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-width
    */
-  readonly borderBlockWidth?: PropertyValue<'borderBlockWidth', T>;
+  borderBlockWidth(value: PropertyValue<'borderBlockWidth', T>): this {
+    return this.write('borderBlockWidth', value);
+  }
   /**
    * 设置下边框的宽度、线型和颜色。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom
    */
-  readonly borderBottom?: PropertyValue<'borderBottom', T>;
+  borderBottom(value: PropertyValue<'borderBottom', T>): this {
+    return this.write('borderBottom', value);
+  }
   /**
    * 设置下边框颜色。
    *
@@ -1991,7 +2425,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-color
    */
-  readonly borderBottomColor?: PropertyValue<'borderBottomColor', T>;
+  borderBottomColor(value: PropertyValue<'borderBottomColor', T>): this {
+    return this.write('borderBottomColor', value);
+  }
   /**
    * 设置左下角边框的圆角半径。
    *
@@ -1999,7 +2435,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-left-radius
    */
-  readonly borderBottomLeftRadius?: PropertyValue<'borderBottomLeftRadius', T>;
+  borderBottomLeftRadius(value: PropertyValue<'borderBottomLeftRadius', T>): this {
+    return this.write('borderBottomLeftRadius', value);
+  }
   /**
    * 设置右下角边框的圆角半径。
    *
@@ -2007,7 +2445,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-right-radius
    */
-  readonly borderBottomRightRadius?: PropertyValue<'borderBottomRightRadius', T>;
+  borderBottomRightRadius(value: PropertyValue<'borderBottomRightRadius', T>): this {
+    return this.write('borderBottomRightRadius', value);
+  }
   /**
    * 设置下边框线型。
    *
@@ -2015,7 +2455,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
    */
-  readonly borderBottomStyle?: PropertyValue<'borderBottomStyle', T>;
+  borderBottomStyle(value: PropertyValue<'borderBottomStyle', T>): this {
+    return this.write('borderBottomStyle', value);
+  }
   /**
    * 设置下边框宽度。
    *
@@ -2023,7 +2465,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-width
    */
-  readonly borderBottomWidth?: PropertyValue<'borderBottomWidth', T>;
+  borderBottomWidth(value: PropertyValue<'borderBottomWidth', T>): this {
+    return this.write('borderBottomWidth', value);
+  }
   /**
    * 设置表格相邻单元格边框合并还是分离。
    *
@@ -2031,13 +2475,17 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-collapse
    */
-  readonly borderCollapse?: PropertyValue<'borderCollapse', T>;
+  borderCollapse(value: PropertyValue<'borderCollapse', T>): this {
+    return this.write('borderCollapse', value);
+  }
   /**
    * 设置四边边框颜色，支持按上、右、下、左顺序简写。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-color
    */
-  readonly borderColor?: PropertyValue<'borderColor', T>;
+  borderColor(value: PropertyValue<'borderColor', T>): this {
+    return this.write('borderColor', value);
+  }
   /**
    * 设置逻辑块轴结束侧与行内轴结束侧相交角的圆角。
    *
@@ -2045,7 +2493,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-end-end-radius
    */
-  readonly borderEndEndRadius?: PropertyValue<'borderEndEndRadius', T>;
+  borderEndEndRadius(value: PropertyValue<'borderEndEndRadius', T>): this {
+    return this.write('borderEndEndRadius', value);
+  }
   /**
    * 设置逻辑块轴结束侧与行内轴起始侧相交角的圆角。
    *
@@ -2053,13 +2503,17 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-end-start-radius
    */
-  readonly borderEndStartRadius?: PropertyValue<'borderEndStartRadius', T>;
+  borderEndStartRadius(value: PropertyValue<'borderEndStartRadius', T>): this {
+    return this.write('borderEndStartRadius', value);
+  }
   /**
    * 设置用作边框的图像及其切片、宽度、外扩和重复方式。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image
    */
-  readonly borderImage?: PropertyValue<'borderImage', T>;
+  borderImage(value: PropertyValue<'borderImage', T>): this {
+    return this.write('borderImage', value);
+  }
   /**
    * 设置边框图像超出边框盒的距离。
    *
@@ -2067,7 +2521,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-outset
    */
-  readonly borderImageOutset?: PropertyValue<'borderImageOutset', T>;
+  borderImageOutset(value: PropertyValue<'borderImageOutset', T>): this {
+    return this.write('borderImageOutset', value);
+  }
   /**
    * 设置边框图像切片沿边框的重复或拉伸方式。
    *
@@ -2075,7 +2531,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-repeat
    */
-  readonly borderImageRepeat?: PropertyValue<'borderImageRepeat', T>;
+  borderImageRepeat(value: PropertyValue<'borderImageRepeat', T>): this {
+    return this.write('borderImageRepeat', value);
+  }
   /**
    * 设置边框图像的切片位置及是否填充中间区域。
    *
@@ -2083,7 +2541,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-slice
    */
-  readonly borderImageSlice?: PropertyValue<'borderImageSlice', T>;
+  borderImageSlice(value: PropertyValue<'borderImageSlice', T>): this {
+    return this.write('borderImageSlice', value);
+  }
   /**
    * 指定边框使用的图像或渐变。
    *
@@ -2091,7 +2551,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-source
    */
-  readonly borderImageSource?: PropertyValue<'borderImageSource', T>;
+  borderImageSource(value: PropertyValue<'borderImageSource', T>): this {
+    return this.write('borderImageSource', value);
+  }
   /**
    * 设置边框图像各边的绘制宽度。
    *
@@ -2099,13 +2561,17 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-width
    */
-  readonly borderImageWidth?: PropertyValue<'borderImageWidth', T>;
+  borderImageWidth(value: PropertyValue<'borderImageWidth', T>): this {
+    return this.write('borderImageWidth', value);
+  }
   /**
    * 设置逻辑行内轴起始侧和结束侧的边框。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline
    */
-  readonly borderInline?: PropertyValue<'borderInline', T>;
+  borderInline(value: PropertyValue<'borderInline', T>): this {
+    return this.write('borderInline', value);
+  }
   /**
    * 设置逻辑行内轴两侧边框颜色。
    *
@@ -2113,13 +2579,17 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-color
    */
-  readonly borderInlineColor?: PropertyValue<'borderInlineColor', T>;
+  borderInlineColor(value: PropertyValue<'borderInlineColor', T>): this {
+    return this.write('borderInlineColor', value);
+  }
   /**
    * 设置逻辑行内轴结束侧边框的宽度、线型和颜色。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end
    */
-  readonly borderInlineEnd?: PropertyValue<'borderInlineEnd', T>;
+  borderInlineEnd(value: PropertyValue<'borderInlineEnd', T>): this {
+    return this.write('borderInlineEnd', value);
+  }
   /**
    * 设置逻辑行内轴结束侧边框颜色。
    *
@@ -2127,7 +2597,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-color
    */
-  readonly borderInlineEndColor?: PropertyValue<'borderInlineEndColor', T>;
+  borderInlineEndColor(value: PropertyValue<'borderInlineEndColor', T>): this {
+    return this.write('borderInlineEndColor', value);
+  }
   /**
    * 设置逻辑行内轴结束侧边框线型。
    *
@@ -2135,7 +2607,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
    */
-  readonly borderInlineEndStyle?: PropertyValue<'borderInlineEndStyle', T>;
+  borderInlineEndStyle(value: PropertyValue<'borderInlineEndStyle', T>): this {
+    return this.write('borderInlineEndStyle', value);
+  }
   /**
    * 设置逻辑行内轴结束侧边框宽度。
    *
@@ -2143,13 +2617,17 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-width
    */
-  readonly borderInlineEndWidth?: PropertyValue<'borderInlineEndWidth', T>;
+  borderInlineEndWidth(value: PropertyValue<'borderInlineEndWidth', T>): this {
+    return this.write('borderInlineEndWidth', value);
+  }
   /**
    * 设置逻辑行内轴起始侧边框的宽度、线型和颜色。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start
    */
-  readonly borderInlineStart?: PropertyValue<'borderInlineStart', T>;
+  borderInlineStart(value: PropertyValue<'borderInlineStart', T>): this {
+    return this.write('borderInlineStart', value);
+  }
   /**
    * 设置逻辑行内轴起始侧边框颜色。
    *
@@ -2157,7 +2635,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-color
    */
-  readonly borderInlineStartColor?: PropertyValue<'borderInlineStartColor', T>;
+  borderInlineStartColor(value: PropertyValue<'borderInlineStartColor', T>): this {
+    return this.write('borderInlineStartColor', value);
+  }
   /**
    * 设置逻辑行内轴起始侧边框线型。
    *
@@ -2165,7 +2645,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
    */
-  readonly borderInlineStartStyle?: PropertyValue<'borderInlineStartStyle', T>;
+  borderInlineStartStyle(value: PropertyValue<'borderInlineStartStyle', T>): this {
+    return this.write('borderInlineStartStyle', value);
+  }
   /**
    * 设置逻辑行内轴起始侧边框宽度。
    *
@@ -2173,7 +2655,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-width
    */
-  readonly borderInlineStartWidth?: PropertyValue<'borderInlineStartWidth', T>;
+  borderInlineStartWidth(value: PropertyValue<'borderInlineStartWidth', T>): this {
+    return this.write('borderInlineStartWidth', value);
+  }
   /**
    * 设置逻辑行内轴两侧边框线型。
    *
@@ -2181,7 +2665,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
    */
-  readonly borderInlineStyle?: PropertyValue<'borderInlineStyle', T>;
+  borderInlineStyle(value: PropertyValue<'borderInlineStyle', T>): this {
+    return this.write('borderInlineStyle', value);
+  }
   /**
    * 设置逻辑行内轴两侧边框宽度。
    *
@@ -2189,13 +2675,17 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-width
    */
-  readonly borderInlineWidth?: PropertyValue<'borderInlineWidth', T>;
+  borderInlineWidth(value: PropertyValue<'borderInlineWidth', T>): this {
+    return this.write('borderInlineWidth', value);
+  }
   /**
    * 设置左边框的宽度、线型和颜色。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left
    */
-  readonly borderLeft?: PropertyValue<'borderLeft', T>;
+  borderLeft(value: PropertyValue<'borderLeft', T>): this {
+    return this.write('borderLeft', value);
+  }
   /**
    * 设置左边框颜色。
    *
@@ -2203,7 +2693,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-color
    */
-  readonly borderLeftColor?: PropertyValue<'borderLeftColor', T>;
+  borderLeftColor(value: PropertyValue<'borderLeftColor', T>): this {
+    return this.write('borderLeftColor', value);
+  }
   /**
    * 设置左边框线型。
    *
@@ -2211,7 +2703,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
    */
-  readonly borderLeftStyle?: PropertyValue<'borderLeftStyle', T>;
+  borderLeftStyle(value: PropertyValue<'borderLeftStyle', T>): this {
+    return this.write('borderLeftStyle', value);
+  }
   /**
    * 设置左边框宽度。
    *
@@ -2219,7 +2713,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-width
    */
-  readonly borderLeftWidth?: PropertyValue<'borderLeftWidth', T>;
+  borderLeftWidth(value: PropertyValue<'borderLeftWidth', T>): this {
+    return this.write('borderLeftWidth', value);
+  }
   /**
    * 设置四个角的圆角半径；斜杠语法可分别指定水平和垂直半径。
    *
@@ -2227,17 +2723,21 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * 适用场景：卡片、按钮、头像的圆角外观。
    * @example
-   * css({ borderRadius: "8px" })
+   * s.borderRadius("8px")
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-radius
    */
-  readonly borderRadius?: PropertyValue<'borderRadius', T>;
+  borderRadius(value: PropertyValue<'borderRadius', T>): this {
+    return this.write('borderRadius', value);
+  }
   /**
    * 设置右边框的宽度、线型和颜色。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right
    */
-  readonly borderRight?: PropertyValue<'borderRight', T>;
+  borderRight(value: PropertyValue<'borderRight', T>): this {
+    return this.write('borderRight', value);
+  }
   /**
    * 设置右边框颜色。
    *
@@ -2245,7 +2745,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-color
    */
-  readonly borderRightColor?: PropertyValue<'borderRightColor', T>;
+  borderRightColor(value: PropertyValue<'borderRightColor', T>): this {
+    return this.write('borderRightColor', value);
+  }
   /**
    * 设置右边框线型。
    *
@@ -2253,7 +2755,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
    */
-  readonly borderRightStyle?: PropertyValue<'borderRightStyle', T>;
+  borderRightStyle(value: PropertyValue<'borderRightStyle', T>): this {
+    return this.write('borderRightStyle', value);
+  }
   /**
    * 设置右边框宽度。
    *
@@ -2261,7 +2765,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-width
    */
-  readonly borderRightWidth?: PropertyValue<'borderRightWidth', T>;
+  borderRightWidth(value: PropertyValue<'borderRightWidth', T>): this {
+    return this.write('borderRightWidth', value);
+  }
   /**
    * 设置分离边框模型下表格单元格之间的水平和垂直间距。
    *
@@ -2269,7 +2775,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-spacing
    */
-  readonly borderSpacing?: PropertyValue<'borderSpacing', T>;
+  borderSpacing(value: PropertyValue<'borderSpacing', T>): this {
+    return this.write('borderSpacing', value);
+  }
   /**
    * 设置逻辑块轴起始侧与行内轴结束侧相交角的圆角。
    *
@@ -2277,7 +2785,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-start-end-radius
    */
-  readonly borderStartEndRadius?: PropertyValue<'borderStartEndRadius', T>;
+  borderStartEndRadius(value: PropertyValue<'borderStartEndRadius', T>): this {
+    return this.write('borderStartEndRadius', value);
+  }
   /**
    * 设置逻辑块轴起始侧与行内轴起始侧相交角的圆角。
    *
@@ -2285,19 +2795,25 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-start-start-radius
    */
-  readonly borderStartStartRadius?: PropertyValue<'borderStartStartRadius', T>;
+  borderStartStartRadius(value: PropertyValue<'borderStartStartRadius', T>): this {
+    return this.write('borderStartStartRadius', value);
+  }
   /**
    * 设置四边边框线型。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-style
    */
-  readonly borderStyle?: PropertyValue<'borderStyle', T>;
+  borderStyle(value: PropertyValue<'borderStyle', T>): this {
+    return this.write('borderStyle', value);
+  }
   /**
    * 设置上边框的宽度、线型和颜色。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top
    */
-  readonly borderTop?: PropertyValue<'borderTop', T>;
+  borderTop(value: PropertyValue<'borderTop', T>): this {
+    return this.write('borderTop', value);
+  }
   /**
    * 设置上边框颜色。
    *
@@ -2305,7 +2821,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-color
    */
-  readonly borderTopColor?: PropertyValue<'borderTopColor', T>;
+  borderTopColor(value: PropertyValue<'borderTopColor', T>): this {
+    return this.write('borderTopColor', value);
+  }
   /**
    * 设置左上角边框的圆角半径。
    *
@@ -2313,7 +2831,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-left-radius
    */
-  readonly borderTopLeftRadius?: PropertyValue<'borderTopLeftRadius', T>;
+  borderTopLeftRadius(value: PropertyValue<'borderTopLeftRadius', T>): this {
+    return this.write('borderTopLeftRadius', value);
+  }
   /**
    * 设置右上角边框的圆角半径。
    *
@@ -2321,7 +2841,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-right-radius
    */
-  readonly borderTopRightRadius?: PropertyValue<'borderTopRightRadius', T>;
+  borderTopRightRadius(value: PropertyValue<'borderTopRightRadius', T>): this {
+    return this.write('borderTopRightRadius', value);
+  }
   /**
    * 设置上边框线型。
    *
@@ -2329,7 +2851,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
    */
-  readonly borderTopStyle?: PropertyValue<'borderTopStyle', T>;
+  borderTopStyle(value: PropertyValue<'borderTopStyle', T>): this {
+    return this.write('borderTopStyle', value);
+  }
   /**
    * 设置上边框宽度。
    *
@@ -2337,19 +2861,25 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-width
    */
-  readonly borderTopWidth?: PropertyValue<'borderTopWidth', T>;
+  borderTopWidth(value: PropertyValue<'borderTopWidth', T>): this {
+    return this.write('borderTopWidth', value);
+  }
   /**
    * 设置四边边框宽度；可见边框通常还需要非 none 的线型。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-width
    */
-  readonly borderWidth?: PropertyValue<'borderWidth', T>;
+  borderWidth(value: PropertyValue<'borderWidth', T>): this {
+    return this.write('borderWidth', value);
+  }
   /**
    * 设置多栏之间分隔线的宽度、线型和颜色。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule
    */
-  readonly columnRule?: PropertyValue<'columnRule', T>;
+  columnRule(value: PropertyValue<'columnRule', T>): this {
+    return this.write('columnRule', value);
+  }
   /**
    * 设置多栏分隔线的颜色。
    *
@@ -2357,7 +2887,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-color
    */
-  readonly columnRuleColor?: PropertyValue<'columnRuleColor', T>;
+  columnRuleColor(value: PropertyValue<'columnRuleColor', T>): this {
+    return this.write('columnRuleColor', value);
+  }
   /**
    * 设置多栏分隔线的线型。
    *
@@ -2365,7 +2897,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
    */
-  readonly columnRuleStyle?: PropertyValue<'columnRuleStyle', T>;
+  columnRuleStyle(value: PropertyValue<'columnRuleStyle', T>): this {
+    return this.write('columnRuleStyle', value);
+  }
   /**
    * 设置多栏分隔线的宽度。
    *
@@ -2373,7 +2907,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-width
    */
-  readonly columnRuleWidth?: PropertyValue<'columnRuleWidth', T>;
+  columnRuleWidth(value: PropertyValue<'columnRuleWidth', T>): this {
+    return this.write('columnRuleWidth', value);
+  }
   /**
    * 设置盒子外围轮廓线的宽度、线型和颜色，不占布局空间。
    *
@@ -2381,11 +2917,13 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * 适用场景：控件焦点指示和不影响布局的轮廓。
    * @example
-   * css({ ':focus-visible': { outline: "2px solid currentColor", outlineOffset: "2px" } })
+   * s.select(":focus-visible", s.outline("2px solid currentColor").outlineOffset("2px"))
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline
    */
-  readonly outline?: PropertyValue<'outline', T>;
+  outline(value: PropertyValue<'outline', T>): this {
+    return this.write('outline', value);
+  }
   /**
    * 设置轮廓线颜色。
    *
@@ -2393,7 +2931,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-color
    */
-  readonly outlineColor?: PropertyValue<'outlineColor', T>;
+  outlineColor(value: PropertyValue<'outlineColor', T>): this {
+    return this.write('outlineColor', value);
+  }
   /**
    * 设置轮廓线与边框边缘之间的距离。
    *
@@ -2401,7 +2941,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-offset
    */
-  readonly outlineOffset?: PropertyValue<'outlineOffset', T>;
+  outlineOffset(value: PropertyValue<'outlineOffset', T>): this {
+    return this.write('outlineOffset', value);
+  }
   /**
    * 设置轮廓线线型。
    *
@@ -2409,7 +2951,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-style
    */
-  readonly outlineStyle?: PropertyValue<'outlineStyle', T>;
+  outlineStyle(value: PropertyValue<'outlineStyle', T>): this {
+    return this.write('outlineStyle', value);
+  }
   /**
    * 设置轮廓线宽度。
    *
@@ -2417,10 +2961,9 @@ export interface BordersProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-width
    */
-  readonly outlineWidth?: PropertyValue<'outlineWidth', T>;
-}
-/** 视觉效果与图像；泛型 T 保留系统与继承主题关键字。 */
-export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
+  outlineWidth(value: PropertyValue<'outlineWidth', T>): this {
+    return this.write('outlineWidth', value);
+  }
   /**
    * 对元素背后的图像区域应用模糊等滤镜，通常需要透明或半透明背景。
    *
@@ -2428,7 +2971,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/backdrop-filter
    */
-  readonly backdropFilter?: PropertyValue<'backdropFilter', T>;
+  backdropFilter(value: PropertyValue<'backdropFilter', T>): this {
+    return this.write('backdropFilter', value);
+  }
   /**
    * 设置盒子的外部或内部阴影，可叠加多层。
    *
@@ -2438,11 +2983,13 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ boxShadow: "0 2px 8px rgb(0 0 0 / 0.15)" })
+   * s.boxShadow("0 2px 8px rgb(0 0 0 / 0.15)")
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-shadow
    */
-  readonly boxShadow?: PropertyValue<'boxShadow', T>;
+  boxShadow(value: PropertyValue<'boxShadow', T>): this {
+    return this.write('boxShadow', value);
+  }
   /**
    * 通过基本形状、路径或引用裁剪元素的可见区域。
    *
@@ -2450,7 +2997,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip-path
    */
-  readonly clipPath?: PropertyValue<'clipPath', T>;
+  clipPath(value: PropertyValue<'clipPath', T>): this {
+    return this.write('clipPath', value);
+  }
   /**
    * 设置 SVG 裁剪路径判断内部区域所用的填充规则。
    *
@@ -2458,7 +3007,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip-rule
    */
-  readonly clipRule?: PropertyValue<'clipRule', T>;
+  clipRule(value: PropertyValue<'clipRule', T>): this {
+    return this.write('clipRule', value);
+  }
   /**
    * 对元素的最终图像应用模糊、亮度等滤镜。
    *
@@ -2466,7 +3017,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/filter
    */
-  readonly filter?: PropertyValue<'filter', T>;
+  filter(value: PropertyValue<'filter', T>): this {
+    return this.write('filter', value);
+  }
   /**
    * 设置图像是否按元数据等信息调整方向。
    *
@@ -2474,7 +3027,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-orientation
    */
-  readonly imageOrientation?: PropertyValue<'imageOrientation', T>;
+  imageOrientation(value: PropertyValue<'imageOrientation', T>): this {
+    return this.write('imageOrientation', value);
+  }
   /**
    * 向浏览器指定图像缩放时的插值与清晰度偏好。
    *
@@ -2482,7 +3037,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-rendering
    */
-  readonly imageRendering?: PropertyValue<'imageRendering', T>;
+  imageRendering(value: PropertyValue<'imageRendering', T>): this {
+    return this.write('imageRendering', value);
+  }
   /**
    * 设置图像的分辨率解释方式；使用前核对目标浏览器支持。
    *
@@ -2490,19 +3047,25 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-resolution
    */
-  readonly imageResolution?: PropertyValue<'imageResolution', T>;
+  imageResolution(value: PropertyValue<'imageResolution', T>): this {
+    return this.write('imageResolution', value);
+  }
   /**
    * 集中设置遮罩图层的图像、位置、尺寸、重复及合成方式。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
    */
-  readonly mask?: PropertyValue<'mask', T>;
+  mask(value: PropertyValue<'mask', T>): this {
+    return this.write('mask', value);
+  }
   /**
    * 设置基于九宫格图像切片的边框遮罩。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border
    */
-  readonly maskBorder?: PropertyValue<'maskBorder', T>;
+  maskBorder(value: PropertyValue<'maskBorder', T>): this {
+    return this.write('maskBorder', value);
+  }
   /**
    * 设置边框遮罩使用 alpha 还是亮度信息。
    *
@@ -2510,7 +3073,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-mode
    */
-  readonly maskBorderMode?: PropertyValue<'maskBorderMode', T>;
+  maskBorderMode(value: PropertyValue<'maskBorderMode', T>): this {
+    return this.write('maskBorderMode', value);
+  }
   /**
    * 设置边框遮罩超出边框盒的距离。
    *
@@ -2518,7 +3083,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-outset
    */
-  readonly maskBorderOutset?: PropertyValue<'maskBorderOutset', T>;
+  maskBorderOutset(value: PropertyValue<'maskBorderOutset', T>): this {
+    return this.write('maskBorderOutset', value);
+  }
   /**
    * 设置边框遮罩切片的重复或拉伸方式。
    *
@@ -2526,7 +3093,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-repeat
    */
-  readonly maskBorderRepeat?: PropertyValue<'maskBorderRepeat', T>;
+  maskBorderRepeat(value: PropertyValue<'maskBorderRepeat', T>): this {
+    return this.write('maskBorderRepeat', value);
+  }
   /**
    * 设置边框遮罩图像的切片位置。
    *
@@ -2534,7 +3103,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-slice
    */
-  readonly maskBorderSlice?: PropertyValue<'maskBorderSlice', T>;
+  maskBorderSlice(value: PropertyValue<'maskBorderSlice', T>): this {
+    return this.write('maskBorderSlice', value);
+  }
   /**
    * 设置边框遮罩的源图像。
    *
@@ -2542,7 +3113,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-source
    */
-  readonly maskBorderSource?: PropertyValue<'maskBorderSource', T>;
+  maskBorderSource(value: PropertyValue<'maskBorderSource', T>): this {
+    return this.write('maskBorderSource', value);
+  }
   /**
    * 设置边框遮罩各边的宽度。
    *
@@ -2550,7 +3123,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-width
    */
-  readonly maskBorderWidth?: PropertyValue<'maskBorderWidth', T>;
+  maskBorderWidth(value: PropertyValue<'maskBorderWidth', T>): this {
+    return this.write('maskBorderWidth', value);
+  }
   /**
    * 设置遮罩效果允许作用的裁剪区域。
    *
@@ -2558,7 +3133,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-clip
    */
-  readonly maskClip?: PropertyValue<'maskClip', T>;
+  maskClip(value: PropertyValue<'maskClip', T>): this {
+    return this.write('maskClip', value);
+  }
   /**
    * 设置多个遮罩图层之间的合成运算。
    *
@@ -2566,7 +3143,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-composite
    */
-  readonly maskComposite?: PropertyValue<'maskComposite', T>;
+  maskComposite(value: PropertyValue<'maskComposite', T>): this {
+    return this.write('maskComposite', value);
+  }
   /**
    * 设置遮罩使用的图像、渐变或 SVG 遮罩引用。
    *
@@ -2574,7 +3153,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-image
    */
-  readonly maskImage?: PropertyValue<'maskImage', T>;
+  maskImage(value: PropertyValue<'maskImage', T>): this {
+    return this.write('maskImage', value);
+  }
   /**
    * 设置遮罩按 alpha、亮度或源类型解释。
    *
@@ -2582,7 +3163,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-mode
    */
-  readonly maskMode?: PropertyValue<'maskMode', T>;
+  maskMode(value: PropertyValue<'maskMode', T>): this {
+    return this.write('maskMode', value);
+  }
   /**
    * 设置遮罩图像定位所依据的盒子。
    *
@@ -2590,7 +3173,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-origin
    */
-  readonly maskOrigin?: PropertyValue<'maskOrigin', T>;
+  maskOrigin(value: PropertyValue<'maskOrigin', T>): this {
+    return this.write('maskOrigin', value);
+  }
   /**
    * 设置遮罩图像在定位区域中的位置。
    *
@@ -2598,7 +3183,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-position
    */
-  readonly maskPosition?: PropertyValue<'maskPosition', T>;
+  maskPosition(value: PropertyValue<'maskPosition', T>): this {
+    return this.write('maskPosition', value);
+  }
   /**
    * 设置遮罩图像的重复方式。
    *
@@ -2606,7 +3193,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-repeat
    */
-  readonly maskRepeat?: PropertyValue<'maskRepeat', T>;
+  maskRepeat(value: PropertyValue<'maskRepeat', T>): this {
+    return this.write('maskRepeat', value);
+  }
   /**
    * 设置遮罩图像的尺寸。
    *
@@ -2614,7 +3203,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-size
    */
-  readonly maskSize?: PropertyValue<'maskSize', T>;
+  maskSize(value: PropertyValue<'maskSize', T>): this {
+    return this.write('maskSize', value);
+  }
   /**
    * 设置 SVG mask 元素使用亮度还是 alpha 作为遮罩。
    *
@@ -2622,7 +3213,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-type
    */
-  readonly maskType?: PropertyValue<'maskType', T>;
+  maskType(value: PropertyValue<'maskType', T>): this {
+    return this.write('maskType', value);
+  }
   /**
    * 设置元素整体与其背后内容的颜色混合方式。
    *
@@ -2630,7 +3223,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
    */
-  readonly mixBlendMode?: PropertyValue<'mixBlendMode', T>;
+  mixBlendMode(value: PropertyValue<'mixBlendMode', T>): this {
+    return this.write('mixBlendMode', value);
+  }
   /**
    * 设置替换元素的内容如何适应其内容盒，例如图像的裁切和缩放。
    *
@@ -2642,11 +3237,13 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`fill`，不同于浏览器默认样式表。
    * @example
-   * css({ width: "80px", height: "80px", objectFit: "cover" })
+   * s.width("80px").height("80px").objectFit("cover")
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-fit
    */
-  readonly objectFit?: PropertyValue<'objectFit', T>;
+  objectFit(value: PropertyValue<'objectFit', T>): this {
+    return this.write('objectFit', value);
+  }
   /**
    * 设置替换元素内容在内容盒内的对齐位置。
    *
@@ -2654,7 +3251,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-position
    */
-  readonly objectPosition?: PropertyValue<'objectPosition', T>;
+  objectPosition(value: PropertyValue<'objectPosition', T>): this {
+    return this.write('objectPosition', value);
+  }
   /**
    * 设置替换元素内容的可视区域，控制用于呈现的图像范围。
    *
@@ -2662,7 +3261,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-view-box
    */
-  readonly objectViewBox?: PropertyValue<'objectViewBox', T>;
+  objectViewBox(value: PropertyValue<'objectViewBox', T>): this {
+    return this.write('objectViewBox', value);
+  }
   /**
    * 设置元素及其子树合成后的整体不透明度。
    *
@@ -2672,11 +3273,13 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`1`，不同于浏览器默认样式表。
    * @example
-   * css({ opacity: 0.5 })
+   * s.opacity(0.5)
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/opacity
    */
-  readonly opacity?: PropertyValue<'opacity', T>;
+  opacity(value: PropertyValue<'opacity', T>): this {
+    return this.write('opacity', value);
+  }
   /**
    * 设置从图像 alpha 信息提取环绕形状时的阈值。
    *
@@ -2684,7 +3287,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-image-threshold
    */
-  readonly shapeImageThreshold?: PropertyValue<'shapeImageThreshold', T>;
+  shapeImageThreshold(value: PropertyValue<'shapeImageThreshold', T>): this {
+    return this.write('shapeImageThreshold', value);
+  }
   /**
    * 设置文字环绕形状之外的额外间距。
    *
@@ -2692,7 +3297,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-margin
    */
-  readonly shapeMargin?: PropertyValue<'shapeMargin', T>;
+  shapeMargin(value: PropertyValue<'shapeMargin', T>): this {
+    return this.write('shapeMargin', value);
+  }
   /**
    * 设置浮动元素周围行内内容所环绕的形状。
    *
@@ -2700,7 +3307,9 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-outside
    */
-  readonly shapeOutside?: PropertyValue<'shapeOutside', T>;
+  shapeOutside(value: PropertyValue<'shapeOutside', T>): this {
+    return this.write('shapeOutside', value);
+  }
   /**
    * 向 SVG 渲染器提供图形绘制精度与速度的偏好。
    *
@@ -2708,16 +3317,17 @@ export interface EffectsProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-rendering
    */
-  readonly shapeRendering?: PropertyValue<'shapeRendering', T>;
-}
-/** 动画与变换；泛型 T 保留系统与继承主题关键字。 */
-export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
+  shapeRendering(value: PropertyValue<'shapeRendering', T>): this {
+    return this.write('shapeRendering', value);
+  }
   /**
    * 集中设置关键帧动画的名称、时长、缓动、延迟、次数及播放行为。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
    */
-  readonly animation?: PropertyValue<'animation', T>;
+  animation(value: PropertyValue<'animation', T>): this {
+    return this.write('animation', value);
+  }
   /**
    * 设置动画效果与底层属性值的替换、叠加或累积方式。
    *
@@ -2725,7 +3335,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-composition
    */
-  readonly animationComposition?: PropertyValue<'animationComposition', T>;
+  animationComposition(value: PropertyValue<'animationComposition', T>): this {
+    return this.write('animationComposition', value);
+  }
   /**
    * 设置动画开始前的延迟；负值表示从动画中途开始播放。
    *
@@ -2733,7 +3345,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-delay
    */
-  readonly animationDelay?: PropertyValue<'animationDelay', T>;
+  animationDelay(value: PropertyValue<'animationDelay', T>): this {
+    return this.write('animationDelay', value);
+  }
   /**
    * 设置动画按正向、反向或交替方向播放。
    *
@@ -2741,7 +3355,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-direction
    */
-  readonly animationDirection?: PropertyValue<'animationDirection', T>;
+  animationDirection(value: PropertyValue<'animationDirection', T>): this {
+    return this.write('animationDirection', value);
+  }
   /**
    * 设置动画完成一次循环的时长。
    *
@@ -2749,7 +3365,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-duration
    */
-  readonly animationDuration?: PropertyValue<'animationDuration', T>;
+  animationDuration(value: PropertyValue<'animationDuration', T>): this {
+    return this.write('animationDuration', value);
+  }
   /**
    * 设置动画在有效播放区间之外是否应用关键帧样式。
    *
@@ -2761,11 +3379,13 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ animationFillMode: "forwards" })
+   * s.animationFillMode("forwards")
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-fill-mode
    */
-  readonly animationFillMode?: PropertyValue<'animationFillMode', T>;
+  animationFillMode(value: PropertyValue<'animationFillMode', T>): this {
+    return this.write('animationFillMode', value);
+  }
   /**
    * 设置动画循环次数，或无限循环。
    *
@@ -2773,7 +3393,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-iteration-count
    */
-  readonly animationIterationCount?: PropertyValue<'animationIterationCount', T>;
+  animationIterationCount(value: PropertyValue<'animationIterationCount', T>): this {
+    return this.write('animationIterationCount', value);
+  }
   /**
    * 选择要播放的 @keyframes 动画名称。
    *
@@ -2781,7 +3403,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-name
    */
-  readonly animationName?: PropertyValue<'animationName', T>;
+  animationName(value: PropertyValue<'animationName', T>): this {
+    return this.write('animationName', value);
+  }
   /**
    * 控制动画运行或暂停，暂停后可从原位置继续。
    *
@@ -2789,13 +3413,17 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-play-state
    */
-  readonly animationPlayState?: PropertyValue<'animationPlayState', T>;
+  animationPlayState(value: PropertyValue<'animationPlayState', T>): this {
+    return this.write('animationPlayState', value);
+  }
   /**
    * 设置动画附着到时间线的起止范围。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range
    */
-  readonly animationRange?: PropertyValue<'animationRange', T>;
+  animationRange(value: PropertyValue<'animationRange', T>): this {
+    return this.write('animationRange', value);
+  }
   /**
    * 设置动画在时间线上的附着范围终点。
    *
@@ -2803,7 +3431,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-end
    */
-  readonly animationRangeEnd?: PropertyValue<'animationRangeEnd', T>;
+  animationRangeEnd(value: PropertyValue<'animationRangeEnd', T>): this {
+    return this.write('animationRangeEnd', value);
+  }
   /**
    * 设置动画在时间线上的附着范围起点。
    *
@@ -2811,7 +3441,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-start
    */
-  readonly animationRangeStart?: PropertyValue<'animationRangeStart', T>;
+  animationRangeStart(value: PropertyValue<'animationRangeStart', T>): this {
+    return this.write('animationRangeStart', value);
+  }
   /**
    * 选择驱动动画的时间线，例如文档时间或滚动进度。
    *
@@ -2819,7 +3451,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timeline
    */
-  readonly animationTimeline?: PropertyValue<'animationTimeline', T>;
+  animationTimeline(value: PropertyValue<'animationTimeline', T>): this {
+    return this.write('animationTimeline', value);
+  }
   /**
    * 设置动画每个关键帧区间内进度变化的缓动函数。
    *
@@ -2827,7 +3461,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timing-function
    */
-  readonly animationTimingFunction?: PropertyValue<'animationTimingFunction', T>;
+  animationTimingFunction(value: PropertyValue<'animationTimingFunction', T>): this {
+    return this.write('animationTimingFunction', value);
+  }
   /**
    * 控制经过三维变换后背向观察者的元素背面是否可见。
    *
@@ -2835,13 +3471,17 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/backface-visibility
    */
-  readonly backfaceVisibility?: PropertyValue<'backfaceVisibility', T>;
+  backfaceVisibility(value: PropertyValue<'backfaceVisibility', T>): this {
+    return this.write('backfaceVisibility', value);
+  }
   /**
    * 集中设置运动路径、起始位置、距离、方向和锚点。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
    */
-  readonly offset?: PropertyValue<'offset', T>;
+  offset(value: PropertyValue<'offset', T>): this {
+    return this.write('offset', value);
+  }
   /**
    * 设置元素沿运动路径移动时与路径相接的内部锚点。
    *
@@ -2849,7 +3489,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-anchor
    */
-  readonly offsetAnchor?: PropertyValue<'offsetAnchor', T>;
+  offsetAnchor(value: PropertyValue<'offsetAnchor', T>): this {
+    return this.write('offsetAnchor', value);
+  }
   /**
    * 设置元素沿运动路径行进的距离。
    *
@@ -2857,7 +3499,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-distance
    */
-  readonly offsetDistance?: PropertyValue<'offsetDistance', T>;
+  offsetDistance(value: PropertyValue<'offsetDistance', T>): this {
+    return this.write('offsetDistance', value);
+  }
   /**
    * 设置元素运动所沿用的路径。
    *
@@ -2865,7 +3509,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-path
    */
-  readonly offsetPath?: PropertyValue<'offsetPath', T>;
+  offsetPath(value: PropertyValue<'offsetPath', T>): this {
+    return this.write('offsetPath', value);
+  }
   /**
    * 设置运动路径的初始位置。
    *
@@ -2873,7 +3519,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-position
    */
-  readonly offsetPosition?: PropertyValue<'offsetPosition', T>;
+  offsetPosition(value: PropertyValue<'offsetPosition', T>): this {
+    return this.write('offsetPosition', value);
+  }
   /**
    * 设置元素沿运动路径移动时的方向和附加旋转。
    *
@@ -2881,7 +3529,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-rotate
    */
-  readonly offsetRotate?: PropertyValue<'offsetRotate', T>;
+  offsetRotate(value: PropertyValue<'offsetRotate', T>): this {
+    return this.write('offsetRotate', value);
+  }
   /**
    * 设置路径旋转的旧名称；新代码使用 offset-rotate。
    *
@@ -2889,7 +3539,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-rotation
    */
-  readonly offsetRotation?: PropertyValue<'offsetRotation', T>;
+  offsetRotation(value: PropertyValue<'offsetRotation', T>): this {
+    return this.write('offsetRotation', value);
+  }
   /**
    * 设置观察子元素三维变换时的透视距离。
    *
@@ -2897,7 +3549,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective
    */
-  readonly perspective?: PropertyValue<'perspective', T>;
+  perspective(value: PropertyValue<'perspective', T>): this {
+    return this.write('perspective', value);
+  }
   /**
    * 设置三维透视的观察原点。
    *
@@ -2905,7 +3559,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective-origin
    */
-  readonly perspectiveOrigin?: PropertyValue<'perspectiveOrigin', T>;
+  perspectiveOrigin(value: PropertyValue<'perspectiveOrigin', T>): this {
+    return this.write('perspectiveOrigin', value);
+  }
   /**
    * 独立设置元素旋转，不必重写 transform 中的其他变换。
    *
@@ -2913,7 +3569,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/rotate
    */
-  readonly rotate?: PropertyValue<'rotate', T>;
+  rotate(value: PropertyValue<'rotate', T>): this {
+    return this.write('rotate', value);
+  }
   /**
    * 独立设置元素的缩放比例。
    *
@@ -2921,7 +3579,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scale
    */
-  readonly scale?: PropertyValue<'scale', T>;
+  scale(value: PropertyValue<'scale', T>): this {
+    return this.write('scale', value);
+  }
   /**
    * 按顺序组合平移、旋转、缩放等二维或三维变换。
    *
@@ -2931,11 +3591,13 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ transform: "translateX(8px) scale(1.05)" })
+   * s.transform("translateX(8px) scale(1.05)")
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform
    */
-  readonly transform?: PropertyValue<'transform', T>;
+  transform(value: PropertyValue<'transform', T>): this {
+    return this.write('transform', value);
+  }
   /**
    * 设置变换及其原点所依据的参照盒。
    *
@@ -2943,7 +3605,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-box
    */
-  readonly transformBox?: PropertyValue<'transformBox', T>;
+  transformBox(value: PropertyValue<'transformBox', T>): this {
+    return this.write('transformBox', value);
+  }
   /**
    * 设置元素变换的原点。
    *
@@ -2951,7 +3615,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-origin
    */
-  readonly transformOrigin?: PropertyValue<'transformOrigin', T>;
+  transformOrigin(value: PropertyValue<'transformOrigin', T>): this {
+    return this.write('transformOrigin', value);
+  }
   /**
    * 控制子元素的三维位置保留在三维空间还是展平。
    *
@@ -2959,7 +3625,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-style
    */
-  readonly transformStyle?: PropertyValue<'transformStyle', T>;
+  transformStyle(value: PropertyValue<'transformStyle', T>): this {
+    return this.write('transformStyle', value);
+  }
   /**
    * 集中设置属性变化过渡的目标、时长、缓动、延迟和行为。
    *
@@ -2967,11 +3635,13 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
    * @example
-   * css({ transition: "opacity 160ms ease" })
+   * s.transition("opacity 160ms ease")
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition
    */
-  readonly transition?: PropertyValue<'transition', T>;
+  transition(value: PropertyValue<'transition', T>): this {
+    return this.write('transition', value);
+  }
   /**
    * 控制离散属性是否可以启动 CSS 过渡。
    *
@@ -2979,7 +3649,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-behavior
    */
-  readonly transitionBehavior?: PropertyValue<'transitionBehavior', T>;
+  transitionBehavior(value: PropertyValue<'transitionBehavior', T>): this {
+    return this.write('transitionBehavior', value);
+  }
   /**
    * 设置属性变化后开始过渡的延迟。
    *
@@ -2987,7 +3659,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-delay
    */
-  readonly transitionDelay?: PropertyValue<'transitionDelay', T>;
+  transitionDelay(value: PropertyValue<'transitionDelay', T>): this {
+    return this.write('transitionDelay', value);
+  }
   /**
    * 设置过渡从开始到完成的时长。
    *
@@ -2995,13 +3669,17 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-duration
    */
-  readonly transitionDuration?: PropertyValue<'transitionDuration', T>;
+  transitionDuration(value: PropertyValue<'transitionDuration', T>): this {
+    return this.write('transitionDuration', value);
+  }
   /**
    * 指定发生变化时需要过渡的 CSS 属性。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-property
    */
-  readonly transitionProperty?: PropertyValue<'transitionProperty', T>;
+  transitionProperty(value: PropertyValue<'transitionProperty', T>): this {
+    return this.write('transitionProperty', value);
+  }
   /**
    * 设置过渡进度变化的缓动函数。
    *
@@ -3009,7 +3687,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-timing-function
    */
-  readonly transitionTimingFunction?: PropertyValue<'transitionTimingFunction', T>;
+  transitionTimingFunction(value: PropertyValue<'transitionTimingFunction', T>): this {
+    return this.write('transitionTimingFunction', value);
+  }
   /**
    * 独立设置元素在二维或三维空间中的平移。
    *
@@ -3017,7 +3697,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/translate
    */
-  readonly translate?: PropertyValue<'translate', T>;
+  translate(value: PropertyValue<'translate', T>): this {
+    return this.write('translate', value);
+  }
   /**
    * 为视图过渡的快照伪元素分组，以便共用样式。
    *
@@ -3025,7 +3707,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-transition-class
    */
-  readonly viewTransitionClass?: PropertyValue<'viewTransitionClass', T>;
+  viewTransitionClass(value: PropertyValue<'viewTransitionClass', T>): this {
+    return this.write('viewTransitionClass', value);
+  }
   /**
    * 为视图过渡中的元素命名，以匹配前后状态的快照。
    *
@@ -3033,10 +3717,9 @@ export interface MotionProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-transition-name
    */
-  readonly viewTransitionName?: PropertyValue<'viewTransitionName', T>;
-}
-/** 滚动与溢出；泛型 T 保留系统与继承主题关键字。 */
-export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> {
+  viewTransitionName(value: PropertyValue<'viewTransitionName', T>): this {
+    return this.write('viewTransitionName', value);
+  }
   /**
    * 设置内容超出盒子时的裁剪和滚动行为。
    *
@@ -3048,11 +3731,13 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ maxHeight: "20rem", overflow: "auto" })
+   * s.maxHeight("20rem").overflow("auto")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow
    */
-  readonly overflow?: PropertyValue<'overflow', T>;
+  overflow(value: PropertyValue<'overflow', T>): this {
+    return this.write('overflow', value);
+  }
   /**
    * 控制元素是否参与滚动锚定，以减少内容变化造成的视口跳动。
    *
@@ -3060,7 +3745,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-anchor
    */
-  readonly overflowAnchor?: PropertyValue<'overflowAnchor', T>;
+  overflowAnchor(value: PropertyValue<'overflowAnchor', T>): this {
+    return this.write('overflowAnchor', value);
+  }
   /**
    * 设置逻辑块轴上的溢出行为。
    *
@@ -3068,7 +3755,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-block
    */
-  readonly overflowBlock?: PropertyValue<'overflowBlock', T>;
+  overflowBlock(value: PropertyValue<'overflowBlock', T>): this {
+    return this.write('overflowBlock', value);
+  }
   /**
    * 设置溢出裁剪参照盒的非标准属性；使用前核对目标浏览器。
    *
@@ -3076,7 +3765,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-clip-box
    */
-  readonly overflowClipBox?: PropertyValue<'overflowClipBox', T>;
+  overflowClipBox(value: PropertyValue<'overflowClipBox', T>): this {
+    return this.write('overflowClipBox', value);
+  }
   /**
    * 设置 overflow:clip 的裁剪边界允许向外扩展的距离。
    *
@@ -3084,7 +3775,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-clip-margin
    */
-  readonly overflowClipMargin?: PropertyValue<'overflowClipMargin', T>;
+  overflowClipMargin(value: PropertyValue<'overflowClipMargin', T>): this {
+    return this.write('overflowClipMargin', value);
+  }
   /**
    * 设置逻辑行内轴上的溢出行为。
    *
@@ -3092,7 +3785,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-inline
    */
-  readonly overflowInline?: PropertyValue<'overflowInline', T>;
+  overflowInline(value: PropertyValue<'overflowInline', T>): this {
+    return this.write('overflowInline', value);
+  }
   /**
    * 设置不可正常断开的长文本是否允许额外换行。
    *
@@ -3102,11 +3797,13 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ overflowWrap: "anywhere" })
+   * s.overflowWrap("anywhere")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-wrap
    */
-  readonly overflowWrap?: PropertyValue<'overflowWrap', T>;
+  overflowWrap(value: PropertyValue<'overflowWrap', T>): this {
+    return this.write('overflowWrap', value);
+  }
   /**
    * 设置水平方向的溢出行为。
    *
@@ -3118,11 +3815,13 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ overflowX: "auto" })
+   * s.overflowX("auto")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-x
    */
-  readonly overflowX?: PropertyValue<'overflowX', T>;
+  overflowX(value: PropertyValue<'overflowX', T>): this {
+    return this.write('overflowX', value);
+  }
   /**
    * 设置垂直方向的溢出行为。
    *
@@ -3134,11 +3833,13 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ maxHeight: "20rem", overflowY: "auto" })
+   * s.maxHeight("20rem").overflowY("auto")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-y
    */
-  readonly overflowY?: PropertyValue<'overflowY', T>;
+  overflowY(value: PropertyValue<'overflowY', T>): this {
+    return this.write('overflowY', value);
+  }
   /**
    * 控制滚动到边界后的滚动链和越界反馈行为。
    *
@@ -3148,11 +3849,13 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ overflowY: "auto", overscrollBehavior: "contain" })
+   * s.overflowY("auto").overscrollBehavior("contain")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior
    */
-  readonly overscrollBehavior?: PropertyValue<'overscrollBehavior', T>;
+  overscrollBehavior(value: PropertyValue<'overscrollBehavior', T>): this {
+    return this.write('overscrollBehavior', value);
+  }
   /**
    * 控制逻辑块轴上到达滚动边界后的行为。
    *
@@ -3160,7 +3863,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-block
    */
-  readonly overscrollBehaviorBlock?: PropertyValue<'overscrollBehaviorBlock', T>;
+  overscrollBehaviorBlock(value: PropertyValue<'overscrollBehaviorBlock', T>): this {
+    return this.write('overscrollBehaviorBlock', value);
+  }
   /**
    * 控制逻辑行内轴上到达滚动边界后的行为。
    *
@@ -3168,7 +3873,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-inline
    */
-  readonly overscrollBehaviorInline?: PropertyValue<'overscrollBehaviorInline', T>;
+  overscrollBehaviorInline(value: PropertyValue<'overscrollBehaviorInline', T>): this {
+    return this.write('overscrollBehaviorInline', value);
+  }
   /**
    * 控制水平方向到达滚动边界后的行为。
    *
@@ -3176,7 +3883,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-x
    */
-  readonly overscrollBehaviorX?: PropertyValue<'overscrollBehaviorX', T>;
+  overscrollBehaviorX(value: PropertyValue<'overscrollBehaviorX', T>): this {
+    return this.write('overscrollBehaviorX', value);
+  }
   /**
    * 控制垂直方向到达滚动边界后的行为。
    *
@@ -3184,7 +3893,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-y
    */
-  readonly overscrollBehaviorY?: PropertyValue<'overscrollBehaviorY', T>;
+  overscrollBehaviorY(value: PropertyValue<'overscrollBehaviorY', T>): this {
+    return this.write('overscrollBehaviorY', value);
+  }
   /**
    * 设置滚动条滑块和轨道的颜色。
    *
@@ -3192,7 +3903,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scrollbar-color
    */
-  readonly scrollbarColor?: PropertyValue<'scrollbarColor', T>;
+  scrollbarColor(value: PropertyValue<'scrollbarColor', T>): this {
+    return this.write('scrollbarColor', value);
+  }
   /**
    * 设置是否预留滚动条槽位，以减少滚动条出现时的布局变化。
    *
@@ -3200,7 +3913,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scrollbar-gutter
    */
-  readonly scrollbarGutter?: PropertyValue<'scrollbarGutter', T>;
+  scrollbarGutter(value: PropertyValue<'scrollbarGutter', T>): this {
+    return this.write('scrollbarGutter', value);
+  }
   /**
    * 设置滚动条采用正常、较细或隐藏的外观。
    *
@@ -3208,7 +3923,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scrollbar-width
    */
-  readonly scrollbarWidth?: PropertyValue<'scrollbarWidth', T>;
+  scrollbarWidth(value: PropertyValue<'scrollbarWidth', T>): this {
+    return this.write('scrollbarWidth', value);
+  }
   /**
    * 设置由导航或滚动 API 触发的滚动采用即时还是平滑方式。
    *
@@ -3218,11 +3935,13 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ scrollBehavior: "smooth" })
+   * s.scrollBehavior("smooth")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-behavior
    */
-  readonly scrollBehavior?: PropertyValue<'scrollBehavior', T>;
+  scrollBehavior(value: PropertyValue<'scrollBehavior', T>): this {
+    return this.write('scrollBehavior', value);
+  }
   /**
    * 将元素声明为祖先滚动容器首次呈现时的候选滚动吸附目标。
    *
@@ -3230,19 +3949,25 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-initial-target
    */
-  readonly scrollInitialTarget?: PropertyValue<'scrollInitialTarget', T>;
+  scrollInitialTarget(value: PropertyValue<'scrollInitialTarget', T>): this {
+    return this.write('scrollInitialTarget', value);
+  }
   /**
    * 设置元素滚动目标区域的四边外扩距离，不改变普通布局外边距。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin
    */
-  readonly scrollMargin?: PropertyValue<'scrollMargin', T>;
+  scrollMargin(value: PropertyValue<'scrollMargin', T>): this {
+    return this.write('scrollMargin', value);
+  }
   /**
    * 设置滚动目标区域在逻辑块轴两侧的外扩距离。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-block
    */
-  readonly scrollMarginBlock?: PropertyValue<'scrollMarginBlock', T>;
+  scrollMarginBlock(value: PropertyValue<'scrollMarginBlock', T>): this {
+    return this.write('scrollMarginBlock', value);
+  }
   /**
    * 设置滚动目标区域在逻辑块轴结束侧的外扩距离。
    *
@@ -3250,7 +3975,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-block-end
    */
-  readonly scrollMarginBlockEnd?: PropertyValue<'scrollMarginBlockEnd', T>;
+  scrollMarginBlockEnd(value: PropertyValue<'scrollMarginBlockEnd', T>): this {
+    return this.write('scrollMarginBlockEnd', value);
+  }
   /**
    * 设置滚动目标区域在逻辑块轴起始侧的外扩距离。
    *
@@ -3258,7 +3985,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-block-start
    */
-  readonly scrollMarginBlockStart?: PropertyValue<'scrollMarginBlockStart', T>;
+  scrollMarginBlockStart(value: PropertyValue<'scrollMarginBlockStart', T>): this {
+    return this.write('scrollMarginBlockStart', value);
+  }
   /**
    * 设置滚动目标区域下侧的外扩距离。
    *
@@ -3266,13 +3995,17 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-bottom
    */
-  readonly scrollMarginBottom?: PropertyValue<'scrollMarginBottom', T>;
+  scrollMarginBottom(value: PropertyValue<'scrollMarginBottom', T>): this {
+    return this.write('scrollMarginBottom', value);
+  }
   /**
    * 设置滚动目标区域在逻辑行内轴两侧的外扩距离。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-inline
    */
-  readonly scrollMarginInline?: PropertyValue<'scrollMarginInline', T>;
+  scrollMarginInline(value: PropertyValue<'scrollMarginInline', T>): this {
+    return this.write('scrollMarginInline', value);
+  }
   /**
    * 设置滚动目标区域在逻辑行内轴结束侧的外扩距离。
    *
@@ -3280,7 +4013,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-inline-end
    */
-  readonly scrollMarginInlineEnd?: PropertyValue<'scrollMarginInlineEnd', T>;
+  scrollMarginInlineEnd(value: PropertyValue<'scrollMarginInlineEnd', T>): this {
+    return this.write('scrollMarginInlineEnd', value);
+  }
   /**
    * 设置滚动目标区域在逻辑行内轴起始侧的外扩距离。
    *
@@ -3288,7 +4023,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-inline-start
    */
-  readonly scrollMarginInlineStart?: PropertyValue<'scrollMarginInlineStart', T>;
+  scrollMarginInlineStart(value: PropertyValue<'scrollMarginInlineStart', T>): this {
+    return this.write('scrollMarginInlineStart', value);
+  }
   /**
    * 设置滚动目标区域左侧的外扩距离。
    *
@@ -3296,7 +4033,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-left
    */
-  readonly scrollMarginLeft?: PropertyValue<'scrollMarginLeft', T>;
+  scrollMarginLeft(value: PropertyValue<'scrollMarginLeft', T>): this {
+    return this.write('scrollMarginLeft', value);
+  }
   /**
    * 设置滚动目标区域右侧的外扩距离。
    *
@@ -3304,7 +4043,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-right
    */
-  readonly scrollMarginRight?: PropertyValue<'scrollMarginRight', T>;
+  scrollMarginRight(value: PropertyValue<'scrollMarginRight', T>): this {
+    return this.write('scrollMarginRight', value);
+  }
   /**
    * 设置滚动目标区域上侧的外扩距离。
    *
@@ -3312,19 +4053,25 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-top
    */
-  readonly scrollMarginTop?: PropertyValue<'scrollMarginTop', T>;
+  scrollMarginTop(value: PropertyValue<'scrollMarginTop', T>): this {
+    return this.write('scrollMarginTop', value);
+  }
   /**
    * 设置滚动容器最佳可视区域的四边内缩距离。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding
    */
-  readonly scrollPadding?: PropertyValue<'scrollPadding', T>;
+  scrollPadding(value: PropertyValue<'scrollPadding', T>): this {
+    return this.write('scrollPadding', value);
+  }
   /**
    * 设置滚动容器最佳可视区域在逻辑块轴两侧的内缩距离。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-block
    */
-  readonly scrollPaddingBlock?: PropertyValue<'scrollPaddingBlock', T>;
+  scrollPaddingBlock(value: PropertyValue<'scrollPaddingBlock', T>): this {
+    return this.write('scrollPaddingBlock', value);
+  }
   /**
    * 设置滚动容器最佳可视区域在逻辑块轴结束侧的内缩距离。
    *
@@ -3332,7 +4079,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-block-end
    */
-  readonly scrollPaddingBlockEnd?: PropertyValue<'scrollPaddingBlockEnd', T>;
+  scrollPaddingBlockEnd(value: PropertyValue<'scrollPaddingBlockEnd', T>): this {
+    return this.write('scrollPaddingBlockEnd', value);
+  }
   /**
    * 设置滚动容器最佳可视区域在逻辑块轴起始侧的内缩距离。
    *
@@ -3340,7 +4089,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-block-start
    */
-  readonly scrollPaddingBlockStart?: PropertyValue<'scrollPaddingBlockStart', T>;
+  scrollPaddingBlockStart(value: PropertyValue<'scrollPaddingBlockStart', T>): this {
+    return this.write('scrollPaddingBlockStart', value);
+  }
   /**
    * 设置滚动容器最佳可视区域下侧的内缩距离。
    *
@@ -3348,13 +4099,17 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-bottom
    */
-  readonly scrollPaddingBottom?: PropertyValue<'scrollPaddingBottom', T>;
+  scrollPaddingBottom(value: PropertyValue<'scrollPaddingBottom', T>): this {
+    return this.write('scrollPaddingBottom', value);
+  }
   /**
    * 设置滚动容器最佳可视区域在逻辑行内轴两侧的内缩距离。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-inline
    */
-  readonly scrollPaddingInline?: PropertyValue<'scrollPaddingInline', T>;
+  scrollPaddingInline(value: PropertyValue<'scrollPaddingInline', T>): this {
+    return this.write('scrollPaddingInline', value);
+  }
   /**
    * 设置滚动容器最佳可视区域在逻辑行内轴结束侧的内缩距离。
    *
@@ -3362,7 +4117,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-inline-end
    */
-  readonly scrollPaddingInlineEnd?: PropertyValue<'scrollPaddingInlineEnd', T>;
+  scrollPaddingInlineEnd(value: PropertyValue<'scrollPaddingInlineEnd', T>): this {
+    return this.write('scrollPaddingInlineEnd', value);
+  }
   /**
    * 设置滚动容器最佳可视区域在逻辑行内轴起始侧的内缩距离。
    *
@@ -3370,7 +4127,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-inline-start
    */
-  readonly scrollPaddingInlineStart?: PropertyValue<'scrollPaddingInlineStart', T>;
+  scrollPaddingInlineStart(value: PropertyValue<'scrollPaddingInlineStart', T>): this {
+    return this.write('scrollPaddingInlineStart', value);
+  }
   /**
    * 设置滚动容器最佳可视区域左侧的内缩距离。
    *
@@ -3378,7 +4137,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-left
    */
-  readonly scrollPaddingLeft?: PropertyValue<'scrollPaddingLeft', T>;
+  scrollPaddingLeft(value: PropertyValue<'scrollPaddingLeft', T>): this {
+    return this.write('scrollPaddingLeft', value);
+  }
   /**
    * 设置滚动容器最佳可视区域右侧的内缩距离。
    *
@@ -3386,7 +4147,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-right
    */
-  readonly scrollPaddingRight?: PropertyValue<'scrollPaddingRight', T>;
+  scrollPaddingRight(value: PropertyValue<'scrollPaddingRight', T>): this {
+    return this.write('scrollPaddingRight', value);
+  }
   /**
    * 设置滚动容器最佳可视区域上侧的内缩距离。
    *
@@ -3394,7 +4157,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-top
    */
-  readonly scrollPaddingTop?: PropertyValue<'scrollPaddingTop', T>;
+  scrollPaddingTop(value: PropertyValue<'scrollPaddingTop', T>): this {
+    return this.write('scrollPaddingTop', value);
+  }
   /**
    * 设置元素作为滚动吸附目标时在块轴和行内轴上的对齐位置。
    *
@@ -3402,13 +4167,17 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-align
    */
-  readonly scrollSnapAlign?: PropertyValue<'scrollSnapAlign', T>;
+  scrollSnapAlign(value: PropertyValue<'scrollSnapAlign', T>): this {
+    return this.write('scrollSnapAlign', value);
+  }
   /**
    * 设置滚动吸附区域外扩的旧名称；新代码使用 scroll-margin。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin
    */
-  readonly scrollSnapMargin?: PropertyValue<'scrollSnapMargin', T>;
+  scrollSnapMargin(value: PropertyValue<'scrollSnapMargin', T>): this {
+    return this.write('scrollSnapMargin', value);
+  }
   /**
    * 设置滚动吸附区域下侧外扩的旧名称；新代码使用 scroll-margin-bottom。
    *
@@ -3416,7 +4185,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-bottom
    */
-  readonly scrollSnapMarginBottom?: PropertyValue<'scrollSnapMarginBottom', T>;
+  scrollSnapMarginBottom(value: PropertyValue<'scrollSnapMarginBottom', T>): this {
+    return this.write('scrollSnapMarginBottom', value);
+  }
   /**
    * 设置滚动吸附区域左侧外扩的旧名称；新代码使用 scroll-margin-left。
    *
@@ -3424,7 +4195,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-left
    */
-  readonly scrollSnapMarginLeft?: PropertyValue<'scrollSnapMarginLeft', T>;
+  scrollSnapMarginLeft(value: PropertyValue<'scrollSnapMarginLeft', T>): this {
+    return this.write('scrollSnapMarginLeft', value);
+  }
   /**
    * 设置滚动吸附区域右侧外扩的旧名称；新代码使用 scroll-margin-right。
    *
@@ -3432,7 +4205,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-right
    */
-  readonly scrollSnapMarginRight?: PropertyValue<'scrollSnapMarginRight', T>;
+  scrollSnapMarginRight(value: PropertyValue<'scrollSnapMarginRight', T>): this {
+    return this.write('scrollSnapMarginRight', value);
+  }
   /**
    * 设置滚动吸附区域上侧外扩的旧名称；新代码使用 scroll-margin-top。
    *
@@ -3440,7 +4215,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-top
    */
-  readonly scrollSnapMarginTop?: PropertyValue<'scrollSnapMarginTop', T>;
+  scrollSnapMarginTop(value: PropertyValue<'scrollSnapMarginTop', T>): this {
+    return this.write('scrollSnapMarginTop', value);
+  }
   /**
    * 设置滚动时是否允许越过该元素的吸附位置。
    *
@@ -3448,7 +4225,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-stop
    */
-  readonly scrollSnapStop?: PropertyValue<'scrollSnapStop', T>;
+  scrollSnapStop(value: PropertyValue<'scrollSnapStop', T>): this {
+    return this.write('scrollSnapStop', value);
+  }
   /**
    * 设置滚动容器的吸附轴和吸附强度。
    *
@@ -3456,17 +4235,21 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ scrollSnapType: "x mandatory" })
+   * s.scrollSnapType("x mandatory")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type
    */
-  readonly scrollSnapType?: PropertyValue<'scrollSnapType', T>;
+  scrollSnapType(value: PropertyValue<'scrollSnapType', T>): this {
+    return this.write('scrollSnapType', value);
+  }
   /**
    * 同时声明滚动进度时间线的名称和轴。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline
    */
-  readonly scrollTimeline?: PropertyValue<'scrollTimeline', T>;
+  scrollTimeline(value: PropertyValue<'scrollTimeline', T>): this {
+    return this.write('scrollTimeline', value);
+  }
   /**
    * 设置滚动进度时间线所观察的滚动轴。
    *
@@ -3474,7 +4257,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline-axis
    */
-  readonly scrollTimelineAxis?: PropertyValue<'scrollTimelineAxis', T>;
+  scrollTimelineAxis(value: PropertyValue<'scrollTimelineAxis', T>): this {
+    return this.write('scrollTimelineAxis', value);
+  }
   /**
    * 声明基于当前容器滚动进度的时间线名称。
    *
@@ -3482,10 +4267,9 @@ export interface ScrollingProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline-name
    */
-  readonly scrollTimelineName?: PropertyValue<'scrollTimelineName', T>;
-}
-/** 交互与显示控制；泛型 T 保留系统与继承主题关键字。 */
-export interface InteractionProperties<T extends SystemKeywords = SystemKeywords> {
+  scrollTimelineName(value: PropertyValue<'scrollTimelineName', T>): this {
+    return this.write('scrollTimelineName', value);
+  }
   /**
    * 控制元素是否采用平台原生控件外观。
    *
@@ -3493,13 +4277,17 @@ export interface InteractionProperties<T extends SystemKeywords = SystemKeywords
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
    */
-  readonly appearance?: PropertyValue<'appearance', T>;
+  appearance(value: PropertyValue<'appearance', T>): this {
+    return this.write('appearance', value);
+  }
   /**
    * 集中设置文本插入光标的颜色和形状。
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret
    */
-  readonly caret?: PropertyValue<'caret', T>;
+  caret(value: PropertyValue<'caret', T>): this {
+    return this.write('caret', value);
+  }
   /**
    * 设置文本插入光标的形状。
    *
@@ -3507,7 +4295,9 @@ export interface InteractionProperties<T extends SystemKeywords = SystemKeywords
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret-shape
    */
-  readonly caretShape?: PropertyValue<'caretShape', T>;
+  caretShape(value: PropertyValue<'caretShape', T>): this {
+    return this.write('caretShape', value);
+  }
   /**
    * 控制是否渲染元素内容，并允许浏览器跳过暂时不可见的子树。
    *
@@ -3519,11 +4309,13 @@ export interface InteractionProperties<T extends SystemKeywords = SystemKeywords
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ contentVisibility: "auto" })
+   * s.contentVisibility("auto")
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/content-visibility
    */
-  readonly contentVisibility?: PropertyValue<'contentVisibility', T>;
+  contentVisibility(value: PropertyValue<'contentVisibility', T>): this {
+    return this.write('contentVisibility', value);
+  }
   /**
    * 设置指针位于元素上方时显示的光标。
    *
@@ -3531,7 +4323,9 @@ export interface InteractionProperties<T extends SystemKeywords = SystemKeywords
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
    */
-  readonly cursor?: PropertyValue<'cursor', T>;
+  cursor(value: PropertyValue<'cursor', T>): this {
+    return this.write('cursor', value);
+  }
   /**
    * 设置元素何时可以成为指针命中目标；SVG 还支持按填充和描边命中。
    *
@@ -3543,11 +4337,13 @@ export interface InteractionProperties<T extends SystemKeywords = SystemKeywords
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ pointerEvents: "none" })
+   * s.pointerEvents("none")
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
    */
-  readonly pointerEvents?: PropertyValue<'pointerEvents', T>;
+  pointerEvents(value: PropertyValue<'pointerEvents', T>): this {
+    return this.write('pointerEvents', value);
+  }
   /**
    * 设置用户是否能调整元素尺寸以及可调整的方向。
    *
@@ -3555,7 +4351,9 @@ export interface InteractionProperties<T extends SystemKeywords = SystemKeywords
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/resize
    */
-  readonly resize?: PropertyValue<'resize', T>;
+  resize(value: PropertyValue<'resize', T>): this {
+    return this.write('resize', value);
+  }
   /**
    * 声明浏览器可以处理的触摸平移与缩放手势。
    *
@@ -3567,11 +4365,13 @@ export interface InteractionProperties<T extends SystemKeywords = SystemKeywords
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ touchAction: "pan-y" })
+   * s.touchAction("pan-y")
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
    */
-  readonly touchAction?: PropertyValue<'touchAction', T>;
+  touchAction(value: PropertyValue<'touchAction', T>): this {
+    return this.write('touchAction', value);
+  }
   /**
    * 设置用户是否可以选取元素中的文本。
    *
@@ -3581,11 +4381,13 @@ export interface InteractionProperties<T extends SystemKeywords = SystemKeywords
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ userSelect: "all" })
+   * s.userSelect("all")
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/user-select
    */
-  readonly userSelect?: PropertyValue<'userSelect', T>;
+  userSelect(value: PropertyValue<'userSelect', T>): this {
+    return this.write('userSelect', value);
+  }
   /**
    * 设置元素是否可见；隐藏通常保留布局空间。
    *
@@ -3595,14 +4397,13 @@ export interface InteractionProperties<T extends SystemKeywords = SystemKeywords
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ visibility: "hidden" })
+   * s.visibility("hidden")
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/visibility
    */
-  readonly visibility?: PropertyValue<'visibility', T>;
-}
-/** 内容、容器与分页；泛型 T 保留系统与继承主题关键字。 */
-export interface StructureProperties<T extends SystemKeywords = SystemKeywords> {
+  visibility(value: PropertyValue<'visibility', T>): this {
+    return this.write('visibility', value);
+  }
   /**
    * 设置元素之后的分页、分栏或区域分片行为。
    *
@@ -3610,7 +4411,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
    */
-  readonly breakAfter?: PropertyValue<'breakAfter', T>;
+  breakAfter(value: PropertyValue<'breakAfter', T>): this {
+    return this.write('breakAfter', value);
+  }
   /**
    * 设置元素之前的分页、分栏或区域分片行为。
    *
@@ -3618,7 +4421,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
    */
-  readonly breakBefore?: PropertyValue<'breakBefore', T>;
+  breakBefore(value: PropertyValue<'breakBefore', T>): this {
+    return this.write('breakBefore', value);
+  }
   /**
    * 设置元素内部是否允许分页、分栏或区域分片。
    *
@@ -3626,7 +4431,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-inside
    */
-  readonly breakInside?: PropertyValue<'breakInside', T>;
+  breakInside(value: PropertyValue<'breakInside', T>): this {
+    return this.write('breakInside', value);
+  }
   /**
    * 设置表格标题相对于表格的放置侧。
    *
@@ -3634,7 +4441,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caption-side
    */
-  readonly captionSide?: PropertyValue<'captionSide', T>;
+  captionSide(value: PropertyValue<'captionSide', T>): this {
+    return this.write('captionSide', value);
+  }
   /**
    * 声明尺寸、布局、绘制或样式隔离，限制子树对外部的影响。
    *
@@ -3646,17 +4455,21 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ contain: "content" })
+   * s.contain("content")
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain
    */
-  readonly contain?: PropertyValue<'contain', T>;
+  contain(value: PropertyValue<'contain', T>): this {
+    return this.write('contain', value);
+  }
   /**
    * 同时声明查询容器的名称和类型。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/container
    */
-  readonly container?: PropertyValue<'container', T>;
+  container(value: PropertyValue<'container', T>): this {
+    return this.write('container', value);
+  }
   /**
    * 为查询容器命名，供 @container 条件规则选择。
    *
@@ -3664,7 +4477,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/container-name
    */
-  readonly containerName?: PropertyValue<'containerName', T>;
+  containerName(value: PropertyValue<'containerName', T>): this {
+    return this.write('containerName', value);
+  }
   /**
    * 建立指定类型的查询容器，并施加所需的隔离行为。
    *
@@ -3676,11 +4491,13 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ containerType: "inline-size" })
+   * s.containerType("inline-size")
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/container-type
    */
-  readonly containerType?: PropertyValue<'containerType', T>;
+  containerType(value: PropertyValue<'containerType', T>): this {
+    return this.write('containerType', value);
+  }
   /**
    * 设置块轴尺寸隔离或跳过内容渲染时使用的替代内部尺寸。
    *
@@ -3688,7 +4505,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-block-size
    */
-  readonly containIntrinsicBlockSize?: PropertyValue<'containIntrinsicBlockSize', T>;
+  containIntrinsicBlockSize(value: PropertyValue<'containIntrinsicBlockSize', T>): this {
+    return this.write('containIntrinsicBlockSize', value);
+  }
   /**
    * 设置高度隔离或跳过内容渲染时使用的替代内部高度。
    *
@@ -3696,7 +4515,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-height
    */
-  readonly containIntrinsicHeight?: PropertyValue<'containIntrinsicHeight', T>;
+  containIntrinsicHeight(value: PropertyValue<'containIntrinsicHeight', T>): this {
+    return this.write('containIntrinsicHeight', value);
+  }
   /**
    * 设置行内轴尺寸隔离或跳过内容渲染时使用的替代内部尺寸。
    *
@@ -3704,13 +4525,17 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-inline-size
    */
-  readonly containIntrinsicInlineSize?: PropertyValue<'containIntrinsicInlineSize', T>;
+  containIntrinsicInlineSize(value: PropertyValue<'containIntrinsicInlineSize', T>): this {
+    return this.write('containIntrinsicInlineSize', value);
+  }
   /**
    * 集中设置尺寸隔离时使用的替代内部宽高。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-size
    */
-  readonly containIntrinsicSize?: PropertyValue<'containIntrinsicSize', T>;
+  containIntrinsicSize(value: PropertyValue<'containIntrinsicSize', T>): this {
+    return this.write('containIntrinsicSize', value);
+  }
   /**
    * 设置宽度隔离或跳过内容渲染时使用的替代内部宽度。
    *
@@ -3718,7 +4543,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-width
    */
-  readonly containIntrinsicWidth?: PropertyValue<'containIntrinsicWidth', T>;
+  containIntrinsicWidth(value: PropertyValue<'containIntrinsicWidth', T>): this {
+    return this.write('containIntrinsicWidth', value);
+  }
   /**
    * 设置生成内容、替换内容或伪元素的内容。
    *
@@ -3726,7 +4553,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/content
    */
-  readonly content?: PropertyValue<'content', T>;
+  content(value: PropertyValue<'content', T>): this {
+    return this.write('content', value);
+  }
   /**
    * 增加或减少指定 CSS 计数器的值。
    *
@@ -3734,7 +4563,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/counter-increment
    */
-  readonly counterIncrement?: PropertyValue<'counterIncrement', T>;
+  counterIncrement(value: PropertyValue<'counterIncrement', T>): this {
+    return this.write('counterIncrement', value);
+  }
   /**
    * 创建或重置 CSS 计数器。
    *
@@ -3742,7 +4573,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/counter-reset
    */
-  readonly counterReset?: PropertyValue<'counterReset', T>;
+  counterReset(value: PropertyValue<'counterReset', T>): this {
+    return this.write('counterReset', value);
+  }
   /**
    * 设置已有 CSS 计数器的值，必要时创建计数器。
    *
@@ -3750,7 +4583,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/counter-set
    */
-  readonly counterSet?: PropertyValue<'counterSet', T>;
+  counterSet(value: PropertyValue<'counterSet', T>): this {
+    return this.write('counterSet', value);
+  }
   /**
    * 控制分离边框表格中空单元格的边框和背景是否绘制。
    *
@@ -3758,13 +4593,17 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/empty-cells
    */
-  readonly emptyCells?: PropertyValue<'emptyCells', T>;
+  emptyCells(value: PropertyValue<'emptyCells', T>): this {
+    return this.write('emptyCells', value);
+  }
   /**
    * 集中设置列表标记的类型、图像和位置。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style
    */
-  readonly listStyle?: PropertyValue<'listStyle', T>;
+  listStyle(value: PropertyValue<'listStyle', T>): this {
+    return this.write('listStyle', value);
+  }
   /**
    * 设置用作列表标记的图像。
    *
@@ -3772,7 +4611,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style-image
    */
-  readonly listStyleImage?: PropertyValue<'listStyleImage', T>;
+  listStyleImage(value: PropertyValue<'listStyleImage', T>): this {
+    return this.write('listStyleImage', value);
+  }
   /**
    * 设置列表标记位于主块盒内部还是外部。
    *
@@ -3780,7 +4621,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style-position
    */
-  readonly listStylePosition?: PropertyValue<'listStylePosition', T>;
+  listStylePosition(value: PropertyValue<'listStylePosition', T>): this {
+    return this.write('listStylePosition', value);
+  }
   /**
    * 设置列表标记或计数器的样式。
    *
@@ -3788,7 +4631,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style-type
    */
-  readonly listStyleType?: PropertyValue<'listStyleType', T>;
+  listStyleType(value: PropertyValue<'listStyleType', T>): this {
+    return this.write('listStyleType', value);
+  }
   /**
    * 设置分页或分栏断点前需保留的最少行数。
    *
@@ -3796,7 +4641,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/orphans
    */
-  readonly orphans?: PropertyValue<'orphans', T>;
+  orphans(value: PropertyValue<'orphans', T>): this {
+    return this.write('orphans', value);
+  }
   /**
    * 选择分页媒体中使用的命名页面类型。
    *
@@ -3804,7 +4651,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page
    */
-  readonly page?: PropertyValue<'page', T>;
+  page(value: PropertyValue<'page', T>): this {
+    return this.write('page', value);
+  }
   /**
    * 设置表格列宽采用自动还是固定布局算法。
    *
@@ -3812,7 +4661,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/table-layout
    */
-  readonly tableLayout?: PropertyValue<'tableLayout', T>;
+  tableLayout(value: PropertyValue<'tableLayout', T>): this {
+    return this.write('tableLayout', value);
+  }
   /**
    * 设置分页或分栏断点后需保留的最少行数。
    *
@@ -3820,10 +4671,9 @@ export interface StructureProperties<T extends SystemKeywords = SystemKeywords> 
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/widows
    */
-  readonly widows?: PropertyValue<'widows', T>;
-}
-/** SVG 属性；泛型 T 保留系统与继承主题关键字。 */
-export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
+  widows(value: PropertyValue<'widows', T>): this {
+    return this.write('widows', value);
+  }
   /**
    * 使 SVG 文本基线相对于其基准位置偏移。
    *
@@ -3831,7 +4681,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/baseline-shift
    */
-  readonly baselineShift?: PropertyValue<'baselineShift', T>;
+  baselineShift(value: PropertyValue<'baselineShift', T>): this {
+    return this.write('baselineShift', value);
+  }
   /**
    * 选择 SVG 文本布局的主导基线及基线表。
    *
@@ -3839,7 +4691,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/dominant-baseline
    */
-  readonly dominantBaseline?: PropertyValue<'dominantBaseline', T>;
+  dominantBaseline(value: PropertyValue<'dominantBaseline', T>): this {
+    return this.write('dominantBaseline', value);
+  }
   /**
    * 设置 SVG 图形内部的填充绘制方式。
    *
@@ -3847,7 +4701,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/fill
    */
-  readonly fill?: PropertyValue<'fill', T>;
+  fill(value: PropertyValue<'fill', T>): this {
+    return this.write('fill', value);
+  }
   /**
    * 设置 SVG 填充的不透明度，不影响描边。
    *
@@ -3855,7 +4711,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/fill-opacity
    */
-  readonly fillOpacity?: PropertyValue<'fillOpacity', T>;
+  fillOpacity(value: PropertyValue<'fillOpacity', T>): this {
+    return this.write('fillOpacity', value);
+  }
   /**
    * 设置复杂 SVG 路径的内部区域判定规则。
    *
@@ -3863,7 +4721,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/fill-rule
    */
-  readonly fillRule?: PropertyValue<'fillRule', T>;
+  fillRule(value: PropertyValue<'fillRule', T>): this {
+    return this.write('fillRule', value);
+  }
   /**
    * 设置 SVG feFlood 或相关滤镜的洪泛颜色。
    *
@@ -3871,7 +4731,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flood-color
    */
-  readonly floodColor?: PropertyValue<'floodColor', T>;
+  floodColor(value: PropertyValue<'floodColor', T>): this {
+    return this.write('floodColor', value);
+  }
   /**
    * 设置 SVG 洪泛滤镜颜色的不透明度。
    *
@@ -3879,13 +4741,17 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flood-opacity
    */
-  readonly floodOpacity?: PropertyValue<'floodOpacity', T>;
+  floodOpacity(value: PropertyValue<'floodOpacity', T>): this {
+    return this.write('floodOpacity', value);
+  }
   /**
    * 设置竖排 SVG 字形方向的旧属性；新代码优先考虑 text-orientation。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/glyph-orientation-vertical
    */
-  readonly glyphOrientationVertical?: PropertyValue<'glyphOrientationVertical', T>;
+  glyphOrientationVertical(value: PropertyValue<'glyphOrientationVertical', T>): this {
+    return this.write('glyphOrientationVertical', value);
+  }
   /**
    * 设置 SVG 光照滤镜使用的光源颜色。
    *
@@ -3893,13 +4759,17 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/lighting-color
    */
-  readonly lightingColor?: PropertyValue<'lightingColor', T>;
+  lightingColor(value: PropertyValue<'lightingColor', T>): this {
+    return this.write('lightingColor', value);
+  }
   /**
    * 同时设置 SVG 路径起点、中间顶点和终点的标记图形。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker
    */
-  readonly marker?: PropertyValue<'marker', T>;
+  marker(value: PropertyValue<'marker', T>): this {
+    return this.write('marker', value);
+  }
   /**
    * 设置 SVG 路径终点的标记图形。
    *
@@ -3907,7 +4777,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker-end
    */
-  readonly markerEnd?: PropertyValue<'markerEnd', T>;
+  markerEnd(value: PropertyValue<'markerEnd', T>): this {
+    return this.write('markerEnd', value);
+  }
   /**
    * 设置 SVG 路径中间顶点的标记图形。
    *
@@ -3915,7 +4787,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker-mid
    */
-  readonly markerMid?: PropertyValue<'markerMid', T>;
+  markerMid(value: PropertyValue<'markerMid', T>): this {
+    return this.write('markerMid', value);
+  }
   /**
    * 设置 SVG 路径起点的标记图形。
    *
@@ -3923,7 +4797,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker-start
    */
-  readonly markerStart?: PropertyValue<'markerStart', T>;
+  markerStart(value: PropertyValue<'markerStart', T>): this {
+    return this.write('markerStart', value);
+  }
   /**
    * 设置 SVG 填充、描边和标记的绘制先后顺序。
    *
@@ -3931,7 +4807,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/paint-order
    */
-  readonly paintOrder?: PropertyValue<'paintOrder', T>;
+  paintOrder(value: PropertyValue<'paintOrder', T>): this {
+    return this.write('paintOrder', value);
+  }
   /**
    * 设置 SVG 渐变 stop 节点的颜色。
    *
@@ -3939,7 +4817,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stop-color
    */
-  readonly stopColor?: PropertyValue<'stopColor', T>;
+  stopColor(value: PropertyValue<'stopColor', T>): this {
+    return this.write('stopColor', value);
+  }
   /**
    * 设置 SVG 渐变 stop 节点的不透明度。
    *
@@ -3947,13 +4827,17 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stop-opacity
    */
-  readonly stopOpacity?: PropertyValue<'stopOpacity', T>;
+  stopOpacity(value: PropertyValue<'stopOpacity', T>): this {
+    return this.write('stopOpacity', value);
+  }
   /**
    * 设置 SVG 图形轮廓的描边绘制方式。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke
    */
-  readonly stroke?: PropertyValue<'stroke', T>;
+  stroke(value: PropertyValue<'stroke', T>): this {
+    return this.write('stroke', value);
+  }
   /**
    * 设置 SVG 描边虚线中线段与空隙的长度序列。
    *
@@ -3961,7 +4845,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-dasharray
    */
-  readonly strokeDasharray?: PropertyValue<'strokeDasharray', T>;
+  strokeDasharray(value: PropertyValue<'strokeDasharray', T>): this {
+    return this.write('strokeDasharray', value);
+  }
   /**
    * 设置 SVG 虚线描边相对于路径起点的偏移。
    *
@@ -3969,7 +4855,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-dashoffset
    */
-  readonly strokeDashoffset?: PropertyValue<'strokeDashoffset', T>;
+  strokeDashoffset(value: PropertyValue<'strokeDashoffset', T>): this {
+    return this.write('strokeDashoffset', value);
+  }
   /**
    * 设置开放 SVG 子路径端点的描边形状。
    *
@@ -3977,7 +4865,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-linecap
    */
-  readonly strokeLinecap?: PropertyValue<'strokeLinecap', T>;
+  strokeLinecap(value: PropertyValue<'strokeLinecap', T>): this {
+    return this.write('strokeLinecap', value);
+  }
   /**
    * 设置 SVG 路径转角处描边的连接形状。
    *
@@ -3985,7 +4875,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-linejoin
    */
-  readonly strokeLinejoin?: PropertyValue<'strokeLinejoin', T>;
+  strokeLinejoin(value: PropertyValue<'strokeLinejoin', T>): this {
+    return this.write('strokeLinejoin', value);
+  }
   /**
    * 限制尖角连接的延伸比例，超过阈值时改变连接形状。
    *
@@ -3993,7 +4885,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-miterlimit
    */
-  readonly strokeMiterlimit?: PropertyValue<'strokeMiterlimit', T>;
+  strokeMiterlimit(value: PropertyValue<'strokeMiterlimit', T>): this {
+    return this.write('strokeMiterlimit', value);
+  }
   /**
    * 设置 SVG 描边的不透明度，不影响填充。
    *
@@ -4001,7 +4895,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-opacity
    */
-  readonly strokeOpacity?: PropertyValue<'strokeOpacity', T>;
+  strokeOpacity(value: PropertyValue<'strokeOpacity', T>): this {
+    return this.write('strokeOpacity', value);
+  }
   /**
    * 设置 SVG 描边宽度。
    *
@@ -4009,7 +4905,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-width
    */
-  readonly strokeWidth?: PropertyValue<'strokeWidth', T>;
+  strokeWidth(value: PropertyValue<'strokeWidth', T>): this {
+    return this.write('strokeWidth', value);
+  }
   /**
    * 设置 SVG 图形变换时对描边等矢量效果的处理。
    *
@@ -4017,10 +4915,9 @@ export interface SvgProperties<T extends SystemKeywords = SystemKeywords> {
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vector-effect
    */
-  readonly vectorEffect?: PropertyValue<'vectorEffect', T>;
-}
-/** 厂商与历史兼容属性；泛型 T 保留系统与继承主题关键字。 */
-export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywords> {
+  vectorEffect(value: PropertyValue<'vectorEffect', T>): this {
+    return this.write('vectorEffect', value);
+  }
   /**
    * 控制旧版弹性盒子项在交叉方向上的对齐，常规布局优先使用 align-items。
    *
@@ -4029,7 +4926,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-align
    */
-  readonly boxAlign?: PropertyValue<'boxAlign', T>;
+  boxAlign(value: PropertyValue<'boxAlign', T>): this {
+    return this.write('boxAlign', value);
+  }
   /**
    * 指定旧版弹性盒的子项排列方向是否反转。
    *
@@ -4038,7 +4937,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-direction
    */
-  readonly boxDirection?: PropertyValue<'boxDirection', T>;
+  boxDirection(value: PropertyValue<'boxDirection', T>): this {
+    return this.write('boxDirection', value);
+  }
   /**
    * 指定旧版弹性盒子项分配剩余空间的比例。
    *
@@ -4047,7 +4948,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-flex
    */
-  readonly boxFlex?: PropertyValue<'boxFlex', T>;
+  boxFlex(value: PropertyValue<'boxFlex', T>): this {
+    return this.write('boxFlex', value);
+  }
   /**
    * 指定旧版弹性盒子项参与弹性分配的组。
    *
@@ -4056,7 +4959,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-flex-group
    */
-  readonly boxFlexGroup?: PropertyValue<'boxFlexGroup', T>;
+  boxFlexGroup(value: PropertyValue<'boxFlexGroup', T>): this {
+    return this.write('boxFlexGroup', value);
+  }
   /**
    * 控制旧版弹性盒是否允许子项分成多行。
    *
@@ -4065,7 +4970,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-lines
    */
-  readonly boxLines?: PropertyValue<'boxLines', T>;
+  boxLines(value: PropertyValue<'boxLines', T>): this {
+    return this.write('boxLines', value);
+  }
   /**
    * 设置旧版弹性盒的子项排列组序号，现代布局使用 order。
    *
@@ -4074,7 +4981,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-ordinal-group
    */
-  readonly boxOrdinalGroup?: PropertyValue<'boxOrdinalGroup', T>;
+  boxOrdinalGroup(value: PropertyValue<'boxOrdinalGroup', T>): this {
+    return this.write('boxOrdinalGroup', value);
+  }
   /**
    * 指定旧版弹性盒的水平或垂直排列轴，现代布局使用 flex-direction。
    *
@@ -4083,7 +4992,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-orient
    */
-  readonly boxOrient?: PropertyValue<'boxOrient', T>;
+  boxOrient(value: PropertyValue<'boxOrient', T>): this {
+    return this.write('boxOrient', value);
+  }
   /**
    * 控制旧版弹性盒在主轴方向的空余空间分配，现代布局使用 justify-content。
    *
@@ -4092,7 +5003,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-pack
    */
-  readonly boxPack?: PropertyValue<'boxPack', T>;
+  boxPack(value: PropertyValue<'boxPack', T>): this {
+    return this.write('boxPack', value);
+  }
   /**
    * 使用旧式矩形裁剪绝对定位元素；新代码优先考虑 clip-path。
    *
@@ -4101,7 +5014,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip
    */
-  readonly clip?: PropertyValue<'clip', T>;
+  clip(value: PropertyValue<'clip', T>): this {
+    return this.write('clip', value);
+  }
   /**
    * 选择字体的宽窄字面；font-width 是其较新的名称。
    *
@@ -4110,7 +5025,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-stretch
    */
-  readonly fontStretch?: PropertyValue<'fontStretch', T>;
+  fontStretch(value: PropertyValue<'fontStretch', T>): this {
+    return this.write('fontStretch', value);
+  }
   /**
    * 兼容属性 grid-column-gap；优先参考标准属性 columnGap及浏览器支持范围。
    * 设置布局中相邻列之间的间距。
@@ -4120,7 +5037,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column-gap
    */
-  readonly gridColumnGap?: PropertyValue<'gridColumnGap', T>;
+  gridColumnGap(value: PropertyValue<'gridColumnGap', T>): this {
+    return this.write('gridColumnGap', value);
+  }
   /**
    * 兼容属性 grid-gap；优先参考标准属性 gap及浏览器支持范围。
    * 设置行与列之间的间距，用于 Grid、Flex 和多栏等布局。
@@ -4128,7 +5047,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-gap
    */
-  readonly gridGap?: PropertyValue<'gridGap', T>;
+  gridGap(value: PropertyValue<'gridGap', T>): this {
+    return this.write('gridGap', value);
+  }
   /**
    * 兼容属性 grid-row-gap；优先参考标准属性 rowGap及浏览器支持范围。
    * 设置布局中相邻行之间的间距。
@@ -4138,7 +5059,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row-gap
    */
-  readonly gridRowGap?: PropertyValue<'gridRowGap', T>;
+  gridRowGap(value: PropertyValue<'gridRowGap', T>): this {
+    return this.write('gridRowGap', value);
+  }
   /**
    * 旧版输入法状态控制，不应替代 inputmode 或正常输入交互。
    *
@@ -4147,7 +5070,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ime-mode
    */
-  readonly imeMode?: PropertyValue<'imeMode', T>;
+  imeMode(value: PropertyValue<'imeMode', T>): this {
+    return this.write('imeMode', value);
+  }
   /**
    * 兼容属性 inset-area；优先参考标准属性 positionArea及浏览器支持范围。
    * 选择相对于锚点的定位区域。
@@ -4157,7 +5082,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
    */
-  readonly insetArea?: PropertyValue<'insetArea', T>;
+  insetArea(value: PropertyValue<'insetArea', T>): this {
+    return this.write('insetArea', value);
+  }
   /**
    * 兼容属性 -khtml-box-align；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒子项在交叉方向上的对齐，常规布局优先使用 align-items。
@@ -4167,7 +5094,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-align
    */
-  readonly KhtmlBoxAlign?: PropertyValue<'KhtmlBoxAlign', T>;
+  KhtmlBoxAlign(value: PropertyValue<'KhtmlBoxAlign', T>): this {
+    return this.write('KhtmlBoxAlign', value);
+  }
   /**
    * 兼容属性 -khtml-box-direction；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒的子项排列方向是否反转。
@@ -4177,7 +5106,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-direction
    */
-  readonly KhtmlBoxDirection?: PropertyValue<'KhtmlBoxDirection', T>;
+  KhtmlBoxDirection(value: PropertyValue<'KhtmlBoxDirection', T>): this {
+    return this.write('KhtmlBoxDirection', value);
+  }
   /**
    * 兼容属性 -khtml-box-flex；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒子项分配剩余空间的比例。
@@ -4187,7 +5118,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-flex
    */
-  readonly KhtmlBoxFlex?: PropertyValue<'KhtmlBoxFlex', T>;
+  KhtmlBoxFlex(value: PropertyValue<'KhtmlBoxFlex', T>): this {
+    return this.write('KhtmlBoxFlex', value);
+  }
   /**
    * 兼容属性 -khtml-box-flex-group；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒子项参与弹性分配的组。
@@ -4197,7 +5130,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-flex-group
    */
-  readonly KhtmlBoxFlexGroup?: PropertyValue<'KhtmlBoxFlexGroup', T>;
+  KhtmlBoxFlexGroup(value: PropertyValue<'KhtmlBoxFlexGroup', T>): this {
+    return this.write('KhtmlBoxFlexGroup', value);
+  }
   /**
    * 兼容属性 -khtml-box-lines；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒是否允许子项分成多行。
@@ -4207,7 +5142,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-lines
    */
-  readonly KhtmlBoxLines?: PropertyValue<'KhtmlBoxLines', T>;
+  KhtmlBoxLines(value: PropertyValue<'KhtmlBoxLines', T>): this {
+    return this.write('KhtmlBoxLines', value);
+  }
   /**
    * 兼容属性 -khtml-box-ordinal-group；优先参考标准属性及浏览器支持范围。
    * 设置旧版弹性盒的子项排列组序号，现代布局使用 order。
@@ -4217,7 +5154,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-ordinal-group
    */
-  readonly KhtmlBoxOrdinalGroup?: PropertyValue<'KhtmlBoxOrdinalGroup', T>;
+  KhtmlBoxOrdinalGroup(value: PropertyValue<'KhtmlBoxOrdinalGroup', T>): this {
+    return this.write('KhtmlBoxOrdinalGroup', value);
+  }
   /**
    * 兼容属性 -khtml-box-orient；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒的水平或垂直排列轴，现代布局使用 flex-direction。
@@ -4227,7 +5166,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-orient
    */
-  readonly KhtmlBoxOrient?: PropertyValue<'KhtmlBoxOrient', T>;
+  KhtmlBoxOrient(value: PropertyValue<'KhtmlBoxOrient', T>): this {
+    return this.write('KhtmlBoxOrient', value);
+  }
   /**
    * 兼容属性 -khtml-box-pack；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒在主轴方向的空余空间分配，现代布局使用 justify-content。
@@ -4237,7 +5178,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-pack
    */
-  readonly KhtmlBoxPack?: PropertyValue<'KhtmlBoxPack', T>;
+  KhtmlBoxPack(value: PropertyValue<'KhtmlBoxPack', T>): this {
+    return this.write('KhtmlBoxPack', value);
+  }
   /**
    * 兼容属性 -khtml-line-break；优先参考标准属性及浏览器支持范围。
    * 设置东亚文字标点等字符的换行严格程度。
@@ -4247,7 +5190,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-line-break
    */
-  readonly KhtmlLineBreak?: PropertyValue<'KhtmlLineBreak', T>;
+  KhtmlLineBreak(value: PropertyValue<'KhtmlLineBreak', T>): this {
+    return this.write('KhtmlLineBreak', value);
+  }
   /**
    * 兼容属性 -khtml-opacity；优先参考标准属性及浏览器支持范围。
    * 设置元素及其子树合成后的整体不透明度。
@@ -4258,12 +5203,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`1`，不同于浏览器默认样式表。
    * @example
-   * css({ opacity: 0.5 })
+   * s.opacity(0.5)
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-opacity
    */
-  readonly KhtmlOpacity?: PropertyValue<'KhtmlOpacity', T>;
+  KhtmlOpacity(value: PropertyValue<'KhtmlOpacity', T>): this {
+    return this.write('KhtmlOpacity', value);
+  }
   /**
    * 兼容属性 -khtml-user-select；优先参考标准属性及浏览器支持范围。
    * 设置用户是否可以选取元素中的文本。
@@ -4274,19 +5221,23 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ userSelect: "all" })
+   * s.userSelect("all")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-user-select
    */
-  readonly KhtmlUserSelect?: PropertyValue<'KhtmlUserSelect', T>;
+  KhtmlUserSelect(value: PropertyValue<'KhtmlUserSelect', T>): this {
+    return this.write('KhtmlUserSelect', value);
+  }
   /**
    * 兼容属性 -moz-animation；优先参考标准属性及浏览器支持范围。
    * 集中设置关键帧动画的名称、时长、缓动、延迟、次数及播放行为。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
    */
-  readonly MozAnimation?: PropertyValue<'MozAnimation', T>;
+  MozAnimation(value: PropertyValue<'MozAnimation', T>): this {
+    return this.write('MozAnimation', value);
+  }
   /**
    * 兼容属性 -moz-animation-delay；优先参考标准属性及浏览器支持范围。
    * 设置动画开始前的延迟；负值表示从动画中途开始播放。
@@ -4295,7 +5246,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-delay
    */
-  readonly MozAnimationDelay?: PropertyValue<'MozAnimationDelay', T>;
+  MozAnimationDelay(value: PropertyValue<'MozAnimationDelay', T>): this {
+    return this.write('MozAnimationDelay', value);
+  }
   /**
    * 兼容属性 -moz-animation-direction；优先参考标准属性及浏览器支持范围。
    * 设置动画按正向、反向或交替方向播放。
@@ -4304,7 +5257,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-direction
    */
-  readonly MozAnimationDirection?: PropertyValue<'MozAnimationDirection', T>;
+  MozAnimationDirection(value: PropertyValue<'MozAnimationDirection', T>): this {
+    return this.write('MozAnimationDirection', value);
+  }
   /**
    * 兼容属性 -moz-animation-duration；优先参考标准属性及浏览器支持范围。
    * 设置动画完成一次循环的时长。
@@ -4313,7 +5268,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-duration
    */
-  readonly MozAnimationDuration?: PropertyValue<'MozAnimationDuration', T>;
+  MozAnimationDuration(value: PropertyValue<'MozAnimationDuration', T>): this {
+    return this.write('MozAnimationDuration', value);
+  }
   /**
    * 兼容属性 -moz-animation-fill-mode；优先参考标准属性及浏览器支持范围。
    * 设置动画在有效播放区间之外是否应用关键帧样式。
@@ -4326,11 +5283,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ animationFillMode: "forwards" })
+   * s.animationFillMode("forwards")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-fill-mode
    */
-  readonly MozAnimationFillMode?: PropertyValue<'MozAnimationFillMode', T>;
+  MozAnimationFillMode(value: PropertyValue<'MozAnimationFillMode', T>): this {
+    return this.write('MozAnimationFillMode', value);
+  }
   /**
    * 兼容属性 -moz-animation-iteration-count；优先参考标准属性及浏览器支持范围。
    * 设置动画循环次数，或无限循环。
@@ -4339,7 +5298,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-iteration-count
    */
-  readonly MozAnimationIterationCount?: PropertyValue<'MozAnimationIterationCount', T>;
+  MozAnimationIterationCount(value: PropertyValue<'MozAnimationIterationCount', T>): this {
+    return this.write('MozAnimationIterationCount', value);
+  }
   /**
    * 兼容属性 -moz-animation-name；优先参考标准属性及浏览器支持范围。
    * 选择要播放的 @keyframes 动画名称。
@@ -4348,7 +5309,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-name
    */
-  readonly MozAnimationName?: PropertyValue<'MozAnimationName', T>;
+  MozAnimationName(value: PropertyValue<'MozAnimationName', T>): this {
+    return this.write('MozAnimationName', value);
+  }
   /**
    * 兼容属性 -moz-animation-play-state；优先参考标准属性及浏览器支持范围。
    * 控制动画运行或暂停，暂停后可从原位置继续。
@@ -4357,7 +5320,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-play-state
    */
-  readonly MozAnimationPlayState?: PropertyValue<'MozAnimationPlayState', T>;
+  MozAnimationPlayState(value: PropertyValue<'MozAnimationPlayState', T>): this {
+    return this.write('MozAnimationPlayState', value);
+  }
   /**
    * 兼容属性 -moz-animation-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置动画每个关键帧区间内进度变化的缓动函数。
@@ -4366,7 +5331,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-timing-function
    */
-  readonly MozAnimationTimingFunction?: PropertyValue<'MozAnimationTimingFunction', T>;
+  MozAnimationTimingFunction(value: PropertyValue<'MozAnimationTimingFunction', T>): this {
+    return this.write('MozAnimationTimingFunction', value);
+  }
   /**
    * 兼容属性 -moz-appearance；优先参考标准属性及浏览器支持范围。
    * 控制元素是否采用平台原生控件外观。
@@ -4375,7 +5342,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
-  readonly MozAppearance?: PropertyValue<'MozAppearance', T>;
+  MozAppearance(value: PropertyValue<'MozAppearance', T>): this {
+    return this.write('MozAppearance', value);
+  }
   /**
    * 兼容属性 -moz-backface-visibility；优先参考标准属性及浏览器支持范围。
    * 控制经过三维变换后背向观察者的元素背面是否可见。
@@ -4384,7 +5353,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-backface-visibility
    */
-  readonly MozBackfaceVisibility?: PropertyValue<'MozBackfaceVisibility', T>;
+  MozBackfaceVisibility(value: PropertyValue<'MozBackfaceVisibility', T>): this {
+    return this.write('MozBackfaceVisibility', value);
+  }
   /**
    * 兼容属性 -moz-background-clip；优先参考标准属性及浏览器支持范围。
    * 设置背景允许绘制到的边界区域。
@@ -4394,7 +5365,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-background-clip
    */
-  readonly MozBackgroundClip?: PropertyValue<'MozBackgroundClip', T>;
+  MozBackgroundClip(value: PropertyValue<'MozBackgroundClip', T>): this {
+    return this.write('MozBackgroundClip', value);
+  }
   /**
    * 兼容属性 -moz-background-origin；优先参考标准属性及浏览器支持范围。
    * 设置背景图像定位所依据的盒子区域。
@@ -4404,7 +5377,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-background-origin
    */
-  readonly MozBackgroundOrigin?: PropertyValue<'MozBackgroundOrigin', T>;
+  MozBackgroundOrigin(value: PropertyValue<'MozBackgroundOrigin', T>): this {
+    return this.write('MozBackgroundOrigin', value);
+  }
   /**
    * 兼容属性 -moz-background-size；优先参考标准属性及浏览器支持范围。
    * 设置背景图像尺寸，以及覆盖或完整容纳图像的缩放方式。
@@ -4417,12 +5392,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
    * @example
-   * css({ backgroundSize: "cover", backgroundPosition: "center" })
+   * s.backgroundSize("cover").backgroundPosition("center")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-background-size
    */
-  readonly MozBackgroundSize?: PropertyValue<'MozBackgroundSize', T>;
+  MozBackgroundSize(value: PropertyValue<'MozBackgroundSize', T>): this {
+    return this.write('MozBackgroundSize', value);
+  }
   /**
    * 兼容属性 -moz-binding；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的 XBL 绑定入口；仅描述历史兼容行为，不适用于现代组件实现。
@@ -4431,7 +5408,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-binding
    */
-  readonly MozBinding?: PropertyValue<'MozBinding', T>;
+  MozBinding(value: PropertyValue<'MozBinding', T>): this {
+    return this.write('MozBinding', value);
+  }
   /**
    * 兼容属性 -moz-border-bottom-colors；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的下边框多色列表；现代设计使用普通边框或 border-image。
@@ -4440,7 +5419,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-bottom-colors
    */
-  readonly MozBorderBottomColors?: PropertyValue<'MozBorderBottomColors', T>;
+  MozBorderBottomColors(value: PropertyValue<'MozBorderBottomColors', T>): this {
+    return this.write('MozBorderBottomColors', value);
+  }
   /**
    * 兼容属性 -moz-border-end-color；优先参考标准属性 borderInlineEndColor及浏览器支持范围。
    * 设置逻辑行内轴结束侧边框颜色。
@@ -4449,7 +5430,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-color
    */
-  readonly MozBorderEndColor?: PropertyValue<'MozBorderEndColor', T>;
+  MozBorderEndColor(value: PropertyValue<'MozBorderEndColor', T>): this {
+    return this.write('MozBorderEndColor', value);
+  }
   /**
    * 兼容属性 -moz-border-end-style；优先参考标准属性 borderInlineEndStyle及浏览器支持范围。
    * 设置逻辑行内轴结束侧边框线型。
@@ -4458,7 +5441,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
    */
-  readonly MozBorderEndStyle?: PropertyValue<'MozBorderEndStyle', T>;
+  MozBorderEndStyle(value: PropertyValue<'MozBorderEndStyle', T>): this {
+    return this.write('MozBorderEndStyle', value);
+  }
   /**
    * 兼容属性 -moz-border-end-width；优先参考标准属性 borderInlineEndWidth及浏览器支持范围。
    * 设置逻辑行内轴结束侧边框宽度。
@@ -4467,14 +5452,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-width
    */
-  readonly MozBorderEndWidth?: PropertyValue<'MozBorderEndWidth', T>;
+  MozBorderEndWidth(value: PropertyValue<'MozBorderEndWidth', T>): this {
+    return this.write('MozBorderEndWidth', value);
+  }
   /**
    * 兼容属性 -moz-border-image；优先参考标准属性及浏览器支持范围。
    * 设置用作边框的图像及其切片、宽度、外扩和重复方式。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-image
    */
-  readonly MozBorderImage?: PropertyValue<'MozBorderImage', T>;
+  MozBorderImage(value: PropertyValue<'MozBorderImage', T>): this {
+    return this.write('MozBorderImage', value);
+  }
   /**
    * 兼容属性 -moz-border-left-colors；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的左边框多色列表；现代设计使用普通边框或 border-image。
@@ -4483,7 +5472,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-left-colors
    */
-  readonly MozBorderLeftColors?: PropertyValue<'MozBorderLeftColors', T>;
+  MozBorderLeftColors(value: PropertyValue<'MozBorderLeftColors', T>): this {
+    return this.write('MozBorderLeftColors', value);
+  }
   /**
    * 兼容属性 -moz-border-radius；优先参考标准属性及浏览器支持范围。
    * 设置四个角的圆角半径；斜杠语法可分别指定水平和垂直半径。
@@ -4492,12 +5483,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * 适用场景：卡片、按钮、头像的圆角外观。
    * @example
-   * css({ borderRadius: "8px" })
+   * s.borderRadius("8px")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius
    */
-  readonly MozBorderRadius?: PropertyValue<'MozBorderRadius', T>;
+  MozBorderRadius(value: PropertyValue<'MozBorderRadius', T>): this {
+    return this.write('MozBorderRadius', value);
+  }
   /**
    * 兼容属性 -moz-border-radius-bottomleft；优先参考标准属性 borderBottomLeftRadius及浏览器支持范围。
    * 设置左下角边框的圆角半径。
@@ -4507,7 +5500,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-bottomleft
    */
-  readonly MozBorderRadiusBottomleft?: PropertyValue<'MozBorderRadiusBottomleft', T>;
+  MozBorderRadiusBottomleft(value: PropertyValue<'MozBorderRadiusBottomleft', T>): this {
+    return this.write('MozBorderRadiusBottomleft', value);
+  }
   /**
    * 兼容属性 -moz-border-radius-bottomright；优先参考标准属性 borderBottomRightRadius及浏览器支持范围。
    * 设置右下角边框的圆角半径。
@@ -4517,7 +5512,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-bottomright
    */
-  readonly MozBorderRadiusBottomright?: PropertyValue<'MozBorderRadiusBottomright', T>;
+  MozBorderRadiusBottomright(value: PropertyValue<'MozBorderRadiusBottomright', T>): this {
+    return this.write('MozBorderRadiusBottomright', value);
+  }
   /**
    * 兼容属性 -moz-border-radius-topleft；优先参考标准属性 borderTopLeftRadius及浏览器支持范围。
    * 设置左上角边框的圆角半径。
@@ -4527,7 +5524,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-topleft
    */
-  readonly MozBorderRadiusTopleft?: PropertyValue<'MozBorderRadiusTopleft', T>;
+  MozBorderRadiusTopleft(value: PropertyValue<'MozBorderRadiusTopleft', T>): this {
+    return this.write('MozBorderRadiusTopleft', value);
+  }
   /**
    * 兼容属性 -moz-border-radius-topright；优先参考标准属性 borderTopRightRadius及浏览器支持范围。
    * 设置右上角边框的圆角半径。
@@ -4537,7 +5536,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-topright
    */
-  readonly MozBorderRadiusTopright?: PropertyValue<'MozBorderRadiusTopright', T>;
+  MozBorderRadiusTopright(value: PropertyValue<'MozBorderRadiusTopright', T>): this {
+    return this.write('MozBorderRadiusTopright', value);
+  }
   /**
    * 兼容属性 -moz-border-right-colors；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的右边框多色列表；现代设计使用普通边框或 border-image。
@@ -4546,7 +5547,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-right-colors
    */
-  readonly MozBorderRightColors?: PropertyValue<'MozBorderRightColors', T>;
+  MozBorderRightColors(value: PropertyValue<'MozBorderRightColors', T>): this {
+    return this.write('MozBorderRightColors', value);
+  }
   /**
    * 兼容属性 -moz-border-start-color；优先参考标准属性 borderInlineStartColor及浏览器支持范围。
    * 设置逻辑行内轴起始侧边框颜色。
@@ -4555,7 +5558,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-color
    */
-  readonly MozBorderStartColor?: PropertyValue<'MozBorderStartColor', T>;
+  MozBorderStartColor(value: PropertyValue<'MozBorderStartColor', T>): this {
+    return this.write('MozBorderStartColor', value);
+  }
   /**
    * 兼容属性 -moz-border-start-style；优先参考标准属性 borderInlineStartStyle及浏览器支持范围。
    * 设置逻辑行内轴起始侧边框线型。
@@ -4564,7 +5569,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
    */
-  readonly MozBorderStartStyle?: PropertyValue<'MozBorderStartStyle', T>;
+  MozBorderStartStyle(value: PropertyValue<'MozBorderStartStyle', T>): this {
+    return this.write('MozBorderStartStyle', value);
+  }
   /**
    * 兼容属性 -moz-border-top-colors；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的上边框多色列表；现代设计使用普通边框或 border-image。
@@ -4573,7 +5580,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-top-colors
    */
-  readonly MozBorderTopColors?: PropertyValue<'MozBorderTopColors', T>;
+  MozBorderTopColors(value: PropertyValue<'MozBorderTopColors', T>): this {
+    return this.write('MozBorderTopColors', value);
+  }
   /**
    * 兼容属性 -moz-box-align；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒子项在交叉方向上的对齐，常规布局优先使用 align-items。
@@ -4583,7 +5592,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-align
    */
-  readonly MozBoxAlign?: PropertyValue<'MozBoxAlign', T>;
+  MozBoxAlign(value: PropertyValue<'MozBoxAlign', T>): this {
+    return this.write('MozBoxAlign', value);
+  }
   /**
    * 兼容属性 -moz-box-direction；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒的子项排列方向是否反转。
@@ -4593,7 +5604,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-direction
    */
-  readonly MozBoxDirection?: PropertyValue<'MozBoxDirection', T>;
+  MozBoxDirection(value: PropertyValue<'MozBoxDirection', T>): this {
+    return this.write('MozBoxDirection', value);
+  }
   /**
    * 兼容属性 -moz-box-flex；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒子项分配剩余空间的比例。
@@ -4603,7 +5616,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-flex
    */
-  readonly MozBoxFlex?: PropertyValue<'MozBoxFlex', T>;
+  MozBoxFlex(value: PropertyValue<'MozBoxFlex', T>): this {
+    return this.write('MozBoxFlex', value);
+  }
   /**
    * 兼容属性 -moz-box-ordinal-group；优先参考标准属性及浏览器支持范围。
    * 设置旧版弹性盒的子项排列组序号，现代布局使用 order。
@@ -4613,7 +5628,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-ordinal-group
    */
-  readonly MozBoxOrdinalGroup?: PropertyValue<'MozBoxOrdinalGroup', T>;
+  MozBoxOrdinalGroup(value: PropertyValue<'MozBoxOrdinalGroup', T>): this {
+    return this.write('MozBoxOrdinalGroup', value);
+  }
   /**
    * 兼容属性 -moz-box-orient；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒的水平或垂直排列轴，现代布局使用 flex-direction。
@@ -4623,7 +5640,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-orient
    */
-  readonly MozBoxOrient?: PropertyValue<'MozBoxOrient', T>;
+  MozBoxOrient(value: PropertyValue<'MozBoxOrient', T>): this {
+    return this.write('MozBoxOrient', value);
+  }
   /**
    * 兼容属性 -moz-box-pack；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒在主轴方向的空余空间分配，现代布局使用 justify-content。
@@ -4633,7 +5652,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-pack
    */
-  readonly MozBoxPack?: PropertyValue<'MozBoxPack', T>;
+  MozBoxPack(value: PropertyValue<'MozBoxPack', T>): this {
+    return this.write('MozBoxPack', value);
+  }
   /**
    * 兼容属性 -moz-box-shadow；优先参考标准属性及浏览器支持范围。
    * 设置盒子的外部或内部阴影，可叠加多层。
@@ -4644,12 +5665,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ boxShadow: "0 2px 8px rgb(0 0 0 / 0.15)" })
+   * s.boxShadow("0 2px 8px rgb(0 0 0 / 0.15)")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-shadow
    */
-  readonly MozBoxShadow?: PropertyValue<'MozBoxShadow', T>;
+  MozBoxShadow(value: PropertyValue<'MozBoxShadow', T>): this {
+    return this.write('MozBoxShadow', value);
+  }
   /**
    * 兼容属性 -moz-box-sizing；优先参考标准属性及浏览器支持范围。
    * 决定 width、height 等尺寸是否包含内边距和边框。
@@ -4660,11 +5683,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`content-box`，不同于浏览器默认样式表。
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-sizing
    */
-  readonly MozBoxSizing?: PropertyValue<'MozBoxSizing', T>;
+  MozBoxSizing(value: PropertyValue<'MozBoxSizing', T>): this {
+    return this.write('MozBoxSizing', value);
+  }
   /**
    * 兼容属性 -moz-column-count；优先参考标准属性及浏览器支持范围。
    * 设置多栏布局的目标栏数。
@@ -4674,7 +5699,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-count
    */
-  readonly MozColumnCount?: PropertyValue<'MozColumnCount', T>;
+  MozColumnCount(value: PropertyValue<'MozColumnCount', T>): this {
+    return this.write('MozColumnCount', value);
+  }
   /**
    * 兼容属性 -moz-column-fill；优先参考标准属性及浏览器支持范围。
    * 设置多栏内容顺序填充还是尽量均衡栏高。
@@ -4684,14 +5711,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-fill
    */
-  readonly MozColumnFill?: PropertyValue<'MozColumnFill', T>;
+  MozColumnFill(value: PropertyValue<'MozColumnFill', T>): this {
+    return this.write('MozColumnFill', value);
+  }
   /**
    * 兼容属性 -moz-column-rule；优先参考标准属性及浏览器支持范围。
    * 设置多栏之间分隔线的宽度、线型和颜色。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule
    */
-  readonly MozColumnRule?: PropertyValue<'MozColumnRule', T>;
+  MozColumnRule(value: PropertyValue<'MozColumnRule', T>): this {
+    return this.write('MozColumnRule', value);
+  }
   /**
    * 兼容属性 -moz-column-rule-color；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的颜色。
@@ -4700,7 +5731,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-color
    */
-  readonly MozColumnRuleColor?: PropertyValue<'MozColumnRuleColor', T>;
+  MozColumnRuleColor(value: PropertyValue<'MozColumnRuleColor', T>): this {
+    return this.write('MozColumnRuleColor', value);
+  }
   /**
    * 兼容属性 -moz-column-rule-style；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的线型。
@@ -4709,7 +5742,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
    */
-  readonly MozColumnRuleStyle?: PropertyValue<'MozColumnRuleStyle', T>;
+  MozColumnRuleStyle(value: PropertyValue<'MozColumnRuleStyle', T>): this {
+    return this.write('MozColumnRuleStyle', value);
+  }
   /**
    * 兼容属性 -moz-column-rule-width；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的宽度。
@@ -4718,14 +5753,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-width
    */
-  readonly MozColumnRuleWidth?: PropertyValue<'MozColumnRuleWidth', T>;
+  MozColumnRuleWidth(value: PropertyValue<'MozColumnRuleWidth', T>): this {
+    return this.write('MozColumnRuleWidth', value);
+  }
   /**
    * 兼容属性 -moz-columns；优先参考标准属性及浏览器支持范围。
    * 同时设置多栏布局的首选栏宽和目标栏数。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-columns
    */
-  readonly MozColumns?: PropertyValue<'MozColumns', T>;
+  MozColumns(value: PropertyValue<'MozColumns', T>): this {
+    return this.write('MozColumns', value);
+  }
   /**
    * 兼容属性 -moz-column-width；优先参考标准属性及浏览器支持范围。
    * 设置多栏布局的首选栏宽，实际栏宽由容器空间决定。
@@ -4734,7 +5773,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-width
    */
-  readonly MozColumnWidth?: PropertyValue<'MozColumnWidth', T>;
+  MozColumnWidth(value: PropertyValue<'MozColumnWidth', T>): this {
+    return this.write('MozColumnWidth', value);
+  }
   /**
    * 兼容属性 -moz-context-properties；优先参考标准属性及浏览器支持范围。
    * 声明可传递给被引用 SVG 图像的上下文绘制属性，如 fill 和 stroke。
@@ -4743,7 +5784,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-context-properties
    */
-  readonly MozContextProperties?: PropertyValue<'MozContextProperties', T>;
+  MozContextProperties(value: PropertyValue<'MozContextProperties', T>): this {
+    return this.write('MozContextProperties', value);
+  }
   /**
    * 兼容属性 -moz-float-edge；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 中指定浮动元素边缘计算使用的盒子范围。
@@ -4753,7 +5796,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-float-edge
    */
-  readonly MozFloatEdge?: PropertyValue<'MozFloatEdge', T>;
+  MozFloatEdge(value: PropertyValue<'MozFloatEdge', T>): this {
+    return this.write('MozFloatEdge', value);
+  }
   /**
    * 兼容属性 -moz-font-feature-settings；优先参考标准属性及浏览器支持范围。
    * 通过 OpenType 特性标签控制字体的底层排版功能。
@@ -4762,7 +5807,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-font-feature-settings
    */
-  readonly MozFontFeatureSettings?: PropertyValue<'MozFontFeatureSettings', T>;
+  MozFontFeatureSettings(value: PropertyValue<'MozFontFeatureSettings', T>): this {
+    return this.write('MozFontFeatureSettings', value);
+  }
   /**
    * 兼容属性 -moz-font-language-override；优先参考标准属性及浏览器支持范围。
    * 覆盖字体排版使用的语言系统标签，不改变文本实际语言。
@@ -4771,7 +5818,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-font-language-override
    */
-  readonly MozFontLanguageOverride?: PropertyValue<'MozFontLanguageOverride', T>;
+  MozFontLanguageOverride(value: PropertyValue<'MozFontLanguageOverride', T>): this {
+    return this.write('MozFontLanguageOverride', value);
+  }
   /**
    * 兼容属性 -moz-force-broken-image-icon；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 中控制损坏图像占位图标的显示。
@@ -4781,7 +5830,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-force-broken-image-icon
    */
-  readonly MozForceBrokenImageIcon?: PropertyValue<'MozForceBrokenImageIcon', T>;
+  MozForceBrokenImageIcon(value: PropertyValue<'MozForceBrokenImageIcon', T>): this {
+    return this.write('MozForceBrokenImageIcon', value);
+  }
   /**
    * 兼容属性 -moz-hyphens；优先参考标准属性及浏览器支持范围。
    * 设置文字断词和连字符插入的方式；自动断词依赖语言和词典。
@@ -4790,7 +5841,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-hyphens
    */
-  readonly MozHyphens?: PropertyValue<'MozHyphens', T>;
+  MozHyphens(value: PropertyValue<'MozHyphens', T>): this {
+    return this.write('MozHyphens', value);
+  }
   /**
    * 兼容属性 -moz-margin-end；优先参考标准属性 marginInlineEnd及浏览器支持范围。
    * 设置逻辑行内轴结束侧的外边距。
@@ -4799,7 +5852,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-margin-end
    */
-  readonly MozMarginEnd?: PropertyValue<'MozMarginEnd', T>;
+  MozMarginEnd(value: PropertyValue<'MozMarginEnd', T>): this {
+    return this.write('MozMarginEnd', value);
+  }
   /**
    * 兼容属性 -moz-margin-start；优先参考标准属性 marginInlineStart及浏览器支持范围。
    * 设置逻辑行内轴起始侧的外边距。
@@ -4808,7 +5863,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-margin-start
    */
-  readonly MozMarginStart?: PropertyValue<'MozMarginStart', T>;
+  MozMarginStart(value: PropertyValue<'MozMarginStart', T>): this {
+    return this.write('MozMarginStart', value);
+  }
   /**
    * 兼容属性 -moz-opacity；优先参考标准属性及浏览器支持范围。
    * 设置元素及其子树合成后的整体不透明度。
@@ -4819,12 +5876,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`1`，不同于浏览器默认样式表。
    * @example
-   * css({ opacity: 0.5 })
+   * s.opacity(0.5)
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-opacity
    */
-  readonly MozOpacity?: PropertyValue<'MozOpacity', T>;
+  MozOpacity(value: PropertyValue<'MozOpacity', T>): this {
+    return this.write('MozOpacity', value);
+  }
   /**
    * 兼容属性 -moz-orient；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 中指定特定控件的显示方向，作用依赖控件类型。
@@ -4833,7 +5892,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-orient
    */
-  readonly MozOrient?: PropertyValue<'MozOrient', T>;
+  MozOrient(value: PropertyValue<'MozOrient', T>): this {
+    return this.write('MozOrient', value);
+  }
   /**
    * 兼容属性 -moz-osx-font-smoothing；优先参考标准属性及浏览器支持范围。
    * 指定 macOS 上文字抗锯齿方式；效果依赖平台和字体渲染实现。
@@ -4842,7 +5903,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-osx-font-smoothing
    */
-  readonly MozOsxFontSmoothing?: PropertyValue<'MozOsxFontSmoothing', T>;
+  MozOsxFontSmoothing(value: PropertyValue<'MozOsxFontSmoothing', T>): this {
+    return this.write('MozOsxFontSmoothing', value);
+  }
   /**
    * 兼容属性 -moz-outline；优先参考标准属性及浏览器支持范围。
    * 设置盒子外围轮廓线的宽度、线型和颜色，不占布局空间。
@@ -4851,12 +5914,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * 适用场景：控件焦点指示和不影响布局的轮廓。
    * @example
-   * css({ ':focus-visible': { outline: "2px solid currentColor", outlineOffset: "2px" } })
+   * s.select(":focus-visible", s.outline("2px solid currentColor").outlineOffset("2px"))
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline
    */
-  readonly MozOutline?: PropertyValue<'MozOutline', T>;
+  MozOutline(value: PropertyValue<'MozOutline', T>): this {
+    return this.write('MozOutline', value);
+  }
   /**
    * 兼容属性 -moz-outline-color；优先参考标准属性及浏览器支持范围。
    * 设置轮廓线颜色。
@@ -4866,14 +5931,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-color
    */
-  readonly MozOutlineColor?: PropertyValue<'MozOutlineColor', T>;
+  MozOutlineColor(value: PropertyValue<'MozOutlineColor', T>): this {
+    return this.write('MozOutlineColor', value);
+  }
   /**
    * 兼容属性 -moz-outline-radius；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的轮廓圆角简写；不同于元素边框本身的圆角。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius
    */
-  readonly MozOutlineRadius?: PropertyValue<'MozOutlineRadius', T>;
+  MozOutlineRadius(value: PropertyValue<'MozOutlineRadius', T>): this {
+    return this.write('MozOutlineRadius', value);
+  }
   /**
    * 兼容属性 -moz-outline-radius-bottomleft；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 轮廓左下角的圆角半径。
@@ -4882,7 +5951,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-bottomleft
    */
-  readonly MozOutlineRadiusBottomleft?: PropertyValue<'MozOutlineRadiusBottomleft', T>;
+  MozOutlineRadiusBottomleft(value: PropertyValue<'MozOutlineRadiusBottomleft', T>): this {
+    return this.write('MozOutlineRadiusBottomleft', value);
+  }
   /**
    * 兼容属性 -moz-outline-radius-bottomright；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 轮廓右下角的圆角半径。
@@ -4891,7 +5962,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-bottomright
    */
-  readonly MozOutlineRadiusBottomright?: PropertyValue<'MozOutlineRadiusBottomright', T>;
+  MozOutlineRadiusBottomright(value: PropertyValue<'MozOutlineRadiusBottomright', T>): this {
+    return this.write('MozOutlineRadiusBottomright', value);
+  }
   /**
    * 兼容属性 -moz-outline-radius-topleft；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 轮廓左上角的圆角半径。
@@ -4900,7 +5973,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-topleft
    */
-  readonly MozOutlineRadiusTopleft?: PropertyValue<'MozOutlineRadiusTopleft', T>;
+  MozOutlineRadiusTopleft(value: PropertyValue<'MozOutlineRadiusTopleft', T>): this {
+    return this.write('MozOutlineRadiusTopleft', value);
+  }
   /**
    * 兼容属性 -moz-outline-radius-topright；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 轮廓右上角的圆角半径。
@@ -4909,7 +5984,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-topright
    */
-  readonly MozOutlineRadiusTopright?: PropertyValue<'MozOutlineRadiusTopright', T>;
+  MozOutlineRadiusTopright(value: PropertyValue<'MozOutlineRadiusTopright', T>): this {
+    return this.write('MozOutlineRadiusTopright', value);
+  }
   /**
    * 兼容属性 -moz-outline-style；优先参考标准属性及浏览器支持范围。
    * 设置轮廓线线型。
@@ -4919,7 +5996,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-style
    */
-  readonly MozOutlineStyle?: PropertyValue<'MozOutlineStyle', T>;
+  MozOutlineStyle(value: PropertyValue<'MozOutlineStyle', T>): this {
+    return this.write('MozOutlineStyle', value);
+  }
   /**
    * 兼容属性 -moz-outline-width；优先参考标准属性及浏览器支持范围。
    * 设置轮廓线宽度。
@@ -4929,7 +6008,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-width
    */
-  readonly MozOutlineWidth?: PropertyValue<'MozOutlineWidth', T>;
+  MozOutlineWidth(value: PropertyValue<'MozOutlineWidth', T>): this {
+    return this.write('MozOutlineWidth', value);
+  }
   /**
    * 兼容属性 -moz-padding-end；优先参考标准属性 paddingInlineEnd及浏览器支持范围。
    * 设置逻辑行内轴结束侧的内边距。
@@ -4938,7 +6019,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-padding-end
    */
-  readonly MozPaddingEnd?: PropertyValue<'MozPaddingEnd', T>;
+  MozPaddingEnd(value: PropertyValue<'MozPaddingEnd', T>): this {
+    return this.write('MozPaddingEnd', value);
+  }
   /**
    * 兼容属性 -moz-padding-start；优先参考标准属性 paddingInlineStart及浏览器支持范围。
    * 设置逻辑行内轴起始侧的内边距。
@@ -4947,7 +6030,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-padding-start
    */
-  readonly MozPaddingStart?: PropertyValue<'MozPaddingStart', T>;
+  MozPaddingStart(value: PropertyValue<'MozPaddingStart', T>): this {
+    return this.write('MozPaddingStart', value);
+  }
   /**
    * 兼容属性 -moz-perspective；优先参考标准属性及浏览器支持范围。
    * 设置观察子元素三维变换时的透视距离。
@@ -4956,7 +6041,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-perspective
    */
-  readonly MozPerspective?: PropertyValue<'MozPerspective', T>;
+  MozPerspective(value: PropertyValue<'MozPerspective', T>): this {
+    return this.write('MozPerspective', value);
+  }
   /**
    * 兼容属性 -moz-perspective-origin；优先参考标准属性及浏览器支持范围。
    * 设置三维透视的观察原点。
@@ -4965,7 +6052,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-perspective-origin
    */
-  readonly MozPerspectiveOrigin?: PropertyValue<'MozPerspectiveOrigin', T>;
+  MozPerspectiveOrigin(value: PropertyValue<'MozPerspectiveOrigin', T>): this {
+    return this.write('MozPerspectiveOrigin', value);
+  }
   /**
    * 兼容属性 -moz-stack-sizing；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 堆叠布局中决定子项尺寸是否参与堆叠容器的尺寸计算。
@@ -4974,7 +6063,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-stack-sizing
    */
-  readonly MozStackSizing?: PropertyValue<'MozStackSizing', T>;
+  MozStackSizing(value: PropertyValue<'MozStackSizing', T>): this {
+    return this.write('MozStackSizing', value);
+  }
   /**
    * 兼容属性 -moz-tab-size；优先参考标准属性及浏览器支持范围。
    * 设置保留制表符时每个制表位的宽度。
@@ -4983,7 +6074,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-tab-size
    */
-  readonly MozTabSize?: PropertyValue<'MozTabSize', T>;
+  MozTabSize(value: PropertyValue<'MozTabSize', T>): this {
+    return this.write('MozTabSize', value);
+  }
   /**
    * 兼容属性 -moz-text-align-last；优先参考标准属性及浏览器支持范围。
    * 设置段落最后一行或强制换行前一行的对齐方式。
@@ -4993,7 +6086,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-align-last
    */
-  readonly MozTextAlignLast?: PropertyValue<'MozTextAlignLast', T>;
+  MozTextAlignLast(value: PropertyValue<'MozTextAlignLast', T>): this {
+    return this.write('MozTextAlignLast', value);
+  }
   /**
    * 兼容属性 -moz-text-blink；优先参考标准属性及浏览器支持范围。
    * 旧版文字闪烁效果开关；现代内容不应依赖该兼容属性。
@@ -5002,7 +6097,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-blink
    */
-  readonly MozTextBlink?: PropertyValue<'MozTextBlink', T>;
+  MozTextBlink(value: PropertyValue<'MozTextBlink', T>): this {
+    return this.write('MozTextBlink', value);
+  }
   /**
    * 兼容属性 -moz-text-decoration-color；优先参考标准属性及浏览器支持范围。
    * 设置文本装饰线颜色。
@@ -5012,7 +6109,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-color
    */
-  readonly MozTextDecorationColor?: PropertyValue<'MozTextDecorationColor', T>;
+  MozTextDecorationColor(value: PropertyValue<'MozTextDecorationColor', T>): this {
+    return this.write('MozTextDecorationColor', value);
+  }
   /**
    * 兼容属性 -moz-text-decoration-line；优先参考标准属性及浏览器支持范围。
    * 设置下划线、上划线或删除线等装饰线位置。
@@ -5022,7 +6121,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-line
    */
-  readonly MozTextDecorationLine?: PropertyValue<'MozTextDecorationLine', T>;
+  MozTextDecorationLine(value: PropertyValue<'MozTextDecorationLine', T>): this {
+    return this.write('MozTextDecorationLine', value);
+  }
   /**
    * 兼容属性 -moz-text-decoration-style；优先参考标准属性及浏览器支持范围。
    * 设置文本装饰线的实线、波浪线等线型。
@@ -5032,7 +6133,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-style
    */
-  readonly MozTextDecorationStyle?: PropertyValue<'MozTextDecorationStyle', T>;
+  MozTextDecorationStyle(value: PropertyValue<'MozTextDecorationStyle', T>): this {
+    return this.write('MozTextDecorationStyle', value);
+  }
   /**
    * 兼容属性 -moz-text-size-adjust；优先参考标准属性及浏览器支持范围。
    * 控制移动浏览器为提升可读性而进行的文字自动放大。
@@ -5041,7 +6144,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-size-adjust
    */
-  readonly MozTextSizeAdjust?: PropertyValue<'MozTextSizeAdjust', T>;
+  MozTextSizeAdjust(value: PropertyValue<'MozTextSizeAdjust', T>): this {
+    return this.write('MozTextSizeAdjust', value);
+  }
   /**
    * 兼容属性 -moz-transform；优先参考标准属性及浏览器支持范围。
    * 按顺序组合平移、旋转、缩放等二维或三维变换。
@@ -5052,11 +6157,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ transform: "translateX(8px) scale(1.05)" })
+   * s.transform("translateX(8px) scale(1.05)")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform
    */
-  readonly MozTransform?: PropertyValue<'MozTransform', T>;
+  MozTransform(value: PropertyValue<'MozTransform', T>): this {
+    return this.write('MozTransform', value);
+  }
   /**
    * 兼容属性 -moz-transform-origin；优先参考标准属性及浏览器支持范围。
    * 设置元素变换的原点。
@@ -5065,7 +6172,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-origin
    */
-  readonly MozTransformOrigin?: PropertyValue<'MozTransformOrigin', T>;
+  MozTransformOrigin(value: PropertyValue<'MozTransformOrigin', T>): this {
+    return this.write('MozTransformOrigin', value);
+  }
   /**
    * 兼容属性 -moz-transform-style；优先参考标准属性及浏览器支持范围。
    * 控制子元素的三维位置保留在三维空间还是展平。
@@ -5074,7 +6183,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-style
    */
-  readonly MozTransformStyle?: PropertyValue<'MozTransformStyle', T>;
+  MozTransformStyle(value: PropertyValue<'MozTransformStyle', T>): this {
+    return this.write('MozTransformStyle', value);
+  }
   /**
    * 兼容属性 -moz-transition；优先参考标准属性及浏览器支持范围。
    * 集中设置属性变化过渡的目标、时长、缓动、延迟和行为。
@@ -5083,11 +6194,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
    * @example
-   * css({ transition: "opacity 160ms ease" })
+   * s.transition("opacity 160ms ease")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition
    */
-  readonly MozTransition?: PropertyValue<'MozTransition', T>;
+  MozTransition(value: PropertyValue<'MozTransition', T>): this {
+    return this.write('MozTransition', value);
+  }
   /**
    * 兼容属性 -moz-transition-delay；优先参考标准属性及浏览器支持范围。
    * 设置属性变化后开始过渡的延迟。
@@ -5097,7 +6210,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-delay
    */
-  readonly MozTransitionDelay?: PropertyValue<'MozTransitionDelay', T>;
+  MozTransitionDelay(value: PropertyValue<'MozTransitionDelay', T>): this {
+    return this.write('MozTransitionDelay', value);
+  }
   /**
    * 兼容属性 -moz-transition-duration；优先参考标准属性及浏览器支持范围。
    * 设置过渡从开始到完成的时长。
@@ -5107,7 +6222,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-duration
    */
-  readonly MozTransitionDuration?: PropertyValue<'MozTransitionDuration', T>;
+  MozTransitionDuration(value: PropertyValue<'MozTransitionDuration', T>): this {
+    return this.write('MozTransitionDuration', value);
+  }
   /**
    * 兼容属性 -moz-transition-property；优先参考标准属性及浏览器支持范围。
    * 指定发生变化时需要过渡的 CSS 属性。
@@ -5115,7 +6232,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-property
    */
-  readonly MozTransitionProperty?: PropertyValue<'MozTransitionProperty', T>;
+  MozTransitionProperty(value: PropertyValue<'MozTransitionProperty', T>): this {
+    return this.write('MozTransitionProperty', value);
+  }
   /**
    * 兼容属性 -moz-transition-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置过渡进度变化的缓动函数。
@@ -5125,7 +6244,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-timing-function
    */
-  readonly MozTransitionTimingFunction?: PropertyValue<'MozTransitionTimingFunction', T>;
+  MozTransitionTimingFunction(value: PropertyValue<'MozTransitionTimingFunction', T>): this {
+    return this.write('MozTransitionTimingFunction', value);
+  }
   /**
    * 兼容属性 -moz-user-focus；优先参考标准属性及浏览器支持范围。
    * 控制旧版 Gecko 元素的用户焦点行为，现代交互优先使用标准焦点机制。
@@ -5135,7 +6256,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-focus
    */
-  readonly MozUserFocus?: PropertyValue<'MozUserFocus', T>;
+  MozUserFocus(value: PropertyValue<'MozUserFocus', T>): this {
+    return this.write('MozUserFocus', value);
+  }
   /**
    * 兼容属性 -moz-user-input；优先参考标准属性及浏览器支持范围。
    * 控制旧版 Gecko 元素是否接受用户输入，现代控件使用标准 disabled/readonly 等语义。
@@ -5145,7 +6268,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-input
    */
-  readonly MozUserInput?: PropertyValue<'MozUserInput', T>;
+  MozUserInput(value: PropertyValue<'MozUserInput', T>): this {
+    return this.write('MozUserInput', value);
+  }
   /**
    * 兼容属性 -moz-user-modify；优先参考标准属性及浏览器支持范围。
    * 控制内容能否被用户编辑的非标准旧接口；现代页面优先使用 contenteditable。
@@ -5154,7 +6279,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-modify
    */
-  readonly MozUserModify?: PropertyValue<'MozUserModify', T>;
+  MozUserModify(value: PropertyValue<'MozUserModify', T>): this {
+    return this.write('MozUserModify', value);
+  }
   /**
    * 兼容属性 -moz-user-select；优先参考标准属性及浏览器支持范围。
    * 设置用户是否可以选取元素中的文本。
@@ -5165,11 +6292,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ userSelect: "all" })
+   * s.userSelect("all")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-select
    */
-  readonly MozUserSelect?: PropertyValue<'MozUserSelect', T>;
+  MozUserSelect(value: PropertyValue<'MozUserSelect', T>): this {
+    return this.write('MozUserSelect', value);
+  }
   /**
    * 兼容属性 -moz-window-dragging；优先参考标准属性及浏览器支持范围。
    * 控制区域能否作为宿主窗口的拖动区域，作用限于支持它的特定环境。
@@ -5178,7 +6307,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-dragging
    */
-  readonly MozWindowDragging?: PropertyValue<'MozWindowDragging', T>;
+  MozWindowDragging(value: PropertyValue<'MozWindowDragging', T>): this {
+    return this.write('MozWindowDragging', value);
+  }
   /**
    * 兼容属性 -moz-window-shadow；优先参考标准属性及浏览器支持范围。
    * 选择旧版 Gecko 宿主窗口阴影的预设，效果依赖窗口与操作系统。
@@ -5187,7 +6318,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-shadow
    */
-  readonly MozWindowShadow?: PropertyValue<'MozWindowShadow', T>;
+  MozWindowShadow(value: PropertyValue<'MozWindowShadow', T>): this {
+    return this.write('MozWindowShadow', value);
+  }
   /**
    * 兼容属性 -ms-accelerator；优先参考标准属性及浏览器支持范围。
    * 旧版 Microsoft 浏览器中控制快捷键提示字符是否显示。
@@ -5196,7 +6329,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-accelerator
    */
-  readonly msAccelerator?: PropertyValue<'msAccelerator', T>;
+  msAccelerator(value: PropertyValue<'msAccelerator', T>): this {
+    return this.write('msAccelerator', value);
+  }
   /**
    * 兼容属性 -ms-block-progression；优先参考标准属性及浏览器支持范围。
    * 旧版块内容的排列方向，现代排版优先使用 writing-mode。
@@ -5205,7 +6340,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-block-progression
    */
-  readonly msBlockProgression?: PropertyValue<'msBlockProgression', T>;
+  msBlockProgression(value: PropertyValue<'msBlockProgression', T>): this {
+    return this.write('msBlockProgression', value);
+  }
   /**
    * 兼容属性 -ms-content-zoom-chaining；优先参考标准属性及浏览器支持范围。
    * 控制缩放操作到达边界后是否继续传递给父级缩放区域。
@@ -5214,21 +6351,27 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-chaining
    */
-  readonly msContentZoomChaining?: PropertyValue<'msContentZoomChaining', T>;
+  msContentZoomChaining(value: PropertyValue<'msContentZoomChaining', T>): this {
+    return this.write('msContentZoomChaining', value);
+  }
   /**
    * 兼容属性 -ms-content-zooming；优先参考标准属性及浏览器支持范围。
    * 控制旧版 Microsoft 触控内容缩放是否启用。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zooming
    */
-  readonly msContentZooming?: PropertyValue<'msContentZooming', T>;
+  msContentZooming(value: PropertyValue<'msContentZooming', T>): this {
+    return this.write('msContentZooming', value);
+  }
   /**
    * 兼容属性 -ms-content-zoom-limit；优先参考标准属性及浏览器支持范围。
    * 合并设置旧版触控内容缩放的最小和最大倍率。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-limit
    */
-  readonly msContentZoomLimit?: PropertyValue<'msContentZoomLimit', T>;
+  msContentZoomLimit(value: PropertyValue<'msContentZoomLimit', T>): this {
+    return this.write('msContentZoomLimit', value);
+  }
   /**
    * 兼容属性 -ms-content-zoom-limit-max；优先参考标准属性及浏览器支持范围。
    * 限制旧版触控内容缩放的最大倍率。
@@ -5237,7 +6380,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-limit-max
    */
-  readonly msContentZoomLimitMax?: PropertyValue<'msContentZoomLimitMax', T>;
+  msContentZoomLimitMax(value: PropertyValue<'msContentZoomLimitMax', T>): this {
+    return this.write('msContentZoomLimitMax', value);
+  }
   /**
    * 兼容属性 -ms-content-zoom-limit-min；优先参考标准属性及浏览器支持范围。
    * 限制旧版触控内容缩放的最小倍率。
@@ -5246,14 +6391,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-limit-min
    */
-  readonly msContentZoomLimitMin?: PropertyValue<'msContentZoomLimitMin', T>;
+  msContentZoomLimitMin(value: PropertyValue<'msContentZoomLimitMin', T>): this {
+    return this.write('msContentZoomLimitMin', value);
+  }
   /**
    * 兼容属性 -ms-content-zoom-snap；优先参考标准属性及浏览器支持范围。
    * 合并设置旧版内容缩放吸附的方式和位置。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap
    */
-  readonly msContentZoomSnap?: PropertyValue<'msContentZoomSnap', T>;
+  msContentZoomSnap(value: PropertyValue<'msContentZoomSnap', T>): this {
+    return this.write('msContentZoomSnap', value);
+  }
   /**
    * 兼容属性 -ms-content-zoom-snap-points；优先参考标准属性及浏览器支持范围。
    * 指定旧版内容缩放操作可以吸附的倍率位置。
@@ -5262,7 +6411,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap-points
    */
-  readonly msContentZoomSnapPoints?: PropertyValue<'msContentZoomSnapPoints', T>;
+  msContentZoomSnapPoints(value: PropertyValue<'msContentZoomSnapPoints', T>): this {
+    return this.write('msContentZoomSnapPoints', value);
+  }
   /**
    * 兼容属性 -ms-content-zoom-snap-type；优先参考标准属性及浏览器支持范围。
    * 指定旧版内容缩放吸附的强制程度。
@@ -5271,14 +6422,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap-type
    */
-  readonly msContentZoomSnapType?: PropertyValue<'msContentZoomSnapType', T>;
+  msContentZoomSnapType(value: PropertyValue<'msContentZoomSnapType', T>): this {
+    return this.write('msContentZoomSnapType', value);
+  }
   /**
    * 兼容属性 -ms-filter；优先参考标准属性及浏览器支持范围。
    * 对元素的最终图像应用模糊、亮度等滤镜。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-filter
    */
-  readonly msFilter?: PropertyValue<'msFilter', T>;
+  msFilter(value: PropertyValue<'msFilter', T>): this {
+    return this.write('msFilter', value);
+  }
   /**
    * 兼容属性 -ms-flex；优先参考标准属性及浏览器支持范围。
    * 集中设置弹性项目的增长系数、收缩系数和基础尺寸。
@@ -5289,13 +6444,15 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * 常用值：`auto`、`none`。
    * @example
-   * css({ flex: "1 1 0%" })
+   * s.flex("1 1 0%")
    * @example
-   * css({ flex: "none" })
+   * s.flex("none")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex
    */
-  readonly msFlex?: PropertyValue<'msFlex', T>;
+  msFlex(value: PropertyValue<'msFlex', T>): this {
+    return this.write('msFlex', value);
+  }
   /**
    * 兼容属性 -ms-flex-direction；优先参考标准属性及浏览器支持范围。
    * 设置弹性容器的主轴方向及项目排列方向。
@@ -5306,11 +6463,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`row`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", flexDirection: "column", gap: "1rem" })
+   * s.display("flex").flexDirection("column").gap("1rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex-direction
    */
-  readonly msFlexDirection?: PropertyValue<'msFlexDirection', T>;
+  msFlexDirection(value: PropertyValue<'msFlexDirection', T>): this {
+    return this.write('msFlexDirection', value);
+  }
   /**
    * 兼容属性 -ms-flex-positive；优先参考标准属性 flexGrow及浏览器支持范围。
    * 设置弹性项目分配正剩余空间时的增长系数。
@@ -5319,7 +6478,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex-positive
    */
-  readonly msFlexPositive?: PropertyValue<'msFlexPositive', T>;
+  msFlexPositive(value: PropertyValue<'msFlexPositive', T>): this {
+    return this.write('msFlexPositive', value);
+  }
   /**
    * 兼容属性 -ms-flow-from；优先参考标准属性及浏览器支持范围。
    * 旧版 CSS Regions 中指定接收哪个命名内容流。
@@ -5328,7 +6489,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flow-from
    */
-  readonly msFlowFrom?: PropertyValue<'msFlowFrom', T>;
+  msFlowFrom(value: PropertyValue<'msFlowFrom', T>): this {
+    return this.write('msFlowFrom', value);
+  }
   /**
    * 兼容属性 -ms-flow-into；优先参考标准属性及浏览器支持范围。
    * 旧版 CSS Regions 中把元素内容放入指定命名流。
@@ -5337,7 +6500,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flow-into
    */
-  readonly msFlowInto?: PropertyValue<'msFlowInto', T>;
+  msFlowInto(value: PropertyValue<'msFlowInto', T>): this {
+    return this.write('msFlowInto', value);
+  }
   /**
    * 兼容属性 -ms-grid-columns；优先参考标准属性 gridTemplateColumns及浏览器支持范围。
    * 定义显式网格的列轨道尺寸及网格线名称。
@@ -5346,7 +6511,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-grid-columns
    */
-  readonly msGridColumns?: PropertyValue<'msGridColumns', T>;
+  msGridColumns(value: PropertyValue<'msGridColumns', T>): this {
+    return this.write('msGridColumns', value);
+  }
   /**
    * 兼容属性 -ms-grid-rows；优先参考标准属性 gridTemplateRows及浏览器支持范围。
    * 定义显式网格的行轨道尺寸及网格线名称。
@@ -5355,7 +6522,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-grid-rows
    */
-  readonly msGridRows?: PropertyValue<'msGridRows', T>;
+  msGridRows(value: PropertyValue<'msGridRows', T>): this {
+    return this.write('msGridRows', value);
+  }
   /**
    * 兼容属性 -ms-high-contrast-adjust；优先参考标准属性及浏览器支持范围。
    * 控制旧版高对比度模式是否调整作者颜色；现代环境优先使用 forced-color-adjust。
@@ -5364,7 +6533,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-high-contrast-adjust
    */
-  readonly msHighContrastAdjust?: PropertyValue<'msHighContrastAdjust', T>;
+  msHighContrastAdjust(value: PropertyValue<'msHighContrastAdjust', T>): this {
+    return this.write('msHighContrastAdjust', value);
+  }
   /**
    * 兼容属性 -ms-hyphenate-limit-chars；优先参考标准属性及浏览器支持范围。
    * 限制可断词的最小单词长度以及断点两侧的最少字符数。
@@ -5373,7 +6544,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphenate-limit-chars
    */
-  readonly msHyphenateLimitChars?: PropertyValue<'msHyphenateLimitChars', T>;
+  msHyphenateLimitChars(value: PropertyValue<'msHyphenateLimitChars', T>): this {
+    return this.write('msHyphenateLimitChars', value);
+  }
   /**
    * 兼容属性 -ms-hyphenate-limit-lines；优先参考标准属性及浏览器支持范围。
    * 限制连续使用断字连字符的文本行数。
@@ -5382,7 +6555,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphenate-limit-lines
    */
-  readonly msHyphenateLimitLines?: PropertyValue<'msHyphenateLimitLines', T>;
+  msHyphenateLimitLines(value: PropertyValue<'msHyphenateLimitLines', T>): this {
+    return this.write('msHyphenateLimitLines', value);
+  }
   /**
    * 兼容属性 -ms-hyphenate-limit-zone；优先参考标准属性及浏览器支持范围。
    * 指定允许开始断字处理的行末区域。
@@ -5391,7 +6566,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphenate-limit-zone
    */
-  readonly msHyphenateLimitZone?: PropertyValue<'msHyphenateLimitZone', T>;
+  msHyphenateLimitZone(value: PropertyValue<'msHyphenateLimitZone', T>): this {
+    return this.write('msHyphenateLimitZone', value);
+  }
   /**
    * 兼容属性 -ms-hyphens；优先参考标准属性及浏览器支持范围。
    * 设置文字断词和连字符插入的方式；自动断词依赖语言和词典。
@@ -5400,7 +6577,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphens
    */
-  readonly msHyphens?: PropertyValue<'msHyphens', T>;
+  msHyphens(value: PropertyValue<'msHyphens', T>): this {
+    return this.write('msHyphens', value);
+  }
   /**
    * 兼容属性 -ms-ime-align；优先参考标准属性及浏览器支持范围。
    * 控制旧版输入法候选窗口相对于编辑区域的对齐位置。
@@ -5409,7 +6588,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-ime-align
    */
-  readonly msImeAlign?: PropertyValue<'msImeAlign', T>;
+  msImeAlign(value: PropertyValue<'msImeAlign', T>): this {
+    return this.write('msImeAlign', value);
+  }
   /**
    * 兼容属性 -ms-ime-mode；优先参考标准属性及浏览器支持范围。
    * 旧版输入法状态控制，不应替代 inputmode 或正常输入交互。
@@ -5419,7 +6600,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-ime-mode
    */
-  readonly msImeMode?: PropertyValue<'msImeMode', T>;
+  msImeMode(value: PropertyValue<'msImeMode', T>): this {
+    return this.write('msImeMode', value);
+  }
   /**
    * 兼容属性 -ms-line-break；优先参考标准属性及浏览器支持范围。
    * 设置东亚文字标点等字符的换行严格程度。
@@ -5428,7 +6611,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-line-break
    */
-  readonly msLineBreak?: PropertyValue<'msLineBreak', T>;
+  msLineBreak(value: PropertyValue<'msLineBreak', T>): this {
+    return this.write('msLineBreak', value);
+  }
   /**
    * 兼容属性 -ms-order；优先参考标准属性及浏览器支持范围。
    * 设置 Flex 或 Grid 项目的视觉排列顺序，不改变 DOM 顺序。
@@ -5439,7 +6624,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-order
    */
-  readonly msOrder?: PropertyValue<'msOrder', T>;
+  msOrder(value: PropertyValue<'msOrder', T>): this {
+    return this.write('msOrder', value);
+  }
   /**
    * 兼容属性 -ms-overflow-style；优先参考标准属性及浏览器支持范围。
    * 选择旧版 Microsoft 浏览器滚动条的呈现方式。
@@ -5448,7 +6635,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-style
    */
-  readonly msOverflowStyle?: PropertyValue<'msOverflowStyle', T>;
+  msOverflowStyle(value: PropertyValue<'msOverflowStyle', T>): this {
+    return this.write('msOverflowStyle', value);
+  }
   /**
    * 兼容属性 -ms-overflow-x；优先参考标准属性及浏览器支持范围。
    * 设置水平方向的溢出行为。
@@ -5461,11 +6650,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ overflowX: "auto" })
+   * s.overflowX("auto")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-x
    */
-  readonly msOverflowX?: PropertyValue<'msOverflowX', T>;
+  msOverflowX(value: PropertyValue<'msOverflowX', T>): this {
+    return this.write('msOverflowX', value);
+  }
   /**
    * 兼容属性 -ms-overflow-y；优先参考标准属性及浏览器支持范围。
    * 设置垂直方向的溢出行为。
@@ -5478,18 +6669,22 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ maxHeight: "20rem", overflowY: "auto" })
+   * s.maxHeight("20rem").overflowY("auto")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-y
    */
-  readonly msOverflowY?: PropertyValue<'msOverflowY', T>;
+  msOverflowY(value: PropertyValue<'msOverflowY', T>): this {
+    return this.write('msOverflowY', value);
+  }
   /**
    * 兼容属性 -ms-scrollbar3dlight-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条三维边框的亮边颜色。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar3dlight-color
    */
-  readonly msScrollbar3dlightColor?: PropertyValue<'msScrollbar3dlightColor', T>;
+  msScrollbar3dlightColor(value: PropertyValue<'msScrollbar3dlightColor', T>): this {
+    return this.write('msScrollbar3dlightColor', value);
+  }
   /**
    * 兼容属性 -ms-scrollbar-arrow-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条箭头颜色。
@@ -5498,14 +6693,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-arrow-color
    */
-  readonly msScrollbarArrowColor?: PropertyValue<'msScrollbarArrowColor', T>;
+  msScrollbarArrowColor(value: PropertyValue<'msScrollbarArrowColor', T>): this {
+    return this.write('msScrollbarArrowColor', value);
+  }
   /**
    * 兼容属性 -ms-scrollbar-base-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条的基础颜色。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-base-color
    */
-  readonly msScrollbarBaseColor?: PropertyValue<'msScrollbarBaseColor', T>;
+  msScrollbarBaseColor(value: PropertyValue<'msScrollbarBaseColor', T>): this {
+    return this.write('msScrollbarBaseColor', value);
+  }
   /**
    * 兼容属性 -ms-scrollbar-darkshadow-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条三维边框的深阴影颜色。
@@ -5514,7 +6713,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-darkshadow-color
    */
-  readonly msScrollbarDarkshadowColor?: PropertyValue<'msScrollbarDarkshadowColor', T>;
+  msScrollbarDarkshadowColor(value: PropertyValue<'msScrollbarDarkshadowColor', T>): this {
+    return this.write('msScrollbarDarkshadowColor', value);
+  }
   /**
    * 兼容属性 -ms-scrollbar-face-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条滑块表面颜色。
@@ -5523,7 +6724,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-face-color
    */
-  readonly msScrollbarFaceColor?: PropertyValue<'msScrollbarFaceColor', T>;
+  msScrollbarFaceColor(value: PropertyValue<'msScrollbarFaceColor', T>): this {
+    return this.write('msScrollbarFaceColor', value);
+  }
   /**
    * 兼容属性 -ms-scrollbar-highlight-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条高亮边缘颜色。
@@ -5532,7 +6735,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-highlight-color
    */
-  readonly msScrollbarHighlightColor?: PropertyValue<'msScrollbarHighlightColor', T>;
+  msScrollbarHighlightColor(value: PropertyValue<'msScrollbarHighlightColor', T>): this {
+    return this.write('msScrollbarHighlightColor', value);
+  }
   /**
    * 兼容属性 -ms-scrollbar-shadow-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条阴影边缘颜色。
@@ -5541,7 +6746,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-shadow-color
    */
-  readonly msScrollbarShadowColor?: PropertyValue<'msScrollbarShadowColor', T>;
+  msScrollbarShadowColor(value: PropertyValue<'msScrollbarShadowColor', T>): this {
+    return this.write('msScrollbarShadowColor', value);
+  }
   /**
    * 兼容属性 -ms-scrollbar-track-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条轨道颜色。
@@ -5550,7 +6757,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-track-color
    */
-  readonly msScrollbarTrackColor?: PropertyValue<'msScrollbarTrackColor', T>;
+  msScrollbarTrackColor(value: PropertyValue<'msScrollbarTrackColor', T>): this {
+    return this.write('msScrollbarTrackColor', value);
+  }
   /**
    * 兼容属性 -ms-scroll-chaining；优先参考标准属性及浏览器支持范围。
    * 控制滚动到达边界后是否传递给祖先滚动容器。
@@ -5559,14 +6768,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-chaining
    */
-  readonly msScrollChaining?: PropertyValue<'msScrollChaining', T>;
+  msScrollChaining(value: PropertyValue<'msScrollChaining', T>): this {
+    return this.write('msScrollChaining', value);
+  }
   /**
    * 兼容属性 -ms-scroll-limit；优先参考标准属性及浏览器支持范围。
    * 合并设置旧版滚动区域的水平和垂直边界。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit
    */
-  readonly msScrollLimit?: PropertyValue<'msScrollLimit', T>;
+  msScrollLimit(value: PropertyValue<'msScrollLimit', T>): this {
+    return this.write('msScrollLimit', value);
+  }
   /**
    * 兼容属性 -ms-scroll-limit-x-max；优先参考标准属性及浏览器支持范围。
    * 限制旧版滚动区域的最大水平位置。
@@ -5575,7 +6788,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-x-max
    */
-  readonly msScrollLimitXMax?: PropertyValue<'msScrollLimitXMax', T>;
+  msScrollLimitXMax(value: PropertyValue<'msScrollLimitXMax', T>): this {
+    return this.write('msScrollLimitXMax', value);
+  }
   /**
    * 兼容属性 -ms-scroll-limit-x-min；优先参考标准属性及浏览器支持范围。
    * 限制旧版滚动区域的最小水平位置。
@@ -5584,7 +6799,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-x-min
    */
-  readonly msScrollLimitXMin?: PropertyValue<'msScrollLimitXMin', T>;
+  msScrollLimitXMin(value: PropertyValue<'msScrollLimitXMin', T>): this {
+    return this.write('msScrollLimitXMin', value);
+  }
   /**
    * 兼容属性 -ms-scroll-limit-y-max；优先参考标准属性及浏览器支持范围。
    * 限制旧版滚动区域的最大垂直位置。
@@ -5593,7 +6810,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-y-max
    */
-  readonly msScrollLimitYMax?: PropertyValue<'msScrollLimitYMax', T>;
+  msScrollLimitYMax(value: PropertyValue<'msScrollLimitYMax', T>): this {
+    return this.write('msScrollLimitYMax', value);
+  }
   /**
    * 兼容属性 -ms-scroll-limit-y-min；优先参考标准属性及浏览器支持范围。
    * 限制旧版滚动区域的最小垂直位置。
@@ -5602,7 +6821,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-y-min
    */
-  readonly msScrollLimitYMin?: PropertyValue<'msScrollLimitYMin', T>;
+  msScrollLimitYMin(value: PropertyValue<'msScrollLimitYMin', T>): this {
+    return this.write('msScrollLimitYMin', value);
+  }
   /**
    * 兼容属性 -ms-scroll-rails；优先参考标准属性及浏览器支持范围。
    * 控制旧版触控滚动是否锁定主要滚动轴。
@@ -5611,7 +6832,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-rails
    */
-  readonly msScrollRails?: PropertyValue<'msScrollRails', T>;
+  msScrollRails(value: PropertyValue<'msScrollRails', T>): this {
+    return this.write('msScrollRails', value);
+  }
   /**
    * 兼容属性 -ms-scroll-snap-points-x；优先参考标准属性及浏览器支持范围。
    * 指定旧版水平滚动吸附位置列表；现代吸附使用容器和子项的吸附属性。
@@ -5620,7 +6843,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-points-x
    */
-  readonly msScrollSnapPointsX?: PropertyValue<'msScrollSnapPointsX', T>;
+  msScrollSnapPointsX(value: PropertyValue<'msScrollSnapPointsX', T>): this {
+    return this.write('msScrollSnapPointsX', value);
+  }
   /**
    * 兼容属性 -ms-scroll-snap-points-y；优先参考标准属性及浏览器支持范围。
    * 指定旧版垂直滚动吸附位置列表；现代吸附使用容器和子项的吸附属性。
@@ -5629,7 +6854,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-points-y
    */
-  readonly msScrollSnapPointsY?: PropertyValue<'msScrollSnapPointsY', T>;
+  msScrollSnapPointsY(value: PropertyValue<'msScrollSnapPointsY', T>): this {
+    return this.write('msScrollSnapPointsY', value);
+  }
   /**
    * 兼容属性 -ms-scroll-snap-type；优先参考标准属性及浏览器支持范围。
    * 设置滚动容器的吸附轴和吸附强度。
@@ -5638,25 +6865,31 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ scrollSnapType: "x mandatory" })
+   * s.scrollSnapType("x mandatory")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-type
    */
-  readonly msScrollSnapType?: PropertyValue<'msScrollSnapType', T>;
+  msScrollSnapType(value: PropertyValue<'msScrollSnapType', T>): this {
+    return this.write('msScrollSnapType', value);
+  }
   /**
    * 兼容属性 -ms-scroll-snap-x；优先参考标准属性及浏览器支持范围。
    * 合并设置旧版水平滚动吸附方式和位置。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-x
    */
-  readonly msScrollSnapX?: PropertyValue<'msScrollSnapX', T>;
+  msScrollSnapX(value: PropertyValue<'msScrollSnapX', T>): this {
+    return this.write('msScrollSnapX', value);
+  }
   /**
    * 兼容属性 -ms-scroll-snap-y；优先参考标准属性及浏览器支持范围。
    * 合并设置旧版垂直滚动吸附方式和位置。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-y
    */
-  readonly msScrollSnapY?: PropertyValue<'msScrollSnapY', T>;
+  msScrollSnapY(value: PropertyValue<'msScrollSnapY', T>): this {
+    return this.write('msScrollSnapY', value);
+  }
   /**
    * 兼容属性 -ms-scroll-translation；优先参考标准属性及浏览器支持范围。
    * 控制旧版 Microsoft 环境中的滚动位移呈现方式。
@@ -5665,7 +6898,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-translation
    */
-  readonly msScrollTranslation?: PropertyValue<'msScrollTranslation', T>;
+  msScrollTranslation(value: PropertyValue<'msScrollTranslation', T>): this {
+    return this.write('msScrollTranslation', value);
+  }
   /**
    * 兼容属性 -ms-text-autospace；优先参考标准属性及浏览器支持范围。
    * 设置中西文、数字等不同文字系统之间的自动间距。
@@ -5674,7 +6909,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-autospace
    */
-  readonly msTextAutospace?: PropertyValue<'msTextAutospace', T>;
+  msTextAutospace(value: PropertyValue<'msTextAutospace', T>): this {
+    return this.write('msTextAutospace', value);
+  }
   /**
    * 兼容属性 -ms-text-combine-horizontal；优先参考标准属性 textCombineUpright及浏览器支持范围。
    * 设置竖排文字中多个字符是否合成为一个横排字形单元。
@@ -5683,7 +6920,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-combine-horizontal
    */
-  readonly msTextCombineHorizontal?: PropertyValue<'msTextCombineHorizontal', T>;
+  msTextCombineHorizontal(value: PropertyValue<'msTextCombineHorizontal', T>): this {
+    return this.write('msTextCombineHorizontal', value);
+  }
   /**
    * 兼容属性 -ms-text-overflow；优先参考标准属性及浏览器支持范围。
    * 设置被裁剪的行内溢出文本如何提示，例如显示省略号。
@@ -5696,11 +6935,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`clip`，不同于浏览器默认样式表。
    * @example
-   * css({ maxWidth: "12rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
+   * s.maxWidth("12rem").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-overflow
    */
-  readonly msTextOverflow?: PropertyValue<'msTextOverflow', T>;
+  msTextOverflow(value: PropertyValue<'msTextOverflow', T>): this {
+    return this.write('msTextOverflow', value);
+  }
   /**
    * 兼容属性 -ms-touch-action；优先参考标准属性及浏览器支持范围。
    * 声明浏览器可以处理的触摸平移与缩放手势。
@@ -5713,11 +6954,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ touchAction: "pan-y" })
+   * s.touchAction("pan-y")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
    */
-  readonly msTouchAction?: PropertyValue<'msTouchAction', T>;
+  msTouchAction(value: PropertyValue<'msTouchAction', T>): this {
+    return this.write('msTouchAction', value);
+  }
   /**
    * 兼容属性 -ms-touch-select；优先参考标准属性及浏览器支持范围。
    * 控制旧版触控文字选择的交互方式。
@@ -5726,7 +6969,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-select
    */
-  readonly msTouchSelect?: PropertyValue<'msTouchSelect', T>;
+  msTouchSelect(value: PropertyValue<'msTouchSelect', T>): this {
+    return this.write('msTouchSelect', value);
+  }
   /**
    * 兼容属性 -ms-transform；优先参考标准属性及浏览器支持范围。
    * 按顺序组合平移、旋转、缩放等二维或三维变换。
@@ -5737,11 +6982,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ transform: "translateX(8px) scale(1.05)" })
+   * s.transform("translateX(8px) scale(1.05)")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transform
    */
-  readonly msTransform?: PropertyValue<'msTransform', T>;
+  msTransform(value: PropertyValue<'msTransform', T>): this {
+    return this.write('msTransform', value);
+  }
   /**
    * 兼容属性 -ms-transform-origin；优先参考标准属性及浏览器支持范围。
    * 设置元素变换的原点。
@@ -5750,7 +6997,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transform-origin
    */
-  readonly msTransformOrigin?: PropertyValue<'msTransformOrigin', T>;
+  msTransformOrigin(value: PropertyValue<'msTransformOrigin', T>): this {
+    return this.write('msTransformOrigin', value);
+  }
   /**
    * 兼容属性 -ms-transition；优先参考标准属性及浏览器支持范围。
    * 集中设置属性变化过渡的目标、时长、缓动、延迟和行为。
@@ -5759,11 +7008,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
    * @example
-   * css({ transition: "opacity 160ms ease" })
+   * s.transition("opacity 160ms ease")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition
    */
-  readonly msTransition?: PropertyValue<'msTransition', T>;
+  msTransition(value: PropertyValue<'msTransition', T>): this {
+    return this.write('msTransition', value);
+  }
   /**
    * 兼容属性 -ms-transition-delay；优先参考标准属性及浏览器支持范围。
    * 设置属性变化后开始过渡的延迟。
@@ -5772,7 +7023,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-delay
    */
-  readonly msTransitionDelay?: PropertyValue<'msTransitionDelay', T>;
+  msTransitionDelay(value: PropertyValue<'msTransitionDelay', T>): this {
+    return this.write('msTransitionDelay', value);
+  }
   /**
    * 兼容属性 -ms-transition-duration；优先参考标准属性及浏览器支持范围。
    * 设置过渡从开始到完成的时长。
@@ -5781,14 +7034,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-duration
    */
-  readonly msTransitionDuration?: PropertyValue<'msTransitionDuration', T>;
+  msTransitionDuration(value: PropertyValue<'msTransitionDuration', T>): this {
+    return this.write('msTransitionDuration', value);
+  }
   /**
    * 兼容属性 -ms-transition-property；优先参考标准属性及浏览器支持范围。
    * 指定发生变化时需要过渡的 CSS 属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-property
    */
-  readonly msTransitionProperty?: PropertyValue<'msTransitionProperty', T>;
+  msTransitionProperty(value: PropertyValue<'msTransitionProperty', T>): this {
+    return this.write('msTransitionProperty', value);
+  }
   /**
    * 兼容属性 -ms-transition-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置过渡进度变化的缓动函数。
@@ -5797,7 +7054,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-timing-function
    */
-  readonly msTransitionTimingFunction?: PropertyValue<'msTransitionTimingFunction', T>;
+  msTransitionTimingFunction(value: PropertyValue<'msTransitionTimingFunction', T>): this {
+    return this.write('msTransitionTimingFunction', value);
+  }
   /**
    * 兼容属性 -ms-user-select；优先参考标准属性及浏览器支持范围。
    * 设置用户是否可以选取元素中的文本。
@@ -5808,11 +7067,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`text`，不同于浏览器默认样式表。
    * @example
-   * css({ userSelect: "all" })
+   * s.userSelect("all")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-user-select
    */
-  readonly msUserSelect?: PropertyValue<'msUserSelect', T>;
+  msUserSelect(value: PropertyValue<'msUserSelect', T>): this {
+    return this.write('msUserSelect', value);
+  }
   /**
    * 兼容属性 -ms-word-break；优先参考标准属性及浏览器支持范围。
    * 设置单词内部或文字之间的断行规则。
@@ -5823,11 +7084,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ wordBreak: "normal" })
+   * s.wordBreak("normal")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-word-break
    */
-  readonly msWordBreak?: PropertyValue<'msWordBreak', T>;
+  msWordBreak(value: PropertyValue<'msWordBreak', T>): this {
+    return this.write('msWordBreak', value);
+  }
   /**
    * 兼容属性 -ms-wrap-flow；优先参考标准属性及浏览器支持范围。
    * 控制旧版排斥形状周围的内容环绕方向。
@@ -5836,7 +7099,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-flow
    */
-  readonly msWrapFlow?: PropertyValue<'msWrapFlow', T>;
+  msWrapFlow(value: PropertyValue<'msWrapFlow', T>): this {
+    return this.write('msWrapFlow', value);
+  }
   /**
    * 兼容属性 -ms-wrap-margin；优先参考标准属性及浏览器支持范围。
    * 设置旧版排斥形状与环绕内容之间的距离。
@@ -5845,7 +7110,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-margin
    */
-  readonly msWrapMargin?: PropertyValue<'msWrapMargin', T>;
+  msWrapMargin(value: PropertyValue<'msWrapMargin', T>): this {
+    return this.write('msWrapMargin', value);
+  }
   /**
    * 兼容属性 -ms-wrap-through；优先参考标准属性及浏览器支持范围。
    * 控制旧版元素是否参与排斥形状的内容环绕。
@@ -5854,7 +7121,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-through
    */
-  readonly msWrapThrough?: PropertyValue<'msWrapThrough', T>;
+  msWrapThrough(value: PropertyValue<'msWrapThrough', T>): this {
+    return this.write('msWrapThrough', value);
+  }
   /**
    * 兼容属性 -ms-writing-mode；优先参考标准属性及浏览器支持范围。
    * 设置水平或竖直书写模式，以及行和块的推进方向。
@@ -5863,7 +7132,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-writing-mode
    */
-  readonly msWritingMode?: PropertyValue<'msWritingMode', T>;
+  msWritingMode(value: PropertyValue<'msWritingMode', T>): this {
+    return this.write('msWritingMode', value);
+  }
   /**
    * 兼容属性 -o-animation；优先参考标准属性及浏览器支持范围。
    * 集中设置关键帧动画的名称、时长、缓动、延迟、次数及播放行为。
@@ -5871,7 +7142,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
    */
-  readonly OAnimation?: PropertyValue<'OAnimation', T>;
+  OAnimation(value: PropertyValue<'OAnimation', T>): this {
+    return this.write('OAnimation', value);
+  }
   /**
    * 兼容属性 -o-animation-delay；优先参考标准属性及浏览器支持范围。
    * 设置动画开始前的延迟；负值表示从动画中途开始播放。
@@ -5881,7 +7154,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-delay
    */
-  readonly OAnimationDelay?: PropertyValue<'OAnimationDelay', T>;
+  OAnimationDelay(value: PropertyValue<'OAnimationDelay', T>): this {
+    return this.write('OAnimationDelay', value);
+  }
   /**
    * 兼容属性 -o-animation-direction；优先参考标准属性及浏览器支持范围。
    * 设置动画按正向、反向或交替方向播放。
@@ -5891,7 +7166,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-direction
    */
-  readonly OAnimationDirection?: PropertyValue<'OAnimationDirection', T>;
+  OAnimationDirection(value: PropertyValue<'OAnimationDirection', T>): this {
+    return this.write('OAnimationDirection', value);
+  }
   /**
    * 兼容属性 -o-animation-duration；优先参考标准属性及浏览器支持范围。
    * 设置动画完成一次循环的时长。
@@ -5901,7 +7178,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-duration
    */
-  readonly OAnimationDuration?: PropertyValue<'OAnimationDuration', T>;
+  OAnimationDuration(value: PropertyValue<'OAnimationDuration', T>): this {
+    return this.write('OAnimationDuration', value);
+  }
   /**
    * 兼容属性 -o-animation-fill-mode；优先参考标准属性及浏览器支持范围。
    * 设置动画在有效播放区间之外是否应用关键帧样式。
@@ -5914,12 +7193,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ animationFillMode: "forwards" })
+   * s.animationFillMode("forwards")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-fill-mode
    */
-  readonly OAnimationFillMode?: PropertyValue<'OAnimationFillMode', T>;
+  OAnimationFillMode(value: PropertyValue<'OAnimationFillMode', T>): this {
+    return this.write('OAnimationFillMode', value);
+  }
   /**
    * 兼容属性 -o-animation-iteration-count；优先参考标准属性及浏览器支持范围。
    * 设置动画循环次数，或无限循环。
@@ -5929,7 +7210,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-iteration-count
    */
-  readonly OAnimationIterationCount?: PropertyValue<'OAnimationIterationCount', T>;
+  OAnimationIterationCount(value: PropertyValue<'OAnimationIterationCount', T>): this {
+    return this.write('OAnimationIterationCount', value);
+  }
   /**
    * 兼容属性 -o-animation-name；优先参考标准属性及浏览器支持范围。
    * 选择要播放的 @keyframes 动画名称。
@@ -5939,7 +7222,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-name
    */
-  readonly OAnimationName?: PropertyValue<'OAnimationName', T>;
+  OAnimationName(value: PropertyValue<'OAnimationName', T>): this {
+    return this.write('OAnimationName', value);
+  }
   /**
    * 兼容属性 -o-animation-play-state；优先参考标准属性及浏览器支持范围。
    * 控制动画运行或暂停，暂停后可从原位置继续。
@@ -5949,7 +7234,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-play-state
    */
-  readonly OAnimationPlayState?: PropertyValue<'OAnimationPlayState', T>;
+  OAnimationPlayState(value: PropertyValue<'OAnimationPlayState', T>): this {
+    return this.write('OAnimationPlayState', value);
+  }
   /**
    * 兼容属性 -o-animation-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置动画每个关键帧区间内进度变化的缓动函数。
@@ -5959,7 +7246,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-timing-function
    */
-  readonly OAnimationTimingFunction?: PropertyValue<'OAnimationTimingFunction', T>;
+  OAnimationTimingFunction(value: PropertyValue<'OAnimationTimingFunction', T>): this {
+    return this.write('OAnimationTimingFunction', value);
+  }
   /**
    * 兼容属性 -o-background-size；优先参考标准属性及浏览器支持范围。
    * 设置背景图像尺寸，以及覆盖或完整容纳图像的缩放方式。
@@ -5972,12 +7261,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
    * @example
-   * css({ backgroundSize: "cover", backgroundPosition: "center" })
+   * s.backgroundSize("cover").backgroundPosition("center")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-background-size
    */
-  readonly OBackgroundSize?: PropertyValue<'OBackgroundSize', T>;
+  OBackgroundSize(value: PropertyValue<'OBackgroundSize', T>): this {
+    return this.write('OBackgroundSize', value);
+  }
   /**
    * 兼容属性 -o-border-image；优先参考标准属性及浏览器支持范围。
    * 设置用作边框的图像及其切片、宽度、外扩和重复方式。
@@ -5985,7 +7276,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-border-image
    */
-  readonly OBorderImage?: PropertyValue<'OBorderImage', T>;
+  OBorderImage(value: PropertyValue<'OBorderImage', T>): this {
+    return this.write('OBorderImage', value);
+  }
   /**
    * 兼容属性 offset-block；优先参考标准属性 insetBlock及浏览器支持范围。
    * 设置定位元素沿逻辑块轴的起始和结束偏移。
@@ -5993,7 +7286,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-block
    */
-  readonly offsetBlock?: PropertyValue<'offsetBlock', T>;
+  offsetBlock(value: PropertyValue<'offsetBlock', T>): this {
+    return this.write('offsetBlock', value);
+  }
   /**
    * 兼容属性 offset-block-end；优先参考标准属性 insetBlockEnd及浏览器支持范围。
    * 设置定位元素在逻辑块轴结束侧的偏移。
@@ -6003,7 +7298,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-block-end
    */
-  readonly offsetBlockEnd?: PropertyValue<'offsetBlockEnd', T>;
+  offsetBlockEnd(value: PropertyValue<'offsetBlockEnd', T>): this {
+    return this.write('offsetBlockEnd', value);
+  }
   /**
    * 兼容属性 offset-block-start；优先参考标准属性 insetBlockStart及浏览器支持范围。
    * 设置定位元素在逻辑块轴起始侧的偏移。
@@ -6013,7 +7310,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-block-start
    */
-  readonly offsetBlockStart?: PropertyValue<'offsetBlockStart', T>;
+  offsetBlockStart(value: PropertyValue<'offsetBlockStart', T>): this {
+    return this.write('offsetBlockStart', value);
+  }
   /**
    * 兼容属性 offset-inline；优先参考标准属性 insetInline及浏览器支持范围。
    * 设置定位元素沿逻辑行内轴的起始和结束偏移。
@@ -6021,7 +7320,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-inline
    */
-  readonly offsetInline?: PropertyValue<'offsetInline', T>;
+  offsetInline(value: PropertyValue<'offsetInline', T>): this {
+    return this.write('offsetInline', value);
+  }
   /**
    * 兼容属性 offset-inline-end；优先参考标准属性 insetInlineEnd及浏览器支持范围。
    * 设置定位元素在逻辑行内轴结束侧的偏移。
@@ -6031,7 +7332,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-inline-end
    */
-  readonly offsetInlineEnd?: PropertyValue<'offsetInlineEnd', T>;
+  offsetInlineEnd(value: PropertyValue<'offsetInlineEnd', T>): this {
+    return this.write('offsetInlineEnd', value);
+  }
   /**
    * 兼容属性 offset-inline-start；优先参考标准属性 insetInlineStart及浏览器支持范围。
    * 设置定位元素在逻辑行内轴起始侧的偏移。
@@ -6041,7 +7344,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-inline-start
    */
-  readonly offsetInlineStart?: PropertyValue<'offsetInlineStart', T>;
+  offsetInlineStart(value: PropertyValue<'offsetInlineStart', T>): this {
+    return this.write('offsetInlineStart', value);
+  }
   /**
    * 兼容属性 -o-object-fit；优先参考标准属性及浏览器支持范围。
    * 设置替换元素的内容如何适应其内容盒，例如图像的裁切和缩放。
@@ -6054,12 +7359,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`fill`，不同于浏览器默认样式表。
    * @example
-   * css({ width: "80px", height: "80px", objectFit: "cover" })
+   * s.width("80px").height("80px").objectFit("cover")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-object-fit
    */
-  readonly OObjectFit?: PropertyValue<'OObjectFit', T>;
+  OObjectFit(value: PropertyValue<'OObjectFit', T>): this {
+    return this.write('OObjectFit', value);
+  }
   /**
    * 兼容属性 -o-object-position；优先参考标准属性及浏览器支持范围。
    * 设置替换元素内容在内容盒内的对齐位置。
@@ -6069,7 +7376,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-object-position
    */
-  readonly OObjectPosition?: PropertyValue<'OObjectPosition', T>;
+  OObjectPosition(value: PropertyValue<'OObjectPosition', T>): this {
+    return this.write('OObjectPosition', value);
+  }
   /**
    * 兼容属性 -o-tab-size；优先参考标准属性及浏览器支持范围。
    * 设置保留制表符时每个制表位的宽度。
@@ -6079,7 +7388,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-tab-size
    */
-  readonly OTabSize?: PropertyValue<'OTabSize', T>;
+  OTabSize(value: PropertyValue<'OTabSize', T>): this {
+    return this.write('OTabSize', value);
+  }
   /**
    * 兼容属性 -o-text-overflow；优先参考标准属性及浏览器支持范围。
    * 设置被裁剪的行内溢出文本如何提示，例如显示省略号。
@@ -6092,12 +7403,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`clip`，不同于浏览器默认样式表。
    * @example
-   * css({ maxWidth: "12rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
+   * s.maxWidth("12rem").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-text-overflow
    */
-  readonly OTextOverflow?: PropertyValue<'OTextOverflow', T>;
+  OTextOverflow(value: PropertyValue<'OTextOverflow', T>): this {
+    return this.write('OTextOverflow', value);
+  }
   /**
    * 兼容属性 -o-transform；优先参考标准属性及浏览器支持范围。
    * 按顺序组合平移、旋转、缩放等二维或三维变换。
@@ -6108,12 +7421,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ transform: "translateX(8px) scale(1.05)" })
+   * s.transform("translateX(8px) scale(1.05)")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transform
    */
-  readonly OTransform?: PropertyValue<'OTransform', T>;
+  OTransform(value: PropertyValue<'OTransform', T>): this {
+    return this.write('OTransform', value);
+  }
   /**
    * 兼容属性 -o-transform-origin；优先参考标准属性及浏览器支持范围。
    * 设置元素变换的原点。
@@ -6123,7 +7438,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transform-origin
    */
-  readonly OTransformOrigin?: PropertyValue<'OTransformOrigin', T>;
+  OTransformOrigin(value: PropertyValue<'OTransformOrigin', T>): this {
+    return this.write('OTransformOrigin', value);
+  }
   /**
    * 兼容属性 -o-transition；优先参考标准属性及浏览器支持范围。
    * 集中设置属性变化过渡的目标、时长、缓动、延迟和行为。
@@ -6132,12 +7449,14 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
    * @example
-   * css({ transition: "opacity 160ms ease" })
+   * s.transition("opacity 160ms ease")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition
    */
-  readonly OTransition?: PropertyValue<'OTransition', T>;
+  OTransition(value: PropertyValue<'OTransition', T>): this {
+    return this.write('OTransition', value);
+  }
   /**
    * 兼容属性 -o-transition-delay；优先参考标准属性及浏览器支持范围。
    * 设置属性变化后开始过渡的延迟。
@@ -6147,7 +7466,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-delay
    */
-  readonly OTransitionDelay?: PropertyValue<'OTransitionDelay', T>;
+  OTransitionDelay(value: PropertyValue<'OTransitionDelay', T>): this {
+    return this.write('OTransitionDelay', value);
+  }
   /**
    * 兼容属性 -o-transition-duration；优先参考标准属性及浏览器支持范围。
    * 设置过渡从开始到完成的时长。
@@ -6157,7 +7478,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-duration
    */
-  readonly OTransitionDuration?: PropertyValue<'OTransitionDuration', T>;
+  OTransitionDuration(value: PropertyValue<'OTransitionDuration', T>): this {
+    return this.write('OTransitionDuration', value);
+  }
   /**
    * 兼容属性 -o-transition-property；优先参考标准属性及浏览器支持范围。
    * 指定发生变化时需要过渡的 CSS 属性。
@@ -6165,7 +7488,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-property
    */
-  readonly OTransitionProperty?: PropertyValue<'OTransitionProperty', T>;
+  OTransitionProperty(value: PropertyValue<'OTransitionProperty', T>): this {
+    return this.write('OTransitionProperty', value);
+  }
   /**
    * 兼容属性 -o-transition-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置过渡进度变化的缓动函数。
@@ -6175,7 +7500,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-timing-function
    */
-  readonly OTransitionTimingFunction?: PropertyValue<'OTransitionTimingFunction', T>;
+  OTransitionTimingFunction(value: PropertyValue<'OTransitionTimingFunction', T>): this {
+    return this.write('OTransitionTimingFunction', value);
+  }
   /**
    * 兼容属性 page-break-after；优先参考标准属性 breakAfter及浏览器支持范围。
    * 设置元素之后的分页、分栏或区域分片行为。
@@ -6185,7 +7512,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-after
    */
-  readonly pageBreakAfter?: PropertyValue<'pageBreakAfter', T>;
+  pageBreakAfter(value: PropertyValue<'pageBreakAfter', T>): this {
+    return this.write('pageBreakAfter', value);
+  }
   /**
    * 兼容属性 page-break-before；优先参考标准属性 breakBefore及浏览器支持范围。
    * 设置元素之前的分页、分栏或区域分片行为。
@@ -6195,7 +7524,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-before
    */
-  readonly pageBreakBefore?: PropertyValue<'pageBreakBefore', T>;
+  pageBreakBefore(value: PropertyValue<'pageBreakBefore', T>): this {
+    return this.write('pageBreakBefore', value);
+  }
   /**
    * 兼容属性 page-break-inside；优先参考标准属性 breakInside及浏览器支持范围。
    * 设置元素内部是否允许分页、分栏或区域分片。
@@ -6205,7 +7536,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-inside
    */
-  readonly pageBreakInside?: PropertyValue<'pageBreakInside', T>;
+  pageBreakInside(value: PropertyValue<'pageBreakInside', T>): this {
+    return this.write('pageBreakInside', value);
+  }
   /**
    * 兼容属性 position-try-options；优先参考标准属性 positionTryFallbacks及浏览器支持范围。
    * 设置锚点定位溢出时尝试的替代位置。
@@ -6215,7 +7548,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
    */
-  readonly positionTryOptions?: PropertyValue<'positionTryOptions', T>;
+  positionTryOptions(value: PropertyValue<'positionTryOptions', T>): this {
+    return this.write('positionTryOptions', value);
+  }
   /**
    * 指定旧版滚动子项的吸附坐标，现代布局使用 scroll-snap-align。
    *
@@ -6224,7 +7559,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-coordinate
    */
-  readonly scrollSnapCoordinate?: PropertyValue<'scrollSnapCoordinate', T>;
+  scrollSnapCoordinate(value: PropertyValue<'scrollSnapCoordinate', T>): this {
+    return this.write('scrollSnapCoordinate', value);
+  }
   /**
    * 指定旧版滚动容器中吸附位置对齐的目标坐标。
    *
@@ -6233,7 +7570,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-destination
    */
-  readonly scrollSnapDestination?: PropertyValue<'scrollSnapDestination', T>;
+  scrollSnapDestination(value: PropertyValue<'scrollSnapDestination', T>): this {
+    return this.write('scrollSnapDestination', value);
+  }
   /**
    * 指定旧版水平滚动吸附位置列表；现代吸附使用容器和子项的吸附属性。
    *
@@ -6242,7 +7581,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-points-x
    */
-  readonly scrollSnapPointsX?: PropertyValue<'scrollSnapPointsX', T>;
+  scrollSnapPointsX(value: PropertyValue<'scrollSnapPointsX', T>): this {
+    return this.write('scrollSnapPointsX', value);
+  }
   /**
    * 指定旧版垂直滚动吸附位置列表；现代吸附使用容器和子项的吸附属性。
    *
@@ -6251,7 +7592,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-points-y
    */
-  readonly scrollSnapPointsY?: PropertyValue<'scrollSnapPointsY', T>;
+  scrollSnapPointsY(value: PropertyValue<'scrollSnapPointsY', T>): this {
+    return this.write('scrollSnapPointsY', value);
+  }
   /**
    * 控制旧版水平滚动吸附的强制程度。
    *
@@ -6260,7 +7603,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type-x
    */
-  readonly scrollSnapTypeX?: PropertyValue<'scrollSnapTypeX', T>;
+  scrollSnapTypeX(value: PropertyValue<'scrollSnapTypeX', T>): this {
+    return this.write('scrollSnapTypeX', value);
+  }
   /**
    * 控制旧版垂直滚动吸附的强制程度。
    *
@@ -6269,7 +7614,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type-y
    */
-  readonly scrollSnapTypeY?: PropertyValue<'scrollSnapTypeY', T>;
+  scrollSnapTypeY(value: PropertyValue<'scrollSnapTypeY', T>): this {
+    return this.write('scrollSnapTypeY', value);
+  }
   /**
    * 兼容属性 -webkit-align-content；优先参考标准属性及浏览器支持范围。
    * 分配布局容器交叉轴或块轴上的剩余空间，控制内容整体的对齐。
@@ -6278,7 +7625,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
    */
-  readonly WebkitAlignContent?: PropertyValue<'WebkitAlignContent', T>;
+  WebkitAlignContent(value: PropertyValue<'WebkitAlignContent', T>): this {
+    return this.write('WebkitAlignContent', value);
+  }
   /**
    * 兼容属性 -webkit-align-items；优先参考标准属性及浏览器支持范围。
    * 设置容器内项目在交叉轴或块轴上的默认对齐方式。
@@ -6291,11 +7640,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", alignItems: "center" })
+   * s.display("flex").alignItems("center")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
    */
-  readonly WebkitAlignItems?: PropertyValue<'WebkitAlignItems', T>;
+  WebkitAlignItems(value: PropertyValue<'WebkitAlignItems', T>): this {
+    return this.write('WebkitAlignItems', value);
+  }
   /**
    * 兼容属性 -webkit-align-self；优先参考标准属性及浏览器支持范围。
    * 单独覆盖一个项目的交叉轴或块轴对齐方式。
@@ -6306,18 +7657,22 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ alignSelf: "center" })
+   * s.alignSelf("center")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-self
    */
-  readonly WebkitAlignSelf?: PropertyValue<'WebkitAlignSelf', T>;
+  WebkitAlignSelf(value: PropertyValue<'WebkitAlignSelf', T>): this {
+    return this.write('WebkitAlignSelf', value);
+  }
   /**
    * 兼容属性 -webkit-animation；优先参考标准属性及浏览器支持范围。
    * 集中设置关键帧动画的名称、时长、缓动、延迟、次数及播放行为。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
    */
-  readonly WebkitAnimation?: PropertyValue<'WebkitAnimation', T>;
+  WebkitAnimation(value: PropertyValue<'WebkitAnimation', T>): this {
+    return this.write('WebkitAnimation', value);
+  }
   /**
    * 兼容属性 -webkit-animation-delay；优先参考标准属性及浏览器支持范围。
    * 设置动画开始前的延迟；负值表示从动画中途开始播放。
@@ -6326,7 +7681,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-delay
    */
-  readonly WebkitAnimationDelay?: PropertyValue<'WebkitAnimationDelay', T>;
+  WebkitAnimationDelay(value: PropertyValue<'WebkitAnimationDelay', T>): this {
+    return this.write('WebkitAnimationDelay', value);
+  }
   /**
    * 兼容属性 -webkit-animation-direction；优先参考标准属性及浏览器支持范围。
    * 设置动画按正向、反向或交替方向播放。
@@ -6335,7 +7692,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-direction
    */
-  readonly WebkitAnimationDirection?: PropertyValue<'WebkitAnimationDirection', T>;
+  WebkitAnimationDirection(value: PropertyValue<'WebkitAnimationDirection', T>): this {
+    return this.write('WebkitAnimationDirection', value);
+  }
   /**
    * 兼容属性 -webkit-animation-duration；优先参考标准属性及浏览器支持范围。
    * 设置动画完成一次循环的时长。
@@ -6344,7 +7703,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-duration
    */
-  readonly WebkitAnimationDuration?: PropertyValue<'WebkitAnimationDuration', T>;
+  WebkitAnimationDuration(value: PropertyValue<'WebkitAnimationDuration', T>): this {
+    return this.write('WebkitAnimationDuration', value);
+  }
   /**
    * 兼容属性 -webkit-animation-fill-mode；优先参考标准属性及浏览器支持范围。
    * 设置动画在有效播放区间之外是否应用关键帧样式。
@@ -6357,11 +7718,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ animationFillMode: "forwards" })
+   * s.animationFillMode("forwards")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-fill-mode
    */
-  readonly WebkitAnimationFillMode?: PropertyValue<'WebkitAnimationFillMode', T>;
+  WebkitAnimationFillMode(value: PropertyValue<'WebkitAnimationFillMode', T>): this {
+    return this.write('WebkitAnimationFillMode', value);
+  }
   /**
    * 兼容属性 -webkit-animation-iteration-count；优先参考标准属性及浏览器支持范围。
    * 设置动画循环次数，或无限循环。
@@ -6370,7 +7733,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-iteration-count
    */
-  readonly WebkitAnimationIterationCount?: PropertyValue<'WebkitAnimationIterationCount', T>;
+  WebkitAnimationIterationCount(value: PropertyValue<'WebkitAnimationIterationCount', T>): this {
+    return this.write('WebkitAnimationIterationCount', value);
+  }
   /**
    * 兼容属性 -webkit-animation-name；优先参考标准属性及浏览器支持范围。
    * 选择要播放的 @keyframes 动画名称。
@@ -6379,7 +7744,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-name
    */
-  readonly WebkitAnimationName?: PropertyValue<'WebkitAnimationName', T>;
+  WebkitAnimationName(value: PropertyValue<'WebkitAnimationName', T>): this {
+    return this.write('WebkitAnimationName', value);
+  }
   /**
    * 兼容属性 -webkit-animation-play-state；优先参考标准属性及浏览器支持范围。
    * 控制动画运行或暂停，暂停后可从原位置继续。
@@ -6388,7 +7755,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-play-state
    */
-  readonly WebkitAnimationPlayState?: PropertyValue<'WebkitAnimationPlayState', T>;
+  WebkitAnimationPlayState(value: PropertyValue<'WebkitAnimationPlayState', T>): this {
+    return this.write('WebkitAnimationPlayState', value);
+  }
   /**
    * 兼容属性 -webkit-animation-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置动画每个关键帧区间内进度变化的缓动函数。
@@ -6397,7 +7766,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-timing-function
    */
-  readonly WebkitAnimationTimingFunction?: PropertyValue<'WebkitAnimationTimingFunction', T>;
+  WebkitAnimationTimingFunction(value: PropertyValue<'WebkitAnimationTimingFunction', T>): this {
+    return this.write('WebkitAnimationTimingFunction', value);
+  }
   /**
    * 兼容属性 -webkit-appearance；优先参考标准属性及浏览器支持范围。
    * 控制元素是否采用平台原生控件外观。
@@ -6406,7 +7777,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
    */
-  readonly WebkitAppearance?: PropertyValue<'WebkitAppearance', T>;
+  WebkitAppearance(value: PropertyValue<'WebkitAppearance', T>): this {
+    return this.write('WebkitAppearance', value);
+  }
   /**
    * 兼容属性 -webkit-backdrop-filter；优先参考标准属性及浏览器支持范围。
    * 对元素背后的图像区域应用模糊等滤镜，通常需要透明或半透明背景。
@@ -6415,7 +7788,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-backdrop-filter
    */
-  readonly WebkitBackdropFilter?: PropertyValue<'WebkitBackdropFilter', T>;
+  WebkitBackdropFilter(value: PropertyValue<'WebkitBackdropFilter', T>): this {
+    return this.write('WebkitBackdropFilter', value);
+  }
   /**
    * 兼容属性 -webkit-backface-visibility；优先参考标准属性及浏览器支持范围。
    * 控制经过三维变换后背向观察者的元素背面是否可见。
@@ -6424,7 +7799,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-backface-visibility
    */
-  readonly WebkitBackfaceVisibility?: PropertyValue<'WebkitBackfaceVisibility', T>;
+  WebkitBackfaceVisibility(value: PropertyValue<'WebkitBackfaceVisibility', T>): this {
+    return this.write('WebkitBackfaceVisibility', value);
+  }
   /**
    * 兼容属性 -webkit-background-clip；优先参考标准属性及浏览器支持范围。
    * 设置背景允许绘制到的边界区域。
@@ -6433,7 +7810,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-background-clip
    */
-  readonly WebkitBackgroundClip?: PropertyValue<'WebkitBackgroundClip', T>;
+  WebkitBackgroundClip(value: PropertyValue<'WebkitBackgroundClip', T>): this {
+    return this.write('WebkitBackgroundClip', value);
+  }
   /**
    * 兼容属性 -webkit-background-origin；优先参考标准属性及浏览器支持范围。
    * 设置背景图像定位所依据的盒子区域。
@@ -6442,7 +7821,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-background-origin
    */
-  readonly WebkitBackgroundOrigin?: PropertyValue<'WebkitBackgroundOrigin', T>;
+  WebkitBackgroundOrigin(value: PropertyValue<'WebkitBackgroundOrigin', T>): this {
+    return this.write('WebkitBackgroundOrigin', value);
+  }
   /**
    * 兼容属性 -webkit-background-size；优先参考标准属性及浏览器支持范围。
    * 设置背景图像尺寸，以及覆盖或完整容纳图像的缩放方式。
@@ -6455,18 +7836,22 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
    * @example
-   * css({ backgroundSize: "cover", backgroundPosition: "center" })
+   * s.backgroundSize("cover").backgroundPosition("center")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-background-size
    */
-  readonly WebkitBackgroundSize?: PropertyValue<'WebkitBackgroundSize', T>;
+  WebkitBackgroundSize(value: PropertyValue<'WebkitBackgroundSize', T>): this {
+    return this.write('WebkitBackgroundSize', value);
+  }
   /**
    * 兼容属性 -webkit-border-before；优先参考标准属性 borderBlockStart及浏览器支持范围。
    * 设置逻辑块轴起始侧边框的宽度、线型和颜色。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before
    */
-  readonly WebkitBorderBefore?: PropertyValue<'WebkitBorderBefore', T>;
+  WebkitBorderBefore(value: PropertyValue<'WebkitBorderBefore', T>): this {
+    return this.write('WebkitBorderBefore', value);
+  }
   /**
    * 兼容属性 -webkit-border-before-color；优先参考标准属性 borderBlockStartColor及浏览器支持范围。
    * 设置逻辑块轴起始侧的边框颜色。
@@ -6475,7 +7860,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-color
    */
-  readonly WebkitBorderBeforeColor?: PropertyValue<'WebkitBorderBeforeColor', T>;
+  WebkitBorderBeforeColor(value: PropertyValue<'WebkitBorderBeforeColor', T>): this {
+    return this.write('WebkitBorderBeforeColor', value);
+  }
   /**
    * 兼容属性 -webkit-border-before-style；优先参考标准属性 borderBlockStartStyle及浏览器支持范围。
    * 设置逻辑块轴起始侧的边框线型。
@@ -6484,7 +7871,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
    */
-  readonly WebkitBorderBeforeStyle?: PropertyValue<'WebkitBorderBeforeStyle', T>;
+  WebkitBorderBeforeStyle(value: PropertyValue<'WebkitBorderBeforeStyle', T>): this {
+    return this.write('WebkitBorderBeforeStyle', value);
+  }
   /**
    * 兼容属性 -webkit-border-before-width；优先参考标准属性 borderBlockStartWidth及浏览器支持范围。
    * 设置逻辑块轴起始侧的边框宽度。
@@ -6493,7 +7882,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-width
    */
-  readonly WebkitBorderBeforeWidth?: PropertyValue<'WebkitBorderBeforeWidth', T>;
+  WebkitBorderBeforeWidth(value: PropertyValue<'WebkitBorderBeforeWidth', T>): this {
+    return this.write('WebkitBorderBeforeWidth', value);
+  }
   /**
    * 兼容属性 -webkit-border-bottom-left-radius；优先参考标准属性及浏览器支持范围。
    * 设置左下角边框的圆角半径。
@@ -6502,7 +7893,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-bottom-left-radius
    */
-  readonly WebkitBorderBottomLeftRadius?: PropertyValue<'WebkitBorderBottomLeftRadius', T>;
+  WebkitBorderBottomLeftRadius(value: PropertyValue<'WebkitBorderBottomLeftRadius', T>): this {
+    return this.write('WebkitBorderBottomLeftRadius', value);
+  }
   /**
    * 兼容属性 -webkit-border-bottom-right-radius；优先参考标准属性及浏览器支持范围。
    * 设置右下角边框的圆角半径。
@@ -6511,14 +7904,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-bottom-right-radius
    */
-  readonly WebkitBorderBottomRightRadius?: PropertyValue<'WebkitBorderBottomRightRadius', T>;
+  WebkitBorderBottomRightRadius(value: PropertyValue<'WebkitBorderBottomRightRadius', T>): this {
+    return this.write('WebkitBorderBottomRightRadius', value);
+  }
   /**
    * 兼容属性 -webkit-border-image；优先参考标准属性及浏览器支持范围。
    * 设置用作边框的图像及其切片、宽度、外扩和重复方式。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-image
    */
-  readonly WebkitBorderImage?: PropertyValue<'WebkitBorderImage', T>;
+  WebkitBorderImage(value: PropertyValue<'WebkitBorderImage', T>): this {
+    return this.write('WebkitBorderImage', value);
+  }
   /**
    * 兼容属性 -webkit-border-image-slice；优先参考标准属性及浏览器支持范围。
    * 设置边框图像的切片位置及是否填充中间区域。
@@ -6527,7 +7924,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-image-slice
    */
-  readonly WebkitBorderImageSlice?: PropertyValue<'WebkitBorderImageSlice', T>;
+  WebkitBorderImageSlice(value: PropertyValue<'WebkitBorderImageSlice', T>): this {
+    return this.write('WebkitBorderImageSlice', value);
+  }
   /**
    * 兼容属性 -webkit-border-radius；优先参考标准属性及浏览器支持范围。
    * 设置四个角的圆角半径；斜杠语法可分别指定水平和垂直半径。
@@ -6536,11 +7935,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * 适用场景：卡片、按钮、头像的圆角外观。
    * @example
-   * css({ borderRadius: "8px" })
+   * s.borderRadius("8px")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-radius
    */
-  readonly WebkitBorderRadius?: PropertyValue<'WebkitBorderRadius', T>;
+  WebkitBorderRadius(value: PropertyValue<'WebkitBorderRadius', T>): this {
+    return this.write('WebkitBorderRadius', value);
+  }
   /**
    * 兼容属性 -webkit-border-top-left-radius；优先参考标准属性及浏览器支持范围。
    * 设置左上角边框的圆角半径。
@@ -6549,7 +7950,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-top-left-radius
    */
-  readonly WebkitBorderTopLeftRadius?: PropertyValue<'WebkitBorderTopLeftRadius', T>;
+  WebkitBorderTopLeftRadius(value: PropertyValue<'WebkitBorderTopLeftRadius', T>): this {
+    return this.write('WebkitBorderTopLeftRadius', value);
+  }
   /**
    * 兼容属性 -webkit-border-top-right-radius；优先参考标准属性及浏览器支持范围。
    * 设置右上角边框的圆角半径。
@@ -6558,7 +7961,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-top-right-radius
    */
-  readonly WebkitBorderTopRightRadius?: PropertyValue<'WebkitBorderTopRightRadius', T>;
+  WebkitBorderTopRightRadius(value: PropertyValue<'WebkitBorderTopRightRadius', T>): this {
+    return this.write('WebkitBorderTopRightRadius', value);
+  }
   /**
    * 兼容属性 -webkit-box-align；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒子项在交叉方向上的对齐，常规布局优先使用 align-items。
@@ -6568,7 +7973,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-align
    */
-  readonly WebkitBoxAlign?: PropertyValue<'WebkitBoxAlign', T>;
+  WebkitBoxAlign(value: PropertyValue<'WebkitBoxAlign', T>): this {
+    return this.write('WebkitBoxAlign', value);
+  }
   /**
    * 兼容属性 -webkit-box-decoration-break；优先参考标准属性及浏览器支持范围。
    * 设置盒子被分成多行、多栏或多页时装饰如何绘制。
@@ -6577,7 +7984,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-decoration-break
    */
-  readonly WebkitBoxDecorationBreak?: PropertyValue<'WebkitBoxDecorationBreak', T>;
+  WebkitBoxDecorationBreak(value: PropertyValue<'WebkitBoxDecorationBreak', T>): this {
+    return this.write('WebkitBoxDecorationBreak', value);
+  }
   /**
    * 兼容属性 -webkit-box-direction；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒的子项排列方向是否反转。
@@ -6587,7 +7996,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-direction
    */
-  readonly WebkitBoxDirection?: PropertyValue<'WebkitBoxDirection', T>;
+  WebkitBoxDirection(value: PropertyValue<'WebkitBoxDirection', T>): this {
+    return this.write('WebkitBoxDirection', value);
+  }
   /**
    * 兼容属性 -webkit-box-flex；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒子项分配剩余空间的比例。
@@ -6597,7 +8008,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-flex
    */
-  readonly WebkitBoxFlex?: PropertyValue<'WebkitBoxFlex', T>;
+  WebkitBoxFlex(value: PropertyValue<'WebkitBoxFlex', T>): this {
+    return this.write('WebkitBoxFlex', value);
+  }
   /**
    * 兼容属性 -webkit-box-flex-group；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒子项参与弹性分配的组。
@@ -6607,7 +8020,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-flex-group
    */
-  readonly WebkitBoxFlexGroup?: PropertyValue<'WebkitBoxFlexGroup', T>;
+  WebkitBoxFlexGroup(value: PropertyValue<'WebkitBoxFlexGroup', T>): this {
+    return this.write('WebkitBoxFlexGroup', value);
+  }
   /**
    * 兼容属性 -webkit-box-lines；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒是否允许子项分成多行。
@@ -6617,7 +8032,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-lines
    */
-  readonly WebkitBoxLines?: PropertyValue<'WebkitBoxLines', T>;
+  WebkitBoxLines(value: PropertyValue<'WebkitBoxLines', T>): this {
+    return this.write('WebkitBoxLines', value);
+  }
   /**
    * 兼容属性 -webkit-box-ordinal-group；优先参考标准属性及浏览器支持范围。
    * 设置旧版弹性盒的子项排列组序号，现代布局使用 order。
@@ -6627,7 +8044,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-ordinal-group
    */
-  readonly WebkitBoxOrdinalGroup?: PropertyValue<'WebkitBoxOrdinalGroup', T>;
+  WebkitBoxOrdinalGroup(value: PropertyValue<'WebkitBoxOrdinalGroup', T>): this {
+    return this.write('WebkitBoxOrdinalGroup', value);
+  }
   /**
    * 指定旧版弹性盒的排列方向；仅为多行截断兼容保留，常规布局请使用 Flex/Grid。
    *
@@ -6636,7 +8055,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-orient
    */
-  readonly WebkitBoxOrient?: PropertyValue<'WebkitBoxOrient', T>;
+  WebkitBoxOrient(value: PropertyValue<'WebkitBoxOrient', T>): this {
+    return this.write('WebkitBoxOrient', value);
+  }
   /**
    * 兼容属性 -webkit-box-pack；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒在主轴方向的空余空间分配，现代布局使用 justify-content。
@@ -6646,7 +8067,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-pack
    */
-  readonly WebkitBoxPack?: PropertyValue<'WebkitBoxPack', T>;
+  WebkitBoxPack(value: PropertyValue<'WebkitBoxPack', T>): this {
+    return this.write('WebkitBoxPack', value);
+  }
   /**
    * 兼容属性 -webkit-box-reflect；优先参考标准属性及浏览器支持范围。
    * 在指定方向生成元素的镜像，并可设置镜像间距和遮罩。
@@ -6655,7 +8078,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-reflect
    */
-  readonly WebkitBoxReflect?: PropertyValue<'WebkitBoxReflect', T>;
+  WebkitBoxReflect(value: PropertyValue<'WebkitBoxReflect', T>): this {
+    return this.write('WebkitBoxReflect', value);
+  }
   /**
    * 兼容属性 -webkit-box-shadow；优先参考标准属性及浏览器支持范围。
    * 设置盒子的外部或内部阴影，可叠加多层。
@@ -6666,11 +8091,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ boxShadow: "0 2px 8px rgb(0 0 0 / 0.15)" })
+   * s.boxShadow("0 2px 8px rgb(0 0 0 / 0.15)")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-shadow
    */
-  readonly WebkitBoxShadow?: PropertyValue<'WebkitBoxShadow', T>;
+  WebkitBoxShadow(value: PropertyValue<'WebkitBoxShadow', T>): this {
+    return this.write('WebkitBoxShadow', value);
+  }
   /**
    * 兼容属性 -webkit-box-sizing；优先参考标准属性及浏览器支持范围。
    * 决定 width、height 等尺寸是否包含内边距和边框。
@@ -6681,11 +8108,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`content-box`，不同于浏览器默认样式表。
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-sizing
    */
-  readonly WebkitBoxSizing?: PropertyValue<'WebkitBoxSizing', T>;
+  WebkitBoxSizing(value: PropertyValue<'WebkitBoxSizing', T>): this {
+    return this.write('WebkitBoxSizing', value);
+  }
   /**
    * 兼容属性 -webkit-clip-path；优先参考标准属性及浏览器支持范围。
    * 通过基本形状、路径或引用裁剪元素的可见区域。
@@ -6694,7 +8123,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-clip-path
    */
-  readonly WebkitClipPath?: PropertyValue<'WebkitClipPath', T>;
+  WebkitClipPath(value: PropertyValue<'WebkitClipPath', T>): this {
+    return this.write('WebkitClipPath', value);
+  }
   /**
    * 兼容属性 -webkit-column-count；优先参考标准属性及浏览器支持范围。
    * 设置多栏布局的目标栏数。
@@ -6703,7 +8134,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-count
    */
-  readonly WebkitColumnCount?: PropertyValue<'WebkitColumnCount', T>;
+  WebkitColumnCount(value: PropertyValue<'WebkitColumnCount', T>): this {
+    return this.write('WebkitColumnCount', value);
+  }
   /**
    * 兼容属性 -webkit-column-fill；优先参考标准属性及浏览器支持范围。
    * 设置多栏内容顺序填充还是尽量均衡栏高。
@@ -6712,14 +8145,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-fill
    */
-  readonly WebkitColumnFill?: PropertyValue<'WebkitColumnFill', T>;
+  WebkitColumnFill(value: PropertyValue<'WebkitColumnFill', T>): this {
+    return this.write('WebkitColumnFill', value);
+  }
   /**
    * 兼容属性 -webkit-column-rule；优先参考标准属性及浏览器支持范围。
    * 设置多栏之间分隔线的宽度、线型和颜色。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule
    */
-  readonly WebkitColumnRule?: PropertyValue<'WebkitColumnRule', T>;
+  WebkitColumnRule(value: PropertyValue<'WebkitColumnRule', T>): this {
+    return this.write('WebkitColumnRule', value);
+  }
   /**
    * 兼容属性 -webkit-column-rule-color；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的颜色。
@@ -6728,7 +8165,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-color
    */
-  readonly WebkitColumnRuleColor?: PropertyValue<'WebkitColumnRuleColor', T>;
+  WebkitColumnRuleColor(value: PropertyValue<'WebkitColumnRuleColor', T>): this {
+    return this.write('WebkitColumnRuleColor', value);
+  }
   /**
    * 兼容属性 -webkit-column-rule-style；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的线型。
@@ -6737,7 +8176,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
    */
-  readonly WebkitColumnRuleStyle?: PropertyValue<'WebkitColumnRuleStyle', T>;
+  WebkitColumnRuleStyle(value: PropertyValue<'WebkitColumnRuleStyle', T>): this {
+    return this.write('WebkitColumnRuleStyle', value);
+  }
   /**
    * 兼容属性 -webkit-column-rule-width；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的宽度。
@@ -6746,14 +8187,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-width
    */
-  readonly WebkitColumnRuleWidth?: PropertyValue<'WebkitColumnRuleWidth', T>;
+  WebkitColumnRuleWidth(value: PropertyValue<'WebkitColumnRuleWidth', T>): this {
+    return this.write('WebkitColumnRuleWidth', value);
+  }
   /**
    * 兼容属性 -webkit-columns；优先参考标准属性及浏览器支持范围。
    * 同时设置多栏布局的首选栏宽和目标栏数。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-columns
    */
-  readonly WebkitColumns?: PropertyValue<'WebkitColumns', T>;
+  WebkitColumns(value: PropertyValue<'WebkitColumns', T>): this {
+    return this.write('WebkitColumns', value);
+  }
   /**
    * 兼容属性 -webkit-column-span；优先参考标准属性及浏览器支持范围。
    * 设置多栏布局中的元素是否跨越所有栏。
@@ -6762,7 +8207,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-span
    */
-  readonly WebkitColumnSpan?: PropertyValue<'WebkitColumnSpan', T>;
+  WebkitColumnSpan(value: PropertyValue<'WebkitColumnSpan', T>): this {
+    return this.write('WebkitColumnSpan', value);
+  }
   /**
    * 兼容属性 -webkit-column-width；优先参考标准属性及浏览器支持范围。
    * 设置多栏布局的首选栏宽，实际栏宽由容器空间决定。
@@ -6771,7 +8218,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-width
    */
-  readonly WebkitColumnWidth?: PropertyValue<'WebkitColumnWidth', T>;
+  WebkitColumnWidth(value: PropertyValue<'WebkitColumnWidth', T>): this {
+    return this.write('WebkitColumnWidth', value);
+  }
   /**
    * 兼容属性 -webkit-filter；优先参考标准属性及浏览器支持范围。
    * 对元素的最终图像应用模糊、亮度等滤镜。
@@ -6780,7 +8229,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-filter
    */
-  readonly WebkitFilter?: PropertyValue<'WebkitFilter', T>;
+  WebkitFilter(value: PropertyValue<'WebkitFilter', T>): this {
+    return this.write('WebkitFilter', value);
+  }
   /**
    * 兼容属性 -webkit-flex；优先参考标准属性及浏览器支持范围。
    * 集中设置弹性项目的增长系数、收缩系数和基础尺寸。
@@ -6791,13 +8242,15 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * 常用值：`auto`、`none`。
    * @example
-   * css({ flex: "1 1 0%" })
+   * s.flex("1 1 0%")
    * @example
-   * css({ flex: "none" })
+   * s.flex("none")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex
    */
-  readonly WebkitFlex?: PropertyValue<'WebkitFlex', T>;
+  WebkitFlex(value: PropertyValue<'WebkitFlex', T>): this {
+    return this.write('WebkitFlex', value);
+  }
   /**
    * 兼容属性 -webkit-flex-basis；优先参考标准属性及浏览器支持范围。
    * 设置弹性项目分配剩余空间之前的主轴基础尺寸。
@@ -6810,11 +8263,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ flexBasis: "16rem" })
+   * s.flexBasis("16rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-basis
    */
-  readonly WebkitFlexBasis?: PropertyValue<'WebkitFlexBasis', T>;
+  WebkitFlexBasis(value: PropertyValue<'WebkitFlexBasis', T>): this {
+    return this.write('WebkitFlexBasis', value);
+  }
   /**
    * 兼容属性 -webkit-flex-direction；优先参考标准属性及浏览器支持范围。
    * 设置弹性容器的主轴方向及项目排列方向。
@@ -6825,18 +8280,22 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`row`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", flexDirection: "column", gap: "1rem" })
+   * s.display("flex").flexDirection("column").gap("1rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-direction
    */
-  readonly WebkitFlexDirection?: PropertyValue<'WebkitFlexDirection', T>;
+  WebkitFlexDirection(value: PropertyValue<'WebkitFlexDirection', T>): this {
+    return this.write('WebkitFlexDirection', value);
+  }
   /**
    * 兼容属性 -webkit-flex-flow；优先参考标准属性及浏览器支持范围。
    * 同时设置弹性布局的主轴方向和换行方式。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-flow
    */
-  readonly WebkitFlexFlow?: PropertyValue<'WebkitFlexFlow', T>;
+  WebkitFlexFlow(value: PropertyValue<'WebkitFlexFlow', T>): this {
+    return this.write('WebkitFlexFlow', value);
+  }
   /**
    * 兼容属性 -webkit-flex-grow；优先参考标准属性及浏览器支持范围。
    * 设置弹性项目分配正剩余空间时的增长系数。
@@ -6847,11 +8306,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`0`，不同于浏览器默认样式表。
    * @example
-   * css({ flexGrow: 1 })
+   * s.flexGrow(1)
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-grow
    */
-  readonly WebkitFlexGrow?: PropertyValue<'WebkitFlexGrow', T>;
+  WebkitFlexGrow(value: PropertyValue<'WebkitFlexGrow', T>): this {
+    return this.write('WebkitFlexGrow', value);
+  }
   /**
    * 兼容属性 -webkit-flex-shrink；优先参考标准属性及浏览器支持范围。
    * 设置弹性项目空间不足时的收缩系数。
@@ -6862,11 +8323,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`1`，不同于浏览器默认样式表。
    * @example
-   * css({ flexShrink: 0 })
+   * s.flexShrink(0)
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-shrink
    */
-  readonly WebkitFlexShrink?: PropertyValue<'WebkitFlexShrink', T>;
+  WebkitFlexShrink(value: PropertyValue<'WebkitFlexShrink', T>): this {
+    return this.write('WebkitFlexShrink', value);
+  }
   /**
    * 兼容属性 -webkit-flex-wrap；优先参考标准属性及浏览器支持范围。
    * 设置弹性项目是否换行，以及多行的排列方向。
@@ -6877,11 +8340,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`nowrap`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", flexWrap: "wrap", gap: "0.5rem" })
+   * s.display("flex").flexWrap("wrap").gap("0.5rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-wrap
    */
-  readonly WebkitFlexWrap?: PropertyValue<'WebkitFlexWrap', T>;
+  WebkitFlexWrap(value: PropertyValue<'WebkitFlexWrap', T>): this {
+    return this.write('WebkitFlexWrap', value);
+  }
   /**
    * 兼容属性 -webkit-font-feature-settings；优先参考标准属性及浏览器支持范围。
    * 通过 OpenType 特性标签控制字体的底层排版功能。
@@ -6890,7 +8355,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-feature-settings
    */
-  readonly WebkitFontFeatureSettings?: PropertyValue<'WebkitFontFeatureSettings', T>;
+  WebkitFontFeatureSettings(value: PropertyValue<'WebkitFontFeatureSettings', T>): this {
+    return this.write('WebkitFontFeatureSettings', value);
+  }
   /**
    * 兼容属性 -webkit-font-kerning；优先参考标准属性及浏览器支持范围。
    * 设置是否应用字体提供的字偶间距调整。
@@ -6899,7 +8366,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-kerning
    */
-  readonly WebkitFontKerning?: PropertyValue<'WebkitFontKerning', T>;
+  WebkitFontKerning(value: PropertyValue<'WebkitFontKerning', T>): this {
+    return this.write('WebkitFontKerning', value);
+  }
   /**
    * 兼容属性 -webkit-font-smoothing；优先参考标准属性及浏览器支持范围。
    * 指定 WebKit 平台的字体平滑方式；不是通用的跨浏览器排版开关。
@@ -6908,7 +8377,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-smoothing
    */
-  readonly WebkitFontSmoothing?: PropertyValue<'WebkitFontSmoothing', T>;
+  WebkitFontSmoothing(value: PropertyValue<'WebkitFontSmoothing', T>): this {
+    return this.write('WebkitFontSmoothing', value);
+  }
   /**
    * 兼容属性 -webkit-font-variant-ligatures；优先参考标准属性及浏览器支持范围。
    * 设置字体连字的启用方式。
@@ -6917,7 +8388,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-variant-ligatures
    */
-  readonly WebkitFontVariantLigatures?: PropertyValue<'WebkitFontVariantLigatures', T>;
+  WebkitFontVariantLigatures(value: PropertyValue<'WebkitFontVariantLigatures', T>): this {
+    return this.write('WebkitFontVariantLigatures', value);
+  }
   /**
    * 兼容属性 -webkit-hyphenate-character；优先参考标准属性及浏览器支持范围。
    * 设置自动断词时插入的断字符号。
@@ -6926,7 +8399,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-hyphenate-character
    */
-  readonly WebkitHyphenateCharacter?: PropertyValue<'WebkitHyphenateCharacter', T>;
+  WebkitHyphenateCharacter(value: PropertyValue<'WebkitHyphenateCharacter', T>): this {
+    return this.write('WebkitHyphenateCharacter', value);
+  }
   /**
    * 兼容属性 -webkit-hyphens；优先参考标准属性及浏览器支持范围。
    * 设置文字断词和连字符插入的方式；自动断词依赖语言和词典。
@@ -6935,7 +8410,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-hyphens
    */
-  readonly WebkitHyphens?: PropertyValue<'WebkitHyphens', T>;
+  WebkitHyphens(value: PropertyValue<'WebkitHyphens', T>): this {
+    return this.write('WebkitHyphens', value);
+  }
   /**
    * 兼容属性 -webkit-initial-letter；优先参考标准属性及浏览器支持范围。
    * 设置段落首字下沉或抬升时占用的行数与对齐位置。
@@ -6944,7 +8421,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-initial-letter
    */
-  readonly WebkitInitialLetter?: PropertyValue<'WebkitInitialLetter', T>;
+  WebkitInitialLetter(value: PropertyValue<'WebkitInitialLetter', T>): this {
+    return this.write('WebkitInitialLetter', value);
+  }
   /**
    * 兼容属性 -webkit-justify-content；优先参考标准属性及浏览器支持范围。
    * 分配布局主轴或行内轴的剩余空间，控制内容整体对齐。
@@ -6955,11 +8434,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", justifyContent: "space-between" })
+   * s.display("flex").justifyContent("space-between")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-justify-content
    */
-  readonly WebkitJustifyContent?: PropertyValue<'WebkitJustifyContent', T>;
+  WebkitJustifyContent(value: PropertyValue<'WebkitJustifyContent', T>): this {
+    return this.write('WebkitJustifyContent', value);
+  }
   /**
    * 兼容属性 -webkit-line-break；优先参考标准属性及浏览器支持范围。
    * 设置东亚文字标点等字符的换行严格程度。
@@ -6968,15 +8449,19 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-line-break
    */
-  readonly WebkitLineBreak?: PropertyValue<'WebkitLineBreak', T>;
+  WebkitLineBreak(value: PropertyValue<'WebkitLineBreak', T>): this {
+    return this.write('WebkitLineBreak', value);
+  }
   /**
-   * 限制多行文本显示的行数；与 display: -webkit-box、WebkitBoxOrient: 'vertical' 和 overflow: hidden 配合，不删除文本内容。
+   * 限制多行文本显示的行数；与 display: -webkit-box、WebkitBoxOrient('vertical') 和 overflow: hidden 配合，不删除文本内容。
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-line-clamp
    */
-  readonly WebkitLineClamp?: PropertyValue<'WebkitLineClamp', T>;
+  WebkitLineClamp(value: PropertyValue<'WebkitLineClamp', T>): this {
+    return this.write('WebkitLineClamp', value);
+  }
   /**
    * 兼容属性 -webkit-logical-height；优先参考标准属性 blockSize及浏览器支持范围。
    * 设置逻辑块轴尺寸；水平书写时通常对应高度。
@@ -6985,7 +8470,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-logical-height
    */
-  readonly WebkitLogicalHeight?: PropertyValue<'WebkitLogicalHeight', T>;
+  WebkitLogicalHeight(value: PropertyValue<'WebkitLogicalHeight', T>): this {
+    return this.write('WebkitLogicalHeight', value);
+  }
   /**
    * 兼容属性 -webkit-logical-width；优先参考标准属性 inlineSize及浏览器支持范围。
    * 设置逻辑行内轴尺寸；水平书写时通常对应宽度。
@@ -6994,7 +8481,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-logical-width
    */
-  readonly WebkitLogicalWidth?: PropertyValue<'WebkitLogicalWidth', T>;
+  WebkitLogicalWidth(value: PropertyValue<'WebkitLogicalWidth', T>): this {
+    return this.write('WebkitLogicalWidth', value);
+  }
   /**
    * 兼容属性 -webkit-margin-end；优先参考标准属性 marginInlineEnd及浏览器支持范围。
    * 设置逻辑行内轴结束侧的外边距。
@@ -7003,7 +8492,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-margin-end
    */
-  readonly WebkitMarginEnd?: PropertyValue<'WebkitMarginEnd', T>;
+  WebkitMarginEnd(value: PropertyValue<'WebkitMarginEnd', T>): this {
+    return this.write('WebkitMarginEnd', value);
+  }
   /**
    * 兼容属性 -webkit-margin-start；优先参考标准属性 marginInlineStart及浏览器支持范围。
    * 设置逻辑行内轴起始侧的外边距。
@@ -7012,14 +8503,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-margin-start
    */
-  readonly WebkitMarginStart?: PropertyValue<'WebkitMarginStart', T>;
+  WebkitMarginStart(value: PropertyValue<'WebkitMarginStart', T>): this {
+    return this.write('WebkitMarginStart', value);
+  }
   /**
    * 兼容属性 -webkit-mask；优先参考标准属性及浏览器支持范围。
    * 集中设置遮罩图层的图像、位置、尺寸、重复及合成方式。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
    */
-  readonly WebkitMask?: PropertyValue<'WebkitMask', T>;
+  WebkitMask(value: PropertyValue<'WebkitMask', T>): this {
+    return this.write('WebkitMask', value);
+  }
   /**
    * 兼容属性 -webkit-mask-attachment；优先参考标准属性及浏览器支持范围。
    * 指定旧版遮罩图像是否随内容滚动。
@@ -7028,14 +8523,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-attachment
    */
-  readonly WebkitMaskAttachment?: PropertyValue<'WebkitMaskAttachment', T>;
+  WebkitMaskAttachment(value: PropertyValue<'WebkitMaskAttachment', T>): this {
+    return this.write('WebkitMaskAttachment', value);
+  }
   /**
    * 兼容属性 -webkit-mask-box-image；优先参考标准属性 maskBorder及浏览器支持范围。
    * 设置基于九宫格图像切片的边框遮罩。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image
    */
-  readonly WebkitMaskBoxImage?: PropertyValue<'WebkitMaskBoxImage', T>;
+  WebkitMaskBoxImage(value: PropertyValue<'WebkitMaskBoxImage', T>): this {
+    return this.write('WebkitMaskBoxImage', value);
+  }
   /**
    * 兼容属性 -webkit-mask-box-image-outset；优先参考标准属性 maskBorderOutset及浏览器支持范围。
    * 设置边框遮罩超出边框盒的距离。
@@ -7044,7 +8543,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-outset
    */
-  readonly WebkitMaskBoxImageOutset?: PropertyValue<'WebkitMaskBoxImageOutset', T>;
+  WebkitMaskBoxImageOutset(value: PropertyValue<'WebkitMaskBoxImageOutset', T>): this {
+    return this.write('WebkitMaskBoxImageOutset', value);
+  }
   /**
    * 兼容属性 -webkit-mask-box-image-repeat；优先参考标准属性 maskBorderRepeat及浏览器支持范围。
    * 设置边框遮罩切片的重复或拉伸方式。
@@ -7053,7 +8554,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-repeat
    */
-  readonly WebkitMaskBoxImageRepeat?: PropertyValue<'WebkitMaskBoxImageRepeat', T>;
+  WebkitMaskBoxImageRepeat(value: PropertyValue<'WebkitMaskBoxImageRepeat', T>): this {
+    return this.write('WebkitMaskBoxImageRepeat', value);
+  }
   /**
    * 兼容属性 -webkit-mask-box-image-slice；优先参考标准属性 maskBorderSlice及浏览器支持范围。
    * 设置边框遮罩图像的切片位置。
@@ -7062,7 +8565,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-slice
    */
-  readonly WebkitMaskBoxImageSlice?: PropertyValue<'WebkitMaskBoxImageSlice', T>;
+  WebkitMaskBoxImageSlice(value: PropertyValue<'WebkitMaskBoxImageSlice', T>): this {
+    return this.write('WebkitMaskBoxImageSlice', value);
+  }
   /**
    * 兼容属性 -webkit-mask-box-image-source；优先参考标准属性 maskBorderSource及浏览器支持范围。
    * 设置边框遮罩的源图像。
@@ -7071,7 +8576,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-source
    */
-  readonly WebkitMaskBoxImageSource?: PropertyValue<'WebkitMaskBoxImageSource', T>;
+  WebkitMaskBoxImageSource(value: PropertyValue<'WebkitMaskBoxImageSource', T>): this {
+    return this.write('WebkitMaskBoxImageSource', value);
+  }
   /**
    * 兼容属性 -webkit-mask-box-image-width；优先参考标准属性 maskBorderWidth及浏览器支持范围。
    * 设置边框遮罩各边的宽度。
@@ -7080,7 +8587,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-width
    */
-  readonly WebkitMaskBoxImageWidth?: PropertyValue<'WebkitMaskBoxImageWidth', T>;
+  WebkitMaskBoxImageWidth(value: PropertyValue<'WebkitMaskBoxImageWidth', T>): this {
+    return this.write('WebkitMaskBoxImageWidth', value);
+  }
   /**
    * 兼容属性 -webkit-mask-clip；优先参考标准属性及浏览器支持范围。
    * 设置遮罩效果允许作用的裁剪区域。
@@ -7089,7 +8598,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-clip
    */
-  readonly WebkitMaskClip?: PropertyValue<'WebkitMaskClip', T>;
+  WebkitMaskClip(value: PropertyValue<'WebkitMaskClip', T>): this {
+    return this.write('WebkitMaskClip', value);
+  }
   /**
    * 兼容属性 -webkit-mask-composite；优先参考标准属性及浏览器支持范围。
    * 设置多个遮罩图层之间的合成运算。
@@ -7098,7 +8609,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-composite
    */
-  readonly WebkitMaskComposite?: PropertyValue<'WebkitMaskComposite', T>;
+  WebkitMaskComposite(value: PropertyValue<'WebkitMaskComposite', T>): this {
+    return this.write('WebkitMaskComposite', value);
+  }
   /**
    * 兼容属性 -webkit-mask-image；优先参考标准属性及浏览器支持范围。
    * 设置遮罩使用的图像、渐变或 SVG 遮罩引用。
@@ -7107,7 +8620,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-image
    */
-  readonly WebkitMaskImage?: PropertyValue<'WebkitMaskImage', T>;
+  WebkitMaskImage(value: PropertyValue<'WebkitMaskImage', T>): this {
+    return this.write('WebkitMaskImage', value);
+  }
   /**
    * 兼容属性 -webkit-mask-origin；优先参考标准属性及浏览器支持范围。
    * 设置遮罩图像定位所依据的盒子。
@@ -7116,7 +8631,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-origin
    */
-  readonly WebkitMaskOrigin?: PropertyValue<'WebkitMaskOrigin', T>;
+  WebkitMaskOrigin(value: PropertyValue<'WebkitMaskOrigin', T>): this {
+    return this.write('WebkitMaskOrigin', value);
+  }
   /**
    * 兼容属性 -webkit-mask-position；优先参考标准属性及浏览器支持范围。
    * 设置遮罩图像在定位区域中的位置。
@@ -7125,7 +8642,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position
    */
-  readonly WebkitMaskPosition?: PropertyValue<'WebkitMaskPosition', T>;
+  WebkitMaskPosition(value: PropertyValue<'WebkitMaskPosition', T>): this {
+    return this.write('WebkitMaskPosition', value);
+  }
   /**
    * 兼容属性 -webkit-mask-position-x；优先参考标准属性 backgroundPositionX及浏览器支持范围。
    * 设置遮罩图像的水平位置，可使用长度、百分比或位置关键字。
@@ -7134,7 +8653,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-x
    */
-  readonly WebkitMaskPositionX?: PropertyValue<'WebkitMaskPositionX', T>;
+  WebkitMaskPositionX(value: PropertyValue<'WebkitMaskPositionX', T>): this {
+    return this.write('WebkitMaskPositionX', value);
+  }
   /**
    * 兼容属性 -webkit-mask-position-y；优先参考标准属性 backgroundPositionY及浏览器支持范围。
    * 设置遮罩图像的垂直位置，可使用长度、百分比或位置关键字。
@@ -7143,7 +8664,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-y
    */
-  readonly WebkitMaskPositionY?: PropertyValue<'WebkitMaskPositionY', T>;
+  WebkitMaskPositionY(value: PropertyValue<'WebkitMaskPositionY', T>): this {
+    return this.write('WebkitMaskPositionY', value);
+  }
   /**
    * 兼容属性 -webkit-mask-repeat；优先参考标准属性及浏览器支持范围。
    * 设置遮罩图像的重复方式。
@@ -7152,7 +8675,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat
    */
-  readonly WebkitMaskRepeat?: PropertyValue<'WebkitMaskRepeat', T>;
+  WebkitMaskRepeat(value: PropertyValue<'WebkitMaskRepeat', T>): this {
+    return this.write('WebkitMaskRepeat', value);
+  }
   /**
    * 兼容属性 -webkit-mask-repeat-x；优先参考标准属性及浏览器支持范围。
    * 控制旧版遮罩图像在水平方向的重复方式。
@@ -7161,7 +8686,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-x
    */
-  readonly WebkitMaskRepeatX?: PropertyValue<'WebkitMaskRepeatX', T>;
+  WebkitMaskRepeatX(value: PropertyValue<'WebkitMaskRepeatX', T>): this {
+    return this.write('WebkitMaskRepeatX', value);
+  }
   /**
    * 兼容属性 -webkit-mask-repeat-y；优先参考标准属性及浏览器支持范围。
    * 控制旧版遮罩图像在垂直方向的重复方式。
@@ -7170,7 +8697,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-y
    */
-  readonly WebkitMaskRepeatY?: PropertyValue<'WebkitMaskRepeatY', T>;
+  WebkitMaskRepeatY(value: PropertyValue<'WebkitMaskRepeatY', T>): this {
+    return this.write('WebkitMaskRepeatY', value);
+  }
   /**
    * 兼容属性 -webkit-mask-size；优先参考标准属性及浏览器支持范围。
    * 设置遮罩图像的尺寸。
@@ -7179,7 +8708,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-size
    */
-  readonly WebkitMaskSize?: PropertyValue<'WebkitMaskSize', T>;
+  WebkitMaskSize(value: PropertyValue<'WebkitMaskSize', T>): this {
+    return this.write('WebkitMaskSize', value);
+  }
   /**
    * 兼容属性 -webkit-max-inline-size；优先参考标准属性及浏览器支持范围。
    * 限制元素逻辑行内轴的最大尺寸。
@@ -7188,7 +8719,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-max-inline-size
    */
-  readonly WebkitMaxInlineSize?: PropertyValue<'WebkitMaxInlineSize', T>;
+  WebkitMaxInlineSize(value: PropertyValue<'WebkitMaxInlineSize', T>): this {
+    return this.write('WebkitMaxInlineSize', value);
+  }
   /**
    * 兼容属性 -webkit-order；优先参考标准属性及浏览器支持范围。
    * 设置 Flex 或 Grid 项目的视觉排列顺序，不改变 DOM 顺序。
@@ -7199,7 +8732,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-order
    */
-  readonly WebkitOrder?: PropertyValue<'WebkitOrder', T>;
+  WebkitOrder(value: PropertyValue<'WebkitOrder', T>): this {
+    return this.write('WebkitOrder', value);
+  }
   /**
    * 兼容属性 -webkit-overflow-scrolling；优先参考标准属性及浏览器支持范围。
    * 选择特定旧版 WebKit 触控环境的滚动方式，包括惯性滚动。
@@ -7208,7 +8743,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-overflow-scrolling
    */
-  readonly WebkitOverflowScrolling?: PropertyValue<'WebkitOverflowScrolling', T>;
+  WebkitOverflowScrolling(value: PropertyValue<'WebkitOverflowScrolling', T>): this {
+    return this.write('WebkitOverflowScrolling', value);
+  }
   /**
    * 兼容属性 -webkit-padding-end；优先参考标准属性 paddingInlineEnd及浏览器支持范围。
    * 设置逻辑行内轴结束侧的内边距。
@@ -7217,7 +8754,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-padding-end
    */
-  readonly WebkitPaddingEnd?: PropertyValue<'WebkitPaddingEnd', T>;
+  WebkitPaddingEnd(value: PropertyValue<'WebkitPaddingEnd', T>): this {
+    return this.write('WebkitPaddingEnd', value);
+  }
   /**
    * 兼容属性 -webkit-padding-start；优先参考标准属性 paddingInlineStart及浏览器支持范围。
    * 设置逻辑行内轴起始侧的内边距。
@@ -7226,7 +8765,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-padding-start
    */
-  readonly WebkitPaddingStart?: PropertyValue<'WebkitPaddingStart', T>;
+  WebkitPaddingStart(value: PropertyValue<'WebkitPaddingStart', T>): this {
+    return this.write('WebkitPaddingStart', value);
+  }
   /**
    * 兼容属性 -webkit-perspective；优先参考标准属性及浏览器支持范围。
    * 设置观察子元素三维变换时的透视距离。
@@ -7235,7 +8776,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-perspective
    */
-  readonly WebkitPerspective?: PropertyValue<'WebkitPerspective', T>;
+  WebkitPerspective(value: PropertyValue<'WebkitPerspective', T>): this {
+    return this.write('WebkitPerspective', value);
+  }
   /**
    * 兼容属性 -webkit-perspective-origin；优先参考标准属性及浏览器支持范围。
    * 设置三维透视的观察原点。
@@ -7244,7 +8787,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-perspective-origin
    */
-  readonly WebkitPerspectiveOrigin?: PropertyValue<'WebkitPerspectiveOrigin', T>;
+  WebkitPerspectiveOrigin(value: PropertyValue<'WebkitPerspectiveOrigin', T>): this {
+    return this.write('WebkitPerspectiveOrigin', value);
+  }
   /**
    * 兼容属性 -webkit-print-color-adjust；优先参考标准属性及浏览器支持范围。
    * 设置打印时浏览器是否可以为节墨或可读性调整颜色。
@@ -7253,7 +8798,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-print-color-adjust
    */
-  readonly WebkitPrintColorAdjust?: PropertyValue<'WebkitPrintColorAdjust', T>;
+  WebkitPrintColorAdjust(value: PropertyValue<'WebkitPrintColorAdjust', T>): this {
+    return this.write('WebkitPrintColorAdjust', value);
+  }
   /**
    * 兼容属性 -webkit-ruby-position；优先参考标准属性及浏览器支持范围。
    * 设置注音文字相对于基底文字的位置。
@@ -7262,7 +8809,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-ruby-position
    */
-  readonly WebkitRubyPosition?: PropertyValue<'WebkitRubyPosition', T>;
+  WebkitRubyPosition(value: PropertyValue<'WebkitRubyPosition', T>): this {
+    return this.write('WebkitRubyPosition', value);
+  }
   /**
    * 兼容属性 -webkit-scroll-snap-type；优先参考标准属性及浏览器支持范围。
    * 设置滚动容器的吸附轴和吸附强度。
@@ -7271,11 +8820,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ scrollSnapType: "x mandatory" })
+   * s.scrollSnapType("x mandatory")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-scroll-snap-type
    */
-  readonly WebkitScrollSnapType?: PropertyValue<'WebkitScrollSnapType', T>;
+  WebkitScrollSnapType(value: PropertyValue<'WebkitScrollSnapType', T>): this {
+    return this.write('WebkitScrollSnapType', value);
+  }
   /**
    * 兼容属性 -webkit-shape-margin；优先参考标准属性及浏览器支持范围。
    * 设置文字环绕形状之外的额外间距。
@@ -7284,7 +8835,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-shape-margin
    */
-  readonly WebkitShapeMargin?: PropertyValue<'WebkitShapeMargin', T>;
+  WebkitShapeMargin(value: PropertyValue<'WebkitShapeMargin', T>): this {
+    return this.write('WebkitShapeMargin', value);
+  }
   /**
    * 兼容属性 -webkit-tap-highlight-color；优先参考标准属性及浏览器支持范围。
    * 设置 WebKit 触控点击链接或可交互区域时的高亮颜色。
@@ -7293,7 +8846,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-tap-highlight-color
    */
-  readonly WebkitTapHighlightColor?: PropertyValue<'WebkitTapHighlightColor', T>;
+  WebkitTapHighlightColor(value: PropertyValue<'WebkitTapHighlightColor', T>): this {
+    return this.write('WebkitTapHighlightColor', value);
+  }
   /**
    * 兼容属性 -webkit-text-combine；优先参考标准属性 textCombineUpright及浏览器支持范围。
    * 设置竖排文字中多个字符是否合成为一个横排字形单元。
@@ -7302,7 +8857,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-combine
    */
-  readonly WebkitTextCombine?: PropertyValue<'WebkitTextCombine', T>;
+  WebkitTextCombine(value: PropertyValue<'WebkitTextCombine', T>): this {
+    return this.write('WebkitTextCombine', value);
+  }
   /**
    * 兼容属性 -webkit-text-decoration-color；优先参考标准属性及浏览器支持范围。
    * 设置文本装饰线颜色。
@@ -7311,7 +8868,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-color
    */
-  readonly WebkitTextDecorationColor?: PropertyValue<'WebkitTextDecorationColor', T>;
+  WebkitTextDecorationColor(value: PropertyValue<'WebkitTextDecorationColor', T>): this {
+    return this.write('WebkitTextDecorationColor', value);
+  }
   /**
    * 兼容属性 -webkit-text-decoration-line；优先参考标准属性及浏览器支持范围。
    * 设置下划线、上划线或删除线等装饰线位置。
@@ -7320,7 +8879,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-line
    */
-  readonly WebkitTextDecorationLine?: PropertyValue<'WebkitTextDecorationLine', T>;
+  WebkitTextDecorationLine(value: PropertyValue<'WebkitTextDecorationLine', T>): this {
+    return this.write('WebkitTextDecorationLine', value);
+  }
   /**
    * 兼容属性 -webkit-text-decoration-skip；优先参考标准属性及浏览器支持范围。
    * 设置文本装饰线跳过哪些内容；具体语法需核对支持情况。
@@ -7329,7 +8890,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-skip
    */
-  readonly WebkitTextDecorationSkip?: PropertyValue<'WebkitTextDecorationSkip', T>;
+  WebkitTextDecorationSkip(value: PropertyValue<'WebkitTextDecorationSkip', T>): this {
+    return this.write('WebkitTextDecorationSkip', value);
+  }
   /**
    * 兼容属性 -webkit-text-decoration-style；优先参考标准属性及浏览器支持范围。
    * 设置文本装饰线的实线、波浪线等线型。
@@ -7338,14 +8901,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-style
    */
-  readonly WebkitTextDecorationStyle?: PropertyValue<'WebkitTextDecorationStyle', T>;
+  WebkitTextDecorationStyle(value: PropertyValue<'WebkitTextDecorationStyle', T>): this {
+    return this.write('WebkitTextDecorationStyle', value);
+  }
   /**
    * 兼容属性 -webkit-text-emphasis；优先参考标准属性及浏览器支持范围。
    * 同时设置文字着重号的样式和颜色。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis
    */
-  readonly WebkitTextEmphasis?: PropertyValue<'WebkitTextEmphasis', T>;
+  WebkitTextEmphasis(value: PropertyValue<'WebkitTextEmphasis', T>): this {
+    return this.write('WebkitTextEmphasis', value);
+  }
   /**
    * 兼容属性 -webkit-text-emphasis-color；优先参考标准属性及浏览器支持范围。
    * 设置文字着重号颜色。
@@ -7354,7 +8921,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-color
    */
-  readonly WebkitTextEmphasisColor?: PropertyValue<'WebkitTextEmphasisColor', T>;
+  WebkitTextEmphasisColor(value: PropertyValue<'WebkitTextEmphasisColor', T>): this {
+    return this.write('WebkitTextEmphasisColor', value);
+  }
   /**
    * 兼容属性 -webkit-text-emphasis-position；优先参考标准属性及浏览器支持范围。
    * 设置文字着重号位于文字的哪一侧。
@@ -7363,7 +8932,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-position
    */
-  readonly WebkitTextEmphasisPosition?: PropertyValue<'WebkitTextEmphasisPosition', T>;
+  WebkitTextEmphasisPosition(value: PropertyValue<'WebkitTextEmphasisPosition', T>): this {
+    return this.write('WebkitTextEmphasisPosition', value);
+  }
   /**
    * 兼容属性 -webkit-text-emphasis-style；优先参考标准属性及浏览器支持范围。
    * 设置文字着重号的形状和填充方式。
@@ -7372,7 +8943,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-style
    */
-  readonly WebkitTextEmphasisStyle?: PropertyValue<'WebkitTextEmphasisStyle', T>;
+  WebkitTextEmphasisStyle(value: PropertyValue<'WebkitTextEmphasisStyle', T>): this {
+    return this.write('WebkitTextEmphasisStyle', value);
+  }
   /**
    * 兼容属性 -webkit-text-fill-color；优先参考标准属性及浏览器支持范围。
    * 设置文字字形内部填充色，可独立于文字描边色。
@@ -7381,7 +8954,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-fill-color
    */
-  readonly WebkitTextFillColor?: PropertyValue<'WebkitTextFillColor', T>;
+  WebkitTextFillColor(value: PropertyValue<'WebkitTextFillColor', T>): this {
+    return this.write('WebkitTextFillColor', value);
+  }
   /**
    * 兼容属性 -webkit-text-orientation；优先参考标准属性及浏览器支持范围。
    * 设置竖排模式下字符的方向。
@@ -7390,7 +8965,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-orientation
    */
-  readonly WebkitTextOrientation?: PropertyValue<'WebkitTextOrientation', T>;
+  WebkitTextOrientation(value: PropertyValue<'WebkitTextOrientation', T>): this {
+    return this.write('WebkitTextOrientation', value);
+  }
   /**
    * 兼容属性 -webkit-text-size-adjust；优先参考标准属性及浏览器支持范围。
    * 控制移动浏览器为提升可读性而进行的文字自动放大。
@@ -7399,14 +8976,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-size-adjust
    */
-  readonly WebkitTextSizeAdjust?: PropertyValue<'WebkitTextSizeAdjust', T>;
+  WebkitTextSizeAdjust(value: PropertyValue<'WebkitTextSizeAdjust', T>): this {
+    return this.write('WebkitTextSizeAdjust', value);
+  }
   /**
    * 兼容属性 -webkit-text-stroke；优先参考标准属性及浏览器支持范围。
    * 合并设置文字字形描边的宽度和颜色。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-stroke
    */
-  readonly WebkitTextStroke?: PropertyValue<'WebkitTextStroke', T>;
+  WebkitTextStroke(value: PropertyValue<'WebkitTextStroke', T>): this {
+    return this.write('WebkitTextStroke', value);
+  }
   /**
    * 兼容属性 -webkit-text-stroke-color；优先参考标准属性及浏览器支持范围。
    * 设置文字字形轮廓的描边颜色。
@@ -7415,7 +8996,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-stroke-color
    */
-  readonly WebkitTextStrokeColor?: PropertyValue<'WebkitTextStrokeColor', T>;
+  WebkitTextStrokeColor(value: PropertyValue<'WebkitTextStrokeColor', T>): this {
+    return this.write('WebkitTextStrokeColor', value);
+  }
   /**
    * 兼容属性 -webkit-text-stroke-width；优先参考标准属性及浏览器支持范围。
    * 设置文字字形轮廓的描边宽度。
@@ -7424,7 +9007,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-stroke-width
    */
-  readonly WebkitTextStrokeWidth?: PropertyValue<'WebkitTextStrokeWidth', T>;
+  WebkitTextStrokeWidth(value: PropertyValue<'WebkitTextStrokeWidth', T>): this {
+    return this.write('WebkitTextStrokeWidth', value);
+  }
   /**
    * 兼容属性 -webkit-text-underline-position；优先参考标准属性及浏览器支持范围。
    * 设置下划线相对于文字基线或竖排文字的放置方式。
@@ -7433,7 +9018,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-underline-position
    */
-  readonly WebkitTextUnderlinePosition?: PropertyValue<'WebkitTextUnderlinePosition', T>;
+  WebkitTextUnderlinePosition(value: PropertyValue<'WebkitTextUnderlinePosition', T>): this {
+    return this.write('WebkitTextUnderlinePosition', value);
+  }
   /**
    * 兼容属性 -webkit-touch-callout；优先参考标准属性及浏览器支持范围。
    * 控制特定 WebKit 触控环境是否显示长按内容菜单。
@@ -7442,7 +9029,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-touch-callout
    */
-  readonly WebkitTouchCallout?: PropertyValue<'WebkitTouchCallout', T>;
+  WebkitTouchCallout(value: PropertyValue<'WebkitTouchCallout', T>): this {
+    return this.write('WebkitTouchCallout', value);
+  }
   /**
    * 兼容属性 -webkit-transform；优先参考标准属性及浏览器支持范围。
    * 按顺序组合平移、旋转、缩放等二维或三维变换。
@@ -7453,11 +9042,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ transform: "translateX(8px) scale(1.05)" })
+   * s.transform("translateX(8px) scale(1.05)")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform
    */
-  readonly WebkitTransform?: PropertyValue<'WebkitTransform', T>;
+  WebkitTransform(value: PropertyValue<'WebkitTransform', T>): this {
+    return this.write('WebkitTransform', value);
+  }
   /**
    * 兼容属性 -webkit-transform-origin；优先参考标准属性及浏览器支持范围。
    * 设置元素变换的原点。
@@ -7466,7 +9057,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-origin
    */
-  readonly WebkitTransformOrigin?: PropertyValue<'WebkitTransformOrigin', T>;
+  WebkitTransformOrigin(value: PropertyValue<'WebkitTransformOrigin', T>): this {
+    return this.write('WebkitTransformOrigin', value);
+  }
   /**
    * 兼容属性 -webkit-transform-style；优先参考标准属性及浏览器支持范围。
    * 控制子元素的三维位置保留在三维空间还是展平。
@@ -7475,7 +9068,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-style
    */
-  readonly WebkitTransformStyle?: PropertyValue<'WebkitTransformStyle', T>;
+  WebkitTransformStyle(value: PropertyValue<'WebkitTransformStyle', T>): this {
+    return this.write('WebkitTransformStyle', value);
+  }
   /**
    * 兼容属性 -webkit-transition；优先参考标准属性及浏览器支持范围。
    * 集中设置属性变化过渡的目标、时长、缓动、延迟和行为。
@@ -7484,11 +9079,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
    * @example
-   * css({ transition: "opacity 160ms ease" })
+   * s.transition("opacity 160ms ease")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition
    */
-  readonly WebkitTransition?: PropertyValue<'WebkitTransition', T>;
+  WebkitTransition(value: PropertyValue<'WebkitTransition', T>): this {
+    return this.write('WebkitTransition', value);
+  }
   /**
    * 兼容属性 -webkit-transition-delay；优先参考标准属性及浏览器支持范围。
    * 设置属性变化后开始过渡的延迟。
@@ -7497,7 +9094,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-delay
    */
-  readonly WebkitTransitionDelay?: PropertyValue<'WebkitTransitionDelay', T>;
+  WebkitTransitionDelay(value: PropertyValue<'WebkitTransitionDelay', T>): this {
+    return this.write('WebkitTransitionDelay', value);
+  }
   /**
    * 兼容属性 -webkit-transition-duration；优先参考标准属性及浏览器支持范围。
    * 设置过渡从开始到完成的时长。
@@ -7506,14 +9105,18 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-duration
    */
-  readonly WebkitTransitionDuration?: PropertyValue<'WebkitTransitionDuration', T>;
+  WebkitTransitionDuration(value: PropertyValue<'WebkitTransitionDuration', T>): this {
+    return this.write('WebkitTransitionDuration', value);
+  }
   /**
    * 兼容属性 -webkit-transition-property；优先参考标准属性及浏览器支持范围。
    * 指定发生变化时需要过渡的 CSS 属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-property
    */
-  readonly WebkitTransitionProperty?: PropertyValue<'WebkitTransitionProperty', T>;
+  WebkitTransitionProperty(value: PropertyValue<'WebkitTransitionProperty', T>): this {
+    return this.write('WebkitTransitionProperty', value);
+  }
   /**
    * 兼容属性 -webkit-transition-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置过渡进度变化的缓动函数。
@@ -7522,7 +9125,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-timing-function
    */
-  readonly WebkitTransitionTimingFunction?: PropertyValue<'WebkitTransitionTimingFunction', T>;
+  WebkitTransitionTimingFunction(value: PropertyValue<'WebkitTransitionTimingFunction', T>): this {
+    return this.write('WebkitTransitionTimingFunction', value);
+  }
   /**
    * 兼容属性 -webkit-user-modify；优先参考标准属性及浏览器支持范围。
    * 控制内容能否被用户编辑的非标准旧接口；现代页面优先使用 contenteditable。
@@ -7531,7 +9136,9 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-user-modify
    */
-  readonly WebkitUserModify?: PropertyValue<'WebkitUserModify', T>;
+  WebkitUserModify(value: PropertyValue<'WebkitUserModify', T>): this {
+    return this.write('WebkitUserModify', value);
+  }
   /**
    * 兼容属性 -webkit-user-select；优先参考标准属性及浏览器支持范围。
    * 设置用户是否可以选取元素中的文本。
@@ -7542,11 +9149,13 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ userSelect: "all" })
+   * s.userSelect("all")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-user-select
    */
-  readonly WebkitUserSelect?: PropertyValue<'WebkitUserSelect', T>;
+  WebkitUserSelect(value: PropertyValue<'WebkitUserSelect', T>): this {
+    return this.write('WebkitUserSelect', value);
+  }
   /**
    * 兼容属性 -webkit-writing-mode；优先参考标准属性及浏览器支持范围。
    * 设置水平或竖直书写模式，以及行和块的推进方向。
@@ -7555,16 +9164,17 @@ export interface CompatibilityProperties<T extends SystemKeywords = SystemKeywor
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-writing-mode
    */
-  readonly WebkitWritingMode?: PropertyValue<'WebkitWritingMode', T>;
-}
-/** 其他标准属性；泛型 T 保留系统与继承主题关键字。 */
-export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
+  WebkitWritingMode(value: PropertyValue<'WebkitWritingMode', T>): this {
+    return this.write('WebkitWritingMode', value);
+  }
   /**
    * 批量重置 CSS 属性；不重置 direction、unicode-bidi 和自定义属性。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/all
    */
-  readonly all?: PropertyValue<'all', T>;
+  all(value: PropertyValue<'all', T>): this {
+    return this.write('all', value);
+  }
   /**
    * 设置盒子被分成多行、多栏或多页时装饰如何绘制。
    *
@@ -7572,7 +9182,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-decoration-break
    */
-  readonly boxDecorationBreak?: PropertyValue<'boxDecorationBreak', T>;
+  boxDecorationBreak(value: PropertyValue<'boxDecorationBreak', T>): this {
+    return this.write('boxDecorationBreak', value);
+  }
   /**
    * 设置 SVG 圆或椭圆中心的横坐标。
    *
@@ -7580,7 +9192,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cx
    */
-  readonly cx?: PropertyValue<'cx', T>;
+  cx(value: PropertyValue<'cx', T>): this {
+    return this.write('cx', value);
+  }
   /**
    * 设置 SVG 圆或椭圆中心的纵坐标。
    *
@@ -7588,7 +9202,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cy
    */
-  readonly cy?: PropertyValue<'cy', T>;
+  cy(value: PropertyValue<'cy', T>): this {
+    return this.write('cy', value);
+  }
   /**
    * 设置 SVG path 元素的路径数据。
    *
@@ -7596,7 +9212,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/d
    */
-  readonly d?: PropertyValue<'d', T>;
+  d(value: PropertyValue<'d', T>): this {
+    return this.write('d', value);
+  }
   /**
    * 控制表单控件采用固定默认尺寸还是根据内容调整尺寸。
    *
@@ -7604,7 +9222,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/field-sizing
    */
-  readonly fieldSizing?: PropertyValue<'fieldSizing', T>;
+  fieldSizing(value: PropertyValue<'fieldSizing', T>): this {
+    return this.write('fieldSizing', value);
+  }
   /**
    * 控制元素是否参与系统强制颜色模式的自动替换。
    *
@@ -7612,7 +9232,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/forced-color-adjust
    */
-  readonly forcedColorAdjust?: PropertyValue<'forcedColorAdjust', T>;
+  forcedColorAdjust(value: PropertyValue<'forcedColorAdjust', T>): this {
+    return this.write('forcedColorAdjust', value);
+  }
   /**
    * 设置自动断词时插入的断字符号。
    *
@@ -7620,7 +9242,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hyphenate-character
    */
-  readonly hyphenateCharacter?: PropertyValue<'hyphenateCharacter', T>;
+  hyphenateCharacter(value: PropertyValue<'hyphenateCharacter', T>): this {
+    return this.write('hyphenateCharacter', value);
+  }
   /**
    * 限制可断词的最小单词长度以及断点两侧的最少字符数。
    *
@@ -7628,7 +9252,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hyphenate-limit-chars
    */
-  readonly hyphenateLimitChars?: PropertyValue<'hyphenateLimitChars', T>;
+  hyphenateLimitChars(value: PropertyValue<'hyphenateLimitChars', T>): this {
+    return this.write('hyphenateLimitChars', value);
+  }
   /**
    * 控制动画是否允许在数值尺寸与内部尺寸关键字之间插值。
    *
@@ -7636,7 +9262,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/interpolate-size
    */
-  readonly interpolateSize?: PropertyValue<'interpolateSize', T>;
+  interpolateSize(value: PropertyValue<'interpolateSize', T>): this {
+    return this.write('interpolateSize', value);
+  }
   /**
    * 控制元素是否建立独立的层叠上下文，隔离混合效果。
    *
@@ -7646,11 +9274,13 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ isolation: "isolate" })
+   * s.isolation("isolate")
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/isolation
    */
-  readonly isolation?: PropertyValue<'isolation', T>;
+  isolation(value: PropertyValue<'isolation', T>): this {
+    return this.write('isolation', value);
+  }
   /**
    * 旧版瀑布流布局提案中的自动放置策略；使用前核对实现与规范版本。
    *
@@ -7658,7 +9288,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/masonry-auto-flow
    */
-  readonly masonryAutoFlow?: PropertyValue<'masonryAutoFlow', T>;
+  masonryAutoFlow(value: PropertyValue<'masonryAutoFlow', T>): this {
+    return this.write('masonryAutoFlow', value);
+  }
   /**
    * 设置数学公式的嵌套深度，用于数学字号等排版计算。
    *
@@ -7666,7 +9298,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/math-depth
    */
-  readonly mathDepth?: PropertyValue<'mathDepth', T>;
+  mathDepth(value: PropertyValue<'mathDepth', T>): this {
+    return this.write('mathDepth', value);
+  }
   /**
    * 控制数学上标采用正常还是压缩的垂直偏移。
    *
@@ -7674,7 +9308,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/math-shift
    */
-  readonly mathShift?: PropertyValue<'mathShift', T>;
+  mathShift(value: PropertyValue<'mathShift', T>): this {
+    return this.write('mathShift', value);
+  }
   /**
    * 设置数学公式采用正常还是紧凑排版。
    *
@@ -7682,13 +9318,17 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/math-style
    */
-  readonly mathStyle?: PropertyValue<'mathStyle', T>;
+  mathStyle(value: PropertyValue<'mathStyle', T>): this {
+    return this.write('mathStyle', value);
+  }
   /**
    * 设置运动路径的旧式简写；对应现代 offset 属性族。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
    */
-  readonly motion?: PropertyValue<'motion', T>;
+  motion(value: PropertyValue<'motion', T>): this {
+    return this.write('motion', value);
+  }
   /**
    * 设置沿运动路径行进距离的旧属性；对应 offset-distance。
    *
@@ -7696,7 +9336,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-distance
    */
-  readonly motionDistance?: PropertyValue<'motionDistance', T>;
+  motionDistance(value: PropertyValue<'motionDistance', T>): this {
+    return this.write('motionDistance', value);
+  }
   /**
    * 设置运动路径的旧属性；对应 offset-path。
    *
@@ -7704,7 +9346,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-path
    */
-  readonly motionPath?: PropertyValue<'motionPath', T>;
+  motionPath(value: PropertyValue<'motionPath', T>): this {
+    return this.write('motionPath', value);
+  }
   /**
    * 设置运动路径旋转方式的旧属性；对应 offset-rotate。
    *
@@ -7712,7 +9356,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-rotation
    */
-  readonly motionRotation?: PropertyValue<'motionRotation', T>;
+  motionRotation(value: PropertyValue<'motionRotation', T>): this {
+    return this.write('motionRotation', value);
+  }
   /**
    * 反映元素是否位于顶层，主要用于顶层退出过渡；通常由浏览器管理。
    *
@@ -7720,7 +9366,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overlay
    */
-  readonly overlay?: PropertyValue<'overlay', T>;
+  overlay(value: PropertyValue<'overlay', T>): this {
+    return this.write('overlay', value);
+  }
   /**
    * 设置 SVG 圆的半径。
    *
@@ -7728,7 +9376,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/r
    */
-  readonly r?: PropertyValue<'r', T>;
+  r(value: PropertyValue<'r', T>): this {
+    return this.write('r', value);
+  }
   /**
    * 设置 SVG 椭圆的水平半径，或矩形的水平圆角半径。
    *
@@ -7736,7 +9386,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/rx
    */
-  readonly rx?: PropertyValue<'rx', T>;
+  rx(value: PropertyValue<'rx', T>): this {
+    return this.write('rx', value);
+  }
   /**
    * 设置 SVG 椭圆的垂直半径，或矩形的垂直圆角半径。
    *
@@ -7744,7 +9396,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ry
    */
-  readonly ry?: PropertyValue<'ry', T>;
+  ry(value: PropertyValue<'ry', T>): this {
+    return this.write('ry', value);
+  }
   /**
    * 设置语音呈现时文字、数字和标点的朗读方式；使用前核对语音媒体支持。
    *
@@ -7752,7 +9406,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/speak-as
    */
-  readonly speakAs?: PropertyValue<'speakAs', T>;
+  speakAs(value: PropertyValue<'speakAs', T>): this {
+    return this.write('speakAs', value);
+  }
   /**
    * 设置描边颜色的扩展属性；常规 SVG 优先使用 stroke 并核对支持情况。
    *
@@ -7760,7 +9416,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-color
    */
-  readonly strokeColor?: PropertyValue<'strokeColor', T>;
+  strokeColor(value: PropertyValue<'strokeColor', T>): this {
+    return this.write('strokeColor', value);
+  }
   /**
    * 扩大命名动画时间线的可引用作用域。
    *
@@ -7768,13 +9426,17 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/timeline-scope
    */
-  readonly timelineScope?: PropertyValue<'timelineScope', T>;
+  timelineScope(value: PropertyValue<'timelineScope', T>): this {
+    return this.write('timelineScope', value);
+  }
   /**
    * 同时声明基于元素可见进度的时间线名称与轴。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline
    */
-  readonly viewTimeline?: PropertyValue<'viewTimeline', T>;
+  viewTimeline(value: PropertyValue<'viewTimeline', T>): this {
+    return this.write('viewTimeline', value);
+  }
   /**
    * 设置可见进度时间线所观察的滚动轴。
    *
@@ -7782,7 +9444,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-axis
    */
-  readonly viewTimelineAxis?: PropertyValue<'viewTimelineAxis', T>;
+  viewTimelineAxis(value: PropertyValue<'viewTimelineAxis', T>): this {
+    return this.write('viewTimelineAxis', value);
+  }
   /**
    * 设置可见进度时间线使用的滚动视口内缩范围。
    *
@@ -7790,7 +9454,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-inset
    */
-  readonly viewTimelineInset?: PropertyValue<'viewTimelineInset', T>;
+  viewTimelineInset(value: PropertyValue<'viewTimelineInset', T>): this {
+    return this.write('viewTimelineInset', value);
+  }
   /**
    * 声明基于元素进入和离开滚动视口的时间线名称。
    *
@@ -7798,7 +9464,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-name
    */
-  readonly viewTimelineName?: PropertyValue<'viewTimelineName', T>;
+  viewTimelineName(value: PropertyValue<'viewTimelineName', T>): this {
+    return this.write('viewTimelineName', value);
+  }
   /**
    * 提前告知浏览器可能发生变化的属性，便于准备优化资源。
    *
@@ -7808,7 +9476,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/will-change
    */
-  readonly willChange?: PropertyValue<'willChange', T>;
+  willChange(value: PropertyValue<'willChange', T>): this {
+    return this.write('willChange', value);
+  }
   /**
    * 设置适用 SVG 元素的水平几何坐标。
    *
@@ -7816,7 +9486,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/x
    */
-  readonly x?: PropertyValue<'x', T>;
+  x(value: PropertyValue<'x', T>): this {
+    return this.write('x', value);
+  }
   /**
    * 设置适用 SVG 元素的垂直几何坐标。
    *
@@ -7824,7 +9496,9 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/y
    */
-  readonly y?: PropertyValue<'y', T>;
+  y(value: PropertyValue<'y', T>): this {
+    return this.write('y', value);
+  }
   /**
    * 设置元素及其布局的缩放比例，与 transform:scale 的布局行为不同。
    *
@@ -7832,21 +9506,7 @@ export interface OtherProperties<T extends SystemKeywords = SystemKeywords> {
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/zoom
    */
-  readonly zoom?: PropertyValue<'zoom', T>;
+  zoom(value: PropertyValue<'zoom', T>): this {
+    return this.write('zoom', value);
+  }
 }
-export interface CssProperties<T extends SystemKeywords = SystemKeywords>
-  extends
-    LayoutProperties<T>,
-    SizingProperties<T>,
-    SpacingProperties<T>,
-    TypographyProperties<T>,
-    ColorsProperties<T>,
-    BordersProperties<T>,
-    EffectsProperties<T>,
-    MotionProperties<T>,
-    ScrollingProperties<T>,
-    InteractionProperties<T>,
-    StructureProperties<T>,
-    SvgProperties<T>,
-    CompatibilityProperties<T>,
-    OtherProperties<T> {}

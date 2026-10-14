@@ -6,10 +6,12 @@ import {
   bx,
   createTheme,
   SystemKeywords,
-  keywords,
   keyframes,
   globalCss,
+  useCss,
 } from '@zerodep-vue/core';
+const s = useCss();
+const keywords = s.keywords;
 
 export class Palette extends SystemKeywords {
   override readonly color = {
@@ -22,7 +24,8 @@ export class Palette extends SystemKeywords {
   }
 }
 export const palettes = { light: new Palette(), dark: new Palette('#93c5fd') };
-export const { css: themed, keywords: themedKeywords } = createTheme(palettes.light);
+export const themed = createTheme(palettes.light).useCss();
+export const themedKeywords = themed.keywords;
 
 export interface InputHandle {
   focus(): void;
@@ -51,21 +54,21 @@ const Async = _component(async () => {
 });
 export const App = _component(() => {
   const currentPalette = shallowRef(palettes.light);
-  const { css: themed, keywords: themedKeywords } = createTheme(currentPalette);
+  const themed = createTheme(currentPalette).useCss();
+  const themedKeywords = themed.keywords;
   const text = ref('package-state');
   const gap = ref('12px');
-  const fade = keyframes({ from: { opacity: 0.5 }, to: { opacity: 1 } });
-  globalCss('consumer-base', { body: { margin: 0 } });
+  const fade = keyframes({ from: s.opacity(0.5), to: s.opacity(1) });
+  globalCss('consumer-base', { body: s.margin(0) });
   return (
     <main
-      class={themed({
-        padding: bx(gap.value),
-        color: themedKeywords.color._brand,
-        display: keywords.display.flex,
-        animationName: fade,
-        animationDuration: '1s',
-        ':hover': { color: 'purple' },
-      })}
+      class={themed
+        .padding(bx(gap.value))
+        .color(themedKeywords.color._brand)
+        .display(keywords.display.flex)
+        .animationName(fade)
+        .animationDuration('1s')
+        .select(':hover', themed.color('purple'))}
     >
       <Panel footer={<b>footer-content</b>}>
         <Field model={text} />

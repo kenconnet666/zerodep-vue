@@ -20,35 +20,36 @@ test('CSS literal completion documentation and navigation use real generated dec
   const host = languageServiceHost(ts, root, [filename], parsed.options);
   let source =
     ts.sys.readFile(filename) +
-    String.raw`
-export const escapedLiteral = css({ font: 'in\u0068erit' }); // literal:escaped
-export const freeString = css({ font: '18px system-ui' }); // literal:free
+    `export const escapedLiteral = s.font('in\\u0068erit'); // literal:escaped
+export const freeString = s.font('18px system-ui'); // literal:free
 export const ordinaryObject = { font: 'inherit' }; // literal:ordinary
 import { bx as bind, keyframes, globalCss } from '@zerodep-vue/core';
 import * as cssTools from '@zerodep-vue/core';
 import { AppTheme } from './theme-types';
+
 declare const active: boolean;
 declare const business: string;
 const bindAlias = bind;
 const namespaceAlias = cssTools.bx;
-css({ display: bindAlias(active ? 'none' : 'inline-flex') }); // literal:alias
-css({ display: cssTools.bx('inline-flex') }); // literal:namespace
-css({ display: namespaceAlias('inline-flex') }); // literal:namespaceAlias
-css({ display: ('inline-flex' satisfies CssObject['display']) }); // literal:satisfiesValue
-css({ font: ('inherit') }); // literal:parentheses
-css({ display: (active ? 'none' : ('inline-flex' as const)) }); // literal:wrappedBranch
-css({ display: 'inline-flex'! }); // literal:nonNull
-({ display: 'inline-flex' } satisfies CssObject); // literal:satisfiesObject
-keyframes({ from: { display: 'inline-flex' } }); // literal:animation
-globalCss('probe', { '.probe': { display: 'inline-flex' } }); // literal:global
-css({ transformStyle: 'preserve-3d' }); // literal:transform
-css({ pointerEvents: 'visibleFill' }); // literal:pointer
-css({ touchAction: 'pan-up' }); // literal:touch
-css({ maxWidth: 'none' }); // literal:maximum
-function genericTheme<T extends AppTheme>({ css, keywords }: CssContext<T>) {
-  css({ display: bind(active ? 'none' : 'inline-flex'), color: keywords.color._brand }); // literal:genericTheme
+s.display(bindAlias(active ? 'none' : 'inline-flex')); // literal:alias
+s.display(cssTools.bx('inline-flex')); // literal:namespace
+s.display(namespaceAlias('inline-flex')); // literal:namespaceAlias
+s.display(('inline-flex' satisfies Parameters<Css['display']>[0])); // literal:satisfiesValue
+s.font(('inherit')); // literal:parentheses
+s.display((active ? 'none' : ('inline-flex' as const))); // literal:wrappedBranch
+s.display('inline-flex'!); // literal:nonNull
+s.display('inline-flex') satisfies Css; // literal:satisfiesObject
+keyframes({from: s.display('inline-flex')}); // literal:animation
+globalCss('probe', {'.probe': s.display('inline-flex')}); // literal:global
+s.transformStyle('preserve-3d'); // literal:transform
+s.pointerEvents('visibleFill'); // literal:pointer
+s.touchAction('pan-up'); // literal:touch
+s.maxWidth('none'); // literal:maximum
+function genericTheme<T extends AppTheme>(s: Css<T>) {
+ const keywords = s.keywords;
+  s.display(bind(active ? 'none' : 'inline-flex')).color(keywords.color._brand); // literal:genericTheme
   // @ts-expect-error 表达式增强不改变泛型 T 的属性边界。
-  css({ padding: keywords.color._brand });
+  s.padding(keywords.color._brand);
 }
 class ExtendedTheme extends AppTheme {
   override readonly color = {
@@ -57,22 +58,23 @@ class ExtendedTheme extends AppTheme {
     _danger: 'red',
   };
 }
-function inheritedTheme<T extends ExtendedTheme>({ css, keywords }: CssContext<T>) {
-  return css({ color: keywords.color._danger, backgroundColor: keywords.color._brand });
+function inheritedTheme<T extends ExtendedTheme>(s: Css<T>) {
+ const keywords = s.keywords;
+  return s.color(keywords.color._danger).backgroundColor(keywords.color._brand);
 }
 function identity<T>(value: T): T { return value; }
-css({ display: identity('inline-flex') }); // literal:otherFunction
+s.display(identity('inline-flex')); // literal:otherFunction
 function shadowed(bx: typeof bind) {
-  css({ display: bx('inline-flex') }); // literal:shadowed
+  s.display(bx('inline-flex')); // literal:shadowed
 }
 const typedImpostor: typeof bind = value => bind(value);
-css({ display: typedImpostor('inline-flex') }); // literal:typedImpostor
+s.display(typedImpostor('inline-flex')); // literal:typedImpostor
 let mutableAlias = bind;
-css({ display: mutableAlias('inline-flex') }); // literal:mutableAlias
-css({ display: business === 'inline-flex' ? 'none' : 'flex' }); // literal:condition
-css({ display: 'inline-flex' + business }); // literal:concatenation
+s.display(mutableAlias('inline-flex')); // literal:mutableAlias
+s.display(business === 'inline-flex' ? 'none' : 'flex'); // literal:condition
+s.display('inline-flex' + business); // literal:concatenation
 // @ts-expect-error 闭合值域不能因断言中的补全而放宽。
-css({ boxSizing: 'not-a-box-model' as const });
+s.boxSizing('not-a-box-model' as const);
 `;
   const snapshot = host.getScriptSnapshot.bind(host);
   let version = 0;
@@ -217,14 +219,10 @@ css({ boxSizing: 'not-a-box-model' as const });
     }
     const complete = source;
     // 实际输入期间的空字符串、部分词和缺失引号都要有候选，随后切回业务对象不能残留上下文。
-    for (const expression of [
-      "css({ display: bind('",
-      "css({ display: bind('in",
-      "css({ display: '' })",
-    ]) {
+    for (const expression of ["s.display(bind('", "s.display(bind('in", "s.display('')"]) {
       source = complete + '\n' + expression;
       version++;
-      const position = expression.endsWith('})') ? source.lastIndexOf("''") + 1 : source.length;
+      const position = expression.endsWith(')') ? source.lastIndexOf("''") + 1 : source.length;
       const completions = enhanced.getCompletionsAtPosition(filename, position, {});
       assert(
         completions?.entries.some((entry) => entry.name === 'inline-flex'),

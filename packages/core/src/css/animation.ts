@@ -1,29 +1,16 @@
-import { css as compose } from './composition.ts';
+import { cx } from './composition.ts';
 import { CLASS } from './types.ts';
-import type { CssObject } from './types.ts';
-import type { CssProperties } from './generated/properties.ts';
-import type { SystemKeywords } from './generated/system.ts';
+import type { CssNestedInput } from './types.ts';
 import { ANIMATION } from './animation-token.ts';
 import type { CssAnimation } from './animation-token.ts';
 
-type AnimationControl = {
-  [Key in keyof CssProperties]: Key extends `${string}Animation${string}` | `animation${string}`
-    ? Key extends `${string}TimingFunction` | 'animationTimingFunction'
-      ? never
-      : Key
-    : never;
-}[keyof CssProperties];
-export type KeyframeStyle<T extends SystemKeywords> = Omit<
-  CssProperties<T>,
-  Exclude<AnimationControl, undefined>
-> & { readonly [Key in `--${string}`]?: CssObject<T>[`--${string}`] };
 type FramePosition = 'from' | 'to' | `${number}%`;
-export type Keyframes<T extends SystemKeywords> = Readonly<
-  Partial<Record<FramePosition | `${FramePosition},${string}`, KeyframeStyle<T>>>
+export type Keyframes = Readonly<
+  Partial<Record<FramePosition | `${FramePosition},${string}`, CssNestedInput>>
 >;
 
 /** 声明可复用关键帧；实际使用时才解析主题/绑定并登记规则。 */
-export function keyframes<T extends SystemKeywords>(frames: Keyframes<T>): CssAnimation {
+export function keyframes(frames: Keyframes): CssAnimation {
   const result = Object.entries(frames).map(([at, style]) => {
     if (
       !at
@@ -35,9 +22,10 @@ export function keyframes<T extends SystemKeywords>(frames: Keyframes<T>): CssAn
         )
     )
       throw new Error(`无效关键帧位置：${at}`);
-    const resolved = compose(style as CssObject<T>);
+    const resolved = cx(style);
     for (const part of resolved[CLASS])
-      if (typeof part !== 'string')
+      if (typeof part === 'string') throw new Error('关键帧不能包含普通类名。');
+      else
         for (const declaration of part.declarations) {
           if (declaration.selector !== '&' || declaration.conditions.length)
             throw new Error('关键帧只接受属性声明，不接受嵌套选择器或媒体条件。');

@@ -1,17 +1,12 @@
-import { isRef, unref } from 'vue';
-import type { Ref } from 'vue';
-import { css as compose, create } from './composition.ts';
+import { isRef, unref, hasInjectionContext, getCurrentInstance, inject, provide } from 'vue';
+import type { Ref, InjectionKey } from 'vue';
+import { Css } from './generated/author.ts';
 import { SystemKeywords } from './generated/system.ts';
 import type { SystemViews } from './generated/system.ts';
 import { systemValues } from './generated/keywords.ts';
 import { THEME, THEME_SOURCE, keyword } from './tokens.ts';
 import type { CheckedTheme, ThemeReference } from './tokens.ts';
-import type { CssInput, CssClass, PropertyName } from './types.ts';
-import { keyframes as createKeyframes } from './animation.ts';
-import type { Keyframes } from './animation.ts';
-import type { CssAnimation } from './animation-token.ts';
-import { globalCss as registerGlobal } from './global.ts';
-import type { GlobalRules, GlobalOptions } from './global.ts';
+import type { PropertyName } from './types.ts';
 
 type ThemeMembers<Group, Key extends PropertyName> = {
   readonly [Name in keyof Group]: Name extends string ? ThemeReference<Key, Name> : never;
@@ -20,32 +15,12 @@ type ThemeMembers<Group, Key extends PropertyName> = {
 export type KeywordView<T extends SystemKeywords> = {
   readonly [Key in keyof SystemViews]: SystemViews[Key] & ThemeMembers<T[Key], Key>;
 };
-export interface Css<T extends SystemKeywords = SystemKeywords> {
-  /** 声明或组合样式，统一用于 class；同一选择器/条件/属性后项覆盖，空条件项忽略。 */
-  (...inputs: readonly CssInput<T>[]): CssClass;
-}
-/** 批量定义具名样式；结果通过 css() 应用，成员保留 T 的作者约束。 */
-export interface Cx<T extends SystemKeywords = SystemKeywords> {
-  /** 批量定义具名样式；成员与 css() 的结果使用相同协议，消费时仍经 css() 组合。 */
-  <const Name extends string>(
-    styles: Record<Name, CssInput<T>>,
-  ): { readonly [Key in Name]: CssClass };
-}
-
-/** 同一主题来源的独立作者函数；调用方按需解构，不把方法挂到 css/cx 函数上。 */
-export interface CssContext<T extends SystemKeywords = SystemKeywords> {
-  readonly css: Css<T>;
-  readonly cx: Cx<T>;
-  /** 系统值与 T 继承的主题成员共用视图，成员说明在映射中保留。 */
-  readonly keywords: KeywordView<T>;
-  /** 声明动画资源；使用时才求值和登记，支持 bx 和主题引用。 */
-  keyframes(frames: Keyframes<T>): CssAnimation;
-  /** 注册显式全局规则，返回清理函数；bx/主题更新保留节点及层叠位置。 */
-  globalCss(
-    name: string,
-    rules: GlobalRules<T> | Ref<GlobalRules<T>>,
-    options?: GlobalOptions,
-  ): () => void;
+/** 同一个主题类型拥有独立注入键；覆盖只影响其逻辑子树。 */
+export interface CssTheme<T extends SystemKeywords> {
+  /** 取得当前区域的不可变作者；组件外使用该主题的默认来源。 */
+  useCss(): Css<T>;
+  /** 在 setup 中提供区域主题；返回相同作者供当前组件使用。 */
+  provide(source: ThemeSource<T>): Css<T>;
 }
 
 /** 共享工具可沿用此类型接收主题来源，同时保留成员名称和值域校验。 */
@@ -164,20 +139,22 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
   ) as KeywordView<T>;
 }
 
-/**
- * 使用继承 SystemKeywords 的主题实例，返回携带同一 T 的样式函数和关键字视图。
- * 多套主题使用普通实例保存；传入 Vue Ref 后，替换实例会更新实际消费它的元素。
- * 主题通过正常 TypeScript 类继承扩展；替换整个属性组时仍遵循普通对象覆盖语义。
- */
-export function createTheme<T extends SystemKeywords>(source: ThemeSource<T>): CssContext<T> {
+/** 创建有真实来源的主题上下文；T 来自实例，不依靠调用方的类型断言。 */
+export function createTheme<T extends SystemKeywords>(source: ThemeSource<T>): CssTheme<T> {
+  const fallback = new Css<T>(keywordView(source));
+  const key: InjectionKey<Css<T>> = Symbol('CSS theme');
   return Object.freeze({
-    css: compose,
-    keywords: keywordView<T>(source),
-    cx: create,
-    keyframes: createKeyframes,
-    globalCss: registerGlobal,
+    useCss(): Css<T> {
+      return hasInjectionContext() ? inject(key, fallback) : fallback;
+    },
+    provide(next: ThemeSource<T>): Css<T> {
+      if (!getCurrentInstance()) throw new Error('主题 provide 必须在组件 setup 中调用。');
+      const author = new Css<T>(keywordView(next));
+      provide(key, author);
+      return author;
+    },
   });
 }
 
-/** 没有业务主题的默认作者仍具备完整系统关键字。 */
-export const { css, cx, keywords, keyframes, globalCss } = createTheme(new SystemKeywords());
+/** 默认作者只包含系统关键字；业务主题导出 createTheme 返回的 useCss。 */
+export const { useCss } = createTheme(new SystemKeywords());

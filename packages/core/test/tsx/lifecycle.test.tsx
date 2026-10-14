@@ -13,7 +13,8 @@ import {
   TransitionGroup,
 } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
-import { _component, bx, css, createCssHost, keyframes, globalCss } from '@zerodep-vue/core';
+import { _component, bx, createCssHost, keyframes, globalCss, useCss } from '@zerodep-vue/core';
+const s = useCss();
 
 const wrappers: VueWrapper[] = [];
 const containers: HTMLElement[] = [];
@@ -35,8 +36,8 @@ test('Transition retains class and animation resources until its real DOM remova
   const visible = ref(true);
   let finish: (() => void) | undefined;
   const Leaf = _component(() => {
-    const fade = keyframes({ from: { opacity: 1 }, to: { opacity: 0 } });
-    return <div class={css({ color: 'red', animationName: fade })}>leaving</div>;
+    const fade = keyframes({ from: s.opacity(1), to: s.opacity(0) });
+    return <div class={s.color('red').animationName(fade)}>leaving</div>;
   });
   const App = _component(() => (
     <Transition
@@ -81,7 +82,7 @@ test('KeepAlive preserves state and CSS leases across deactivation and cache evi
     return (
       <button
         data-page={name}
-        class={css({ width: bx(count.value + 20), color: name === 'a' ? 'red' : 'blue' })}
+        class={s.width(bx(count.value + 20)).color(name === 'a' ? 'red' : 'blue')}
         onClick={() => count.value++}
       >
         {name}:{count.value}
@@ -121,7 +122,7 @@ test('TransitionGroup keeps a departing row styled while keyed rows retain ident
   const rows = ref(['a', 'b']);
   let finish: (() => void) | undefined;
   const Row = _component(({ name }: { name: string }) => (
-    <span data-row={name} class={css({ color: 'green' })}>
+    <span data-row={name} class={s.color('green')}>
       {name}
     </span>
   ));
@@ -180,11 +181,7 @@ test('async setup exposes methods, updates shared Ref and clears DOM/component r
     expose({ focus: () => element.value?.focus() });
     await gate;
     return (
-      <input
-        ref={element}
-        v-model={model.value}
-        class={css({ width: bx(model.value.length * 10) })}
-      />
+      <input ref={element} v-model={model.value} class={s.width(bx(model.value.length * 10))} />
     );
   });
   const model = ref('abc');
@@ -232,9 +229,9 @@ test('a cancelled pending async component releases setup resources and never mou
     onScopeDispose(() => {
       disposed++;
     });
-    globalCss('pending-scope', { ':root': { color: 'red' } });
+    globalCss('pending-scope', { ':root': s.color('red') });
     await gate;
-    return <div class={css({ color: 'blue' })}>late</div>;
+    return <div class={s.color('blue')}>late</div>;
   });
   const visible = ref(true);
   const App = _component(() => (
@@ -273,7 +270,7 @@ test('native Vue template hosting reuses value props, callbacks, default slots a
       const button = ref<HTMLButtonElement | null>(null);
       expose({ focus: () => button.value?.focus() });
       return (
-        <button ref={button} class={css({ color: 'red' })} onClick={() => onCommit(label)}>
+        <button ref={button} class={s.color('red')} onClick={() => onCommit(label)}>
           {label}
           {children}
         </button>

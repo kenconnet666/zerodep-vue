@@ -2,12 +2,14 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { vitePlugin as vueTsx } from '../src/index.ts';
 
-const source = `import {_component} from '@zerodep-vue/core';
-import {css,bx} from '@zerodep-vue/core';
+const source = `import { _component } from '@zerodep-vue/core';
+import { bx, useCss, cx } from '@zerodep-vue/core';
 import {ref} from 'vue';
+const s = useCss();
+
 export const App = _component(()=>{
   const width=ref('20px');
-  const style=css({width:bx(width.value)});
+  const style=s.width(bx(width.value));
   return <div class={style}/>;
 });`;
 async function compile(command, ssr = false) {
@@ -27,8 +29,10 @@ test('development traces keep source locations and the browser-only inspector en
   assert(result.code.includes('@zerodep-vue/core'));
   assert(!result.code.includes('@zerodep-vue/compiler'));
   assert(result.code.includes('enableInspection'));
-  const column = source.split('\n')[5].indexOf('width.value') + 1;
-  assert.match(result.code, new RegExp(`line: 6,\\s*column: ${column},\\s*kind: "binding"`));
+  const lines = source.split('\n');
+  const line = lines.findIndex((text) => text.includes('width.value')) + 1;
+  const column = lines[line - 1].indexOf('width.value') + 1;
+  assert.match(result.code, new RegExp(`line: ${line},\\s*column: ${column},\\s*kind: "binding"`));
   assert(result.code.includes('kind: "class"'));
   assert(JSON.parse(result.map).sources.includes('/project/App.tsx'));
 });

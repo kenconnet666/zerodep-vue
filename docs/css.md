@@ -1,73 +1,106 @@
 # 运行时 CSS 与 JSX 接线
 
-CSS 声明、组合、规则生成与缓存都在运行时执行；编译器捕获 bx 表达式，并在 Vue 归一化 class 之前保留它的元数据。作者只写 class，变量 style 自动接入。
-
-`css(...)` 声明和组合样式，`cx({...})` 批量定义具名样式，`keywords.xx` 独立提供关键字。继承主题只使用 `createTheme(主题实例或 Ref)`，动画和全局规则分别使用 `keyframes(...)`、`globalCss(...)`。css 和 cx 都是普通函数，不挂载工具方法或关键字成员。
+CSS 使用不可变链式声明和 cx 有序组合。属性调用返回可直接交给 class 的样式值；声明、组合、规则生成和缓存都在运行时完成。编译器捕获 bx 表达式，在 Vue 归一化 class 前保留元数据，变量 style 自动接入。
 
 ```tsx
 import { ref } from 'vue';
-import { _component } from '@zerodep-vue/core';
-import { css, bx } from '@zerodep-vue/core';
+import { _component, useCss, cx, bx } from '@zerodep-vue/core';
 
-export const Position = _component(() => {
+export const Position = _component(({ compact = false }) => {
+  const s = useCss();
   const x = ref(10);
   const y = ref(20);
+  const base = s.display('inline-flex').alignItems('center');
   return (
     <div
-      class={css({
-        transform: `translate(${bx(x.value)}px, ${bx(y.value)}px)`,
-        ':hover': { color: 'white', backgroundColor: '#2563eb' },
-      })}
+      class={cx(
+        base,
+        s.padding(12).transform(`translate(${bx(x.value)}px, ${bx(y.value)}px)`),
+        compact && s.padding(6),
+        s.select(':hover', s.color('white').backgroundColor('#2563eb')),
+      )}
       style={{ minWidth: '80px' }}
     />
   );
 });
 ```
 
-样式 class 可以在模块、setup、函数返回值、数组中保存和组合。读取绑定时参与实际消费组件的 Vue render 追踪，不另建一套响应式系统。普通 setup 中预先创建的 JSX 仍是 Vue VNode 快照；需要更新的节点放在 render 返回表达式中，复用时保存 class 描述或普通渲染函数。
+## 声明与复用
 
-## 接入范围
+```ts
+const s = useCss();
+const base = s.padding(8).color('black');
+const compact = base.padding(4);
+const danger = base.color('red');
+const styles = { root: base, compact, danger };
+```
 
-导入本库 CSS 或 TSX 工具的文件自动接入 class 协议。已有普通 Vue 文件如果只从项目共享模块导入 class 值，可以在编译/Vite 选项中设置 `zerodep: { css: true }`，让这些文件也接入；不需要改写为 _component。`zerodep.css: false` 用于明确关闭 CSS 增强的文件配置。自定义 pragma 需要能表达 Vue VNode 协议，当前 CSS 入口会给出明确诊断。
+base、compact、danger 互不修改；同一个 s 可重复开启独立链。链共享不可变前缀，追加属性不复制旧声明，消费或组合时才展开。裸写 s.color('red') 后丢弃返回值不会产生样式，也不会改变 s。
 
-未启用增强的旧 TSX 保持官方转换。自有组件之间通过内部字段传递原始 class，字段不属于作者 props，也不进入第三方组件或 DOM。旧 Vue 组件接收普通 class/style，它把属性应用到哪个节点仍由自身实现决定。
+按布局、间距、文字、状态等用途组织短链，用 cx 组合。具名集合使用普通对象，不再提供批量命名函数。旧 css({...})、对象声明类型和 cx({...}) 命名入口已移除，无兼容层。
 
-## 声明、组合与覆盖
+## 组合与覆盖
 
 ```tsx
-import { css, cx } from '@zerodep-vue/core';
+const base = s.color('red').select(':hover', s.color('blue').opacity(0.8));
+<button class={cx(base, s.color('black'), externalClass)} />;
+```
 
-const styles = cx({
-  base: { color: 'red', ':hover': { color: 'blue' } },
-  compact: { padding: '4px 8px' },
+后项只覆盖同一选择器、条件路径和属性；此例默认颜色为 black，hover 的 blue 与 opacity 继续保留。后项只写 hover 时也保留默认值和其他状态。简写、长写按最后一次声明的位置参与 CSS 级联，不手工展开逻辑属性或发明额外覆盖模式。
+
+组合项 false、0、null、undefined 跳过；属性 undefined 不提供覆盖，属性 null 清除当前位置的前项。中间组合保留清除标记，因此 cx(cx(a, b), c) 与 cx(a, b, c) 等价。外部样式输入使用 CssInput：它只包含已经检查过的样式、普通类名和条件数组，泛型 T 在链式声明时检查。ClassValue 留给 Vue 兼容边界。
+
+cx 不接受普通对象。条件类名使用 enabled && 'active'。普通外部类名的规则不会被反向解析，覆盖关系仍由浏览器层叠决定。
+
+## 选择器、条件与变量
+
+```tsx
+const selected = s
+  .select(':hover', [styles.danger, enabled && s.opacity(0.8)])
+  .select('& > span', s.fontWeight(600))
+  .select('@supports (display: grid)', s.display('grid'))
+  .select('@starting-style', s.opacity(0));
+<div class={selected} />;
+```
+
+select 将传入样式相对当前条件展开，支持嵌套 select、伪类、函数伪类、属性选择器、伪元素、后代及 media/supports/container。被复用的样式不变；包含普通类名的组合不能进入 select，因为其选择器无法重新限定。
+
+原生自定义属性使用 s.variable('--button-gap', '8px').gap('var(--button-gap, 4px)')。名称和 fallback 由作者管理；数字不自动补 px。普通长度属性的数字补 px，unitless 属性保留数字。主题及属性关键字见 [themes.md](themes.md)。
+
+## 动态值与求值时机
+
+setup 中 s.width(width.value) 保存当时的普通值；需要持续读取时使用 s.width(bx(width.value))。在 render 中重新调用普通属性方法仍遵循正常 Vue 追踪。没有另一套 CSS 响应式系统。
+
+bx 由编译器变为 getter，读取属于最终消费元素。模板中的多个 bx 保持独立变量位置；先组合再读取，被覆盖的绑定不执行。完整声明变成 initial/inherit/unset/revert/revert-layer 时输出原生关键字并撤去无用变量，正常值恢复后重新接入变量。同一规则可由多个元素共享，变量值互不共享。
+
+显式 style 在自动变量之后合并，因此作者明确提供的值优先。class 可以通过变量、函数返回值、数组和组件传递；不能转成字符串丢失绑定。setup 中预先创建的普通 JSX 仍是 VNode 快照，需要更新的节点放在 render 返回表达式中。
+
+## 动画与全局规则
+
+```tsx
+import { keyframes, globalCss } from '@zerodep-vue/core';
+
+const fade = keyframes({
+  from: s.opacity(bx(start.value)),
+  '50%, to': s.opacity(1),
 });
-
-<button class={css(styles.base, compact.value && styles.compact, { color: 'black' })} />;
+globalCss('page', { 'body, main': s.margin(0).color(s.keywords.color.CanvasText) });
+<div class={s.animation(`${fade} 1s ease`)} />;
 ```
 
-按选择器、条件路径与属性识别重复声明：后项添加新声明，只覆盖同一位置的重复属性。因此这里默认 color 变为 black，hover 的 blue 继续保留。后项只写 hover 颜色时，也会保留默认颜色和其他状态。媒体条件、伪元素及后代选择器分别组合。属性 undefined 不提供覆盖，null 只清除当前位置的前项属性；组合中的空值、false、0 跳过。中间组合保留清除信息，嵌套组合与直接组合结果一致。
+keyframes 的位置映射和 globalCss 的选择器映射保留普通对象，映射值统一为链式样式。关键帧限制在运行时根据真实声明检查：不能包含选择器、媒体条件、普通类名、!important 或动画控制属性，animationTimingFunction 除外。属性方法本身仍有精确类型，未使用或被覆盖的动画不求值。
 
-本库样式统一使用 `class={css(...)}`。`cx` 批量定义具名样式，它的成员与 css 的结果使用相同协议，不是另一套静态编译模式。组件外部样式声明为 `CssInput<T>`，保持与当前作者相同的泛型 T，再通过 `css(styles.root, external)` 组合；`ClassValue` 只用于 Vue 兼容边界。普通类名可写为 `enabled && 'active'`，条件类名对象不作为 CSS 声明输入。
+globalCss 在 setup 注册；组件外必须提供 { host }。返回幂等清理函数，作用域或宿主销毁也会清理。全局规则没有元素承载变量，因此在独立 Vue effect 中输出当前字面值，更新保持同一 style 节点及层叠位置。source 可为 Vue Ref，支持替换整个映射。相同静态定义可共用名称；动态命名规则由应用或区域入口注册一次，多个所有者不能争写不同内容。
 
-嵌套条件支持复用结构化样式和条件数组，如 `css({ ':hover': [styles.emphasis, enabled && { opacity: 0.8 }] })`。复用时选择器相对当前条件展开，主题与 bx 保留消费时求值。包含普通类名的样式不能用于嵌套条件，因为库无法重写外部类名的规则；此时给出明确错误。函数伪类、属性选择器与 `@starting-style` 使用相同条件类型。
+## 接入范围与宿主
 
-同一条件中的简写与长写保留声明顺序，具体值解释、逻辑方向和浏览器层叠使用 CSS 本身的规则。普通外部类名不被反向解析。兼容条件使用普通声明和 `@supports` 表达。数值长度补 px，unitless 属性和自定义变量保留数字。
+导入本库工具的 TSX 文件自动接入 class 协议。只从共享模块导入样式的旧 TSX，可显式配置 zerodep: { css: true }；false 关闭增强。未启用增强的文件保持官方行为，自定义 pragma 需要能表达 Vue VNode 协议。
 
-```tsx
-<div class={css({ display: 'flex', '@supports (display: grid)': { display: 'grid' } })} />
-```
+自有组件保留原始 class 到实际元素；第三方 Vue 组件接收普通 class/style，具体落在哪个节点由其实现决定。普通 Vue class 条件对象及 style 行为保持原样。
 
-同一组规则由多个元素共用，bx 的当前值只进入各自的内联变量。变量更新不会重新生成规则；完整声明变成 initial/inherit/unset/revert/revert-layer 时改为原生关键字并撤去无用变量，后续正常值可以恢复。
+浏览器默认按应用取得宿主；挂载、更新和卸载管理租约，闲置规则使用有上限缓存。显式 app.use(createCssHost({ target })) 可共享或隔离目标容器。Transition 保留样式至实际 DOM 离场结束，KeepAlive 缓存项持有租约，淘汰后释放。容器重建时再次消费会恢复规则。
 
-显式 style 位于自动变量之后，因此作者明确提供的值优先。事件、spread、class 条件对象沿用 Vue 规则；作者的表达式不会为提取绑定而额外求值。
-
-## 宿主与 SSR
-
-浏览器默认按应用取得宿主并共享目标容器中的相同规则。挂载、更新、卸载控制租约，已无消费者的规则使用有上限的缓存；需要独立样式容器时可 `app.use(createCssHost({ target }))`。一个显式宿主可由多个应用共同使用，卸载其中一个不清除其他应用的活动样式。
-
-Transition 的逻辑卸载可能早于 DOM 离场结束，样式及动画规则因此保留到实际节点移除。KeepAlive 缓存项仍拥有租约，激活/停用时更新 DOM 根观察位置，淘汰后释放。ShadowRoot 等容器重建内容后，再次消费缓存规则会恢复被清空的 style 节点。
-
-SSR 使用本次 renderToString context 收集样式：
+SSR 按请求收集：
 
 ```ts
 const context = {};
@@ -75,61 +108,4 @@ const html = await renderToString(createSSRApp(App), context);
 const styles = getCssHost(context)?.renderStyles() ?? '';
 ```
 
-将 styles 写入页面 head。客户端按规则内容采用已有 style 标签，多个请求不共享变量或收集结果。宿主可配置固定 layer 和 nonce；它们属于宿主配置，不按每次组合新建层。
-
-同一运行环境中的独立 CSS 模块实例，通过以实际 app/context 为弱键的登记表共享宿主。因此 SSR runtime 被打入另一 bundle 后，外部 getCssHost 仍能取得完整请求结果；不同请求和冻结的 context 保持独立，不增加请求历史表。
-
-## 主题、自定义属性与动画
-
-继承主题的定义、多套实例和切换统一见 [themes.md](themes.md)。颜色、间距等应用主题值通过对应 keywords 成员使用。
-
-需要与普通 CSS 或第三方样式共享自定义属性时，直接使用 CSS 语法：
-
-```tsx
-const base = css({
-  '--button-gap': '8px',
-  gap: 'var(--button-gap, 4px)',
-  ':hover': { '--button-gap': '12px' },
-});
-<button class={css(base)}>保存</button>;
-```
-
-自定义属性遵循原生 DOM 继承，名称和 fallback 由作者明确书写；数值不自动补 px。动态值仍可使用 bx。Teleport 中跟随逻辑组件来源的应用主题使用继承主题引用。
-
-```tsx
-import { css, bx, keyframes } from '@zerodep-vue/core';
-
-const Fade = _component(() => {
-  const start = ref(0.2);
-  const fade = keyframes({
-    from: { opacity: bx(start.value) },
-    to: { opacity: 1 },
-  });
-  return <div class={css({ animation: `${fade} 1s ease` })}>内容</div>;
-});
-```
-
-关键帧接受 from/to、百分比和逗号分隔的位置。内部只写声明，可使用主题、bx 和 animationTimingFunction；嵌套选择器及其他动画控制属性会被拒绝。也可直接写 `animationName: fade` 并分别提供 duration 等属性。动画引用在实际消费时解析，更新变量复用规则；多个元素共享资源但保有独立动态值，最后一个消费者移除后按宿主缓存策略释放。
-
-## 全局规则
-
-```tsx
-import { globalCss, bx } from '@zerodep-vue/core';
-
-const Page = _component(() => {
-  const color = ref('#111827');
-  globalCss('page-base', {
-    'body, main': {
-      color: bx(color.value),
-      '@media (prefers-reduced-motion: reduce)': { scrollBehavior: 'auto' },
-    },
-  });
-  return <main>内容</main>;
-});
-```
-
-根键是全局选择器，内部沿用普通 CSS 对象和条件分组。`globalCss` 返回可提前撤销的函数，组件作用域销毁时也会停止订阅并释放规则。组件之外提供 `globalCss(name, rules, { host })`，由该宿主负责最终清理；rules 也可为 Vue Ref，替换整个选择器映射。
-
-全局规则没有接收内联变量的元素，因此 bx、主题和动画在独立 Vue effect 中输出当前字面 CSS。更新保留同一 style 节点及插入位置。相同静态定义可共用同一名称，动态命名规则应在应用或区域入口只注册一次；多个所有者不能争写不同内容。SSR 按请求隔离并保持与普通规则的收集顺序，客户端采用已有标签。
-
-主题用法见 [themes.md](themes.md)。完整浏览器、源码调试和生产验收仍在推进；兼容声明以 BLUEPRINT.md 的最终验收和 docs/progress.md 的实际证据为准。
+将 styles 写入 head；客户端按规则内容采用已有标签。独立模块实例以真实 app/context 为弱键共享宿主，不建立请求历史表。宿主统一配置 layer/nonce，不按组合新建层。全局规则与动画纳入相同的 SSR、hydrate 和资源清理机制。

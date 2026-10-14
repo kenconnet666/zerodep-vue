@@ -1,8 +1,9 @@
 import { createApp, KeepAlive, nextTick, onScopeDispose, ref, Transition } from 'vue';
 import type { Ref } from 'vue';
-import { _component, bx, css, createCssHost, keyframes } from '@zerodep-vue/core';
+import { _component, bx, createCssHost, keyframes, useCss } from '@zerodep-vue/core';
 
 import type { StabilityReport } from './contracts.ts';
+const s = useCss();
 
 function scene(label: string) {
   const value = ref(0);
@@ -21,14 +22,13 @@ function scene(label: string) {
       return (value.value % 40) + 10;
     };
     const size = bx(read());
-    const pulse = keyframes({ from: { opacity: 0.5 }, to: { opacity: 1 } });
-    const style = css({
-      width: size,
-      height: size,
-      color: `rgb(${value.value % 255}, 20, 40)`,
-      animationName: pulse,
-      animationDuration: '1s',
-    });
+    const pulse = keyframes({ from: s.opacity(0.5), to: s.opacity(1) });
+    const style = s
+      .width(size)
+      .height(size)
+      .color(`rgb(${value.value % 255}, 20, 40)`)
+      .animationName(pulse)
+      .animationDuration('1s');
     return (
       <article data-scene={label} ref={element} class={style}>
         {label}
@@ -64,7 +64,7 @@ const shadowHost = createCssHost({ target: shadow, maxUnusedRules: 4 });
 const appA = createApp(a.App).use(hostA);
 appA.mount(aContainer);
 const Protected = _component(() => (
-  <div data-testid="protected" class={css({ color: 'blue' })}>
+  <div data-testid="protected" class={s.color('blue')}>
     protected
   </div>
 ));
@@ -90,7 +90,7 @@ const Cached = _component(({ name }: { name: string }) => {
   return (
     <button
       data-testid="cached"
-      class={css({ color: name === 'a' ? 'red' : 'green', width: bx(count.value + 40) })}
+      class={s.color(name === 'a' ? 'red' : 'green').width(bx(count.value + 40))}
       onClick={() => count.value++}
     >
       {name}:{count.value}
@@ -98,9 +98,9 @@ const Cached = _component(({ name }: { name: string }) => {
   );
 });
 const Leaving = _component(() => {
-  const fade = keyframes({ from: { opacity: 1 }, to: { opacity: 0.5 } });
+  const fade = keyframes({ from: s.opacity(1), to: s.opacity(0.5) });
   return (
-    <div data-testid="leaving" class={css({ color: 'purple', animation: `${fade} 1s infinite` })}>
+    <div data-testid="leaving" class={s.color('purple').animation(`${fade} 1s infinite`)}>
       leaving
     </div>
   );

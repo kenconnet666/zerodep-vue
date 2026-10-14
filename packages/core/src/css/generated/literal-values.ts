@@ -1,4 +1,4 @@
-// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成。说明只进入类型声明。
+// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
 import type * as CSS from 'csstype';
 import type { Scalar } from '../bindings.ts';
 type NativeProperties = CSS.Properties<Scalar>;
@@ -1097,7 +1097,7 @@ export interface AlignItemsValues extends CssWideValues {
    * 适用场景：横向图标和文字的垂直对齐。
    *
    * @example
-   * css({ display: "inline-flex", alignItems: "center" })
+   * s.display("inline-flex").alignItems("center")
    */
   readonly center: 'center';
   /**
@@ -1136,7 +1136,7 @@ export interface AlignItemsValues extends CssWideValues {
    * 项目在对齐轴有显式尺寸或受最小/最大尺寸约束时，不一定填满可用区域。
    *
    * @example
-   * css({ display: "flex", alignItems: "stretch" })
+   * s.display("flex").alignItems("stretch")
    */
   readonly stretch: 'stretch';
 }
@@ -3934,7 +3934,7 @@ export interface BoxSizingValues extends CssWideValues {
    * 仍不包含 margin；最小/最大尺寸和布局约束仍参与计算。
    *
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    */
   readonly 'border-box': 'border-box';
   /**
@@ -3943,7 +3943,7 @@ export interface BoxSizingValues extends CssWideValues {
    * 适用场景：希望明确指定纯内容区尺寸时。
    *
    * @example
-   * css({ boxSizing: "content-box", width: "100px", padding: "10px" })
+   * s.boxSizing("content-box").width("100px").padding("10px")
    */
   readonly 'content-box': 'content-box';
 }
@@ -4994,7 +4994,7 @@ export interface DisplayValues extends CssWideValues {
    * 替换元素等存在特殊规则；应检查语义和可访问性，不要把它当作无条件删除包装盒的替代。
    *
    * @example
-   * css({ display: "contents" })
+   * s.display("contents")
    */
   readonly contents: 'contents';
   /**
@@ -5009,7 +5009,7 @@ export interface DisplayValues extends CssWideValues {
    * 默认主轴为 row，默认不换行；主轴方向还受书写方向影响。
    *
    * @example
-   * css({ display: "flex", alignItems: "center", justifyContent: "space-between" })
+   * s.display("flex").alignItems("center").justifyContent("space-between")
    */
   readonly flex: 'flex';
   /**
@@ -5024,7 +5024,7 @@ export interface DisplayValues extends CssWideValues {
    * 适用场景：让容器包住内部浮动，或隔离内外的部分外边距折叠。
    *
    * @example
-   * css({ display: "flow-root", padding: "1rem" })
+   * s.display("flow-root").padding("1rem")
    */
   readonly 'flow-root': 'flow-root';
   /**
@@ -5037,7 +5037,7 @@ export interface DisplayValues extends CssWideValues {
    * 适用场景：卡片网格、表单对齐和二维页面区域布局。
    *
    * @example
-   * css({ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "1rem" })
+   * s.display("grid").gridTemplateColumns("repeat(3, minmax(0, 1fr))").gap("1rem")
    */
   readonly grid: 'grid';
   /**
@@ -5054,7 +5054,7 @@ export interface DisplayValues extends CssWideValues {
    * 相邻行内级盒子之间的文本空白仍可能形成间距，vertical-align 会影响它在行内的位置。
    *
    * @example
-   * css({ display: "inline-block", width: "2rem", height: "2rem", verticalAlign: "middle" })
+   * s.display("inline-block").width("2rem").height("2rem").verticalAlign("middle")
    */
   readonly 'inline-block': 'inline-block';
   /**
@@ -5070,7 +5070,7 @@ export interface DisplayValues extends CssWideValues {
    * 子项换行由 flex-wrap 控制。当容器自身是 Flex/Grid 项目时，其外部排版还受父布局控制。
    *
    * @example
-   * css({ display: "inline-flex", alignItems: "center", gap: "0.375rem" })
+   * s.display("inline-flex").alignItems("center").gap("0.375rem")
    */
   readonly 'inline-flex': 'inline-flex';
   /**
@@ -5081,7 +5081,7 @@ export interface DisplayValues extends CssWideValues {
    * 适用场景：需要行列对齐并与周围文字同行的小型内容组。
    *
    * @example
-   * css({ display: "inline-grid", gridTemplateColumns: "repeat(2, auto)", gap: "0.25rem" })
+   * s.display("inline-grid").gridTemplateColumns("repeat(2, auto)").gap("0.25rem")
    */
   readonly 'inline-grid': 'inline-grid';
   /**
@@ -5107,7 +5107,7 @@ export interface DisplayValues extends CssWideValues {
    * 不能靠它保留可聚焦交互；重新显示时需按组件需求管理焦点。
    *
    * @example
-   * css({ display: "none" })
+   * s.display("none")
    */
   readonly none: 'none';
   /**
@@ -5298,7 +5298,7 @@ export interface FlexValues extends CssWideValues {
    * 最终比例还受最小/最大尺寸约束，不保证所有项目等宽。
    *
    * @example
-   * css({ flex: "auto" })
+   * s.flex("auto")
    */
   readonly auto: 'auto';
   /**
@@ -5329,7 +5329,7 @@ export interface FlexValues extends CssWideValues {
    * 适用场景：防止工具栏中的图标或固定控件被压缩。
    *
    * @example
-   * css({ flex: "none" })
+   * s.flex("none")
    */
   readonly none: 'none';
 }
@@ -5448,7 +5448,7 @@ export interface FlexWrapValues extends CssWideValues {
    * 换行不会自动均分每行项目宽度，尺寸仍由各项目的 flex 配置决定。
    *
    * @example
-   * css({ display: "flex", flexWrap: "wrap" })
+   * s.display("flex").flexWrap("wrap")
    */
   readonly wrap: 'wrap';
   /**
@@ -7151,7 +7151,7 @@ export interface JustifyContentValues extends CssWideValues {
    * 只有一个项目时靠起始侧，不会自动居中。
    *
    * @example
-   * css({ display: "flex", justifyContent: "space-between", alignItems: "center" })
+   * s.display("flex").justifyContent("space-between").alignItems("center")
    */
   readonly 'space-between': 'space-between';
   /**
@@ -7160,7 +7160,7 @@ export interface JustifyContentValues extends CssWideValues {
    * 适用场景：希望容器两端和项目之间空隙一致的导航或操作组。
    *
    * @example
-   * css({ display: "flex", justifyContent: "space-evenly" })
+   * s.display("flex").justifyContent("space-evenly")
    */
   readonly 'space-evenly': 'space-evenly';
   /**
@@ -9946,7 +9946,7 @@ export interface MozBoxSizingValues extends CssWideValues {
    * 仍不包含 margin；最小/最大尺寸和布局约束仍参与计算。
    *
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    */
   readonly 'border-box': 'border-box';
   /**
@@ -9955,7 +9955,7 @@ export interface MozBoxSizingValues extends CssWideValues {
    * 适用场景：希望明确指定纯内容区尺寸时。
    *
    * @example
-   * css({ boxSizing: "content-box", width: "100px", padding: "10px" })
+   * s.boxSizing("content-box").width("100px").padding("10px")
    */
   readonly 'content-box': 'content-box';
 }
@@ -10672,7 +10672,7 @@ export interface MozTransformStyleValues extends CssWideValues {
    * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
    *
    * @example
-   * css({ transformStyle: "preserve-3d" })
+   * s.transformStyle("preserve-3d")
    */
   readonly 'preserve-3d': 'preserve-3d';
 }
@@ -11023,7 +11023,7 @@ export interface MsFlexValues extends CssWideValues {
    * 最终比例还受最小/最大尺寸约束，不保证所有项目等宽。
    *
    * @example
-   * css({ flex: "auto" })
+   * s.flex("auto")
    */
   readonly auto: 'auto';
   /**
@@ -11054,7 +11054,7 @@ export interface MsFlexValues extends CssWideValues {
    * 适用场景：防止工具栏中的图标或固定控件被压缩。
    *
    * @example
-   * css({ flex: "none" })
+   * s.flex("none")
    */
   readonly none: 'none';
 }
@@ -11264,7 +11264,7 @@ export interface MsOverflowXValues extends CssWideValues {
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
    *
    * @example
-   * css({ $property: "auto" })
+   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -11277,7 +11277,7 @@ export interface MsOverflowXValues extends CssWideValues {
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
    *
    * @example
-   * css({ $property: "clip" })
+   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -11290,7 +11290,7 @@ export interface MsOverflowXValues extends CssWideValues {
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
    *
    * @example
-   * css({ $property: "hidden" })
+   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -11320,7 +11320,7 @@ export interface MsOverflowYValues extends CssWideValues {
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
    *
    * @example
-   * css({ $property: "auto" })
+   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -11333,7 +11333,7 @@ export interface MsOverflowYValues extends CssWideValues {
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
    *
    * @example
-   * css({ $property: "clip" })
+   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -11346,7 +11346,7 @@ export interface MsOverflowYValues extends CssWideValues {
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
    *
    * @example
-   * css({ $property: "hidden" })
+   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -11573,7 +11573,7 @@ export interface MsTextOverflowValues extends CssWideValues {
    * 不会自动限制宽度、禁用换行或实现多行省略。Flex/Grid 子项还可能需要 min-width:0。
    *
    * @example
-   * css({ minWidth: "0px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
+   * s.minWidth("0px").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    */
   readonly ellipsis: 'ellipsis';
 }
@@ -12127,7 +12127,7 @@ export interface ObjectFitValues extends CssWideValues {
    * 适用场景：希望完整显示的商品图或图像预览。
    *
    * @example
-   * css({ width: "20rem", height: "12rem", objectFit: "contain" })
+   * s.width("20rem").height("12rem").objectFit("contain")
    */
   readonly contain: 'contain';
   /**
@@ -12140,7 +12140,7 @@ export interface ObjectFitValues extends CssWideValues {
    * 裁剪位置由 object-position 控制，盒子尺寸仍需另外设置。
    *
    * @example
-   * css({ width: "80px", height: "80px", objectFit: "cover" })
+   * s.width("80px").height("80px").objectFit("cover")
    */
   readonly cover: 'cover';
   /**
@@ -12454,7 +12454,7 @@ export interface OObjectFitValues extends CssWideValues {
    * 适用场景：希望完整显示的商品图或图像预览。
    *
    * @example
-   * css({ width: "20rem", height: "12rem", objectFit: "contain" })
+   * s.width("20rem").height("12rem").objectFit("contain")
    */
   readonly contain: 'contain';
   /**
@@ -12467,7 +12467,7 @@ export interface OObjectFitValues extends CssWideValues {
    * 裁剪位置由 object-position 控制，盒子尺寸仍需另外设置。
    *
    * @example
-   * css({ width: "80px", height: "80px", objectFit: "cover" })
+   * s.width("80px").height("80px").objectFit("cover")
    */
   readonly cover: 'cover';
   /**
@@ -12527,7 +12527,7 @@ export interface OTextOverflowValues extends CssWideValues {
    * 不会自动限制宽度、禁用换行或实现多行省略。Flex/Grid 子项还可能需要 min-width:0。
    *
    * @example
-   * css({ minWidth: "0px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
+   * s.minWidth("0px").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    */
   readonly ellipsis: 'ellipsis';
 }
@@ -12829,7 +12829,7 @@ export interface OverflowValues extends CssWideValues {
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
    *
    * @example
-   * css({ $property: "auto" })
+   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -12842,7 +12842,7 @@ export interface OverflowValues extends CssWideValues {
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
    *
    * @example
-   * css({ $property: "clip" })
+   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -12855,7 +12855,7 @@ export interface OverflowValues extends CssWideValues {
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
    *
    * @example
-   * css({ $property: "hidden" })
+   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -12890,7 +12890,7 @@ export interface OverflowBlockValues extends CssWideValues {
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
    *
    * @example
-   * css({ $property: "auto" })
+   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -12903,7 +12903,7 @@ export interface OverflowBlockValues extends CssWideValues {
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
    *
    * @example
-   * css({ $property: "clip" })
+   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -12916,7 +12916,7 @@ export interface OverflowBlockValues extends CssWideValues {
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
    *
    * @example
-   * css({ $property: "hidden" })
+   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -12966,7 +12966,7 @@ export interface OverflowInlineValues extends CssWideValues {
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
    *
    * @example
-   * css({ $property: "auto" })
+   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -12979,7 +12979,7 @@ export interface OverflowInlineValues extends CssWideValues {
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
    *
    * @example
-   * css({ $property: "clip" })
+   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -12992,7 +12992,7 @@ export interface OverflowInlineValues extends CssWideValues {
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
    *
    * @example
-   * css({ $property: "hidden" })
+   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -13013,7 +13013,7 @@ export interface OverflowWrapValues extends CssWideValues {
    * 适用场景：展示不可控的长 URL 或无空格文本。
    *
    * @example
-   * css({ $property: "anywhere" })
+   * s.$property("anywhere")
    */
   readonly anywhere: 'anywhere';
   /**
@@ -13039,7 +13039,7 @@ export interface OverflowXValues extends CssWideValues {
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
    *
    * @example
-   * css({ $property: "auto" })
+   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -13052,7 +13052,7 @@ export interface OverflowXValues extends CssWideValues {
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
    *
    * @example
-   * css({ $property: "clip" })
+   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -13065,7 +13065,7 @@ export interface OverflowXValues extends CssWideValues {
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
    *
    * @example
-   * css({ $property: "hidden" })
+   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -13095,7 +13095,7 @@ export interface OverflowYValues extends CssWideValues {
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
    *
    * @example
-   * css({ $property: "auto" })
+   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -13108,7 +13108,7 @@ export interface OverflowYValues extends CssWideValues {
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
    *
    * @example
-   * css({ $property: "clip" })
+   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -13121,7 +13121,7 @@ export interface OverflowYValues extends CssWideValues {
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
    *
    * @example
-   * css({ $property: "hidden" })
+   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -13564,7 +13564,7 @@ export interface PointerEventsValues extends CssWideValues {
    * 后代可以恢复命中；来自后代的事件仍可能经过祖先监听器。
    *
    * @example
-   * css({ pointerEvents: "none" })
+   * s.pointerEvents("none")
    */
   readonly none: 'none';
   /**
@@ -13606,7 +13606,7 @@ export interface PositionValues extends CssWideValues {
    * 通常在预期的容器上设置 position:relative；元素不为自己保留普通流占位。
    *
    * @example
-   * css({ position: "absolute", top: "0px", right: "0px" })
+   * s.position("absolute").top("0px").right("0px")
    */
   readonly absolute: 'absolute';
   /**
@@ -13619,7 +13619,7 @@ export interface PositionValues extends CssWideValues {
    * 祖先的 transform 等属性可能改变固定定位的包含块；z-index 仍受层叠上下文约束。
    *
    * @example
-   * css({ position: "fixed", inset: "0px" })
+   * s.position("fixed").inset("0px")
    */
   readonly fixed: 'fixed';
   /**
@@ -13630,7 +13630,7 @@ export interface PositionValues extends CssWideValues {
    * 适用场景：为绝对定位后代提供定位参照，或做不改变其他元素排布的视觉偏移。
    *
    * @example
-   * css({ position: "relative" })
+   * s.position("relative")
    */
   readonly relative: 'relative';
   /**
@@ -13647,7 +13647,7 @@ export interface PositionValues extends CssWideValues {
    * 对应轴至少一个 inset 必须非 auto；祖先 overflow 可能改变滚动参照。
    *
    * @example
-   * css({ position: "sticky", top: "0px" })
+   * s.position("sticky").top("0px")
    */
   readonly sticky: 'sticky';
 }
@@ -16116,7 +16116,7 @@ export interface TextOverflowValues extends CssWideValues {
    * 不会自动限制宽度、禁用换行或实现多行省略。Flex/Grid 子项还可能需要 min-width:0。
    *
    * @example
-   * css({ minWidth: "0px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
+   * s.minWidth("0px").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    */
   readonly ellipsis: 'ellipsis';
 }
@@ -16452,7 +16452,7 @@ export interface TransformStyleValues extends CssWideValues {
    * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
    *
    * @example
-   * css({ transformStyle: "preserve-3d" })
+   * s.transformStyle("preserve-3d")
    */
   readonly 'preserve-3d': 'preserve-3d';
 }
@@ -16799,7 +16799,7 @@ export interface VisibilityValues extends CssWideValues {
    * 适用场景：暂时隐藏占位内容。
    *
    * @example
-   * css({ visibility: "hidden" })
+   * s.visibility("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -16880,7 +16880,7 @@ export interface WebkitAlignItemsValues extends CssWideValues {
    * 适用场景：横向图标和文字的垂直对齐。
    *
    * @example
-   * css({ display: "inline-flex", alignItems: "center" })
+   * s.display("inline-flex").alignItems("center")
    */
   readonly center: 'center';
   /**
@@ -16919,7 +16919,7 @@ export interface WebkitAlignItemsValues extends CssWideValues {
    * 项目在对齐轴有显式尺寸或受最小/最大尺寸约束时，不一定填满可用区域。
    *
    * @example
-   * css({ display: "flex", alignItems: "stretch" })
+   * s.display("flex").alignItems("stretch")
    */
   readonly stretch: 'stretch';
 }
@@ -17826,7 +17826,7 @@ export interface WebkitBoxSizingValues extends CssWideValues {
    * 仍不包含 margin；最小/最大尺寸和布局约束仍参与计算。
    *
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    */
   readonly 'border-box': 'border-box';
   /**
@@ -17835,7 +17835,7 @@ export interface WebkitBoxSizingValues extends CssWideValues {
    * 适用场景：希望明确指定纯内容区尺寸时。
    *
    * @example
-   * css({ boxSizing: "content-box", width: "100px", padding: "10px" })
+   * s.boxSizing("content-box").width("100px").padding("10px")
    */
   readonly 'content-box': 'content-box';
 }
@@ -18079,7 +18079,7 @@ export interface WebkitFlexValues extends CssWideValues {
    * 最终比例还受最小/最大尺寸约束，不保证所有项目等宽。
    *
    * @example
-   * css({ flex: "auto" })
+   * s.flex("auto")
    */
   readonly auto: 'auto';
   /**
@@ -18110,7 +18110,7 @@ export interface WebkitFlexValues extends CssWideValues {
    * 适用场景：防止工具栏中的图标或固定控件被压缩。
    *
    * @example
-   * css({ flex: "none" })
+   * s.flex("none")
    */
   readonly none: 'none';
 }
@@ -18229,7 +18229,7 @@ export interface WebkitFlexWrapValues extends CssWideValues {
    * 换行不会自动均分每行项目宽度，尺寸仍由各项目的 flex 配置决定。
    *
    * @example
-   * css({ display: "flex", flexWrap: "wrap" })
+   * s.display("flex").flexWrap("wrap")
    */
   readonly wrap: 'wrap';
   /**
@@ -18433,7 +18433,7 @@ export interface WebkitJustifyContentValues extends CssWideValues {
    * 只有一个项目时靠起始侧，不会自动居中。
    *
    * @example
-   * css({ display: "flex", justifyContent: "space-between", alignItems: "center" })
+   * s.display("flex").justifyContent("space-between").alignItems("center")
    */
   readonly 'space-between': 'space-between';
   /**
@@ -18442,7 +18442,7 @@ export interface WebkitJustifyContentValues extends CssWideValues {
    * 适用场景：希望容器两端和项目之间空隙一致的导航或操作组。
    *
    * @example
-   * css({ display: "flex", justifyContent: "space-evenly" })
+   * s.display("flex").justifyContent("space-evenly")
    */
   readonly 'space-evenly': 'space-evenly';
   /**
@@ -19625,7 +19625,7 @@ export interface WebkitTransformStyleValues extends CssWideValues {
    * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
    *
    * @example
-   * css({ transformStyle: "preserve-3d" })
+   * s.transformStyle("preserve-3d")
    */
   readonly 'preserve-3d': 'preserve-3d';
 }
@@ -19822,7 +19822,7 @@ export interface WhiteSpaceValues extends CssWideValues {
    * 适用场景：单行标签；结合宽度约束、overflow 和 text-overflow 实现省略。
    *
    * @example
-   * css({ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
+   * s.whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    */
   readonly nowrap: 'nowrap';
   /**
@@ -19841,7 +19841,7 @@ export interface WhiteSpaceValues extends CssWideValues {
    * 适用场景：需要保留用户换行和空格，同时允许适应容器宽度的文本。
    *
    * @example
-   * css({ whiteSpace: "pre-wrap" })
+   * s.whiteSpace("pre-wrap")
    */
   readonly 'pre-wrap': 'pre-wrap';
   /**

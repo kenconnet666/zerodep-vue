@@ -1,4 +1,4 @@
-// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成。说明只进入类型声明。
+// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
 import type { PropertyName } from '../types.ts';
 import type { SystemKeywordView, SystemKeyword } from '../tokens.ts';
 import type * as Values from './literal-values.ts';
@@ -1614,7 +1614,7 @@ export interface BoxSizingKeywords<Key extends PropertyName> extends CssWideKeyw
    * 仍不包含 margin；最小/最大尺寸和布局约束仍参与计算。
    *
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    */
   readonly borderBox: SystemKeyword<Key, 'border-box'>;
   /**
@@ -1623,7 +1623,7 @@ export interface BoxSizingKeywords<Key extends PropertyName> extends CssWideKeyw
    * 适用场景：希望明确指定纯内容区尺寸时。
    *
    * @example
-   * css({ boxSizing: "content-box", width: "100px", padding: "10px" })
+   * s.boxSizing("content-box").width("100px").padding("10px")
    */
   readonly contentBox: SystemKeyword<Key, 'content-box'>;
 }
@@ -2230,7 +2230,7 @@ export interface DisplayKeywords<Key extends PropertyName>
    * 适用场景：让容器包住内部浮动，或隔离内外的部分外边距折叠。
    *
    * @example
-   * css({ display: "flow-root", padding: "1rem" })
+   * s.display("flow-root").padding("1rem")
    */
   readonly flowRoot: SystemKeyword<Key, 'flow-root'>;
   /**
@@ -2243,7 +2243,7 @@ export interface DisplayKeywords<Key extends PropertyName>
    * 相邻行内级盒子之间的文本空白仍可能形成间距，vertical-align 会影响它在行内的位置。
    *
    * @example
-   * css({ display: "inline-block", width: "2rem", height: "2rem", verticalAlign: "middle" })
+   * s.display("inline-block").width("2rem").height("2rem").verticalAlign("middle")
    */
   readonly inlineBlock: SystemKeyword<Key, 'inline-block'>;
   /**
@@ -2259,7 +2259,7 @@ export interface DisplayKeywords<Key extends PropertyName>
    * 子项换行由 flex-wrap 控制。当容器自身是 Flex/Grid 项目时，其外部排版还受父布局控制。
    *
    * @example
-   * css({ display: "inline-flex", alignItems: "center", gap: "0.375rem" })
+   * s.display("inline-flex").alignItems("center").gap("0.375rem")
    */
   readonly inlineFlex: SystemKeyword<Key, 'inline-flex'>;
   /**
@@ -2270,7 +2270,7 @@ export interface DisplayKeywords<Key extends PropertyName>
    * 适用场景：需要行列对齐并与周围文字同行的小型内容组。
    *
    * @example
-   * css({ display: "inline-grid", gridTemplateColumns: "repeat(2, auto)", gap: "0.25rem" })
+   * s.display("inline-grid").gridTemplateColumns("repeat(2, auto)").gap("0.25rem")
    */
   readonly inlineGrid: SystemKeyword<Key, 'inline-grid'>;
   /**
@@ -3629,7 +3629,7 @@ export interface JustifyContentKeywords<Key extends PropertyName>
    * 只有一个项目时靠起始侧，不会自动居中。
    *
    * @example
-   * css({ display: "flex", justifyContent: "space-between", alignItems: "center" })
+   * s.display("flex").justifyContent("space-between").alignItems("center")
    */
   readonly spaceBetween: SystemKeyword<Key, 'space-between'>;
   /**
@@ -3638,7 +3638,7 @@ export interface JustifyContentKeywords<Key extends PropertyName>
    * 适用场景：希望容器两端和项目之间空隙一致的导航或操作组。
    *
    * @example
-   * css({ display: "flex", justifyContent: "space-evenly" })
+   * s.display("flex").justifyContent("space-evenly")
    */
   readonly spaceEvenly: SystemKeyword<Key, 'space-evenly'>;
 }
@@ -5309,7 +5309,7 @@ export interface MozBoxSizingKeywords<Key extends PropertyName> extends CssWideK
    * 仍不包含 margin；最小/最大尺寸和布局约束仍参与计算。
    *
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    */
   readonly borderBox: SystemKeyword<Key, 'border-box'>;
   /**
@@ -5318,7 +5318,7 @@ export interface MozBoxSizingKeywords<Key extends PropertyName> extends CssWideK
    * 适用场景：希望明确指定纯内容区尺寸时。
    *
    * @example
-   * css({ boxSizing: "content-box", width: "100px", padding: "10px" })
+   * s.boxSizing("content-box").width("100px").padding("10px")
    */
   readonly contentBox: SystemKeyword<Key, 'content-box'>;
 }
@@ -5663,7 +5663,7 @@ export interface MozTransformStyleKeywords<Key extends PropertyName>
    * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
    *
    * @example
-   * css({ transformStyle: "preserve-3d" })
+   * s.transformStyle("preserve-3d")
    */
   readonly preserve3d: SystemKeyword<Key, 'preserve-3d'>;
 }
@@ -9039,7 +9039,7 @@ export interface TransformStyleKeywords<Key extends PropertyName>
    * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
    *
    * @example
-   * css({ transformStyle: "preserve-3d" })
+   * s.transformStyle("preserve-3d")
    */
   readonly preserve3d: SystemKeyword<Key, 'preserve-3d'>;
 }
@@ -9913,7 +9913,7 @@ export interface WebkitBoxSizingKeywords<Key extends PropertyName> extends CssWi
    * 仍不包含 margin；最小/最大尺寸和布局约束仍参与计算。
    *
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    */
   readonly borderBox: SystemKeyword<Key, 'border-box'>;
   /**
@@ -9922,7 +9922,7 @@ export interface WebkitBoxSizingKeywords<Key extends PropertyName> extends CssWi
    * 适用场景：希望明确指定纯内容区尺寸时。
    *
    * @example
-   * css({ boxSizing: "content-box", width: "100px", padding: "10px" })
+   * s.boxSizing("content-box").width("100px").padding("10px")
    */
   readonly contentBox: SystemKeyword<Key, 'content-box'>;
 }
@@ -10282,7 +10282,7 @@ export interface WebkitJustifyContentKeywords<Key extends PropertyName>
    * 只有一个项目时靠起始侧，不会自动居中。
    *
    * @example
-   * css({ display: "flex", justifyContent: "space-between", alignItems: "center" })
+   * s.display("flex").justifyContent("space-between").alignItems("center")
    */
   readonly spaceBetween: SystemKeyword<Key, 'space-between'>;
   /**
@@ -10291,7 +10291,7 @@ export interface WebkitJustifyContentKeywords<Key extends PropertyName>
    * 适用场景：希望容器两端和项目之间空隙一致的导航或操作组。
    *
    * @example
-   * css({ display: "flex", justifyContent: "space-evenly" })
+   * s.display("flex").justifyContent("space-evenly")
    */
   readonly spaceEvenly: SystemKeyword<Key, 'space-evenly'>;
 }
@@ -10968,7 +10968,7 @@ export interface WebkitTransformStyleKeywords<Key extends PropertyName>
    * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
    *
    * @example
-   * css({ transformStyle: "preserve-3d" })
+   * s.transformStyle("preserve-3d")
    */
   readonly preserve3d: SystemKeyword<Key, 'preserve-3d'>;
 }
@@ -11126,7 +11126,7 @@ export interface WhiteSpaceKeywords<Key extends PropertyName>
    * 适用场景：需要保留用户换行和空格，同时允许适应容器宽度的文本。
    *
    * @example
-   * css({ whiteSpace: "pre-wrap" })
+   * s.whiteSpace("pre-wrap")
    */
   readonly preWrap: SystemKeyword<Key, 'pre-wrap'>;
   /**
@@ -11309,7 +11309,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", alignItems: "center" })
+   * s.display("flex").alignItems("center")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
    */
@@ -11331,7 +11331,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ alignSelf: "center" })
+   * s.alignSelf("center")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self
    */
@@ -11415,7 +11415,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ animationFillMode: "forwards" })
+   * s.animationFillMode("forwards")
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-fill-mode
    */
@@ -11499,7 +11499,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ aspectRatio: "16 / 9", width: "100%" })
+   * s.aspectRatio("16 / 9").width("100%")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/aspect-ratio
    */
@@ -11617,7 +11617,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
    * @example
-   * css({ backgroundSize: "cover", backgroundPosition: "center" })
+   * s.backgroundSize("cover").backgroundPosition("center")
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-size
    */
@@ -11639,7 +11639,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ blockSize: "10rem" })
+   * s.blockSize("10rem")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/block-size
    */
@@ -11989,7 +11989,7 @@ export interface SystemViews {
    *
    * 适用场景：卡片、按钮、头像的圆角外观。
    * @example
-   * css({ borderRadius: "8px" })
+   * s.borderRadius("8px")
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-radius
    */
@@ -12203,7 +12203,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ boxShadow: "0 2px 8px rgb(0 0 0 / 0.15)" })
+   * s.boxShadow("0 2px 8px rgb(0 0 0 / 0.15)")
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-shadow
    */
@@ -12217,7 +12217,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`content-box`，不同于浏览器默认样式表。
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-sizing
    */
@@ -12316,9 +12316,9 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`canvastext`，不同于浏览器默认样式表。
    * @example
-   * css({ color: "rgb(255 0 0 / 0.5)" })
+   * s.color("rgb(255 0 0 / 0.5)")
    * @example
-   * css({ color: "oklch(0.7 0.15 250)" })
+   * s.color("oklch(0.7 0.15 250)")
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color
    */
@@ -12448,7 +12448,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ contain: "content" })
+   * s.contain("content")
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain
    */
@@ -12478,7 +12478,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ containerType: "inline-size" })
+   * s.containerType("inline-size")
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/container-type
    */
@@ -12540,7 +12540,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ contentVisibility: "auto" })
+   * s.contentVisibility("auto")
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/content-visibility
    */
@@ -12620,7 +12620,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`inline`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", alignItems: "center", gap: "0.5rem" })
+   * s.display("flex").alignItems("center").gap("0.5rem")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
    */
@@ -12690,9 +12690,9 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`none`。
    * @example
-   * css({ flex: "1 1 0%" })
+   * s.flex("1 1 0%")
    * @example
-   * css({ flex: "none" })
+   * s.flex("none")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex
    */
@@ -12708,7 +12708,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ flexBasis: "16rem" })
+   * s.flexBasis("16rem")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-basis
    */
@@ -12722,7 +12722,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`row`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", flexDirection: "column", gap: "1rem" })
+   * s.display("flex").flexDirection("column").gap("1rem")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-direction
    */
@@ -12742,7 +12742,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`0`，不同于浏览器默认样式表。
    * @example
-   * css({ flexGrow: 1 })
+   * s.flexGrow(1)
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-grow
    */
@@ -12756,7 +12756,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`1`，不同于浏览器默认样式表。
    * @example
-   * css({ flexShrink: 0 })
+   * s.flexShrink(0)
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-shrink
    */
@@ -12770,7 +12770,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`nowrap`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", flexWrap: "wrap", gap: "0.5rem" })
+   * s.display("flex").flexWrap("wrap").gap("0.5rem")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-wrap
    */
@@ -12860,7 +12860,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
    * @example
-   * css({ fontSize: "1rem", lineHeight: 1.5 })
+   * s.fontSize("1rem").lineHeight(1.5)
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size
    */
@@ -13021,7 +13021,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ fontWeight: 600 })
+   * s.fontWeight(600)
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-weight
    */
@@ -13049,7 +13049,7 @@ export interface SystemViews {
    *
    * 适用场景：给 Flex/Grid 项目设置统一间隔，避免逐个项目添加 margin。
    * @example
-   * css({ gap: "8px 16px" })
+   * s.gap("8px 16px")
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/gap
    */
@@ -13091,7 +13091,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`row`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "grid", gridAutoFlow: "row" })
+   * s.display("grid").gridAutoFlow("row")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-auto-flow
    */
@@ -13199,7 +13199,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" })
+   * s.gridTemplateColumns("repeat(3, minmax(0, 1fr))")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-columns
    */
@@ -13213,7 +13213,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ gridTemplateRows: "auto minmax(0, 1fr)" })
+   * s.gridTemplateRows("auto minmax(0, 1fr)")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-rows
    */
@@ -13235,7 +13235,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ maxHeight: "20rem", overflowY: "auto" })
+   * s.maxHeight("20rem").overflowY("auto")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/height
    */
@@ -13322,7 +13322,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ inlineSize: "20rem" })
+   * s.inlineSize("20rem")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inline-size
    */
@@ -13404,7 +13404,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ isolation: "isolate" })
+   * s.isolation("isolate")
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/isolation
    */
@@ -13418,7 +13418,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", justifyContent: "space-between" })
+   * s.display("flex").justifyContent("space-between")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content
    */
@@ -13547,7 +13547,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`1`，不同于浏览器默认样式表。
    * @example
-   * css({ opacity: 0.5 })
+   * s.opacity(0.5)
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-opacity
@@ -13563,7 +13563,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ userSelect: "all" })
+   * s.userSelect("all")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-user-select
@@ -13618,7 +13618,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ lineHeight: 1.5 })
+   * s.lineHeight(1.5)
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-height
    */
@@ -13668,9 +13668,9 @@ export interface SystemViews {
    *
    * 适用场景：控制盒子外侧与相邻内容的距离；布局项统一间隔可考虑容器 gap。
    * @example
-   * css({ margin: "8px 16px" })
+   * s.margin("8px 16px")
    * @example
-   * css({ margin: "0 auto" })
+   * s.margin("0 auto")
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin
    */
@@ -13994,7 +13994,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ width: "100%", maxWidth: "48rem" })
+   * s.width("100%").maxWidth("48rem")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
    */
@@ -14032,7 +14032,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ minWidth: "0px" })
+   * s.minWidth("0px")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
    */
@@ -14121,7 +14121,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ animationFillMode: "forwards" })
+   * s.animationFillMode("forwards")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-fill-mode
    */
@@ -14212,7 +14212,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
    * @example
-   * css({ backgroundSize: "cover", backgroundPosition: "center" })
+   * s.backgroundSize("cover").backgroundPosition("center")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-background-size
@@ -14287,7 +14287,7 @@ export interface SystemViews {
    *
    * 适用场景：卡片、按钮、头像的圆角外观。
    * @example
-   * css({ borderRadius: "8px" })
+   * s.borderRadius("8px")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius
@@ -14439,7 +14439,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ boxShadow: "0 2px 8px rgb(0 0 0 / 0.15)" })
+   * s.boxShadow("0 2px 8px rgb(0 0 0 / 0.15)")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-shadow
@@ -14455,7 +14455,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`content-box`，不同于浏览器默认样式表。
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-sizing
    */
@@ -14614,7 +14614,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`1`，不同于浏览器默认样式表。
    * @example
-   * css({ opacity: 0.5 })
+   * s.opacity(0.5)
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-opacity
@@ -14646,7 +14646,7 @@ export interface SystemViews {
    *
    * 适用场景：控件焦点指示和不影响布局的轮廓。
    * @example
-   * css({ ':focus-visible': { outline: "2px solid currentColor", outlineOffset: "2px" } })
+   * s.select(":focus-visible", s.outline("2px solid currentColor").outlineOffset("2px"))
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline
@@ -14847,7 +14847,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ transform: "translateX(8px) scale(1.05)" })
+   * s.transform("translateX(8px) scale(1.05)")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform
    */
@@ -14878,7 +14878,7 @@ export interface SystemViews {
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
    * @example
-   * css({ transition: "opacity 160ms ease" })
+   * s.transition("opacity 160ms ease")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition
    */
@@ -14960,7 +14960,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ userSelect: "all" })
+   * s.userSelect("all")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-select
    */
@@ -15084,9 +15084,9 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`none`。
    * @example
-   * css({ flex: "1 1 0%" })
+   * s.flex("1 1 0%")
    * @example
-   * css({ flex: "none" })
+   * s.flex("none")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex
    */
@@ -15101,7 +15101,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`row`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", flexDirection: "column", gap: "1rem" })
+   * s.display("flex").flexDirection("column").gap("1rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex-direction
    */
@@ -15256,7 +15256,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ overflowX: "auto" })
+   * s.overflowX("auto")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-x
    */
@@ -15273,7 +15273,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ maxHeight: "20rem", overflowY: "auto" })
+   * s.maxHeight("20rem").overflowY("auto")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-y
    */
@@ -15433,7 +15433,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ scrollSnapType: "x mandatory" })
+   * s.scrollSnapType("x mandatory")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-type
    */
@@ -15491,7 +15491,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`clip`，不同于浏览器默认样式表。
    * @example
-   * css({ maxWidth: "12rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
+   * s.maxWidth("12rem").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-overflow
    */
@@ -15508,7 +15508,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ touchAction: "pan-y" })
+   * s.touchAction("pan-y")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
    */
@@ -15532,7 +15532,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ transform: "translateX(8px) scale(1.05)" })
+   * s.transform("translateX(8px) scale(1.05)")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transform
    */
@@ -15554,7 +15554,7 @@ export interface SystemViews {
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
    * @example
-   * css({ transition: "opacity 160ms ease" })
+   * s.transition("opacity 160ms ease")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition
    */
@@ -15603,7 +15603,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`text`，不同于浏览器默认样式表。
    * @example
-   * css({ userSelect: "all" })
+   * s.userSelect("all")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-user-select
    */
@@ -15618,7 +15618,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ wordBreak: "normal" })
+   * s.wordBreak("normal")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-word-break
    */
@@ -15709,7 +15709,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ animationFillMode: "forwards" })
+   * s.animationFillMode("forwards")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-fill-mode
@@ -15767,7 +15767,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
    * @example
-   * css({ backgroundSize: "cover", backgroundPosition: "center" })
+   * s.backgroundSize("cover").backgroundPosition("center")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-background-size
@@ -15784,7 +15784,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`fill`，不同于浏览器默认样式表。
    * @example
-   * css({ width: "80px", height: "80px", objectFit: "cover" })
+   * s.width("80px").height("80px").objectFit("cover")
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-fit
    */
@@ -15935,7 +15935,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`fill`，不同于浏览器默认样式表。
    * @example
-   * css({ width: "80px", height: "80px", objectFit: "cover" })
+   * s.width("80px").height("80px").objectFit("cover")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-object-fit
@@ -15960,7 +15960,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`1`，不同于浏览器默认样式表。
    * @example
-   * css({ opacity: 0.5 })
+   * s.opacity(0.5)
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/opacity
    */
@@ -16005,7 +16005,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`clip`，不同于浏览器默认样式表。
    * @example
-   * css({ maxWidth: "12rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
+   * s.maxWidth("12rem").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-text-overflow
@@ -16021,7 +16021,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ transform: "translateX(8px) scale(1.05)" })
+   * s.transform("translateX(8px) scale(1.05)")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transform
@@ -16045,7 +16045,7 @@ export interface SystemViews {
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
    * @example
-   * css({ transition: "opacity 160ms ease" })
+   * s.transition("opacity 160ms ease")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition
@@ -16096,7 +16096,7 @@ export interface SystemViews {
    *
    * 适用场景：控件焦点指示和不影响布局的轮廓。
    * @example
-   * css({ ':focus-visible': { outline: "2px solid currentColor", outlineOffset: "2px" } })
+   * s.select(":focus-visible", s.outline("2px solid currentColor").outlineOffset("2px"))
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline
    */
@@ -16144,7 +16144,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ maxHeight: "20rem", overflow: "auto" })
+   * s.maxHeight("20rem").overflow("auto")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow
    */
@@ -16198,7 +16198,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ overflowWrap: "anywhere" })
+   * s.overflowWrap("anywhere")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-wrap
    */
@@ -16214,7 +16214,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ overflowX: "auto" })
+   * s.overflowX("auto")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-x
    */
@@ -16230,7 +16230,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ maxHeight: "20rem", overflowY: "auto" })
+   * s.maxHeight("20rem").overflowY("auto")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-y
    */
@@ -16252,7 +16252,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ overflowY: "auto", overscrollBehavior: "contain" })
+   * s.overflowY("auto").overscrollBehavior("contain")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior
    */
@@ -16296,7 +16296,7 @@ export interface SystemViews {
    *
    * 适用场景：控制文字或子元素与组件边框之间的留白。
    * @example
-   * css({ padding: "0.5rem 1rem" })
+   * s.padding("0.5rem 1rem")
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding
    */
@@ -16468,7 +16468,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ pointerEvents: "none" })
+   * s.pointerEvents("none")
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
    */
@@ -16484,7 +16484,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`static`，不同于浏览器默认样式表。
    * @example
-   * css({ position: "sticky", top: "0px" })
+   * s.position("sticky").top("0px")
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position
    */
@@ -16688,7 +16688,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ scrollBehavior: "smooth" })
+   * s.scrollBehavior("smooth")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-behavior
    */
@@ -16962,7 +16962,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ scrollSnapType: "x mandatory" })
+   * s.scrollSnapType("x mandatory")
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type
    */
@@ -17160,7 +17160,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`start`，不同于浏览器默认样式表。
    * @example
-   * css({ textAlign: "start" })
+   * s.textAlign("start")
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align
    */
@@ -17340,7 +17340,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`clip`，不同于浏览器默认样式表。
    * @example
-   * css({ maxWidth: "12rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
+   * s.maxWidth("12rem").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-overflow
    */
@@ -17452,7 +17452,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ touchAction: "pan-y" })
+   * s.touchAction("pan-y")
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
    */
@@ -17466,7 +17466,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ transform: "translateX(8px) scale(1.05)" })
+   * s.transform("translateX(8px) scale(1.05)")
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform
    */
@@ -17502,7 +17502,7 @@ export interface SystemViews {
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
    * @example
-   * css({ transition: "opacity 160ms ease" })
+   * s.transition("opacity 160ms ease")
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition
    */
@@ -17570,7 +17570,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ userSelect: "all" })
+   * s.userSelect("all")
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/user-select
    */
@@ -17646,7 +17646,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
    * @example
-   * css({ visibility: "hidden" })
+   * s.visibility("hidden")
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/visibility
    */
@@ -17672,7 +17672,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", alignItems: "center" })
+   * s.display("flex").alignItems("center")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
    */
@@ -17687,7 +17687,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ alignSelf: "center" })
+   * s.alignSelf("center")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-self
    */
@@ -17738,7 +17738,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ animationFillMode: "forwards" })
+   * s.animationFillMode("forwards")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-fill-mode
    */
@@ -17836,7 +17836,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
    * @example
-   * css({ backgroundSize: "cover", backgroundPosition: "center" })
+   * s.backgroundSize("cover").backgroundPosition("center")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-background-size
    */
@@ -17917,7 +17917,7 @@ export interface SystemViews {
    *
    * 适用场景：卡片、按钮、头像的圆角外观。
    * @example
-   * css({ borderRadius: "8px" })
+   * s.borderRadius("8px")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-radius
    */
@@ -18047,7 +18047,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ boxShadow: "0 2px 8px rgb(0 0 0 / 0.15)" })
+   * s.boxShadow("0 2px 8px rgb(0 0 0 / 0.15)")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-shadow
    */
@@ -18062,7 +18062,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`content-box`，不同于浏览器默认样式表。
    * @example
-   * css({ boxSizing: "border-box", width: "20rem", padding: "1rem" })
+   * s.boxSizing("border-box").width("20rem").padding("1rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-sizing
    */
@@ -18172,9 +18172,9 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`none`。
    * @example
-   * css({ flex: "1 1 0%" })
+   * s.flex("1 1 0%")
    * @example
-   * css({ flex: "none" })
+   * s.flex("none")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex
    */
@@ -18191,7 +18191,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ flexBasis: "16rem" })
+   * s.flexBasis("16rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-basis
    */
@@ -18206,7 +18206,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`row`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", flexDirection: "column", gap: "1rem" })
+   * s.display("flex").flexDirection("column").gap("1rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-direction
    */
@@ -18228,7 +18228,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`0`，不同于浏览器默认样式表。
    * @example
-   * css({ flexGrow: 1 })
+   * s.flexGrow(1)
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-grow
    */
@@ -18243,7 +18243,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`1`，不同于浏览器默认样式表。
    * @example
-   * css({ flexShrink: 0 })
+   * s.flexShrink(0)
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-shrink
    */
@@ -18258,7 +18258,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`nowrap`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", flexWrap: "wrap", gap: "0.5rem" })
+   * s.display("flex").flexWrap("wrap").gap("0.5rem")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-wrap
    */
@@ -18336,7 +18336,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ display: "flex", justifyContent: "space-between" })
+   * s.display("flex").justifyContent("space-between")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-justify-content
    */
@@ -18351,7 +18351,7 @@ export interface SystemViews {
    */
   readonly WebkitLineBreak: WebkitLineBreakKeywords<'WebkitLineBreak'>;
   /**
-   * 限制多行文本显示的行数；与 display: -webkit-box、WebkitBoxOrient: 'vertical' 和 overflow: hidden 配合，不删除文本内容。
+   * 限制多行文本显示的行数；与 display: -webkit-box、WebkitBoxOrient('vertical') 和 overflow: hidden 配合，不删除文本内容。
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @category 厂商与历史兼容属性
@@ -18652,7 +18652,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ scrollSnapType: "x mandatory" })
+   * s.scrollSnapType("x mandatory")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-scroll-snap-type
    */
@@ -18834,7 +18834,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
    * @example
-   * css({ transform: "translateX(8px) scale(1.05)" })
+   * s.transform("translateX(8px) scale(1.05)")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform
    */
@@ -18865,7 +18865,7 @@ export interface SystemViews {
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
    * @example
-   * css({ transition: "opacity 160ms ease" })
+   * s.transition("opacity 160ms ease")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition
    */
@@ -18923,7 +18923,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ userSelect: "all" })
+   * s.userSelect("all")
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-user-select
    */
@@ -18948,7 +18948,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ whiteSpace: "pre-wrap" })
+   * s.whiteSpace("pre-wrap")
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
    */
@@ -18980,9 +18980,9 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ width: "20rem" })
+   * s.width("20rem")
    * @example
-   * css({ width: "clamp(12rem, 50vw, 40rem)" })
+   * s.width("clamp(12rem, 50vw, 40rem)")
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/width
    */
@@ -19006,7 +19006,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
    * @example
-   * css({ wordBreak: "normal" })
+   * s.wordBreak("normal")
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/word-break
    */
@@ -19060,7 +19060,7 @@ export interface SystemViews {
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
    * @example
-   * css({ position: "relative", zIndex: 1 })
+   * s.position("relative").zIndex(1)
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/z-index
    */

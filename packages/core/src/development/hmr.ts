@@ -76,16 +76,34 @@ export function registerModule(
       return value;
     };
   };
-  const view = (read: () => any, token: symbol) =>
-    Object.freeze({
-      get [token]() {
-        return read()[token];
+  const view = (read: () => any, token: symbol): any =>
+    new Proxy(
+      {},
+      {
+        get(_target, key) {
+          const current = read();
+          if (key === token) return current[token];
+          const value = Reflect.get(current, key);
+          if (typeof value !== 'function' || typeof key !== 'string') return value;
+          return (...args: unknown[]) => {
+            let owner = current;
+            let result = Reflect.apply(value, owner, args);
+            // 方法调用立即执行；后续热更新才重建同一分支，普通参数仍是调用时的快照。
+            return view(() => {
+              const next = read();
+              if (next !== owner) {
+                result = Reflect.apply(Reflect.get(next, key), next, args);
+                owner = next;
+              }
+              return result;
+            }, CLASS);
+          };
+        },
+        has(_target, key) {
+          return key in read();
+        },
       },
-      [Symbol.toPrimitive](hint: string) {
-        const value = read();
-        return value[Symbol.toPrimitive] ? value[Symbol.toPrimitive](hint) : String(value);
-      },
-    });
+    );
   return {
     render(site: string, environment: Environment) {
       return (...args: unknown[]) => current.factories.value[site]!(environment, ...args);
@@ -95,37 +113,7 @@ export function registerModule(
       if (kind === 'class') return view(read, CLASS);
       if (kind === 'keyframes') return view(read, ANIMATION);
       if (kind === 'source') return computed(() => unref(read()));
-      // 具名样式成员也使用稳定视图，setup 解构后的单个 class 不会固定在旧版本。
-      const members = new Map<PropertyKey, object>();
-      return new Proxy(
-        {},
-        {
-          get(_target, key) {
-            if (!Object.hasOwn(read(), key)) return Reflect.get(read(), key);
-            if (!members.has(key)) {
-              const member = () => {
-                const item = read()[key];
-                if (!item)
-                  throw new Error(`HMR 样式成员 ${String(key)} 已移除；请同步修改消费位置。`);
-                return item;
-              };
-              members.set(key, view(member, CLASS));
-            }
-            return members.get(key);
-          },
-          has(_target, key) {
-            return Reflect.has(read(), key);
-          },
-          ownKeys() {
-            return Reflect.ownKeys(read());
-          },
-          getOwnPropertyDescriptor(_target, key) {
-            return Object.hasOwn(read(), key)
-              ? { configurable: true, enumerable: true }
-              : undefined;
-          },
-        },
-      );
+      throw new Error('未知 HMR 样式类型：' + kind);
     },
     onceGlobal(site: string, register: () => () => void) {
       if (!current.globals.has(site)) current.globals.set(site, register());

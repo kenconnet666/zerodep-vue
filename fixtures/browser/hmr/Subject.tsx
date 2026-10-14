@@ -1,8 +1,9 @@
 import { ref } from 'vue';
-import { _component, bx, cx, globalCss } from '@zerodep-vue/core';
+import { _component, bx, globalCss, useCss } from '@zerodep-vue/core';
 
 import { NSelect } from '@fixture/naive';
 import type {} from '../src/contracts.ts';
+const s = useCss();
 
 export default _component(() => {
   window.__hmrSetups = (window.__hmrSetups ?? 0) + 1;
@@ -10,10 +11,8 @@ export default _component(() => {
   const text = ref('initial');
   const open = ref(false);
   const suffix = ref('!');
-  const { panel } = cx({
-    panel: { color: 'rgb(255, 0, 0)', padding: 16, marginLeft: bx(count.value) },
-  });
-  globalCss('hot-page', { body: { fontFamily: 'sans-serif' } });
+  const { panel } = { panel: s.color('rgb(255, 0, 0)').padding(16).marginLeft(bx(count.value)) };
+  globalCss('hot-page', { body: s.fontFamily('sans-serif') });
   return (
     <section class={panel}>
       <h2>原始标题</h2>

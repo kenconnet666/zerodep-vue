@@ -2,8 +2,9 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { JSDOM } from 'jsdom';
 import { effectScope, ref, shallowRef } from 'vue';
-import { createCssHost, keyframes, globalCss } from '../../src/index.ts';
+import { createCssHost, keyframes, globalCss, useCss } from '../../src/index.ts';
 import { binding } from '../../src/css/bindings.ts';
+const s = useCss();
 
 test('global reactive rules keep cascade position and stop when their scope ends', () => {
   const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>');
@@ -13,13 +14,14 @@ test('global reactive rules keep cascade position and stop when their scope ends
   let reads = 0;
   try {
     const rules = shallowRef({
-      'body, main': {
-        color: binding(() => {
-          reads++;
-          return color.value;
-        }),
-        ':hover': { opacity: 0.8 },
-      },
+      'body, main': s
+        .color(
+          binding(() => {
+            reads++;
+            return color.value;
+          }),
+        )
+        .select(':hover', s.opacity(0.8)),
     });
     scope.run(() => globalCss('page', rules, { host }));
     const node = dom.window.document.head.firstElementChild;
@@ -31,7 +33,7 @@ test('global reactive rules keep cascade position and stop when their scope ends
     assert.equal(reads, 2);
     assert(node.textContent.includes('color:green'));
     assert.equal(dom.window.document.head.firstElementChild, node);
-    rules.value = { ':root': { '--tone': 'black' } };
+    rules.value = { ':root': s.variable('--tone', 'black') };
     assert.equal(node.textContent, ':root{--tone:black;}');
     color.value = 'purple';
     assert.equal(reads, 2);
@@ -53,12 +55,12 @@ test('global names protect other owners and a host disposal stops external react
   const stop = globalCss(
     'reset',
     {
-      body: {
-        color: binding(() => {
+      body: s.color(
+        binding(() => {
           reads++;
           return value.value;
         }),
-      },
+      ),
     },
     { host },
   );
@@ -85,13 +87,13 @@ test('failed initial global resolution leaves no reactive subscriptions', (t) =>
       globalCss(
         'invalid',
         {
-          body: {
-            color: binding(() => {
+          body: s.color(
+            binding(() => {
               reads++;
               return value.value;
             }),
-          },
-          '&': { opacity: 1 },
+          ),
+          '&': s.opacity(1),
         },
         { host },
       ),
@@ -103,13 +105,14 @@ test('failed initial global resolution leaves no reactive subscriptions', (t) =>
       globalCss(
         'invalid-value',
         {
-          body: {
-            color: binding(() => {
-              reads++;
-              return value.value;
-            }),
-            width: 'broken(',
-          },
+          body: s
+            .color(
+              binding(() => {
+                reads++;
+                return value.value;
+              }),
+            )
+            .width('broken('),
         },
         { host },
       ),
@@ -153,18 +156,18 @@ test('SSR preserves global/ordinary collection order and client adopts the same 
 test('global rules resolve dynamic animations literally and reject invalid boundaries', () => {
   const host = createCssHost({ target: null });
   const value = ref(0.2);
-  const fade = keyframes({ from: { opacity: binding(() => value.value) }, to: { opacity: 1 } });
-  globalCss('animated', { body: { animationName: fade } }, { host });
+  const fade = keyframes({ from: s.opacity(binding(() => value.value)), to: s.opacity(1) });
+  globalCss('animated', { body: s.animationName(fade) }, { host });
   assert(host.cssText().includes('from{opacity:0.2;}'));
   assert(!host.cssText().includes('var(--zv-'));
   value.value = 0.8;
   assert(host.cssText().includes('from{opacity:0.8;}'));
   assert(!host.cssText().includes('opacity:0.2'));
   assert.equal(host.stats().globalRules, 1);
-  assert.throws(() => globalCss('bad', { body: { color: 'red' } }), /显式 host/);
-  assert.throws(() => globalCss('bad', { '&': { color: 'red' } }, { host }), /根选择器/);
+  assert.throws(() => globalCss('bad', { body: s.color('red') }), /显式 host/);
+  assert.throws(() => globalCss('bad', { '&': s.color('red') }, { host }), /根选择器/);
   assert.throws(
-    () => globalCss('bad', { 'body;html': { color: 'red' } }, { host }),
+    () => globalCss('bad', { 'body;html': s.color('red') }, { host }),
     /语法或声明边界/,
   );
   host.dispose();

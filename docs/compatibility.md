@@ -34,13 +34,14 @@ TypeScript 保持 `jsx: "preserve"` 并移除 jsxImportSource。core 的根入�
 
 ```tsx
 import { ref } from 'vue';
-import { _component, bx, css } from '@zerodep-vue/core';
+import { _component, bx, useCss, cx } from '@zerodep-vue/core';
+const s = useCss();
 
 export default _component(() => {
   const count = ref(0);
   return (
     <button
-      class={css({ padding: 8, opacity: bx(count.value > 5 ? 0.6 : 1) })}
+      class={s.padding(8).opacity(bx(count.value > 5 ? 0.6 : 1))}
       onClick={() => count.value++}
     >
       {count.value}

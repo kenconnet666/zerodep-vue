@@ -1,20 +1,21 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { css, createTheme, SystemKeywords, keywords, keyframes } from '../../src/index.ts';
+import { createTheme, SystemKeywords, keyframes, useCss, cx } from '../../src/index.ts';
 import { binding, template } from '../../src/css/bindings.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
+const s = useCss();
+const keywords = s.keywords;
 
 test('plain CSS custom properties retain native fallbacks and condition composition', () => {
   const resolved = resolveClass(
-    css({
-      '--control-color': 'green',
-      color: 'var(--control-color, red)',
-      gap: 'var(--control-gap, 8px)',
-      ':hover': { '--control-opacity': 1 },
-      '@starting-style': { '--control-color': 'blue' },
-      ':nth-child(2n)': { '--control-gap': '4px' },
-      '@supports (display: grid)': { display: keywords.display.grid },
-    }),
+    s
+      .variable('--control-color', 'green')
+      .color('var(--control-color, red)')
+      .gap('var(--control-gap, 8px)')
+      .select(':hover', s.variable('--control-opacity', 1))
+      .select('@starting-style', s.variable('--control-color', 'blue'))
+      .select(':nth-child(2n)', s.variable('--control-gap', '4px'))
+      .select('@supports (display: grid)', s.display(keywords.display.grid)),
   );
   assert(resolved.cssText.includes('--control-color:green'));
   assert(resolved.cssText.includes('color:var(--control-color, red)'));
@@ -29,12 +30,13 @@ test('plain custom properties share dynamic and inherited theme resolution', () 
   class Theme extends SystemKeywords {
     color = { _brand: 'purple' };
   }
-  const { css: themed, keywords } = createTheme(new Theme());
+  const themed = createTheme(new Theme()).useCss();
+  const keywords = themed.keywords;
   let padding = '12px';
-  const style = themed({
-    '--card-accent': keywords.color._brand,
-    '--card-padding': binding(() => padding),
-  });
+  const style = themed.variable('--card-accent', keywords.color._brand).variable(
+    '--card-padding',
+    binding(() => padding),
+  );
   const first = resolveClass(style);
   assert.deepEqual(Object.values(first.variables), ['purple', '12px']);
   padding = 'initial';
@@ -46,15 +48,9 @@ test('plain custom properties share dynamic and inherited theme resolution', () 
 test('dynamic keyframes keep per-frame and per-animation variables distinct and stable', () => {
   let a = 0.2;
   let b = 0.8;
-  const first = keyframes({
-    from: { opacity: binding(() => a) },
-    to: { opacity: binding(() => b) },
-  });
-  const second = keyframes({
-    from: { opacity: binding(() => b) },
-    to: { opacity: binding(() => a) },
-  });
-  const style = css({ animation: template([first, ' 1s linear, ', second, ' 2s ease']) });
+  const first = keyframes({ from: s.opacity(binding(() => a)), to: s.opacity(binding(() => b)) });
+  const second = keyframes({ from: s.opacity(binding(() => b)), to: s.opacity(binding(() => a)) });
+  const style = s.animation(template([first, ' 1s linear, ', second, ' 2s ease']));
   const one = resolveClass(style);
   assert.equal(one.resources.length, 2);
   assert.equal(new Set(one.resources.map((rule) => rule.name)).size, 2);
@@ -72,29 +68,29 @@ test('dynamic keyframes keep per-frame and per-animation variables distinct and 
 
 test('overridden animation is never evaluated and dynamic animation templates retain resources', () => {
   const bad = keyframes({
-    to: {
-      opacity: binding(() => {
+    to: s.opacity(
+      binding(() => {
         throw new Error('unused');
       }),
-    },
+    ),
   });
-  const resolved = resolveClass(css({ animationName: bad }, { animationName: 'none' }));
+  const resolved = resolveClass(cx(s.animationName(bad), s.animationName('none')));
   assert.deepEqual(resolved.resources, []);
-  const good = keyframes({ '0%, 50%': { opacity: 0 }, to: { opacity: 1 } });
-  const dynamic = resolveClass(css({ animation: template([binding(() => good), ' 1s']) }));
+  const good = keyframes({ '0%, 50%': s.opacity(0), to: s.opacity(1) });
+  const dynamic = resolveClass(s.animation(template([binding(() => good), ' 1s'])));
   assert.equal(dynamic.resources.length, 1);
   assert.equal(Object.values(dynamic.variables)[0], dynamic.resources[0].name);
-  assert.throws(() => resolveClass(css({ color: good })), /只能用于/);
+  assert.throws(() => resolveClass(s.color(good)), /只能用于/);
 });
 
 test('invalid keyframe structures and animation controls are diagnosed', () => {
-  assert.throws(() => keyframes({ '101%': { opacity: 1 } }), /无效关键帧位置/);
-  assert.throws(() => keyframes({ from: { ':hover': { opacity: 1 } } }), /嵌套选择器/);
-  assert.throws(() => keyframes({ from: { animationDuration: '1s' } }), /动画控制属性/);
+  assert.throws(() => keyframes({ '101%': s.opacity(1) }), /无效关键帧位置/);
+  assert.throws(() => keyframes({ from: s.select(':hover', s.opacity(1)) }), /嵌套选择器/);
+  assert.throws(() => keyframes({ from: s.animationDuration('1s') }), /动画控制属性/);
   assert.throws(
-    () => resolveClass(css({ animationName: keyframes({ from: { color: 'red!important' } }) })),
+    () => resolveClass(s.animationName(keyframes({ from: s.color('red!important') }))),
     /important/,
   );
-  assert.throws(() => css(keyframes({ from: { opacity: 0 } })), /属性值请放入/);
-  assert(keyframes({ 'from, to': { animationTimingFunction: 'ease', '--step': 1 } }));
+  assert.throws(() => cx(keyframes({ from: s.opacity(0) })), /cx 只接受链式样式/);
+  assert(keyframes({ 'from, to': s.animationTimingFunction('ease').variable('--step', 1) }));
 });

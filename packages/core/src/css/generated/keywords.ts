@@ -1,4 +1,4 @@
-// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成。说明只进入类型声明。
+// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
 const sets = [
   {
     MozInitial: '-moz-initial',

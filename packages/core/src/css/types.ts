@@ -2,7 +2,6 @@ import type * as CSS from 'csstype';
 import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
 import type { AllowedSystem, AllowedTheme, SystemKeyword, ThemeReference } from './tokens.ts';
 import type { SystemKeywords } from './generated/system.ts';
-import type { CssProperties } from './generated/properties.ts';
 import type { KeywordValues } from './generated/literal-values.ts';
 import type { CssAnimation } from './animation-token.ts';
 
@@ -35,23 +34,17 @@ export type CssCondition =
   | `@supports ${string}`
   | `@container ${string}`
   | '@starting-style';
-/** 按状态组织 CSS；普通属性使用 csstype 的属性类型与编辑器说明。 */
-export type CssObject<T extends SystemKeywords = SystemKeywords> = CssProperties<T> & {
-  readonly [Key in CssCondition]?: CssNestedInput<T>;
-} & {
-  readonly [Key in `--${string}`]?:
-    | Scalar
-    | SystemKeyword
-    | ThemeReference
-    | CssBinding<Scalar | SystemKeyword | ThemeReference | null | undefined>
-    | CssTemplate
-    | null
-    | undefined;
-};
+export type CustomPropertyValue =
+  | Scalar
+  | SystemKeyword
+  | ThemeReference
+  | CssBinding<Scalar | SystemKeyword | ThemeReference | null | undefined>
+  | CssTemplate
+  | null
+  | undefined;
 
-/** 嵌套复用仍携带 T；普通类名不具备可重新限定的声明，不进入嵌套条件。 */
-export type CssNestedInput<T extends SystemKeywords = SystemKeywords> =
-  CssObject<T> | CssClass | false | 0 | null | undefined | readonly CssNestedInput<T>[];
+/** 嵌套样式必须能重新限定选择器；普通类名只参与最外层组合。 */
+export type CssNestedInput = CssClass | false | 0 | null | undefined | readonly CssNestedInput[];
 
 export interface Declaration {
   readonly selector: string;
@@ -69,9 +62,8 @@ export type ClassPart = StyleSource | string;
 export interface CssClass {
   readonly [CLASS]: readonly ClassPart[];
 }
-export type CssInput<T extends SystemKeywords = SystemKeywords> =
-  CssObject<T> | CssClass | string | false | 0 | null | undefined | readonly CssInput<T>[];
-/** Vue 兼容边界使用；本库组件的外部样式输入使用 CssInput<T> 并经 css() 组合。 */
+export type CssInput = CssClass | string | false | 0 | null | undefined | readonly CssInput[];
+/** Vue 兼容边界使用；本库组件的外部样式输入使用 CssInput 并经 cx() 组合。 */
 export type ClassValue =
   | CssClass
   | string

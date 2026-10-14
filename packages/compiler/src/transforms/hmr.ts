@@ -45,14 +45,30 @@ function entry(scope: Scope, node: t.Node, name: string, seen = new Set<t.Node>(
   );
 }
 
+/** 只追踪真实 useCss 来源、其别名及链式返回值；普通同名业务方法保持原语义。 */
+function author(scope: Scope, node: t.Node, seen = new Set<t.Node>()): boolean {
+  if (t.isCallExpression(node)) {
+    if (node.extra?.zerodepCssKind === 'class') return true;
+    if (entry(scope, node.callee, 'useCss')) return true;
+    return t.isMemberExpression(node.callee) && author(scope, node.callee.object, seen);
+  }
+  if (!t.isIdentifier(node)) return false;
+  const binding = scope.getBinding(node.name);
+  if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
+    return false;
+  seen.add(binding.path.node);
+  const init = binding.path.node.init;
+  return !!init && author(binding.path.scope, init, seen);
+}
+
 const cssEntries = new Map([
-  ['css', 'class'],
-  ['cx', 'create'],
+  ['cx', 'class'],
   ['keyframes', 'keyframes'],
   ['globalCss', 'global'],
 ]);
 export function cssCallKind(scope: Scope, node: t.Node): string | undefined {
   for (const [name, kind] of cssEntries) if (entry(scope, node, name)) return kind;
+  if (t.isMemberExpression(node) && author(scope, node.object)) return 'class';
 }
 
 /** HMR 不依赖源码排版、位置或临时 raw 文本，只比较未被隔离的初始化结构。 */

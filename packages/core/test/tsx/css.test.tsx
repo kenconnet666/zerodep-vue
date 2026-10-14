@@ -16,14 +16,16 @@ import { renderToString } from '@vue/server-renderer';
 import {
   _component,
   bx,
-  css,
   createTheme,
   createCssHost,
   getCssHost,
   SystemKeywords,
+  useCss,
+  cx,
 } from '@zerodep-vue/core';
 
 import type { CssInput } from '@zerodep-vue/core';
+const s = useCss();
 
 const mounted: VueWrapper[] = [];
 const containers: HTMLElement[] = [];
@@ -50,8 +52,8 @@ test('automatic class override suppresses the unused default binding', () => {
   const unused = () => {
     throw new Error('overridden binding was evaluated');
   };
-  const Button = _component(() => <button class={css({ color: bx(unused()) })}>button</button>);
-  const App = _component(() => <Button class={css({ color: 'black' })} />);
+  const Button = _component(() => <button class={s.color(bx(unused()))}>button</button>);
+  const App = _component(() => <Button class={s.color('black')} />);
   const host = setupHost();
   const wrapper = mount(App, { global: { plugins: [host] } });
   mounted.push(wrapper);
@@ -62,8 +64,8 @@ test('Vue cloneVNode preserves style descriptions, bindings and ref ownership', 
   const width = ref('10px');
   const element = ref<HTMLElement | null>(null);
   const App = _component(() => {
-    return cloneVNode(<div ref={element} class={css({ color: 'red', width: bx(width.value) })} />, {
-      class: css({ color: 'blue' }),
+    return cloneVNode(<div ref={element} class={s.color('red').width(bx(width.value))} />, {
+      class: s.color('blue'),
       title: 'clone',
     });
   });
@@ -86,7 +88,7 @@ test('implicit class/style binding updates and removes CSS-wide keyword variable
   const App = _component(() => (
     <div
       title={width.value}
-      class={enabled.value && css({ width: bx(width.value) })}
+      class={enabled.value && s.width(bx(width.value))}
       style={{ opacity: 0.5 }}
     />
   ));
@@ -122,7 +124,7 @@ test('multiple bx variables and aliases retain one style declaration across inst
   const y = ref(20);
   const App = _component(() => {
     const horizontal = bx(x.value);
-    const style = css({ transform: `translate(${horizontal}px, ${bx(y.value)}px)` });
+    const style = s.transform(`translate(${horizontal}px, ${bx(y.value)}px)`);
     return <div class={style} />;
   });
   const host = setupHost();
@@ -142,14 +144,14 @@ test('multiple bx variables and aliases retain one style declaration across inst
   expect(containers.at(-1)!.childElementCount).toBe(1);
 });
 
-test('owned components compose through css, retain states and transfer bindings without metadata leaks', async () => {
+test('owned components compose through cx, retain states and transfer bindings without metadata leaks', async () => {
   const width = ref('120px');
   const Base = _component(({ class: external }: { class?: CssInput }) => (
-    <button class={css({ color: 'red', ':hover': { color: 'blue' } }, external)}>owned</button>
+    <button class={cx(s.color('red').select(':hover', s.color('blue')), external)}>owned</button>
   ));
   const Wrapper = _component(() => <Base />);
   const App = _component(() => (
-    <Wrapper class={css({ color: 'black', width: bx(width.value) })} title="forwarded" />
+    <Wrapper class={s.color('black').width(bx(width.value))} title="forwarded" />
   ));
   const host = setupHost();
   const wrapper = mount(App, { global: { plugins: [host] } });
@@ -175,7 +177,7 @@ test('ordinary Vue receives only native class/style and updates generated style'
     inheritAttrs: false,
   });
   const App = _component(() => (
-    <Legacy class={css({ width: bx(width.value) })} style={{ minWidth: '4px' }} />
+    <Legacy class={s.width(bx(width.value))} style={{ minWidth: '4px' }} />
   ));
   const host = setupHost();
   const wrapper = mount(App, { global: { plugins: [host] } });
@@ -195,11 +197,11 @@ test('spread and callbacks evaluate once, merge in order, and preserve explicit 
   const handler = () => calls++;
   const makeClass = () => {
     classes++;
-    return css({ color: 'red' });
+    return s.color('red');
   };
   const props = () => {
     spreads++;
-    return { class: css({ color: 'blue' }), onClick: handler };
+    return { class: s.color('blue'), onClick: handler };
   };
   const App = _component(() => (
     <button class={makeClass()} {...props()} onClick={handler} style={{ color: 'green' }} />
@@ -217,9 +219,7 @@ test('spread and callbacks evaluate once, merge in order, and preserve explicit 
 });
 
 test('SSR collects rules and emits the same variable protocol per request', async () => {
-  const App = _component(({ width }: { width: string }) => (
-    <div class={css({ width: bx(width) })} />
-  ));
+  const App = _component(({ width }: { width: string }) => <div class={s.width(bx(width))} />);
   const a = {};
   const b = {};
   const htmlA = await renderToString(createSSRApp(App, { width: '100px' }), a);
@@ -233,7 +233,7 @@ test('SSR collects rules and emits the same variable protocol per request', asyn
 });
 
 test('SSR preserves the selected host layer and nonce', async () => {
-  const App = _component(() => <span class={css({ color: 'red' })}>layer</span>);
+  const App = _component(() => <span class={s.color('red')}>layer</span>);
   const host = createCssHost({ target: null, layer: 'components', nonce: 'example' });
   const context = {};
   await renderToString(createSSRApp(App).use(host), context);
@@ -257,7 +257,7 @@ test('legacy slot can replace a styled element with a plain h node without retai
     <Legacy
       v-slots={{
         default: ({ show }: { show: boolean }) =>
-          show ? <span class={css({ color: 'red' })}>styled</span> : h('span', 'plain'),
+          show ? <span class={s.color('red')}>styled</span> : h('span', 'plain'),
       }}
     />
   ));
@@ -276,7 +276,7 @@ test('different JSX branches remove implicit style while preserving the DOM node
   const title = ref('title');
   const App = _component(() =>
     active.value ? (
-      <div class={css({ width: bx('100px') })} title={title.value} />
+      <div class={s.width(bx('100px'))} title={title.value} />
     ) : (
       <div class="plain" title={title.value} />
     ),
@@ -307,11 +307,9 @@ test('independent runtime themes retain their values through Teleport and one re
   const second = shallowRef(new RegionTheme('blue'));
   const showFirst = ref(true);
   const Region = _component(({ theme, name }: { theme: Ref<RegionTheme>; name: string }) => {
-    const { css: themed, keywords: themedKeywords } = createTheme(theme);
-    const style = themed({
-      color: themedKeywords.color._brand,
-      display: themedKeywords.display.block,
-    });
+    const themed = createTheme(theme).useCss();
+    const themedKeywords = themed.keywords;
+    const style = themed.color(themedKeywords.color._brand).display(themedKeywords.display.block);
     return (
       <Teleport to="body">
         <div data-theme-region={name} class={style} />
@@ -345,10 +343,11 @@ test('independent runtime themes retain their values through Teleport and one re
 
 test('SSR Teleport emits the correct per-request theme variables', async () => {
   const Page = _component(({ color }: { color: string }) => {
-    const { css: themed, keywords: themedKeywords } = createTheme(new RegionTheme(color));
+    const themed = createTheme(new RegionTheme(color)).useCss();
+    const themedKeywords = themed.keywords;
     return (
       <Teleport to="#dialogs">
-        <div class={themed({ color: themedKeywords.color._brand })}>theme</div>
+        <div class={themed.color(themedKeywords.color._brand)}>theme</div>
       </Teleport>
     );
   });

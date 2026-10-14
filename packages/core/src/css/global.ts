@@ -12,8 +12,7 @@ import type { Ref } from 'vue';
 import selectorParser from 'postcss-selector-parser';
 import { declarations } from './composition.ts';
 import { CLASS } from './types.ts';
-import type { CssObject, Declaration } from './types.ts';
-import type { SystemKeywords } from './generated/system.ts';
+import type { CssNestedInput, Declaration } from './types.ts';
 import { resolveClass } from './resolve.ts';
 import { cssHostKey } from './host.ts';
 import type { CssHost, GlobalLease } from './host.ts';
@@ -22,15 +21,13 @@ import { validateFragment } from './syntax.ts';
 import { inspectionHooks } from './inspection-hooks.ts';
 
 /** 显式全局选择器映射；每个选择器内部沿用普通属性、状态分组和媒体条件。 */
-export type GlobalRules<T extends SystemKeywords = SystemKeywords> = Readonly<
-  Record<string, CssObject<T>>
->;
+export type GlobalRules = Readonly<Record<string, CssNestedInput>>;
 export interface GlobalOptions {
   /** 组件 setup 以外必须明确提供宿主，保证更新和清理有所有者。 */
   host?: CssHost;
 }
 
-function renderGlobal<T extends SystemKeywords>(rules: GlobalRules<T>) {
+function renderGlobal(rules: GlobalRules) {
   const entries: Declaration[] = [];
   for (const [selector, style] of Object.entries(rules)) {
     validateFragment(selector);
@@ -58,9 +55,9 @@ function renderGlobal<T extends SystemKeywords>(rules: GlobalRules<T>) {
  * 登记有名称和所有者的全局规则。bx/主题更新原节点；作用域或宿主释放时停止读取。
  * 返回值可提前撤销，重复调用安全。动态命名规则应由应用/区域入口注册一次。
  */
-export function globalCss<T extends SystemKeywords>(
+export function globalCss(
   name: string,
-  source: GlobalRules<T> | Ref<GlobalRules<T>>,
+  source: GlobalRules | Ref<GlobalRules>,
   options: GlobalOptions = {},
 ): () => void {
   const instance = getCurrentInstance();

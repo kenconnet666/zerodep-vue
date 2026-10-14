@@ -1,12 +1,14 @@
+import { useCss } from '../../src/css/theme.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { JSDOM } from 'jsdom';
 import { createCssHost } from '../../src/css/host.ts';
-import { css } from '../../src/css/composition.ts';
+
 import { resolveClass } from '../../src/css/resolve.ts';
+const s = useCss();
 
 const rule = (color) => {
-  const resolved = resolveClass(css({ color }));
+  const resolved = resolveClass(s.color(color));
   return { name: resolved.ruleName, cssText: resolved.cssText };
 };
 

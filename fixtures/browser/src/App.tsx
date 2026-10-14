@@ -16,16 +16,17 @@ import {
   For,
   _component,
   bx,
-  css,
   createTheme,
   SystemKeywords,
   keyframes,
   globalCss,
+  useCss,
 } from '@zerodep-vue/core';
 
 import { NButton, NConfigProvider, NDataTable, NInput, NSelect } from '@fixture/naive';
 import type { DataTableColumns } from '@fixture/naive';
 import type { InitialState } from './contracts.ts';
+const s = useCss();
 
 const labelKey: InjectionKey<string> = Symbol('label');
 const Input = _component(
@@ -66,9 +67,10 @@ const regionKey: InjectionKey<Readonly<Ref<RegionTheme>>> = Symbol('region-theme
 const RegionContent = _component(({ name }: { name: string }) => {
   const source = inject(regionKey);
   if (!source) throw new Error('Missing region theme');
-  const { css: themed, keywords: themedKeywords } = createTheme(source);
+  const themed = createTheme(source).useCss();
+  const themedKeywords = themed.keywords;
   return (
-    <div data-testid={`region-${name}`} class={themed({ color: themedKeywords.color._brand })}>
+    <div data-testid={`region-${name}`} class={themed.color(themedKeywords.color._brand)}>
       {name}
     </div>
   );
@@ -124,14 +126,14 @@ const Content = _component(({ initial }: { initial: InitialState }) => {
   const columns: DataTableColumns<Row> = [
     { title: '名称', key: 'name', render: (row) => <Label>{row.name}</Label> },
   ];
-  const fade = keyframes({ from: { opacity: 0.5 }, to: { opacity: 1 } });
-  globalCss('browser-reset', { body: { margin: 0, fontFamily: 'sans-serif' } });
+  const fade = keyframes({ from: s.opacity(0.5), to: s.opacity(1) });
+  globalCss('browser-reset', { body: s.margin(0).fontFamily('sans-serif') });
   provide(labelKey, 'user:');
   onMounted(() => {
     window.__mounted = true;
   });
   return (
-    <main class={css({ padding: 24, display: 'grid', gap: 16 })}>
+    <main class={s.padding(24).display('grid').gap(16)}>
       <h1>真实源码编译与混用验收</h1>
       <NConfigProvider themeOverrides={{ common: { primaryColor: '#a020f0' } }}>
         <section>
@@ -179,13 +181,12 @@ const Content = _component(({ initial }: { initial: InitialState }) => {
         <button
           data-testid="styled"
           disabled={disabled.value}
-          class={css({
-            width: bx(width.value),
-            color: 'rgb(10, 20, 30)',
-            backgroundColor: 'rgb(240, 240, 240)',
-            ':hover': { color: 'rgb(40, 50, 60)', backgroundColor: 'rgb(200, 200, 200)' },
-            ':disabled': { color: 'rgb(70, 80, 90)', backgroundColor: 'rgb(150, 150, 150)' },
-          })}
+          class={s
+            .width(bx(width.value))
+            .color('rgb(10, 20, 30)')
+            .backgroundColor('rgb(240, 240, 240)')
+            .select(':hover', s.color('rgb(40, 50, 60)').backgroundColor('rgb(200, 200, 200)'))
+            .select(':disabled', s.color('rgb(70, 80, 90)').backgroundColor('rgb(150, 150, 150)'))}
         >
           样式
         </button>
@@ -217,9 +218,9 @@ const Content = _component(({ initial }: { initial: InitialState }) => {
         >
           切换禁用
         </button>
-        <div data-testid="variables" class={css({ padding: bx(width.value) })} />
+        <div data-testid="variables" class={s.padding(bx(width.value))} />
         {show.value && (
-          <div data-testid="animation" class={css({ animation: `${fade} 2s linear infinite` })}>
+          <div data-testid="animation" class={s.animation(`${fade} 2s linear infinite`)}>
             动画
           </div>
         )}

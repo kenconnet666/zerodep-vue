@@ -129,7 +129,7 @@ function installInspectionHooks() {
         }),
         sources: parts
           .filter((part) => typeof part !== 'string')
-          .map((part) => {
+          .map<CssSnapshot['sources'][number]>((part) => {
             const source = locations.get(part);
             return {
               ...(source ? { source } : {}),
@@ -149,7 +149,15 @@ function installInspectionHooks() {
                 bindings: bindingSnapshot(declaration.value, reads, active.has(declaration)),
               })),
             };
-          }),
+          })
+          .reduce<CssSnapshot['sources']>((groups, next) => {
+            // 一条链的相邻声明共享来源，检查器按作者位置展示，不暴露内部节点数量。
+            const previous = groups.at(-1);
+            if (previous && previous.source === next.source)
+              previous.declarations.push(...next.declarations);
+            else groups.push(next);
+            return groups;
+          }, []),
       });
     },
     global(token, host, name, source, result, owner) {
@@ -187,9 +195,6 @@ export function traceCss<T>(value: T, source: SourceLocation): T {
       if (typeof part !== 'string' && !locations.has(part)) locations.set(part, source);
   } else if (isAnimation(value)) {
     for (const frame of value[ANIMATION]) traceCss(frame.style, { ...source, name: frame.at });
-  } else if (source.kind === 'create') {
-    for (const [name, item] of Object.entries(value))
-      traceCss(item, { ...source, name, kind: 'class' });
   }
   return value;
 }

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createSSRApp, ref } from 'vue';
-import { css, createCssHost, getCssHost, keyframes, globalCss } from '../../src/index.ts';
+import { createCssHost, getCssHost, keyframes, globalCss, useCss, cx } from '../../src/index.ts';
 import { renderToString } from '@vue/server-renderer';
 import { binding } from '../../src/css/bindings.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
@@ -12,6 +12,7 @@ import {
   traceGlobal,
 } from '../../src/development/inspector.ts';
 import { inspectionHooks } from '../../src/css/inspection-hooks.ts';
+const s = useCss();
 
 const source = (line, kind = 'class') => ({ file: '/project/App.tsx', line, column: 3, kind });
 
@@ -34,9 +35,9 @@ test('inspection uses consumed values, records override/clear provenance and nev
     }),
     source(7, 'binding'),
   );
-  const base = traceCss(css({ color: unused, width: live, padding: 4 }), source(5));
-  const override = traceCss(css({ color: 'green', padding: null }), source(12));
-  const resolved = resolveClass(css(base, override));
+  const base = traceCss(s.color(unused).width(live).padding(4), source(5));
+  const override = traceCss(s.color('green').padding(null), source(12));
+  const resolved = resolveClass(cx(base, override));
   const snapshot = inspectionSnapshot(resolved);
   assert.equal(reads, 1);
   assert.equal(snapshot.sources[0].source.line, 5);
@@ -52,17 +53,17 @@ test('inspection uses consumed values, records override/clear provenance and nev
 test('animation frame inspection keeps declaration and binding locations', () => {
   const fade = traceCss(
     keyframes({
-      from: {
-        opacity: traceCss(
+      from: s.opacity(
+        traceCss(
           binding(() => 0.3),
           source(21, 'binding'),
         ),
-      },
-      to: { opacity: 1 },
+      ),
+      to: s.opacity(1),
     }),
     source(20, 'keyframes'),
   );
-  const snapshot = inspectionSnapshot(resolveClass(css({ animationName: fade })));
+  const snapshot = inspectionSnapshot(resolveClass(s.animationName(fade)));
   assert.equal(snapshot.frames.length, 2);
   assert.equal(snapshot.frames[0].sources[0].source.name, 'from');
   assert.equal(snapshot.frames[0].sources[0].declarations[0].bindings[0].source.line, 21);
@@ -76,12 +77,12 @@ test('global inspection follows active leases and releases data with the host', 
   let reads = 0;
   const rules = traceGlobal(
     {
-      body: {
-        color: binding(() => {
+      body: s.color(
+        binding(() => {
           reads++;
           return color.value;
         }),
-      },
+      ),
     },
     source(30, 'global'),
   );
@@ -100,7 +101,7 @@ test('global inspection follows active leases and releases data with the host', 
 test('client development tooling does not retain SSR request registrations', async () => {
   const app = createSSRApp({
     setup() {
-      globalCss('request', { body: { color: 'red' } });
+      globalCss('request', { body: s.color('red') });
       return () => null;
     },
   });

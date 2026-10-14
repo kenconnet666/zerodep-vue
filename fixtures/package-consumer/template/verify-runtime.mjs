@@ -9,7 +9,7 @@ import { build } from 'vite';
 import { createSSRApp, ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { babelPlugin as compiler, vitePlugin as vueTsx } from '@zerodep-vue/compiler';
-import { getCssHost } from '@zerodep-vue/core';
+import { getCssHost, useCss } from '@zerodep-vue/core';
 import { assertRuntimeCode, assertRuntimeChunks } from './runtime-boundary.mjs';
 
 const root = process.cwd();
@@ -31,7 +31,7 @@ for (const entry of [
   assert.throws(() => require.resolve(`@zerodep-vue/core/${entry}`), {
     code: 'ERR_PACKAGE_PATH_NOT_EXPORTED',
   });
-assert.equal(typeof require('@zerodep-vue/core').css, 'function');
+assert.equal(typeof require('@zerodep-vue/core').useCss, 'function');
 assert.equal(typeof require('@zerodep-vue/core').createTheme, 'function');
 assert.equal('createCss' in require('@zerodep-vue/core'), false);
 assert.equal('defineVars' in require('@zerodep-vue/core'), false);
