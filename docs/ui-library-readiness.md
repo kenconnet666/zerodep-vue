@@ -42,7 +42,7 @@
 
 ## 当前 fixture 验证结果
 
-- 已增加跨模块 ThemeRegion，仅验证现有 createCssContext/provideTheme 的使用方式；覆盖对象、Ref 容器和值的替换、嵌套区域、Teleport、固定 keywords 来源及并发 SSR。
+- 已增加跨模块 ThemeRegion，仅验证现有 createCssContext/provideTheme 的使用方式；覆盖对象、Ref 容器和值的替换、嵌套区域、Teleport、useTheme 与作者共用区域来源及并发 SSR。
 - TextInput 仍是私有夹具，增加原生属性/style、显式 focus 句柄和 change 通知；验证可写 computed、模型替换、父级 reset、输入法组合事件和卸载引用清理。类型夹具拒绝只读模型、竞争 value 输入、错误回调类型及不存在的公开方法。
 - 发现并补齐运行测试缺少 TypeScript 项目的问题：新增测试目录 tsconfig，相关文件诊断从错误的 React JSX/模块解析恢复为零错误；完整运行测试类型检查已接入 CI。
 - 7 项相关组件短测分批通过，6 个修改 TS/TSX 文件的当前会话 MCP 完整诊断为零错误。新增两项浏览器场景进入既有 development/production × Chromium/Firefox 矩阵，本地不重建旧 Naive 产物来替代新提交 CI。
@@ -53,7 +53,7 @@
 
 ### 1. 组件库拥有基础主题和上下文
 
-现状：夹具使用自己的 `ControlTheme`，只有品牌色和 hover 色；每次 `createCssContext()` 都创建独立注入键。应用另建主题上下文不会自动覆盖组件库上下文。独立导出的 `keywords` 固定指向其创建来源，区域覆盖依赖 `useCss()` 和主题字面量。core 不导出默认 useCss/keywords，主题模块直接从上下文解构导出 `useCss`、`provideTheme` 和 `keywords`。
+现状：夹具使用自己的 `ControlTheme`，只有品牌色和 hover 色；每次 `createCssContext()` 都创建独立注入键。应用另建主题上下文不会自动覆盖组件库上下文。区域样式使用 `useCss()` 和主题名字面量，业务映射通过 `useTheme()` 读取同一区域来源。core 不导出默认 hooks，主题模块从上下文解构导出 `useCss`、`provideTheme` 和 `useTheme`。
 
 | 路线                                                                   | 收益与代价                                                   | 建议     |
 | ---------------------------------------------------------------------- | ------------------------------------------------------------ | -------- |
@@ -64,7 +64,7 @@
 
 组件内部继续 `const s = useCss()`，这个函数来自组件库主题模块。应用 Provider 调用同一个库上下文导出的 `provideTheme`；SSR 请求值通过请求根提供，禁止修改共享模块 Ref。应用可以继承基础主题增加成员，但库内组件只依赖它所声明的基础语义。
 
-区域颜色优先写 `s.backgroundColor('_brand')`。默认上下文的 `keywords.color._brand` 是显式固定来源，不应被误用作区域覆盖。这一边界已有实现和文档，本轮不改变它。
+区域颜色优先写 `s.backgroundColor('_brand')`。字面量简化已移除 `keywords` 对象视图；需要当前映射时使用 `useTheme()`，动态样式通过 `bx(theme.value.color._brand)` 显式读取。提供者当前组件使用 provideTheme 返回的作者和自己提供的来源，子树 hooks 读取最近祖先的来源。
 
 ### 2. 明确表单组件的主要消费方式
 

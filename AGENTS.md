@@ -5,8 +5,8 @@
 - TypeScript 精确使用 6.0.3，Node 24，pnpm 11.22.0。包依赖经 pnpm catalog 固定，保留唯一锁文件。
 - packages/compiler 保留官方 Vue JSX v3.0.0 的真实源码 fork 和对照测试；实现状态与远程证据见 docs/progress.md，不能把蓝图中的未完成 API 写成已实现。
 - 状态直接使用 Vue API。CSS 作者入口为 class，编译器负责 bx 的隐式 style 接线，不新增独立 JSX 样式属性。
-- CSS 采用运行时处理加辅助编译：基础层提供系统关键字，主题通过继承增加，泛型 T 贯穿作者入口、链式样式和关键字视图。
-- 组件统一写 `const s = useCss()`；应用主题模块从 `createCssContext(source)` 直接解构导出 `useCss`、`provideTheme` 和 `keywords`。core 不导出默认 useCss/keywords 或创建默认上下文。系统值和主题名优先使用字面量自动补全，例如 `.display('inline-flex').backgroundColor('_brand')`。显式引用使用独立 `keywords.color._brand`，不挂在 s 下；cx 只负责有序组合。
+- CSS 采用运行时处理加辅助编译：系统值使用原生字面量，主题通过继承增加，泛型 T 贯穿作者入口、链式样式和主题映射。
+- 组件统一写 `const s = useCss()`；应用主题模块从 `createCssContext(source)` 直接解构导出 `useCss`、`provideTheme` 和 `useTheme`。core 不导出默认 hooks 或创建默认上下文。系统值和主题名使用字面量自动补全，例如 `.display('inline-flex').backgroundColor('_brand')`；不提供 keywords 对象视图。`useTheme()` 返回当前区域原始主题的只读 Ref 入口，映射值用于动态样式时显式使用 bx；cx 只负责有序组合。
 - 属性、系统/主题关键字需有准确补全和有用的中文 JSDoc；参考老项目的说明与生成方式，适配不可变链式 API，并验证发布声明不丢失类型或注释。
 - 新源码遵循 TypeScript 和 Vue 的正常语义；中文注释解释边界、所有权和非显然的处理。
 - 以人工可读和可维护为重：作者类型与运行时值分清职责；同一判别值的多分支适当使用 switch，类型守卫和二选一保留 if。优先消除重复策略和深层嵌套，不为了拆分增加文件或转发跳转。需要改变公共 API 时先给出具体取舍讨论。

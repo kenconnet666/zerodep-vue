@@ -329,8 +329,7 @@ test('independent runtime themes retain their values through Teleport and one re
   const Region = _component(({ theme, name }: { theme: Ref<RegionTheme>; name: string }) => {
     const themedContext = createCssContext(theme);
     const themed = themedContext.useCss();
-    const themedKeywords = themedContext.keywords;
-    const style = themed.color(themedKeywords.color._brand).display(themedKeywords.display.block);
+    const style = themed.color('_brand').display('block');
     return (
       <Teleport to="body">
         <div data-theme-region={name} class={style} />
@@ -366,10 +365,9 @@ test('SSR Teleport emits the correct per-request theme variables', async () => {
   const Page = _component(({ color }: { color: string }) => {
     const themedContext = createCssContext(new RegionTheme(color));
     const themed = themedContext.useCss();
-    const themedKeywords = themedContext.keywords;
     return (
       <Teleport to="#dialogs">
-        <div class={themed.color(themedKeywords.color._brand)}>theme</div>
+        <div class={themed.color('_brand')}>theme</div>
       </Teleport>
     );
   });

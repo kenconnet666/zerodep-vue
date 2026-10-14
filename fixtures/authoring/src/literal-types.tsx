@@ -1,7 +1,7 @@
 import { bx, SystemKeywords, createCssContext } from '@zerodep-vue/core';
 import type { Css } from '@zerodep-vue/core';
 
-const { keywords, useCss } = createCssContext(new SystemKeywords());
+const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 
@@ -12,12 +12,12 @@ export const literalStyle = s
   .select('@media (width > 600px)', s.position('relative')); // literal:media
 export const namedStyle = { root: s.display('grid') }; // literal:named
 export const reusableStyle = s.alignItems('center'); // literal:object
-export const namedKeywords = s
-  .display(keywords.display.inlineFlex) // member:inlineFlex
-  .font(keywords.font.inherit) // member:inherit
-  .color(keywords.color.currentColor)
-  .width(keywords.width.revertLayer)
-  .transformStyle(keywords.transformStyle.preserve3d);
+export const nativeValues = s
+  .display('inline-flex')
+  .font('inherit')
+  .color('currentColor')
+  .width('revert-layer')
+  .transformStyle('preserve-3d');
 
 export function genericLiteral<T extends SystemKeywords>(s: Css<T>) {
   return s.font('inherit'); // literal:generic

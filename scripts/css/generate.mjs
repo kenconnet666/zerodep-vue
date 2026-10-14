@@ -184,13 +184,9 @@ function keywordDoc(name, value, color) {
   return `${cssName(name)} 的原生 ${value} 值；具体布局或绘制效果见该属性参考。\n@see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/${cssName(name)}`;
 }
 
-const runtimeSets = [];
-const interfaces = [];
 const literalInterfaces = [];
 const literalProperties = [];
 const slotLines = [];
-const viewLines = [];
-const runtimeLines = [];
 const colorNames = [];
 const header = '// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。\n';
 const literalValues = (type) =>
@@ -205,55 +201,28 @@ const dataTypes = ast.statements.find(
   (node) => ts.isModuleDeclaration(node) && node.name.text === 'DataType',
 );
 const commonGroups = [
-  ['Globals', 'CssWideKeywords'],
-  ['NamedColor', 'NamedColorKeywords'],
-  ['SystemColor', 'SystemColorKeywords'],
-  ['DeprecatedSystemColor', 'DeprecatedSystemColorKeywords'],
+  ['Globals', 'CssWideValues'],
+  ['NamedColor', 'NamedColorValues'],
+  ['SystemColor', 'SystemColorValues'],
+  ['DeprecatedSystemColor', 'DeprecatedSystemColorValues'],
 ].map(([source, name]) => {
   const nodes = source === 'Globals' ? ast.statements : dataTypes.body.statements;
   const node = nodes.find((item) => ts.isTypeAliasDeclaration(item) && item.name.text === source);
   assert(node, `Missing csstype value group: ${source}`);
   return { name, values: literalValues(checker.getTypeAtLocation(node)) };
 });
-// 每个关键字只提供一种成员拼写；CSS 字符串仍使用原生拼写。
-const memberName = (value) =>
-  value === 'currentcolor'
-    ? 'currentColor'
-    : value.replace(/-([a-z0-9])/g, (_match, letter) => letter.toUpperCase());
-function keywordView(typeName, literalName, values, parents, comment) {
-  const stable = values.filter((value) => memberName(value) === value);
-  const bases = parents.map((name) => `${name}<Key>`);
-  if (stable.length)
-    bases.push(
-      `SystemKeywordView<Pick<Values.${literalName}, ${stable.map(JSON.stringify).join(' | ')}>, Key>`,
-    );
-  // 同名成员直接投影原声明；只有不同拼写的 camelCase 别名需要自己的适配字段。
-  const aliases = values
-    .filter((value) => memberName(value) !== value)
-    .map(
-      (value) =>
-        comment(value) +
-        `readonly ${JSON.stringify(memberName(value))}: SystemKeyword<Key, ${JSON.stringify(value)}>;`,
-    );
-  return (
-    `export interface ${typeName}<Key extends PropertyName>` +
-    (bases.length ? ' extends ' + bases.join(', ') : '') +
-    ` {\n${aliases.join('\n')}\n}`
-  );
-}
 for (const group of commonGroups) {
-  const literalName = group.name.replace(/Keywords$/, 'Values');
   const commentFor = (value) => {
-    if (group.name === 'CssWideKeywords') {
+    if (group.name === 'CssWideValues') {
       return jsdoc(keywordDoc('color', value, false));
     }
-    const named = group.name === 'NamedColorKeywords';
+    const named = group.name === 'NamedColorValues';
     const description = named
       ? `CSS 命名颜色 ${value}。`
       : `CSS 系统颜色 ${value}；实际颜色由浏览器和用户环境决定。`;
     const comment = jsdoc(
       description +
-        (group.name === 'DeprecatedSystemColorKeywords'
+        (group.name === 'DeprecatedSystemColorValues'
           ? '\n@deprecated 历史系统颜色；优先使用现代系统颜色。'
           : '') +
         `\n@see https://developer.mozilla.org/docs/Web/CSS/${named ? 'named-color' : 'system-color'}`,
@@ -263,8 +232,7 @@ for (const group of commonGroups) {
   const literalFields = group.values.map(
     (value) => commentFor(value) + `readonly ${JSON.stringify(value)}: ${JSON.stringify(value)};`,
   );
-  interfaces.push(keywordView(group.name, literalName, group.values, [], commentFor));
-  literalInterfaces.push(`export interface ${literalName} {\n${literalFields.join('\n')}\n}`);
+  literalInterfaces.push(`export interface ${group.name} {\n${literalFields.join('\n')}\n}`);
 }
 for (const property of properties) {
   const name = property.name;
@@ -274,30 +242,14 @@ for (const property of properties) {
   const values = literalValues(type);
   const color = values.includes('red') && values.includes('blue');
   if (color) colorNames.push(name);
-  const members = {};
-  for (const value of values) {
-    const member = memberName(value);
-    assert(
-      /^[A-Za-z_$][\w$]*$/.test(member),
-      `Keyword member needs a usable name: ${name}.${member}`,
-    );
-    assert(
-      !members[member] || members[member].toLowerCase() === value.toLowerCase(),
-      `Keyword member collision: ${name}.${member}`,
-    );
-    members[member] = value;
-  }
   const common = commonGroups.filter((group) =>
     group.values.every((value) => values.includes(value)),
   );
   const shared = new Set(common.flatMap((group) => group.values));
-  const typeName = name[0].toUpperCase() + name.slice(1) + 'Keywords';
   const literalName = name[0].toUpperCase() + name.slice(1) + 'Values';
   literalInterfaces.push(
     `export interface ${literalName}` +
-      (common.length
-        ? ' extends ' + common.map((group) => group.name.replace(/Keywords$/, 'Values')).join(', ')
-        : '') +
+      (common.length ? ' extends ' + common.map((group) => group.name).join(', ') : '') +
       ` {\n${values
         .filter((value) => !shared.has(value))
         .map(
@@ -307,7 +259,7 @@ for (const property of properties) {
         )
         .join('\n')}\n}`,
   );
-  // keyof 连接原生字面量声明，同名关键词视图通过同态映射共享这份来源。
+  // keyof 保留字面量成员的中文说明与导航来源，不生成另一套对象访问视图。
   const scalars = [
     ...new Set(
       (concreteType.isUnion() ? concreteType.types : [concreteType])
@@ -330,15 +282,6 @@ for (const property of properties) {
       (checker.isTypeAssignableTo(checker.getStringType(), concreteType) ? ' | CssString' : '') +
       ';',
   );
-  interfaces.push(
-    keywordView(
-      typeName,
-      literalName,
-      Object.values(members).filter((value) => !shared.has(value)),
-      common.map((group) => group.name),
-      (value) => jsdoc(keywordDoc(name, value, color)),
-    ),
-  );
   const comment = jsdoc(description(name));
   slotLines.push(comment + `declare readonly ${name}: {};`);
   groups
@@ -347,61 +290,24 @@ for (const property of properties) {
       comment +
         `${name}<const Value>(value: PropertyInput<${JSON.stringify(name)}, T, Value>): this { return this.write(${JSON.stringify(name)}, value); }`,
     );
-  viewLines.push(comment + `readonly ${name}: ${typeName}<${JSON.stringify(name)}>;`);
-  const runtimeSignature = JSON.stringify(members);
-  let runtimeIndex = runtimeSets.findIndex((item) => JSON.stringify(item) === runtimeSignature);
-  if (runtimeIndex < 0) {
-    runtimeIndex = runtimeSets.length;
-    runtimeSets.push(members);
-  }
-  runtimeLines.push(`${JSON.stringify(name)}: ${runtimeIndex},`);
 }
-// 只保留属性到共享组的索引；大字典在实际读取该组时创建，并复用公共关键字集合。
-const commonRuntime = commonGroups.map((group) =>
-  Object.fromEntries(group.values.map((value) => [memberName(value), value])),
-);
-const runtimeFactories = runtimeSets.map((members) => {
-  const used = commonRuntime.flatMap((group, index) =>
-    Object.entries(group).every(([name, value]) => members[name] === value) ? [index] : [],
-  );
-  const shared = new Set(used.flatMap((index) => Object.keys(commonRuntime[index])));
-  const own = Object.entries(members).filter(([name]) => !shared.has(name));
-  const fields = [
-    ...used.map((index) => `...common${index}(),`),
-    ...own.map(([name, value]) => `${JSON.stringify(name)}: ${JSON.stringify(value)},`),
-  ];
-  return `lazy(() => Object.freeze({${fields.join('\n')}} as const))`;
-});
 const outputs = {
   'literal-values.ts':
     header +
     `/** 保留字面量候选，同时接收原属性允许的自由 CSS 字符串。 */\ntype CssString = string & {};\n` +
     literalInterfaces.join('\n') +
-    `\n/** 生成时展开非字符串范围，关键词只引用一份说明来源。 */\nexport interface KeywordValues {\n${literalProperties.join('\n')}\n}\n`,
+    `\n/** 各属性的原生输入值域；字面量说明只维护一份。 */\nexport interface PropertyValues {\n${literalProperties.join('\n')}\n}\n`,
   'system.ts':
     header +
     `import { THEME_SOURCE } from '../tokens.ts';\n` +
-    `/** 系统关键字的主题扩展边界；子类在属性组中增加 _ 开头的主题成员。 */\nexport class SystemKeywords {\nreadonly [THEME_SOURCE] = true as const;\n${slotLines.join('\n')}\n}\n` +
-    `export type { SystemViews } from './keyword-views.ts';\n`,
-  'keyword-views.ts':
-    header +
-    `import type { PropertyName, SystemKeywordView } from '../types.ts';\nimport type { SystemKeyword } from '../tokens.ts';\nimport type * as Values from './literal-values.ts';\n` +
-    interfaces.join('\n') +
-    `\nexport interface SystemViews {\n${viewLines.join('\n')}\n}\n`,
+    `/** 主题扩展基类；属性槽仅作类型声明，子类定义 _ 开头的主题映射。 */\nexport class SystemKeywords {\nreadonly [THEME_SOURCE] = true as const;\n${slotLines.join('\n')}\n}\n`,
   'author.ts':
     header +
     `import type { PropertyInput } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\nimport { CssAuthor } from '../author.ts';\n` +
     `/** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */\nexport class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor {\n${propertyGroups.map(([name]) => groups.get(name).join('\n')).join('\n')}\n}\n`,
-  'keywords.ts':
+  'metadata.ts':
     header +
-    `import { lazy } from '../lazy.ts';\n` +
-    commonRuntime
-      .map(
-        (group, index) =>
-          `const common${index} = lazy(() => Object.freeze(${JSON.stringify(group)} as const));`,
-      )
-      .join('\n') +
-    `\nconst sets = [${runtimeFactories.join(',\n')}] as const;\nconst propertySets = {\n${runtimeLines.join('\n')}\n} as const;\ntype Name = keyof typeof propertySets;\ntype Values<Key extends Name> = ReturnType<(typeof sets)[(typeof propertySets)[Key]]>;\nexport type SystemValue<Key extends Name> = Extract<Values<Key>[keyof Values<Key>], string>;\nexport function hasSystemProperty(name: string): name is Name { return Object.hasOwn(propertySets, name); }\nexport function getSystemValues(name: Name): Readonly<Record<string, string>> { return sets[propertySets[name]](); }\nexport const systemPropertyNames = lazy(() => Object.freeze(Object.keys(propertySets) as Name[]));\nexport const colorProperties = ${JSON.stringify(colorNames)} as const;\nexport type ColorProperty = (typeof colorProperties)[number];\n`,
+    `/** 可回退到共享 color 主题组的属性；原生值本身无需运行时字典。 */\nexport const colorProperties = ${JSON.stringify(colorNames)} as const;\nexport type ColorProperty = (typeof colorProperties)[number];\n`,
 };
 const destination = resolve(root, 'packages/core/src/css/generated');
 await mkdir(destination, { recursive: true });
@@ -418,5 +324,5 @@ for (const [name, content] of Object.entries(outputs)) {
   else await writeFile(path, formatted);
 }
 console.log(
-  `Generated ${properties.length} properties in ${groups.size} categories, named keyword views and ${colorNames.length} color-compatible properties.`,
+  `Generated ${properties.length} properties in ${groups.size} categories, literal documentation and ${colorNames.length} color-compatible properties.`,
 );

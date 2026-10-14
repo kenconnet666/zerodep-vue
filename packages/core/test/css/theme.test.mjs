@@ -1,12 +1,22 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { shallowRef, ref, createSSRApp, defineComponent, h } from 'vue';
+import {
+  shallowRef,
+  ref,
+  toRef,
+  isRef,
+  isReadonly,
+  watchSyncEffect,
+  createSSRApp,
+  defineComponent,
+  h,
+} from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { cx, createCssContext, SystemKeywords } from '../../src/index.ts';
 import * as api from '../../src/index.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
 import { binding, template } from '../../src/css/bindings.ts';
-const { keywords, useCss } = createCssContext(new SystemKeywords());
+const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 
@@ -20,12 +30,15 @@ test('theme literals resolve per property and keep shared binding reads and sour
     backgroundColor = { _brand: 'black' };
   }
   const source = shallowRef(new Specific());
-  const { useCss, keywords } = createCssContext(source);
+  const { useCss, useTheme } = createCssContext(source);
   const s = useCss();
+  const theme = useTheme();
   const style = s.color('_brand').backgroundColor('_brand');
   assert.deepEqual(Object.values(resolveClass(style).variables), ['red', 'black']);
   assert.deepEqual(
-    Object.values(resolveClass(s.backgroundColor(keywords.color._brand)).variables),
+    Object.values(
+      resolveClass(s.backgroundColor(binding(() => theme.value.color._brand))).variables,
+    ),
     ['red'],
   );
   let reads = 0;
@@ -67,8 +80,11 @@ test('typed theme hooks isolate nested providers, independent contexts and SSR r
   assert.throws(() => theme.provideTheme(new Theme()), /setup/);
   const Leaf = defineComponent(() => {
     const s = theme.useCss();
+    const mapping = theme.useTheme();
     const other = independent.useCss();
     const style = s.color('_brand');
+    assert.deepEqual(Object.values(resolveClass(style).variables), [mapping.value.color._brand]);
+    assert.equal(independent.useTheme().value.color._brand, 'red');
     return () =>
       h(
         'span',
@@ -100,11 +116,12 @@ test('typed theme hooks isolate nested providers, independent contexts and SSR r
 });
 
 test('immutable authors and ordinary named collections compose through cx without legacy APIs', () => {
-  const styles = { root: s.display(keywords.display.flex), active: s.opacity(0.5) };
+  const styles = { root: s.display('flex'), active: s.opacity(0.5) };
   assert.equal(typeof useCss, 'function');
   assert.equal(typeof cx, 'function');
   assert.equal('css' in api, false);
   assert.equal('useCss' in api, false);
+  assert.equal('useTheme' in api, false);
   assert.equal('keywords' in api, false);
   assert.equal('keywords' in s, false);
   const result = resolveClass(cx(styles.root, styles.active));
@@ -112,32 +129,23 @@ test('immutable authors and ordinary named collections compose through cx withou
   assert(result.cssText.includes('opacity:0.5'));
 });
 
-test('system keywords stay available beside typed theme members and remain literal values', () => {
+test('native CSS literals need no named keyword view or variable output', () => {
   const themedContext = createCssContext(new Theme());
   const themed = themedContext.useCss();
-  const themedKeywords = themedContext.keywords;
   const style = resolveClass(
-    themed
-      .display(themedKeywords.display.flex)
-      .color(themedKeywords.color.currentColor)
-      .width(themedKeywords.width.initial)
-      .transformStyle(themedKeywords.transformStyle.preserve3d),
+    themed.display('flex').color('currentColor').width('initial').transformStyle('preserve-3d'),
   );
   assert(style.cssText.includes('display:flex'));
   assert(style.cssText.toLowerCase().includes('color:currentcolor'));
   assert(style.cssText.includes('width:initial'));
   assert(style.cssText.includes('transform-style:preserve-3d'));
-  assert.equal(keywords.transformStyle['preserve-3d'], undefined);
   assert(
-    resolveClass(s.WebkitTransformStyle(keywords.WebkitTransformStyle.preserve3d)).cssText.includes(
+    resolveClass(s.WebkitTransformStyle('preserve-3d')).cssText.includes(
       '-webkit-transform-style:preserve-3d',
     ),
   );
-  for (const group of Object.values(keywords))
-    for (const member of Object.keys(group)) assert.match(member, /^[A-Za-z_$][\w$]*$/);
   assert.deepEqual(style.variables, {});
-  assert.equal(themedKeywords.color._brand, themedKeywords.color._brand);
-  assert.equal(keywords.width.nonexistent, undefined);
+  assert.equal('keywords' in themedContext, false);
 });
 
 test('predefined themes switch through one Ref while other regions keep their own source', () => {
@@ -149,10 +157,7 @@ test('predefined themes switch through one Ref while other regions keep their ow
   const source = shallowRef(themes.light);
   const themedContext = createCssContext(source);
   const themed = themedContext.useCss();
-  const themedKeywords = themedContext.keywords;
-  const style = themed
-    .color(themedKeywords.color._brand)
-    .backgroundColor(themedKeywords.color._accent);
+  const style = themed.color('_brand').backgroundColor('_accent');
   const first = resolveClass(style);
   assert.deepEqual(Object.values(first.variables), ['red', 'orange']);
   source.value = themes.dark;
@@ -161,10 +166,7 @@ test('predefined themes switch through one Ref while other regions keep their ow
   assert.deepEqual(Object.values(second.variables), ['blue', 'purple']);
   const otherContext = createCssContext(themes.light);
   const other = otherContext.useCss();
-  const otherKeywords = otherContext.keywords;
-  assert.deepEqual(Object.values(resolveClass(other.color(otherKeywords.color._brand)).variables), [
-    'red',
-  ]);
+  assert.deepEqual(Object.values(resolveClass(other.color('_brand')).variables), ['red']);
   source.value = themes.light;
   assert.deepEqual(Object.values(resolveClass(style).variables), ['red', 'orange']);
 });
@@ -175,13 +177,8 @@ test('normal class inheritance retains members and invalid source definitions ar
   }
   const themedContext = createCssContext(new Extended());
   const themed = themedContext.useCss();
-  const themedKeywords = themedContext.keywords;
   assert.deepEqual(
-    Object.values(
-      resolveClass(
-        themed.color(themedKeywords.color._brand).borderColor(themedKeywords.color._danger),
-      ).variables,
-    ),
+    Object.values(resolveClass(themed.color('_brand').borderColor('_danger')).variables),
     ['red', 'crimson'],
   );
   assert.throws(() => createCssContext(), /真实主题实例/);
@@ -190,7 +187,10 @@ test('normal class inheritance retains members and invalid source definitions ar
   }
   const invalid = createCssContext(new Invalid());
   assert.throws(() => invalid.useCss().color('_missing'), /不能覆盖系统关键字/);
-  assert.throws(() => resolveClass(themed.color(themedKeywords.color._missing)), /当前主题缺少/);
+  assert.throws(() => themed.color('_missing'), /没有关键字/);
+  const style = themed.color('_brand');
+  themedContext.useTheme().value.color = { _danger: 'crimson' };
+  assert.throws(() => resolveClass(style), /当前主题缺少 color._brand/);
 });
 
 test('contexts defer unused groups and reuse provided source authors without creating the fallback', async () => {
@@ -213,8 +213,10 @@ test('contexts defer unused groups and reuse provided source authors without cre
   assert.equal(fallbackReads, 0);
   const source = shallowRef(new Theme());
   const authors = [];
+  const mappings = [];
   const Leaf = defineComponent(() => {
     authors.push(context.useCss());
+    mappings.push(context.useTheme());
     return () => h('span', 'leaf');
   });
   const Region = defineComponent(() => {
@@ -225,6 +227,8 @@ test('contexts defer unused groups and reuse provided source authors without cre
     createSSRApp(defineComponent(() => () => h('main', [h(Region), h(Region)]))),
   );
   assert(authors.every((author) => author === authors[0]));
+  assert(mappings.every((mapping) => mapping === mappings[0]));
+  assert.equal(mappings[0].value, source.value);
   assert.equal(fallbackReads, 0);
   assert.equal(unusedReads, 0);
   const first = context.useCss();
@@ -232,4 +236,70 @@ test('contexts defer unused groups and reuse provided source authors without cre
   assert.equal(fallbackReads, 0);
   assert.deepEqual(Object.values(resolveClass(first.color('_brand')).variables), ['red']);
   assert.equal(unusedReads, 0);
+});
+
+test('useTheme exposes the original mapping through a stable readonly Ref and tracks replacement', () => {
+  const plain = new Theme();
+  const plainContext = createCssContext(plain);
+  const plainMapping = plainContext.useTheme();
+  assert.equal(plainMapping, plainContext.useTheme());
+  assert.equal(plainMapping.value, plain);
+  assert(isRef(plainMapping));
+  assert(isReadonly(plainMapping));
+  assert.throws(() => {
+    plainMapping.value = new Theme();
+  }, TypeError);
+  plain.color._brand = 'blue';
+  assert.equal(plainMapping.value.color._brand, 'blue');
+
+  const first = new Theme();
+  const source = shallowRef(first);
+  const context = createCssContext(source);
+  const mapping = context.useTheme();
+  const seen = [];
+  const stop = watchSyncEffect(() => seen.push(mapping.value.color._accent.value));
+  try {
+    first.color._accent.value = 'gold';
+    const next = new Theme();
+    next.color._accent.value = 'purple';
+    source.value = next;
+    first.color._accent.value = 'unused';
+    next.color._accent.value = 'green';
+    assert.deepEqual(seen, ['orange', 'gold', 'purple', 'green']);
+    assert.equal(mapping.value, next);
+    assert.equal(mapping, context.useTheme());
+  } finally {
+    stop();
+  }
+});
+
+test('theme entries defer source reads, retry invalid sources and share only current consumption', () => {
+  let sourceReads = 0;
+  let sourceValue;
+  const source = toRef(() => {
+    sourceReads++;
+    return sourceValue;
+  });
+  const context = createCssContext(source);
+  const s = context.useCss();
+  const mapping = context.useTheme();
+  assert.equal(sourceReads, 0);
+  assert.throws(() => mapping.value, /真实主题实例/);
+  sourceValue = new Theme();
+  let reads = 0;
+  Object.defineProperty(sourceValue.color, '_brand', {
+    get() {
+      reads++;
+      return 'red';
+    },
+  });
+  const style = s.color('_brand').backgroundColor('_brand').borderColor('_brand');
+  assert.equal(reads, 0);
+  assert.deepEqual(Object.values(resolveClass(style).variables), ['red', 'red', 'red']);
+  assert.equal(reads, 1);
+  resolveClass(style);
+  assert.equal(reads, 2);
+  assert.equal(mapping.value, sourceValue);
+  sourceValue = { color: { _brand: 'wrong' } };
+  assert.throws(() => resolveClass(style), /真实主题实例/);
 });

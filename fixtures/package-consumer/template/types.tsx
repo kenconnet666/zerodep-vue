@@ -14,9 +14,9 @@ import {
   cx,
 } from '@zerodep-vue/core';
 
-import type { Css, CssInput, KeywordView } from '@zerodep-vue/core';
-import { Field, Palette, palettes, themed, themedKeywords } from './App';
-const { keywords, useCss } = createCssContext(new SystemKeywords());
+import type { Css, CssInput } from '@zerodep-vue/core';
+import { Field, Palette, palettes, themed, theme } from './App';
+const { useCss } = createCssContext(new SystemKeywords());
 
 // UI 不提供第三方代理入口；显式安装的 peer 声明必须在消费者中独立可用。
 // @ts-expect-error Zod 从 zod 直接导入。
@@ -62,20 +62,21 @@ const writable = computed({
 export const input = <Field model={writable} />;
 // @ts-expect-error 公布的声明仍拒绝 getter-only computed 进入可编辑 Ref。
 export const readonlyInput = <Field model={computed(() => value.value)} />;
-// @ts-expect-error 系统关键字不能用于不兼容属性。
-s.padding(keywords.display.flex);
+// @ts-expect-error 封闭属性不能接收不兼容的原生值。
+s.boxSizing('flex');
 // @ts-expect-error 业务主题成员不能退化成任意字符串。
-themedKeywords.color._missing;
+theme.value.color._missing;
+// @ts-expect-error 只读映射入口不能替换主题来源。
+theme.value = new Palette();
 
-const display = keywords.display.flex; /*hover:flex*/
-const brand = themedKeywords.color._brand; /*hover:brand*/
+const display = 'flex';
+const brand = '_brand';
+const mappedBrand = theme.value.color._brand; /*hover:brand*/
+themed.variable('--brand', bind(theme.value.color._brand));
 export const literalStyles = s
   .font('inherit')
   // literal:font
   .select(':hover', s.display('inline-flex')); // literal:display
-export const transform = keywords.transformStyle.preserve3d; /*hover:preserve3d*/
-// @ts-expect-error 规范化成员只保留点访问拼写；CSS 字符串仍可使用 preserve-3d。
-keywords.transformStyle['preserve-3d'];
 export function expressionLiterals<T extends Palette>(s: Css<T>, active: boolean) {
   return (
     s
@@ -90,23 +91,20 @@ export function expressionLiterals<T extends Palette>(s: Css<T>, active: boolean
       .color('_brand') // literal:themeBrand
   );
 }
-themed.display(display).color(brand).select(':hover', themed.color(themedKeywords.color._brand));
+themed.display(display).color(brand).select(':hover', themed.color('_brand'));
 // @ts-expect-error 默认作者只声明系统关键字，业务主题值使用对应的泛型作者入口。
 s.color(brand);
 // 不同作者生成的 class 仍可直接组合。
 cx(themed.color(brand), s.padding(4));
 
-export function reusable<T extends Palette>(
-  s: Css<T>,
-  keywords: KeywordView<T>,
-  external?: CssInput,
-) {
-  const genericBrand = keywords.color._brand; /*hover:genericBrand*/
-  const genericFlex = keywords.display.flex; /*hover:genericFlex*/
-  const named = { root: s.color(genericBrand).display(genericFlex), active: s.color(genericBrand) };
+export function mappedValue<T extends Palette>(theme: Readonly<Ref<T>>) {
+  return theme.value.color._brand; /*hover:genericBrand*/
+}
+export function reusable<T extends Palette>(s: Css<T>, external?: CssInput) {
+  const named = { root: s.color('_brand').display('flex'), active: s.color('_brand') };
   const nested = s
-    .select(':hover', [named.active, s.color(genericBrand)])
-    .select('@media (width < 600px)', s.display(genericFlex));
+    .select(':hover', [named.active, s.color('_brand')])
+    .select('@media (width < 600px)', s.display('flex'));
   return cx(named.root, nested, external);
 }
 const List = _component(

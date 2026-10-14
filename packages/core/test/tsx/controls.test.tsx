@@ -20,7 +20,7 @@ import type { TextInputHandle } from '../../../../fixtures/controls/TextInput.ts
 import { ThemeRegion } from '../../../../fixtures/controls/ThemeRegion.tsx';
 import {
   ControlTheme,
-  keywords,
+  useTheme,
   provideTheme,
   useCss as useControlCss,
 } from '../../../../fixtures/controls/theme.ts';
@@ -192,13 +192,14 @@ test('fixture provider follows replaced objects and Ref containers through neste
   document.body.append(portal);
   const Leaf = _component(() => {
     const s = useControlCss();
+    const theme = useTheme();
     return (
       <>
         <span data-test="regional" class={s.color('_brand')}>
           区域
         </span>
-        <span data-test="explicit" class={s.color(keywords.color._brand)}>
-          固定来源
+        <span data-test="mapping" class={s.color(bx(theme.value.color._brand))}>
+          区域映射
         </span>
         <Teleport to={portal}>
           <span data-test="portal" class={s.color('_brand')}>
@@ -225,7 +226,7 @@ test('fixture provider follows replaced objects and Ref containers through neste
       expect(regional.attributes('style')).toContain(value);
       expect(portal.querySelector('span')?.getAttribute('style')).toContain(value);
       expect(wrapper.get('[data-test=nested]').attributes('style')).toContain('purple');
-      expect(wrapper.get('[data-test=explicit]').attributes('style')).toContain('rgb(37, 99, 235)');
+      expect(wrapper.get('[data-test=mapping]').attributes('style')).toContain(value);
       expect(regional.attributes('class')).toBe(className);
       expect(host.stats().activeRules).toBe(rules);
     };

@@ -26,7 +26,7 @@ assert.equal(
   false,
   'Application hooks must not compete with core auto-imports.',
 );
-assert.equal('keywords' in cjsCore, false, 'Keyword views belong to an explicit CSS context.');
+assert.equal('keywords' in cjsCore, false, 'CSS authoring uses literals, not keyword views.');
 assert.equal(cjsCore.cx, cx);
 assert.equal(cjsCore.createCssContext, createCssContext);
 for (const entry of ['vite', 'runtime', 'hmr', 'devtools'])

@@ -6,12 +6,13 @@ import { TextInput } from '../../controls/TextInput.tsx';
 import type { TextInputHandle } from '../../controls/TextInput.tsx';
 import { ThemeRegion } from '../../controls/ThemeRegion.tsx';
 import { ControlTheme } from '../../controls/theme.ts';
-import { keywords, useCss as useControlCss } from '../../controls/theme.ts';
-import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
+import { useTheme, useCss as useControlCss } from '../../controls/theme.ts';
+import { bx, createCssContext, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
-export const explicitThemeStyle = useControlCss().backgroundColor(keywords.color._brand);
+const theme = useTheme();
+export const mappedThemeStyle = useControlCss().backgroundColor(bx(theme.value.color._brand));
 export const controls = (
   <>
     <Button

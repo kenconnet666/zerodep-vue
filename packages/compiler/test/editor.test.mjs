@@ -114,7 +114,6 @@ export const ordinaryObject = { font: 'inherit' }; // literal:ordinary
 import { bx as bind, keyframes, globalCss } from '@zerodep-vue/core';
 import * as cssTools from '@zerodep-vue/core';
 import { AppTheme } from './theme-types';
-import type { KeywordView } from '@zerodep-vue/core';
 
 declare const active: boolean;
 declare const business: string;
@@ -134,10 +133,10 @@ s.transformStyle('preserve-3d'); // literal:transform
 s.pointerEvents('visibleFill'); // literal:pointer
 s.touchAction('pan-up'); // literal:touch
 s.maxWidth('none'); // literal:maximum
-function genericTheme<T extends AppTheme>(s: Css<T>, keywords: KeywordView<T>) {
-  s.display(bind(active ? 'none' : 'inline-flex')).color(keywords.color._brand); // literal:genericTheme
+function genericTheme<T extends AppTheme>(s: Css<T>) {
+  s.display(bind(active ? 'none' : 'inline-flex')).color('_brand'); // literal:genericTheme
   // @ts-expect-error 表达式增强不改变泛型 T 的属性边界。
-  s.padding(keywords.color._brand);
+  s.padding('_brand');
 }
 class ExtendedTheme extends AppTheme {
   override readonly color = {
@@ -146,8 +145,8 @@ class ExtendedTheme extends AppTheme {
     _danger: 'red',
   };
 }
-function inheritedTheme<T extends ExtendedTheme>(s: Css<T>, keywords: KeywordView<T>) {
-  return s.color(keywords.color._danger).backgroundColor(keywords.color._brand);
+function inheritedTheme<T extends ExtendedTheme>(s: Css<T>) {
+  return s.color('_danger').backgroundColor('_brand');
 }
 function themeLiterals<T extends ExtendedTheme>(s: Css<T>) {
   s.backgroundColor('_brand'); // theme:brand
@@ -298,22 +297,6 @@ s.boxSizing('not-a-box-model' as const);
         assert(!completions.entries.some((item) => item.name === 'border-box'));
       } else assert.deepEqual(completions, native);
     }
-    const namedEnd = source.indexOf('// member:inlineFlex');
-    const namedPosition = source.lastIndexOf('inlineFlex', namedEnd);
-    const namedHover = service.getQuickInfoAtPosition(filename, namedPosition);
-    assert(/\p{Script=Han}/u.test(ts.displayPartsToString(namedHover?.documentation)));
-    const namedDefinitions = service.getDefinitionAtPosition(filename, namedPosition);
-    assert.equal(namedDefinitions?.length, 1);
-    assert(
-      namedDefinitions[0].fileName.replaceAll('\\', '/').endsWith('/generated/keyword-views.ts'),
-    );
-    const inheritEnd = source.indexOf('// member:inherit');
-    const inheritPosition = source.lastIndexOf('inherit', inheritEnd);
-    const sharedDefinitions = service.getDefinitionAtPosition(filename, inheritPosition);
-    assert.equal(sharedDefinitions?.length, 1);
-    assert(
-      sharedDefinitions[0].fileName.replaceAll('\\', '/').endsWith('/generated/literal-values.ts'),
-    );
     assert.match(
       ts.resolveJSModule('@zerodep-vue/compiler/src/editor/plugin.cjs', root, ts.sys),
       /plugin\.cjs$/,
@@ -323,8 +306,7 @@ s.boxSizing('not-a-box-model' as const);
       ['_danger', '危险操作'],
     ]) {
       const position =
-        source.indexOf('keywords.color.' + member, source.indexOf('function inheritedTheme')) +
-        'keywords.color.'.length;
+        source.indexOf("'" + member + "'", source.indexOf('function inheritedTheme')) + 2;
       assert(
         ts
           .displayPartsToString(enhanced.getQuickInfoAtPosition(filename, position)?.documentation)

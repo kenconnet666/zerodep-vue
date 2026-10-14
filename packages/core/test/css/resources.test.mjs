@@ -3,7 +3,7 @@ import test from 'node:test';
 import { createCssContext, SystemKeywords, keyframes, cx } from '../../src/index.ts';
 import { binding, template } from '../../src/css/bindings.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
-const { keywords, useCss } = createCssContext(new SystemKeywords());
+const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 
@@ -34,7 +34,7 @@ test('plain CSS custom properties retain native fallbacks and condition composit
       .select(':hover', s.variable('--control-opacity', 1))
       .select('@starting-style', s.variable('--control-color', 'blue'))
       .select(':nth-child(2n)', s.variable('--control-gap', '4px'))
-      .select('@supports (display: grid)', s.display(keywords.display.grid)),
+      .select('@supports (display: grid)', s.display('grid')),
   );
   assert(resolved.cssText.includes('--control-color:green'));
   assert(resolved.cssText.includes('color:var(--control-color, red)'));
@@ -51,12 +51,17 @@ test('plain custom properties share dynamic and inherited theme resolution', () 
   }
   const themedContext = createCssContext(new Theme());
   const themed = themedContext.useCss();
-  const keywords = themedContext.keywords;
+  const theme = themedContext.useTheme();
   let padding = '12px';
-  const style = themed.variable('--card-accent', keywords.color._brand).variable(
-    '--card-padding',
-    binding(() => padding),
-  );
+  const style = themed
+    .variable(
+      '--card-accent',
+      binding(() => theme.value.color._brand),
+    )
+    .variable(
+      '--card-padding',
+      binding(() => padding),
+    );
   const first = resolveClass(style);
   assert.deepEqual(Object.values(first.variables), ['purple', '12px']);
   padding = 'initial';

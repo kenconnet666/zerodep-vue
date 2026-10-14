@@ -7,7 +7,7 @@ import type { ClassPart, ClassValue, CssClass, Declaration } from './style-value
 import { BINDING, TEMPLATE, isBinding, isTemplate } from './bindings.ts';
 import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
 import { declarationValue, inheritsVariables, scopedSelector, validateFragment } from './syntax.ts';
-import { KEYWORD, THEME, isKeyword, isThemeReference } from './tokens.ts';
+import { THEME, isThemeReference } from './tokens.ts';
 import type { ThemeReference } from './tokens.ts';
 import { ANIMATION, isAnimation } from './animation-token.ts';
 import type { CssAnimation } from './animation-token.ts';
@@ -84,7 +84,6 @@ export function propertyName(property: string): string {
 }
 
 function scalar(value: unknown, property?: string, checkSyntax = true): string {
-  if (isKeyword(value)) value = value[KEYWORD].value;
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) throw new Error(`CSS ${property ?? '片段'} 不能使用非有限数字。`);
     const normalized = property?.replace(
@@ -187,7 +186,7 @@ export function resolveClass(
       try {
         let value = isThemeReference(input) ? input[THEME].read() : input[BINDING]();
         if (isThemeReference(value) || isBinding(value)) value = read(value);
-        reads.set(input, isKeyword(value) ? value[KEYWORD].value : value);
+        reads.set(input, value);
       } finally {
         evaluating.delete(input);
       }

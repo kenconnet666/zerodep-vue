@@ -2,15 +2,15 @@
 
 作者写法仍是 `const s = useCss()`、`s.color('_brand')`、`cx(...)` 和 `bx(...)`。先区分输入检查与运行时描述，再阅读求值和 VNode 生命周期，不需要从生成文件开始。
 
-| 位置                           | 负责什么                                         | 不负责什么                     |
-| ------------------------------ | ------------------------------------------------ | ------------------------------ |
-| types.ts                       | 属性输入、主题名称、关键字视图与上下文的类型契约 | 不创建对象或缓存               |
-| style-value.ts                 | CssClass、声明、组合输入和稳定描述登记           | 不校验主题泛型                 |
-| tokens.ts / bindings.ts        | 系统/主题/动态值的运行时标记与读取协议           | 不订阅 Vue，也不插入 CSS       |
-| author.ts                      | 共享不可变前缀，追加声明                         | 不再保存主题视图或携带主题泛型 |
-| theme.ts                       | 来源校验、按需关键字视图、区域注入与作者复用     | 不跨请求保存主题当前值         |
-| composition.ts / resolve.ts    | 有序覆盖、必要值的读取、规则与变量输出           | 不拥有 DOM 或组件生命周期      |
-| host.ts / vnode.ts / global.ts | 样式宿主、实际消费与释放                         | 不重新决定作者类型约束         |
+| 位置                           | 负责什么                                            | 不负责什么                     |
+| ------------------------------ | --------------------------------------------------- | ------------------------------ |
+| types.ts                       | 属性输入、主题名称与上下文的类型契约                | 不创建对象或缓存               |
+| style-value.ts                 | CssClass、声明、组合输入和稳定描述登记              | 不校验主题泛型                 |
+| tokens.ts / bindings.ts        | 内部主题引用与动态值的运行时标记和读取协议          | 不订阅 Vue，也不插入 CSS       |
+| author.ts                      | 共享不可变前缀，追加声明                            | 不再保存主题视图或携带主题泛型 |
+| theme.ts                       | 直接查主题组、useTheme 原始映射、区域注入与作者复用 | 不跨请求保存主题当前值         |
+| composition.ts / resolve.ts    | 有序覆盖、必要值的读取、规则与变量输出              | 不拥有 DOM 或组件生命周期      |
+| host.ts / vnode.ts / global.ts | 样式宿主、实际消费与释放                            | 不重新决定作者类型约束         |
 
 ## 两个容易混淆的类型
 
@@ -35,4 +35,15 @@ type PropertyInput<Key extends PropertyName, T extends SystemKeywords, Value> = 
 
 组合先确定后项覆盖，仅为判断 undefined 回退读取必要候选。解析阶段再组装完整 CSS 值和变量；不能改为先求值所有绑定再做覆盖。主题、绑定、动画与缓存的对象身份也不能在整理时丢失。
 
-generated/ 中的声明、中文说明和属性方法由 scripts/css/generate.mjs 生成。维护生成器与对应类型契约，不手改生成结果；type-only 导入形成的类型引用不会给运行时增加加载依赖。
+## 生成文件只保留四种职责
+
+generated/ 由 scripts/css/generate.mjs 生成，不手改结果：
+
+- author.ts：真实的属性方法，参数统一交给 PropertyInput 检查。
+- system.ts：SystemKeywords 主题扩展基类，declare 属性槽不创建空对象。
+- literal-values.ts：原生字面量声明与中文说明，PropertyValues 汇总各属性的原生输入值域。
+- metadata.ts：72 个可以使用共享 color 主题组的属性，同时提供运行时列表和类型联合。
+
+不再生成 keywords 字典或 keyword-views 类型。原生 'inline-flex' 直接使用；'_brand' 直接查来源的属性组，只有颜色属性可以回退到 color 组。内部 ThemeReference 只负责延迟读取，公开输入不再接受它。useTheme() 返回当前区域原始主题的只读 Ref 入口；成员是否响应式由来源决定，动态样式通过 bx 显式读取。
+
+type-only 导入不会给运行时增加加载依赖。literal-values.ts 中看似对象的接口仅用于类型、说明和导航，不实例化系统值表。

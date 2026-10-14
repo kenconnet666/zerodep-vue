@@ -9,13 +9,13 @@ import {
   keyframes,
   globalCss,
 } from '@zerodep-vue/core';
-const { keywords, useCss } = createCssContext(new SystemKeywords());
+const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 
 export class Palette extends SystemKeywords {
   override readonly color = {
-    /** 消费应用的强调色，保留到泛型关键字视图。 */
+    /** 消费应用的强调色，保留到字面量补全和主题映射。 */
     _brand: '#2563eb',
   };
   constructor(brand = '#2563eb') {
@@ -26,7 +26,7 @@ export class Palette extends SystemKeywords {
 export const palettes = { light: new Palette(), dark: new Palette('#93c5fd') };
 export const themedContext = createCssContext(palettes.light);
 export const themed = themedContext.useCss();
-export const themedKeywords = themedContext.keywords;
+export const theme = themedContext.useTheme();
 
 export interface InputHandle {
   focus(): void;
@@ -57,7 +57,6 @@ export const App = _component(() => {
   const currentPalette = shallowRef(palettes.light);
   const themedContext = createCssContext(currentPalette);
   const themed = themedContext.useCss();
-  const themedKeywords = themedContext.keywords;
   const text = ref('package-state');
   const gap = ref('12px');
   const fade = keyframes({ from: s.opacity(0.5), to: s.opacity(1) });
@@ -66,8 +65,8 @@ export const App = _component(() => {
     <main
       class={themed
         .padding(bx(gap.value))
-        .color(themedKeywords.color._brand)
-        .display(keywords.display.flex)
+        .color('_brand')
+        .display('flex')
         .animationName(fade)
         .animationDuration('1s')
         .select(':hover', themed.color('purple'))}

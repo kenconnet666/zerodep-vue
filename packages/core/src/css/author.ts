@@ -1,7 +1,7 @@
 import { CLASS, markStableParts } from './style-value.ts';
 import type { ClassPart, CssClass, CssNestedInput, Declaration } from './style-value.ts';
 import type { CssCondition, CustomPropertyValue } from './types.ts';
-import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
+import { isThemeReference } from './tokens.ts';
 import type { ThemeResolver } from './tokens.ts';
 import { isBinding, isTemplate } from './bindings.ts';
 import { isAnimation } from './animation-token.ts';
@@ -53,8 +53,7 @@ export class CssAuthor implements CssClass {
     return markStableParts(Object.freeze(next));
   }
 
-  protected write(property: string, input: unknown): this {
-    let value = isKeyword(input) ? input[KEYWORD].value : input;
+  protected write(property: string, value: unknown): this {
     if (value === undefined) return this;
     const themed = !property.startsWith('--');
     if (themed && typeof value === 'string' && value.startsWith('_'))

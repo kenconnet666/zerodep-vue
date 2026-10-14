@@ -1,7 +1,7 @@
 import { SystemKeywords, createCssContext, cx, bx } from '@zerodep-vue/core';
 import type { Css, CssInput } from '@zerodep-vue/core';
 import { shallowRef } from 'vue';
-const { keywords, useCss } = createCssContext(new SystemKeywords());
+const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 
@@ -29,17 +29,16 @@ selectTheme(themes.dark);
 selectTheme(new SystemKeywords());
 export const appTheme = createCssContext(source);
 export const themed = appTheme.useCss();
-export const themedKeywords = appTheme.keywords;
+export const theme = appTheme.useTheme();
 export const inferredContext = createCssContext(new AppTheme());
 export const inferred = inferredContext.useCss();
-export const inferredKeywords = inferredContext.keywords;
 export const styles = themed
-  .display(themedKeywords.display.flex)
-  .color(themedKeywords.color._brand)
-  .backgroundColor(themedKeywords.color._brand)
-  .borderColor(inferredKeywords.color._brand)
-  .padding(themedKeywords.padding._control)
-  .select(':hover', themed.color(themedKeywords.color._brand));
+  .display('flex')
+  .color('_brand')
+  .backgroundColor('_brand')
+  .borderColor('_brand')
+  .padding('_control')
+  .select(':hover', themed.color('_brand'));
 cx(styles);
 // @ts-expect-error 泛型不能替代真实来源。
 createCssContext<AppTheme>();
@@ -47,14 +46,14 @@ createCssContext<AppTheme>();
 useCss<AppTheme>();
 // @ts-expect-error 区域覆盖必须保持相同主题约定。
 appTheme.provideTheme(new SystemKeywords());
-// @ts-expect-error 系统基类没有业务主题名。
-keywords.color._brand;
+// @ts-expect-error 系统基类的映射没有业务主题名。
+createCssContext(new SystemKeywords()).useTheme().value.color._brand;
 // @ts-expect-error 成员名不能被任意索引吞掉。
-themedKeywords.color._missing;
-// @ts-expect-error 颜色主题引用不能用作间距。
-themed.padding(themedKeywords.color._brand);
-// @ts-expect-error 系统关键字按目标属性的真实值域检查。
-s.padding(keywords.display.flex);
+theme.value.color._missing;
+// @ts-expect-error 封闭属性仍按目标属性的真实值域检查。
+s.boxSizing('flex');
+// @ts-expect-error 映射入口不能替换来源；切换由 source 的拥有者负责。
+theme.value = new AppTheme();
 
 class InvalidTheme extends SystemKeywords {
   override readonly color = { brand: 'red' };
@@ -66,10 +65,7 @@ export const child = new (class extends AppTheme {
 })();
 export const inheritedContext = createCssContext(child);
 export const inherited = inheritedContext.useCss();
-export const inheritedKeywords = inheritedContext.keywords;
-inherited
-  .color(inheritedKeywords.color._brand)
-  .select(':disabled', inherited.color(inheritedKeywords.color._danger));
+inherited.color('_brand').select(':disabled', inherited.color('_danger'));
 
 export function reusable<T extends AppTheme>(s: Css<T>) {
   return s.color(bx('_brand')).select(':hover', s.backgroundColor('_brand')).display('flex');
@@ -87,7 +83,9 @@ themed.padding('_brand');
 themed.backgroundColor('_missing');
 // @ts-expect-error 默认系统作者没有业务主题名。
 s.color('_brand');
-// @ts-expect-error 作者没有关键词成员，显式引用使用独立 keywords。
+// @ts-expect-error 作者没有关键词对象，直接使用字面量。
 s.keywords;
+// @ts-expect-error 上下文也不再提供关键词视图。
+appTheme.keywords;
 // @ts-expect-error 动态绑定中的已知错误主题字面量也被拒绝。
 themed.color(bx('_missing'));

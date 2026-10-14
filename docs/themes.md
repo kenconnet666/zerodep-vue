@@ -1,10 +1,10 @@
 # 系统关键字、继承主题与泛型
 
-core 不导出 useCss 或 keywords，也不创建默认上下文。应用在主题模块创建自己的上下文；只需要系统关键字时传入 new SystemKeywords()。业务主题继承 SystemKeywords，再通过 createCssContext(实例或 Vue Ref) 创建带具体类型的上下文。它提供 useCss、provideTheme 和独立的 keywords 视图；cx、keyframes、globalCss 从根入口独立导入。
+core 不导出默认 useCss/useTheme，也不创建默认上下文。应用在主题模块创建自己的上下文；只需要原生 CSS 值时传入 new SystemKeywords()。业务主题继承 SystemKeywords，再通过 createCssContext(实例或 Vue Ref) 创建带具体类型的上下文。它提供 useCss、provideTheme 和 useTheme；cx、keyframes、globalCss 从根入口独立导入。系统值与主题名统一写字面量，不再提供 keywords 对象视图。
 
-创建上下文只登记来源，默认作者到首次 useCss 时才建立；已有上级覆盖时不会提前创建默认作者。同一个上下文按来源对象/Ref 的身份弱缓存作者，provideTheme 登记后，子树取得同一实例，不反复构造。不同上下文使用独立注入键及缓存。
+创建上下文只登记来源，作者到首次 useCss 时才建立，映射入口到首次 useTheme 时才建立；已有上级覆盖时不会提前创建默认来源。同一个上下文按来源对象/Ref 的身份弱缓存两者，provideTheme 登记后，子树取得同一作者和映射入口。不同上下文使用独立注入键及缓存。
 
-系统关键字表按属性组首次访问创建并共享不可变数据；主题组也按首次访问检查，不为未使用的属性 getter 提前求值。无效来源对象立即报错，无效的主题组或成员在首次使用该组时诊断。SystemKeywords 的属性槽仍为纯类型声明，不为每个实例创建 857 个空对象。
+原生 CSS 字面量无需运行时字典；补全和中文说明保存在生成声明中。主题解析器直接查找实际用到的属性组，按首次访问检查，不为未使用的属性 getter 提前求值。无效来源容器立即报错，Ref 内实例与主题组在实际读取时检查。SystemKeywords 的属性槽仍为纯类型声明，不为每个实例创建 857 个空对象。
 
 ```tsx
 import { shallowRef } from 'vue';
@@ -27,7 +27,7 @@ class AppTheme extends SystemKeywords {
 
 const themes = { light: new AppTheme(), dark: new AppTheme('#93c5fd') };
 const currentTheme = shallowRef(themes.light);
-export const { useCss, provideTheme, keywords } = createCssContext(currentTheme);
+export const { useCss, provideTheme, useTheme } = createCssContext(currentTheme);
 
 const s = useCss();
 const styles = {
@@ -41,7 +41,7 @@ const button = <button class={styles.root}>保存</button>;
 
 ## 区域与请求隔离
 
-主题边界在 setup 调用 provideTheme(区域实例或Ref)，向逻辑子树提供同类型作者；返回值供当前组件使用。子组件调用从同一主题模块导入的 useCss() 获取最近的覆盖。没有覆盖时使用 createCssContext 的默认来源，组件之外也使用默认来源。不同 createCssContext 实例使用不同注入键。
+主题边界在 setup 调用 provideTheme(区域实例或Ref)，向逻辑子树提供同类型来源；返回作者供当前组件使用，当前组件的映射直接读取自己提供的来源。子组件调用同一主题模块的 useCss()/useTheme() 获取最近的祖先覆盖；与 Vue inject 一样，提供者自己的 hooks 仍读取其祖先。没有覆盖时使用 createCssContext 的默认来源，组件之外也使用默认来源。不同 createCssContext 实例使用不同注入键。
 
 应用在创建主题的模块直接解构并导出自己的 useCss，组件使用 import { useCss } from './theme'，然后只写 const s = useCss()，不在组件里调用主题对象的方法。没有 useCss<AppTheme>() 这种缺少真实来源的类型承诺。createCssContext<AppTheme>() 缺少来源也会被拒绝。
 
@@ -49,19 +49,30 @@ const button = <button class={styles.root}>保存</button>;
 
 SSR 的请求专属主题应在请求根 setup 中 provideTheme，或按请求创建上下文；不要让多个请求改写同一个模块级 Ref。Teleport 使用逻辑组件树来源，不依赖原 DOM 祖先，不向全局 body 注入局部主题。嵌套区域可用 computed 选择父级与覆盖来源。
 
-## 字面量与独立关键字视图
+## 字面量与原始主题映射
 
 常规样式使用 s.display('inline-flex').backgroundColor('_brand')。系统字面量保留原生 CSS 值；以 _ 开头的完整属性值是主题名，按目标属性查找，颜色属性同时接受共享 color 组，同名时目标属性自身的成员优先。类型检查会拒绝已知的错误主题字面量；运行时字符串和 bx 的结果也会在消费时校验，不把未知名称静默输出成 CSS。
 
-关键词自动补全、中文说明和定义跳转覆盖普通字面量、bx、条件分支与泛型作者。无需手写 keywords 路径才能获得提示。
+关键词自动补全、中文说明和定义跳转覆盖普通字面量、bx、条件分支与泛型作者。
 
-需要显式引用时使用独立的 keywords，从应用主题模块导入 keywords，该模块从 createCssContext 的结果解构并导出视图。显式引用固定指向创建该视图的来源；区域继承使用 useCss 取得的作者及主题字面量，不用默认来源的显式引用替代区域覆盖。自定义 CSS 变量中的普通字符串保留原值。
+需要对应映射时使用 useTheme()。返回值为 Readonly<Ref<T>>：入口不可写回 .value，主题实例、属性组和成员不复制、不递归冻结或代理。它与 useCss 使用同一来源，并跟随来源 Ref 的替换。成员本身是 Ref 时仍按正常 Vue 语义读取；普通非响应式成员不会凭空获得响应性。
+
+```tsx
+const s = useCss();
+const theme = useTheme();
+const brand = computed(() => theme.value.color._brand);
+
+// 普通属性推荐主题名；自定义变量不做主题名解析，显式读取映射并用 bx 保持更新。
+const style = s.color('_brand').variable('--brand', bx(theme.value.color._brand));
+```
+
+这里的 computed 从 vue 导入，bx 从 core 导入。直接保存 theme.value 或直接把成员值传入样式，遵循普通 JavaScript 当次读取语义；需要跟随替换时在 computed/bx 内读取。自定义 CSS 变量中的普通字符串（包括 '_brand'）保留原值。原 keywords.color._brand 调用迁移到主题名字面量；若需要固定来源或跨属性组的实际值，明确捕获对应来源并通过 bx 读取。
 
 ## 类型与继承
 
-Css<T> 的属性方法和独立 KeywordView<T> 保留同一主题约束。共享工具接收 s: Css<T>，主题 T 可继续 extends AppTheme。组合接收已经检查的 CssClass/CssInput，不重复携带主题泛型，也不依靠全局 module augmentation。
+Css<T> 的属性方法与 useTheme() 的原始映射保留同一主题约束。共享样式工具接收 s: Css<T>，主题 T 可继续 extends AppTheme；需要映射的业务工具可以接收 Readonly<Ref<T>>。组合接收已经检查的 CssClass/CssInput，不重复携带主题泛型，也不依靠全局 module augmentation。
 
-主题成员使用 _ 前缀，系统成员不能被覆盖。颜色主题建议集中放在 color 组，可以用于 color、backgroundColor、borderColor 等 72 个兼容位置，不能作为 padding。系统引用也按目标属性允许的关键字集合检查；普通 CSS 字符串继续可用。
+主题成员使用 _ 前缀，不能覆盖原生 CSS 关键字。颜色主题建议集中放在 color 组，可以用于 color、backgroundColor、borderColor 等 72 个兼容位置，其主题名不能用于 padding。原生值沿用该属性的 csstype 输入边界：封闭属性拒绝错误值，允许自由字符串的属性仍接受字符串；这里没有新增完整 CSS 语法类型检查器。
 
 ```ts
 class DarkTheme extends AppTheme {
@@ -78,7 +89,7 @@ class DarkTheme extends AppTheme {
 
 ## 补全与中文说明
 
-固定生成器覆盖 857 个真实属性方法，按 14 类组织 @category 文档。属性方法说明用途、常用值、规范初始值和易错点，系统/主题成员保留中文 JSDoc。规范化成员使用 inlineFlex、currentColor、revertLayer、preserve3d 等点访问拼写；属性方法的字符串仍接受原生连字符拼写。
+固定生成器覆盖 857 个真实属性方法，按 14 类组织 @category 文档。属性方法说明用途、常用值、规范初始值和易错点，原生字面量与主题成员保留中文 JSDoc。原生值直接使用 'inline-flex'、'currentColor'、'revert-layer'、'preserve-3d' 等 CSS 拼写，不再生成 camelCase 成员映射。
 
 生成器借鉴 zerodep-js 的简短输入别名，属性方法统一使用 PropertyInput；原生数值与自由字符串范围在生成时展开，关键字注释只维护一份，主题名称与 bx 仍参与检查。规范初始值和继承标记取自固定 mdn-data，简写属性展开子属性初始值；数据缺项时明确说明，不混同浏览器默认样式表。
 

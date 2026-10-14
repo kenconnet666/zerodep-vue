@@ -60,11 +60,8 @@ try {
   const text = readFileSync(filename, 'utf8');
   const evidence = {};
   for (const [name, token, member] of [
-    ['flex', 'keywords.display.', 'flex'],
-    ['brand', 'themedKeywords.color.', '_brand'],
-    ['genericBrand', 'keywords.color.', '_brand'],
-    ['genericFlex', 'keywords.display.', 'flex'],
-    ['preserve3d', 'keywords.transformStyle.', 'preserve3d'],
+    ['brand', 'theme.value.color.', '_brand'],
+    ['genericBrand', 'theme.value.color.', '_brand'],
   ]) {
     const marker = text.indexOf(`/*hover:${name}*/`);
     assert(marker > 0, `Missing probe marker ${name}`);

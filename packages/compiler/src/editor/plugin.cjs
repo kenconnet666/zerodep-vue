@@ -104,7 +104,7 @@ module.exports = function init({ typescript: ts }) {
             origin.replace(/author(\.d)?\.ts$/, 'literal-values$1.ts'),
           );
           const dictionary = valuesFile?.statements.find(
-            (node) => ts.isInterfaceDeclaration(node) && node.name.text === 'KeywordValues',
+            (node) => ts.isInterfaceDeclaration(node) && node.name.text === 'PropertyValues',
           );
           const member = dictionary?.members.find(
             (node) => node.name?.getText(valuesFile) === property,

@@ -4,7 +4,7 @@ export { keyframes } from './css/animation.ts';
 export { globalCss } from './css/global.ts';
 export type { Css } from './css/generated/author.ts';
 export { SystemKeywords } from './css/generated/system.ts';
-export type { CssContext, KeywordView, ThemeSource } from './css/types.ts';
+export type { CssContext, ThemeSource } from './css/types.ts';
 export { bx } from './css/bindings.ts';
 export { createCssHost, cssHostKey } from './css/host.ts';
 export { getCssHost } from './css/context.ts';

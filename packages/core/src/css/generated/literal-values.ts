@@ -20041,8 +20041,8 @@ export interface ZoomValues extends CssWideValues {
    */
   readonly reset: 'reset';
 }
-/** 生成时展开非字符串范围，关键词只引用一份说明来源。 */
-export interface KeywordValues {
+/** 各属性的原生输入值域；字面量说明只维护一份。 */
+export interface PropertyValues {
   readonly accentColor: keyof AccentColorValues | undefined | CssString;
   readonly alignContent: keyof AlignContentValues | undefined | CssString;
   readonly alignItems: keyof AlignItemsValues | undefined | CssString;

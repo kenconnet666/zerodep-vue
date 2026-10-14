@@ -1,4 +1,4 @@
-import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
+import { isThemeReference } from './tokens.ts';
 import type { ThemeReference } from './tokens.ts';
 import { isAnimation } from './animation-token.ts';
 import type { CssAnimation } from './animation-token.ts';
@@ -47,7 +47,6 @@ export function bx<const T>(value: T): CssBinding<T> {
 
 /** @internal 按原模板的顺序完成普通片段的字符串转换，绑定仍保持结构化。 */
 export function piece(value: unknown): TemplateInput {
-  if (isKeyword(value)) return value[KEYWORD].value;
   return isInterpolation(value) ? value : `${value}`;
 }
 

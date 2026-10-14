@@ -16,4 +16,4 @@ export class ControlTheme extends SystemKeywords {
 }
 
 /** 应用在主题模块直接导出已绑定的入口，组件不依赖底层上下文对象。 */
-export const { useCss, provideTheme, keywords } = createCssContext(new ControlTheme());
+export const { useCss, provideTheme, useTheme } = createCssContext(new ControlTheme());

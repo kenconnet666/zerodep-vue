@@ -1,6 +1,6 @@
 // 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
 import { THEME_SOURCE } from '../tokens.ts';
-/** 系统关键字的主题扩展边界；子类在属性组中增加 _ 开头的主题成员。 */
+/** 主题扩展基类；属性槽仅作类型声明，子类定义 _ 开头的主题映射。 */
 export class SystemKeywords {
   readonly [THEME_SOURCE] = true as const;
   /**
@@ -8875,4 +8875,3 @@ export class SystemKeywords {
    */
   declare readonly zoom: {};
 }
-export type { SystemViews } from './keyword-views.ts';
