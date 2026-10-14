@@ -191,6 +191,39 @@ try {
     assert(/\p{Script=Han}/u.test(JSON.stringify(completions.items)), JSON.stringify(completions));
     report.checks.push({ name: 'generic-theme-keyword', member, hover, completions });
   }
+  const literalFile = 'fixtures/authoring/src/literal-types.tsx';
+  const literalText = await readFile(resolve(root, literalFile), 'utf8');
+  for (const [marker, value] of [
+    ['font', 'inherit'],
+    ['display', 'inline-flex'],
+  ]) {
+    const end = literalText.indexOf('// literal:' + marker);
+    assert(end > 0);
+    const close = literalText.lastIndexOf("'", end);
+    const index = literalText.lastIndexOf("'", close - 1) + 2;
+    const before = literalText.slice(0, index);
+    const query = {
+      filePath: literalFile,
+      line: before.split('\n').length,
+      column: before.length - before.lastIndexOf('\n'),
+    };
+    const hover = await connection.call('hover', query);
+    const definitions = await connection.call('definitions', query);
+    const completions = await connection.call('completions', {
+      ...query,
+      prefix: value,
+      resolveLimit: 1,
+    });
+    assert(/\p{Script=Han}/u.test(JSON.stringify(hover.contents)));
+    assert(definitions.items.some((entry) => /literal-values\.ts$/.test(entry.filePath)));
+    assert(
+      completions.items.some(
+        (entry) =>
+          entry.label === value && /\p{Script=Han}/u.test(JSON.stringify(entry.documentation)),
+      ),
+    );
+    report.checks.push({ name: 'literal-keyword', value, hover, definitions, completions });
+  }
   await mkdir(resolve(root, 'test-results/language-services'), { recursive: true });
   await writeFile(
     resolve(root, 'test-results/language-services/verification.json'),

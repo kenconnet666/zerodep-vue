@@ -59,3 +59,19 @@ class DarkTheme extends AppTheme {
 当前生成器覆盖 857 个属性，按布局、尺寸、间距、排版等 14 类组织类型与 @category 文档；厂商和历史属性独立归入兼容类，作者对象仍然使用标准 camelCase 属性。关键字类型使用 DisplayKeywords 等语义命名，共享 CSS-wide、命名颜色和系统颜色定义。成员使用 inlineFlex、currentColor、revertLayer 等规范化拼写，不重复提供连字符别名；原生 CSS 字符串继续接受原始拼写。72 个单色兼容属性仍由固定类型数据生成。
 
 属性文档提供中文用途、常用值、规范初始值与对象 API 示例。旧链式示例不进入新声明。源码和生成文件由固定依赖复现，说明与许可来源见 CSS 包的 THIRD_PARTY_NOTICES.md。发布声明中的泛型、成员补全详情及定义跳转由独立包消费者在远程验证。
+
+## 普通字面量的编辑体验
+
+`css({ font: 'inherit', display: 'inline-flex' })`、cx、嵌套条件和泛型作者的普通字符串同样保留属性级候选。生成器通过带中文 JSDoc 的具体值成员及 keyof 连接字面量类型。同名系统成员由关键词视图投影原声明，inherit 等只有一个定义；inline-flex 与 inlineFlex 这类不同拼写保留各自明确的入口。开放字符串和数值范围沿用原属性类型，不为提示放宽封闭属性。
+
+TypeScript 6 的原生服务没有自动为这些字符串候选返回成员注释。包提供编辑器专用的语言服务扩展，按当前 Program 中的真实 CSS 属性类型找到值声明，补充 hover、补全详情和定义位置。它不修改诊断、类型检查或 JavaScript 输出，也不接管普通业务对象。使用包的工程可在 tsconfig 中启用：
+
+```json
+{
+  "compilerOptions": {
+    "plugins": [{ "name": "@zerodep-vue/css/language-service" }]
+  }
+}
+```
+
+本仓库已在 tsconfig.base.json 和独立 LSP 启动配置中启用。编辑器首次加载或更新扩展后，需要重新加载 TypeScript 服务；源码与安装包分别验证，不能把 MCP 的 stdio 成功直接当成 IDE 提示已刷新。声明、注释和扩展不由 CSS 的浏览器运行入口导入。

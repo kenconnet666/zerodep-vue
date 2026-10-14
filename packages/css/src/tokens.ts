@@ -14,6 +14,10 @@ export interface SystemKeyword<
 > {
   readonly [KEYWORD]: { readonly property: Key; readonly value: Value };
 }
+/** 具名视图投影同一份字面量声明，保留 JSDoc 和导航，避免复制第二份同名成员。 */
+export type SystemKeywordView<Values, Key extends PropertyName> = {
+  readonly [Name in keyof Values]: SystemKeyword<Key, Values[Name] & string>;
+};
 /** 主题引用保留真实来源；同名成员不依赖全局“当前主题”。 */
 export interface ThemeReference<
   out Key extends PropertyName = PropertyName,

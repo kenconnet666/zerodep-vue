@@ -3,13 +3,14 @@ import type { CssBinding, CssTemplate, Scalar } from './values.ts';
 import type { AllowedSystem, AllowedTheme, SystemKeyword, ThemeReference } from './tokens.ts';
 import type { SystemKeywords } from './generated/system.ts';
 import type { CssProperties } from './generated/properties.ts';
+import type { KeywordValues } from './generated/literal-values.ts';
 import type { CssAnimation, CssVariable } from './resource-tokens.ts';
 
 export const CLASS = Symbol.for('@zerodep-vue/css/class/v1');
 export type Properties = CSS.Properties<Scalar>;
 export type PropertyName = keyof Properties;
 type InputValue<Key extends PropertyName, T extends SystemKeywords> =
-  | Properties[Key]
+  | KeywordValues[Key]
   | AllowedSystem<Key>
   | AllowedTheme<T, Key>
   | CssVariable

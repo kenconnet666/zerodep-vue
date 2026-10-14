@@ -23,6 +23,10 @@ themedKeywords.color._missing;
 
 const display = keywords.display.flex; /*hover:flex*/
 const brand = themedKeywords.color._brand; /*hover:brand*/
+export const literalStyles = css({
+  font: 'inherit', // literal:font
+  ':hover': { display: 'inline-flex' }, // literal:display
+});
 themed({ display, color: brand, ':hover': { color: themedKeywords.color._brand } });
 // @ts-expect-error 默认作者只声明系统关键字，业务主题值使用对应的泛型作者入口。
 css({ color: brand });

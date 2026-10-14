@@ -140,6 +140,8 @@ function keywordDoc(name, value, color) {
 
 const runtimeSets = [];
 const interfaces = [];
+const literalInterfaces = [];
+const literalProperties = [];
 const slotLines = [];
 const viewLines = [];
 const runtimeLines = [];
@@ -172,33 +174,51 @@ const memberName = (value) =>
   value === 'currentcolor'
     ? 'currentColor'
     : value.replace(/-([a-z])/g, (_match, letter) => letter.toUpperCase());
-const field = (property, value, color) =>
-  jsdoc(keywordDoc(property, value, color)) +
-  `readonly ${JSON.stringify(memberName(value))}: SystemKeyword<Key, ${JSON.stringify(value)}>;`;
-for (const group of commonGroups) {
-  interfaces.push(
-    `export interface ${group.name}<Key extends PropertyName> {\n` +
-      group.values
-        .map((value) => {
-          if (group.name === 'CssWideKeywords') return field('color', value, false);
-          const named = group.name === 'NamedColorKeywords';
-          const description = named
-            ? `CSS 命名颜色 ${value}。`
-            : `CSS 系统颜色 ${value}；实际颜色由浏览器和用户环境决定。`;
-          return (
-            jsdoc(
-              description +
-                (group.name === 'DeprecatedSystemColorKeywords'
-                  ? '\n@deprecated 历史系统颜色；优先使用现代系统颜色。'
-                  : '') +
-                `\n@see https://developer.mozilla.org/docs/Web/CSS/${named ? 'named-color' : 'system-color'}`,
-            ) +
-            `readonly ${JSON.stringify(memberName(value))}: SystemKeyword<Key, ${JSON.stringify(value)}>;`
-          );
-        })
-        .join('\n') +
-      '\n}',
+function keywordView(typeName, literalName, values, parents, comment) {
+  const stable = values.filter((value) => memberName(value) === value);
+  const bases = parents.map((name) => `${name}<Key>`);
+  if (stable.length)
+    bases.push(
+      `SystemKeywordView<Pick<Values.${literalName}, ${stable.map(JSON.stringify).join(' | ')}>, Key>`,
+    );
+  // 同名成员直接投影原声明；只有不同拼写的 camelCase 别名需要自己的适配字段。
+  const aliases = values
+    .filter((value) => memberName(value) !== value)
+    .map(
+      (value) =>
+        comment(value) +
+        `readonly ${JSON.stringify(memberName(value))}: SystemKeyword<Key, ${JSON.stringify(value)}>;`,
+    );
+  return (
+    `export interface ${typeName}<Key extends PropertyName>` +
+    (bases.length ? ' extends ' + bases.join(', ') : '') +
+    ` {\n${aliases.join('\n')}\n}`
   );
+}
+for (const group of commonGroups) {
+  const literalName = group.name.replace(/Keywords$/, 'Values');
+  const commentFor = (value) => {
+    if (group.name === 'CssWideKeywords') {
+      return jsdoc(keywordDoc('color', value, false));
+    }
+    const named = group.name === 'NamedColorKeywords';
+    const description = named
+      ? `CSS 命名颜色 ${value}。`
+      : `CSS 系统颜色 ${value}；实际颜色由浏览器和用户环境决定。`;
+    const comment = jsdoc(
+      description +
+        (group.name === 'DeprecatedSystemColorKeywords'
+          ? '\n@deprecated 历史系统颜色；优先使用现代系统颜色。'
+          : '') +
+        `\n@see https://developer.mozilla.org/docs/Web/CSS/${named ? 'named-color' : 'system-color'}`,
+    );
+    return comment;
+  };
+  const literalFields = group.values.map(
+    (value) => commentFor(value) + `readonly ${JSON.stringify(value)}: ${JSON.stringify(value)};`,
+  );
+  interfaces.push(keywordView(group.name, literalName, group.values, [], commentFor));
+  literalInterfaces.push(`export interface ${literalName} {\n${literalFields.join('\n')}\n}`);
 }
 for (const property of properties) {
   const name = property.name;
@@ -219,15 +239,36 @@ for (const property of properties) {
     group.values.every((value) => values.includes(value)),
   );
   const shared = new Set(common.flatMap((group) => group.values));
-  const fields = Object.values(members)
-    .filter((value) => !shared.has(value))
-    .map((value) => field(name, value, color))
-    .join('\n');
   const typeName = name[0].toUpperCase() + name.slice(1) + 'Keywords';
+  const literalName = name[0].toUpperCase() + name.slice(1) + 'Values';
+  literalInterfaces.push(
+    `export interface ${literalName}` +
+      (common.length
+        ? ' extends ' + common.map((group) => group.name.replace(/Keywords$/, 'Values')).join(', ')
+        : '') +
+      ` {\n${values
+        .filter((value) => !shared.has(value))
+        .map(
+          (value) =>
+            jsdoc(keywordDoc(name, value, color)) +
+            `readonly ${JSON.stringify(value)}: ${JSON.stringify(value)};`,
+        )
+        .join('\n')}\n}`,
+  );
+  // keyof 连接原生字面量声明，同名关键词视图通过同态映射共享这份来源。
+  literalProperties.push(
+    `readonly ${name}: keyof ${literalName} | Exclude<NativeProperties[${JSON.stringify(name)}], string>` +
+      (checker.isTypeAssignableTo(checker.getStringType(), type) ? ' | CssString' : '') +
+      ';',
+  );
   interfaces.push(
-    `export interface ${typeName}<Key extends PropertyName>` +
-      (common.length ? ' extends ' + common.map((group) => `${group.name}<Key>`).join(', ') : '') +
-      ` {\n${fields}\n}`,
+    keywordView(
+      typeName,
+      literalName,
+      Object.values(members).filter((value) => !shared.has(value)),
+      common.map((group) => group.name),
+      (value) => jsdoc(keywordDoc(name, value, color)),
+    ),
   );
   const comment = jsdoc(description(name));
   slotLines.push(comment + `declare readonly ${name}: {};`);
@@ -244,6 +285,11 @@ for (const property of properties) {
   runtimeLines.push(`${JSON.stringify(name)}: sets[${runtimeIndex}],`);
 }
 const outputs = {
+  'literal-values.ts':
+    header +
+    `import type * as CSS from 'csstype';\nimport type { Scalar } from '../values.ts';\ntype NativeProperties = CSS.Properties<Scalar>;\n/** 保留字面量候选，同时接收原属性允许的自由 CSS 字符串。 */\ntype CssString = string & {};\n` +
+    literalInterfaces.join('\n') +
+    `\n/** 普通字符串作者入口：keyof 与同名关键词视图共享声明、注释和导航来源。 */\nexport interface KeywordValues {\n${literalProperties.join('\n')}\n}\n`,
   'system.ts':
     header +
     `import { THEME_SOURCE } from '../tokens.ts';\n` +
@@ -251,7 +297,7 @@ const outputs = {
     `export type { SystemViews } from './keyword-views.ts';\n`,
   'keyword-views.ts':
     header +
-    `import type { PropertyName } from '../types.ts';\nimport type { SystemKeyword } from '../tokens.ts';\n` +
+    `import type { PropertyName } from '../types.ts';\nimport type { SystemKeywordView, SystemKeyword } from '../tokens.ts';\nimport type * as Values from './literal-values.ts';\n` +
     interfaces.join('\n') +
     `\nexport interface SystemViews {\n${viewLines.join('\n')}\n}\n`,
   'properties.ts':

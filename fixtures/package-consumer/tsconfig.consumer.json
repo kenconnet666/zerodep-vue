@@ -11,7 +11,8 @@
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": false,
     "types": ["node"],
-    "noEmit": true
+    "noEmit": true,
+    "plugins": [{ "name": "@zerodep-vue/css/language-service" }]
   },
   "include": ["App.tsx", "types.tsx", "compiler-options.ts"]
 }

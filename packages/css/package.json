@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Runtime CSS values, composition and Vue binding integration.",
   "exports": {
+    "./language-service": "./language-service/index.cjs",
     ".": {
       "zerodep-vue-source": "./src/index.ts",
       "types": "./dist/index.d.ts",
@@ -31,6 +32,7 @@
     }
   },
   "files": [
+    "language-service",
     "dist",
     "CSSTYPE-LICENSE",
     "ZERODEP-JS-LICENSE",

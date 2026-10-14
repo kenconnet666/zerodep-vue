@@ -1,1046 +1,248 @@
 // 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成。说明只进入类型声明。
 import type { PropertyName } from '../types.ts';
-import type { SystemKeyword } from '../tokens.ts';
-export interface CssWideKeywords<Key extends PropertyName> {
+import type { SystemKeywordView, SystemKeyword } from '../tokens.ts';
+import type * as Values from './literal-values.ts';
+export interface CssWideKeywords<Key extends PropertyName> extends SystemKeywordView<
+  Pick<Values.CssWideValues, 'inherit' | 'initial' | 'revert' | 'unset'>,
+  Key
+> {
   /**
    * 旧版 Gecko 的初始值关键字；现代样式优先使用 initial。
    */
   readonly MozInitial: SystemKeyword<Key, '-moz-initial'>;
   /**
-   * 使用父元素该属性的计算值，即使这个属性默认不继承。
-   */
-  readonly inherit: SystemKeyword<Key, 'inherit'>;
-  /**
-   * 使用 CSS 规范定义的初始值，不是浏览器默认样式表给元素设置的值。
-   */
-  readonly initial: SystemKeyword<Key, 'initial'>;
-  /**
-   * 按层叠来源回退该属性，可能恢复用户或浏览器样式；不等同于 initial。
-   */
-  readonly revert: SystemKeyword<Key, 'revert'>;
-  /**
    * 回退当前层叠层对该属性的贡献，让较早层的声明参与决定结果。
    */
   readonly revertLayer: SystemKeyword<Key, 'revert-layer'>;
-  /**
-   * 继承型属性按 inherit 处理，非继承型属性按 initial 处理。
-   */
-  readonly unset: SystemKeyword<Key, 'unset'>;
 }
-export interface NamedColorKeywords<Key extends PropertyName> {
-  /**
-   * CSS 命名颜色 aliceblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly aliceblue: SystemKeyword<Key, 'aliceblue'>;
-  /**
-   * CSS 命名颜色 antiquewhite。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly antiquewhite: SystemKeyword<Key, 'antiquewhite'>;
-  /**
-   * CSS 命名颜色 aqua。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly aqua: SystemKeyword<Key, 'aqua'>;
-  /**
-   * CSS 命名颜色 aquamarine。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly aquamarine: SystemKeyword<Key, 'aquamarine'>;
-  /**
-   * CSS 命名颜色 azure。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly azure: SystemKeyword<Key, 'azure'>;
-  /**
-   * CSS 命名颜色 beige。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly beige: SystemKeyword<Key, 'beige'>;
-  /**
-   * CSS 命名颜色 bisque。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly bisque: SystemKeyword<Key, 'bisque'>;
-  /**
-   * CSS 命名颜色 black。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly black: SystemKeyword<Key, 'black'>;
-  /**
-   * CSS 命名颜色 blanchedalmond。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly blanchedalmond: SystemKeyword<Key, 'blanchedalmond'>;
-  /**
-   * CSS 命名颜色 blue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly blue: SystemKeyword<Key, 'blue'>;
-  /**
-   * CSS 命名颜色 blueviolet。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly blueviolet: SystemKeyword<Key, 'blueviolet'>;
-  /**
-   * CSS 命名颜色 brown。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly brown: SystemKeyword<Key, 'brown'>;
-  /**
-   * CSS 命名颜色 burlywood。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly burlywood: SystemKeyword<Key, 'burlywood'>;
-  /**
-   * CSS 命名颜色 cadetblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly cadetblue: SystemKeyword<Key, 'cadetblue'>;
-  /**
-   * CSS 命名颜色 chartreuse。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly chartreuse: SystemKeyword<Key, 'chartreuse'>;
-  /**
-   * CSS 命名颜色 chocolate。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly chocolate: SystemKeyword<Key, 'chocolate'>;
-  /**
-   * CSS 命名颜色 coral。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly coral: SystemKeyword<Key, 'coral'>;
-  /**
-   * CSS 命名颜色 cornflowerblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly cornflowerblue: SystemKeyword<Key, 'cornflowerblue'>;
-  /**
-   * CSS 命名颜色 cornsilk。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly cornsilk: SystemKeyword<Key, 'cornsilk'>;
-  /**
-   * CSS 命名颜色 crimson。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly crimson: SystemKeyword<Key, 'crimson'>;
-  /**
-   * CSS 命名颜色 cyan。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly cyan: SystemKeyword<Key, 'cyan'>;
-  /**
-   * CSS 命名颜色 darkblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkblue: SystemKeyword<Key, 'darkblue'>;
-  /**
-   * CSS 命名颜色 darkcyan。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkcyan: SystemKeyword<Key, 'darkcyan'>;
-  /**
-   * CSS 命名颜色 darkgoldenrod。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkgoldenrod: SystemKeyword<Key, 'darkgoldenrod'>;
-  /**
-   * CSS 命名颜色 darkgray。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkgray: SystemKeyword<Key, 'darkgray'>;
-  /**
-   * CSS 命名颜色 darkgreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkgreen: SystemKeyword<Key, 'darkgreen'>;
-  /**
-   * CSS 命名颜色 darkgrey。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkgrey: SystemKeyword<Key, 'darkgrey'>;
-  /**
-   * CSS 命名颜色 darkkhaki。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkkhaki: SystemKeyword<Key, 'darkkhaki'>;
-  /**
-   * CSS 命名颜色 darkmagenta。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkmagenta: SystemKeyword<Key, 'darkmagenta'>;
-  /**
-   * CSS 命名颜色 darkolivegreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkolivegreen: SystemKeyword<Key, 'darkolivegreen'>;
-  /**
-   * CSS 命名颜色 darkorange。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkorange: SystemKeyword<Key, 'darkorange'>;
-  /**
-   * CSS 命名颜色 darkorchid。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkorchid: SystemKeyword<Key, 'darkorchid'>;
-  /**
-   * CSS 命名颜色 darkred。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkred: SystemKeyword<Key, 'darkred'>;
-  /**
-   * CSS 命名颜色 darksalmon。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darksalmon: SystemKeyword<Key, 'darksalmon'>;
-  /**
-   * CSS 命名颜色 darkseagreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkseagreen: SystemKeyword<Key, 'darkseagreen'>;
-  /**
-   * CSS 命名颜色 darkslateblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkslateblue: SystemKeyword<Key, 'darkslateblue'>;
-  /**
-   * CSS 命名颜色 darkslategray。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkslategray: SystemKeyword<Key, 'darkslategray'>;
-  /**
-   * CSS 命名颜色 darkslategrey。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkslategrey: SystemKeyword<Key, 'darkslategrey'>;
-  /**
-   * CSS 命名颜色 darkturquoise。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkturquoise: SystemKeyword<Key, 'darkturquoise'>;
-  /**
-   * CSS 命名颜色 darkviolet。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly darkviolet: SystemKeyword<Key, 'darkviolet'>;
-  /**
-   * CSS 命名颜色 deeppink。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly deeppink: SystemKeyword<Key, 'deeppink'>;
-  /**
-   * CSS 命名颜色 deepskyblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly deepskyblue: SystemKeyword<Key, 'deepskyblue'>;
-  /**
-   * CSS 命名颜色 dimgray。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly dimgray: SystemKeyword<Key, 'dimgray'>;
-  /**
-   * CSS 命名颜色 dimgrey。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly dimgrey: SystemKeyword<Key, 'dimgrey'>;
-  /**
-   * CSS 命名颜色 dodgerblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly dodgerblue: SystemKeyword<Key, 'dodgerblue'>;
-  /**
-   * CSS 命名颜色 firebrick。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly firebrick: SystemKeyword<Key, 'firebrick'>;
-  /**
-   * CSS 命名颜色 floralwhite。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly floralwhite: SystemKeyword<Key, 'floralwhite'>;
-  /**
-   * CSS 命名颜色 forestgreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly forestgreen: SystemKeyword<Key, 'forestgreen'>;
-  /**
-   * CSS 命名颜色 fuchsia。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly fuchsia: SystemKeyword<Key, 'fuchsia'>;
-  /**
-   * CSS 命名颜色 gainsboro。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly gainsboro: SystemKeyword<Key, 'gainsboro'>;
-  /**
-   * CSS 命名颜色 ghostwhite。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly ghostwhite: SystemKeyword<Key, 'ghostwhite'>;
-  /**
-   * CSS 命名颜色 gold。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly gold: SystemKeyword<Key, 'gold'>;
-  /**
-   * CSS 命名颜色 goldenrod。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly goldenrod: SystemKeyword<Key, 'goldenrod'>;
-  /**
-   * CSS 命名颜色 gray。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly gray: SystemKeyword<Key, 'gray'>;
-  /**
-   * CSS 命名颜色 green。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly green: SystemKeyword<Key, 'green'>;
-  /**
-   * CSS 命名颜色 greenyellow。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly greenyellow: SystemKeyword<Key, 'greenyellow'>;
-  /**
-   * CSS 命名颜色 grey。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly grey: SystemKeyword<Key, 'grey'>;
-  /**
-   * CSS 命名颜色 honeydew。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly honeydew: SystemKeyword<Key, 'honeydew'>;
-  /**
-   * CSS 命名颜色 hotpink。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly hotpink: SystemKeyword<Key, 'hotpink'>;
-  /**
-   * CSS 命名颜色 indianred。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly indianred: SystemKeyword<Key, 'indianred'>;
-  /**
-   * CSS 命名颜色 indigo。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly indigo: SystemKeyword<Key, 'indigo'>;
-  /**
-   * CSS 命名颜色 ivory。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly ivory: SystemKeyword<Key, 'ivory'>;
-  /**
-   * CSS 命名颜色 khaki。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly khaki: SystemKeyword<Key, 'khaki'>;
-  /**
-   * CSS 命名颜色 lavender。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lavender: SystemKeyword<Key, 'lavender'>;
-  /**
-   * CSS 命名颜色 lavenderblush。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lavenderblush: SystemKeyword<Key, 'lavenderblush'>;
-  /**
-   * CSS 命名颜色 lawngreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lawngreen: SystemKeyword<Key, 'lawngreen'>;
-  /**
-   * CSS 命名颜色 lemonchiffon。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lemonchiffon: SystemKeyword<Key, 'lemonchiffon'>;
-  /**
-   * CSS 命名颜色 lightblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightblue: SystemKeyword<Key, 'lightblue'>;
-  /**
-   * CSS 命名颜色 lightcoral。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightcoral: SystemKeyword<Key, 'lightcoral'>;
-  /**
-   * CSS 命名颜色 lightcyan。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightcyan: SystemKeyword<Key, 'lightcyan'>;
-  /**
-   * CSS 命名颜色 lightgoldenrodyellow。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightgoldenrodyellow: SystemKeyword<Key, 'lightgoldenrodyellow'>;
-  /**
-   * CSS 命名颜色 lightgray。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightgray: SystemKeyword<Key, 'lightgray'>;
-  /**
-   * CSS 命名颜色 lightgreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightgreen: SystemKeyword<Key, 'lightgreen'>;
-  /**
-   * CSS 命名颜色 lightgrey。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightgrey: SystemKeyword<Key, 'lightgrey'>;
-  /**
-   * CSS 命名颜色 lightpink。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightpink: SystemKeyword<Key, 'lightpink'>;
-  /**
-   * CSS 命名颜色 lightsalmon。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightsalmon: SystemKeyword<Key, 'lightsalmon'>;
-  /**
-   * CSS 命名颜色 lightseagreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightseagreen: SystemKeyword<Key, 'lightseagreen'>;
-  /**
-   * CSS 命名颜色 lightskyblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightskyblue: SystemKeyword<Key, 'lightskyblue'>;
-  /**
-   * CSS 命名颜色 lightslategray。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightslategray: SystemKeyword<Key, 'lightslategray'>;
-  /**
-   * CSS 命名颜色 lightslategrey。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightslategrey: SystemKeyword<Key, 'lightslategrey'>;
-  /**
-   * CSS 命名颜色 lightsteelblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightsteelblue: SystemKeyword<Key, 'lightsteelblue'>;
-  /**
-   * CSS 命名颜色 lightyellow。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lightyellow: SystemKeyword<Key, 'lightyellow'>;
-  /**
-   * CSS 命名颜色 lime。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly lime: SystemKeyword<Key, 'lime'>;
-  /**
-   * CSS 命名颜色 limegreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly limegreen: SystemKeyword<Key, 'limegreen'>;
-  /**
-   * CSS 命名颜色 linen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly linen: SystemKeyword<Key, 'linen'>;
-  /**
-   * CSS 命名颜色 magenta。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly magenta: SystemKeyword<Key, 'magenta'>;
-  /**
-   * CSS 命名颜色 maroon。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly maroon: SystemKeyword<Key, 'maroon'>;
-  /**
-   * CSS 命名颜色 mediumaquamarine。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly mediumaquamarine: SystemKeyword<Key, 'mediumaquamarine'>;
-  /**
-   * CSS 命名颜色 mediumblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly mediumblue: SystemKeyword<Key, 'mediumblue'>;
-  /**
-   * CSS 命名颜色 mediumorchid。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly mediumorchid: SystemKeyword<Key, 'mediumorchid'>;
-  /**
-   * CSS 命名颜色 mediumpurple。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly mediumpurple: SystemKeyword<Key, 'mediumpurple'>;
-  /**
-   * CSS 命名颜色 mediumseagreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly mediumseagreen: SystemKeyword<Key, 'mediumseagreen'>;
-  /**
-   * CSS 命名颜色 mediumslateblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly mediumslateblue: SystemKeyword<Key, 'mediumslateblue'>;
-  /**
-   * CSS 命名颜色 mediumspringgreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly mediumspringgreen: SystemKeyword<Key, 'mediumspringgreen'>;
-  /**
-   * CSS 命名颜色 mediumturquoise。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly mediumturquoise: SystemKeyword<Key, 'mediumturquoise'>;
-  /**
-   * CSS 命名颜色 mediumvioletred。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly mediumvioletred: SystemKeyword<Key, 'mediumvioletred'>;
-  /**
-   * CSS 命名颜色 midnightblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly midnightblue: SystemKeyword<Key, 'midnightblue'>;
-  /**
-   * CSS 命名颜色 mintcream。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly mintcream: SystemKeyword<Key, 'mintcream'>;
-  /**
-   * CSS 命名颜色 mistyrose。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly mistyrose: SystemKeyword<Key, 'mistyrose'>;
-  /**
-   * CSS 命名颜色 moccasin。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly moccasin: SystemKeyword<Key, 'moccasin'>;
-  /**
-   * CSS 命名颜色 navajowhite。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly navajowhite: SystemKeyword<Key, 'navajowhite'>;
-  /**
-   * CSS 命名颜色 navy。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly navy: SystemKeyword<Key, 'navy'>;
-  /**
-   * CSS 命名颜色 oldlace。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly oldlace: SystemKeyword<Key, 'oldlace'>;
-  /**
-   * CSS 命名颜色 olive。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly olive: SystemKeyword<Key, 'olive'>;
-  /**
-   * CSS 命名颜色 olivedrab。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly olivedrab: SystemKeyword<Key, 'olivedrab'>;
-  /**
-   * CSS 命名颜色 orange。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly orange: SystemKeyword<Key, 'orange'>;
-  /**
-   * CSS 命名颜色 orangered。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly orangered: SystemKeyword<Key, 'orangered'>;
-  /**
-   * CSS 命名颜色 orchid。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly orchid: SystemKeyword<Key, 'orchid'>;
-  /**
-   * CSS 命名颜色 palegoldenrod。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly palegoldenrod: SystemKeyword<Key, 'palegoldenrod'>;
-  /**
-   * CSS 命名颜色 palegreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly palegreen: SystemKeyword<Key, 'palegreen'>;
-  /**
-   * CSS 命名颜色 paleturquoise。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly paleturquoise: SystemKeyword<Key, 'paleturquoise'>;
-  /**
-   * CSS 命名颜色 palevioletred。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly palevioletred: SystemKeyword<Key, 'palevioletred'>;
-  /**
-   * CSS 命名颜色 papayawhip。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly papayawhip: SystemKeyword<Key, 'papayawhip'>;
-  /**
-   * CSS 命名颜色 peachpuff。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly peachpuff: SystemKeyword<Key, 'peachpuff'>;
-  /**
-   * CSS 命名颜色 peru。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly peru: SystemKeyword<Key, 'peru'>;
-  /**
-   * CSS 命名颜色 pink。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly pink: SystemKeyword<Key, 'pink'>;
-  /**
-   * CSS 命名颜色 plum。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly plum: SystemKeyword<Key, 'plum'>;
-  /**
-   * CSS 命名颜色 powderblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly powderblue: SystemKeyword<Key, 'powderblue'>;
-  /**
-   * CSS 命名颜色 purple。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly purple: SystemKeyword<Key, 'purple'>;
-  /**
-   * CSS 命名颜色 rebeccapurple。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly rebeccapurple: SystemKeyword<Key, 'rebeccapurple'>;
-  /**
-   * CSS 命名颜色 red。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly red: SystemKeyword<Key, 'red'>;
-  /**
-   * CSS 命名颜色 rosybrown。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly rosybrown: SystemKeyword<Key, 'rosybrown'>;
-  /**
-   * CSS 命名颜色 royalblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly royalblue: SystemKeyword<Key, 'royalblue'>;
-  /**
-   * CSS 命名颜色 saddlebrown。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly saddlebrown: SystemKeyword<Key, 'saddlebrown'>;
-  /**
-   * CSS 命名颜色 salmon。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly salmon: SystemKeyword<Key, 'salmon'>;
-  /**
-   * CSS 命名颜色 sandybrown。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly sandybrown: SystemKeyword<Key, 'sandybrown'>;
-  /**
-   * CSS 命名颜色 seagreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly seagreen: SystemKeyword<Key, 'seagreen'>;
-  /**
-   * CSS 命名颜色 seashell。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly seashell: SystemKeyword<Key, 'seashell'>;
-  /**
-   * CSS 命名颜色 sienna。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly sienna: SystemKeyword<Key, 'sienna'>;
-  /**
-   * CSS 命名颜色 silver。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly silver: SystemKeyword<Key, 'silver'>;
-  /**
-   * CSS 命名颜色 skyblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly skyblue: SystemKeyword<Key, 'skyblue'>;
-  /**
-   * CSS 命名颜色 slateblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly slateblue: SystemKeyword<Key, 'slateblue'>;
-  /**
-   * CSS 命名颜色 slategray。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly slategray: SystemKeyword<Key, 'slategray'>;
-  /**
-   * CSS 命名颜色 slategrey。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly slategrey: SystemKeyword<Key, 'slategrey'>;
-  /**
-   * CSS 命名颜色 snow。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly snow: SystemKeyword<Key, 'snow'>;
-  /**
-   * CSS 命名颜色 springgreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly springgreen: SystemKeyword<Key, 'springgreen'>;
-  /**
-   * CSS 命名颜色 steelblue。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly steelblue: SystemKeyword<Key, 'steelblue'>;
-  /**
-   * CSS 命名颜色 tan。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly tan: SystemKeyword<Key, 'tan'>;
-  /**
-   * CSS 命名颜色 teal。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly teal: SystemKeyword<Key, 'teal'>;
-  /**
-   * CSS 命名颜色 thistle。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly thistle: SystemKeyword<Key, 'thistle'>;
-  /**
-   * CSS 命名颜色 tomato。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly tomato: SystemKeyword<Key, 'tomato'>;
-  /**
-   * CSS 命名颜色 turquoise。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly turquoise: SystemKeyword<Key, 'turquoise'>;
-  /**
-   * CSS 命名颜色 violet。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly violet: SystemKeyword<Key, 'violet'>;
-  /**
-   * CSS 命名颜色 wheat。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly wheat: SystemKeyword<Key, 'wheat'>;
-  /**
-   * CSS 命名颜色 white。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly white: SystemKeyword<Key, 'white'>;
-  /**
-   * CSS 命名颜色 whitesmoke。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly whitesmoke: SystemKeyword<Key, 'whitesmoke'>;
-  /**
-   * CSS 命名颜色 yellow。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly yellow: SystemKeyword<Key, 'yellow'>;
-  /**
-   * CSS 命名颜色 yellowgreen。
-   * @see https://developer.mozilla.org/docs/Web/CSS/named-color
-   */
-  readonly yellowgreen: SystemKeyword<Key, 'yellowgreen'>;
-}
-export interface SystemColorKeywords<Key extends PropertyName> {
-  /**
-   * CSS 系统颜色 AccentColor；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly AccentColor: SystemKeyword<Key, 'AccentColor'>;
-  /**
-   * CSS 系统颜色 AccentColorText；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly AccentColorText: SystemKeyword<Key, 'AccentColorText'>;
-  /**
-   * CSS 系统颜色 ActiveText；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ActiveText: SystemKeyword<Key, 'ActiveText'>;
-  /**
-   * CSS 系统颜色 ButtonBorder；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ButtonBorder: SystemKeyword<Key, 'ButtonBorder'>;
-  /**
-   * CSS 系统颜色 ButtonFace；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ButtonFace: SystemKeyword<Key, 'ButtonFace'>;
-  /**
-   * CSS 系统颜色 ButtonText；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ButtonText: SystemKeyword<Key, 'ButtonText'>;
-  /**
-   * CSS 系统颜色 Canvas；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly Canvas: SystemKeyword<Key, 'Canvas'>;
-  /**
-   * CSS 系统颜色 CanvasText；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly CanvasText: SystemKeyword<Key, 'CanvasText'>;
-  /**
-   * CSS 系统颜色 Field；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly Field: SystemKeyword<Key, 'Field'>;
-  /**
-   * CSS 系统颜色 FieldText；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly FieldText: SystemKeyword<Key, 'FieldText'>;
-  /**
-   * CSS 系统颜色 GrayText；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly GrayText: SystemKeyword<Key, 'GrayText'>;
-  /**
-   * CSS 系统颜色 Highlight；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly Highlight: SystemKeyword<Key, 'Highlight'>;
-  /**
-   * CSS 系统颜色 HighlightText；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly HighlightText: SystemKeyword<Key, 'HighlightText'>;
-  /**
-   * CSS 系统颜色 LinkText；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly LinkText: SystemKeyword<Key, 'LinkText'>;
-  /**
-   * CSS 系统颜色 Mark；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly Mark: SystemKeyword<Key, 'Mark'>;
-  /**
-   * CSS 系统颜色 MarkText；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly MarkText: SystemKeyword<Key, 'MarkText'>;
-  /**
-   * CSS 系统颜色 SelectedItem；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly SelectedItem: SystemKeyword<Key, 'SelectedItem'>;
-  /**
-   * CSS 系统颜色 SelectedItemText；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly SelectedItemText: SystemKeyword<Key, 'SelectedItemText'>;
-  /**
-   * CSS 系统颜色 VisitedText；实际颜色由浏览器和用户环境决定。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly VisitedText: SystemKeyword<Key, 'VisitedText'>;
-}
-export interface DeprecatedSystemColorKeywords<Key extends PropertyName> {
-  /**
-   * CSS 系统颜色 ActiveBorder；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ActiveBorder: SystemKeyword<Key, 'ActiveBorder'>;
-  /**
-   * CSS 系统颜色 ActiveCaption；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ActiveCaption: SystemKeyword<Key, 'ActiveCaption'>;
-  /**
-   * CSS 系统颜色 AppWorkspace；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly AppWorkspace: SystemKeyword<Key, 'AppWorkspace'>;
-  /**
-   * CSS 系统颜色 Background；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly Background: SystemKeyword<Key, 'Background'>;
-  /**
-   * CSS 系统颜色 ButtonHighlight；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ButtonHighlight: SystemKeyword<Key, 'ButtonHighlight'>;
-  /**
-   * CSS 系统颜色 ButtonShadow；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ButtonShadow: SystemKeyword<Key, 'ButtonShadow'>;
-  /**
-   * CSS 系统颜色 CaptionText；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly CaptionText: SystemKeyword<Key, 'CaptionText'>;
-  /**
-   * CSS 系统颜色 InactiveBorder；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly InactiveBorder: SystemKeyword<Key, 'InactiveBorder'>;
-  /**
-   * CSS 系统颜色 InactiveCaption；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly InactiveCaption: SystemKeyword<Key, 'InactiveCaption'>;
-  /**
-   * CSS 系统颜色 InactiveCaptionText；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly InactiveCaptionText: SystemKeyword<Key, 'InactiveCaptionText'>;
-  /**
-   * CSS 系统颜色 InfoBackground；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly InfoBackground: SystemKeyword<Key, 'InfoBackground'>;
-  /**
-   * CSS 系统颜色 InfoText；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly InfoText: SystemKeyword<Key, 'InfoText'>;
-  /**
-   * CSS 系统颜色 Menu；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly Menu: SystemKeyword<Key, 'Menu'>;
-  /**
-   * CSS 系统颜色 MenuText；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly MenuText: SystemKeyword<Key, 'MenuText'>;
-  /**
-   * CSS 系统颜色 Scrollbar；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly Scrollbar: SystemKeyword<Key, 'Scrollbar'>;
-  /**
-   * CSS 系统颜色 ThreeDDarkShadow；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ThreeDDarkShadow: SystemKeyword<Key, 'ThreeDDarkShadow'>;
-  /**
-   * CSS 系统颜色 ThreeDFace；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ThreeDFace: SystemKeyword<Key, 'ThreeDFace'>;
-  /**
-   * CSS 系统颜色 ThreeDHighlight；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ThreeDHighlight: SystemKeyword<Key, 'ThreeDHighlight'>;
-  /**
-   * CSS 系统颜色 ThreeDLightShadow；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ThreeDLightShadow: SystemKeyword<Key, 'ThreeDLightShadow'>;
-  /**
-   * CSS 系统颜色 ThreeDShadow；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly ThreeDShadow: SystemKeyword<Key, 'ThreeDShadow'>;
-  /**
-   * CSS 系统颜色 Window；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly Window: SystemKeyword<Key, 'Window'>;
-  /**
-   * CSS 系统颜色 WindowFrame；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly WindowFrame: SystemKeyword<Key, 'WindowFrame'>;
-  /**
-   * CSS 系统颜色 WindowText；实际颜色由浏览器和用户环境决定。
-   * @deprecated 历史系统颜色；优先使用现代系统颜色。
-   * @see https://developer.mozilla.org/docs/Web/CSS/system-color
-   */
-  readonly WindowText: SystemKeyword<Key, 'WindowText'>;
-}
+export interface NamedColorKeywords<Key extends PropertyName> extends SystemKeywordView<
+  Pick<
+    Values.NamedColorValues,
+    | 'aliceblue'
+    | 'antiquewhite'
+    | 'aqua'
+    | 'aquamarine'
+    | 'azure'
+    | 'beige'
+    | 'bisque'
+    | 'black'
+    | 'blanchedalmond'
+    | 'blue'
+    | 'blueviolet'
+    | 'brown'
+    | 'burlywood'
+    | 'cadetblue'
+    | 'chartreuse'
+    | 'chocolate'
+    | 'coral'
+    | 'cornflowerblue'
+    | 'cornsilk'
+    | 'crimson'
+    | 'cyan'
+    | 'darkblue'
+    | 'darkcyan'
+    | 'darkgoldenrod'
+    | 'darkgray'
+    | 'darkgreen'
+    | 'darkgrey'
+    | 'darkkhaki'
+    | 'darkmagenta'
+    | 'darkolivegreen'
+    | 'darkorange'
+    | 'darkorchid'
+    | 'darkred'
+    | 'darksalmon'
+    | 'darkseagreen'
+    | 'darkslateblue'
+    | 'darkslategray'
+    | 'darkslategrey'
+    | 'darkturquoise'
+    | 'darkviolet'
+    | 'deeppink'
+    | 'deepskyblue'
+    | 'dimgray'
+    | 'dimgrey'
+    | 'dodgerblue'
+    | 'firebrick'
+    | 'floralwhite'
+    | 'forestgreen'
+    | 'fuchsia'
+    | 'gainsboro'
+    | 'ghostwhite'
+    | 'gold'
+    | 'goldenrod'
+    | 'gray'
+    | 'green'
+    | 'greenyellow'
+    | 'grey'
+    | 'honeydew'
+    | 'hotpink'
+    | 'indianred'
+    | 'indigo'
+    | 'ivory'
+    | 'khaki'
+    | 'lavender'
+    | 'lavenderblush'
+    | 'lawngreen'
+    | 'lemonchiffon'
+    | 'lightblue'
+    | 'lightcoral'
+    | 'lightcyan'
+    | 'lightgoldenrodyellow'
+    | 'lightgray'
+    | 'lightgreen'
+    | 'lightgrey'
+    | 'lightpink'
+    | 'lightsalmon'
+    | 'lightseagreen'
+    | 'lightskyblue'
+    | 'lightslategray'
+    | 'lightslategrey'
+    | 'lightsteelblue'
+    | 'lightyellow'
+    | 'lime'
+    | 'limegreen'
+    | 'linen'
+    | 'magenta'
+    | 'maroon'
+    | 'mediumaquamarine'
+    | 'mediumblue'
+    | 'mediumorchid'
+    | 'mediumpurple'
+    | 'mediumseagreen'
+    | 'mediumslateblue'
+    | 'mediumspringgreen'
+    | 'mediumturquoise'
+    | 'mediumvioletred'
+    | 'midnightblue'
+    | 'mintcream'
+    | 'mistyrose'
+    | 'moccasin'
+    | 'navajowhite'
+    | 'navy'
+    | 'oldlace'
+    | 'olive'
+    | 'olivedrab'
+    | 'orange'
+    | 'orangered'
+    | 'orchid'
+    | 'palegoldenrod'
+    | 'palegreen'
+    | 'paleturquoise'
+    | 'palevioletred'
+    | 'papayawhip'
+    | 'peachpuff'
+    | 'peru'
+    | 'pink'
+    | 'plum'
+    | 'powderblue'
+    | 'purple'
+    | 'rebeccapurple'
+    | 'red'
+    | 'rosybrown'
+    | 'royalblue'
+    | 'saddlebrown'
+    | 'salmon'
+    | 'sandybrown'
+    | 'seagreen'
+    | 'seashell'
+    | 'sienna'
+    | 'silver'
+    | 'skyblue'
+    | 'slateblue'
+    | 'slategray'
+    | 'slategrey'
+    | 'snow'
+    | 'springgreen'
+    | 'steelblue'
+    | 'tan'
+    | 'teal'
+    | 'thistle'
+    | 'tomato'
+    | 'turquoise'
+    | 'violet'
+    | 'wheat'
+    | 'white'
+    | 'whitesmoke'
+    | 'yellow'
+    | 'yellowgreen'
+  >,
+  Key
+> {}
+export interface SystemColorKeywords<Key extends PropertyName> extends SystemKeywordView<
+  Pick<
+    Values.SystemColorValues,
+    | 'AccentColor'
+    | 'AccentColorText'
+    | 'ActiveText'
+    | 'ButtonBorder'
+    | 'ButtonFace'
+    | 'ButtonText'
+    | 'Canvas'
+    | 'CanvasText'
+    | 'Field'
+    | 'FieldText'
+    | 'GrayText'
+    | 'Highlight'
+    | 'HighlightText'
+    | 'LinkText'
+    | 'Mark'
+    | 'MarkText'
+    | 'SelectedItem'
+    | 'SelectedItemText'
+    | 'VisitedText'
+  >,
+  Key
+> {}
+export interface DeprecatedSystemColorKeywords<Key extends PropertyName> extends SystemKeywordView<
+  Pick<
+    Values.DeprecatedSystemColorValues,
+    | 'ActiveBorder'
+    | 'ActiveCaption'
+    | 'AppWorkspace'
+    | 'Background'
+    | 'ButtonHighlight'
+    | 'ButtonShadow'
+    | 'CaptionText'
+    | 'InactiveBorder'
+    | 'InactiveCaption'
+    | 'InactiveCaptionText'
+    | 'InfoBackground'
+    | 'InfoText'
+    | 'Menu'
+    | 'MenuText'
+    | 'Scrollbar'
+    | 'ThreeDDarkShadow'
+    | 'ThreeDFace'
+    | 'ThreeDHighlight'
+    | 'ThreeDLightShadow'
+    | 'ThreeDShadow'
+    | 'Window'
+    | 'WindowFrame'
+    | 'WindowText'
+  >,
+  Key
+> {}
 export interface AccentColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface AlignContentKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * align-content 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * align-content 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * align-content 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.AccentColorValues, 'auto' | 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface AlignContentKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.AlignContentValues,
+        'baseline' | 'center' | 'end' | 'normal' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * align-content 的原生 flex-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
@@ -1051,10 +253,6 @@ export interface AlignContentKeywords<Key extends PropertyName> extends CssWideK
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
   /**
    * align-content 的原生 space-around 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
@@ -1070,42 +268,19 @@ export interface AlignContentKeywords<Key extends PropertyName> extends CssWideK
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
    */
   readonly spaceEvenly: SystemKeyword<Key, 'space-evenly'>;
-  /**
-   * align-content 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * align-content 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface AlignItemsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface AlignItemsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.AlignItemsValues, 'baseline' | 'center' | 'end' | 'normal' | 'start' | 'stretch'>,
+      Key
+    > {
   /**
    * align-items 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
    */
   readonly anchorCenter: SystemKeyword<Key, 'anchor-center'>;
-  /**
-   * 按项目的对齐基线对齐，不等同于底边对齐。
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * 将各项目在交叉轴或块轴的对齐区域中居中。
-   *
-   * 区别：justify-content 控制 Flex 主轴上的内容分布；align-items 控制交叉轴。
-   *
-   * 适用场景：横向图标和文字的垂直对齐。
-   *
-   * @example
-   * css({ display: "inline-flex", alignItems: "center" })
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * 按对齐轴的逻辑结束侧对齐。
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
   /**
    * 在 Flex 中按交叉轴结束侧对齐。
    */
@@ -1114,10 +289,6 @@ export interface AlignItemsKeywords<Key extends PropertyName> extends CssWideKey
    * 在 Flex 中按交叉轴起始侧对齐；交叉轴方向受换行方式影响。
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
-  /**
-   * 由布局模式决定行为，许多场景类似 stretch，但存在内部尺寸等例外。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
   /**
    * align-items 的原生 self-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
@@ -1128,53 +299,17 @@ export interface AlignItemsKeywords<Key extends PropertyName> extends CssWideKey
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
    */
   readonly selfStart: SystemKeyword<Key, 'self-start'>;
-  /**
-   * 按对齐轴的逻辑起始侧对齐。
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * 在自动尺寸及最小/最大约束允许时拉伸项目，不强制覆盖显式尺寸。
-   *
-   * 区别：center 保持项目尺寸并居中；stretch 尝试扩大自动尺寸。
-   *
-   * 项目在对齐轴有显式尺寸或受最小/最大尺寸约束时，不一定填满可用区域。
-   *
-   * @example
-   * css({ display: "flex", alignItems: "stretch" })
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface AlignmentBaselineKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * alignment-baseline 的原生 alphabetic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/alignment-baseline
-   */
-  readonly alphabetic: SystemKeyword<Key, 'alphabetic'>;
-  /**
-   * alignment-baseline 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/alignment-baseline
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * alignment-baseline 的原生 central 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/alignment-baseline
-   */
-  readonly central: SystemKeyword<Key, 'central'>;
-  /**
-   * alignment-baseline 的原生 ideographic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/alignment-baseline
-   */
-  readonly ideographic: SystemKeyword<Key, 'ideographic'>;
-  /**
-   * alignment-baseline 的原生 mathematical 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/alignment-baseline
-   */
-  readonly mathematical: SystemKeyword<Key, 'mathematical'>;
-  /**
-   * alignment-baseline 的原生 middle 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/alignment-baseline
-   */
-  readonly middle: SystemKeyword<Key, 'middle'>;
+export interface AlignmentBaselineKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.AlignmentBaselineValues,
+        'alphabetic' | 'baseline' | 'central' | 'ideographic' | 'mathematical' | 'middle'
+      >,
+      Key
+    > {
   /**
    * alignment-baseline 的原生 text-after-edge 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/alignment-baseline
@@ -1186,30 +321,21 @@ export interface AlignmentBaselineKeywords<Key extends PropertyName> extends Css
    */
   readonly textBeforeEdge: SystemKeyword<Key, 'text-before-edge'>;
 }
-export interface AlignSelfKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface AlignSelfKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.AlignSelfValues,
+        'auto' | 'baseline' | 'center' | 'end' | 'normal' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * align-self 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self
    */
   readonly anchorCenter: SystemKeyword<Key, 'anchor-center'>;
-  /**
-   * 使用父容器的 align-items 对齐方式。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 让当前项目参与基线对齐，不等同于底边对齐。
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * align-self 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * align-self 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
   /**
    * align-self 的原生 flex-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self
@@ -1221,10 +347,6 @@ export interface AlignSelfKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
   /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * align-self 的原生 self-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self
    */
@@ -1234,32 +356,17 @@ export interface AlignSelfKeywords<Key extends PropertyName> extends CssWideKeyw
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self
    */
   readonly selfStart: SystemKeyword<Key, 'self-start'>;
-  /**
-   * align-self 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * 在自动尺寸和最小/最大约束允许时拉伸当前项目。
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface AlignTracksKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * align-tracks 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * align-tracks 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * align-tracks 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
+export interface AlignTracksKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.AlignTracksValues,
+        'baseline' | 'center' | 'end' | 'normal' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * align-tracks 的原生 flex-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
@@ -1270,10 +377,6 @@ export interface AlignTracksKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
   /**
    * align-tracks 的原生 space-around 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
@@ -1289,65 +392,41 @@ export interface AlignTracksKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
    */
   readonly spaceEvenly: SystemKeyword<Key, 'space-evenly'>;
-  /**
-   * align-tracks 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * align-tracks 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
 export interface AllKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface AnchorNameKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface AnchorScopeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * anchor-scope 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-scope
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface AnimationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * animation 的原生 alternate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
-   */
-  readonly alternate: SystemKeyword<Key, 'alternate'>;
+export interface AnchorNameKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.AnchorNameValues, 'none'>, Key> {}
+export interface AnchorScopeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.AnchorScopeValues, 'all' | 'none'>, Key> {}
+export interface AnimationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.AnimationValues,
+        | 'alternate'
+        | 'auto'
+        | 'backwards'
+        | 'both'
+        | 'ease'
+        | 'forwards'
+        | 'infinite'
+        | 'linear'
+        | 'none'
+        | 'normal'
+        | 'paused'
+        | 'reverse'
+        | 'running'
+      >,
+      Key
+    > {
   /**
    * animation 的原生 alternate-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
    */
   readonly alternateReverse: SystemKeyword<Key, 'alternate-reverse'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * animation 的原生 backwards 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
-   */
-  readonly backwards: SystemKeyword<Key, 'backwards'>;
-  /**
-   * animation 的原生 both 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * animation 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
   /**
    * animation 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
@@ -1364,44 +443,6 @@ export interface AnimationKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * animation 的原生 forwards 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
-   */
-  readonly forwards: SystemKeyword<Key, 'forwards'>;
-  /**
-   * animation 的原生 infinite 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
-   */
-  readonly infinite: SystemKeyword<Key, 'infinite'>;
-  /**
-   * animation 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * animation 的原生 paused 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
-   */
-  readonly paused: SystemKeyword<Key, 'paused'>;
-  /**
-   * animation 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
-  /**
-   * animation 的原生 running 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
-   */
-  readonly running: SystemKeyword<Key, 'running'>;
-  /**
    * animation 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
    */
@@ -1412,226 +453,110 @@ export interface AnimationKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly stepStart: SystemKeyword<Key, 'step-start'>;
 }
-export interface AnimationCompositionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * animation-composition 的原生 accumulate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-composition
-   */
-  readonly accumulate: SystemKeyword<Key, 'accumulate'>;
-  /**
-   * animation-composition 的原生 add 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-composition
-   */
-  readonly add: SystemKeyword<Key, 'add'>;
-  /**
-   * animation-composition 的原生 replace 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-composition
-   */
-  readonly replace: SystemKeyword<Key, 'replace'>;
-}
+export interface AnimationCompositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.AnimationCompositionValues, 'accumulate' | 'add' | 'replace'>,
+      Key
+    > {}
 export interface AnimationDelayKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface AnimationDirectionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * animation-direction 的原生 alternate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-direction
-   */
-  readonly alternate: SystemKeyword<Key, 'alternate'>;
+export interface AnimationDirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.AnimationDirectionValues, 'alternate' | 'normal' | 'reverse'>,
+      Key
+    > {
   /**
    * animation-direction 的原生 alternate-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-direction
    */
   readonly alternateReverse: SystemKeyword<Key, 'alternate-reverse'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * animation-direction 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-direction
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
 }
-export interface AnimationDurationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface AnimationFillModeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 延迟阶段应用最先生效关键帧的效果，具体帧取决于播放方向。
-   */
-  readonly backwards: SystemKeyword<Key, 'backwards'>;
-  /**
-   * 同时应用 backwards 和 forwards 的区间外效果。
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * 播放结束后保留最后生效关键帧的效果；最后帧取决于方向和循环次数。
-   */
-  readonly forwards: SystemKeyword<Key, 'forwards'>;
-  /**
-   * 动画有效区间之外不应用动画关键帧值。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface AnimationIterationCountKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * animation-iteration-count 的原生 infinite 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-iteration-count
-   */
-  readonly infinite: SystemKeyword<Key, 'infinite'>;
-}
-export interface AnimationNameKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface AnimationPlayStateKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * animation-play-state 的原生 paused 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-play-state
-   */
-  readonly paused: SystemKeyword<Key, 'paused'>;
-  /**
-   * animation-play-state 的原生 running 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-play-state
-   */
-  readonly running: SystemKeyword<Key, 'running'>;
-}
-export interface AnimationRangeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * animation-range 的原生 contain 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * animation-range 的原生 cover 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range
-   */
-  readonly cover: SystemKeyword<Key, 'cover'>;
-  /**
-   * animation-range 的原生 entry 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range
-   */
-  readonly entry: SystemKeyword<Key, 'entry'>;
+export interface AnimationDurationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.AnimationDurationValues, 'auto'>, Key> {}
+export interface AnimationFillModeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.AnimationFillModeValues, 'backwards' | 'both' | 'forwards' | 'none'>,
+      Key
+    > {}
+export interface AnimationIterationCountKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.AnimationIterationCountValues, 'infinite'>, Key> {}
+export interface AnimationNameKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.AnimationNameValues, 'none'>, Key> {}
+export interface AnimationPlayStateKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.AnimationPlayStateValues, 'paused' | 'running'>, Key> {}
+export interface AnimationRangeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.AnimationRangeValues, 'contain' | 'cover' | 'entry' | 'exit' | 'normal'>,
+      Key
+    > {
   /**
    * animation-range 的原生 entry-crossing 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range
    */
   readonly entryCrossing: SystemKeyword<Key, 'entry-crossing'>;
   /**
-   * animation-range 的原生 exit 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range
-   */
-  readonly exit: SystemKeyword<Key, 'exit'>;
-  /**
    * animation-range 的原生 exit-crossing 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range
    */
   readonly exitCrossing: SystemKeyword<Key, 'exit-crossing'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
-export interface AnimationRangeEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * animation-range-end 的原生 contain 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-end
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * animation-range-end 的原生 cover 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-end
-   */
-  readonly cover: SystemKeyword<Key, 'cover'>;
-  /**
-   * animation-range-end 的原生 entry 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-end
-   */
-  readonly entry: SystemKeyword<Key, 'entry'>;
+export interface AnimationRangeEndKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.AnimationRangeEndValues, 'contain' | 'cover' | 'entry' | 'exit' | 'normal'>,
+      Key
+    > {
   /**
    * animation-range-end 的原生 entry-crossing 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-end
    */
   readonly entryCrossing: SystemKeyword<Key, 'entry-crossing'>;
   /**
-   * animation-range-end 的原生 exit 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-end
-   */
-  readonly exit: SystemKeyword<Key, 'exit'>;
-  /**
    * animation-range-end 的原生 exit-crossing 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-end
    */
   readonly exitCrossing: SystemKeyword<Key, 'exit-crossing'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
-export interface AnimationRangeStartKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * animation-range-start 的原生 contain 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-start
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * animation-range-start 的原生 cover 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-start
-   */
-  readonly cover: SystemKeyword<Key, 'cover'>;
-  /**
-   * animation-range-start 的原生 entry 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-start
-   */
-  readonly entry: SystemKeyword<Key, 'entry'>;
+export interface AnimationRangeStartKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.AnimationRangeStartValues, 'contain' | 'cover' | 'entry' | 'exit' | 'normal'>,
+      Key
+    > {
   /**
    * animation-range-start 的原生 entry-crossing 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-start
    */
   readonly entryCrossing: SystemKeyword<Key, 'entry-crossing'>;
   /**
-   * animation-range-start 的原生 exit 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-start
-   */
-  readonly exit: SystemKeyword<Key, 'exit'>;
-  /**
    * animation-range-start 的原生 exit-crossing 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-start
    */
   readonly exitCrossing: SystemKeyword<Key, 'exit-crossing'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
-export interface AnimationTimelineKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface AnimationTimingFunctionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * animation-timing-function 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timing-function
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
+export interface AnimationTimelineKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.AnimationTimelineValues, 'auto' | 'none'>, Key> {}
+export interface AnimationTimingFunctionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.AnimationTimingFunctionValues, 'ease' | 'linear'>, Key> {
   /**
    * animation-timing-function 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timing-function
@@ -1648,11 +573,6 @@ export interface AnimationTimingFunctionKeywords<
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * animation-timing-function 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timing-function
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
    * animation-timing-function 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timing-function
    */
@@ -1663,149 +583,87 @@ export interface AnimationTimingFunctionKeywords<
    */
   readonly stepStart: SystemKeyword<Key, 'step-start'>;
 }
-export interface AppearanceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * appearance 的原生 button 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
-   */
-  readonly button: SystemKeyword<Key, 'button'>;
-  /**
-   * appearance 的原生 checkbox 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
-   */
-  readonly checkbox: SystemKeyword<Key, 'checkbox'>;
-  /**
-   * appearance 的原生 listbox 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
-   */
-  readonly listbox: SystemKeyword<Key, 'listbox'>;
-  /**
-   * appearance 的原生 menulist 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
-   */
-  readonly menulist: SystemKeyword<Key, 'menulist'>;
+export interface AppearanceKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.AppearanceValues,
+        | 'auto'
+        | 'button'
+        | 'checkbox'
+        | 'listbox'
+        | 'menulist'
+        | 'meter'
+        | 'none'
+        | 'radio'
+        | 'searchfield'
+        | 'textarea'
+        | 'textfield'
+      >,
+      Key
+    > {
   /**
    * appearance 的原生 menulist-button 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
    */
   readonly menulistButton: SystemKeyword<Key, 'menulist-button'>;
   /**
-   * appearance 的原生 meter 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
-   */
-  readonly meter: SystemKeyword<Key, 'meter'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
    * appearance 的原生 progress-bar 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
    */
   readonly progressBar: SystemKeyword<Key, 'progress-bar'>;
-  /**
-   * appearance 的原生 radio 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
-   */
-  readonly radio: SystemKeyword<Key, 'radio'>;
-  /**
-   * appearance 的原生 searchfield 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
-   */
-  readonly searchfield: SystemKeyword<Key, 'searchfield'>;
-  /**
-   * appearance 的原生 textarea 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
-   */
-  readonly textarea: SystemKeyword<Key, 'textarea'>;
-  /**
-   * appearance 的原生 textfield 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
-   */
-  readonly textfield: SystemKeyword<Key, 'textfield'>;
 }
-export interface AspectRatioKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface BackdropFilterKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface BackfaceVisibilityKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * backface-visibility 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/backface-visibility
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * backface-visibility 的原生 visible 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/backface-visibility
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
-}
+export interface AspectRatioKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.AspectRatioValues, 'auto'>, Key> {}
+export interface BackdropFilterKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.BackdropFilterValues, 'none'>, Key> {}
+export interface BackfaceVisibilityKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BackfaceVisibilityValues, 'hidden' | 'visible'>, Key> {}
 export interface BackgroundKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BackgroundValues,
+        | 'bottom'
+        | 'center'
+        | 'currentColor'
+        | 'fixed'
+        | 'left'
+        | 'local'
+        | 'none'
+        | 'repeat'
+        | 'right'
+        | 'round'
+        | 'scroll'
+        | 'space'
+        | 'top'
+        | 'transparent'
+      >,
+      Key
+    > {
   /**
    * CSS 颜色关键字 border-box；系统颜色会随用户环境和配色设置变化。
    */
   readonly borderBox: SystemKeyword<Key, 'border-box'>;
   /**
-   * CSS 颜色关键字 bottom；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * CSS 颜色关键字 center；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
    * CSS 颜色关键字 content-box；系统颜色会随用户环境和配色设置变化。
    */
   readonly contentBox: SystemKeyword<Key, 'content-box'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 fixed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly fixed: SystemKeyword<Key, 'fixed'>;
-  /**
-   * CSS 颜色关键字 left；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * CSS 颜色关键字 local；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly local: SystemKeyword<Key, 'local'>;
   /**
    * CSS 颜色关键字 no-repeat；系统颜色会随用户环境和配色设置变化。
    */
   readonly noRepeat: SystemKeyword<Key, 'no-repeat'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
    * CSS 颜色关键字 padding-box；系统颜色会随用户环境和配色设置变化。
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
-  /**
-   * CSS 颜色关键字 repeat；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
   /**
    * CSS 颜色关键字 repeat-x；系统颜色会随用户环境和配色设置变化。
    */
@@ -1814,58 +672,32 @@ export interface BackgroundKeywords<Key extends PropertyName>
    * CSS 颜色关键字 repeat-y；系统颜色会随用户环境和配色设置变化。
    */
   readonly repeatY: SystemKeyword<Key, 'repeat-y'>;
-  /**
-   * CSS 颜色关键字 right；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * CSS 颜色关键字 round；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * CSS 颜色关键字 scroll；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly scroll: SystemKeyword<Key, 'scroll'>;
-  /**
-   * CSS 颜色关键字 space；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
-   * CSS 颜色关键字 top；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
 }
-export interface BackgroundAttachmentKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * background-attachment 的原生 fixed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-attachment
-   */
-  readonly fixed: SystemKeyword<Key, 'fixed'>;
-  /**
-   * background-attachment 的原生 local 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-attachment
-   */
-  readonly local: SystemKeyword<Key, 'local'>;
-  /**
-   * background-attachment 的原生 scroll 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-attachment
-   */
-  readonly scroll: SystemKeyword<Key, 'scroll'>;
-}
-export interface BackgroundBlendModeKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * background-blend-mode 的原生 color 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
-   */
-  readonly color: SystemKeyword<Key, 'color'>;
+export interface BackgroundAttachmentKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BackgroundAttachmentValues, 'fixed' | 'local' | 'scroll'>, Key> {}
+export interface BackgroundBlendModeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BackgroundBlendModeValues,
+        | 'color'
+        | 'darken'
+        | 'difference'
+        | 'exclusion'
+        | 'hue'
+        | 'lighten'
+        | 'luminosity'
+        | 'multiply'
+        | 'normal'
+        | 'overlay'
+        | 'saturation'
+        | 'screen'
+      >,
+      Key
+    > {
   /**
    * background-blend-mode 的原生 color-burn 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
@@ -1877,71 +709,18 @@ export interface BackgroundBlendModeKeywords<
    */
   readonly colorDodge: SystemKeyword<Key, 'color-dodge'>;
   /**
-   * background-blend-mode 的原生 darken 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
-   */
-  readonly darken: SystemKeyword<Key, 'darken'>;
-  /**
-   * background-blend-mode 的原生 difference 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
-   */
-  readonly difference: SystemKeyword<Key, 'difference'>;
-  /**
-   * background-blend-mode 的原生 exclusion 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
-   */
-  readonly exclusion: SystemKeyword<Key, 'exclusion'>;
-  /**
    * background-blend-mode 的原生 hard-light 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
    */
   readonly hardLight: SystemKeyword<Key, 'hard-light'>;
-  /**
-   * background-blend-mode 的原生 hue 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
-   */
-  readonly hue: SystemKeyword<Key, 'hue'>;
-  /**
-   * background-blend-mode 的原生 lighten 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
-   */
-  readonly lighten: SystemKeyword<Key, 'lighten'>;
-  /**
-   * background-blend-mode 的原生 luminosity 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
-   */
-  readonly luminosity: SystemKeyword<Key, 'luminosity'>;
-  /**
-   * background-blend-mode 的原生 multiply 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
-   */
-  readonly multiply: SystemKeyword<Key, 'multiply'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * background-blend-mode 的原生 overlay 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
-   */
-  readonly overlay: SystemKeyword<Key, 'overlay'>;
-  /**
-   * background-blend-mode 的原生 saturation 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
-   */
-  readonly saturation: SystemKeyword<Key, 'saturation'>;
-  /**
-   * background-blend-mode 的原生 screen 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
-   */
-  readonly screen: SystemKeyword<Key, 'screen'>;
   /**
    * background-blend-mode 的原生 soft-light 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
    */
   readonly softLight: SystemKeyword<Key, 'soft-light'>;
 }
-export interface BackgroundClipKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface BackgroundClipKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.BackgroundClipValues, 'text'>, Key> {
   /**
    * background-clip 的原生 border-area 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-clip
@@ -1962,32 +741,18 @@ export interface BackgroundClipKeywords<Key extends PropertyName> extends CssWid
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-clip
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
-  /**
-   * 把背景裁剪到文字字形；显示背景文字效果通常还需要透明的文字颜色。
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
 }
 export interface BackgroundColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface BackgroundImageKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 不绘制这一层背景图像；背景颜色仍然可以显示。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.BackgroundColorValues, 'currentColor' | 'transparent'>, Key> {}
+export interface BackgroundImageKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BackgroundImageValues, 'none'>, Key> {}
 export interface BackgroundOriginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
    * background-origin 的原生 border-box 值；具体布局或绘制效果见该属性参考。
@@ -2005,51 +770,17 @@ export interface BackgroundOriginKeywords<Key extends PropertyName> extends CssW
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
 }
-export interface BackgroundPositionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * background-position 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * background-position 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * background-position 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * background-position 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * background-position 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface BackgroundPositionXKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * background-position-x 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-x
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * background-position-x 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-x
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * background-position-x 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-x
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
+export interface BackgroundPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.BackgroundPositionValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface BackgroundPositionXKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BackgroundPositionXValues, 'center' | 'left' | 'right'>, Key> {
   /**
    * background-position-x 的原生 x-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-x
@@ -2061,24 +792,10 @@ export interface BackgroundPositionXKeywords<
    */
   readonly xStart: SystemKeyword<Key, 'x-start'>;
 }
-export interface BackgroundPositionYKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * background-position-y 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-y
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * background-position-y 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-y
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * background-position-y 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-y
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
+export interface BackgroundPositionYKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BackgroundPositionYValues, 'bottom' | 'center' | 'top'>, Key> {
   /**
    * background-position-y 的原生 y-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-y
@@ -2090,17 +807,15 @@ export interface BackgroundPositionYKeywords<
    */
   readonly yStart: SystemKeyword<Key, 'y-start'>;
 }
-export interface BackgroundRepeatKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface BackgroundRepeatKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BackgroundRepeatValues, 'repeat' | 'round' | 'space'>, Key> {
   /**
    * background-repeat 的原生 no-repeat 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-repeat
    */
   readonly noRepeat: SystemKeyword<Key, 'no-repeat'>;
-  /**
-   * background-repeat 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-repeat
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
   /**
    * background-repeat 的原生 repeat-x 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-repeat
@@ -2111,49 +826,17 @@ export interface BackgroundRepeatKeywords<Key extends PropertyName> extends CssW
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-repeat
    */
   readonly repeatY: SystemKeyword<Key, 'repeat-y'>;
-  /**
-   * background-repeat 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-repeat
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * background-repeat 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-repeat
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
 }
-export interface BackgroundSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 依据图像内部尺寸、比例及另一维的设置确定尺寸。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 保持图像比例并使整张图像容纳于定位区域，可能留下空白。
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 保持图像比例并覆盖整个定位区域，超出部分可能被裁剪。
-   */
-  readonly cover: SystemKeyword<Key, 'cover'>;
-}
-export interface BaselineShiftKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * baseline-shift 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/baseline-shift
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * baseline-shift 的原生 sub 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/baseline-shift
-   */
-  readonly sub: SystemKeyword<Key, 'sub'>;
-  /**
-   * baseline-shift 的原生 super 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/baseline-shift
-   */
-  readonly super: SystemKeyword<Key, 'super'>;
-}
-export interface BlockSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface BackgroundSizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BackgroundSizeValues, 'auto' | 'contain' | 'cover'>, Key> {}
+export interface BaselineShiftKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BaselineShiftValues, 'baseline' | 'sub' | 'super'>, Key> {}
+export interface BlockSizeKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.BlockSizeValues, 'auto'>, Key> {
   /**
    * block-size 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/block-size
@@ -2169,10 +852,6 @@ export interface BlockSizeKeywords<Key extends PropertyName> extends CssWideKeyw
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/block-size
    */
   readonly MozMinContent: SystemKeyword<Key, '-moz-min-content'>;
-  /**
-   * 让布局算法决定尺寸，不保证等于父元素尺寸。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
   /**
    * 在最小和最大内部尺寸之间按可用空间夹取尺寸。
    */
@@ -2191,1536 +870,604 @@ export interface BorderKeywords<Key extends PropertyName>
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface BorderBlockKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderBlockValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface BorderBlockColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderBlockColorValues, 'currentColor' | 'transparent'>, Key> {}
 export interface BorderBlockEndKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderBlockEndValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface BorderBlockEndColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface BorderBlockEndStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * border-block-end-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * border-block-end-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * border-block-end-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * border-block-end-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * border-block-end-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * border-block-end-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-block-end-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * border-block-end-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * border-block-end-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface BorderBlockEndWidthKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * border-block-end-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * border-block-end-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * border-block-end-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.BorderBlockEndColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface BorderBlockEndStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderBlockEndStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface BorderBlockEndWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderBlockEndWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
 export interface BorderBlockStartKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderBlockStartValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface BorderBlockStartColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface BorderBlockStartStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * border-block-start-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * border-block-start-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * border-block-start-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * border-block-start-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * border-block-start-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * border-block-start-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-block-start-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * border-block-start-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * border-block-start-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface BorderBlockStartWidthKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * border-block-start-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * border-block-start-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * border-block-start-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
-export interface BorderBlockStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-block-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * border-block-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * border-block-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * border-block-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * border-block-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * border-block-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-block-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * border-block-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * border-block-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface BorderBlockWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-block-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * border-block-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * border-block-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.BorderBlockStartColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface BorderBlockStartStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderBlockStartStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface BorderBlockStartWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderBlockStartWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
+export interface BorderBlockStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderBlockStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface BorderBlockWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderBlockWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
 export interface BorderBottomKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderBottomValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface BorderBottomColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderBottomColorValues, 'currentColor' | 'transparent'>, Key> {}
 export interface BorderBottomLeftRadiusKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
 export interface BorderBottomRightRadiusKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface BorderBottomStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-bottom-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * border-bottom-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * border-bottom-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * border-bottom-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * border-bottom-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * border-bottom-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-bottom-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * border-bottom-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * border-bottom-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface BorderBottomWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-bottom-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * border-bottom-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * border-bottom-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
-export interface BorderCollapseKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-collapse 的原生 collapse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-collapse
-   */
-  readonly collapse: SystemKeyword<Key, 'collapse'>;
-  /**
-   * border-collapse 的原生 separate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-collapse
-   */
-  readonly separate: SystemKeyword<Key, 'separate'>;
-}
+export interface BorderBottomStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderBottomStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface BorderBottomWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderBottomWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
+export interface BorderCollapseKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderCollapseValues, 'collapse' | 'separate'>, Key> {}
 export interface BorderColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderColorValues, 'currentColor' | 'transparent'>, Key> {}
 export interface BorderEndEndRadiusKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
 export interface BorderEndStartRadiusKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface BorderImageKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-image 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
-  /**
-   * border-image 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * border-image 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
-   * border-image 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
+export interface BorderImageKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.BorderImageValues, 'none' | 'repeat' | 'round' | 'space' | 'stretch'>,
+      Key
+    > {}
 export interface BorderImageOutsetKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface BorderImageRepeatKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-image-repeat 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-repeat
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
-  /**
-   * border-image-repeat 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-repeat
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * border-image-repeat 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-repeat
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
-   * border-image-repeat 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-repeat
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
+export interface BorderImageRepeatKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.BorderImageRepeatValues, 'repeat' | 'round' | 'space' | 'stretch'>,
+      Key
+    > {}
 export interface BorderImageSliceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface BorderImageSourceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface BorderImageWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
+export interface BorderImageSourceKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderImageSourceValues, 'none'>, Key> {}
+export interface BorderImageWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderImageWidthValues, 'auto'>, Key> {}
 export interface BorderInlineKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderInlineValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface BorderInlineColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderInlineColorValues, 'currentColor' | 'transparent'>, Key> {}
 export interface BorderInlineEndKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderInlineEndValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface BorderInlineEndColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface BorderInlineEndStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * border-inline-end-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * border-inline-end-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * border-inline-end-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * border-inline-end-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * border-inline-end-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * border-inline-end-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-inline-end-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * border-inline-end-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * border-inline-end-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface BorderInlineEndWidthKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * border-inline-end-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * border-inline-end-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * border-inline-end-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.BorderInlineEndColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface BorderInlineEndStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderInlineEndStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface BorderInlineEndWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderInlineEndWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
 export interface BorderInlineStartKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderInlineStartValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface BorderInlineStartColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface BorderInlineStartStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * border-inline-start-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * border-inline-start-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * border-inline-start-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * border-inline-start-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * border-inline-start-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * border-inline-start-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-inline-start-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * border-inline-start-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * border-inline-start-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface BorderInlineStartWidthKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * border-inline-start-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * border-inline-start-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * border-inline-start-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
-export interface BorderInlineStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-inline-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * border-inline-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * border-inline-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * border-inline-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * border-inline-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * border-inline-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-inline-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * border-inline-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * border-inline-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface BorderInlineWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-inline-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * border-inline-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * border-inline-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.BorderInlineStartColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface BorderInlineStartStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderInlineStartStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface BorderInlineStartWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.BorderInlineStartWidthValues, 'medium' | 'thick' | 'thin'>,
+      Key
+    > {}
+export interface BorderInlineStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderInlineStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface BorderInlineWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderInlineWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
 export interface BorderLeftKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderLeftValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface BorderLeftColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface BorderLeftStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-left-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * border-left-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * border-left-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * border-left-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * border-left-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * border-left-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-left-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * border-left-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * border-left-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface BorderLeftWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-left-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * border-left-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * border-left-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderLeftColorValues, 'currentColor' | 'transparent'>, Key> {}
+export interface BorderLeftStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderLeftStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface BorderLeftWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderLeftWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
 export interface BorderRadiusKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface BorderRightKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderRightValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface BorderRightColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface BorderRightStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-right-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * border-right-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * border-right-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * border-right-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * border-right-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * border-right-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-right-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * border-right-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * border-right-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface BorderRightWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-right-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * border-right-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * border-right-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderRightColorValues, 'currentColor' | 'transparent'>, Key> {}
+export interface BorderRightStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderRightStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface BorderRightWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderRightWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
 export interface BorderSpacingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface BorderStartEndRadiusKeywords<
   Key extends PropertyName,
@@ -3728,349 +1475,137 @@ export interface BorderStartEndRadiusKeywords<
 export interface BorderStartStartRadiusKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface BorderStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * border-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * border-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * border-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * 通常与 none 类似；在表格边框合并冲突中优先隐藏边框。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * border-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 不绘制边框，并使对应边框计算宽度为零。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * border-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * 绘制连续实线边框。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
+export interface BorderStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
 export interface BorderTopKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderTopValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface BorderTopColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderTopColorValues, 'currentColor' | 'transparent'>, Key> {}
 export interface BorderTopLeftRadiusKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
 export interface BorderTopRightRadiusKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface BorderTopStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-top-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * border-top-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * border-top-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * border-top-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * border-top-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * border-top-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * border-top-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * border-top-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * border-top-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface BorderTopWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-top-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * border-top-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * border-top-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
-export interface BorderWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * border-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * border-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * border-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
-export interface BottomKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface BoxAlignKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * box-align 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-align
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * box-align 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-align
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * box-align 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-align
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * box-align 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-align
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * box-align 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-align
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
-export interface BoxDecorationBreakKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * box-decoration-break 的原生 clone 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-decoration-break
-   */
-  readonly clone: SystemKeyword<Key, 'clone'>;
-  /**
-   * box-decoration-break 的原生 slice 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-decoration-break
-   */
-  readonly slice: SystemKeyword<Key, 'slice'>;
-}
-export interface BoxDirectionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * box-direction 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-direction
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
-}
+export interface BorderTopStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BorderTopStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface BorderTopWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderTopWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
+export interface BorderWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BorderWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
+export interface BottomKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.BottomValues, 'auto'>, Key> {}
+export interface BoxAlignKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.BoxAlignValues, 'baseline' | 'center' | 'end' | 'start' | 'stretch'>,
+      Key
+    > {}
+export interface BoxDecorationBreakKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BoxDecorationBreakValues, 'clone' | 'slice'>, Key> {}
+export interface BoxDirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BoxDirectionValues, 'normal' | 'reverse'>, Key> {}
 export interface BoxFlexKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface BoxFlexGroupKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface BoxLinesKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * box-lines 的原生 multiple 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-lines
-   */
-  readonly multiple: SystemKeyword<Key, 'multiple'>;
-  /**
-   * box-lines 的原生 single 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-lines
-   */
-  readonly single: SystemKeyword<Key, 'single'>;
-}
+export interface BoxLinesKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BoxLinesValues, 'multiple' | 'single'>, Key> {}
 export interface BoxOrdinalGroupKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface BoxOrientKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface BoxOrientKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BoxOrientValues, 'horizontal' | 'vertical'>, Key> {
   /**
    * box-orient 的原生 block-axis 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-orient
    */
   readonly blockAxis: SystemKeyword<Key, 'block-axis'>;
   /**
-   * box-orient 的原生 horizontal 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-orient
-   */
-  readonly horizontal: SystemKeyword<Key, 'horizontal'>;
-  /**
    * box-orient 的原生 inline-axis 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-orient
    */
   readonly inlineAxis: SystemKeyword<Key, 'inline-axis'>;
-  /**
-   * box-orient 的原生 vertical 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-orient
-   */
-  readonly vertical: SystemKeyword<Key, 'vertical'>;
 }
-export interface BoxPackKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * box-pack 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-pack
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * box-pack 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-pack
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * box-pack 的原生 justify 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-pack
-   */
-  readonly justify: SystemKeyword<Key, 'justify'>;
-  /**
-   * box-pack 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-pack
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-}
-export interface BoxShadowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface BoxPackKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BoxPackValues, 'center' | 'end' | 'justify' | 'start'>, Key> {}
+export interface BoxShadowKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.BoxShadowValues, 'none'>, Key> {}
 export interface BoxSizingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
    * 指定尺寸包含内容、内边距和边框，但不包含外边距。
@@ -4095,26 +1630,26 @@ export interface BoxSizingKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly contentBox: SystemKeyword<Key, 'content-box'>;
 }
-export interface BreakAfterKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * break-after 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * break-after 的原生 always 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
-   */
-  readonly always: SystemKeyword<Key, 'always'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * break-after 的原生 avoid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
-   */
-  readonly avoid: SystemKeyword<Key, 'avoid'>;
+export interface BreakAfterKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BreakAfterValues,
+        | 'all'
+        | 'always'
+        | 'auto'
+        | 'avoid'
+        | 'column'
+        | 'left'
+        | 'page'
+        | 'recto'
+        | 'region'
+        | 'right'
+        | 'verso'
+      >,
+      Key
+    > {
   /**
    * break-after 的原生 avoid-column 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
@@ -4130,62 +1665,27 @@ export interface BreakAfterKeywords<Key extends PropertyName> extends CssWideKey
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
    */
   readonly avoidRegion: SystemKeyword<Key, 'avoid-region'>;
-  /**
-   * break-after 的原生 column 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
-   */
-  readonly column: SystemKeyword<Key, 'column'>;
-  /**
-   * break-after 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * break-after 的原生 page 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
-   */
-  readonly page: SystemKeyword<Key, 'page'>;
-  /**
-   * break-after 的原生 recto 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
-   */
-  readonly recto: SystemKeyword<Key, 'recto'>;
-  /**
-   * break-after 的原生 region 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
-   */
-  readonly region: SystemKeyword<Key, 'region'>;
-  /**
-   * break-after 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * break-after 的原生 verso 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
-   */
-  readonly verso: SystemKeyword<Key, 'verso'>;
 }
-export interface BreakBeforeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * break-before 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * break-before 的原生 always 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
-   */
-  readonly always: SystemKeyword<Key, 'always'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * break-before 的原生 avoid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
-   */
-  readonly avoid: SystemKeyword<Key, 'avoid'>;
+export interface BreakBeforeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.BreakBeforeValues,
+        | 'all'
+        | 'always'
+        | 'auto'
+        | 'avoid'
+        | 'column'
+        | 'left'
+        | 'page'
+        | 'recto'
+        | 'region'
+        | 'right'
+        | 'verso'
+      >,
+      Key
+    > {
   /**
    * break-before 的原生 avoid-column 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
@@ -4201,52 +1701,11 @@ export interface BreakBeforeKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
    */
   readonly avoidRegion: SystemKeyword<Key, 'avoid-region'>;
-  /**
-   * break-before 的原生 column 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
-   */
-  readonly column: SystemKeyword<Key, 'column'>;
-  /**
-   * break-before 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * break-before 的原生 page 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
-   */
-  readonly page: SystemKeyword<Key, 'page'>;
-  /**
-   * break-before 的原生 recto 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
-   */
-  readonly recto: SystemKeyword<Key, 'recto'>;
-  /**
-   * break-before 的原生 region 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
-   */
-  readonly region: SystemKeyword<Key, 'region'>;
-  /**
-   * break-before 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * break-before 的原生 verso 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
-   */
-  readonly verso: SystemKeyword<Key, 'verso'>;
 }
-export interface BreakInsideKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * break-inside 的原生 avoid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-inside
-   */
-  readonly avoid: SystemKeyword<Key, 'avoid'>;
+export interface BreakInsideKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.BreakInsideValues, 'auto' | 'avoid'>, Key> {
   /**
    * break-inside 的原生 avoid-column 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-inside
@@ -4263,95 +1722,44 @@ export interface BreakInsideKeywords<Key extends PropertyName> extends CssWideKe
    */
   readonly avoidRegion: SystemKeyword<Key, 'avoid-region'>;
 }
-export interface CaptionSideKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * caption-side 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caption-side
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * caption-side 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caption-side
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
+export interface CaptionSideKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.CaptionSideValues, 'bottom' | 'top'>, Key> {}
 export interface CaretKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * CSS 颜色关键字 bar；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly bar: SystemKeyword<Key, 'bar'>;
-  /**
-   * CSS 颜色关键字 block；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly block: SystemKeyword<Key, 'block'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-  /**
-   * CSS 颜色关键字 underscore；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly underscore: SystemKeyword<Key, 'underscore'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.CaretValues,
+        'auto' | 'bar' | 'block' | 'currentColor' | 'transparent' | 'underscore'
+      >,
+      Key
+    > {}
 export interface CaretColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface CaretShapeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * caret-shape 的原生 bar 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret-shape
-   */
-  readonly bar: SystemKeyword<Key, 'bar'>;
-  /**
-   * caret-shape 的原生 block 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret-shape
-   */
-  readonly block: SystemKeyword<Key, 'block'>;
-  /**
-   * caret-shape 的原生 underscore 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret-shape
-   */
-  readonly underscore: SystemKeyword<Key, 'underscore'>;
-}
-export interface ClearKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * clear 的原生 both 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clear
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.CaretColorValues, 'auto' | 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface CaretShapeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.CaretShapeValues, 'auto' | 'bar' | 'block' | 'underscore'>,
+      Key
+    > {}
+export interface ClearKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ClearValues, 'both' | 'left' | 'none' | 'right'>, Key> {
   /**
    * clear 的原生 inline-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clear
@@ -4362,28 +1770,11 @@ export interface ClearKeywords<Key extends PropertyName> extends CssWideKeywords
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clear
    */
   readonly inlineStart: SystemKeyword<Key, 'inline-start'>;
-  /**
-   * clear 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clear
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * clear 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clear
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
 }
-export interface ClipKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ClipPathKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface ClipKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ClipValues, 'auto'>, Key> {}
+export interface ClipPathKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ClipPathValues, 'none'>, Key> {
   /**
    * clip-path 的原生 border-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip-path
@@ -4405,10 +1796,6 @@ export interface ClipPathKeywords<Key extends PropertyName> extends CssWideKeywo
    */
   readonly marginBox: SystemKeyword<Key, 'margin-box'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
    * clip-path 的原生 padding-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip-path
    */
@@ -4424,415 +1811,174 @@ export interface ClipPathKeywords<Key extends PropertyName> extends CssWideKeywo
    */
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
-export interface ClipRuleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * clip-rule 的原生 evenodd 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip-rule
-   */
-  readonly evenodd: SystemKeyword<Key, 'evenodd'>;
-  /**
-   * clip-rule 的原生 nonzero 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip-rule
-   */
-  readonly nonzero: SystemKeyword<Key, 'nonzero'>;
-}
+export interface ClipRuleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ClipRuleValues, 'evenodd' | 'nonzero'>, Key> {}
 export interface ColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface ColorAdjustKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * color-adjust 的原生 economy 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-adjust
-   */
-  readonly economy: SystemKeyword<Key, 'economy'>;
-  /**
-   * color-adjust 的原生 exact 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-adjust
-   */
-  readonly exact: SystemKeyword<Key, 'exact'>;
-}
-export interface ColorInterpolationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * color-interpolation 的原生 linearRGB 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-interpolation
-   */
-  readonly linearRGB: SystemKeyword<Key, 'linearRGB'>;
-  /**
-   * color-interpolation 的原生 sRGB 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-interpolation
-   */
-  readonly sRGB: SystemKeyword<Key, 'sRGB'>;
-}
-export interface ColorInterpolationFiltersKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * color-interpolation-filters 的原生 linearRGB 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-interpolation-filters
-   */
-  readonly linearRGB: SystemKeyword<Key, 'linearRGB'>;
-  /**
-   * color-interpolation-filters 的原生 sRGB 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-interpolation-filters
-   */
-  readonly sRGB: SystemKeyword<Key, 'sRGB'>;
-}
-export interface ColorRenderingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * color-rendering 的原生 optimizeQuality 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-rendering
-   */
-  readonly optimizeQuality: SystemKeyword<Key, 'optimizeQuality'>;
-  /**
-   * color-rendering 的原生 optimizeSpeed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-rendering
-   */
-  readonly optimizeSpeed: SystemKeyword<Key, 'optimizeSpeed'>;
-}
-export interface ColorSchemeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * color-scheme 的原生 dark 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-scheme
-   */
-  readonly dark: SystemKeyword<Key, 'dark'>;
-  /**
-   * color-scheme 的原生 light 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-scheme
-   */
-  readonly light: SystemKeyword<Key, 'light'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface ColumnCountKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ColumnFillKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * column-fill 的原生 balance 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-fill
-   */
-  readonly balance: SystemKeyword<Key, 'balance'>;
-}
-export interface ColumnGapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.ColorValues, 'currentColor' | 'transparent'>, Key> {}
+export interface ColorAdjustKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ColorAdjustValues, 'economy' | 'exact'>, Key> {}
+export interface ColorInterpolationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ColorInterpolationValues, 'auto' | 'linearRGB' | 'sRGB'>, Key> {}
+export interface ColorInterpolationFiltersKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.ColorInterpolationFiltersValues, 'auto' | 'linearRGB' | 'sRGB'>,
+      Key
+    > {}
+export interface ColorRenderingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.ColorRenderingValues, 'auto' | 'optimizeQuality' | 'optimizeSpeed'>,
+      Key
+    > {}
+export interface ColorSchemeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ColorSchemeValues, 'dark' | 'light' | 'normal'>, Key> {}
+export interface ColumnCountKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ColumnCountValues, 'auto'>, Key> {}
+export interface ColumnFillKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ColumnFillValues, 'auto' | 'balance'>, Key> {}
+export interface ColumnGapKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ColumnGapValues, 'normal'>, Key> {}
 export interface ColumnRuleKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.ColumnRuleValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface ColumnRuleColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface ColumnRuleStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * column-rule-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * column-rule-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * column-rule-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * column-rule-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * column-rule-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * column-rule-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * column-rule-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * column-rule-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * column-rule-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface ColumnRuleWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * column-rule-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * column-rule-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * column-rule-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
-export interface ColumnsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ColumnSpanKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * column-span 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-span
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ColumnWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ContainKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 组合 layout、style 和 paint 隔离，不包含 size 隔离。
-   */
-  readonly content: SystemKeyword<Key, 'content'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.ColumnRuleColorValues, 'currentColor' | 'transparent'>, Key> {}
+export interface ColumnRuleStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.ColumnRuleStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface ColumnRuleWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ColumnRuleWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
+export interface ColumnsKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ColumnsValues, 'auto'>, Key> {}
+export interface ColumnSpanKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ColumnSpanValues, 'all' | 'none'>, Key> {}
+export interface ColumnWidthKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ColumnWidthValues, 'auto'>, Key> {}
+export interface ContainKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.ContainValues,
+        'content' | 'layout' | 'none' | 'paint' | 'size' | 'strict' | 'style'
+      >,
+      Key
+    > {
   /**
    * contain 的原生 inline-size 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain
    */
   readonly inlineSize: SystemKeyword<Key, 'inline-size'>;
-  /**
-   * contain 的原生 layout 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain
-   */
-  readonly layout: SystemKeyword<Key, 'layout'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 将后代绘制限制在隔离边界内。
-   */
-  readonly paint: SystemKeyword<Key, 'paint'>;
-  /**
-   * 计算盒子尺寸时不依赖后代内容，通常需要显式或替代内部尺寸。
-   */
-  readonly size: SystemKeyword<Key, 'size'>;
-  /**
-   * 组合 size、layout、style 和 paint 隔离；尺寸隔离可能影响自动尺寸。
-   */
-  readonly strict: SystemKeyword<Key, 'strict'>;
-  /**
-   * 隔离计数器等特定样式副作用，不会阻止普通 CSS 继承或选择器匹配。
-   */
-  readonly style: SystemKeyword<Key, 'style'>;
 }
-export interface ContainerKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ContainerNameKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ContainerTypeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface ContainerKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ContainerValues, 'none'>, Key> {}
+export interface ContainerNameKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ContainerNameValues, 'none'>, Key> {}
+export interface ContainerTypeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ContainerTypeValues, 'normal' | 'size'>, Key> {
   /**
    * 建立行内轴尺寸查询容器，不同时隔离块轴尺寸。
    */
   readonly inlineSize: SystemKeyword<Key, 'inline-size'>;
   /**
-   * 不建立尺寸查询容器；仍可用于支持的样式查询。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * container-type 的原生 scroll-state 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/container-type
    */
   readonly scrollState: SystemKeyword<Key, 'scroll-state'>;
-  /**
-   * 建立两个轴的尺寸查询容器，内容不再直接决定其隔离尺寸。
-   */
-  readonly size: SystemKeyword<Key, 'size'>;
 }
-export interface ContainIntrinsicBlockSizeKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ContainIntrinsicHeightKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ContainIntrinsicInlineSizeKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ContainIntrinsicSizeKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ContainIntrinsicWidthKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ContentKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface ContainIntrinsicBlockSizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ContainIntrinsicBlockSizeValues, 'none'>, Key> {}
+export interface ContainIntrinsicHeightKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ContainIntrinsicHeightValues, 'none'>, Key> {}
+export interface ContainIntrinsicInlineSizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ContainIntrinsicInlineSizeValues, 'none'>, Key> {}
+export interface ContainIntrinsicSizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ContainIntrinsicSizeValues, 'none'>, Key> {}
+export interface ContainIntrinsicWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ContainIntrinsicWidthValues, 'none'>, Key> {}
+export interface ContentKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ContentValues, 'none' | 'normal'>, Key> {
   /**
    * content 的原生 close-quote 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/content
@@ -4849,52 +1995,47 @@ export interface ContentKeywords<Key extends PropertyName> extends CssWideKeywor
    */
   readonly noOpenQuote: SystemKeyword<Key, 'no-open-quote'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * content 的原生 open-quote 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/content
    */
   readonly openQuote: SystemKeyword<Key, 'open-quote'>;
 }
-export interface ContentVisibilityKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 允许浏览器跳过与用户暂不相关的内容渲染，仍需维护布局和可访问性语义。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 跳过内容渲染，行为不同于只隐藏绘制的 visibility:hidden。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * 正常渲染内容，不由此属性跳过子树。
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
-}
-export interface CounterIncrementKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface CounterResetKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface CounterSetKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface CursorKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface ContentVisibilityKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ContentVisibilityValues, 'auto' | 'hidden' | 'visible'>, Key> {}
+export interface CounterIncrementKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.CounterIncrementValues, 'none'>, Key> {}
+export interface CounterResetKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.CounterResetValues, 'none'>, Key> {}
+export interface CounterSetKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.CounterSetValues, 'none'>, Key> {}
+export interface CursorKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.CursorValues,
+        | 'alias'
+        | 'auto'
+        | 'cell'
+        | 'copy'
+        | 'crosshair'
+        | 'default'
+        | 'grab'
+        | 'grabbing'
+        | 'help'
+        | 'move'
+        | 'none'
+        | 'pointer'
+        | 'progress'
+        | 'text'
+        | 'wait'
+      >,
+      Key
+    > {
   /**
    * cursor 的原生 -moz-grab 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
@@ -4931,24 +2072,10 @@ export interface CursorKeywords<Key extends PropertyName> extends CssWideKeyword
    */
   readonly WebkitZoomOut: SystemKeyword<Key, '-webkit-zoom-out'>;
   /**
-   * cursor 的原生 alias 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly alias: SystemKeyword<Key, 'alias'>;
-  /**
    * cursor 的原生 all-scroll 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
    */
   readonly allScroll: SystemKeyword<Key, 'all-scroll'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * cursor 的原生 cell 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly cell: SystemKeyword<Key, 'cell'>;
   /**
    * cursor 的原生 col-resize 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
@@ -4960,21 +2087,6 @@ export interface CursorKeywords<Key extends PropertyName> extends CssWideKeyword
    */
   readonly contextMenu: SystemKeyword<Key, 'context-menu'>;
   /**
-   * cursor 的原生 copy 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly copy: SystemKeyword<Key, 'copy'>;
-  /**
-   * cursor 的原生 crosshair 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly crosshair: SystemKeyword<Key, 'crosshair'>;
-  /**
-   * cursor 的原生 default 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly default: SystemKeyword<Key, 'default'>;
-  /**
    * cursor 的原生 e-resize 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
    */
@@ -4984,26 +2096,6 @@ export interface CursorKeywords<Key extends PropertyName> extends CssWideKeyword
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
    */
   readonly ewResize: SystemKeyword<Key, 'ew-resize'>;
-  /**
-   * cursor 的原生 grab 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly grab: SystemKeyword<Key, 'grab'>;
-  /**
-   * cursor 的原生 grabbing 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly grabbing: SystemKeyword<Key, 'grabbing'>;
-  /**
-   * cursor 的原生 help 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly help: SystemKeyword<Key, 'help'>;
-  /**
-   * cursor 的原生 move 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly move: SystemKeyword<Key, 'move'>;
   /**
    * cursor 的原生 n-resize 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
@@ -5025,10 +2117,6 @@ export interface CursorKeywords<Key extends PropertyName> extends CssWideKeyword
    */
   readonly noDrop: SystemKeyword<Key, 'no-drop'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
    * cursor 的原生 not-allowed 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
    */
@@ -5048,16 +2136,6 @@ export interface CursorKeywords<Key extends PropertyName> extends CssWideKeyword
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
    */
   readonly nwseResize: SystemKeyword<Key, 'nwse-resize'>;
-  /**
-   * cursor 的原生 pointer 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly pointer: SystemKeyword<Key, 'pointer'>;
-  /**
-   * cursor 的原生 progress 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly progress: SystemKeyword<Key, 'progress'>;
   /**
    * cursor 的原生 row-resize 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
@@ -5079,11 +2157,6 @@ export interface CursorKeywords<Key extends PropertyName> extends CssWideKeyword
    */
   readonly swResize: SystemKeyword<Key, 'sw-resize'>;
   /**
-   * cursor 的原生 text 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
-  /**
    * cursor 的原生 vertical-text 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
    */
@@ -5093,11 +2166,6 @@ export interface CursorKeywords<Key extends PropertyName> extends CssWideKeyword
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
    */
   readonly wResize: SystemKeyword<Key, 'w-resize'>;
-  /**
-   * cursor 的原生 wait 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
-   */
-  readonly wait: SystemKeyword<Key, 'wait'>;
   /**
    * cursor 的原生 zoom-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
@@ -5111,25 +2179,22 @@ export interface CursorKeywords<Key extends PropertyName> extends CssWideKeyword
 }
 export interface CxKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface CyKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface DKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface DirectionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * direction 的原生 ltr 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/direction
-   */
-  readonly ltr: SystemKeyword<Key, 'ltr'>;
-  /**
-   * direction 的原生 rtl 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/direction
-   */
-  readonly rtl: SystemKeyword<Key, 'rtl'>;
-}
-export interface DisplayKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface DKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.DValues, 'none'>, Key> {}
+export interface DirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.DirectionValues, 'ltr' | 'rtl'>, Key> {}
+export interface DisplayKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.DisplayValues,
+        'block' | 'contents' | 'flex' | 'flow' | 'grid' | 'inline' | 'none' | 'ruby' | 'table'
+      >,
+      Key
+    > {
   /**
    * display 的原生 -ms-flexbox 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
@@ -5161,43 +2226,6 @@ export interface DisplayKeywords<Key extends PropertyName> extends CssWideKeywor
    */
   readonly WebkitInlineFlex: SystemKeyword<Key, '-webkit-inline-flex'>;
   /**
-   * 生成块级盒子，内部默认采用普通流布局。
-   */
-  readonly block: SystemKeyword<Key, 'block'>;
-  /**
-   * 通常不生成元素自身的主盒子，让子盒子参与外层布局；背景、边框等失去承载盒，应核对可访问性行为。
-   *
-   * 普通元素自身不再提供主盒子，子盒子可参与外层 Flex/Grid 等布局。
-   *
-   * 适用场景：保留 DOM 包装节点，同时让内部项目进入外层布局。
-   *
-   * 替换元素等存在特殊规则；应检查语义和可访问性，不要把它当作无条件删除包装盒的替代。
-   *
-   * @example
-   * css({ display: "contents" })
-   */
-  readonly contents: SystemKeyword<Key, 'contents'>;
-  /**
-   * 生成块级弹性容器，直接子元素参与 Flex 布局。
-   *
-   * 容器自身以块级方式参与普通流，直接子元素成为弹性项目；可分配剩余空间、对齐和换行。
-   *
-   * 区别：inline-flex 使用相同的内部布局，但容器对外按行内级盒子排列。
-   *
-   * 适用场景：工具栏、横向导航、纵向堆叠和一维内容排列。
-   *
-   * 默认主轴为 row，默认不换行；主轴方向还受书写方向影响。
-   *
-   * @example
-   * css({ display: "flex", alignItems: "center", justifyContent: "space-between" })
-   */
-  readonly flex: SystemKeyword<Key, 'flex'>;
-  /**
-   * display 的原生 flow 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
-   */
-  readonly flow: SystemKeyword<Key, 'flow'>;
-  /**
    * 建立独立块格式化上下文，可包住内部浮动并隔离部分外边距折叠。
    *
    * 区别：与普通 block 相比，显式建立独立块格式化上下文；无需借助 overflow:hidden，也不会因此裁剪溢出。
@@ -5208,23 +2236,6 @@ export interface DisplayKeywords<Key extends PropertyName> extends CssWideKeywor
    * css({ display: "flow-root", padding: "1rem" })
    */
   readonly flowRoot: SystemKeyword<Key, 'flow-root'>;
-  /**
-   * 生成块级网格容器，直接子元素参与 Grid 布局。
-   *
-   * 直接子元素进入网格，行列轨道和命名区域共同决定项目位置与尺寸。
-   *
-   * 区别：Flex 更侧重单个主轴；Grid 可以同时控制行和列。inline-grid 则改变容器对外的显示类型。
-   *
-   * 适用场景：卡片网格、表单对齐和二维页面区域布局。
-   *
-   * @example
-   * css({ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "1rem" })
-   */
-  readonly grid: SystemKeyword<Key, 'grid'>;
-  /**
-   * 生成行内盒子，参与行内排版；普通非替换行内盒子的宽高不按块盒规则应用。
-   */
-  readonly inline: SystemKeyword<Key, 'inline'>;
   /**
    * 外部参与行内排版，内部建立独立格式化上下文，可设置宽高。
    *
@@ -5280,24 +2291,6 @@ export interface DisplayKeywords<Key extends PropertyName> extends CssWideKeywor
    */
   readonly listItem: SystemKeyword<Key, 'list-item'>;
   /**
-   * 不生成元素及其后代的布局盒子，通常也从可访问性树中移除。
-   *
-   * 区别：visibility:hidden 通常保留布局空间；opacity:0 只改变透明度，通常仍能交互。
-   *
-   * 适用场景：从当前布局中隐藏一段内容。
-   *
-   * 不能靠它保留可聚焦交互；重新显示时需按组件需求管理焦点。
-   *
-   * @example
-   * css({ display: "none" })
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * display 的原生 ruby 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
-   */
-  readonly ruby: SystemKeyword<Key, 'ruby'>;
-  /**
    * display 的原生 ruby-base 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
    */
@@ -5322,11 +2315,6 @@ export interface DisplayKeywords<Key extends PropertyName> extends CssWideKeywor
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
    */
   readonly runIn: SystemKeyword<Key, 'run-in'>;
-  /**
-   * display 的原生 table 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
-   */
-  readonly table: SystemKeyword<Key, 'table'>;
   /**
    * display 的原生 table-caption 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
@@ -5368,41 +2356,16 @@ export interface DisplayKeywords<Key extends PropertyName> extends CssWideKeywor
    */
   readonly tableRowGroup: SystemKeyword<Key, 'table-row-group'>;
 }
-export interface DominantBaselineKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * dominant-baseline 的原生 alphabetic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/dominant-baseline
-   */
-  readonly alphabetic: SystemKeyword<Key, 'alphabetic'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * dominant-baseline 的原生 central 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/dominant-baseline
-   */
-  readonly central: SystemKeyword<Key, 'central'>;
-  /**
-   * dominant-baseline 的原生 hanging 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/dominant-baseline
-   */
-  readonly hanging: SystemKeyword<Key, 'hanging'>;
-  /**
-   * dominant-baseline 的原生 ideographic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/dominant-baseline
-   */
-  readonly ideographic: SystemKeyword<Key, 'ideographic'>;
-  /**
-   * dominant-baseline 的原生 mathematical 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/dominant-baseline
-   */
-  readonly mathematical: SystemKeyword<Key, 'mathematical'>;
-  /**
-   * dominant-baseline 的原生 middle 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/dominant-baseline
-   */
-  readonly middle: SystemKeyword<Key, 'middle'>;
+export interface DominantBaselineKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.DominantBaselineValues,
+        'alphabetic' | 'auto' | 'central' | 'hanging' | 'ideographic' | 'mathematical' | 'middle'
+      >,
+      Key
+    > {
   /**
    * dominant-baseline 的原生 text-bottom 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/dominant-baseline
@@ -5414,36 +2377,21 @@ export interface DominantBaselineKeywords<Key extends PropertyName> extends CssW
    */
   readonly textTop: SystemKeyword<Key, 'text-top'>;
 }
-export interface EmptyCellsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * empty-cells 的原生 hide 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/empty-cells
-   */
-  readonly hide: SystemKeyword<Key, 'hide'>;
-  /**
-   * empty-cells 的原生 show 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/empty-cells
-   */
-  readonly show: SystemKeyword<Key, 'show'>;
-}
-export interface FieldSizingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * field-sizing 的原生 content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/field-sizing
-   */
-  readonly content: SystemKeyword<Key, 'content'>;
-  /**
-   * field-sizing 的原生 fixed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/field-sizing
-   */
-  readonly fixed: SystemKeyword<Key, 'fixed'>;
-}
+export interface EmptyCellsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.EmptyCellsValues, 'hide' | 'show'>, Key> {}
+export interface FieldSizingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FieldSizingValues, 'content' | 'fixed'>, Key> {}
 export interface FillKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.FillValues, 'currentColor' | 'none' | 'transparent'>, Key> {
   /**
    * CSS 颜色关键字 context-fill；系统颜色会随用户环境和配色设置变化。
    */
@@ -5452,55 +2400,18 @@ export interface FillKeywords<Key extends PropertyName>
    * CSS 颜色关键字 context-stroke；系统颜色会随用户环境和配色设置变化。
    */
   readonly contextStroke: SystemKeyword<Key, 'context-stroke'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
 }
 export interface FillOpacityKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface FillRuleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 按射线穿过路径次数的奇偶性判断内部，适合交叠或有孔路径。
-   */
-  readonly evenodd: SystemKeyword<Key, 'evenodd'>;
-  /**
-   * 按有方向的绕数判断路径内部，子路径方向会影响结果。
-   */
-  readonly nonzero: SystemKeyword<Key, 'nonzero'>;
-}
-export interface FilterKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface FlexKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 等价于 1 1 auto：可增长、可收缩，基础尺寸由主尺寸属性或内容决定。
-   *
-   * 区别：1 1 0% 以零百分比为基础分配，auto 的基础尺寸通常受内容或主尺寸属性影响。
-   *
-   * 适用场景：让项目以自身尺寸为基础参与剩余空间分配。
-   *
-   * 最终比例还受最小/最大尺寸约束，不保证所有项目等宽。
-   *
-   * @example
-   * css({ flex: "auto" })
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * flex 的原生 content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex
-   */
-  readonly content: SystemKeyword<Key, 'content'>;
+export interface FillRuleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FillRuleValues, 'evenodd' | 'nonzero'>, Key> {}
+export interface FilterKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.FilterValues, 'none'>, Key> {}
+export interface FlexKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FlexValues, 'auto' | 'content' | 'none'>, Key> {
   /**
    * flex 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex
@@ -5516,19 +2427,11 @@ export interface FlexKeywords<Key extends PropertyName> extends CssWideKeywords<
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 等价于 0 0 auto：不增长也不收缩，保留自动基础尺寸。
-   *
-   * 区别：auto 会增长和收缩；none 两者都不参与。
-   *
-   * 适用场景：防止工具栏中的图标或固定控件被压缩。
-   *
-   * @example
-   * css({ flex: "none" })
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface FlexBasisKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface FlexBasisKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FlexBasisValues, 'auto' | 'content'>, Key> {
   /**
    * flex-basis 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-basis
@@ -5550,14 +2453,6 @@ export interface FlexBasisKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly WebkitAuto: SystemKeyword<Key, '-webkit-auto'>;
   /**
-   * 先参考主轴对应的 width 或 height；该值也为 auto 时由内容决定。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 按内容确定基础尺寸，而不直接使用 width 或 height 作为基础尺寸。
-   */
-  readonly content: SystemKeyword<Key, 'content'>;
-  /**
    * flex-basis 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-basis
    */
@@ -5573,55 +2468,33 @@ export interface FlexBasisKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
-export interface FlexDirectionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 主轴沿块方向排列；水平书写时通常从上到下。
-   */
-  readonly column: SystemKeyword<Key, 'column'>;
+export interface FlexDirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FlexDirectionValues, 'column' | 'row'>, Key> {
   /**
    * 反转块方向的视觉排列，不改变 DOM 顺序。
    */
   readonly columnReverse: SystemKeyword<Key, 'column-reverse'>;
   /**
-   * 主轴沿行内方向排列；不一定是从左到右，取决于书写方向。
-   */
-  readonly row: SystemKeyword<Key, 'row'>;
-  /**
    * 反转行内方向的视觉排列，不改变 DOM 顺序。
    */
   readonly rowReverse: SystemKeyword<Key, 'row-reverse'>;
 }
-export interface FlexFlowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * flex-flow 的原生 column 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow
-   */
-  readonly column: SystemKeyword<Key, 'column'>;
+export interface FlexFlowKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FlexFlowValues, 'column' | 'nowrap' | 'row' | 'wrap'>, Key> {
   /**
    * flex-flow 的原生 column-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow
    */
   readonly columnReverse: SystemKeyword<Key, 'column-reverse'>;
   /**
-   * flex-flow 的原生 nowrap 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow
-   */
-  readonly nowrap: SystemKeyword<Key, 'nowrap'>;
-  /**
-   * flex-flow 的原生 row 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow
-   */
-  readonly row: SystemKeyword<Key, 'row'>;
-  /**
    * flex-flow 的原生 row-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow
    */
   readonly rowReverse: SystemKeyword<Key, 'row-reverse'>;
-  /**
-   * flex-flow 的原生 wrap 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow
-   */
-  readonly wrap: SystemKeyword<Key, 'wrap'>;
   /**
    * flex-flow 的原生 wrap-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow
@@ -5630,28 +2503,19 @@ export interface FlexFlowKeywords<Key extends PropertyName> extends CssWideKeywo
 }
 export interface FlexGrowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface FlexShrinkKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface FlexWrapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 保持单行；项目仍可能收缩或溢出。
-   */
-  readonly nowrap: SystemKeyword<Key, 'nowrap'>;
-  /**
-   * 空间不足时形成多行，沿交叉轴正常方向排列。
-   *
-   * 区别：nowrap 保持单行；wrap-reverse 反转交叉轴上各行的排列方向。
-   *
-   * 换行不会自动均分每行项目宽度，尺寸仍由各项目的 flex 配置决定。
-   *
-   * @example
-   * css({ display: "flex", flexWrap: "wrap" })
-   */
-  readonly wrap: SystemKeyword<Key, 'wrap'>;
+export interface FlexWrapKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FlexWrapValues, 'nowrap' | 'wrap'>, Key> {
   /**
    * 允许换行并反转交叉轴上各行的排列方向。
    */
   readonly wrapReverse: SystemKeyword<Key, 'wrap-reverse'>;
 }
-export interface FloatKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface FloatKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FloatValues, 'left' | 'none' | 'right'>, Key> {
   /**
    * float 的原生 inline-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/float
@@ -5662,53 +2526,19 @@ export interface FloatKeywords<Key extends PropertyName> extends CssWideKeywords
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/float
    */
   readonly inlineStart: SystemKeyword<Key, 'inline-start'>;
-  /**
-   * float 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/float
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * float 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/float
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
 }
 export interface FloodColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.FloodColorValues, 'currentColor' | 'transparent'>, Key> {}
 export interface FloodOpacityKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface FontKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * font 的原生 caption 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font
-   */
-  readonly caption: SystemKeyword<Key, 'caption'>;
-  /**
-   * font 的原生 icon 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font
-   */
-  readonly icon: SystemKeyword<Key, 'icon'>;
-  /**
-   * font 的原生 menu 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font
-   */
-  readonly menu: SystemKeyword<Key, 'menu'>;
+export interface FontKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontValues, 'caption' | 'icon' | 'menu'>, Key> {
   /**
    * font 的原生 message-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font
@@ -5725,52 +2555,26 @@ export interface FontKeywords<Key extends PropertyName> extends CssWideKeywords<
    */
   readonly statusBar: SystemKeyword<Key, 'status-bar'>;
 }
-export interface FontFamilyKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface FontFamilyKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.FontFamilyValues,
+        'cursive' | 'emoji' | 'fangsong' | 'fantasy' | 'math' | 'monospace' | 'serif'
+      >,
+      Key
+    > {
   /**
    * font-family 的原生 -apple-system 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
    */
   readonly AppleSystem: SystemKeyword<Key, '-apple-system'>;
   /**
-   * font-family 的原生 cursive 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
-   */
-  readonly cursive: SystemKeyword<Key, 'cursive'>;
-  /**
-   * font-family 的原生 emoji 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
-   */
-  readonly emoji: SystemKeyword<Key, 'emoji'>;
-  /**
-   * font-family 的原生 fangsong 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
-   */
-  readonly fangsong: SystemKeyword<Key, 'fangsong'>;
-  /**
-   * font-family 的原生 fantasy 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
-   */
-  readonly fantasy: SystemKeyword<Key, 'fantasy'>;
-  /**
-   * font-family 的原生 math 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
-   */
-  readonly math: SystemKeyword<Key, 'math'>;
-  /**
-   * font-family 的原生 monospace 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
-   */
-  readonly monospace: SystemKeyword<Key, 'monospace'>;
-  /**
    * font-family 的原生 sans-serif 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
    */
   readonly sansSerif: SystemKeyword<Key, 'sans-serif'>;
-  /**
-   * font-family 的原生 serif 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
-   */
-  readonly serif: SystemKeyword<Key, 'serif'>;
   /**
    * font-family 的原生 system-ui 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
@@ -5797,93 +2601,33 @@ export interface FontFamilyKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly uiSerif: SystemKeyword<Key, 'ui-serif'>;
 }
-export interface FontFeatureSettingsKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface FontKerningKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface FontLanguageOverrideKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface FontOpticalSizingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface FontPaletteKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * font-palette 的原生 dark 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-palette
-   */
-  readonly dark: SystemKeyword<Key, 'dark'>;
-  /**
-   * font-palette 的原生 light 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-palette
-   */
-  readonly light: SystemKeyword<Key, 'light'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface FontSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * font-size 的原生 large 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size
-   */
-  readonly large: SystemKeyword<Key, 'large'>;
-  /**
-   * font-size 的原生 larger 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size
-   */
-  readonly larger: SystemKeyword<Key, 'larger'>;
-  /**
-   * font-size 的原生 math 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size
-   */
-  readonly math: SystemKeyword<Key, 'math'>;
-  /**
-   * font-size 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * font-size 的原生 small 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size
-   */
-  readonly small: SystemKeyword<Key, 'small'>;
-  /**
-   * font-size 的原生 smaller 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size
-   */
-  readonly smaller: SystemKeyword<Key, 'smaller'>;
+export interface FontFeatureSettingsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontFeatureSettingsValues, 'normal'>, Key> {}
+export interface FontKerningKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontKerningValues, 'auto' | 'none' | 'normal'>, Key> {}
+export interface FontLanguageOverrideKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontLanguageOverrideValues, 'normal'>, Key> {}
+export interface FontOpticalSizingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontOpticalSizingValues, 'auto' | 'none'>, Key> {}
+export interface FontPaletteKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontPaletteValues, 'dark' | 'light' | 'normal'>, Key> {}
+export interface FontSizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.FontSizeValues, 'large' | 'larger' | 'math' | 'medium' | 'small' | 'smaller'>,
+      Key
+    > {
   /**
    * font-size 的原生 x-large 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size
@@ -5910,47 +2654,21 @@ export interface FontSizeKeywords<Key extends PropertyName> extends CssWideKeywo
    */
   readonly xxxLarge: SystemKeyword<Key, 'xxx-large'>;
 }
-export interface FontSizeAdjustKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface FontSizeAdjustKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.FontSizeAdjustValues, 'none'>, Key> {
   /**
    * font-size-adjust 的原生 from-font 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size-adjust
    */
   readonly fromFont: SystemKeyword<Key, 'from-font'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface FontSmoothKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * font-smooth 的原生 always 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-smooth
-   */
-  readonly always: SystemKeyword<Key, 'always'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * font-smooth 的原生 large 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-smooth
-   */
-  readonly large: SystemKeyword<Key, 'large'>;
-  /**
-   * font-smooth 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-smooth
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * font-smooth 的原生 never 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-smooth
-   */
-  readonly never: SystemKeyword<Key, 'never'>;
-  /**
-   * font-smooth 的原生 small 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-smooth
-   */
-  readonly small: SystemKeyword<Key, 'small'>;
+export interface FontSmoothKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.FontSmoothValues, 'always' | 'auto' | 'large' | 'medium' | 'never' | 'small'>,
+      Key
+    > {
   /**
    * font-smooth 的原生 x-large 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-smooth
@@ -5977,17 +2695,10 @@ export interface FontSmoothKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly xxxLarge: SystemKeyword<Key, 'xxx-large'>;
 }
-export interface FontStretchKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * font-stretch 的原生 condensed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-stretch
-   */
-  readonly condensed: SystemKeyword<Key, 'condensed'>;
-  /**
-   * font-stretch 的原生 expanded 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-stretch
-   */
-  readonly expanded: SystemKeyword<Key, 'expanded'>;
+export interface FontStretchKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontStretchValues, 'condensed' | 'expanded' | 'normal'>, Key> {
   /**
    * font-stretch 的原生 extra-condensed 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-stretch
@@ -5998,10 +2709,6 @@ export interface FontStretchKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-stretch
    */
   readonly extraExpanded: SystemKeyword<Key, 'extra-expanded'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
   /**
    * font-stretch 的原生 semi-condensed 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-stretch
@@ -6023,95 +2730,60 @@ export interface FontStretchKeywords<Key extends PropertyName> extends CssWideKe
    */
   readonly ultraExpanded: SystemKeyword<Key, 'ultra-expanded'>;
 }
-export interface FontStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * font-style 的原生 italic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-style
-   */
-  readonly italic: SystemKeyword<Key, 'italic'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * font-style 的原生 oblique 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-style
-   */
-  readonly oblique: SystemKeyword<Key, 'oblique'>;
-}
-export interface FontSynthesisKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * font-synthesis 的原生 position 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis
-   */
-  readonly position: SystemKeyword<Key, 'position'>;
+export interface FontStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontStyleValues, 'italic' | 'normal' | 'oblique'>, Key> {}
+export interface FontSynthesisKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.FontSynthesisValues, 'none' | 'position' | 'style' | 'weight'>,
+      Key
+    > {
   /**
    * font-synthesis 的原生 small-caps 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis
    */
   readonly smallCaps: SystemKeyword<Key, 'small-caps'>;
-  /**
-   * font-synthesis 的原生 style 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis
-   */
-  readonly style: SystemKeyword<Key, 'style'>;
-  /**
-   * font-synthesis 的原生 weight 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis
-   */
-  readonly weight: SystemKeyword<Key, 'weight'>;
 }
-export interface FontSynthesisPositionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface FontSynthesisSmallCapsKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface FontSynthesisStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface FontSynthesisWeightKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface FontVariantKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface FontSynthesisPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontSynthesisPositionValues, 'auto' | 'none'>, Key> {}
+export interface FontSynthesisSmallCapsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontSynthesisSmallCapsValues, 'auto' | 'none'>, Key> {}
+export interface FontSynthesisStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontSynthesisStyleValues, 'auto' | 'none'>, Key> {}
+export interface FontSynthesisWeightKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontSynthesisWeightValues, 'auto' | 'none'>, Key> {}
+export interface FontVariantKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.FontVariantValues,
+        | 'contextual'
+        | 'jis04'
+        | 'jis78'
+        | 'jis83'
+        | 'jis90'
+        | 'none'
+        | 'normal'
+        | 'ordinal'
+        | 'ruby'
+        | 'simplified'
+        | 'traditional'
+        | 'unicase'
+      >,
+      Key
+    > {
   /**
    * font-variant 的原生 all-petite-caps 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
@@ -6127,11 +2799,6 @@ export interface FontVariantKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
    */
   readonly commonLigatures: SystemKeyword<Key, 'common-ligatures'>;
-  /**
-   * font-variant 的原生 contextual 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
-   */
-  readonly contextual: SystemKeyword<Key, 'contextual'>;
   /**
    * font-variant 的原生 diagonal-fractions 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
@@ -6158,26 +2825,6 @@ export interface FontVariantKeywords<Key extends PropertyName> extends CssWideKe
    */
   readonly historicalLigatures: SystemKeyword<Key, 'historical-ligatures'>;
   /**
-   * font-variant 的原生 jis04 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
-   */
-  readonly jis04: SystemKeyword<Key, 'jis04'>;
-  /**
-   * font-variant 的原生 jis78 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
-   */
-  readonly jis78: SystemKeyword<Key, 'jis78'>;
-  /**
-   * font-variant 的原生 jis83 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
-   */
-  readonly jis83: SystemKeyword<Key, 'jis83'>;
-  /**
-   * font-variant 的原生 jis90 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
-   */
-  readonly jis90: SystemKeyword<Key, 'jis90'>;
-  /**
    * font-variant 的原生 lining-nums 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
    */
@@ -6203,23 +2850,10 @@ export interface FontVariantKeywords<Key extends PropertyName> extends CssWideKe
    */
   readonly noHistoricalLigatures: SystemKeyword<Key, 'no-historical-ligatures'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * font-variant 的原生 oldstyle-nums 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
    */
   readonly oldstyleNums: SystemKeyword<Key, 'oldstyle-nums'>;
-  /**
-   * font-variant 的原生 ordinal 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
-   */
-  readonly ordinal: SystemKeyword<Key, 'ordinal'>;
   /**
    * font-variant 的原生 petite-caps 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
@@ -6235,16 +2869,6 @@ export interface FontVariantKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
    */
   readonly proportionalWidth: SystemKeyword<Key, 'proportional-width'>;
-  /**
-   * font-variant 的原生 ruby 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
-   */
-  readonly ruby: SystemKeyword<Key, 'ruby'>;
-  /**
-   * font-variant 的原生 simplified 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
-   */
-  readonly simplified: SystemKeyword<Key, 'simplified'>;
   /**
    * font-variant 的原生 slashed-zero 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
@@ -6270,31 +2894,21 @@ export interface FontVariantKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
    */
   readonly titlingCaps: SystemKeyword<Key, 'titling-caps'>;
-  /**
-   * font-variant 的原生 traditional 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
-   */
-  readonly traditional: SystemKeyword<Key, 'traditional'>;
-  /**
-   * font-variant 的原生 unicase 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
-   */
-  readonly unicase: SystemKeyword<Key, 'unicase'>;
 }
-export interface FontVariantAlternatesKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
+export interface FontVariantAlternatesKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontVariantAlternatesValues, 'normal'>, Key> {
   /**
    * font-variant-alternates 的原生 historical-forms 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-alternates
    */
   readonly historicalForms: SystemKeyword<Key, 'historical-forms'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
-export interface FontVariantCapsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface FontVariantCapsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontVariantCapsValues, 'normal' | 'unicase'>, Key> {
   /**
    * font-variant-caps 的原生 all-petite-caps 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-caps
@@ -6305,10 +2919,6 @@ export interface FontVariantCapsKeywords<Key extends PropertyName> extends CssWi
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-caps
    */
   readonly allSmallCaps: SystemKeyword<Key, 'all-small-caps'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
   /**
    * font-variant-caps 的原生 petite-caps 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-caps
@@ -6324,99 +2934,47 @@ export interface FontVariantCapsKeywords<Key extends PropertyName> extends CssWi
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-caps
    */
   readonly titlingCaps: SystemKeyword<Key, 'titling-caps'>;
-  /**
-   * font-variant-caps 的原生 unicase 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-caps
-   */
-  readonly unicase: SystemKeyword<Key, 'unicase'>;
 }
-export interface FontVariantEastAsianKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
+export interface FontVariantEastAsianKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.FontVariantEastAsianValues,
+        'jis04' | 'jis78' | 'jis83' | 'jis90' | 'normal' | 'ruby' | 'simplified' | 'traditional'
+      >,
+      Key
+    > {
   /**
    * font-variant-east-asian 的原生 full-width 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
    */
   readonly fullWidth: SystemKeyword<Key, 'full-width'>;
   /**
-   * font-variant-east-asian 的原生 jis04 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
-   */
-  readonly jis04: SystemKeyword<Key, 'jis04'>;
-  /**
-   * font-variant-east-asian 的原生 jis78 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
-   */
-  readonly jis78: SystemKeyword<Key, 'jis78'>;
-  /**
-   * font-variant-east-asian 的原生 jis83 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
-   */
-  readonly jis83: SystemKeyword<Key, 'jis83'>;
-  /**
-   * font-variant-east-asian 的原生 jis90 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
-   */
-  readonly jis90: SystemKeyword<Key, 'jis90'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * font-variant-east-asian 的原生 proportional-width 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
    */
   readonly proportionalWidth: SystemKeyword<Key, 'proportional-width'>;
-  /**
-   * font-variant-east-asian 的原生 ruby 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
-   */
-  readonly ruby: SystemKeyword<Key, 'ruby'>;
-  /**
-   * font-variant-east-asian 的原生 simplified 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
-   */
-  readonly simplified: SystemKeyword<Key, 'simplified'>;
-  /**
-   * font-variant-east-asian 的原生 traditional 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
-   */
-  readonly traditional: SystemKeyword<Key, 'traditional'>;
 }
-export interface FontVariantEmojiKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * font-variant-emoji 的原生 emoji 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-emoji
-   */
-  readonly emoji: SystemKeyword<Key, 'emoji'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * font-variant-emoji 的原生 text 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-emoji
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
-  /**
-   * font-variant-emoji 的原生 unicode 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-emoji
-   */
-  readonly unicode: SystemKeyword<Key, 'unicode'>;
-}
-export interface FontVariantLigaturesKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
+export interface FontVariantEmojiKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.FontVariantEmojiValues, 'emoji' | 'normal' | 'text' | 'unicode'>,
+      Key
+    > {}
+export interface FontVariantLigaturesKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.FontVariantLigaturesValues, 'contextual' | 'none' | 'normal'>,
+      Key
+    > {
   /**
    * font-variant-ligatures 的原生 common-ligatures 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-ligatures
    */
   readonly commonLigatures: SystemKeyword<Key, 'common-ligatures'>;
-  /**
-   * font-variant-ligatures 的原生 contextual 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-ligatures
-   */
-  readonly contextual: SystemKeyword<Key, 'contextual'>;
   /**
    * font-variant-ligatures 的原生 discretionary-ligatures 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-ligatures
@@ -6447,16 +3005,11 @@ export interface FontVariantLigaturesKeywords<
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-ligatures
    */
   readonly noHistoricalLigatures: SystemKeyword<Key, 'no-historical-ligatures'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
-export interface FontVariantNumericKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface FontVariantNumericKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontVariantNumericValues, 'normal' | 'ordinal'>, Key> {
   /**
    * font-variant-numeric 的原生 diagonal-fractions 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-numeric
@@ -6468,19 +3021,10 @@ export interface FontVariantNumericKeywords<Key extends PropertyName> extends Cs
    */
   readonly liningNums: SystemKeyword<Key, 'lining-nums'>;
   /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * font-variant-numeric 的原生 oldstyle-nums 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-numeric
    */
   readonly oldstyleNums: SystemKeyword<Key, 'oldstyle-nums'>;
-  /**
-   * font-variant-numeric 的原生 ordinal 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-numeric
-   */
-  readonly ordinal: SystemKeyword<Key, 'ordinal'>;
   /**
    * font-variant-numeric 的原生 proportional-nums 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-numeric
@@ -6502,61 +3046,25 @@ export interface FontVariantNumericKeywords<Key extends PropertyName> extends Cs
    */
   readonly tabularNums: SystemKeyword<Key, 'tabular-nums'>;
 }
-export interface FontVariantPositionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * font-variant-position 的原生 sub 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-position
-   */
-  readonly sub: SystemKeyword<Key, 'sub'>;
-  /**
-   * font-variant-position 的原生 super 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-position
-   */
-  readonly super: SystemKeyword<Key, 'super'>;
-}
-export interface FontVariationSettingsKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface FontWeightKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 粗体字重，等价于数值 700。
-   */
-  readonly bold: SystemKeyword<Key, 'bold'>;
-  /**
-   * 相对于继承字重选择更粗的字重，不是简单加一个固定数值。
-   */
-  readonly bolder: SystemKeyword<Key, 'bolder'>;
-  /**
-   * 相对于继承字重选择更细的字重，不是简单减一个固定数值。
-   */
-  readonly lighter: SystemKeyword<Key, 'lighter'>;
-  /**
-   * 正常字重，等价于数值 400。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface FontWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * font-width 的原生 condensed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-width
-   */
-  readonly condensed: SystemKeyword<Key, 'condensed'>;
-  /**
-   * font-width 的原生 expanded 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-width
-   */
-  readonly expanded: SystemKeyword<Key, 'expanded'>;
+export interface FontVariantPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontVariantPositionValues, 'normal' | 'sub' | 'super'>, Key> {}
+export interface FontVariationSettingsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontVariationSettingsValues, 'normal'>, Key> {}
+export interface FontWeightKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.FontWeightValues, 'bold' | 'bolder' | 'lighter' | 'normal'>,
+      Key
+    > {}
+export interface FontWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.FontWidthValues, 'condensed' | 'expanded' | 'normal'>, Key> {
   /**
    * font-width 的原生 extra-condensed 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-width
@@ -6567,10 +3075,6 @@ export interface FontWidthKeywords<Key extends PropertyName> extends CssWideKeyw
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-width
    */
   readonly extraExpanded: SystemKeyword<Key, 'extra-expanded'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
   /**
    * font-width 的原生 semi-condensed 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-width
@@ -6592,52 +3096,28 @@ export interface FontWidthKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly ultraExpanded: SystemKeyword<Key, 'ultra-expanded'>;
 }
-export interface ForcedColorAdjustKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
+export interface ForcedColorAdjustKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ForcedColorAdjustValues, 'auto' | 'none'>, Key> {
   /**
    * forced-color-adjust 的原生 preserve-parent-color 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/forced-color-adjust
    */
   readonly preserveParentColor: SystemKeyword<Key, 'preserve-parent-color'>;
 }
-export interface GapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface GlyphOrientationVerticalKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface GridKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface GridAreaKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface GridAutoColumnsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface GapKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.GapValues, 'normal'>, Key> {}
+export interface GlyphOrientationVerticalKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.GlyphOrientationVerticalValues, 'auto'>, Key> {}
+export interface GridKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.GridValues, 'none'>, Key> {}
+export interface GridAreaKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.GridAreaValues, 'auto'>, Key> {}
+export interface GridAutoColumnsKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.GridAutoColumnsValues, 'auto'>, Key> {
   /**
    * grid-auto-columns 的原生 max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-auto-columns
@@ -6649,25 +3129,12 @@ export interface GridAutoColumnsKeywords<Key extends PropertyName> extends CssWi
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
-export interface GridAutoFlowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 优先沿列放置项目，必要时创建新的隐式列。
-   */
-  readonly column: SystemKeyword<Key, 'column'>;
-  /**
-   * 尝试回填前面留下的空洞，可能让视觉顺序与 DOM 顺序不同。
-   */
-  readonly dense: SystemKeyword<Key, 'dense'>;
-  /**
-   * 优先沿行放置项目，必要时创建新的隐式行。
-   */
-  readonly row: SystemKeyword<Key, 'row'>;
-}
-export interface GridAutoRowsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface GridAutoFlowKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.GridAutoFlowValues, 'column' | 'dense' | 'row'>, Key> {}
+export interface GridAutoRowsKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.GridAutoRowsValues, 'auto'>, Key> {
   /**
    * grid-auto-rows 的原生 max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-auto-rows
@@ -6679,64 +3146,33 @@ export interface GridAutoRowsKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
-export interface GridColumnKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface GridColumnEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
+export interface GridColumnKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.GridColumnValues, 'auto'>, Key> {}
+export interface GridColumnEndKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.GridColumnEndValues, 'auto'>, Key> {}
 export interface GridColumnGapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface GridColumnStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
+export interface GridColumnStartKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.GridColumnStartValues, 'auto'>, Key> {}
 export interface GridGapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface GridRowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface GridRowEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
+export interface GridRowKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.GridRowValues, 'auto'>, Key> {}
+export interface GridRowEndKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.GridRowEndValues, 'auto'>, Key> {}
 export interface GridRowGapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface GridRowStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface GridTemplateKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface GridTemplateAreasKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface GridTemplateColumnsKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface GridRowStartKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.GridRowStartValues, 'auto'>, Key> {}
+export interface GridTemplateKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.GridTemplateValues, 'none'>, Key> {}
+export interface GridTemplateAreasKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.GridTemplateAreasValues, 'none'>, Key> {}
+export interface GridTemplateColumnsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.GridTemplateColumnsValues, 'auto' | 'none' | 'subgrid'>, Key> {
   /**
    * grid-template-columns 的原生 max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-columns
@@ -6747,21 +3183,11 @@ export interface GridTemplateColumnsKeywords<
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-columns
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * grid-template-columns 的原生 subgrid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-columns
-   */
-  readonly subgrid: SystemKeyword<Key, 'subgrid'>;
 }
-export interface GridTemplateRowsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface GridTemplateRowsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.GridTemplateRowsValues, 'auto' | 'none' | 'subgrid'>, Key> {
   /**
    * grid-template-rows 的原生 max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-rows
@@ -6772,43 +3198,24 @@ export interface GridTemplateRowsKeywords<Key extends PropertyName> extends CssW
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-rows
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * grid-template-rows 的原生 subgrid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-rows
-   */
-  readonly subgrid: SystemKeyword<Key, 'subgrid'>;
 }
-export interface HangingPunctuationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface HangingPunctuationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.HangingPunctuationValues, 'first' | 'last' | 'none'>, Key> {
   /**
    * hanging-punctuation 的原生 allow-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hanging-punctuation
    */
   readonly allowEnd: SystemKeyword<Key, 'allow-end'>;
   /**
-   * hanging-punctuation 的原生 first 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hanging-punctuation
-   */
-  readonly first: SystemKeyword<Key, 'first'>;
-  /**
    * hanging-punctuation 的原生 force-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hanging-punctuation
    */
   readonly forceEnd: SystemKeyword<Key, 'force-end'>;
-  /**
-   * hanging-punctuation 的原生 last 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hanging-punctuation
-   */
-  readonly last: SystemKeyword<Key, 'last'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface HeightKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface HeightKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.HeightValues, 'auto'>, Key> {
   /**
    * height 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/height
@@ -6830,10 +3237,6 @@ export interface HeightKeywords<Key extends PropertyName> extends CssWideKeyword
    */
   readonly WebkitFitContent: SystemKeyword<Key, '-webkit-fit-content'>;
   /**
-   * 让布局算法决定尺寸，不保证等于父元素尺寸。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
    * 在最小和最大内部尺寸之间按可用空间夹取尺寸。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
@@ -6846,48 +3249,32 @@ export interface HeightKeywords<Key extends PropertyName> extends CssWideKeyword
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
-export interface HyphenateCharacterKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface HyphenateLimitCharsKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface HyphensKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * hyphens 的原生 manual 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hyphens
-   */
-  readonly manual: SystemKeyword<Key, 'manual'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ImageOrientationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * image-orientation 的原生 flip 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-orientation
-   */
-  readonly flip: SystemKeyword<Key, 'flip'>;
+export interface HyphenateCharacterKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.HyphenateCharacterValues, 'auto'>, Key> {}
+export interface HyphenateLimitCharsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.HyphenateLimitCharsValues, 'auto'>, Key> {}
+export interface HyphensKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.HyphensValues, 'auto' | 'manual' | 'none'>, Key> {}
+export interface ImageOrientationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ImageOrientationValues, 'flip'>, Key> {
   /**
    * image-orientation 的原生 from-image 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-orientation
    */
   readonly fromImage: SystemKeyword<Key, 'from-image'>;
 }
-export interface ImageRenderingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface ImageRenderingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ImageRenderingValues, 'auto' | 'pixelated' | 'smooth'>, Key> {
   /**
    * image-rendering 的原生 -moz-crisp-edges 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-rendering
@@ -6899,24 +3286,10 @@ export interface ImageRenderingKeywords<Key extends PropertyName> extends CssWid
    */
   readonly WebkitOptimizeContrast: SystemKeyword<Key, '-webkit-optimize-contrast'>;
   /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
    * image-rendering 的原生 crisp-edges 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-rendering
    */
   readonly crispEdges: SystemKeyword<Key, 'crisp-edges'>;
-  /**
-   * image-rendering 的原生 pixelated 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-rendering
-   */
-  readonly pixelated: SystemKeyword<Key, 'pixelated'>;
-  /**
-   * image-rendering 的原生 smooth 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-rendering
-   */
-  readonly smooth: SystemKeyword<Key, 'smooth'>;
 }
 export interface ImageResolutionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
@@ -6925,59 +3298,26 @@ export interface ImageResolutionKeywords<Key extends PropertyName> extends CssWi
    */
   readonly fromImage: SystemKeyword<Key, 'from-image'>;
 }
-export interface ImeModeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * ime-mode 的原生 active 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ime-mode
-   */
-  readonly active: SystemKeyword<Key, 'active'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * ime-mode 的原生 disabled 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ime-mode
-   */
-  readonly disabled: SystemKeyword<Key, 'disabled'>;
-  /**
-   * ime-mode 的原生 inactive 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ime-mode
-   */
-  readonly inactive: SystemKeyword<Key, 'inactive'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface InitialLetterKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface InitialLetterAlignKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * initial-letter-align 的原生 alphabetic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/initial-letter-align
-   */
-  readonly alphabetic: SystemKeyword<Key, 'alphabetic'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * initial-letter-align 的原生 hanging 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/initial-letter-align
-   */
-  readonly hanging: SystemKeyword<Key, 'hanging'>;
-  /**
-   * initial-letter-align 的原生 ideographic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/initial-letter-align
-   */
-  readonly ideographic: SystemKeyword<Key, 'ideographic'>;
-}
-export interface InlineSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface ImeModeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.ImeModeValues, 'active' | 'auto' | 'disabled' | 'inactive' | 'normal'>,
+      Key
+    > {}
+export interface InitialLetterKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.InitialLetterValues, 'normal'>, Key> {}
+export interface InitialLetterAlignKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.InitialLetterAlignValues, 'alphabetic' | 'auto' | 'hanging' | 'ideographic'>,
+      Key
+    > {}
+export interface InlineSizeKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.InlineSizeValues, 'auto'>, Key> {
   /**
    * inline-size 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inline-size
@@ -6999,10 +3339,6 @@ export interface InlineSizeKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly WebkitFillAvailable: SystemKeyword<Key, '-webkit-fill-available'>;
   /**
-   * 让布局算法决定尺寸，不保证等于父元素尺寸。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
    * 在最小和最大内部尺寸之间按可用空间夹取尺寸。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
@@ -7015,13 +3351,18 @@ export interface InlineSizeKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
-export interface InsetKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface InsetAreaKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface InsetKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.InsetValues, 'auto'>, Key> {}
+export interface InsetAreaKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.InsetAreaValues,
+        'bottom' | 'center' | 'end' | 'left' | 'none' | 'right' | 'start' | 'top'
+      >,
+      Key
+    > {
   /**
    * inset-area 的原生 block-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
@@ -7033,21 +3374,6 @@ export interface InsetAreaKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly blockStart: SystemKeyword<Key, 'block-start'>;
   /**
-   * inset-area 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * inset-area 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * inset-area 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
    * inset-area 的原生 inline-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
    */
@@ -7057,20 +3383,6 @@ export interface InsetAreaKeywords<Key extends PropertyName> extends CssWideKeyw
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
    */
   readonly inlineStart: SystemKeyword<Key, 'inline-start'>;
-  /**
-   * inset-area 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * inset-area 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
   /**
    * inset-area 的原生 self-block-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
@@ -7227,16 +3539,6 @@ export interface InsetAreaKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly spanYStart: SystemKeyword<Key, 'span-y-start'>;
   /**
-   * inset-area 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * inset-area 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-  /**
    * inset-area 的原生 x-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
    */
@@ -7277,42 +3579,22 @@ export interface InsetAreaKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly yStart: SystemKeyword<Key, 'y-start'>;
 }
-export interface InsetBlockKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface InsetBlockEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface InsetBlockStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface InsetInlineKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface InsetInlineEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface InsetInlineStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
+export interface InsetBlockKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.InsetBlockValues, 'auto'>, Key> {}
+export interface InsetBlockEndKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.InsetBlockEndValues, 'auto'>, Key> {}
+export interface InsetBlockStartKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.InsetBlockStartValues, 'auto'>, Key> {}
+export interface InsetInlineKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.InsetInlineValues, 'auto'>, Key> {}
+export interface InsetInlineEndKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.InsetInlineEndValues, 'auto'>, Key> {}
+export interface InsetInlineStartKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.InsetInlineStartValues, 'auto'>, Key> {}
 export interface InterpolateSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
    * 允许受支持的内部尺寸关键字与长度/百分比之间插值，不保证两个关键字之间可以插值。
@@ -7323,26 +3605,20 @@ export interface InterpolateSizeKeywords<Key extends PropertyName> extends CssWi
    */
   readonly numericOnly: SystemKeyword<Key, 'numeric-only'>;
 }
-export interface IsolationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由其他属性是否需要层叠上下文决定，不强制隔离。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 建立独立层叠上下文，使混合效果在该分组内处理。
-   */
-  readonly isolate: SystemKeyword<Key, 'isolate'>;
-}
-export interface JustifyContentKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 将整体内容放在主轴或行内轴的中间，不改变项目内部文字对齐。
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * justify-content 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
+export interface IsolationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.IsolationValues, 'auto' | 'isolate'>, Key> {}
+export interface JustifyContentKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.JustifyContentValues,
+        'center' | 'end' | 'left' | 'normal' | 'right' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * Flex 内容靠主轴终点排列。
    */
@@ -7351,20 +3627,6 @@ export interface JustifyContentKeywords<Key extends PropertyName> extends CssWid
    * Flex 内容靠主轴起点排列；起点受 flex-direction 影响。
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
-  /**
-   * justify-content 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * justify-content 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
   /**
    * 每个项目两侧分配相等空间，容器边缘的空间是相邻项目间的一半。
    */
@@ -7391,37 +3653,22 @@ export interface JustifyContentKeywords<Key extends PropertyName> extends CssWid
    * css({ display: "flex", justifyContent: "space-evenly" })
    */
   readonly spaceEvenly: SystemKeyword<Key, 'space-evenly'>;
-  /**
-   * justify-content 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * 在支持的布局中拉伸自动尺寸的内容；Flex 主轴增长通常由 flex-grow 控制。
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface JustifyItemsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface JustifyItemsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.JustifyItemsValues,
+        'baseline' | 'center' | 'end' | 'left' | 'legacy' | 'normal' | 'right' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * justify-items 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
    */
   readonly anchorCenter: SystemKeyword<Key, 'anchor-center'>;
-  /**
-   * justify-items 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * justify-items 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * justify-items 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
   /**
    * justify-items 的原生 flex-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
@@ -7433,25 +3680,6 @@ export interface JustifyItemsKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
   /**
-   * justify-items 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * justify-items 的原生 legacy 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
-   */
-  readonly legacy: SystemKeyword<Key, 'legacy'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * justify-items 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
    * justify-items 的原生 self-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
    */
@@ -7461,42 +3689,22 @@ export interface JustifyItemsKeywords<Key extends PropertyName> extends CssWideK
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
    */
   readonly selfStart: SystemKeyword<Key, 'self-start'>;
-  /**
-   * justify-items 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * justify-items 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface JustifySelfKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface JustifySelfKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.JustifySelfValues,
+        'auto' | 'baseline' | 'center' | 'end' | 'left' | 'normal' | 'right' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * justify-self 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
    */
   readonly anchorCenter: SystemKeyword<Key, 'anchor-center'>;
-  /**
-   * 采用父容器 justify-items 等上下文决定的对齐方式；不用于 Flex 项目的主轴分配。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * justify-self 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * justify-self 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * justify-self 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
   /**
    * justify-self 的原生 flex-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
@@ -7508,20 +3716,6 @@ export interface JustifySelfKeywords<Key extends PropertyName> extends CssWideKe
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
   /**
-   * justify-self 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * justify-self 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
    * justify-self 的原生 self-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
    */
@@ -7531,27 +3725,17 @@ export interface JustifySelfKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
    */
   readonly selfStart: SystemKeyword<Key, 'self-start'>;
-  /**
-   * justify-self 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * 在自动尺寸和最小/最大约束允许时沿行内轴拉伸。
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface JustifyTracksKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * justify-tracks 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * justify-tracks 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
+export interface JustifyTracksKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.JustifyTracksValues,
+        'center' | 'end' | 'left' | 'normal' | 'right' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * justify-tracks 的原生 flex-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
@@ -7562,20 +3746,6 @@ export interface JustifyTracksKeywords<Key extends PropertyName> extends CssWide
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
-  /**
-   * justify-tracks 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * justify-tracks 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
   /**
    * justify-tracks 的原生 space-around 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
@@ -7591,432 +3761,189 @@ export interface JustifyTracksKeywords<Key extends PropertyName> extends CssWide
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
    */
   readonly spaceEvenly: SystemKeyword<Key, 'space-evenly'>;
-  /**
-   * justify-tracks 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * justify-tracks 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface KhtmlBoxAlignKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -khtml-box-align 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-align
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * -khtml-box-align 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-align
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -khtml-box-align 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-align
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * -khtml-box-align 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-align
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * -khtml-box-align 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-align
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
-export interface KhtmlBoxDirectionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -khtml-box-direction 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-direction
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
-}
+export interface KhtmlBoxAlignKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.KhtmlBoxAlignValues, 'baseline' | 'center' | 'end' | 'start' | 'stretch'>,
+      Key
+    > {}
+export interface KhtmlBoxDirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.KhtmlBoxDirectionValues, 'normal' | 'reverse'>, Key> {}
 export interface KhtmlBoxFlexKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface KhtmlBoxFlexGroupKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface KhtmlBoxLinesKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -khtml-box-lines 的原生 multiple 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-lines
-   */
-  readonly multiple: SystemKeyword<Key, 'multiple'>;
-  /**
-   * -khtml-box-lines 的原生 single 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-lines
-   */
-  readonly single: SystemKeyword<Key, 'single'>;
-}
+export interface KhtmlBoxLinesKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.KhtmlBoxLinesValues, 'multiple' | 'single'>, Key> {}
 export interface KhtmlBoxOrdinalGroupKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface KhtmlBoxOrientKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface KhtmlBoxOrientKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.KhtmlBoxOrientValues, 'horizontal' | 'vertical'>, Key> {
   /**
    * -khtml-box-orient 的原生 block-axis 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-orient
    */
   readonly blockAxis: SystemKeyword<Key, 'block-axis'>;
   /**
-   * -khtml-box-orient 的原生 horizontal 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-orient
-   */
-  readonly horizontal: SystemKeyword<Key, 'horizontal'>;
-  /**
    * -khtml-box-orient 的原生 inline-axis 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-orient
    */
   readonly inlineAxis: SystemKeyword<Key, 'inline-axis'>;
-  /**
-   * -khtml-box-orient 的原生 vertical 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-orient
-   */
-  readonly vertical: SystemKeyword<Key, 'vertical'>;
 }
-export interface KhtmlBoxPackKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -khtml-box-pack 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-pack
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -khtml-box-pack 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-pack
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * -khtml-box-pack 的原生 justify 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-pack
-   */
-  readonly justify: SystemKeyword<Key, 'justify'>;
-  /**
-   * -khtml-box-pack 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-pack
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-}
-export interface KhtmlLineBreakKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -khtml-line-break 的原生 anywhere 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-line-break
-   */
-  readonly anywhere: SystemKeyword<Key, 'anywhere'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -khtml-line-break 的原生 loose 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-line-break
-   */
-  readonly loose: SystemKeyword<Key, 'loose'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -khtml-line-break 的原生 strict 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-line-break
-   */
-  readonly strict: SystemKeyword<Key, 'strict'>;
-}
+export interface KhtmlBoxPackKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.KhtmlBoxPackValues, 'center' | 'end' | 'justify' | 'start'>,
+      Key
+    > {}
+export interface KhtmlLineBreakKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.KhtmlLineBreakValues, 'anywhere' | 'auto' | 'loose' | 'normal' | 'strict'>,
+      Key
+    > {}
 export interface KhtmlOpacityKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface KhtmlUserSelectKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface KhtmlUserSelectKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.KhtmlUserSelectValues, 'all' | 'auto' | 'none' | 'text'>, Key> {
   /**
    * -khtml-user-select 的原生 -moz-none 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-user-select
    */
   readonly MozNone: SystemKeyword<Key, '-moz-none'>;
-  /**
-   * 将元素内容作为整体选取单元。
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 由父级与元素上下文决定使用的选取行为。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 阻止常规文本选取，不是内容保护或访问控制。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 允许文本选取。
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
 }
-export interface LeftKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface LetterSpacingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
+export interface LeftKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.LeftValues, 'auto'>, Key> {}
+export interface LetterSpacingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.LetterSpacingValues, 'normal'>, Key> {}
 export interface LightingColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface LineBreakKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * line-break 的原生 anywhere 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-break
-   */
-  readonly anywhere: SystemKeyword<Key, 'anywhere'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * line-break 的原生 loose 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-break
-   */
-  readonly loose: SystemKeyword<Key, 'loose'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * line-break 的原生 strict 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-break
-   */
-  readonly strict: SystemKeyword<Key, 'strict'>;
-}
-export interface LineClampKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface LineHeightKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由浏览器和字体度量确定行高，没有固定的跨字体倍数。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.LightingColorValues, 'currentColor' | 'transparent'>, Key> {}
+export interface LineBreakKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.LineBreakValues, 'anywhere' | 'auto' | 'loose' | 'normal' | 'strict'>,
+      Key
+    > {}
+export interface LineClampKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.LineClampValues, 'none'>, Key> {}
+export interface LineHeightKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.LineHeightValues, 'normal'>, Key> {}
 export interface LineHeightStepKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface ListStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * list-style 的原生 inside 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style
-   */
-  readonly inside: SystemKeyword<Key, 'inside'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * list-style 的原生 outside 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style
-   */
-  readonly outside: SystemKeyword<Key, 'outside'>;
-}
-export interface ListStyleImageKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ListStylePositionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * list-style-position 的原生 inside 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style-position
-   */
-  readonly inside: SystemKeyword<Key, 'inside'>;
-  /**
-   * list-style-position 的原生 outside 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style-position
-   */
-  readonly outside: SystemKeyword<Key, 'outside'>;
-}
-export interface ListStyleTypeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MarginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由布局模式分配自动外边距；在 Flex/Grid 中可吸收剩余空间，不保证所有方向都自动居中。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MarginBlockKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由布局模式分配自动外边距；在 Flex/Grid 中可吸收剩余空间，不保证所有方向都自动居中。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MarginBlockEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由布局模式分配自动外边距；在 Flex/Grid 中可吸收剩余空间，不保证所有方向都自动居中。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MarginBlockStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由布局模式分配自动外边距；在 Flex/Grid 中可吸收剩余空间，不保证所有方向都自动居中。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MarginBottomKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由布局模式分配自动外边距；在 Flex/Grid 中可吸收剩余空间，不保证所有方向都自动居中。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MarginInlineKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由布局模式分配自动外边距；在 Flex/Grid 中可吸收剩余空间，不保证所有方向都自动居中。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MarginInlineEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由布局模式分配自动外边距；在 Flex/Grid 中可吸收剩余空间，不保证所有方向都自动居中。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MarginInlineStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由布局模式分配自动外边距；在 Flex/Grid 中可吸收剩余空间，不保证所有方向都自动居中。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MarginLeftKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由布局模式分配自动外边距；在 Flex/Grid 中可吸收剩余空间，不保证所有方向都自动居中。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MarginRightKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由布局模式分配自动外边距；在 Flex/Grid 中可吸收剩余空间，不保证所有方向都自动居中。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MarginTopKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由布局模式分配自动外边距；在 Flex/Grid 中可吸收剩余空间，不保证所有方向都自动居中。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MarginTrimKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * margin-trim 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-trim
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
+export interface ListStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ListStyleValues, 'inside' | 'none' | 'outside'>, Key> {}
+export interface ListStyleImageKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ListStyleImageValues, 'none'>, Key> {}
+export interface ListStylePositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ListStylePositionValues, 'inside' | 'outside'>, Key> {}
+export interface ListStyleTypeKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ListStyleTypeValues, 'none'>, Key> {}
+export interface MarginKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarginValues, 'auto'>, Key> {}
+export interface MarginBlockKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarginBlockValues, 'auto'>, Key> {}
+export interface MarginBlockEndKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarginBlockEndValues, 'auto'>, Key> {}
+export interface MarginBlockStartKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MarginBlockStartValues, 'auto'>, Key> {}
+export interface MarginBottomKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarginBottomValues, 'auto'>, Key> {}
+export interface MarginInlineKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarginInlineValues, 'auto'>, Key> {}
+export interface MarginInlineEndKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MarginInlineEndValues, 'auto'>, Key> {}
+export interface MarginInlineStartKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MarginInlineStartValues, 'auto'>, Key> {}
+export interface MarginLeftKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarginLeftValues, 'auto'>, Key> {}
+export interface MarginRightKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarginRightValues, 'auto'>, Key> {}
+export interface MarginTopKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarginTopValues, 'auto'>, Key> {}
+export interface MarginTrimKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MarginTrimValues, 'all' | 'none'>, Key> {
   /**
    * margin-trim 的原生 in-flow 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-trim
    */
   readonly inFlow: SystemKeyword<Key, 'in-flow'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface MarkerKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MarkerEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MarkerMidKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MarkerStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MaskKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * mask 的原生 add 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly add: SystemKeyword<Key, 'add'>;
-  /**
-   * mask 的原生 alpha 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly alpha: SystemKeyword<Key, 'alpha'>;
+export interface MarkerKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarkerValues, 'none'>, Key> {}
+export interface MarkerEndKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarkerEndValues, 'none'>, Key> {}
+export interface MarkerMidKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarkerMidValues, 'none'>, Key> {}
+export interface MarkerStartKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MarkerStartValues, 'none'>, Key> {}
+export interface MaskKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MaskValues,
+        | 'add'
+        | 'alpha'
+        | 'bottom'
+        | 'center'
+        | 'exclude'
+        | 'intersect'
+        | 'left'
+        | 'luminance'
+        | 'none'
+        | 'repeat'
+        | 'right'
+        | 'round'
+        | 'space'
+        | 'subtract'
+        | 'top'
+      >,
+      Key
+    > {
   /**
    * mask 的原生 border-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
    */
   readonly borderBox: SystemKeyword<Key, 'border-box'>;
   /**
-   * mask 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * mask 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
    * mask 的原生 content-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
    */
   readonly contentBox: SystemKeyword<Key, 'content-box'>;
   /**
-   * mask 的原生 exclude 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly exclude: SystemKeyword<Key, 'exclude'>;
-  /**
    * mask 的原生 fill-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
    */
   readonly fillBox: SystemKeyword<Key, 'fill-box'>;
-  /**
-   * mask 的原生 intersect 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly intersect: SystemKeyword<Key, 'intersect'>;
-  /**
-   * mask 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * mask 的原生 luminance 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly luminance: SystemKeyword<Key, 'luminance'>;
   /**
    * mask 的原生 margin-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
@@ -8038,19 +3965,10 @@ export interface MaskKeywords<Key extends PropertyName> extends CssWideKeywords<
    */
   readonly noRepeat: SystemKeyword<Key, 'no-repeat'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
    * mask 的原生 padding-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
-  /**
-   * mask 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
   /**
    * mask 的原生 repeat-x 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
@@ -8062,125 +3980,47 @@ export interface MaskKeywords<Key extends PropertyName> extends CssWideKeywords<
    */
   readonly repeatY: SystemKeyword<Key, 'repeat-y'>;
   /**
-   * mask 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * mask 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * mask 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
    * mask 的原生 stroke-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
    */
   readonly strokeBox: SystemKeyword<Key, 'stroke-box'>;
-  /**
-   * mask 的原生 subtract 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly subtract: SystemKeyword<Key, 'subtract'>;
-  /**
-   * mask 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
   /**
    * mask 的原生 view-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
    */
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
-export interface MaskBorderKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * mask-border 的原生 alpha 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border
-   */
-  readonly alpha: SystemKeyword<Key, 'alpha'>;
-  /**
-   * mask-border 的原生 luminance 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border
-   */
-  readonly luminance: SystemKeyword<Key, 'luminance'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * mask-border 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
-  /**
-   * mask-border 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * mask-border 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
-   * mask-border 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
-export interface MaskBorderModeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * mask-border-mode 的原生 alpha 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-mode
-   */
-  readonly alpha: SystemKeyword<Key, 'alpha'>;
-  /**
-   * mask-border-mode 的原生 luminance 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-mode
-   */
-  readonly luminance: SystemKeyword<Key, 'luminance'>;
-}
+export interface MaskBorderKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MaskBorderValues,
+        'alpha' | 'luminance' | 'none' | 'repeat' | 'round' | 'space' | 'stretch'
+      >,
+      Key
+    > {}
+export interface MaskBorderModeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MaskBorderModeValues, 'alpha' | 'luminance'>, Key> {}
 export interface MaskBorderOutsetKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MaskBorderRepeatKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * mask-border-repeat 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-repeat
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
-  /**
-   * mask-border-repeat 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-repeat
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * mask-border-repeat 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-repeat
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
-   * mask-border-repeat 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-repeat
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
+export interface MaskBorderRepeatKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MaskBorderRepeatValues, 'repeat' | 'round' | 'space' | 'stretch'>,
+      Key
+    > {}
 export interface MaskBorderSliceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MaskBorderSourceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MaskBorderWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
+export interface MaskBorderSourceKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MaskBorderSourceValues, 'none'>, Key> {}
+export interface MaskBorderWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MaskBorderWidthValues, 'auto'>, Key> {}
 export interface MaskClipKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
    * mask-clip 的原生 border-box 值；具体布局或绘制效果见该属性参考。
@@ -8218,45 +4058,19 @@ export interface MaskClipKeywords<Key extends PropertyName> extends CssWideKeywo
    */
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
-export interface MaskCompositeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * mask-composite 的原生 add 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-composite
-   */
-  readonly add: SystemKeyword<Key, 'add'>;
-  /**
-   * mask-composite 的原生 exclude 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-composite
-   */
-  readonly exclude: SystemKeyword<Key, 'exclude'>;
-  /**
-   * mask-composite 的原生 intersect 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-composite
-   */
-  readonly intersect: SystemKeyword<Key, 'intersect'>;
-  /**
-   * mask-composite 的原生 subtract 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-composite
-   */
-  readonly subtract: SystemKeyword<Key, 'subtract'>;
-}
-export interface MaskImageKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MaskModeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * mask-mode 的原生 alpha 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-mode
-   */
-  readonly alpha: SystemKeyword<Key, 'alpha'>;
-  /**
-   * mask-mode 的原生 luminance 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-mode
-   */
-  readonly luminance: SystemKeyword<Key, 'luminance'>;
+export interface MaskCompositeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MaskCompositeValues, 'add' | 'exclude' | 'intersect' | 'subtract'>,
+      Key
+    > {}
+export interface MaskImageKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MaskImageValues, 'none'>, Key> {}
+export interface MaskModeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MaskModeValues, 'alpha' | 'luminance'>, Key> {
   /**
    * mask-mode 的原生 match-source 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-mode
@@ -8295,44 +4109,22 @@ export interface MaskOriginKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
-export interface MaskPositionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * mask-position 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-position
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * mask-position 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-position
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * mask-position 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-position
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * mask-position 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-position
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * mask-position 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-position
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface MaskRepeatKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MaskPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MaskPositionValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface MaskRepeatKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MaskRepeatValues, 'repeat' | 'round' | 'space'>, Key> {
   /**
    * mask-repeat 的原生 no-repeat 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-repeat
    */
   readonly noRepeat: SystemKeyword<Key, 'no-repeat'>;
-  /**
-   * mask-repeat 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-repeat
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
   /**
    * mask-repeat 的原生 repeat-x 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-repeat
@@ -8343,64 +4135,24 @@ export interface MaskRepeatKeywords<Key extends PropertyName> extends CssWideKey
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-repeat
    */
   readonly repeatY: SystemKeyword<Key, 'repeat-y'>;
-  /**
-   * mask-repeat 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-repeat
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * mask-repeat 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-repeat
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
 }
-export interface MaskSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 依据图像内部尺寸、比例及另一维的设置确定尺寸。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 保持图像比例并使整张图像容纳于定位区域，可能留下空白。
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 保持图像比例并覆盖整个定位区域，超出部分可能被裁剪。
-   */
-  readonly cover: SystemKeyword<Key, 'cover'>;
-}
-export interface MaskTypeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * mask-type 的原生 alpha 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-type
-   */
-  readonly alpha: SystemKeyword<Key, 'alpha'>;
-  /**
-   * mask-type 的原生 luminance 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-type
-   */
-  readonly luminance: SystemKeyword<Key, 'luminance'>;
-}
-export interface MasonryAutoFlowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MaskSizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MaskSizeValues, 'auto' | 'contain' | 'cover'>, Key> {}
+export interface MaskTypeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MaskTypeValues, 'alpha' | 'luminance'>, Key> {}
+export interface MasonryAutoFlowKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MasonryAutoFlowValues, 'next' | 'ordered' | 'pack'>, Key> {
   /**
    * masonry-auto-flow 的原生 definite-first 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/masonry-auto-flow
    */
   readonly definiteFirst: SystemKeyword<Key, 'definite-first'>;
-  /**
-   * masonry-auto-flow 的原生 next 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/masonry-auto-flow
-   */
-  readonly next: SystemKeyword<Key, 'next'>;
-  /**
-   * masonry-auto-flow 的原生 ordered 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/masonry-auto-flow
-   */
-  readonly ordered: SystemKeyword<Key, 'ordered'>;
-  /**
-   * masonry-auto-flow 的原生 pack 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/masonry-auto-flow
-   */
-  readonly pack: SystemKeyword<Key, 'pack'>;
 }
 export interface MathDepthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
@@ -8409,29 +4161,16 @@ export interface MathDepthKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly autoAdd: SystemKeyword<Key, 'auto-add'>;
 }
-export interface MathShiftKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * math-shift 的原生 compact 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/math-shift
-   */
-  readonly compact: SystemKeyword<Key, 'compact'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface MathStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * math-style 的原生 compact 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/math-style
-   */
-  readonly compact: SystemKeyword<Key, 'compact'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface MaxBlockSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MathShiftKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MathShiftValues, 'compact' | 'normal'>, Key> {}
+export interface MathStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MathStyleValues, 'compact' | 'normal'>, Key> {}
+export interface MaxBlockSizeKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MaxBlockSizeValues, 'none'>, Key> {
   /**
    * max-block-size 的原生 -moz-max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-block-size
@@ -8462,12 +4201,11 @@ export interface MaxBlockSizeKeywords<Key extends PropertyName> extends CssWideK
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-block-size
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface MaxHeightKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MaxHeightKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MaxHeightValues, 'intrinsic' | 'none'>, Key> {
   /**
    * max-height 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
@@ -8504,11 +4242,6 @@ export interface MaxHeightKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
   /**
-   * max-height 的原生 intrinsic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
-   */
-  readonly intrinsic: SystemKeyword<Key, 'intrinsic'>;
-  /**
    * max-height 的原生 max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
    */
@@ -8518,12 +4251,9 @@ export interface MaxHeightKeywords<Key extends PropertyName> extends CssWideKeyw
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface MaxInlineSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MaxInlineSizeKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MaxInlineSizeValues, 'none'>, Key> {
   /**
    * max-inline-size 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-inline-size
@@ -8559,18 +4289,13 @@ export interface MaxInlineSizeKeywords<Key extends PropertyName> extends CssWide
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-inline-size
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface MaxLinesKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MaxWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MaxLinesKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MaxLinesValues, 'none'>, Key> {}
+export interface MaxWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MaxWidthValues, 'intrinsic' | 'none'>, Key> {
   /**
    * max-width 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
@@ -8607,11 +4332,6 @@ export interface MaxWidthKeywords<Key extends PropertyName> extends CssWideKeywo
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
   /**
-   * max-width 的原生 intrinsic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
-   */
-  readonly intrinsic: SystemKeyword<Key, 'intrinsic'>;
-  /**
    * max-width 的原生 max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
    */
@@ -8621,12 +4341,9 @@ export interface MaxWidthKeywords<Key extends PropertyName> extends CssWideKeywo
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface MinBlockSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MinBlockSizeKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MinBlockSizeValues, 'auto'>, Key> {
   /**
    * min-block-size 的原生 -moz-max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-block-size
@@ -8643,10 +4360,6 @@ export interface MinBlockSizeKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly WebkitFillAvailable: SystemKeyword<Key, '-webkit-fill-available'>;
   /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
    * min-block-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-block-size
    */
@@ -8662,7 +4375,10 @@ export interface MinBlockSizeKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
-export interface MinHeightKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MinHeightKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MinHeightValues, 'auto' | 'intrinsic'>, Key> {
   /**
    * min-height 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
@@ -8694,19 +4410,10 @@ export interface MinHeightKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly WebkitMinContent: SystemKeyword<Key, '-webkit-min-content'>;
   /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
    * min-height 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
-  /**
-   * min-height 的原生 intrinsic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
-   */
-  readonly intrinsic: SystemKeyword<Key, 'intrinsic'>;
   /**
    * min-height 的原生 max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
@@ -8718,7 +4425,8 @@ export interface MinHeightKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
-export interface MinInlineSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MinInlineSizeKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MinInlineSizeValues, 'auto'>, Key> {
   /**
    * min-inline-size 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-inline-size
@@ -8740,10 +4448,6 @@ export interface MinInlineSizeKeywords<Key extends PropertyName> extends CssWide
    */
   readonly WebkitFillAvailable: SystemKeyword<Key, '-webkit-fill-available'>;
   /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
    * min-inline-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-inline-size
    */
@@ -8759,7 +4463,10 @@ export interface MinInlineSizeKeywords<Key extends PropertyName> extends CssWide
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
-export interface MinWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MinWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MinWidthValues, 'auto' | 'intrinsic'>, Key> {
   /**
    * min-width 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
@@ -8791,19 +4498,10 @@ export interface MinWidthKeywords<Key extends PropertyName> extends CssWideKeywo
    */
   readonly WebkitMinContent: SystemKeyword<Key, '-webkit-min-content'>;
   /**
-   * 自动最小尺寸由布局模式决定；Flex/Grid 项目可能受内容最小宽度限制。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
    * min-width 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
-  /**
-   * min-width 的原生 intrinsic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
-   */
-  readonly intrinsic: SystemKeyword<Key, 'intrinsic'>;
   /**
    * min-width 的原生 max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
@@ -8820,12 +4518,27 @@ export interface MinWidthKeywords<Key extends PropertyName> extends CssWideKeywo
    */
   readonly minIntrinsic: SystemKeyword<Key, 'min-intrinsic'>;
 }
-export interface MixBlendModeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * mix-blend-mode 的原生 color 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
-   */
-  readonly color: SystemKeyword<Key, 'color'>;
+export interface MixBlendModeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MixBlendModeValues,
+        | 'color'
+        | 'darken'
+        | 'difference'
+        | 'exclusion'
+        | 'hue'
+        | 'lighten'
+        | 'luminosity'
+        | 'multiply'
+        | 'normal'
+        | 'overlay'
+        | 'saturation'
+        | 'screen'
+      >,
+      Key
+    > {
   /**
    * mix-blend-mode 的原生 color-burn 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
@@ -8837,54 +4550,10 @@ export interface MixBlendModeKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly colorDodge: SystemKeyword<Key, 'color-dodge'>;
   /**
-   * mix-blend-mode 的原生 darken 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
-   */
-  readonly darken: SystemKeyword<Key, 'darken'>;
-  /**
-   * mix-blend-mode 的原生 difference 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
-   */
-  readonly difference: SystemKeyword<Key, 'difference'>;
-  /**
-   * mix-blend-mode 的原生 exclusion 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
-   */
-  readonly exclusion: SystemKeyword<Key, 'exclusion'>;
-  /**
    * mix-blend-mode 的原生 hard-light 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
    */
   readonly hardLight: SystemKeyword<Key, 'hard-light'>;
-  /**
-   * mix-blend-mode 的原生 hue 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
-   */
-  readonly hue: SystemKeyword<Key, 'hue'>;
-  /**
-   * mix-blend-mode 的原生 lighten 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
-   */
-  readonly lighten: SystemKeyword<Key, 'lighten'>;
-  /**
-   * mix-blend-mode 的原生 luminosity 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
-   */
-  readonly luminosity: SystemKeyword<Key, 'luminosity'>;
-  /**
-   * mix-blend-mode 的原生 multiply 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
-   */
-  readonly multiply: SystemKeyword<Key, 'multiply'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * mix-blend-mode 的原生 overlay 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
-   */
-  readonly overlay: SystemKeyword<Key, 'overlay'>;
   /**
    * mix-blend-mode 的原生 plus-darker 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
@@ -8896,41 +4565,26 @@ export interface MixBlendModeKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly plusLighter: SystemKeyword<Key, 'plus-lighter'>;
   /**
-   * mix-blend-mode 的原生 saturation 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
-   */
-  readonly saturation: SystemKeyword<Key, 'saturation'>;
-  /**
-   * mix-blend-mode 的原生 screen 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
-   */
-  readonly screen: SystemKeyword<Key, 'screen'>;
-  /**
    * mix-blend-mode 的原生 soft-light 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
    */
   readonly softLight: SystemKeyword<Key, 'soft-light'>;
 }
-export interface MotionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface MotionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MotionValues,
+        'auto' | 'bottom' | 'center' | 'left' | 'none' | 'normal' | 'right' | 'top'
+      >,
+      Key
+    > {
   /**
    * motion 的原生 border-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
    */
   readonly borderBox: SystemKeyword<Key, 'border-box'>;
-  /**
-   * motion 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * motion 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
   /**
    * motion 的原生 content-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
@@ -8942,38 +4596,15 @@ export interface MotionKeywords<Key extends PropertyName> extends CssWideKeyword
    */
   readonly fillBox: SystemKeyword<Key, 'fill-box'>;
   /**
-   * motion 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * motion 的原生 padding-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
   /**
-   * motion 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
    * motion 的原生 stroke-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
    */
   readonly strokeBox: SystemKeyword<Key, 'stroke-box'>;
-  /**
-   * motion 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
   /**
    * motion 的原生 view-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
@@ -8981,7 +4612,8 @@ export interface MotionKeywords<Key extends PropertyName> extends CssWideKeyword
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
 export interface MotionDistanceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MotionPathKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MotionPathKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MotionPathValues, 'none'>, Key> {
   /**
    * motion-path 的原生 border-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-path
@@ -8998,10 +4630,6 @@ export interface MotionPathKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly fillBox: SystemKeyword<Key, 'fill-box'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
    * motion-path 的原生 padding-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-path
    */
@@ -9017,47 +4645,37 @@ export interface MotionPathKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
-export interface MotionRotationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * motion-rotation 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-rotation
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
-}
-export interface MozAnimationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-animation 的原生 alternate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
-   */
-  readonly alternate: SystemKeyword<Key, 'alternate'>;
+export interface MotionRotationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MotionRotationValues, 'auto' | 'reverse'>, Key> {}
+export interface MozAnimationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MozAnimationValues,
+        | 'alternate'
+        | 'auto'
+        | 'backwards'
+        | 'both'
+        | 'ease'
+        | 'forwards'
+        | 'infinite'
+        | 'linear'
+        | 'none'
+        | 'normal'
+        | 'paused'
+        | 'reverse'
+        | 'running'
+      >,
+      Key
+    > {
   /**
    * -moz-animation 的原生 alternate-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
    */
   readonly alternateReverse: SystemKeyword<Key, 'alternate-reverse'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -moz-animation 的原生 backwards 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
-   */
-  readonly backwards: SystemKeyword<Key, 'backwards'>;
-  /**
-   * -moz-animation 的原生 both 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * -moz-animation 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
   /**
    * -moz-animation 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
@@ -9074,44 +4692,6 @@ export interface MozAnimationKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * -moz-animation 的原生 forwards 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
-   */
-  readonly forwards: SystemKeyword<Key, 'forwards'>;
-  /**
-   * -moz-animation 的原生 infinite 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
-   */
-  readonly infinite: SystemKeyword<Key, 'infinite'>;
-  /**
-   * -moz-animation 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -moz-animation 的原生 paused 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
-   */
-  readonly paused: SystemKeyword<Key, 'paused'>;
-  /**
-   * -moz-animation 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
-  /**
-   * -moz-animation 的原生 running 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
-   */
-  readonly running: SystemKeyword<Key, 'running'>;
-  /**
    * -moz-animation 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
    */
@@ -9123,94 +4703,46 @@ export interface MozAnimationKeywords<Key extends PropertyName> extends CssWideK
   readonly stepStart: SystemKeyword<Key, 'step-start'>;
 }
 export interface MozAnimationDelayKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MozAnimationDirectionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-animation-direction 的原生 alternate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-direction
-   */
-  readonly alternate: SystemKeyword<Key, 'alternate'>;
+export interface MozAnimationDirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozAnimationDirectionValues, 'alternate' | 'normal' | 'reverse'>,
+      Key
+    > {
   /**
    * -moz-animation-direction 的原生 alternate-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-direction
    */
   readonly alternateReverse: SystemKeyword<Key, 'alternate-reverse'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -moz-animation-direction 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-direction
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
 }
-export interface MozAnimationDurationKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MozAnimationFillModeKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 延迟阶段应用最先生效关键帧的效果，具体帧取决于播放方向。
-   */
-  readonly backwards: SystemKeyword<Key, 'backwards'>;
-  /**
-   * 同时应用 backwards 和 forwards 的区间外效果。
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * 播放结束后保留最后生效关键帧的效果；最后帧取决于方向和循环次数。
-   */
-  readonly forwards: SystemKeyword<Key, 'forwards'>;
-  /**
-   * 动画有效区间之外不应用动画关键帧值。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MozAnimationIterationCountKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-animation-iteration-count 的原生 infinite 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-iteration-count
-   */
-  readonly infinite: SystemKeyword<Key, 'infinite'>;
-}
-export interface MozAnimationNameKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MozAnimationPlayStateKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-animation-play-state 的原生 paused 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-play-state
-   */
-  readonly paused: SystemKeyword<Key, 'paused'>;
-  /**
-   * -moz-animation-play-state 的原生 running 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-play-state
-   */
-  readonly running: SystemKeyword<Key, 'running'>;
-}
-export interface MozAnimationTimingFunctionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-animation-timing-function 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-timing-function
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
+export interface MozAnimationDurationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozAnimationDurationValues, 'auto'>, Key> {}
+export interface MozAnimationFillModeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozAnimationFillModeValues, 'backwards' | 'both' | 'forwards' | 'none'>,
+      Key
+    > {}
+export interface MozAnimationIterationCountKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozAnimationIterationCountValues, 'infinite'>, Key> {}
+export interface MozAnimationNameKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozAnimationNameValues, 'none'>, Key> {}
+export interface MozAnimationPlayStateKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozAnimationPlayStateValues, 'paused' | 'running'>, Key> {}
+export interface MozAnimationTimingFunctionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozAnimationTimingFunctionValues, 'ease' | 'linear'>, Key> {
   /**
    * -moz-animation-timing-function 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-timing-function
@@ -9227,11 +4759,6 @@ export interface MozAnimationTimingFunctionKeywords<
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * -moz-animation-timing-function 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-timing-function
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
    * -moz-animation-timing-function 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-timing-function
    */
@@ -9242,7 +4769,70 @@ export interface MozAnimationTimingFunctionKeywords<
    */
   readonly stepStart: SystemKeyword<Key, 'step-start'>;
 }
-export interface MozAppearanceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MozAppearanceKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MozAppearanceValues,
+        | 'button'
+        | 'caret'
+        | 'checkbox'
+        | 'checkmenuitem'
+        | 'dualbutton'
+        | 'groupbox'
+        | 'listbox'
+        | 'listitem'
+        | 'menuarrow'
+        | 'menubar'
+        | 'menucheckbox'
+        | 'menuimage'
+        | 'menuitem'
+        | 'menuitemtext'
+        | 'menulist'
+        | 'menupopup'
+        | 'menuradio'
+        | 'menuseparator'
+        | 'meterbar'
+        | 'meterchunk'
+        | 'none'
+        | 'progressbar'
+        | 'progresschunk'
+        | 'radio'
+        | 'radiomenuitem'
+        | 'range'
+        | 'resizer'
+        | 'resizerpanel'
+        | 'scalethumbend'
+        | 'scalethumbstart'
+        | 'scalethumbtick'
+        | 'searchfield'
+        | 'separator'
+        | 'sheet'
+        | 'spinner'
+        | 'splitter'
+        | 'statusbar'
+        | 'statusbarpanel'
+        | 'tab'
+        | 'tabpanel'
+        | 'tabpanels'
+        | 'textfield'
+        | 'toolbar'
+        | 'toolbarbutton'
+        | 'toolbargripper'
+        | 'toolbox'
+        | 'tooltip'
+        | 'treeheader'
+        | 'treeheadercell'
+        | 'treeheadersortarrow'
+        | 'treeitem'
+        | 'treeline'
+        | 'treetwisty'
+        | 'treetwistyopen'
+        | 'treeview'
+      >,
+      Key
+    > {
   /**
    * -moz-appearance 的原生 -moz-mac-unified-toolbar 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
@@ -9344,11 +4934,6 @@ export interface MozAppearanceKeywords<Key extends PropertyName> extends CssWide
    */
   readonly MozWindowTitlebarMaximized: SystemKeyword<Key, '-moz-window-titlebar-maximized'>;
   /**
-   * -moz-appearance 的原生 button 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly button: SystemKeyword<Key, 'button'>;
-  /**
    * -moz-appearance 的原生 button-arrow-down 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
@@ -9379,16 +4964,6 @@ export interface MozAppearanceKeywords<Key extends PropertyName> extends CssWide
    */
   readonly buttonFocus: SystemKeyword<Key, 'button-focus'>;
   /**
-   * -moz-appearance 的原生 caret 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly caret: SystemKeyword<Key, 'caret'>;
-  /**
-   * -moz-appearance 的原生 checkbox 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly checkbox: SystemKeyword<Key, 'checkbox'>;
-  /**
    * -moz-appearance 的原生 checkbox-container 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
@@ -9398,66 +4973,6 @@ export interface MozAppearanceKeywords<Key extends PropertyName> extends CssWide
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
   readonly checkboxLabel: SystemKeyword<Key, 'checkbox-label'>;
-  /**
-   * -moz-appearance 的原生 checkmenuitem 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly checkmenuitem: SystemKeyword<Key, 'checkmenuitem'>;
-  /**
-   * -moz-appearance 的原生 dualbutton 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly dualbutton: SystemKeyword<Key, 'dualbutton'>;
-  /**
-   * -moz-appearance 的原生 groupbox 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly groupbox: SystemKeyword<Key, 'groupbox'>;
-  /**
-   * -moz-appearance 的原生 listbox 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly listbox: SystemKeyword<Key, 'listbox'>;
-  /**
-   * -moz-appearance 的原生 listitem 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly listitem: SystemKeyword<Key, 'listitem'>;
-  /**
-   * -moz-appearance 的原生 menuarrow 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly menuarrow: SystemKeyword<Key, 'menuarrow'>;
-  /**
-   * -moz-appearance 的原生 menubar 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly menubar: SystemKeyword<Key, 'menubar'>;
-  /**
-   * -moz-appearance 的原生 menucheckbox 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly menucheckbox: SystemKeyword<Key, 'menucheckbox'>;
-  /**
-   * -moz-appearance 的原生 menuimage 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly menuimage: SystemKeyword<Key, 'menuimage'>;
-  /**
-   * -moz-appearance 的原生 menuitem 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly menuitem: SystemKeyword<Key, 'menuitem'>;
-  /**
-   * -moz-appearance 的原生 menuitemtext 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly menuitemtext: SystemKeyword<Key, 'menuitemtext'>;
-  /**
-   * -moz-appearance 的原生 menulist 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly menulist: SystemKeyword<Key, 'menulist'>;
   /**
    * -moz-appearance 的原生 menulist-button 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
@@ -9474,59 +4989,15 @@ export interface MozAppearanceKeywords<Key extends PropertyName> extends CssWide
    */
   readonly menulistTextfield: SystemKeyword<Key, 'menulist-textfield'>;
   /**
-   * -moz-appearance 的原生 menupopup 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly menupopup: SystemKeyword<Key, 'menupopup'>;
-  /**
-   * -moz-appearance 的原生 menuradio 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly menuradio: SystemKeyword<Key, 'menuradio'>;
-  /**
-   * -moz-appearance 的原生 menuseparator 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly menuseparator: SystemKeyword<Key, 'menuseparator'>;
-  /**
-   * -moz-appearance 的原生 meterbar 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly meterbar: SystemKeyword<Key, 'meterbar'>;
-  /**
-   * -moz-appearance 的原生 meterchunk 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly meterchunk: SystemKeyword<Key, 'meterchunk'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -moz-appearance 的原生 progressbar 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly progressbar: SystemKeyword<Key, 'progressbar'>;
-  /**
    * -moz-appearance 的原生 progressbar-vertical 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
   readonly progressbarVertical: SystemKeyword<Key, 'progressbar-vertical'>;
   /**
-   * -moz-appearance 的原生 progresschunk 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly progresschunk: SystemKeyword<Key, 'progresschunk'>;
-  /**
    * -moz-appearance 的原生 progresschunk-vertical 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
   readonly progresschunkVertical: SystemKeyword<Key, 'progresschunk-vertical'>;
-  /**
-   * -moz-appearance 的原生 radio 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly radio: SystemKeyword<Key, 'radio'>;
   /**
    * -moz-appearance 的原生 radio-container 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
@@ -9538,30 +5009,10 @@ export interface MozAppearanceKeywords<Key extends PropertyName> extends CssWide
    */
   readonly radioLabel: SystemKeyword<Key, 'radio-label'>;
   /**
-   * -moz-appearance 的原生 radiomenuitem 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly radiomenuitem: SystemKeyword<Key, 'radiomenuitem'>;
-  /**
-   * -moz-appearance 的原生 range 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly range: SystemKeyword<Key, 'range'>;
-  /**
    * -moz-appearance 的原生 range-thumb 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
   readonly rangeThumb: SystemKeyword<Key, 'range-thumb'>;
-  /**
-   * -moz-appearance 的原生 resizer 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly resizer: SystemKeyword<Key, 'resizer'>;
-  /**
-   * -moz-appearance 的原生 resizerpanel 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly resizerpanel: SystemKeyword<Key, 'resizerpanel'>;
   /**
    * -moz-appearance 的原生 scale-horizontal 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
@@ -9582,21 +5033,6 @@ export interface MozAppearanceKeywords<Key extends PropertyName> extends CssWide
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
   readonly scalethumbVertical: SystemKeyword<Key, 'scalethumb-vertical'>;
-  /**
-   * -moz-appearance 的原生 scalethumbend 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly scalethumbend: SystemKeyword<Key, 'scalethumbend'>;
-  /**
-   * -moz-appearance 的原生 scalethumbstart 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly scalethumbstart: SystemKeyword<Key, 'scalethumbstart'>;
-  /**
-   * -moz-appearance 的原生 scalethumbtick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly scalethumbtick: SystemKeyword<Key, 'scalethumbtick'>;
   /**
    * -moz-appearance 的原生 scrollbarbutton-down 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
@@ -9638,26 +5074,6 @@ export interface MozAppearanceKeywords<Key extends PropertyName> extends CssWide
    */
   readonly scrollbartrackVertical: SystemKeyword<Key, 'scrollbartrack-vertical'>;
   /**
-   * -moz-appearance 的原生 searchfield 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly searchfield: SystemKeyword<Key, 'searchfield'>;
-  /**
-   * -moz-appearance 的原生 separator 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly separator: SystemKeyword<Key, 'separator'>;
-  /**
-   * -moz-appearance 的原生 sheet 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly sheet: SystemKeyword<Key, 'sheet'>;
-  /**
-   * -moz-appearance 的原生 spinner 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly spinner: SystemKeyword<Key, 'spinner'>;
-  /**
    * -moz-appearance 的原生 spinner-downbutton 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
@@ -9673,26 +5089,6 @@ export interface MozAppearanceKeywords<Key extends PropertyName> extends CssWide
    */
   readonly spinnerUpbutton: SystemKeyword<Key, 'spinner-upbutton'>;
   /**
-   * -moz-appearance 的原生 splitter 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly splitter: SystemKeyword<Key, 'splitter'>;
-  /**
-   * -moz-appearance 的原生 statusbar 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly statusbar: SystemKeyword<Key, 'statusbar'>;
-  /**
-   * -moz-appearance 的原生 statusbarpanel 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly statusbarpanel: SystemKeyword<Key, 'statusbarpanel'>;
-  /**
-   * -moz-appearance 的原生 tab 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly tab: SystemKeyword<Key, 'tab'>;
-  /**
    * -moz-appearance 的原生 tab-scroll-arrow-back 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
@@ -9703,111 +5099,24 @@ export interface MozAppearanceKeywords<Key extends PropertyName> extends CssWide
    */
   readonly tabScrollArrowForward: SystemKeyword<Key, 'tab-scroll-arrow-forward'>;
   /**
-   * -moz-appearance 的原生 tabpanel 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly tabpanel: SystemKeyword<Key, 'tabpanel'>;
-  /**
-   * -moz-appearance 的原生 tabpanels 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly tabpanels: SystemKeyword<Key, 'tabpanels'>;
-  /**
-   * -moz-appearance 的原生 textfield 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly textfield: SystemKeyword<Key, 'textfield'>;
-  /**
    * -moz-appearance 的原生 textfield-multiline 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
   readonly textfieldMultiline: SystemKeyword<Key, 'textfield-multiline'>;
   /**
-   * -moz-appearance 的原生 toolbar 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly toolbar: SystemKeyword<Key, 'toolbar'>;
-  /**
-   * -moz-appearance 的原生 toolbarbutton 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly toolbarbutton: SystemKeyword<Key, 'toolbarbutton'>;
-  /**
    * -moz-appearance 的原生 toolbarbutton-dropdown 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
   readonly toolbarbuttonDropdown: SystemKeyword<Key, 'toolbarbutton-dropdown'>;
-  /**
-   * -moz-appearance 的原生 toolbargripper 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly toolbargripper: SystemKeyword<Key, 'toolbargripper'>;
-  /**
-   * -moz-appearance 的原生 toolbox 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly toolbox: SystemKeyword<Key, 'toolbox'>;
-  /**
-   * -moz-appearance 的原生 tooltip 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly tooltip: SystemKeyword<Key, 'tooltip'>;
-  /**
-   * -moz-appearance 的原生 treeheader 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly treeheader: SystemKeyword<Key, 'treeheader'>;
-  /**
-   * -moz-appearance 的原生 treeheadercell 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly treeheadercell: SystemKeyword<Key, 'treeheadercell'>;
-  /**
-   * -moz-appearance 的原生 treeheadersortarrow 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly treeheadersortarrow: SystemKeyword<Key, 'treeheadersortarrow'>;
-  /**
-   * -moz-appearance 的原生 treeitem 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly treeitem: SystemKeyword<Key, 'treeitem'>;
-  /**
-   * -moz-appearance 的原生 treeline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly treeline: SystemKeyword<Key, 'treeline'>;
-  /**
-   * -moz-appearance 的原生 treetwisty 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly treetwisty: SystemKeyword<Key, 'treetwisty'>;
-  /**
-   * -moz-appearance 的原生 treetwistyopen 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly treetwistyopen: SystemKeyword<Key, 'treetwistyopen'>;
-  /**
-   * -moz-appearance 的原生 treeview 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
-   */
-  readonly treeview: SystemKeyword<Key, 'treeview'>;
 }
-export interface MozBackfaceVisibilityKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-backface-visibility 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-backface-visibility
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * -moz-backface-visibility 的原生 visible 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-backface-visibility
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
-}
-export interface MozBackgroundClipKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MozBackfaceVisibilityKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozBackfaceVisibilityValues, 'hidden' | 'visible'>, Key> {}
+export interface MozBackgroundClipKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozBackgroundClipValues, 'text'>, Key> {
   /**
    * -moz-background-clip 的原生 border-area 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-background-clip
@@ -9828,10 +5137,6 @@ export interface MozBackgroundClipKeywords<Key extends PropertyName> extends Css
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-background-clip
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
-  /**
-   * 把背景裁剪到文字字形；显示背景文字效果通常还需要透明的文字颜色。
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
 }
 export interface MozBackgroundOriginKeywords<
   Key extends PropertyName,
@@ -9852,173 +5157,69 @@ export interface MozBackgroundOriginKeywords<
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
 }
-export interface MozBackgroundSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 依据图像内部尺寸、比例及另一维的设置确定尺寸。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 保持图像比例并使整张图像容纳于定位区域，可能留下空白。
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 保持图像比例并覆盖整个定位区域，超出部分可能被裁剪。
-   */
-  readonly cover: SystemKeyword<Key, 'cover'>;
-}
-export interface MozBindingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface MozBackgroundSizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozBackgroundSizeValues, 'auto' | 'contain' | 'cover'>, Key> {}
+export interface MozBindingKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MozBindingValues, 'none'>, Key> {}
 export interface MozBorderBottomColorsKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozBorderBottomColorsValues, 'currentColor' | 'none' | 'transparent'>,
+      Key
+    > {}
 export interface MozBorderEndColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface MozBorderEndStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-border-end-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * -moz-border-end-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * -moz-border-end-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * -moz-border-end-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * -moz-border-end-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * -moz-border-end-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -moz-border-end-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * -moz-border-end-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * -moz-border-end-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface MozBorderEndWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-border-end-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * -moz-border-end-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * -moz-border-end-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
-export interface MozBorderImageKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -moz-border-image 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-image
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
-  /**
-   * -moz-border-image 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-image
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * -moz-border-image 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-image
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
-   * -moz-border-image 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-image
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozBorderEndColorValues, 'currentColor' | 'transparent'>, Key> {}
+export interface MozBorderEndStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MozBorderEndStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface MozBorderEndWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozBorderEndWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
+export interface MozBorderImageKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozBorderImageValues, 'none' | 'repeat' | 'round' | 'space' | 'stretch'>,
+      Key
+    > {}
 export interface MozBorderLeftColorsKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozBorderLeftColorsValues, 'currentColor' | 'none' | 'transparent'>,
+      Key
+    > {}
 export interface MozBorderRadiusKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface MozBorderRadiusBottomleftKeywords<
   Key extends PropertyName,
@@ -10037,199 +5238,86 @@ export interface MozBorderRightColorsKeywords<Key extends PropertyName>
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozBorderRightColorsValues, 'currentColor' | 'none' | 'transparent'>,
+      Key
+    > {}
 export interface MozBorderStartColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface MozBorderStartStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-border-start-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * -moz-border-start-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * -moz-border-start-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * -moz-border-start-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * -moz-border-start-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * -moz-border-start-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -moz-border-start-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * -moz-border-start-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * -moz-border-start-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozBorderStartColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface MozBorderStartStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MozBorderStartStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
 export interface MozBorderTopColorsKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface MozBoxAlignKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-box-align 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-align
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * -moz-box-align 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-align
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -moz-box-align 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-align
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * -moz-box-align 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-align
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * -moz-box-align 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-align
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
-export interface MozBoxDirectionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -moz-box-direction 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-direction
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozBorderTopColorsValues, 'currentColor' | 'none' | 'transparent'>,
+      Key
+    > {}
+export interface MozBoxAlignKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozBoxAlignValues, 'baseline' | 'center' | 'end' | 'start' | 'stretch'>,
+      Key
+    > {}
+export interface MozBoxDirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozBoxDirectionValues, 'normal' | 'reverse'>, Key> {}
 export interface MozBoxFlexKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface MozBoxOrdinalGroupKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface MozBoxOrientKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MozBoxOrientKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozBoxOrientValues, 'horizontal' | 'vertical'>, Key> {
   /**
    * -moz-box-orient 的原生 block-axis 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-orient
    */
   readonly blockAxis: SystemKeyword<Key, 'block-axis'>;
   /**
-   * -moz-box-orient 的原生 horizontal 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-orient
-   */
-  readonly horizontal: SystemKeyword<Key, 'horizontal'>;
-  /**
    * -moz-box-orient 的原生 inline-axis 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-orient
    */
   readonly inlineAxis: SystemKeyword<Key, 'inline-axis'>;
-  /**
-   * -moz-box-orient 的原生 vertical 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-orient
-   */
-  readonly vertical: SystemKeyword<Key, 'vertical'>;
 }
-export interface MozBoxPackKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-box-pack 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-pack
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -moz-box-pack 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-pack
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * -moz-box-pack 的原生 justify 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-pack
-   */
-  readonly justify: SystemKeyword<Key, 'justify'>;
-  /**
-   * -moz-box-pack 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-pack
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-}
-export interface MozBoxShadowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface MozBoxPackKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozBoxPackValues, 'center' | 'end' | 'justify' | 'start'>, Key> {}
+export interface MozBoxShadowKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MozBoxShadowValues, 'none'>, Key> {}
 export interface MozBoxSizingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
    * 指定尺寸包含内容、内边距和边框，但不包含外边距。
@@ -10254,207 +5342,82 @@ export interface MozBoxSizingKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly contentBox: SystemKeyword<Key, 'content-box'>;
 }
-export interface MozColumnCountKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MozColumnFillKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -moz-column-fill 的原生 balance 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-fill
-   */
-  readonly balance: SystemKeyword<Key, 'balance'>;
-}
+export interface MozColumnCountKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MozColumnCountValues, 'auto'>, Key> {}
+export interface MozColumnFillKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozColumnFillValues, 'auto' | 'balance'>, Key> {}
 export interface MozColumnRuleKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MozColumnRuleValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface MozColumnRuleColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface MozColumnRuleStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-column-rule-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * -moz-column-rule-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * -moz-column-rule-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * -moz-column-rule-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * -moz-column-rule-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * -moz-column-rule-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -moz-column-rule-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * -moz-column-rule-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * -moz-column-rule-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface MozColumnRuleWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-column-rule-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * -moz-column-rule-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * -moz-column-rule-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
-export interface MozColumnsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MozColumnWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MozContextPropertiesKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-context-properties 的原生 fill 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-context-properties
-   */
-  readonly fill: SystemKeyword<Key, 'fill'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozColumnRuleColorValues, 'currentColor' | 'transparent'>, Key> {}
+export interface MozColumnRuleStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MozColumnRuleStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface MozColumnRuleWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozColumnRuleWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
+export interface MozColumnsKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MozColumnsValues, 'auto'>, Key> {}
+export interface MozColumnWidthKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MozColumnWidthValues, 'auto'>, Key> {}
+export interface MozContextPropertiesKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozContextPropertiesValues, 'fill' | 'none' | 'stroke'>, Key> {
   /**
    * -moz-context-properties 的原生 fill-opacity 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-context-properties
    */
   readonly fillOpacity: SystemKeyword<Key, 'fill-opacity'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -moz-context-properties 的原生 stroke 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-context-properties
-   */
-  readonly stroke: SystemKeyword<Key, 'stroke'>;
   /**
    * -moz-context-properties 的原生 stroke-opacity 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-context-properties
@@ -10483,107 +5446,43 @@ export interface MozFloatEdgeKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
 }
-export interface MozFontFeatureSettingsKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface MozFontLanguageOverrideKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
+export interface MozFontFeatureSettingsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozFontFeatureSettingsValues, 'normal'>, Key> {}
+export interface MozFontLanguageOverrideKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozFontLanguageOverrideValues, 'normal'>, Key> {}
 export interface MozForceBrokenImageIconKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface MozHyphensKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -moz-hyphens 的原生 manual 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-hyphens
-   */
-  readonly manual: SystemKeyword<Key, 'manual'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MozMarginEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MozMarginStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
+export interface MozHyphensKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozHyphensValues, 'auto' | 'manual' | 'none'>, Key> {}
+export interface MozMarginEndKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MozMarginEndValues, 'auto'>, Key> {}
+export interface MozMarginStartKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MozMarginStartValues, 'auto'>, Key> {}
 export interface MozOpacityKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MozOrientKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-orient 的原生 block 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-orient
-   */
-  readonly block: SystemKeyword<Key, 'block'>;
-  /**
-   * -moz-orient 的原生 horizontal 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-orient
-   */
-  readonly horizontal: SystemKeyword<Key, 'horizontal'>;
-  /**
-   * -moz-orient 的原生 inline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-orient
-   */
-  readonly inline: SystemKeyword<Key, 'inline'>;
-  /**
-   * -moz-orient 的原生 vertical 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-orient
-   */
-  readonly vertical: SystemKeyword<Key, 'vertical'>;
-}
-export interface MozOsxFontSmoothingKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-osx-font-smoothing 的原生 always 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-osx-font-smoothing
-   */
-  readonly always: SystemKeyword<Key, 'always'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -moz-osx-font-smoothing 的原生 large 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-osx-font-smoothing
-   */
-  readonly large: SystemKeyword<Key, 'large'>;
-  /**
-   * -moz-osx-font-smoothing 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-osx-font-smoothing
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * -moz-osx-font-smoothing 的原生 never 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-osx-font-smoothing
-   */
-  readonly never: SystemKeyword<Key, 'never'>;
-  /**
-   * -moz-osx-font-smoothing 的原生 small 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-osx-font-smoothing
-   */
-  readonly small: SystemKeyword<Key, 'small'>;
+export interface MozOrientKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozOrientValues, 'block' | 'horizontal' | 'inline' | 'vertical'>,
+      Key
+    > {}
+export interface MozOsxFontSmoothingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MozOsxFontSmoothingValues,
+        'always' | 'auto' | 'large' | 'medium' | 'never' | 'small'
+      >,
+      Key
+    > {
   /**
    * -moz-osx-font-smoothing 的原生 x-large 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-osx-font-smoothing
@@ -10615,87 +5514,38 @@ export interface MozOutlineKeywords<Key extends PropertyName>
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MozOutlineValues,
+        | 'auto'
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface MozOutlineColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozOutlineColorValues, 'auto' | 'currentColor' | 'transparent'>,
+      Key
+    > {}
 export interface MozOutlineRadiusKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface MozOutlineRadiusBottomleftKeywords<
   Key extends PropertyName,
@@ -10709,116 +5559,44 @@ export interface MozOutlineRadiusTopleftKeywords<
 export interface MozOutlineRadiusToprightKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface MozOutlineStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -moz-outline-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * -moz-outline-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * -moz-outline-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * -moz-outline-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * -moz-outline-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -moz-outline-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * -moz-outline-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * -moz-outline-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface MozOutlineWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-outline-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * -moz-outline-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * -moz-outline-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
+export interface MozOutlineStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MozOutlineStyleValues,
+        | 'auto'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface MozOutlineWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozOutlineWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
 export interface MozPaddingEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface MozPaddingStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MozPerspectiveKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MozPerspectiveOriginKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-perspective-origin 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-perspective-origin
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * -moz-perspective-origin 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-perspective-origin
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -moz-perspective-origin 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-perspective-origin
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -moz-perspective-origin 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-perspective-origin
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * -moz-perspective-origin 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-perspective-origin
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface MozStackSizingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-stack-sizing 的原生 ignore 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-stack-sizing
-   */
-  readonly ignore: SystemKeyword<Key, 'ignore'>;
+export interface MozPerspectiveKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MozPerspectiveValues, 'none'>, Key> {}
+export interface MozPerspectiveOriginKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozPerspectiveOriginValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface MozStackSizingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozStackSizingValues, 'ignore'>, Key> {
   /**
    * -moz-stack-sizing 的原生 stretch-to-fit 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-stack-sizing
@@ -10826,76 +5604,37 @@ export interface MozStackSizingKeywords<Key extends PropertyName> extends CssWid
   readonly stretchToFit: SystemKeyword<Key, 'stretch-to-fit'>;
 }
 export interface MozTabSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MozTextAlignLastKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -moz-text-align-last 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-align-last
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -moz-text-align-last 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-align-last
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * -moz-text-align-last 的原生 justify 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-align-last
-   */
-  readonly justify: SystemKeyword<Key, 'justify'>;
-  /**
-   * -moz-text-align-last 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-align-last
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -moz-text-align-last 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-align-last
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * -moz-text-align-last 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-align-last
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-}
-export interface MozTextBlinkKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-text-blink 的原生 blink 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-blink
-   */
-  readonly blink: SystemKeyword<Key, 'blink'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface MozTextAlignLastKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.MozTextAlignLastValues,
+        'auto' | 'center' | 'end' | 'justify' | 'left' | 'right' | 'start'
+      >,
+      Key
+    > {}
+export interface MozTextBlinkKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozTextBlinkValues, 'blink' | 'none'>, Key> {}
 export interface MozTextDecorationColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface MozTextDecorationLineKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-text-decoration-line 的原生 blink 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-line
-   */
-  readonly blink: SystemKeyword<Key, 'blink'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozTextDecorationColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface MozTextDecorationLineKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozTextDecorationLineValues, 'blink' | 'none' | 'overline' | 'underline'>,
+      Key
+    > {
   /**
    * -moz-text-decoration-line 的原生 grammar-error 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-line
@@ -10907,125 +5646,47 @@ export interface MozTextDecorationLineKeywords<
    */
   readonly lineThrough: SystemKeyword<Key, 'line-through'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -moz-text-decoration-line 的原生 overline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-line
-   */
-  readonly overline: SystemKeyword<Key, 'overline'>;
-  /**
    * -moz-text-decoration-line 的原生 spelling-error 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-line
    */
   readonly spellingError: SystemKeyword<Key, 'spelling-error'>;
-  /**
-   * -moz-text-decoration-line 的原生 underline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-line
-   */
-  readonly underline: SystemKeyword<Key, 'underline'>;
 }
-export interface MozTextDecorationStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-text-decoration-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * -moz-text-decoration-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * -moz-text-decoration-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * -moz-text-decoration-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * -moz-text-decoration-style 的原生 wavy 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-style
-   */
-  readonly wavy: SystemKeyword<Key, 'wavy'>;
-}
-export interface MozTextSizeAdjustKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MozTransformKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MozTransformOriginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-transform-origin 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-origin
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * -moz-transform-origin 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-origin
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -moz-transform-origin 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-origin
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -moz-transform-origin 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-origin
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * -moz-transform-origin 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-origin
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface MozTransformStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-transform-style 的原生 flat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-style
-   */
-  readonly flat: SystemKeyword<Key, 'flat'>;
-  /**
-   * -moz-transform-style 的原生 preserve-3d 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-style
-   */
-  readonly 'preserve-3d': SystemKeyword<Key, 'preserve-3d'>;
-}
-export interface MozTransitionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-transition 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
+export interface MozTextDecorationStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozTextDecorationStyleValues, 'dashed' | 'dotted' | 'double' | 'solid' | 'wavy'>,
+      Key
+    > {}
+export interface MozTextSizeAdjustKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozTextSizeAdjustValues, 'auto' | 'none'>, Key> {}
+export interface MozTransformKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MozTransformValues, 'none'>, Key> {}
+export interface MozTransformOriginKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozTransformOriginValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface MozTransformStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozTransformStyleValues, 'flat' | 'preserve-3d'>, Key> {}
+export interface MozTransitionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozTransitionValues, 'all' | 'ease' | 'linear' | 'none' | 'normal'>,
+      Key
+    > {
   /**
    * -moz-transition 的原生 allow-discrete 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition
    */
   readonly allowDiscrete: SystemKeyword<Key, 'allow-discrete'>;
-  /**
-   * -moz-transition 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
   /**
    * -moz-transition 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition
@@ -11041,19 +5702,6 @@ export interface MozTransitionKeywords<Key extends PropertyName> extends CssWide
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
-  /**
-   * -moz-transition 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
   /**
    * -moz-transition 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition
@@ -11071,27 +5719,14 @@ export interface MozTransitionDelayKeywords<
 export interface MozTransitionDurationKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface MozTransitionPropertyKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-transition-property 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-property
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MozTransitionTimingFunctionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -moz-transition-timing-function 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-timing-function
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
+export interface MozTransitionPropertyKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozTransitionPropertyValues, 'all' | 'none'>, Key> {}
+export interface MozTransitionTimingFunctionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozTransitionTimingFunctionValues, 'ease' | 'linear'>, Key> {
   /**
    * -moz-transition-timing-function 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-timing-function
@@ -11108,11 +5743,6 @@ export interface MozTransitionTimingFunctionKeywords<
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * -moz-transition-timing-function 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-timing-function
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
    * -moz-transition-timing-function 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-timing-function
    */
@@ -11123,20 +5753,10 @@ export interface MozTransitionTimingFunctionKeywords<
    */
   readonly stepStart: SystemKeyword<Key, 'step-start'>;
 }
-export interface MozUserFocusKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-user-focus 的原生 ignore 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-focus
-   */
-  readonly ignore: SystemKeyword<Key, 'ignore'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
+export interface MozUserFocusKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozUserFocusValues, 'ignore' | 'none' | 'normal'>, Key> {
   /**
    * -moz-user-focus 的原生 select-after 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-focus
@@ -11163,26 +5783,13 @@ export interface MozUserFocusKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly selectSame: SystemKeyword<Key, 'select-same'>;
 }
-export interface MozUserInputKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -moz-user-input 的原生 disabled 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-input
-   */
-  readonly disabled: SystemKeyword<Key, 'disabled'>;
-  /**
-   * -moz-user-input 的原生 enabled 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-input
-   */
-  readonly enabled: SystemKeyword<Key, 'enabled'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface MozUserInputKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozUserInputValues, 'auto' | 'disabled' | 'enabled' | 'none'>,
+      Key
+    > {}
 export interface MozUserModifyKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
    * -moz-user-modify 的原生 read-only 值；具体布局或绘制效果见该属性参考。
@@ -11200,125 +5807,49 @@ export interface MozUserModifyKeywords<Key extends PropertyName> extends CssWide
    */
   readonly writeOnly: SystemKeyword<Key, 'write-only'>;
 }
-export interface MozUserSelectKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MozUserSelectKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozUserSelectValues, 'all' | 'auto' | 'none' | 'text'>, Key> {
   /**
    * -moz-user-select 的原生 -moz-none 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-select
    */
   readonly MozNone: SystemKeyword<Key, '-moz-none'>;
-  /**
-   * 将元素内容作为整体选取单元。
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 由父级与元素上下文决定使用的选取行为。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 阻止常规文本选取，不是内容保护或访问控制。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 允许文本选取。
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
 }
-export interface MozWindowDraggingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-window-dragging 的原生 drag 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-dragging
-   */
-  readonly drag: SystemKeyword<Key, 'drag'>;
+export interface MozWindowDraggingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MozWindowDraggingValues, 'drag'>, Key> {
   /**
    * -moz-window-dragging 的原生 no-drag 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-dragging
    */
   readonly noDrag: SystemKeyword<Key, 'no-drag'>;
 }
-export interface MozWindowShadowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -moz-window-shadow 的原生 default 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-shadow
-   */
-  readonly default: SystemKeyword<Key, 'default'>;
-  /**
-   * -moz-window-shadow 的原生 menu 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-shadow
-   */
-  readonly menu: SystemKeyword<Key, 'menu'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -moz-window-shadow 的原生 sheet 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-shadow
-   */
-  readonly sheet: SystemKeyword<Key, 'sheet'>;
-  /**
-   * -moz-window-shadow 的原生 tooltip 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-shadow
-   */
-  readonly tooltip: SystemKeyword<Key, 'tooltip'>;
-}
-export interface MsAcceleratorKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-accelerator 的原生 false 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-accelerator
-   */
-  readonly false: SystemKeyword<Key, 'false'>;
-  /**
-   * -ms-accelerator 的原生 true 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-accelerator
-   */
-  readonly true: SystemKeyword<Key, 'true'>;
-}
-export interface MsBlockProgressionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-block-progression 的原生 bt 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-block-progression
-   */
-  readonly bt: SystemKeyword<Key, 'bt'>;
-  /**
-   * -ms-block-progression 的原生 lr 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-block-progression
-   */
-  readonly lr: SystemKeyword<Key, 'lr'>;
-  /**
-   * -ms-block-progression 的原生 rl 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-block-progression
-   */
-  readonly rl: SystemKeyword<Key, 'rl'>;
-  /**
-   * -ms-block-progression 的原生 tb 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-block-progression
-   */
-  readonly tb: SystemKeyword<Key, 'tb'>;
-}
-export interface MsContentZoomChainingKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -ms-content-zoom-chaining 的原生 chained 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-chaining
-   */
-  readonly chained: SystemKeyword<Key, 'chained'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MsContentZoomingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -ms-content-zooming 的原生 zoom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zooming
-   */
-  readonly zoom: SystemKeyword<Key, 'zoom'>;
-}
+export interface MozWindowShadowKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MozWindowShadowValues, 'default' | 'menu' | 'none' | 'sheet' | 'tooltip'>,
+      Key
+    > {}
+export interface MsAcceleratorKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsAcceleratorValues, 'false' | 'true'>, Key> {}
+export interface MsBlockProgressionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsBlockProgressionValues, 'bt' | 'lr' | 'rl' | 'tb'>, Key> {}
+export interface MsContentZoomChainingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsContentZoomChainingValues, 'chained' | 'none'>, Key> {}
+export interface MsContentZoomingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsContentZoomingValues, 'none' | 'zoom'>, Key> {}
 export interface MsContentZoomLimitKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
@@ -11328,63 +5859,28 @@ export interface MsContentZoomLimitMaxKeywords<
 export interface MsContentZoomLimitMinKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface MsContentZoomSnapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-content-zoom-snap 的原生 mandatory 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap
-   */
-  readonly mandatory: SystemKeyword<Key, 'mandatory'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -ms-content-zoom-snap 的原生 proximity 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap
-   */
-  readonly proximity: SystemKeyword<Key, 'proximity'>;
-}
+export interface MsContentZoomSnapKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsContentZoomSnapValues, 'mandatory' | 'none' | 'proximity'>,
+      Key
+    > {}
 export interface MsContentZoomSnapPointsKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface MsContentZoomSnapTypeKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -ms-content-zoom-snap-type 的原生 mandatory 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap-type
-   */
-  readonly mandatory: SystemKeyword<Key, 'mandatory'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -ms-content-zoom-snap-type 的原生 proximity 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap-type
-   */
-  readonly proximity: SystemKeyword<Key, 'proximity'>;
-}
+export interface MsContentZoomSnapTypeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsContentZoomSnapTypeValues, 'mandatory' | 'none' | 'proximity'>,
+      Key
+    > {}
 export interface MsFilterKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MsFlexKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 等价于 1 1 auto：可增长、可收缩，基础尺寸由主尺寸属性或内容决定。
-   *
-   * 区别：1 1 0% 以零百分比为基础分配，auto 的基础尺寸通常受内容或主尺寸属性影响。
-   *
-   * 适用场景：让项目以自身尺寸为基础参与剩余空间分配。
-   *
-   * 最终比例还受最小/最大尺寸约束，不保证所有项目等宽。
-   *
-   * @example
-   * css({ flex: "auto" })
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -ms-flex 的原生 content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex
-   */
-  readonly content: SystemKeyword<Key, 'content'>;
+export interface MsFlexKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsFlexValues, 'auto' | 'content' | 'none'>, Key> {
   /**
    * -ms-flex 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex
@@ -11400,54 +5896,29 @@ export interface MsFlexKeywords<Key extends PropertyName> extends CssWideKeyword
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 等价于 0 0 auto：不增长也不收缩，保留自动基础尺寸。
-   *
-   * 区别：auto 会增长和收缩；none 两者都不参与。
-   *
-   * 适用场景：防止工具栏中的图标或固定控件被压缩。
-   *
-   * @example
-   * css({ flex: "none" })
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface MsFlexDirectionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 主轴沿块方向排列；水平书写时通常从上到下。
-   */
-  readonly column: SystemKeyword<Key, 'column'>;
+export interface MsFlexDirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsFlexDirectionValues, 'column' | 'row'>, Key> {
   /**
    * 反转块方向的视觉排列，不改变 DOM 顺序。
    */
   readonly columnReverse: SystemKeyword<Key, 'column-reverse'>;
-  /**
-   * 主轴沿行内方向排列；不一定是从左到右，取决于书写方向。
-   */
-  readonly row: SystemKeyword<Key, 'row'>;
   /**
    * 反转行内方向的视觉排列，不改变 DOM 顺序。
    */
   readonly rowReverse: SystemKeyword<Key, 'row-reverse'>;
 }
 export interface MsFlexPositiveKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MsFlowFromKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MsFlowIntoKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MsGridColumnsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface MsFlowFromKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MsFlowFromValues, 'none'>, Key> {}
+export interface MsFlowIntoKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MsFlowIntoValues, 'none'>, Key> {}
+export interface MsGridColumnsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsGridColumnsValues, 'auto' | 'none'>, Key> {
   /**
    * -ms-grid-columns 的原生 max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-grid-columns
@@ -11458,16 +5929,11 @@ export interface MsGridColumnsKeywords<Key extends PropertyName> extends CssWide
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-grid-columns
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface MsGridRowsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface MsGridRowsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsGridRowsValues, 'auto' | 'none'>, Key> {
   /**
    * -ms-grid-rows 的原生 max-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-grid-rows
@@ -11478,31 +5944,15 @@ export interface MsGridRowsKeywords<Key extends PropertyName> extends CssWideKey
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-grid-rows
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface MsHighContrastAdjustKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MsHyphenateLimitCharsKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
+export interface MsHighContrastAdjustKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsHighContrastAdjustValues, 'auto' | 'none'>, Key> {}
+export interface MsHyphenateLimitCharsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsHyphenateLimitCharsValues, 'auto'>, Key> {}
 export interface MsHyphenateLimitLinesKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {
@@ -11515,410 +5965,191 @@ export interface MsHyphenateLimitLinesKeywords<
 export interface MsHyphenateLimitZoneKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface MsHyphensKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -ms-hyphens 的原生 manual 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphens
-   */
-  readonly manual: SystemKeyword<Key, 'manual'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MsImeAlignKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-ime-align 的原生 after 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-ime-align
-   */
-  readonly after: SystemKeyword<Key, 'after'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface MsImeModeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-ime-mode 的原生 active 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-ime-mode
-   */
-  readonly active: SystemKeyword<Key, 'active'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -ms-ime-mode 的原生 disabled 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-ime-mode
-   */
-  readonly disabled: SystemKeyword<Key, 'disabled'>;
-  /**
-   * -ms-ime-mode 的原生 inactive 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-ime-mode
-   */
-  readonly inactive: SystemKeyword<Key, 'inactive'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface MsLineBreakKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-line-break 的原生 anywhere 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-line-break
-   */
-  readonly anywhere: SystemKeyword<Key, 'anywhere'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -ms-line-break 的原生 loose 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-line-break
-   */
-  readonly loose: SystemKeyword<Key, 'loose'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -ms-line-break 的原生 strict 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-line-break
-   */
-  readonly strict: SystemKeyword<Key, 'strict'>;
-}
+export interface MsHyphensKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsHyphensValues, 'auto' | 'manual' | 'none'>, Key> {}
+export interface MsImeAlignKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsImeAlignValues, 'after' | 'auto'>, Key> {}
+export interface MsImeModeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsImeModeValues, 'active' | 'auto' | 'disabled' | 'inactive' | 'normal'>,
+      Key
+    > {}
+export interface MsLineBreakKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsLineBreakValues, 'anywhere' | 'auto' | 'loose' | 'normal' | 'strict'>,
+      Key
+    > {}
 export interface MsOrderKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MsOverflowStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MsOverflowStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsOverflowStyleValues, 'auto' | 'none' | 'scrollbar'>, Key> {
   /**
    * -ms-overflow-style 的原生 -ms-autohiding-scrollbar 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-style
    */
   readonly MsAutohidingScrollbar: SystemKeyword<Key, '-ms-autohiding-scrollbar'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -ms-overflow-style 的原生 scrollbar 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-style
-   */
-  readonly scrollbar: SystemKeyword<Key, 'scrollbar'>;
 }
-export interface MsOverflowXKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MsOverflowXKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsOverflowXValues, 'auto' | 'clip' | 'hidden' | 'overlay' | 'scroll' | 'visible'>,
+      Key
+    > {
   /**
    * -ms-overflow-x 的原生 -moz-hidden-unscrollable 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-x
    */
   readonly MozHiddenUnscrollable: SystemKeyword<Key, '-moz-hidden-unscrollable'>;
-  /**
-   * 按溢出情况提供滚动机制；滚动条外观和是否占空间由环境决定。
-   *
-   * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
-   *
-   * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * css({ $property: "auto" })
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 在裁剪边界截断内容，不建立滚动容器，也不支持程序化滚动。
-   *
-   * 区别：与 hidden 不同，不支持程序化滚动，也不单独建立块格式化上下文。
-   *
-   * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
-   *
-   * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * css({ $property: "clip" })
-   */
-  readonly clip: SystemKeyword<Key, 'clip'>;
-  /**
-   * 裁剪溢出且不显示滚动条，但仍是可通过脚本等方式滚动的滚动容器。
-   *
-   * 区别：clip 不建立滚动容器；hidden 仍可通过脚本或焦点移动滚动。
-   *
-   * 适用场景：需要裁剪且仍保留程序化滚动的容器。
-   *
-   * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * css({ $property: "hidden" })
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * 历史兼容值，现代实现通常将其作为 auto 的别名；不保证滚动条覆盖在内容上。
-   */
-  readonly overlay: SystemKeyword<Key, 'overlay'>;
-  /**
-   * 建立滚动容器，通常即使未溢出也显示滚动条；具体外观由平台决定。
-   */
-  readonly scroll: SystemKeyword<Key, 'scroll'>;
-  /**
-   * 允许内容绘制到盒子外；与另一轴的设置组合时计算值可能变化。
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
 }
-export interface MsOverflowYKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MsOverflowYKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsOverflowYValues, 'auto' | 'clip' | 'hidden' | 'overlay' | 'scroll' | 'visible'>,
+      Key
+    > {
   /**
    * -ms-overflow-y 的原生 -moz-hidden-unscrollable 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-y
    */
   readonly MozHiddenUnscrollable: SystemKeyword<Key, '-moz-hidden-unscrollable'>;
-  /**
-   * 按溢出情况提供滚动机制；滚动条外观和是否占空间由环境决定。
-   *
-   * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
-   *
-   * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * css({ $property: "auto" })
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 在裁剪边界截断内容，不建立滚动容器，也不支持程序化滚动。
-   *
-   * 区别：与 hidden 不同，不支持程序化滚动，也不单独建立块格式化上下文。
-   *
-   * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
-   *
-   * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * css({ $property: "clip" })
-   */
-  readonly clip: SystemKeyword<Key, 'clip'>;
-  /**
-   * 裁剪溢出且不显示滚动条，但仍是可通过脚本等方式滚动的滚动容器。
-   *
-   * 区别：clip 不建立滚动容器；hidden 仍可通过脚本或焦点移动滚动。
-   *
-   * 适用场景：需要裁剪且仍保留程序化滚动的容器。
-   *
-   * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * css({ $property: "hidden" })
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * 历史兼容值，现代实现通常将其作为 auto 的别名；不保证滚动条覆盖在内容上。
-   */
-  readonly overlay: SystemKeyword<Key, 'overlay'>;
-  /**
-   * 建立滚动容器，通常即使未溢出也显示滚动条；具体外观由平台决定。
-   */
-  readonly scroll: SystemKeyword<Key, 'scroll'>;
-  /**
-   * 允许内容绘制到盒子外；与另一轴的设置组合时计算值可能变化。
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
 }
 export interface MsScrollbar3dlightColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsScrollbar3dlightColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
 export interface MsScrollbarArrowColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsScrollbarArrowColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
 export interface MsScrollbarBaseColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsScrollbarBaseColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
 export interface MsScrollbarDarkshadowColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsScrollbarDarkshadowColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
 export interface MsScrollbarFaceColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsScrollbarFaceColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
 export interface MsScrollbarHighlightColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsScrollbarHighlightColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
 export interface MsScrollbarShadowColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsScrollbarShadowColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
 export interface MsScrollbarTrackColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface MsScrollChainingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-scroll-chaining 的原生 chained 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-chaining
-   */
-  readonly chained: SystemKeyword<Key, 'chained'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsScrollbarTrackColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface MsScrollChainingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsScrollChainingValues, 'chained' | 'none'>, Key> {}
 export interface MsScrollLimitKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MsScrollLimitXMaxKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
+export interface MsScrollLimitXMaxKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsScrollLimitXMaxValues, 'auto'>, Key> {}
 export interface MsScrollLimitXMinKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MsScrollLimitYMaxKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
+export interface MsScrollLimitYMaxKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsScrollLimitYMaxValues, 'auto'>, Key> {}
 export interface MsScrollLimitYMinKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MsScrollRailsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -ms-scroll-rails 的原生 railed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-rails
-   */
-  readonly railed: SystemKeyword<Key, 'railed'>;
-}
+export interface MsScrollRailsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsScrollRailsValues, 'none' | 'railed'>, Key> {}
 export interface MsScrollSnapPointsXKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
 export interface MsScrollSnapPointsYKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface MsScrollSnapTypeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-scroll-snap-type 的原生 mandatory 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-type
-   */
-  readonly mandatory: SystemKeyword<Key, 'mandatory'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -ms-scroll-snap-type 的原生 proximity 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-type
-   */
-  readonly proximity: SystemKeyword<Key, 'proximity'>;
-}
+export interface MsScrollSnapTypeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsScrollSnapTypeValues, 'mandatory' | 'none' | 'proximity'>,
+      Key
+    > {}
 export interface MsScrollSnapXKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface MsScrollSnapYKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MsScrollTranslationKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
+export interface MsScrollTranslationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsScrollTranslationValues, 'none'>, Key> {
   /**
    * -ms-scroll-translation 的原生 vertical-to-horizontal 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-translation
    */
   readonly verticalToHorizontal: SystemKeyword<Key, 'vertical-to-horizontal'>;
 }
-export interface MsTextAutospaceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MsTextAutospaceKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MsTextAutospaceValues, 'none'>, Key> {
   /**
    * -ms-text-autospace 的原生 ideograph-alpha 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-autospace
@@ -11939,47 +6170,19 @@ export interface MsTextAutospaceKeywords<Key extends PropertyName> extends CssWi
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-autospace
    */
   readonly ideographSpace: SystemKeyword<Key, 'ideograph-space'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface MsTextCombineHorizontalKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -ms-text-combine-horizontal 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-combine-horizontal
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * -ms-text-combine-horizontal 的原生 digits 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-combine-horizontal
-   */
-  readonly digits: SystemKeyword<Key, 'digits'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MsTextOverflowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 直接裁剪溢出文本，不添加省略标记。
-   */
-  readonly clip: SystemKeyword<Key, 'clip'>;
-  /**
-   * 用省略号提示被裁剪的行内溢出；还需要限制尺寸并配置溢出规则。
-   *
-   * 适用场景：给确实发生行内溢出的单行内容添加省略提示。
-   *
-   * 不会自动限制宽度、禁用换行或实现多行省略。Flex/Grid 子项还可能需要 min-width:0。
-   *
-   * @example
-   * css({ minWidth: "0px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
-   */
-  readonly ellipsis: SystemKeyword<Key, 'ellipsis'>;
-}
-export interface MsTouchActionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MsTextCombineHorizontalKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsTextCombineHorizontalValues, 'all' | 'digits' | 'none'>, Key> {}
+export interface MsTextOverflowKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsTextOverflowValues, 'clip' | 'ellipsis'>, Key> {}
+export interface MsTouchActionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsTouchActionValues, 'auto' | 'manipulation' | 'none'>, Key> {
   /**
    * -ms-touch-action 的原生 -ms-manipulation 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
@@ -12005,18 +6208,6 @@ export interface MsTouchActionKeywords<Key extends PropertyName> extends CssWide
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
    */
   readonly MsPinchZoom: SystemKeyword<Key, '-ms-pinch-zoom'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 允许平移和连续缩放，通常禁用双击缩放等额外手势。
-   */
-  readonly manipulation: SystemKeyword<Key, 'manipulation'>;
-  /**
-   * 禁用浏览器在该区域处理的平移和缩放手势，可能影响用户缩放可访问性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
   /**
    * -ms-touch-action 的原生 pan-down 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
@@ -12051,66 +6242,31 @@ export interface MsTouchActionKeywords<Key extends PropertyName> extends CssWide
    */
   readonly pinchZoom: SystemKeyword<Key, 'pinch-zoom'>;
 }
-export interface MsTouchSelectKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-touch-select 的原生 grippers 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-select
-   */
-  readonly grippers: SystemKeyword<Key, 'grippers'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MsTransformKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MsTransformOriginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-transform-origin 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transform-origin
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * -ms-transform-origin 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transform-origin
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -ms-transform-origin 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transform-origin
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -ms-transform-origin 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transform-origin
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * -ms-transform-origin 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transform-origin
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface MsTransitionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-transition 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
+export interface MsTouchSelectKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsTouchSelectValues, 'grippers' | 'none'>, Key> {}
+export interface MsTransformKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MsTransformValues, 'none'>, Key> {}
+export interface MsTransformOriginKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsTransformOriginValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface MsTransitionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsTransitionValues, 'all' | 'ease' | 'linear' | 'none' | 'normal'>,
+      Key
+    > {
   /**
    * -ms-transition 的原生 allow-discrete 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition
    */
   readonly allowDiscrete: SystemKeyword<Key, 'allow-discrete'>;
-  /**
-   * -ms-transition 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
   /**
    * -ms-transition 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition
@@ -12127,19 +6283,6 @@ export interface MsTransitionKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * -ms-transition 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * -ms-transition 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition
    */
@@ -12154,27 +6297,14 @@ export interface MsTransitionDelayKeywords<Key extends PropertyName> extends Css
 export interface MsTransitionDurationKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface MsTransitionPropertyKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -ms-transition-property 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-property
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface MsTransitionTimingFunctionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -ms-transition-timing-function 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-timing-function
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
+export interface MsTransitionPropertyKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsTransitionPropertyValues, 'all' | 'none'>, Key> {}
+export interface MsTransitionTimingFunctionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsTransitionTimingFunctionValues, 'ease' | 'linear'>, Key> {
   /**
    * -ms-transition-timing-function 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-timing-function
@@ -12191,11 +6321,6 @@ export interface MsTransitionTimingFunctionKeywords<
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * -ms-transition-timing-function 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-timing-function
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
    * -ms-transition-timing-function 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-timing-function
    */
@@ -12206,22 +6331,12 @@ export interface MsTransitionTimingFunctionKeywords<
    */
   readonly stepStart: SystemKeyword<Key, 'step-start'>;
 }
-export interface MsUserSelectKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -ms-user-select 的原生 element 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-user-select
-   */
-  readonly element: SystemKeyword<Key, 'element'>;
-  /**
-   * 阻止常规文本选取，不是内容保护或访问控制。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 允许文本选取。
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
-}
-export interface MsWordBreakKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface MsUserSelectKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsUserSelectValues, 'element' | 'none' | 'text'>, Key> {}
+export interface MsWordBreakKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.MsWordBreakValues, 'normal'>, Key> {
   /**
    * -ms-word-break 的原生 auto-phrase 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-word-break
@@ -12240,54 +6355,19 @@ export interface MsWordBreakKeywords<Key extends PropertyName> extends CssWideKe
    * 限制中日韩文字内部断行，其他文字仍按正常规则处理。
    */
   readonly keepAll: SystemKeyword<Key, 'keep-all'>;
-  /**
-   * 按语言的默认断行规则处理。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
-export interface MsWrapFlowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -ms-wrap-flow 的原生 both 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-flow
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * -ms-wrap-flow 的原生 clear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-flow
-   */
-  readonly clear: SystemKeyword<Key, 'clear'>;
-  /**
-   * -ms-wrap-flow 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-flow
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * -ms-wrap-flow 的原生 maximum 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-flow
-   */
-  readonly maximum: SystemKeyword<Key, 'maximum'>;
-  /**
-   * -ms-wrap-flow 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-flow
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-}
+export interface MsWrapFlowKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.MsWrapFlowValues, 'auto' | 'both' | 'clear' | 'end' | 'maximum' | 'start'>,
+      Key
+    > {}
 export interface MsWrapMarginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface MsWrapThroughKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -ms-wrap-through 的原生 wrap 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-through
-   */
-  readonly wrap: SystemKeyword<Key, 'wrap'>;
-}
+export interface MsWrapThroughKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.MsWrapThroughValues, 'none' | 'wrap'>, Key> {}
 export interface MsWritingModeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
    * -ms-writing-mode 的原生 horizontal-tb 值；具体布局或绘制效果见该属性参考。
@@ -12315,36 +6395,33 @@ export interface MsWritingModeKeywords<Key extends PropertyName> extends CssWide
    */
   readonly verticalRl: SystemKeyword<Key, 'vertical-rl'>;
 }
-export interface OAnimationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -o-animation 的原生 alternate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
-   */
-  readonly alternate: SystemKeyword<Key, 'alternate'>;
+export interface OAnimationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.OAnimationValues,
+        | 'alternate'
+        | 'auto'
+        | 'backwards'
+        | 'both'
+        | 'ease'
+        | 'forwards'
+        | 'infinite'
+        | 'linear'
+        | 'none'
+        | 'normal'
+        | 'paused'
+        | 'reverse'
+        | 'running'
+      >,
+      Key
+    > {
   /**
    * -o-animation 的原生 alternate-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
    */
   readonly alternateReverse: SystemKeyword<Key, 'alternate-reverse'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -o-animation 的原生 backwards 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
-   */
-  readonly backwards: SystemKeyword<Key, 'backwards'>;
-  /**
-   * -o-animation 的原生 both 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * -o-animation 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
   /**
    * -o-animation 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
@@ -12361,44 +6438,6 @@ export interface OAnimationKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * -o-animation 的原生 forwards 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
-   */
-  readonly forwards: SystemKeyword<Key, 'forwards'>;
-  /**
-   * -o-animation 的原生 infinite 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
-   */
-  readonly infinite: SystemKeyword<Key, 'infinite'>;
-  /**
-   * -o-animation 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -o-animation 的原生 paused 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
-   */
-  readonly paused: SystemKeyword<Key, 'paused'>;
-  /**
-   * -o-animation 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
-  /**
-   * -o-animation 的原生 running 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
-   */
-  readonly running: SystemKeyword<Key, 'running'>;
-  /**
    * -o-animation 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
    */
@@ -12410,90 +6449,44 @@ export interface OAnimationKeywords<Key extends PropertyName> extends CssWideKey
   readonly stepStart: SystemKeyword<Key, 'step-start'>;
 }
 export interface OAnimationDelayKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface OAnimationDirectionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -o-animation-direction 的原生 alternate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-direction
-   */
-  readonly alternate: SystemKeyword<Key, 'alternate'>;
+export interface OAnimationDirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OAnimationDirectionValues, 'alternate' | 'normal' | 'reverse'>,
+      Key
+    > {
   /**
    * -o-animation-direction 的原生 alternate-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-direction
    */
   readonly alternateReverse: SystemKeyword<Key, 'alternate-reverse'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -o-animation-direction 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-direction
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
 }
-export interface OAnimationDurationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface OAnimationFillModeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 延迟阶段应用最先生效关键帧的效果，具体帧取决于播放方向。
-   */
-  readonly backwards: SystemKeyword<Key, 'backwards'>;
-  /**
-   * 同时应用 backwards 和 forwards 的区间外效果。
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * 播放结束后保留最后生效关键帧的效果；最后帧取决于方向和循环次数。
-   */
-  readonly forwards: SystemKeyword<Key, 'forwards'>;
-  /**
-   * 动画有效区间之外不应用动画关键帧值。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface OAnimationIterationCountKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -o-animation-iteration-count 的原生 infinite 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-iteration-count
-   */
-  readonly infinite: SystemKeyword<Key, 'infinite'>;
-}
-export interface OAnimationNameKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface OAnimationPlayStateKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -o-animation-play-state 的原生 paused 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-play-state
-   */
-  readonly paused: SystemKeyword<Key, 'paused'>;
-  /**
-   * -o-animation-play-state 的原生 running 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-play-state
-   */
-  readonly running: SystemKeyword<Key, 'running'>;
-}
-export interface OAnimationTimingFunctionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -o-animation-timing-function 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-timing-function
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
+export interface OAnimationDurationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OAnimationDurationValues, 'auto'>, Key> {}
+export interface OAnimationFillModeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OAnimationFillModeValues, 'backwards' | 'both' | 'forwards' | 'none'>,
+      Key
+    > {}
+export interface OAnimationIterationCountKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OAnimationIterationCountValues, 'infinite'>, Key> {}
+export interface OAnimationNameKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.OAnimationNameValues, 'none'>, Key> {}
+export interface OAnimationPlayStateKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OAnimationPlayStateValues, 'paused' | 'running'>, Key> {}
+export interface OAnimationTimingFunctionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OAnimationTimingFunctionValues, 'ease' | 'linear'>, Key> {
   /**
    * -o-animation-timing-function 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-timing-function
@@ -12510,11 +6503,6 @@ export interface OAnimationTimingFunctionKeywords<
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * -o-animation-timing-function 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-timing-function
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
    * -o-animation-timing-function 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-timing-function
    */
@@ -12525,137 +6513,50 @@ export interface OAnimationTimingFunctionKeywords<
    */
   readonly stepStart: SystemKeyword<Key, 'step-start'>;
 }
-export interface OBackgroundSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 依据图像内部尺寸、比例及另一维的设置确定尺寸。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 保持图像比例并使整张图像容纳于定位区域，可能留下空白。
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 保持图像比例并覆盖整个定位区域，超出部分可能被裁剪。
-   */
-  readonly cover: SystemKeyword<Key, 'cover'>;
-}
-export interface ObjectFitKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 保留宽高比并完整放入内容盒，可能留下空白。
-   *
-   * 区别：cover 优先填满盒子并可能裁剪；contain 优先保留完整内容。
-   *
-   * 适用场景：希望完整显示的商品图或图像预览。
-   *
-   * @example
-   * css({ width: "20rem", height: "12rem", objectFit: "contain" })
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 保留宽高比并填满内容盒，可能裁掉部分图像。
-   *
-   * 区别：contain 保证完整图像可见但可能留白；fill 可能改变图像比例。
-   *
-   * 适用场景：固定尺寸头像、卡片封面。
-   *
-   * 裁剪位置由 object-position 控制，盒子尺寸仍需另外设置。
-   *
-   * @example
-   * css({ width: "80px", height: "80px", objectFit: "cover" })
-   */
-  readonly cover: SystemKeyword<Key, 'cover'>;
-  /**
-   * 把内容拉伸到内容盒，可能改变原有宽高比。
-   */
-  readonly fill: SystemKeyword<Key, 'fill'>;
-  /**
-   * 不按内容盒缩放替换内容。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
+export interface OBackgroundSizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OBackgroundSizeValues, 'auto' | 'contain' | 'cover'>, Key> {}
+export interface ObjectFitKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ObjectFitValues, 'contain' | 'cover' | 'fill' | 'none'>, Key> {
   /**
    * 在 none 和 contain 中选择得到较小内容尺寸的方案。
    */
   readonly scaleDown: SystemKeyword<Key, 'scale-down'>;
 }
-export interface ObjectPositionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * object-position 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-position
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * object-position 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-position
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * object-position 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-position
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * object-position 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-position
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * object-position 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-position
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface ObjectViewBoxKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface OBorderImageKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -o-border-image 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-border-image
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
-  /**
-   * -o-border-image 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-border-image
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * -o-border-image 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-border-image
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
-   * -o-border-image 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-border-image
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
-export interface OffsetKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface ObjectPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.ObjectPositionValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface ObjectViewBoxKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ObjectViewBoxValues, 'none'>, Key> {}
+export interface OBorderImageKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OBorderImageValues, 'none' | 'repeat' | 'round' | 'space' | 'stretch'>,
+      Key
+    > {}
+export interface OffsetKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.OffsetValues,
+        'auto' | 'bottom' | 'center' | 'left' | 'none' | 'normal' | 'right' | 'top'
+      >,
+      Key
+    > {
   /**
    * offset 的原生 border-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
    */
   readonly borderBox: SystemKeyword<Key, 'border-box'>;
-  /**
-   * offset 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * offset 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
   /**
    * offset 的原生 content-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
@@ -12667,113 +6568,49 @@ export interface OffsetKeywords<Key extends PropertyName> extends CssWideKeyword
    */
   readonly fillBox: SystemKeyword<Key, 'fill-box'>;
   /**
-   * offset 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * offset 的原生 padding-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
-  /**
-   * offset 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
   /**
    * offset 的原生 stroke-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
    */
   readonly strokeBox: SystemKeyword<Key, 'stroke-box'>;
   /**
-   * offset 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-  /**
    * offset 的原生 view-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
    */
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
-export interface OffsetAnchorKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * offset-anchor 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-anchor
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * offset-anchor 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-anchor
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * offset-anchor 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-anchor
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * offset-anchor 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-anchor
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * offset-anchor 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-anchor
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface OffsetBlockKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface OffsetBlockEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface OffsetBlockStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
+export interface OffsetAnchorKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OffsetAnchorValues, 'auto' | 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface OffsetBlockKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.OffsetBlockValues, 'auto'>, Key> {}
+export interface OffsetBlockEndKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.OffsetBlockEndValues, 'auto'>, Key> {}
+export interface OffsetBlockStartKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OffsetBlockStartValues, 'auto'>, Key> {}
 export interface OffsetDistanceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface OffsetInlineKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface OffsetInlineEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface OffsetInlineStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface OffsetPathKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface OffsetInlineKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.OffsetInlineValues, 'auto'>, Key> {}
+export interface OffsetInlineEndKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OffsetInlineEndValues, 'auto'>, Key> {}
+export interface OffsetInlineStartKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OffsetInlineStartValues, 'auto'>, Key> {}
+export interface OffsetPathKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.OffsetPathValues, 'none'>, Key> {
   /**
    * offset-path 的原生 border-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-path
@@ -12790,10 +6627,6 @@ export interface OffsetPathKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly fillBox: SystemKeyword<Key, 'fill-box'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
    * offset-path 的原生 padding-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-path
    */
@@ -12809,198 +6642,69 @@ export interface OffsetPathKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
-export interface OffsetPositionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * offset-position 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-position
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * offset-position 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-position
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * offset-position 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-position
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * offset-position 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-position
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * offset-position 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-position
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface OffsetRotateKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * offset-rotate 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-rotate
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
-}
-export interface OffsetRotationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * offset-rotation 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-rotation
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
-}
-export interface OObjectFitKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 保留宽高比并完整放入内容盒，可能留下空白。
-   *
-   * 区别：cover 优先填满盒子并可能裁剪；contain 优先保留完整内容。
-   *
-   * 适用场景：希望完整显示的商品图或图像预览。
-   *
-   * @example
-   * css({ width: "20rem", height: "12rem", objectFit: "contain" })
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 保留宽高比并填满内容盒，可能裁掉部分图像。
-   *
-   * 区别：contain 保证完整图像可见但可能留白；fill 可能改变图像比例。
-   *
-   * 适用场景：固定尺寸头像、卡片封面。
-   *
-   * 裁剪位置由 object-position 控制，盒子尺寸仍需另外设置。
-   *
-   * @example
-   * css({ width: "80px", height: "80px", objectFit: "cover" })
-   */
-  readonly cover: SystemKeyword<Key, 'cover'>;
-  /**
-   * 把内容拉伸到内容盒，可能改变原有宽高比。
-   */
-  readonly fill: SystemKeyword<Key, 'fill'>;
-  /**
-   * 不按内容盒缩放替换内容。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
+export interface OffsetPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.OffsetPositionValues,
+        'auto' | 'bottom' | 'center' | 'left' | 'normal' | 'right' | 'top'
+      >,
+      Key
+    > {}
+export interface OffsetRotateKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OffsetRotateValues, 'auto' | 'reverse'>, Key> {}
+export interface OffsetRotationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OffsetRotationValues, 'auto' | 'reverse'>, Key> {}
+export interface OObjectFitKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OObjectFitValues, 'contain' | 'cover' | 'fill' | 'none'>, Key> {
   /**
    * 在 none 和 contain 中选择得到较小内容尺寸的方案。
    */
   readonly scaleDown: SystemKeyword<Key, 'scale-down'>;
 }
-export interface OObjectPositionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -o-object-position 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-object-position
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * -o-object-position 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-object-position
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -o-object-position 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-object-position
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -o-object-position 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-object-position
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * -o-object-position 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-object-position
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
+export interface OObjectPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OObjectPositionValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
 export interface OpacityKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface OrderKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface OrphansKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface OTabSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface OTextOverflowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 直接裁剪溢出文本，不添加省略标记。
-   */
-  readonly clip: SystemKeyword<Key, 'clip'>;
-  /**
-   * 用省略号提示被裁剪的行内溢出；还需要限制尺寸并配置溢出规则。
-   *
-   * 适用场景：给确实发生行内溢出的单行内容添加省略提示。
-   *
-   * 不会自动限制宽度、禁用换行或实现多行省略。Flex/Grid 子项还可能需要 min-width:0。
-   *
-   * @example
-   * css({ minWidth: "0px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
-   */
-  readonly ellipsis: SystemKeyword<Key, 'ellipsis'>;
-}
-export interface OTransformKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface OTransformOriginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -o-transform-origin 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transform-origin
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * -o-transform-origin 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transform-origin
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -o-transform-origin 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transform-origin
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -o-transform-origin 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transform-origin
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * -o-transform-origin 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transform-origin
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface OTransitionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -o-transition 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
+export interface OTextOverflowKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OTextOverflowValues, 'clip' | 'ellipsis'>, Key> {}
+export interface OTransformKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.OTransformValues, 'none'>, Key> {}
+export interface OTransformOriginKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OTransformOriginValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface OTransitionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OTransitionValues, 'all' | 'ease' | 'linear' | 'none' | 'normal'>,
+      Key
+    > {
   /**
    * -o-transition 的原生 allow-discrete 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition
    */
   readonly allowDiscrete: SystemKeyword<Key, 'allow-discrete'>;
-  /**
-   * -o-transition 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
   /**
    * -o-transition 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition
@@ -13017,19 +6721,6 @@ export interface OTransitionKeywords<Key extends PropertyName> extends CssWideKe
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * -o-transition 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * -o-transition 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition
    */
@@ -13044,27 +6735,14 @@ export interface OTransitionDelayKeywords<Key extends PropertyName> extends CssW
 export interface OTransitionDurationKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface OTransitionPropertyKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -o-transition-property 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-property
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface OTransitionTimingFunctionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -o-transition-timing-function 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-timing-function
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
+export interface OTransitionPropertyKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OTransitionPropertyValues, 'all' | 'none'>, Key> {}
+export interface OTransitionTimingFunctionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OTransitionTimingFunctionValues, 'ease' | 'linear'>, Key> {
   /**
    * -o-transition-timing-function 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-timing-function
@@ -13081,11 +6759,6 @@ export interface OTransitionTimingFunctionKeywords<
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * -o-transition-timing-function 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-timing-function
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
    * -o-transition-timing-function 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-timing-function
    */
@@ -13101,268 +6774,86 @@ export interface OutlineKeywords<Key extends PropertyName>
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.OutlineValues,
+        | 'auto'
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface OutlineColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OutlineColorValues, 'auto' | 'currentColor' | 'transparent'>,
+      Key
+    > {}
 export interface OutlineOffsetKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface OutlineStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * outline-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * outline-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * outline-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * outline-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * outline-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * outline-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * outline-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * outline-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface OutlineWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * outline-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * outline-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * outline-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
-export interface OverflowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface OutlineStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.OutlineStyleValues,
+        | 'auto'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface OutlineWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OutlineWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
+export interface OverflowKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OverflowValues, 'auto' | 'clip' | 'hidden' | 'overlay' | 'scroll' | 'visible'>,
+      Key
+    > {
   /**
    * overflow 的原生 -moz-hidden-unscrollable 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow
    */
   readonly MozHiddenUnscrollable: SystemKeyword<Key, '-moz-hidden-unscrollable'>;
-  /**
-   * 按溢出情况提供滚动机制；滚动条外观和是否占空间由环境决定。
-   *
-   * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
-   *
-   * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * css({ $property: "auto" })
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 在裁剪边界截断内容，不建立滚动容器，也不支持程序化滚动。
-   *
-   * 区别：与 hidden 不同，不支持程序化滚动，也不单独建立块格式化上下文。
-   *
-   * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
-   *
-   * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * css({ $property: "clip" })
-   */
-  readonly clip: SystemKeyword<Key, 'clip'>;
-  /**
-   * 裁剪溢出且不显示滚动条，但仍是可通过脚本等方式滚动的滚动容器。
-   *
-   * 区别：clip 不建立滚动容器；hidden 仍可通过脚本或焦点移动滚动。
-   *
-   * 适用场景：需要裁剪且仍保留程序化滚动的容器。
-   *
-   * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * css({ $property: "hidden" })
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * 历史兼容值，现代实现通常将其作为 auto 的别名；不保证滚动条覆盖在内容上。
-   */
-  readonly overlay: SystemKeyword<Key, 'overlay'>;
-  /**
-   * 建立滚动容器，通常即使未溢出也显示滚动条；具体外观由平台决定。
-   */
-  readonly scroll: SystemKeyword<Key, 'scroll'>;
-  /**
-   * 允许内容绘制到盒子外；与另一轴的设置组合时计算值可能变化。
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
 }
-export interface OverflowAnchorKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface OverflowBlockKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 按溢出情况提供滚动机制；滚动条外观和是否占空间由环境决定。
-   *
-   * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
-   *
-   * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * css({ $property: "auto" })
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 在裁剪边界截断内容，不建立滚动容器，也不支持程序化滚动。
-   *
-   * 区别：与 hidden 不同，不支持程序化滚动，也不单独建立块格式化上下文。
-   *
-   * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
-   *
-   * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * css({ $property: "clip" })
-   */
-  readonly clip: SystemKeyword<Key, 'clip'>;
-  /**
-   * 裁剪溢出且不显示滚动条，但仍是可通过脚本等方式滚动的滚动容器。
-   *
-   * 区别：clip 不建立滚动容器；hidden 仍可通过脚本或焦点移动滚动。
-   *
-   * 适用场景：需要裁剪且仍保留程序化滚动的容器。
-   *
-   * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * css({ $property: "hidden" })
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * 建立滚动容器，通常即使未溢出也显示滚动条；具体外观由平台决定。
-   */
-  readonly scroll: SystemKeyword<Key, 'scroll'>;
-  /**
-   * 允许内容绘制到盒子外；与另一轴的设置组合时计算值可能变化。
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
-}
+export interface OverflowAnchorKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OverflowAnchorValues, 'auto' | 'none'>, Key> {}
+export interface OverflowBlockKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OverflowBlockValues, 'auto' | 'clip' | 'hidden' | 'scroll' | 'visible'>,
+      Key
+    > {}
 export interface OverflowClipBoxKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
    * overflow-clip-box 的原生 content-box 值；具体布局或绘制效果见该属性参考。
@@ -13392,274 +6883,78 @@ export interface OverflowClipMarginKeywords<Key extends PropertyName> extends Cs
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
 }
-export interface OverflowInlineKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 按溢出情况提供滚动机制；滚动条外观和是否占空间由环境决定。
-   *
-   * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
-   *
-   * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * css({ $property: "auto" })
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 在裁剪边界截断内容，不建立滚动容器，也不支持程序化滚动。
-   *
-   * 区别：与 hidden 不同，不支持程序化滚动，也不单独建立块格式化上下文。
-   *
-   * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
-   *
-   * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * css({ $property: "clip" })
-   */
-  readonly clip: SystemKeyword<Key, 'clip'>;
-  /**
-   * 裁剪溢出且不显示滚动条，但仍是可通过脚本等方式滚动的滚动容器。
-   *
-   * 区别：clip 不建立滚动容器；hidden 仍可通过脚本或焦点移动滚动。
-   *
-   * 适用场景：需要裁剪且仍保留程序化滚动的容器。
-   *
-   * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * css({ $property: "hidden" })
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * 建立滚动容器，通常即使未溢出也显示滚动条；具体外观由平台决定。
-   */
-  readonly scroll: SystemKeyword<Key, 'scroll'>;
-  /**
-   * 允许内容绘制到盒子外；与另一轴的设置组合时计算值可能变化。
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
-}
-export interface OverflowWrapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 必要时允许在长文本任意位置断行，这些机会参与 min-content 尺寸计算。
-   *
-   * 区别：break-word 的额外断点不按 anywhere 的方式参与最小内容宽度计算；word-break:break-all 更积极地拆分普通单词。
-   *
-   * 适用场景：展示不可控的长 URL 或无空格文本。
-   *
-   * @example
-   * css({ $property: "anywhere" })
-   */
-  readonly anywhere: SystemKeyword<Key, 'anywhere'>;
+export interface OverflowInlineKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OverflowInlineValues, 'auto' | 'clip' | 'hidden' | 'scroll' | 'visible'>,
+      Key
+    > {}
+export interface OverflowWrapKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OverflowWrapValues, 'anywhere' | 'normal'>, Key> {
   /**
    * 必要时允许长文本断行，但新增断点不按 anywhere 的方式参与 min-content 计算。
    */
   readonly breakWord: SystemKeyword<Key, 'break-word'>;
-  /**
-   * 只使用正常换行机会，不为长单词额外断行。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
-export interface OverflowXKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface OverflowXKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OverflowXValues, 'auto' | 'clip' | 'hidden' | 'overlay' | 'scroll' | 'visible'>,
+      Key
+    > {
   /**
    * overflow-x 的原生 -moz-hidden-unscrollable 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-x
    */
   readonly MozHiddenUnscrollable: SystemKeyword<Key, '-moz-hidden-unscrollable'>;
-  /**
-   * 按溢出情况提供滚动机制；滚动条外观和是否占空间由环境决定。
-   *
-   * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
-   *
-   * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * css({ $property: "auto" })
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 在裁剪边界截断内容，不建立滚动容器，也不支持程序化滚动。
-   *
-   * 区别：与 hidden 不同，不支持程序化滚动，也不单独建立块格式化上下文。
-   *
-   * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
-   *
-   * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * css({ $property: "clip" })
-   */
-  readonly clip: SystemKeyword<Key, 'clip'>;
-  /**
-   * 裁剪溢出且不显示滚动条，但仍是可通过脚本等方式滚动的滚动容器。
-   *
-   * 区别：clip 不建立滚动容器；hidden 仍可通过脚本或焦点移动滚动。
-   *
-   * 适用场景：需要裁剪且仍保留程序化滚动的容器。
-   *
-   * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * css({ $property: "hidden" })
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * 历史兼容值，现代实现通常将其作为 auto 的别名；不保证滚动条覆盖在内容上。
-   */
-  readonly overlay: SystemKeyword<Key, 'overlay'>;
-  /**
-   * 建立滚动容器，通常即使未溢出也显示滚动条；具体外观由平台决定。
-   */
-  readonly scroll: SystemKeyword<Key, 'scroll'>;
-  /**
-   * 允许内容绘制到盒子外；与另一轴的设置组合时计算值可能变化。
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
 }
-export interface OverflowYKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface OverflowYKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OverflowYValues, 'auto' | 'clip' | 'hidden' | 'overlay' | 'scroll' | 'visible'>,
+      Key
+    > {
   /**
    * overflow-y 的原生 -moz-hidden-unscrollable 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-y
    */
   readonly MozHiddenUnscrollable: SystemKeyword<Key, '-moz-hidden-unscrollable'>;
-  /**
-   * 按溢出情况提供滚动机制；滚动条外观和是否占空间由环境决定。
-   *
-   * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
-   *
-   * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * css({ $property: "auto" })
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 在裁剪边界截断内容，不建立滚动容器，也不支持程序化滚动。
-   *
-   * 区别：与 hidden 不同，不支持程序化滚动，也不单独建立块格式化上下文。
-   *
-   * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
-   *
-   * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * css({ $property: "clip" })
-   */
-  readonly clip: SystemKeyword<Key, 'clip'>;
-  /**
-   * 裁剪溢出且不显示滚动条，但仍是可通过脚本等方式滚动的滚动容器。
-   *
-   * 区别：clip 不建立滚动容器；hidden 仍可通过脚本或焦点移动滚动。
-   *
-   * 适用场景：需要裁剪且仍保留程序化滚动的容器。
-   *
-   * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * css({ $property: "hidden" })
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * 历史兼容值，现代实现通常将其作为 auto 的别名；不保证滚动条覆盖在内容上。
-   */
-  readonly overlay: SystemKeyword<Key, 'overlay'>;
-  /**
-   * 建立滚动容器，通常即使未溢出也显示滚动条；具体外观由平台决定。
-   */
-  readonly scroll: SystemKeyword<Key, 'scroll'>;
-  /**
-   * 允许内容绘制到盒子外；与另一轴的设置组合时计算值可能变化。
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
 }
-export interface OverlayKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface OverscrollBehaviorKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 采用默认滚动链和边界反馈。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 阻止滚动链传播到祖先，同时可保留当前容器的边界反馈。
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 阻止滚动链，并抑制当前容器的默认越界反馈。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface OverscrollBehaviorBlockKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 采用默认滚动链和边界反馈。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 阻止滚动链传播到祖先，同时可保留当前容器的边界反馈。
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 阻止滚动链，并抑制当前容器的默认越界反馈。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface OverscrollBehaviorInlineKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 采用默认滚动链和边界反馈。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 阻止滚动链传播到祖先，同时可保留当前容器的边界反馈。
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 阻止滚动链，并抑制当前容器的默认越界反馈。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface OverscrollBehaviorXKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 采用默认滚动链和边界反馈。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 阻止滚动链传播到祖先，同时可保留当前容器的边界反馈。
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 阻止滚动链，并抑制当前容器的默认越界反馈。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface OverscrollBehaviorYKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 采用默认滚动链和边界反馈。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 阻止滚动链传播到祖先，同时可保留当前容器的边界反馈。
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 阻止滚动链，并抑制当前容器的默认越界反馈。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface OverlayKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OverlayValues, 'auto' | 'none'>, Key> {}
+export interface OverscrollBehaviorKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OverscrollBehaviorValues, 'auto' | 'contain' | 'none'>, Key> {}
+export interface OverscrollBehaviorBlockKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OverscrollBehaviorBlockValues, 'auto' | 'contain' | 'none'>,
+      Key
+    > {}
+export interface OverscrollBehaviorInlineKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.OverscrollBehaviorInlineValues, 'auto' | 'contain' | 'none'>,
+      Key
+    > {}
+export interface OverscrollBehaviorXKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OverscrollBehaviorXValues, 'auto' | 'contain' | 'none'>, Key> {}
+export interface OverscrollBehaviorYKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.OverscrollBehaviorYValues, 'auto' | 'contain' | 'none'>, Key> {}
 export interface PaddingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface PaddingBlockKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface PaddingBlockEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
@@ -13673,165 +6968,58 @@ export interface PaddingInlineStartKeywords<
 export interface PaddingLeftKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface PaddingRightKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface PaddingTopKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface PageKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface PageBreakAfterKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * page-break-after 的原生 always 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-after
-   */
-  readonly always: SystemKeyword<Key, 'always'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * page-break-after 的原生 avoid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-after
-   */
-  readonly avoid: SystemKeyword<Key, 'avoid'>;
-  /**
-   * page-break-after 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-after
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * page-break-after 的原生 recto 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-after
-   */
-  readonly recto: SystemKeyword<Key, 'recto'>;
-  /**
-   * page-break-after 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-after
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * page-break-after 的原生 verso 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-after
-   */
-  readonly verso: SystemKeyword<Key, 'verso'>;
-}
-export interface PageBreakBeforeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * page-break-before 的原生 always 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-before
-   */
-  readonly always: SystemKeyword<Key, 'always'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * page-break-before 的原生 avoid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-before
-   */
-  readonly avoid: SystemKeyword<Key, 'avoid'>;
-  /**
-   * page-break-before 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-before
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * page-break-before 的原生 recto 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-before
-   */
-  readonly recto: SystemKeyword<Key, 'recto'>;
-  /**
-   * page-break-before 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-before
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * page-break-before 的原生 verso 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-before
-   */
-  readonly verso: SystemKeyword<Key, 'verso'>;
-}
-export interface PageBreakInsideKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * page-break-inside 的原生 avoid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-inside
-   */
-  readonly avoid: SystemKeyword<Key, 'avoid'>;
-}
-export interface PaintOrderKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * paint-order 的原生 fill 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/paint-order
-   */
-  readonly fill: SystemKeyword<Key, 'fill'>;
-  /**
-   * paint-order 的原生 markers 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/paint-order
-   */
-  readonly markers: SystemKeyword<Key, 'markers'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * paint-order 的原生 stroke 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/paint-order
-   */
-  readonly stroke: SystemKeyword<Key, 'stroke'>;
-}
-export interface PerspectiveKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface PerspectiveOriginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * perspective-origin 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective-origin
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * perspective-origin 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective-origin
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * perspective-origin 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective-origin
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * perspective-origin 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective-origin
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * perspective-origin 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective-origin
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface PlaceContentKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * place-content 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * place-content 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * place-content 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
+export interface PageKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.PageValues, 'auto'>, Key> {}
+export interface PageBreakAfterKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.PageBreakAfterValues,
+        'always' | 'auto' | 'avoid' | 'left' | 'recto' | 'right' | 'verso'
+      >,
+      Key
+    > {}
+export interface PageBreakBeforeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.PageBreakBeforeValues,
+        'always' | 'auto' | 'avoid' | 'left' | 'recto' | 'right' | 'verso'
+      >,
+      Key
+    > {}
+export interface PageBreakInsideKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.PageBreakInsideValues, 'auto' | 'avoid'>, Key> {}
+export interface PaintOrderKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.PaintOrderValues, 'fill' | 'markers' | 'normal' | 'stroke'>,
+      Key
+    > {}
+export interface PerspectiveKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.PerspectiveValues, 'none'>, Key> {}
+export interface PerspectiveOriginKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.PerspectiveOriginValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface PlaceContentKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.PlaceContentValues,
+        'baseline' | 'center' | 'end' | 'normal' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * place-content 的原生 flex-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
@@ -13842,10 +7030,6 @@ export interface PlaceContentKeywords<Key extends PropertyName> extends CssWideK
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
   /**
    * place-content 的原生 space-around 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
@@ -13861,38 +7045,19 @@ export interface PlaceContentKeywords<Key extends PropertyName> extends CssWideK
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
    */
   readonly spaceEvenly: SystemKeyword<Key, 'space-evenly'>;
-  /**
-   * place-content 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * place-content 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface PlaceItemsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface PlaceItemsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.PlaceItemsValues, 'baseline' | 'center' | 'end' | 'normal' | 'start' | 'stretch'>,
+      Key
+    > {
   /**
    * place-items 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
    */
   readonly anchorCenter: SystemKeyword<Key, 'anchor-center'>;
-  /**
-   * place-items 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * place-items 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * place-items 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
   /**
    * place-items 的原生 flex-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
@@ -13904,10 +7069,6 @@ export interface PlaceItemsKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
   /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * place-items 的原生 self-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
    */
@@ -13917,42 +7078,22 @@ export interface PlaceItemsKeywords<Key extends PropertyName> extends CssWideKey
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
    */
   readonly selfStart: SystemKeyword<Key, 'self-start'>;
-  /**
-   * place-items 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * place-items 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface PlaceSelfKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface PlaceSelfKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.PlaceSelfValues,
+        'auto' | 'baseline' | 'center' | 'end' | 'normal' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * place-self 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
    */
   readonly anchorCenter: SystemKeyword<Key, 'anchor-center'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * place-self 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * place-self 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * place-self 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
   /**
    * place-self 的原生 flex-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
@@ -13964,10 +7105,6 @@ export interface PlaceSelfKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
   /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * place-self 的原生 self-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
    */
@@ -13977,140 +7114,51 @@ export interface PlaceSelfKeywords<Key extends PropertyName> extends CssWideKeyw
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
    */
   readonly selfStart: SystemKeyword<Key, 'self-start'>;
-  /**
-   * place-self 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * place-self 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface PointerEventsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * pointer-events 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 采用当前元素类型的默认命中规则。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * pointer-events 的原生 fill 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
-   */
-  readonly fill: SystemKeyword<Key, 'fill'>;
-  /**
-   * 元素本身不成为指针命中目标；不等于禁用，仍可能通过 Tab 获焦，后代也可恢复命中。
-   *
-   * 适用场景：覆盖在内容上方但不应拦截点击的装饰层。
-   *
-   * 后代可以恢复命中；来自后代的事件仍可能经过祖先监听器。
-   *
-   * @example
-   * css({ pointerEvents: "none" })
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * pointer-events 的原生 painted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
-   */
-  readonly painted: SystemKeyword<Key, 'painted'>;
-  /**
-   * pointer-events 的原生 stroke 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
-   */
-  readonly stroke: SystemKeyword<Key, 'stroke'>;
-  /**
-   * pointer-events 的原生 visible 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
-  /**
-   * pointer-events 的原生 visibleFill 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
-   */
-  readonly visibleFill: SystemKeyword<Key, 'visibleFill'>;
-  /**
-   * pointer-events 的原生 visiblePainted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
-   */
-  readonly visiblePainted: SystemKeyword<Key, 'visiblePainted'>;
-  /**
-   * pointer-events 的原生 visibleStroke 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
-   */
-  readonly visibleStroke: SystemKeyword<Key, 'visibleStroke'>;
-}
-export interface PositionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface PointerEventsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.PointerEventsValues,
+        | 'all'
+        | 'auto'
+        | 'fill'
+        | 'none'
+        | 'painted'
+        | 'stroke'
+        | 'visible'
+        | 'visibleFill'
+        | 'visiblePainted'
+        | 'visibleStroke'
+      >,
+      Key
+    > {}
+export interface PositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.PositionValues, 'absolute' | 'fixed' | 'relative' | 'static' | 'sticky'>,
+      Key
+    > {
   /**
    * position 的原生 -webkit-sticky 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position
    */
   readonly WebkitSticky: SystemKeyword<Key, '-webkit-sticky'>;
-  /**
-   * 脱离普通文档流，按包含块定位；包含块通常由定位祖先或 transform 等属性建立。
-   *
-   * 适用场景：容器内部的角标、图标覆盖和定位装饰。
-   *
-   * 通常在预期的容器上设置 position:relative；元素不为自己保留普通流占位。
-   *
-   * @example
-   * css({ position: "absolute", top: "0px", right: "0px" })
-   */
-  readonly absolute: SystemKeyword<Key, 'absolute'>;
-  /**
-   * 脱离普通流，通常相对视口固定；某些祖先属性会建立不同的包含块。
-   *
-   * 区别：absolute 通常跟随其包含块滚动；fixed 在以视口为包含块时保持视口位置。
-   *
-   * 适用场景：固定工具栏或覆盖层。
-   *
-   * 祖先的 transform 等属性可能改变固定定位的包含块；z-index 仍受层叠上下文约束。
-   *
-   * @example
-   * css({ position: "fixed", inset: "0px" })
-   */
-  readonly fixed: SystemKeyword<Key, 'fixed'>;
-  /**
-   * 保留普通流中的原位置，再按偏移移动绘制位置；不会为偏移后的区域重新排版。
-   *
-   * 区别：absolute 会脱离普通流；relative 仍保留原占位。
-   *
-   * 适用场景：为绝对定位后代提供定位参照，或做不改变其他元素排布的视觉偏移。
-   *
-   * @example
-   * css({ position: "relative" })
-   */
-  readonly relative: SystemKeyword<Key, 'relative'>;
-  /**
-   * 参与普通文档流，top/right/bottom/left 等定位偏移不生效。
-   */
-  readonly static: SystemKeyword<Key, 'static'>;
-  /**
-   * 保留流内位置，在滚动范围内按 inset 约束吸附。对应轴至少一个 inset 须非 auto，并受滚动祖先和包含块限制。
-   *
-   * 区别：与 fixed 不同，它保留流内占位，并受自身所在包含块的范围约束。
-   *
-   * 适用场景：滚动列表的分组标题、吸顶工具栏。
-   *
-   * 对应轴至少一个 inset 必须非 auto；祖先 overflow 可能改变滚动参照。
-   *
-   * @example
-   * css({ position: "sticky", top: "0px" })
-   */
-  readonly sticky: SystemKeyword<Key, 'sticky'>;
 }
-export interface PositionAnchorKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface PositionAreaKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface PositionAnchorKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.PositionAnchorValues, 'auto'>, Key> {}
+export interface PositionAreaKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.PositionAreaValues,
+        'bottom' | 'center' | 'end' | 'left' | 'none' | 'right' | 'start' | 'top'
+      >,
+      Key
+    > {
   /**
    * position-area 的原生 block-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
@@ -14122,21 +7170,6 @@ export interface PositionAreaKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly blockStart: SystemKeyword<Key, 'block-start'>;
   /**
-   * position-area 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * position-area 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * position-area 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
    * position-area 的原生 inline-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
    */
@@ -14146,20 +7179,6 @@ export interface PositionAreaKeywords<Key extends PropertyName> extends CssWideK
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
    */
   readonly inlineStart: SystemKeyword<Key, 'inline-start'>;
-  /**
-   * position-area 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * position-area 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
   /**
    * position-area 的原生 self-block-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
@@ -14316,16 +7335,6 @@ export interface PositionAreaKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly spanYStart: SystemKeyword<Key, 'span-y-start'>;
   /**
-   * position-area 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * position-area 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-  /**
    * position-area 的原生 x-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
    */
@@ -14366,7 +7375,16 @@ export interface PositionAreaKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly yStart: SystemKeyword<Key, 'y-start'>;
 }
-export interface PositionTryKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface PositionTryKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.PositionTryValues,
+        'bottom' | 'center' | 'end' | 'left' | 'none' | 'right' | 'start' | 'top'
+      >,
+      Key
+    > {
   /**
    * position-try 的原生 block-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
@@ -14377,21 +7395,6 @@ export interface PositionTryKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
    */
   readonly blockStart: SystemKeyword<Key, 'block-start'>;
-  /**
-   * position-try 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * position-try 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * position-try 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
   /**
    * position-try 的原生 flip-block 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
@@ -14417,20 +7420,6 @@ export interface PositionTryKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
    */
   readonly inlineStart: SystemKeyword<Key, 'inline-start'>;
-  /**
-   * position-try 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * position-try 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
   /**
    * position-try 的原生 self-block-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
@@ -14587,16 +7576,6 @@ export interface PositionTryKeywords<Key extends PropertyName> extends CssWideKe
    */
   readonly spanYStart: SystemKeyword<Key, 'span-y-start'>;
   /**
-   * position-try 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * position-try 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-  /**
    * position-try 的原生 x-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
    */
@@ -14637,9 +7616,16 @@ export interface PositionTryKeywords<Key extends PropertyName> extends CssWideKe
    */
   readonly yStart: SystemKeyword<Key, 'y-start'>;
 }
-export interface PositionTryFallbacksKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
+export interface PositionTryFallbacksKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.PositionTryFallbacksValues,
+        'bottom' | 'center' | 'end' | 'left' | 'none' | 'right' | 'start' | 'top'
+      >,
+      Key
+    > {
   /**
    * position-try-fallbacks 的原生 block-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
@@ -14650,21 +7636,6 @@ export interface PositionTryFallbacksKeywords<
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
    */
   readonly blockStart: SystemKeyword<Key, 'block-start'>;
-  /**
-   * position-try-fallbacks 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * position-try-fallbacks 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * position-try-fallbacks 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
   /**
    * position-try-fallbacks 的原生 flip-block 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
@@ -14690,20 +7661,6 @@ export interface PositionTryFallbacksKeywords<
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
    */
   readonly inlineStart: SystemKeyword<Key, 'inline-start'>;
-  /**
-   * position-try-fallbacks 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * position-try-fallbacks 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
   /**
    * position-try-fallbacks 的原生 self-block-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
@@ -14860,16 +7817,6 @@ export interface PositionTryFallbacksKeywords<
    */
   readonly spanYStart: SystemKeyword<Key, 'span-y-start'>;
   /**
-   * position-try-fallbacks 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * position-try-fallbacks 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-  /**
    * position-try-fallbacks 的原生 x-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
    */
@@ -14910,7 +7857,16 @@ export interface PositionTryFallbacksKeywords<
    */
   readonly yStart: SystemKeyword<Key, 'y-start'>;
 }
-export interface PositionTryOptionsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface PositionTryOptionsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.PositionTryOptionsValues,
+        'bottom' | 'center' | 'end' | 'left' | 'none' | 'right' | 'start' | 'top'
+      >,
+      Key
+    > {
   /**
    * position-try-options 的原生 block-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
@@ -14921,21 +7877,6 @@ export interface PositionTryOptionsKeywords<Key extends PropertyName> extends Cs
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
    */
   readonly blockStart: SystemKeyword<Key, 'block-start'>;
-  /**
-   * position-try-options 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * position-try-options 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * position-try-options 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
   /**
    * position-try-options 的原生 flip-block 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
@@ -14961,20 +7902,6 @@ export interface PositionTryOptionsKeywords<Key extends PropertyName> extends Cs
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
    */
   readonly inlineStart: SystemKeyword<Key, 'inline-start'>;
-  /**
-   * position-try-options 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * position-try-options 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
   /**
    * position-try-options 的原生 self-block-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
@@ -15131,16 +8058,6 @@ export interface PositionTryOptionsKeywords<Key extends PropertyName> extends Cs
    */
   readonly spanYStart: SystemKeyword<Key, 'span-y-start'>;
   /**
-   * position-try-options 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * position-try-options 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-  /**
    * position-try-options 的原生 x-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
    */
@@ -15181,7 +8098,10 @@ export interface PositionTryOptionsKeywords<Key extends PropertyName> extends Cs
    */
   readonly yStart: SystemKeyword<Key, 'y-start'>;
 }
-export interface PositionTryOrderKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface PositionTryOrderKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.PositionTryOrderValues, 'normal'>, Key> {
   /**
    * position-try-order 的原生 most-block-size 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-order
@@ -15202,17 +8122,11 @@ export interface PositionTryOrderKeywords<Key extends PropertyName> extends CssW
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-order
    */
   readonly mostWidth: SystemKeyword<Key, 'most-width'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
-export interface PositionVisibilityKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * position-visibility 的原生 always 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-visibility
-   */
-  readonly always: SystemKeyword<Key, 'always'>;
+export interface PositionVisibilityKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.PositionVisibilityValues, 'always'>, Key> {
   /**
    * position-visibility 的原生 anchors-valid 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-visibility
@@ -15229,84 +8143,32 @@ export interface PositionVisibilityKeywords<Key extends PropertyName> extends Cs
    */
   readonly noOverflow: SystemKeyword<Key, 'no-overflow'>;
 }
-export interface PrintColorAdjustKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * print-color-adjust 的原生 economy 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/print-color-adjust
-   */
-  readonly economy: SystemKeyword<Key, 'economy'>;
-  /**
-   * print-color-adjust 的原生 exact 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/print-color-adjust
-   */
-  readonly exact: SystemKeyword<Key, 'exact'>;
-}
-export interface QuotesKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface PrintColorAdjustKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.PrintColorAdjustValues, 'economy' | 'exact'>, Key> {}
+export interface QuotesKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.QuotesValues, 'auto' | 'none'>, Key> {}
 export interface RKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface ResizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * resize 的原生 block 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/resize
-   */
-  readonly block: SystemKeyword<Key, 'block'>;
-  /**
-   * resize 的原生 both 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/resize
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * resize 的原生 horizontal 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/resize
-   */
-  readonly horizontal: SystemKeyword<Key, 'horizontal'>;
-  /**
-   * resize 的原生 inline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/resize
-   */
-  readonly inline: SystemKeyword<Key, 'inline'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * resize 的原生 vertical 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/resize
-   */
-  readonly vertical: SystemKeyword<Key, 'vertical'>;
-}
-export interface RightKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface RotateKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface RowGapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface RubyAlignKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * ruby-align 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-align
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
+export interface ResizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.ResizeValues, 'block' | 'both' | 'horizontal' | 'inline' | 'none' | 'vertical'>,
+      Key
+    > {}
+export interface RightKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.RightValues, 'auto'>, Key> {}
+export interface RotateKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.RotateValues, 'none'>, Key> {}
+export interface RowGapKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.RowGapValues, 'normal'>, Key> {}
+export interface RubyAlignKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.RubyAlignValues, 'center' | 'start'>, Key> {
   /**
    * ruby-align 的原生 space-around 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-align
@@ -15317,124 +8179,47 @@ export interface RubyAlignKeywords<Key extends PropertyName> extends CssWideKeyw
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-align
    */
   readonly spaceBetween: SystemKeyword<Key, 'space-between'>;
-  /**
-   * ruby-align 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-align
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
 }
-export interface RubyMergeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * ruby-merge 的原生 collapse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-merge
-   */
-  readonly collapse: SystemKeyword<Key, 'collapse'>;
-  /**
-   * ruby-merge 的原生 separate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-merge
-   */
-  readonly separate: SystemKeyword<Key, 'separate'>;
-}
-export interface RubyOverhangKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface RubyPositionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * ruby-position 的原生 alternate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-position
-   */
-  readonly alternate: SystemKeyword<Key, 'alternate'>;
+export interface RubyMergeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.RubyMergeValues, 'auto' | 'collapse' | 'separate'>, Key> {}
+export interface RubyOverhangKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.RubyOverhangValues, 'auto' | 'none'>, Key> {}
+export interface RubyPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.RubyPositionValues, 'alternate' | 'over' | 'under'>, Key> {
   /**
    * ruby-position 的原生 inter-character 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-position
    */
   readonly interCharacter: SystemKeyword<Key, 'inter-character'>;
-  /**
-   * ruby-position 的原生 over 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-position
-   */
-  readonly over: SystemKeyword<Key, 'over'>;
-  /**
-   * ruby-position 的原生 under 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-position
-   */
-  readonly under: SystemKeyword<Key, 'under'>;
 }
 export interface RxKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface RyKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface ScaleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ScrollbarColorKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollbarGutterKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * scrollbar-gutter 的原生 stable 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scrollbar-gutter
-   */
-  readonly stable: SystemKeyword<Key, 'stable'>;
-}
-export interface ScrollbarWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * scrollbar-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scrollbar-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
-export interface ScrollBehaviorKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * scroll-behavior 的原生 smooth 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-behavior
-   */
-  readonly smooth: SystemKeyword<Key, 'smooth'>;
-}
-export interface ScrollInitialTargetKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * scroll-initial-target 的原生 nearest 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-initial-target
-   */
-  readonly nearest: SystemKeyword<Key, 'nearest'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface ScaleKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ScaleValues, 'none'>, Key> {}
+export interface ScrollbarColorKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ScrollbarColorValues, 'auto'>, Key> {}
+export interface ScrollbarGutterKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollbarGutterValues, 'auto' | 'stable'>, Key> {}
+export interface ScrollbarWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollbarWidthValues, 'auto' | 'none' | 'thin'>, Key> {}
+export interface ScrollBehaviorKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollBehaviorValues, 'auto' | 'smooth'>, Key> {}
+export interface ScrollInitialTargetKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollInitialTargetValues, 'nearest' | 'none'>, Key> {}
 export interface ScrollMarginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface ScrollMarginBlockKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface ScrollMarginBlockEndKeywords<
@@ -15458,167 +8243,72 @@ export interface ScrollMarginInlineStartKeywords<
 export interface ScrollMarginLeftKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface ScrollMarginRightKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface ScrollMarginTopKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface ScrollPaddingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollPaddingBlockKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollPaddingBlockEndKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollPaddingBlockStartKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollPaddingBottomKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollPaddingInlineKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollPaddingInlineEndKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollPaddingInlineStartKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollPaddingLeftKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollPaddingRightKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollPaddingTopKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ScrollSnapAlignKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * scroll-snap-align 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-align
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * scroll-snap-align 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-align
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * scroll-snap-align 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-align
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-}
-export interface ScrollSnapCoordinateKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * scroll-snap-coordinate 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-coordinate
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * scroll-snap-coordinate 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-coordinate
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * scroll-snap-coordinate 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-coordinate
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * scroll-snap-coordinate 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-coordinate
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * scroll-snap-coordinate 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-coordinate
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface ScrollSnapDestinationKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * scroll-snap-destination 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-destination
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * scroll-snap-destination 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-destination
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * scroll-snap-destination 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-destination
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * scroll-snap-destination 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-destination
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * scroll-snap-destination 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-destination
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
+export interface ScrollPaddingKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ScrollPaddingValues, 'auto'>, Key> {}
+export interface ScrollPaddingBlockKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollPaddingBlockValues, 'auto'>, Key> {}
+export interface ScrollPaddingBlockEndKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollPaddingBlockEndValues, 'auto'>, Key> {}
+export interface ScrollPaddingBlockStartKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollPaddingBlockStartValues, 'auto'>, Key> {}
+export interface ScrollPaddingBottomKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollPaddingBottomValues, 'auto'>, Key> {}
+export interface ScrollPaddingInlineKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollPaddingInlineValues, 'auto'>, Key> {}
+export interface ScrollPaddingInlineEndKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollPaddingInlineEndValues, 'auto'>, Key> {}
+export interface ScrollPaddingInlineStartKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollPaddingInlineStartValues, 'auto'>, Key> {}
+export interface ScrollPaddingLeftKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollPaddingLeftValues, 'auto'>, Key> {}
+export interface ScrollPaddingRightKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollPaddingRightValues, 'auto'>, Key> {}
+export interface ScrollPaddingTopKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollPaddingTopValues, 'auto'>, Key> {}
+export interface ScrollSnapAlignKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.ScrollSnapAlignValues, 'center' | 'end' | 'none' | 'start'>,
+      Key
+    > {}
+export interface ScrollSnapCoordinateKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.ScrollSnapCoordinateValues,
+        'bottom' | 'center' | 'left' | 'none' | 'right' | 'top'
+      >,
+      Key
+    > {}
+export interface ScrollSnapDestinationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.ScrollSnapDestinationValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
 export interface ScrollSnapMarginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface ScrollSnapMarginBottomKeywords<
   Key extends PropertyName,
@@ -15632,131 +8322,55 @@ export interface ScrollSnapMarginRightKeywords<
 export interface ScrollSnapMarginTopKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface ScrollSnapPointsXKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ScrollSnapPointsYKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ScrollSnapStopKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * scroll-snap-stop 的原生 always 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-stop
-   */
-  readonly always: SystemKeyword<Key, 'always'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface ScrollSnapTypeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * scroll-snap-type 的原生 block 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type
-   */
-  readonly block: SystemKeyword<Key, 'block'>;
-  /**
-   * scroll-snap-type 的原生 both 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * scroll-snap-type 的原生 inline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type
-   */
-  readonly inline: SystemKeyword<Key, 'inline'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * scroll-snap-type 的原生 x 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type
-   */
-  readonly x: SystemKeyword<Key, 'x'>;
-  /**
-   * scroll-snap-type 的原生 y 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type
-   */
-  readonly y: SystemKeyword<Key, 'y'>;
-}
-export interface ScrollSnapTypeXKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * scroll-snap-type-x 的原生 mandatory 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type-x
-   */
-  readonly mandatory: SystemKeyword<Key, 'mandatory'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * scroll-snap-type-x 的原生 proximity 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type-x
-   */
-  readonly proximity: SystemKeyword<Key, 'proximity'>;
-}
-export interface ScrollSnapTypeYKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * scroll-snap-type-y 的原生 mandatory 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type-y
-   */
-  readonly mandatory: SystemKeyword<Key, 'mandatory'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * scroll-snap-type-y 的原生 proximity 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type-y
-   */
-  readonly proximity: SystemKeyword<Key, 'proximity'>;
-}
-export interface ScrollTimelineKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ScrollTimelineAxisKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * scroll-timeline-axis 的原生 block 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline-axis
-   */
-  readonly block: SystemKeyword<Key, 'block'>;
-  /**
-   * scroll-timeline-axis 的原生 inline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline-axis
-   */
-  readonly inline: SystemKeyword<Key, 'inline'>;
-  /**
-   * scroll-timeline-axis 的原生 x 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline-axis
-   */
-  readonly x: SystemKeyword<Key, 'x'>;
-  /**
-   * scroll-timeline-axis 的原生 y 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline-axis
-   */
-  readonly y: SystemKeyword<Key, 'y'>;
-}
-export interface ScrollTimelineNameKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface ScrollSnapPointsXKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollSnapPointsXValues, 'none'>, Key> {}
+export interface ScrollSnapPointsYKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollSnapPointsYValues, 'none'>, Key> {}
+export interface ScrollSnapStopKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollSnapStopValues, 'always' | 'normal'>, Key> {}
+export interface ScrollSnapTypeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.ScrollSnapTypeValues, 'block' | 'both' | 'inline' | 'none' | 'x' | 'y'>,
+      Key
+    > {}
+export interface ScrollSnapTypeXKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.ScrollSnapTypeXValues, 'mandatory' | 'none' | 'proximity'>,
+      Key
+    > {}
+export interface ScrollSnapTypeYKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.ScrollSnapTypeYValues, 'mandatory' | 'none' | 'proximity'>,
+      Key
+    > {}
+export interface ScrollTimelineKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ScrollTimelineValues, 'none'>, Key> {}
+export interface ScrollTimelineAxisKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollTimelineAxisValues, 'block' | 'inline' | 'x' | 'y'>, Key> {}
+export interface ScrollTimelineNameKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ScrollTimelineNameValues, 'none'>, Key> {}
 export interface ShapeImageThresholdKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
 export interface ShapeMarginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface ShapeOutsideKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface ShapeOutsideKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ShapeOutsideValues, 'none'>, Key> {
   /**
    * shape-outside 的原生 border-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-outside
@@ -15773,42 +8387,25 @@ export interface ShapeOutsideKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly marginBox: SystemKeyword<Key, 'margin-box'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
    * shape-outside 的原生 padding-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-outside
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
 }
-export interface ShapeRenderingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * shape-rendering 的原生 crispEdges 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-rendering
-   */
-  readonly crispEdges: SystemKeyword<Key, 'crispEdges'>;
-  /**
-   * shape-rendering 的原生 geometricPrecision 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-rendering
-   */
-  readonly geometricPrecision: SystemKeyword<Key, 'geometricPrecision'>;
-  /**
-   * shape-rendering 的原生 optimizeSpeed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-rendering
-   */
-  readonly optimizeSpeed: SystemKeyword<Key, 'optimizeSpeed'>;
-}
-export interface SpeakAsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * speak-as 的原生 digits 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/speak-as
-   */
-  readonly digits: SystemKeyword<Key, 'digits'>;
+export interface ShapeRenderingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.ShapeRenderingValues,
+        'auto' | 'crispEdges' | 'geometricPrecision' | 'optimizeSpeed'
+      >,
+      Key
+    > {}
+export interface SpeakAsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.SpeakAsValues, 'digits' | 'normal'>, Key> {
   /**
    * speak-as 的原生 literal-punctuation 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/speak-as
@@ -15820,10 +8417,6 @@ export interface SpeakAsKeywords<Key extends PropertyName> extends CssWideKeywor
    */
   readonly noPunctuation: SystemKeyword<Key, 'no-punctuation'>;
   /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * speak-as 的原生 spell-out 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/speak-as
    */
@@ -15834,23 +8427,16 @@ export interface StopColorKeywords<Key extends PropertyName>
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.StopColorValues, 'currentColor' | 'transparent'>, Key> {}
 export interface StopOpacityKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface StrokeKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.StrokeValues, 'currentColor' | 'none' | 'transparent'>, Key> {
   /**
    * CSS 颜色关键字 context-fill；系统颜色会随用户环境和配色设置变化。
    */
@@ -15859,98 +8445,51 @@ export interface StrokeKeywords<Key extends PropertyName>
    * CSS 颜色关键字 context-stroke；系统颜色会随用户环境和配色设置变化。
    */
   readonly contextStroke: SystemKeyword<Key, 'context-stroke'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
 }
 export interface StrokeColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface StrokeDasharrayKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.StrokeColorValues, 'currentColor' | 'transparent'>, Key> {}
+export interface StrokeDasharrayKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.StrokeDasharrayValues, 'none'>, Key> {}
 export interface StrokeDashoffsetKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface StrokeLinecapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 在端点处平直截断描边，不向外延伸。
-   */
-  readonly butt: SystemKeyword<Key, 'butt'>;
-  /**
-   * 使用半圆端帽，向端点外延伸半个描边宽度。
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * 使用方形端帽，向端点外延伸半个描边宽度。
-   */
-  readonly square: SystemKeyword<Key, 'square'>;
-}
-export interface StrokeLinejoinKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * stroke-linejoin 的原生 arcs 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-linejoin
-   */
-  readonly arcs: SystemKeyword<Key, 'arcs'>;
-  /**
-   * stroke-linejoin 的原生 bevel 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-linejoin
-   */
-  readonly bevel: SystemKeyword<Key, 'bevel'>;
-  /**
-   * stroke-linejoin 的原生 miter 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-linejoin
-   */
-  readonly miter: SystemKeyword<Key, 'miter'>;
+export interface StrokeLinecapKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.StrokeLinecapValues, 'butt' | 'round' | 'square'>, Key> {}
+export interface StrokeLinejoinKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.StrokeLinejoinValues, 'arcs' | 'bevel' | 'miter' | 'round'>,
+      Key
+    > {
   /**
    * stroke-linejoin 的原生 miter-clip 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-linejoin
    */
   readonly miterClip: SystemKeyword<Key, 'miter-clip'>;
-  /**
-   * stroke-linejoin 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-linejoin
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
 }
 export interface StrokeMiterlimitKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface StrokeOpacityKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface StrokeWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface TableLayoutKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * table-layout 的原生 fixed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/table-layout
-   */
-  readonly fixed: SystemKeyword<Key, 'fixed'>;
-}
+export interface TableLayoutKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TableLayoutValues, 'auto' | 'fixed'>, Key> {}
 export interface TabSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface TextAlignKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface TextAlignKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TextAlignValues, 'center' | 'end' | 'justify' | 'left' | 'right' | 'start'>,
+      Key
+    > {
   /**
    * text-align 的原生 -khtml-center 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align
@@ -16002,95 +8541,32 @@ export interface TextAlignKeywords<Key extends PropertyName> extends CssWideKeyw
    */
   readonly WebkitRight: SystemKeyword<Key, '-webkit-right'>;
   /**
-   * 将行内内容在行盒中居中，不会让块盒自身居中。
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * 按当前书写方向的行内结束侧对齐。
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * 调整行内间距使文字两端对齐；最后一行通常由 text-align-last 控制。
-   */
-  readonly justify: SystemKeyword<Key, 'justify'>;
-  /**
-   * text-align 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
    * text-align 的原生 match-parent 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align
    */
   readonly matchParent: SystemKeyword<Key, 'match-parent'>;
-  /**
-   * text-align 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * 按当前书写方向的行内起始侧对齐。
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
 }
-export interface TextAlignLastKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * text-align-last 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align-last
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * text-align-last 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align-last
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * text-align-last 的原生 justify 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align-last
-   */
-  readonly justify: SystemKeyword<Key, 'justify'>;
-  /**
-   * text-align-last 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align-last
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * text-align-last 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align-last
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * text-align-last 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align-last
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-}
-export interface TextAnchorKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * text-anchor 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-anchor
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * text-anchor 的原生 middle 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-anchor
-   */
-  readonly middle: SystemKeyword<Key, 'middle'>;
-  /**
-   * text-anchor 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-anchor
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-}
-export interface TextAutospaceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface TextAlignLastKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.TextAlignLastValues,
+        'auto' | 'center' | 'end' | 'justify' | 'left' | 'right' | 'start'
+      >,
+      Key
+    > {}
+export interface TextAnchorKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextAnchorValues, 'end' | 'middle' | 'start'>, Key> {}
+export interface TextAutospaceKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TextAutospaceValues, 'auto' | 'insert' | 'normal' | 'punctuation' | 'replace'>,
+      Key
+    > {
   /**
    * text-autospace 的原生 ideograph-alpha 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-autospace
@@ -16102,68 +8578,26 @@ export interface TextAutospaceKeywords<Key extends PropertyName> extends CssWide
    */
   readonly ideographNumeric: SystemKeyword<Key, 'ideograph-numeric'>;
   /**
-   * text-autospace 的原生 insert 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-autospace
-   */
-  readonly insert: SystemKeyword<Key, 'insert'>;
-  /**
    * text-autospace 的原生 no-autospace 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-autospace
    */
   readonly noAutospace: SystemKeyword<Key, 'no-autospace'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * text-autospace 的原生 punctuation 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-autospace
-   */
-  readonly punctuation: SystemKeyword<Key, 'punctuation'>;
-  /**
-   * text-autospace 的原生 replace 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-autospace
-   */
-  readonly replace: SystemKeyword<Key, 'replace'>;
 }
-export interface TextBoxKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * text-box 的原生 cap 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box
-   */
-  readonly cap: SystemKeyword<Key, 'cap'>;
-  /**
-   * text-box 的原生 ex 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box
-   */
-  readonly ex: SystemKeyword<Key, 'ex'>;
-  /**
-   * text-box 的原生 ideographic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box
-   */
-  readonly ideographic: SystemKeyword<Key, 'ideographic'>;
+export interface TextBoxKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.TextBoxValues,
+        'auto' | 'cap' | 'ex' | 'ideographic' | 'none' | 'normal' | 'text'
+      >,
+      Key
+    > {
   /**
    * text-box 的原生 ideographic-ink 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box
    */
   readonly ideographicInk: SystemKeyword<Key, 'ideographic-ink'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * text-box 的原生 text 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
   /**
    * text-box 的原生 trim-both 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box
@@ -16180,42 +8614,21 @@ export interface TextBoxKeywords<Key extends PropertyName> extends CssWideKeywor
    */
   readonly trimStart: SystemKeyword<Key, 'trim-start'>;
 }
-export interface TextBoxEdgeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * text-box-edge 的原生 cap 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-edge
-   */
-  readonly cap: SystemKeyword<Key, 'cap'>;
-  /**
-   * text-box-edge 的原生 ex 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-edge
-   */
-  readonly ex: SystemKeyword<Key, 'ex'>;
-  /**
-   * text-box-edge 的原生 ideographic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-edge
-   */
-  readonly ideographic: SystemKeyword<Key, 'ideographic'>;
+export interface TextBoxEdgeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TextBoxEdgeValues, 'auto' | 'cap' | 'ex' | 'ideographic' | 'text'>,
+      Key
+    > {
   /**
    * text-box-edge 的原生 ideographic-ink 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-edge
    */
   readonly ideographicInk: SystemKeyword<Key, 'ideographic-ink'>;
-  /**
-   * text-box-edge 的原生 text 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-edge
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
 }
-export interface TextBoxTrimKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
+export interface TextBoxTrimKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.TextBoxTrimValues, 'none'>, Key> {
   /**
    * text-box-trim 的原生 trim-both 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-trim
@@ -16232,52 +8645,34 @@ export interface TextBoxTrimKeywords<Key extends PropertyName> extends CssWideKe
    */
   readonly trimStart: SystemKeyword<Key, 'trim-start'>;
 }
-export interface TextCombineUprightKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * text-combine-upright 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-combine-upright
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * text-combine-upright 的原生 digits 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-combine-upright
-   */
-  readonly digits: SystemKeyword<Key, 'digits'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface TextCombineUprightKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextCombineUprightValues, 'all' | 'digits' | 'none'>, Key> {}
 export interface TextDecorationKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * CSS 颜色关键字 blink；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly blink: SystemKeyword<Key, 'blink'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.TextDecorationValues,
+        | 'auto'
+        | 'blink'
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'none'
+        | 'overline'
+        | 'solid'
+        | 'transparent'
+        | 'underline'
+        | 'wavy'
+      >,
+      Key
+    > {
   /**
    * CSS 颜色关键字 from-font；系统颜色会随用户环境和配色设置变化。
    */
@@ -16291,55 +8686,27 @@ export interface TextDecorationKeywords<Key extends PropertyName>
    */
   readonly lineThrough: SystemKeyword<Key, 'line-through'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 overline；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly overline: SystemKeyword<Key, 'overline'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
    * CSS 颜色关键字 spelling-error；系统颜色会随用户环境和配色设置变化。
    */
   readonly spellingError: SystemKeyword<Key, 'spelling-error'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-  /**
-   * CSS 颜色关键字 underline；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly underline: SystemKeyword<Key, 'underline'>;
-  /**
-   * CSS 颜色关键字 wavy；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly wavy: SystemKeyword<Key, 'wavy'>;
 }
 export interface TextDecorationColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface TextDecorationLineKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * text-decoration-line 的原生 blink 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-line
-   */
-  readonly blink: SystemKeyword<Key, 'blink'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TextDecorationColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface TextDecorationLineKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TextDecorationLineValues, 'blink' | 'none' | 'overline' | 'underline'>,
+      Key
+    > {
   /**
    * text-decoration-line 的原生 grammar-error 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-line
@@ -16351,114 +8718,49 @@ export interface TextDecorationLineKeywords<Key extends PropertyName> extends Cs
    */
   readonly lineThrough: SystemKeyword<Key, 'line-through'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * text-decoration-line 的原生 overline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-line
-   */
-  readonly overline: SystemKeyword<Key, 'overline'>;
-  /**
    * text-decoration-line 的原生 spelling-error 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-line
    */
   readonly spellingError: SystemKeyword<Key, 'spelling-error'>;
-  /**
-   * text-decoration-line 的原生 underline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-line
-   */
-  readonly underline: SystemKeyword<Key, 'underline'>;
 }
-export interface TextDecorationSkipKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface TextDecorationSkipKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TextDecorationSkipValues, 'edges' | 'none' | 'objects' | 'spaces'>,
+      Key
+    > {
   /**
    * text-decoration-skip 的原生 box-decoration 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip
    */
   readonly boxDecoration: SystemKeyword<Key, 'box-decoration'>;
   /**
-   * text-decoration-skip 的原生 edges 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip
-   */
-  readonly edges: SystemKeyword<Key, 'edges'>;
-  /**
    * text-decoration-skip 的原生 leading-spaces 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip
    */
   readonly leadingSpaces: SystemKeyword<Key, 'leading-spaces'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * text-decoration-skip 的原生 objects 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip
-   */
-  readonly objects: SystemKeyword<Key, 'objects'>;
-  /**
-   * text-decoration-skip 的原生 spaces 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip
-   */
-  readonly spaces: SystemKeyword<Key, 'spaces'>;
   /**
    * text-decoration-skip 的原生 trailing-spaces 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip
    */
   readonly trailingSpaces: SystemKeyword<Key, 'trailing-spaces'>;
 }
-export interface TextDecorationSkipInkKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * text-decoration-skip-ink 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip-ink
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface TextDecorationStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * text-decoration-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * text-decoration-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * text-decoration-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * text-decoration-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * text-decoration-style 的原生 wavy 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-style
-   */
-  readonly wavy: SystemKeyword<Key, 'wavy'>;
-}
-export interface TextDecorationThicknessKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface TextDecorationSkipInkKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextDecorationSkipInkValues, 'all' | 'auto' | 'none'>, Key> {}
+export interface TextDecorationStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TextDecorationStyleValues, 'dashed' | 'dotted' | 'double' | 'solid' | 'wavy'>,
+      Key
+    > {}
+export interface TextDecorationThicknessKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextDecorationThicknessValues, 'auto'>, Key> {
   /**
    * text-decoration-thickness 的原生 from-font 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-thickness
@@ -16470,133 +8772,59 @@ export interface TextEmphasisKeywords<Key extends PropertyName>
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * CSS 颜色关键字 circle；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly circle: SystemKeyword<Key, 'circle'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dot；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dot: SystemKeyword<Key, 'dot'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.TextEmphasisValues,
+        | 'circle'
+        | 'currentColor'
+        | 'dot'
+        | 'filled'
+        | 'none'
+        | 'open'
+        | 'sesame'
+        | 'transparent'
+        | 'triangle'
+      >,
+      Key
+    > {
   /**
    * CSS 颜色关键字 double-circle；系统颜色会随用户环境和配色设置变化。
    */
   readonly doubleCircle: SystemKeyword<Key, 'double-circle'>;
-  /**
-   * CSS 颜色关键字 filled；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly filled: SystemKeyword<Key, 'filled'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 open；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly open: SystemKeyword<Key, 'open'>;
-  /**
-   * CSS 颜色关键字 sesame；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly sesame: SystemKeyword<Key, 'sesame'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-  /**
-   * CSS 颜色关键字 triangle；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly triangle: SystemKeyword<Key, 'triangle'>;
 }
 export interface TextEmphasisColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface TextEmphasisPositionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * text-emphasis-position 的原生 over 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-position
-   */
-  readonly over: SystemKeyword<Key, 'over'>;
-  /**
-   * text-emphasis-position 的原生 under 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-position
-   */
-  readonly under: SystemKeyword<Key, 'under'>;
-}
-export interface TextEmphasisStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * text-emphasis-style 的原生 circle 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-style
-   */
-  readonly circle: SystemKeyword<Key, 'circle'>;
-  /**
-   * text-emphasis-style 的原生 dot 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-style
-   */
-  readonly dot: SystemKeyword<Key, 'dot'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextEmphasisColorValues, 'currentColor' | 'transparent'>, Key> {}
+export interface TextEmphasisPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextEmphasisPositionValues, 'auto' | 'over' | 'under'>, Key> {}
+export interface TextEmphasisStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.TextEmphasisStyleValues,
+        'circle' | 'dot' | 'filled' | 'none' | 'open' | 'sesame' | 'triangle'
+      >,
+      Key
+    > {
   /**
    * text-emphasis-style 的原生 double-circle 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-style
    */
   readonly doubleCircle: SystemKeyword<Key, 'double-circle'>;
-  /**
-   * text-emphasis-style 的原生 filled 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-style
-   */
-  readonly filled: SystemKeyword<Key, 'filled'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * text-emphasis-style 的原生 open 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-style
-   */
-  readonly open: SystemKeyword<Key, 'open'>;
-  /**
-   * text-emphasis-style 的原生 sesame 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-style
-   */
-  readonly sesame: SystemKeyword<Key, 'sesame'>;
-  /**
-   * text-emphasis-style 的原生 triangle 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-style
-   */
-  readonly triangle: SystemKeyword<Key, 'triangle'>;
 }
 export interface TextIndentKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface TextJustifyKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * text-justify 的原生 distribute 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-justify
-   */
-  readonly distribute: SystemKeyword<Key, 'distribute'>;
+export interface TextJustifyKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextJustifyValues, 'auto' | 'distribute' | 'none'>, Key> {
   /**
    * text-justify 的原生 inter-character 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-justify
@@ -16607,92 +8835,41 @@ export interface TextJustifyKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-justify
    */
   readonly interWord: SystemKeyword<Key, 'inter-word'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface TextOrientationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * text-orientation 的原生 mixed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-orientation
-   */
-  readonly mixed: SystemKeyword<Key, 'mixed'>;
-  /**
-   * text-orientation 的原生 sideways 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-orientation
-   */
-  readonly sideways: SystemKeyword<Key, 'sideways'>;
+export interface TextOrientationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextOrientationValues, 'mixed' | 'sideways' | 'upright'>, Key> {
   /**
    * text-orientation 的原生 sideways-right 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-orientation
    */
   readonly sidewaysRight: SystemKeyword<Key, 'sideways-right'>;
-  /**
-   * text-orientation 的原生 upright 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-orientation
-   */
-  readonly upright: SystemKeyword<Key, 'upright'>;
 }
-export interface TextOverflowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 直接裁剪溢出文本，不添加省略标记。
-   */
-  readonly clip: SystemKeyword<Key, 'clip'>;
-  /**
-   * 用省略号提示被裁剪的行内溢出；还需要限制尺寸并配置溢出规则。
-   *
-   * 适用场景：给确实发生行内溢出的单行内容添加省略提示。
-   *
-   * 不会自动限制宽度、禁用换行或实现多行省略。Flex/Grid 子项还可能需要 min-width:0。
-   *
-   * @example
-   * css({ minWidth: "0px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
-   */
-  readonly ellipsis: SystemKeyword<Key, 'ellipsis'>;
-}
-export interface TextRenderingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * text-rendering 的原生 geometricPrecision 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-rendering
-   */
-  readonly geometricPrecision: SystemKeyword<Key, 'geometricPrecision'>;
-  /**
-   * text-rendering 的原生 optimizeLegibility 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-rendering
-   */
-  readonly optimizeLegibility: SystemKeyword<Key, 'optimizeLegibility'>;
-  /**
-   * text-rendering 的原生 optimizeSpeed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-rendering
-   */
-  readonly optimizeSpeed: SystemKeyword<Key, 'optimizeSpeed'>;
-}
-export interface TextShadowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface TextSizeAdjustKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface TextSpacingTrimKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
+export interface TextOverflowKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextOverflowValues, 'clip' | 'ellipsis'>, Key> {}
+export interface TextRenderingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.TextRenderingValues,
+        'auto' | 'geometricPrecision' | 'optimizeLegibility' | 'optimizeSpeed'
+      >,
+      Key
+    > {}
+export interface TextShadowKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.TextShadowValues, 'none'>, Key> {}
+export interface TextSizeAdjustKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextSizeAdjustValues, 'auto' | 'none'>, Key> {}
+export interface TextSpacingTrimKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextSpacingTrimValues, 'normal'>, Key> {
   /**
    * text-spacing-trim 的原生 space-all 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-spacing-trim
@@ -16709,12 +8886,13 @@ export interface TextSpacingTrimKeywords<Key extends PropertyName> extends CssWi
    */
   readonly trimStart: SystemKeyword<Key, 'trim-start'>;
 }
-export interface TextTransformKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * text-transform 的原生 capitalize 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-transform
-   */
-  readonly capitalize: SystemKeyword<Key, 'capitalize'>;
+export interface TextTransformKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TextTransformValues, 'capitalize' | 'lowercase' | 'none' | 'uppercase'>,
+      Key
+    > {
   /**
    * text-transform 的原生 full-size-kana 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-transform
@@ -16726,128 +8904,54 @@ export interface TextTransformKeywords<Key extends PropertyName> extends CssWide
    */
   readonly fullWidth: SystemKeyword<Key, 'full-width'>;
   /**
-   * text-transform 的原生 lowercase 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-transform
-   */
-  readonly lowercase: SystemKeyword<Key, 'lowercase'>;
-  /**
    * text-transform 的原生 math-auto 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-transform
    */
   readonly mathAuto: SystemKeyword<Key, 'math-auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * text-transform 的原生 uppercase 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-transform
-   */
-  readonly uppercase: SystemKeyword<Key, 'uppercase'>;
 }
-export interface TextUnderlineOffsetKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface TextUnderlinePositionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface TextUnderlineOffsetKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextUnderlineOffsetValues, 'auto'>, Key> {}
+export interface TextUnderlinePositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TextUnderlinePositionValues, 'auto' | 'left' | 'right' | 'under'>,
+      Key
+    > {
   /**
    * text-underline-position 的原生 from-font 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-underline-position
    */
   readonly fromFont: SystemKeyword<Key, 'from-font'>;
-  /**
-   * text-underline-position 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-underline-position
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * text-underline-position 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-underline-position
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * text-underline-position 的原生 under 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-underline-position
-   */
-  readonly under: SystemKeyword<Key, 'under'>;
 }
-export interface TextWrapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 尝试让各行长度更均衡，常用于标题；可处理行数由浏览器决定。
-   */
-  readonly balance: SystemKeyword<Key, 'balance'>;
-  /**
-   * 禁止软换行，但不取消显式强制换行。
-   */
-  readonly nowrap: SystemKeyword<Key, 'nowrap'>;
-  /**
-   * 使用偏向排版质量的换行策略，例如减少末行孤立短词。
-   */
-  readonly pretty: SystemKeyword<Key, 'pretty'>;
-  /**
-   * 编辑时尽量不改变较早行的换行位置。
-   */
-  readonly stable: SystemKeyword<Key, 'stable'>;
-  /**
-   * 允许软换行。
-   */
-  readonly wrap: SystemKeyword<Key, 'wrap'>;
-}
-export interface TextWrapModeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 禁止软换行，但不取消显式强制换行。
-   */
-  readonly nowrap: SystemKeyword<Key, 'nowrap'>;
-  /**
-   * 允许软换行。
-   */
-  readonly wrap: SystemKeyword<Key, 'wrap'>;
-}
-export interface TextWrapStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 尝试让各行长度更均衡，常用于标题；可处理行数由浏览器决定。
-   */
-  readonly balance: SystemKeyword<Key, 'balance'>;
-  /**
-   * 使用偏向排版质量的换行策略，例如减少末行孤立短词。
-   */
-  readonly pretty: SystemKeyword<Key, 'pretty'>;
-  /**
-   * 编辑时尽量不改变较早行的换行位置。
-   */
-  readonly stable: SystemKeyword<Key, 'stable'>;
-}
-export interface TimelineScopeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface TopKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface TouchActionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface TextWrapKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TextWrapValues, 'auto' | 'balance' | 'nowrap' | 'pretty' | 'stable' | 'wrap'>,
+      Key
+    > {}
+export interface TextWrapModeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TextWrapModeValues, 'nowrap' | 'wrap'>, Key> {}
+export interface TextWrapStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TextWrapStyleValues, 'auto' | 'balance' | 'pretty' | 'stable'>,
+      Key
+    > {}
+export interface TimelineScopeKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.TimelineScopeValues, 'none'>, Key> {}
+export interface TopKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.TopValues, 'auto'>, Key> {}
+export interface TouchActionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TouchActionValues, 'auto' | 'manipulation' | 'none'>, Key> {
   /**
    * touch-action 的原生 -ms-manipulation 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
@@ -16873,18 +8977,6 @@ export interface TouchActionKeywords<Key extends PropertyName> extends CssWideKe
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
    */
   readonly MsPinchZoom: SystemKeyword<Key, '-ms-pinch-zoom'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 允许平移和连续缩放，通常禁用双击缩放等额外手势。
-   */
-  readonly manipulation: SystemKeyword<Key, 'manipulation'>;
-  /**
-   * 禁用浏览器在该区域处理的平移和缩放手势，可能影响用户缩放可访问性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
   /**
    * touch-action 的原生 pan-down 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
@@ -16919,12 +9011,8 @@ export interface TouchActionKeywords<Key extends PropertyName> extends CssWideKe
    */
   readonly pinchZoom: SystemKeyword<Key, 'pinch-zoom'>;
 }
-export interface TransformKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface TransformKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.TransformValues, 'none'>, Key> {}
 export interface TransformBoxKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
    * transform-box 的原生 border-box 值；具体布局或绘制效果见该属性参考。
@@ -16952,61 +9040,29 @@ export interface TransformBoxKeywords<Key extends PropertyName> extends CssWideK
    */
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
-export interface TransformOriginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * transform-origin 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-origin
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * transform-origin 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-origin
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * transform-origin 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-origin
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * transform-origin 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-origin
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * transform-origin 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-origin
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface TransformStyleKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * transform-style 的原生 flat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-style
-   */
-  readonly flat: SystemKeyword<Key, 'flat'>;
-  /**
-   * transform-style 的原生 preserve-3d 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-style
-   */
-  readonly 'preserve-3d': SystemKeyword<Key, 'preserve-3d'>;
-}
-export interface TransitionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * transition 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
+export interface TransformOriginKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TransformOriginValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface TransformStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TransformStyleValues, 'flat' | 'preserve-3d'>, Key> {}
+export interface TransitionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.TransitionValues, 'all' | 'ease' | 'linear' | 'none' | 'normal'>,
+      Key
+    > {
   /**
    * transition 的原生 allow-discrete 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition
    */
   readonly allowDiscrete: SystemKeyword<Key, 'allow-discrete'>;
-  /**
-   * transition 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
   /**
    * transition 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition
@@ -17023,19 +9079,6 @@ export interface TransitionKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * transition 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * transition 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition
    */
@@ -17046,39 +9089,27 @@ export interface TransitionKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly stepStart: SystemKeyword<Key, 'step-start'>;
 }
-export interface TransitionBehaviorKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface TransitionBehaviorKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TransitionBehaviorValues, 'normal'>, Key> {
   /**
    * 允许离散属性启动过渡；切换时机仍由各属性的动画规则决定。
    */
   readonly allowDiscrete: SystemKeyword<Key, 'allow-discrete'>;
-  /**
-   * 不为离散属性启动普通 CSS 过渡。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
 export interface TransitionDelayKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface TransitionDurationKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface TransitionPropertyKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * transition-property 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-property
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface TransitionTimingFunctionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * transition-timing-function 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-timing-function
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
+export interface TransitionPropertyKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TransitionPropertyValues, 'all' | 'none'>, Key> {}
+export interface TransitionTimingFunctionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.TransitionTimingFunctionValues, 'ease' | 'linear'>, Key> {
   /**
    * transition-timing-function 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-timing-function
@@ -17095,11 +9126,6 @@ export interface TransitionTimingFunctionKeywords<
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * transition-timing-function 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-timing-function
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
    * transition-timing-function 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-timing-function
    */
@@ -17110,13 +9136,15 @@ export interface TransitionTimingFunctionKeywords<
    */
   readonly stepStart: SystemKeyword<Key, 'step-start'>;
 }
-export interface TranslateKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface UnicodeBidiKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface TranslateKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.TranslateValues, 'none'>, Key> {}
+export interface UnicodeBidiKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.UnicodeBidiValues, 'embed' | 'isolate' | 'normal' | 'plaintext'>,
+      Key
+    > {
   /**
    * unicode-bidi 的原生 -moz-isolate 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/unicode-bidi
@@ -17153,54 +9181,23 @@ export interface UnicodeBidiKeywords<Key extends PropertyName> extends CssWideKe
    */
   readonly bidiOverride: SystemKeyword<Key, 'bidi-override'>;
   /**
-   * unicode-bidi 的原生 embed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/unicode-bidi
-   */
-  readonly embed: SystemKeyword<Key, 'embed'>;
-  /**
-   * unicode-bidi 的原生 isolate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/unicode-bidi
-   */
-  readonly isolate: SystemKeyword<Key, 'isolate'>;
-  /**
    * unicode-bidi 的原生 isolate-override 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/unicode-bidi
    */
   readonly isolateOverride: SystemKeyword<Key, 'isolate-override'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * unicode-bidi 的原生 plaintext 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/unicode-bidi
-   */
-  readonly plaintext: SystemKeyword<Key, 'plaintext'>;
 }
-export interface UserSelectKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface UserSelectKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.UserSelectValues, 'all' | 'auto' | 'none' | 'text'>, Key> {
   /**
    * user-select 的原生 -moz-none 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/user-select
    */
   readonly MozNone: SystemKeyword<Key, '-moz-none'>;
-  /**
-   * 将元素内容作为整体选取单元。
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 由父级与元素上下文决定使用的选取行为。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 阻止常规文本选取，不是内容保护或访问控制。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 允许文本选取。
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
 }
-export interface VectorEffectKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface VectorEffectKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.VectorEffectValues, 'none'>, Key> {
   /**
    * vector-effect 的原生 fixed-position 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vector-effect
@@ -17221,37 +9218,14 @@ export interface VectorEffectKeywords<Key extends PropertyName> extends CssWideK
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vector-effect
    */
   readonly nonScalingStroke: SystemKeyword<Key, 'non-scaling-stroke'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface VerticalAlignKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * vertical-align 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vertical-align
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * vertical-align 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vertical-align
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * vertical-align 的原生 middle 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vertical-align
-   */
-  readonly middle: SystemKeyword<Key, 'middle'>;
-  /**
-   * vertical-align 的原生 sub 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vertical-align
-   */
-  readonly sub: SystemKeyword<Key, 'sub'>;
-  /**
-   * vertical-align 的原生 super 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vertical-align
-   */
-  readonly super: SystemKeyword<Key, 'super'>;
+export interface VerticalAlignKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.VerticalAlignValues, 'baseline' | 'bottom' | 'middle' | 'sub' | 'super' | 'top'>,
+      Key
+    > {
   /**
    * vertical-align 的原生 text-bottom 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vertical-align
@@ -17262,108 +9236,49 @@ export interface VerticalAlignKeywords<Key extends PropertyName> extends CssWide
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vertical-align
    */
   readonly textTop: SystemKeyword<Key, 'text-top'>;
-  /**
-   * vertical-align 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vertical-align
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
 }
-export interface ViewTimelineKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ViewTimelineAxisKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * view-timeline-axis 的原生 block 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-axis
-   */
-  readonly block: SystemKeyword<Key, 'block'>;
-  /**
-   * view-timeline-axis 的原生 inline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-axis
-   */
-  readonly inline: SystemKeyword<Key, 'inline'>;
-  /**
-   * view-timeline-axis 的原生 x 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-axis
-   */
-  readonly x: SystemKeyword<Key, 'x'>;
-  /**
-   * view-timeline-axis 的原生 y 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-axis
-   */
-  readonly y: SystemKeyword<Key, 'y'>;
-}
-export interface ViewTimelineInsetKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ViewTimelineNameKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ViewTransitionClassKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface ViewTransitionNameKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface ViewTimelineKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ViewTimelineValues, 'none'>, Key> {}
+export interface ViewTimelineAxisKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ViewTimelineAxisValues, 'block' | 'inline' | 'x' | 'y'>, Key> {}
+export interface ViewTimelineInsetKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ViewTimelineInsetValues, 'auto'>, Key> {}
+export interface ViewTimelineNameKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ViewTimelineNameValues, 'none'>, Key> {}
+export interface ViewTransitionClassKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ViewTransitionClassValues, 'none'>, Key> {}
+export interface ViewTransitionNameKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ViewTransitionNameValues, 'none'>, Key> {
   /**
    * view-transition-name 的原生 match-element 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-transition-name
    */
   readonly matchElement: SystemKeyword<Key, 'match-element'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface VisibilityKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 对表格行列等特定布局有折叠语义，其他场景通常类似 hidden；应核对具体布局行为。
-   */
-  readonly collapse: SystemKeyword<Key, 'collapse'>;
-  /**
-   * 隐藏绘制但通常保留布局空间；后代可显式恢复 visible。
-   *
-   * 区别：display:none 不保留布局盒；opacity:0 不会以相同方式移除交互和可访问性。
-   *
-   * 适用场景：暂时隐藏占位内容。
-   *
-   * @example
-   * css({ visibility: "hidden" })
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * 正常显示元素。
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
-}
-export interface WebkitAlignContentKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-align-content 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * -webkit-align-content 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -webkit-align-content 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
+export interface VisibilityKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.VisibilityValues, 'collapse' | 'hidden' | 'visible'>, Key> {}
+export interface WebkitAlignContentKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitAlignContentValues,
+        'baseline' | 'center' | 'end' | 'normal' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * -webkit-align-content 的原生 flex-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
@@ -17374,10 +9289,6 @@ export interface WebkitAlignContentKeywords<Key extends PropertyName> extends Cs
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
   /**
    * -webkit-align-content 的原生 space-around 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
@@ -17393,42 +9304,22 @@ export interface WebkitAlignContentKeywords<Key extends PropertyName> extends Cs
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
    */
   readonly spaceEvenly: SystemKeyword<Key, 'space-evenly'>;
-  /**
-   * -webkit-align-content 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * -webkit-align-content 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface WebkitAlignItemsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WebkitAlignItemsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitAlignItemsValues,
+        'baseline' | 'center' | 'end' | 'normal' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * -webkit-align-items 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
    */
   readonly anchorCenter: SystemKeyword<Key, 'anchor-center'>;
-  /**
-   * 按项目的对齐基线对齐，不等同于底边对齐。
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * 将各项目在交叉轴或块轴的对齐区域中居中。
-   *
-   * 区别：justify-content 控制 Flex 主轴上的内容分布；align-items 控制交叉轴。
-   *
-   * 适用场景：横向图标和文字的垂直对齐。
-   *
-   * @example
-   * css({ display: "inline-flex", alignItems: "center" })
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * 按对齐轴的逻辑结束侧对齐。
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
   /**
    * 在 Flex 中按交叉轴结束侧对齐。
    */
@@ -17437,10 +9328,6 @@ export interface WebkitAlignItemsKeywords<Key extends PropertyName> extends CssW
    * 在 Flex 中按交叉轴起始侧对齐；交叉轴方向受换行方式影响。
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
-  /**
-   * 由布局模式决定行为，许多场景类似 stretch，但存在内部尺寸等例外。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
   /**
    * -webkit-align-items 的原生 self-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
@@ -17451,46 +9338,22 @@ export interface WebkitAlignItemsKeywords<Key extends PropertyName> extends CssW
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
    */
   readonly selfStart: SystemKeyword<Key, 'self-start'>;
-  /**
-   * 按对齐轴的逻辑起始侧对齐。
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * 在自动尺寸及最小/最大约束允许时拉伸项目，不强制覆盖显式尺寸。
-   *
-   * 区别：center 保持项目尺寸并居中；stretch 尝试扩大自动尺寸。
-   *
-   * 项目在对齐轴有显式尺寸或受最小/最大尺寸约束时，不一定填满可用区域。
-   *
-   * @example
-   * css({ display: "flex", alignItems: "stretch" })
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface WebkitAlignSelfKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WebkitAlignSelfKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitAlignSelfValues,
+        'auto' | 'baseline' | 'center' | 'end' | 'normal' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * -webkit-align-self 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-self
    */
   readonly anchorCenter: SystemKeyword<Key, 'anchor-center'>;
-  /**
-   * 使用父容器的 align-items 对齐方式。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 让当前项目参与基线对齐，不等同于底边对齐。
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * -webkit-align-self 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-self
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -webkit-align-self 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-self
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
   /**
    * -webkit-align-self 的原生 flex-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-self
@@ -17502,10 +9365,6 @@ export interface WebkitAlignSelfKeywords<Key extends PropertyName> extends CssWi
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
   /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
    * -webkit-align-self 的原生 self-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-self
    */
@@ -17515,46 +9374,34 @@ export interface WebkitAlignSelfKeywords<Key extends PropertyName> extends CssWi
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-self
    */
   readonly selfStart: SystemKeyword<Key, 'self-start'>;
-  /**
-   * -webkit-align-self 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-self
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * 在自动尺寸和最小/最大约束允许时拉伸当前项目。
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface WebkitAnimationKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-animation 的原生 alternate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
-   */
-  readonly alternate: SystemKeyword<Key, 'alternate'>;
+export interface WebkitAnimationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitAnimationValues,
+        | 'alternate'
+        | 'auto'
+        | 'backwards'
+        | 'both'
+        | 'ease'
+        | 'forwards'
+        | 'infinite'
+        | 'linear'
+        | 'none'
+        | 'normal'
+        | 'paused'
+        | 'reverse'
+        | 'running'
+      >,
+      Key
+    > {
   /**
    * -webkit-animation 的原生 alternate-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
    */
   readonly alternateReverse: SystemKeyword<Key, 'alternate-reverse'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -webkit-animation 的原生 backwards 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
-   */
-  readonly backwards: SystemKeyword<Key, 'backwards'>;
-  /**
-   * -webkit-animation 的原生 both 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * -webkit-animation 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
   /**
    * -webkit-animation 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
@@ -17571,44 +9418,6 @@ export interface WebkitAnimationKeywords<Key extends PropertyName> extends CssWi
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * -webkit-animation 的原生 forwards 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
-   */
-  readonly forwards: SystemKeyword<Key, 'forwards'>;
-  /**
-   * -webkit-animation 的原生 infinite 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
-   */
-  readonly infinite: SystemKeyword<Key, 'infinite'>;
-  /**
-   * -webkit-animation 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -webkit-animation 的原生 paused 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
-   */
-  readonly paused: SystemKeyword<Key, 'paused'>;
-  /**
-   * -webkit-animation 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
-  /**
-   * -webkit-animation 的原生 running 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
-   */
-  readonly running: SystemKeyword<Key, 'running'>;
-  /**
    * -webkit-animation 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
    */
@@ -17622,96 +9431,46 @@ export interface WebkitAnimationKeywords<Key extends PropertyName> extends CssWi
 export interface WebkitAnimationDelayKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface WebkitAnimationDirectionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-animation-direction 的原生 alternate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-direction
-   */
-  readonly alternate: SystemKeyword<Key, 'alternate'>;
+export interface WebkitAnimationDirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitAnimationDirectionValues, 'alternate' | 'normal' | 'reverse'>,
+      Key
+    > {
   /**
    * -webkit-animation-direction 的原生 alternate-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-direction
    */
   readonly alternateReverse: SystemKeyword<Key, 'alternate-reverse'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -webkit-animation-direction 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-direction
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
 }
-export interface WebkitAnimationDurationKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface WebkitAnimationFillModeKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 延迟阶段应用最先生效关键帧的效果，具体帧取决于播放方向。
-   */
-  readonly backwards: SystemKeyword<Key, 'backwards'>;
-  /**
-   * 同时应用 backwards 和 forwards 的区间外效果。
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * 播放结束后保留最后生效关键帧的效果；最后帧取决于方向和循环次数。
-   */
-  readonly forwards: SystemKeyword<Key, 'forwards'>;
-  /**
-   * 动画有效区间之外不应用动画关键帧值。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitAnimationIterationCountKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-animation-iteration-count 的原生 infinite 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-iteration-count
-   */
-  readonly infinite: SystemKeyword<Key, 'infinite'>;
-}
-export interface WebkitAnimationNameKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitAnimationPlayStateKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-animation-play-state 的原生 paused 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-play-state
-   */
-  readonly paused: SystemKeyword<Key, 'paused'>;
-  /**
-   * -webkit-animation-play-state 的原生 running 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-play-state
-   */
-  readonly running: SystemKeyword<Key, 'running'>;
-}
-export interface WebkitAnimationTimingFunctionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-animation-timing-function 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-timing-function
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
+export interface WebkitAnimationDurationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitAnimationDurationValues, 'auto'>, Key> {}
+export interface WebkitAnimationFillModeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitAnimationFillModeValues, 'backwards' | 'both' | 'forwards' | 'none'>,
+      Key
+    > {}
+export interface WebkitAnimationIterationCountKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitAnimationIterationCountValues, 'infinite'>, Key> {}
+export interface WebkitAnimationNameKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitAnimationNameValues, 'none'>, Key> {}
+export interface WebkitAnimationPlayStateKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitAnimationPlayStateValues, 'paused' | 'running'>, Key> {}
+export interface WebkitAnimationTimingFunctionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitAnimationTimingFunctionValues, 'ease' | 'linear'>, Key> {
   /**
    * -webkit-animation-timing-function 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-timing-function
@@ -17728,11 +9487,6 @@ export interface WebkitAnimationTimingFunctionKeywords<
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
   /**
-   * -webkit-animation-timing-function 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-timing-function
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
    * -webkit-animation-timing-function 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-timing-function
    */
@@ -17743,32 +9497,37 @@ export interface WebkitAnimationTimingFunctionKeywords<
    */
   readonly stepStart: SystemKeyword<Key, 'step-start'>;
 }
-export interface WebkitAppearanceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WebkitAppearanceKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitAppearanceValues,
+        | 'button'
+        | 'caret'
+        | 'checkbox'
+        | 'listbox'
+        | 'listitem'
+        | 'menulist'
+        | 'meter'
+        | 'none'
+        | 'radio'
+        | 'searchfield'
+        | 'textarea'
+        | 'textfield'
+      >,
+      Key
+    > {
   /**
    * -webkit-appearance 的原生 -apple-pay-button 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
    */
   readonly ApplePayButton: SystemKeyword<Key, '-apple-pay-button'>;
   /**
-   * -webkit-appearance 的原生 button 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
-   */
-  readonly button: SystemKeyword<Key, 'button'>;
-  /**
    * -webkit-appearance 的原生 button-bevel 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
    */
   readonly buttonBevel: SystemKeyword<Key, 'button-bevel'>;
-  /**
-   * -webkit-appearance 的原生 caret 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
-   */
-  readonly caret: SystemKeyword<Key, 'caret'>;
-  /**
-   * -webkit-appearance 的原生 checkbox 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
-   */
-  readonly checkbox: SystemKeyword<Key, 'checkbox'>;
   /**
    * -webkit-appearance 的原生 default-button 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
@@ -17779,16 +9538,6 @@ export interface WebkitAppearanceKeywords<Key extends PropertyName> extends CssW
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
    */
   readonly innerSpinButton: SystemKeyword<Key, 'inner-spin-button'>;
-  /**
-   * -webkit-appearance 的原生 listbox 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
-   */
-  readonly listbox: SystemKeyword<Key, 'listbox'>;
-  /**
-   * -webkit-appearance 的原生 listitem 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
-   */
-  readonly listitem: SystemKeyword<Key, 'listitem'>;
   /**
    * -webkit-appearance 的原生 media-controls-background 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
@@ -17886,11 +9635,6 @@ export interface WebkitAppearanceKeywords<Key extends PropertyName> extends CssW
    */
   readonly mediaVolumeSliderthumb: SystemKeyword<Key, 'media-volume-sliderthumb'>;
   /**
-   * -webkit-appearance 的原生 menulist 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
-   */
-  readonly menulist: SystemKeyword<Key, 'menulist'>;
-  /**
    * -webkit-appearance 的原生 menulist-button 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
    */
@@ -17906,15 +9650,6 @@ export interface WebkitAppearanceKeywords<Key extends PropertyName> extends CssW
    */
   readonly menulistTextfield: SystemKeyword<Key, 'menulist-textfield'>;
   /**
-   * -webkit-appearance 的原生 meter 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
-   */
-  readonly meter: SystemKeyword<Key, 'meter'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
    * -webkit-appearance 的原生 progress-bar 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
    */
@@ -17929,16 +9664,6 @@ export interface WebkitAppearanceKeywords<Key extends PropertyName> extends CssW
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
    */
   readonly pushButton: SystemKeyword<Key, 'push-button'>;
-  /**
-   * -webkit-appearance 的原生 radio 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
-   */
-  readonly radio: SystemKeyword<Key, 'radio'>;
-  /**
-   * -webkit-appearance 的原生 searchfield 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
-   */
-  readonly searchfield: SystemKeyword<Key, 'searchfield'>;
   /**
    * -webkit-appearance 的原生 searchfield-cancel-button 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
@@ -17984,42 +9709,19 @@ export interface WebkitAppearanceKeywords<Key extends PropertyName> extends CssW
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
    */
   readonly squareButton: SystemKeyword<Key, 'square-button'>;
-  /**
-   * -webkit-appearance 的原生 textarea 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
-   */
-  readonly textarea: SystemKeyword<Key, 'textarea'>;
-  /**
-   * -webkit-appearance 的原生 textfield 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
-   */
-  readonly textfield: SystemKeyword<Key, 'textfield'>;
 }
-export interface WebkitBackdropFilterKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitBackfaceVisibilityKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-backface-visibility 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-backface-visibility
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * -webkit-backface-visibility 的原生 visible 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-backface-visibility
-   */
-  readonly visible: SystemKeyword<Key, 'visible'>;
-}
-export interface WebkitBackgroundClipKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
+export interface WebkitBackdropFilterKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitBackdropFilterValues, 'none'>, Key> {}
+export interface WebkitBackfaceVisibilityKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitBackfaceVisibilityValues, 'hidden' | 'visible'>, Key> {}
+export interface WebkitBackgroundClipKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitBackgroundClipValues, 'text'>, Key> {
   /**
    * -webkit-background-clip 的原生 border-area 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-background-clip
@@ -18040,10 +9742,6 @@ export interface WebkitBackgroundClipKeywords<
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-background-clip
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
-  /**
-   * 把背景裁剪到文字字形；显示背景文字效果通常还需要透明的文字颜色。
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
 }
 export interface WebkitBackgroundOriginKeywords<
   Key extends PropertyName,
@@ -18064,208 +9762,86 @@ export interface WebkitBackgroundOriginKeywords<
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
 }
-export interface WebkitBackgroundSizeKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 依据图像内部尺寸、比例及另一维的设置确定尺寸。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 保持图像比例并使整张图像容纳于定位区域，可能留下空白。
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 保持图像比例并覆盖整个定位区域，超出部分可能被裁剪。
-   */
-  readonly cover: SystemKeyword<Key, 'cover'>;
-}
+export interface WebkitBackgroundSizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitBackgroundSizeValues, 'auto' | 'contain' | 'cover'>, Key> {}
 export interface WebkitBorderBeforeKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitBorderBeforeValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface WebkitBorderBeforeColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface WebkitBorderBeforeStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-border-before-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * -webkit-border-before-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * -webkit-border-before-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * -webkit-border-before-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * -webkit-border-before-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * -webkit-border-before-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -webkit-border-before-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * -webkit-border-before-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * -webkit-border-before-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface WebkitBorderBeforeWidthKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-border-before-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * -webkit-border-before-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * -webkit-border-before-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitBorderBeforeColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface WebkitBorderBeforeStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitBorderBeforeStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface WebkitBorderBeforeWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitBorderBeforeWidthValues, 'medium' | 'thick' | 'thin'>,
+      Key
+    > {}
 export interface WebkitBorderBottomLeftRadiusKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
 export interface WebkitBorderBottomRightRadiusKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface WebkitBorderImageKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -webkit-border-image 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-image
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
-  /**
-   * -webkit-border-image 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-image
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * -webkit-border-image 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-image
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
-   * -webkit-border-image 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-image
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
+export interface WebkitBorderImageKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitBorderImageValues, 'none' | 'repeat' | 'round' | 'space' | 'stretch'>,
+      Key
+    > {}
 export interface WebkitBorderImageSliceKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
@@ -18278,149 +9854,65 @@ export interface WebkitBorderTopLeftRadiusKeywords<
 export interface WebkitBorderTopRightRadiusKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface WebkitBoxAlignKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-box-align 的原生 baseline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-align
-   */
-  readonly baseline: SystemKeyword<Key, 'baseline'>;
-  /**
-   * -webkit-box-align 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-align
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -webkit-box-align 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-align
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * -webkit-box-align 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-align
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * -webkit-box-align 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-align
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
-export interface WebkitBoxDecorationBreakKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-box-decoration-break 的原生 clone 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-decoration-break
-   */
-  readonly clone: SystemKeyword<Key, 'clone'>;
-  /**
-   * -webkit-box-decoration-break 的原生 slice 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-decoration-break
-   */
-  readonly slice: SystemKeyword<Key, 'slice'>;
-}
-export interface WebkitBoxDirectionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -webkit-box-direction 的原生 reverse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-direction
-   */
-  readonly reverse: SystemKeyword<Key, 'reverse'>;
-}
+export interface WebkitBoxAlignKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitBoxAlignValues, 'baseline' | 'center' | 'end' | 'start' | 'stretch'>,
+      Key
+    > {}
+export interface WebkitBoxDecorationBreakKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitBoxDecorationBreakValues, 'clone' | 'slice'>, Key> {}
+export interface WebkitBoxDirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitBoxDirectionValues, 'normal' | 'reverse'>, Key> {}
 export interface WebkitBoxFlexKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface WebkitBoxFlexGroupKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface WebkitBoxLinesKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-box-lines 的原生 multiple 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-lines
-   */
-  readonly multiple: SystemKeyword<Key, 'multiple'>;
-  /**
-   * -webkit-box-lines 的原生 single 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-lines
-   */
-  readonly single: SystemKeyword<Key, 'single'>;
-}
+export interface WebkitBoxLinesKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitBoxLinesValues, 'multiple' | 'single'>, Key> {}
 export interface WebkitBoxOrdinalGroupKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface WebkitBoxOrientKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WebkitBoxOrientKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitBoxOrientValues, 'horizontal' | 'vertical'>, Key> {
   /**
    * -webkit-box-orient 的原生 block-axis 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-orient
    */
   readonly blockAxis: SystemKeyword<Key, 'block-axis'>;
   /**
-   * -webkit-box-orient 的原生 horizontal 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-orient
-   */
-  readonly horizontal: SystemKeyword<Key, 'horizontal'>;
-  /**
    * -webkit-box-orient 的原生 inline-axis 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-orient
    */
   readonly inlineAxis: SystemKeyword<Key, 'inline-axis'>;
-  /**
-   * -webkit-box-orient 的原生 vertical 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-orient
-   */
-  readonly vertical: SystemKeyword<Key, 'vertical'>;
 }
-export interface WebkitBoxPackKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-box-pack 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-pack
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -webkit-box-pack 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-pack
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
-  /**
-   * -webkit-box-pack 的原生 justify 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-pack
-   */
-  readonly justify: SystemKeyword<Key, 'justify'>;
-  /**
-   * -webkit-box-pack 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-pack
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-}
-export interface WebkitBoxReflectKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-box-reflect 的原生 above 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-reflect
-   */
-  readonly above: SystemKeyword<Key, 'above'>;
-  /**
-   * -webkit-box-reflect 的原生 below 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-reflect
-   */
-  readonly below: SystemKeyword<Key, 'below'>;
-  /**
-   * -webkit-box-reflect 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-reflect
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -webkit-box-reflect 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-reflect
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-}
-export interface WebkitBoxShadowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface WebkitBoxPackKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitBoxPackValues, 'center' | 'end' | 'justify' | 'start'>,
+      Key
+    > {}
+export interface WebkitBoxReflectKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitBoxReflectValues, 'above' | 'below' | 'left' | 'right'>,
+      Key
+    > {}
+export interface WebkitBoxShadowKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitBoxShadowValues, 'none'>, Key> {}
 export interface WebkitBoxSizingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
    * 指定尺寸包含内容、内边距和边框，但不包含外边距。
@@ -18445,7 +9937,8 @@ export interface WebkitBoxSizingKeywords<Key extends PropertyName> extends CssWi
    */
   readonly contentBox: SystemKeyword<Key, 'content-box'>;
 }
-export interface WebkitClipPathKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WebkitClipPathKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.WebkitClipPathValues, 'none'>, Key> {
   /**
    * -webkit-clip-path 的原生 border-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-clip-path
@@ -18467,10 +9960,6 @@ export interface WebkitClipPathKeywords<Key extends PropertyName> extends CssWid
    */
   readonly marginBox: SystemKeyword<Key, 'margin-box'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
    * -webkit-clip-path 的原生 padding-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-clip-path
    */
@@ -18486,225 +9975,90 @@ export interface WebkitClipPathKeywords<Key extends PropertyName> extends CssWid
    */
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
-export interface WebkitColumnCountKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface WebkitColumnFillKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -webkit-column-fill 的原生 balance 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-fill
-   */
-  readonly balance: SystemKeyword<Key, 'balance'>;
-}
+export interface WebkitColumnCountKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitColumnCountValues, 'auto'>, Key> {}
+export interface WebkitColumnFillKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitColumnFillValues, 'auto' | 'balance'>, Key> {}
 export interface WebkitColumnRuleKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dashed；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * CSS 颜色关键字 dotted；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * CSS 颜色关键字 double；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * CSS 颜色关键字 groove；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * CSS 颜色关键字 hidden；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * CSS 颜色关键字 inset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * CSS 颜色关键字 medium；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 outset；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * CSS 颜色关键字 ridge；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * CSS 颜色关键字 solid；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * CSS 颜色关键字 thick；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * CSS 颜色关键字 thin；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitColumnRuleValues,
+        | 'currentColor'
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'medium'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+        | 'thick'
+        | 'thin'
+        | 'transparent'
+      >,
+      Key
+    > {}
 export interface WebkitColumnRuleColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface WebkitColumnRuleStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-column-rule-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * -webkit-column-rule-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * -webkit-column-rule-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * -webkit-column-rule-style 的原生 groove 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
-   */
-  readonly groove: SystemKeyword<Key, 'groove'>;
-  /**
-   * -webkit-column-rule-style 的原生 hidden 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
-   */
-  readonly hidden: SystemKeyword<Key, 'hidden'>;
-  /**
-   * -webkit-column-rule-style 的原生 inset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
-   */
-  readonly inset: SystemKeyword<Key, 'inset'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -webkit-column-rule-style 的原生 outset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
-   */
-  readonly outset: SystemKeyword<Key, 'outset'>;
-  /**
-   * -webkit-column-rule-style 的原生 ridge 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
-   */
-  readonly ridge: SystemKeyword<Key, 'ridge'>;
-  /**
-   * -webkit-column-rule-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-}
-export interface WebkitColumnRuleWidthKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-column-rule-width 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-width
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * -webkit-column-rule-width 的原生 thick 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-width
-   */
-  readonly thick: SystemKeyword<Key, 'thick'>;
-  /**
-   * -webkit-column-rule-width 的原生 thin 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-width
-   */
-  readonly thin: SystemKeyword<Key, 'thin'>;
-}
-export interface WebkitColumnsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface WebkitColumnSpanKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-column-span 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-span
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitColumnWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface WebkitFilterKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitFlexKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 等价于 1 1 auto：可增长、可收缩，基础尺寸由主尺寸属性或内容决定。
-   *
-   * 区别：1 1 0% 以零百分比为基础分配，auto 的基础尺寸通常受内容或主尺寸属性影响。
-   *
-   * 适用场景：让项目以自身尺寸为基础参与剩余空间分配。
-   *
-   * 最终比例还受最小/最大尺寸约束，不保证所有项目等宽。
-   *
-   * @example
-   * css({ flex: "auto" })
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -webkit-flex 的原生 content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex
-   */
-  readonly content: SystemKeyword<Key, 'content'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitColumnRuleColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface WebkitColumnRuleStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitColumnRuleStyleValues,
+        | 'dashed'
+        | 'dotted'
+        | 'double'
+        | 'groove'
+        | 'hidden'
+        | 'inset'
+        | 'none'
+        | 'outset'
+        | 'ridge'
+        | 'solid'
+      >,
+      Key
+    > {}
+export interface WebkitColumnRuleWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitColumnRuleWidthValues, 'medium' | 'thick' | 'thin'>, Key> {}
+export interface WebkitColumnsKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.WebkitColumnsValues, 'auto'>, Key> {}
+export interface WebkitColumnSpanKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitColumnSpanValues, 'all' | 'none'>, Key> {}
+export interface WebkitColumnWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitColumnWidthValues, 'auto'>, Key> {}
+export interface WebkitFilterKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.WebkitFilterValues, 'none'>, Key> {}
+export interface WebkitFlexKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitFlexValues, 'auto' | 'content' | 'none'>, Key> {
   /**
    * -webkit-flex 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex
@@ -18720,19 +10074,11 @@ export interface WebkitFlexKeywords<Key extends PropertyName> extends CssWideKey
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 等价于 0 0 auto：不增长也不收缩，保留自动基础尺寸。
-   *
-   * 区别：auto 会增长和收缩；none 两者都不参与。
-   *
-   * 适用场景：防止工具栏中的图标或固定控件被压缩。
-   *
-   * @example
-   * css({ flex: "none" })
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
-export interface WebkitFlexBasisKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WebkitFlexBasisKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitFlexBasisValues, 'auto' | 'content'>, Key> {
   /**
    * -webkit-flex-basis 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-basis
@@ -18754,14 +10100,6 @@ export interface WebkitFlexBasisKeywords<Key extends PropertyName> extends CssWi
    */
   readonly WebkitAuto: SystemKeyword<Key, '-webkit-auto'>;
   /**
-   * 先参考主轴对应的 width 或 height；该值也为 auto 时由内容决定。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 按内容确定基础尺寸，而不直接使用 width 或 height 作为基础尺寸。
-   */
-  readonly content: SystemKeyword<Key, 'content'>;
-  /**
    * -webkit-flex-basis 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-basis
    */
@@ -18777,57 +10115,36 @@ export interface WebkitFlexBasisKeywords<Key extends PropertyName> extends CssWi
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
-export interface WebkitFlexDirectionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 主轴沿块方向排列；水平书写时通常从上到下。
-   */
-  readonly column: SystemKeyword<Key, 'column'>;
+export interface WebkitFlexDirectionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitFlexDirectionValues, 'column' | 'row'>, Key> {
   /**
    * 反转块方向的视觉排列，不改变 DOM 顺序。
    */
   readonly columnReverse: SystemKeyword<Key, 'column-reverse'>;
   /**
-   * 主轴沿行内方向排列；不一定是从左到右，取决于书写方向。
-   */
-  readonly row: SystemKeyword<Key, 'row'>;
-  /**
    * 反转行内方向的视觉排列，不改变 DOM 顺序。
    */
   readonly rowReverse: SystemKeyword<Key, 'row-reverse'>;
 }
-export interface WebkitFlexFlowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-flex-flow 的原生 column 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-flow
-   */
-  readonly column: SystemKeyword<Key, 'column'>;
+export interface WebkitFlexFlowKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitFlexFlowValues, 'column' | 'nowrap' | 'row' | 'wrap'>,
+      Key
+    > {
   /**
    * -webkit-flex-flow 的原生 column-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-flow
    */
   readonly columnReverse: SystemKeyword<Key, 'column-reverse'>;
   /**
-   * -webkit-flex-flow 的原生 nowrap 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-flow
-   */
-  readonly nowrap: SystemKeyword<Key, 'nowrap'>;
-  /**
-   * -webkit-flex-flow 的原生 row 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-flow
-   */
-  readonly row: SystemKeyword<Key, 'row'>;
-  /**
    * -webkit-flex-flow 的原生 row-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-flow
    */
   readonly rowReverse: SystemKeyword<Key, 'row-reverse'>;
-  /**
-   * -webkit-flex-flow 的原生 wrap 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-flow
-   */
-  readonly wrap: SystemKeyword<Key, 'wrap'>;
   /**
    * -webkit-flex-flow 的原生 wrap-reverse 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-flow
@@ -18836,81 +10153,33 @@ export interface WebkitFlexFlowKeywords<Key extends PropertyName> extends CssWid
 }
 export interface WebkitFlexGrowKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface WebkitFlexShrinkKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface WebkitFlexWrapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 保持单行；项目仍可能收缩或溢出。
-   */
-  readonly nowrap: SystemKeyword<Key, 'nowrap'>;
-  /**
-   * 空间不足时形成多行，沿交叉轴正常方向排列。
-   *
-   * 区别：nowrap 保持单行；wrap-reverse 反转交叉轴上各行的排列方向。
-   *
-   * 换行不会自动均分每行项目宽度，尺寸仍由各项目的 flex 配置决定。
-   *
-   * @example
-   * css({ display: "flex", flexWrap: "wrap" })
-   */
-  readonly wrap: SystemKeyword<Key, 'wrap'>;
+export interface WebkitFlexWrapKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitFlexWrapValues, 'nowrap' | 'wrap'>, Key> {
   /**
    * 允许换行并反转交叉轴上各行的排列方向。
    */
   readonly wrapReverse: SystemKeyword<Key, 'wrap-reverse'>;
 }
-export interface WebkitFontFeatureSettingsKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface WebkitFontKerningKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface WebkitFontSmoothingKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-font-smoothing 的原生 always 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-smoothing
-   */
-  readonly always: SystemKeyword<Key, 'always'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -webkit-font-smoothing 的原生 large 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-smoothing
-   */
-  readonly large: SystemKeyword<Key, 'large'>;
-  /**
-   * -webkit-font-smoothing 的原生 medium 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-smoothing
-   */
-  readonly medium: SystemKeyword<Key, 'medium'>;
-  /**
-   * -webkit-font-smoothing 的原生 never 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-smoothing
-   */
-  readonly never: SystemKeyword<Key, 'never'>;
-  /**
-   * -webkit-font-smoothing 的原生 small 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-smoothing
-   */
-  readonly small: SystemKeyword<Key, 'small'>;
+export interface WebkitFontFeatureSettingsKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitFontFeatureSettingsValues, 'normal'>, Key> {}
+export interface WebkitFontKerningKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitFontKerningValues, 'auto' | 'none' | 'normal'>, Key> {}
+export interface WebkitFontSmoothingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitFontSmoothingValues,
+        'always' | 'auto' | 'large' | 'medium' | 'never' | 'small'
+      >,
+      Key
+    > {
   /**
    * -webkit-font-smoothing 的原生 x-large 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-smoothing
@@ -18937,19 +10206,18 @@ export interface WebkitFontSmoothingKeywords<
    */
   readonly xxxLarge: SystemKeyword<Key, 'xxx-large'>;
 }
-export interface WebkitFontVariantLigaturesKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
+export interface WebkitFontVariantLigaturesKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitFontVariantLigaturesValues, 'contextual' | 'none' | 'normal'>,
+      Key
+    > {
   /**
    * -webkit-font-variant-ligatures 的原生 common-ligatures 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-variant-ligatures
    */
   readonly commonLigatures: SystemKeyword<Key, 'common-ligatures'>;
-  /**
-   * -webkit-font-variant-ligatures 的原生 contextual 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-variant-ligatures
-   */
-  readonly contextual: SystemKeyword<Key, 'contextual'>;
   /**
    * -webkit-font-variant-ligatures 的原生 discretionary-ligatures 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-variant-ligatures
@@ -18980,58 +10248,29 @@ export interface WebkitFontVariantLigaturesKeywords<
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-variant-ligatures
    */
   readonly noHistoricalLigatures: SystemKeyword<Key, 'no-historical-ligatures'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
-export interface WebkitHyphenateCharacterKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface WebkitHyphensKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -webkit-hyphens 的原生 manual 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-hyphens
-   */
-  readonly manual: SystemKeyword<Key, 'manual'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitInitialLetterKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface WebkitJustifyContentKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 将整体内容放在主轴或行内轴的中间，不改变项目内部文字对齐。
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -webkit-justify-content 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-justify-content
-   */
-  readonly end: SystemKeyword<Key, 'end'>;
+export interface WebkitHyphenateCharacterKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitHyphenateCharacterValues, 'auto'>, Key> {}
+export interface WebkitHyphensKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitHyphensValues, 'auto' | 'manual' | 'none'>, Key> {}
+export interface WebkitInitialLetterKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitInitialLetterValues, 'normal'>, Key> {}
+export interface WebkitJustifyContentKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitJustifyContentValues,
+        'center' | 'end' | 'left' | 'normal' | 'right' | 'start' | 'stretch'
+      >,
+      Key
+    > {
   /**
    * Flex 内容靠主轴终点排列。
    */
@@ -19040,20 +10279,6 @@ export interface WebkitJustifyContentKeywords<
    * Flex 内容靠主轴起点排列；起点受 flex-direction 影响。
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
-  /**
-   * -webkit-justify-content 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-justify-content
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -webkit-justify-content 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-justify-content
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
   /**
    * 每个项目两侧分配相等空间，容器边缘的空间是相邻项目间的一半。
    */
@@ -19080,50 +10305,22 @@ export interface WebkitJustifyContentKeywords<
    * css({ display: "flex", justifyContent: "space-evenly" })
    */
   readonly spaceEvenly: SystemKeyword<Key, 'space-evenly'>;
-  /**
-   * -webkit-justify-content 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-justify-content
-   */
-  readonly start: SystemKeyword<Key, 'start'>;
-  /**
-   * 在支持的布局中拉伸自动尺寸的内容；Flex 主轴增长通常由 flex-grow 控制。
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
 }
-export interface WebkitLineBreakKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-line-break 的原生 anywhere 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-line-break
-   */
-  readonly anywhere: SystemKeyword<Key, 'anywhere'>;
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -webkit-line-break 的原生 loose 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-line-break
-   */
-  readonly loose: SystemKeyword<Key, 'loose'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * -webkit-line-break 的原生 strict 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-line-break
-   */
-  readonly strict: SystemKeyword<Key, 'strict'>;
-}
-export interface WebkitLineClampKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitLogicalHeightKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
+export interface WebkitLineBreakKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitLineBreakValues, 'anywhere' | 'auto' | 'loose' | 'normal' | 'strict'>,
+      Key
+    > {}
+export interface WebkitLineClampKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitLineClampValues, 'none'>, Key> {}
+export interface WebkitLogicalHeightKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitLogicalHeightValues, 'auto'>, Key> {
   /**
    * -webkit-logical-height 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-logical-height
@@ -19140,10 +10337,6 @@ export interface WebkitLogicalHeightKeywords<
    */
   readonly MozMinContent: SystemKeyword<Key, '-moz-min-content'>;
   /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
    * -webkit-logical-height 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-logical-height
    */
@@ -19159,7 +10352,10 @@ export interface WebkitLogicalHeightKeywords<
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
-export interface WebkitLogicalWidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WebkitLogicalWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitLogicalWidthValues, 'auto'>, Key> {
   /**
    * -webkit-logical-width 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-logical-width
@@ -19181,10 +10377,6 @@ export interface WebkitLogicalWidthKeywords<Key extends PropertyName> extends Cs
    */
   readonly WebkitFillAvailable: SystemKeyword<Key, '-webkit-fill-available'>;
   /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
    * -webkit-logical-width 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-logical-width
    */
@@ -19200,78 +10392,56 @@ export interface WebkitLogicalWidthKeywords<Key extends PropertyName> extends Cs
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
-export interface WebkitMarginEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface WebkitMarginStartKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface WebkitMaskKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-mask 的原生 border 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly border: SystemKeyword<Key, 'border'>;
+export interface WebkitMarginEndKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMarginEndValues, 'auto'>, Key> {}
+export interface WebkitMarginStartKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMarginStartValues, 'auto'>, Key> {}
+export interface WebkitMaskKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitMaskValues,
+        | 'border'
+        | 'bottom'
+        | 'center'
+        | 'content'
+        | 'left'
+        | 'none'
+        | 'padding'
+        | 'repeat'
+        | 'right'
+        | 'round'
+        | 'space'
+        | 'text'
+        | 'top'
+      >,
+      Key
+    > {
   /**
    * -webkit-mask 的原生 border-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
    */
   readonly borderBox: SystemKeyword<Key, 'border-box'>;
   /**
-   * -webkit-mask 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * -webkit-mask 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -webkit-mask 的原生 content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly content: SystemKeyword<Key, 'content'>;
-  /**
    * -webkit-mask 的原生 content-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
    */
   readonly contentBox: SystemKeyword<Key, 'content-box'>;
-  /**
-   * -webkit-mask 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
   /**
    * -webkit-mask 的原生 no-repeat 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
    */
   readonly noRepeat: SystemKeyword<Key, 'no-repeat'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -webkit-mask 的原生 padding 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly padding: SystemKeyword<Key, 'padding'>;
-  /**
    * -webkit-mask 的原生 padding-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
    */
   readonly paddingBox: SystemKeyword<Key, 'padding-box'>;
-  /**
-   * -webkit-mask 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
   /**
    * -webkit-mask 的原生 repeat-x 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
@@ -19282,149 +10452,54 @@ export interface WebkitMaskKeywords<Key extends PropertyName> extends CssWideKey
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
    */
   readonly repeatY: SystemKeyword<Key, 'repeat-y'>;
-  /**
-   * -webkit-mask 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * -webkit-mask 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * -webkit-mask 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
-   * -webkit-mask 的原生 text 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
-  /**
-   * -webkit-mask 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
 }
-export interface WebkitMaskAttachmentKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-mask-attachment 的原生 fixed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-attachment
-   */
-  readonly fixed: SystemKeyword<Key, 'fixed'>;
-  /**
-   * -webkit-mask-attachment 的原生 local 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-attachment
-   */
-  readonly local: SystemKeyword<Key, 'local'>;
-  /**
-   * -webkit-mask-attachment 的原生 scroll 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-attachment
-   */
-  readonly scroll: SystemKeyword<Key, 'scroll'>;
-}
-export interface WebkitMaskBoxImageKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-mask-box-image 的原生 alpha 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image
-   */
-  readonly alpha: SystemKeyword<Key, 'alpha'>;
-  /**
-   * -webkit-mask-box-image 的原生 luminance 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image
-   */
-  readonly luminance: SystemKeyword<Key, 'luminance'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -webkit-mask-box-image 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
-  /**
-   * -webkit-mask-box-image 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * -webkit-mask-box-image 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
-   * -webkit-mask-box-image 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
+export interface WebkitMaskAttachmentKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskAttachmentValues, 'fixed' | 'local' | 'scroll'>, Key> {}
+export interface WebkitMaskBoxImageKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitMaskBoxImageValues,
+        'alpha' | 'luminance' | 'none' | 'repeat' | 'round' | 'space' | 'stretch'
+      >,
+      Key
+    > {}
 export interface WebkitMaskBoxImageOutsetKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface WebkitMaskBoxImageRepeatKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-mask-box-image-repeat 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-repeat
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
-  /**
-   * -webkit-mask-box-image-repeat 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-repeat
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * -webkit-mask-box-image-repeat 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-repeat
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
-  /**
-   * -webkit-mask-box-image-repeat 的原生 stretch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-repeat
-   */
-  readonly stretch: SystemKeyword<Key, 'stretch'>;
-}
+export interface WebkitMaskBoxImageRepeatKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitMaskBoxImageRepeatValues, 'repeat' | 'round' | 'space' | 'stretch'>,
+      Key
+    > {}
 export interface WebkitMaskBoxImageSliceKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface WebkitMaskBoxImageSourceKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitMaskBoxImageWidthKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface WebkitMaskClipKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-mask-clip 的原生 border 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-clip
-   */
-  readonly border: SystemKeyword<Key, 'border'>;
+export interface WebkitMaskBoxImageSourceKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskBoxImageSourceValues, 'none'>, Key> {}
+export interface WebkitMaskBoxImageWidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskBoxImageWidthValues, 'auto'>, Key> {}
+export interface WebkitMaskClipKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitMaskClipValues, 'border' | 'content' | 'padding' | 'text'>,
+      Key
+    > {
   /**
    * -webkit-mask-clip 的原生 border-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-clip
    */
   readonly borderBox: SystemKeyword<Key, 'border-box'>;
-  /**
-   * -webkit-mask-clip 的原生 content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-clip
-   */
-  readonly content: SystemKeyword<Key, 'content'>;
   /**
    * -webkit-mask-clip 的原生 content-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-clip
@@ -19441,11 +10516,6 @@ export interface WebkitMaskClipKeywords<Key extends PropertyName> extends CssWid
    */
   readonly noClip: SystemKeyword<Key, 'no-clip'>;
   /**
-   * -webkit-mask-clip 的原生 padding 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-clip
-   */
-  readonly padding: SystemKeyword<Key, 'padding'>;
-  /**
    * -webkit-mask-clip 的原生 padding-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-clip
    */
@@ -19456,29 +10526,15 @@ export interface WebkitMaskClipKeywords<Key extends PropertyName> extends CssWid
    */
   readonly strokeBox: SystemKeyword<Key, 'stroke-box'>;
   /**
-   * -webkit-mask-clip 的原生 text 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-clip
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
-  /**
    * -webkit-mask-clip 的原生 view-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-clip
    */
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
-export interface WebkitMaskCompositeKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-mask-composite 的原生 clear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-composite
-   */
-  readonly clear: SystemKeyword<Key, 'clear'>;
-  /**
-   * -webkit-mask-composite 的原生 copy 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-composite
-   */
-  readonly copy: SystemKeyword<Key, 'copy'>;
+export interface WebkitMaskCompositeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskCompositeValues, 'clear' | 'copy' | 'xor'>, Key> {
   /**
    * -webkit-mask-composite 的原生 destination-atop 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-composite
@@ -19519,34 +10575,20 @@ export interface WebkitMaskCompositeKeywords<
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-composite
    */
   readonly sourceOver: SystemKeyword<Key, 'source-over'>;
-  /**
-   * -webkit-mask-composite 的原生 xor 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-composite
-   */
-  readonly xor: SystemKeyword<Key, 'xor'>;
 }
-export interface WebkitMaskImageKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitMaskOriginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-mask-origin 的原生 border 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-origin
-   */
-  readonly border: SystemKeyword<Key, 'border'>;
+export interface WebkitMaskImageKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskImageValues, 'none'>, Key> {}
+export interface WebkitMaskOriginKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskOriginValues, 'border' | 'content' | 'padding'>, Key> {
   /**
    * -webkit-mask-origin 的原生 border-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-origin
    */
   readonly borderBox: SystemKeyword<Key, 'border-box'>;
-  /**
-   * -webkit-mask-origin 的原生 content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-origin
-   */
-  readonly content: SystemKeyword<Key, 'content'>;
   /**
    * -webkit-mask-origin 的原生 content-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-origin
@@ -19557,11 +10599,6 @@ export interface WebkitMaskOriginKeywords<Key extends PropertyName> extends CssW
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-origin
    */
   readonly fillBox: SystemKeyword<Key, 'fill-box'>;
-  /**
-   * -webkit-mask-origin 的原生 padding 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-origin
-   */
-  readonly padding: SystemKeyword<Key, 'padding'>;
   /**
    * -webkit-mask-origin 的原生 padding-box 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-origin
@@ -19578,82 +10615,30 @@ export interface WebkitMaskOriginKeywords<Key extends PropertyName> extends CssW
    */
   readonly viewBox: SystemKeyword<Key, 'view-box'>;
 }
-export interface WebkitMaskPositionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-mask-position 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * -webkit-mask-position 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -webkit-mask-position 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -webkit-mask-position 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * -webkit-mask-position 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface WebkitMaskPositionXKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-mask-position-x 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-x
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -webkit-mask-position-x 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-x
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -webkit-mask-position-x 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-x
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-}
-export interface WebkitMaskPositionYKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-mask-position-y 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-y
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * -webkit-mask-position-y 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-y
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -webkit-mask-position-y 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-y
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface WebkitMaskRepeatKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WebkitMaskPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitMaskPositionValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface WebkitMaskPositionXKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskPositionXValues, 'center' | 'left' | 'right'>, Key> {}
+export interface WebkitMaskPositionYKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskPositionYValues, 'bottom' | 'center' | 'top'>, Key> {}
+export interface WebkitMaskRepeatKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskRepeatValues, 'repeat' | 'round' | 'space'>, Key> {
   /**
    * -webkit-mask-repeat 的原生 no-repeat 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat
    */
   readonly noRepeat: SystemKeyword<Key, 'no-repeat'>;
-  /**
-   * -webkit-mask-repeat 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
   /**
    * -webkit-mask-repeat 的原生 repeat-x 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat
@@ -19664,78 +10649,35 @@ export interface WebkitMaskRepeatKeywords<Key extends PropertyName> extends CssW
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat
    */
   readonly repeatY: SystemKeyword<Key, 'repeat-y'>;
-  /**
-   * -webkit-mask-repeat 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * -webkit-mask-repeat 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
 }
-export interface WebkitMaskRepeatXKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WebkitMaskRepeatXKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskRepeatXValues, 'repeat' | 'round' | 'space'>, Key> {
   /**
    * -webkit-mask-repeat-x 的原生 no-repeat 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-x
    */
   readonly noRepeat: SystemKeyword<Key, 'no-repeat'>;
-  /**
-   * -webkit-mask-repeat-x 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-x
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
-  /**
-   * -webkit-mask-repeat-x 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-x
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * -webkit-mask-repeat-x 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-x
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
 }
-export interface WebkitMaskRepeatYKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WebkitMaskRepeatYKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskRepeatYValues, 'repeat' | 'round' | 'space'>, Key> {
   /**
    * -webkit-mask-repeat-y 的原生 no-repeat 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-y
    */
   readonly noRepeat: SystemKeyword<Key, 'no-repeat'>;
-  /**
-   * -webkit-mask-repeat-y 的原生 repeat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-y
-   */
-  readonly repeat: SystemKeyword<Key, 'repeat'>;
-  /**
-   * -webkit-mask-repeat-y 的原生 round 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-y
-   */
-  readonly round: SystemKeyword<Key, 'round'>;
-  /**
-   * -webkit-mask-repeat-y 的原生 space 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-y
-   */
-  readonly space: SystemKeyword<Key, 'space'>;
 }
-export interface WebkitMaskSizeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 依据图像内部尺寸、比例及另一维的设置确定尺寸。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 保持图像比例并使整张图像容纳于定位区域，可能留下空白。
-   */
-  readonly contain: SystemKeyword<Key, 'contain'>;
-  /**
-   * 保持图像比例并覆盖整个定位区域，超出部分可能被裁剪。
-   */
-  readonly cover: SystemKeyword<Key, 'cover'>;
-}
-export interface WebkitMaxInlineSizeKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
+export interface WebkitMaskSizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaskSizeValues, 'auto' | 'contain' | 'cover'>, Key> {}
+export interface WebkitMaxInlineSizeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitMaxInlineSizeValues, 'none'>, Key> {
   /**
    * -webkit-max-inline-size 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-max-inline-size
@@ -19771,188 +10713,80 @@ export interface WebkitMaxInlineSizeKeywords<
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-max-inline-size
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
 }
 export interface WebkitOrderKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface WebkitOverflowScrollingKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -webkit-overflow-scrolling 的原生 touch 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-overflow-scrolling
-   */
-  readonly touch: SystemKeyword<Key, 'touch'>;
-}
+export interface WebkitOverflowScrollingKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitOverflowScrollingValues, 'auto' | 'touch'>, Key> {}
 export interface WebkitPaddingEndKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface WebkitPaddingStartKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface WebkitPerspectiveKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitPerspectiveOriginKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-perspective-origin 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-perspective-origin
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * -webkit-perspective-origin 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-perspective-origin
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -webkit-perspective-origin 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-perspective-origin
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -webkit-perspective-origin 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-perspective-origin
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * -webkit-perspective-origin 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-perspective-origin
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface WebkitPrintColorAdjustKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-print-color-adjust 的原生 economy 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-print-color-adjust
-   */
-  readonly economy: SystemKeyword<Key, 'economy'>;
-  /**
-   * -webkit-print-color-adjust 的原生 exact 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-print-color-adjust
-   */
-  readonly exact: SystemKeyword<Key, 'exact'>;
-}
-export interface WebkitRubyPositionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-ruby-position 的原生 alternate 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-ruby-position
-   */
-  readonly alternate: SystemKeyword<Key, 'alternate'>;
+export interface WebkitPerspectiveKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitPerspectiveValues, 'none'>, Key> {}
+export interface WebkitPerspectiveOriginKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitPerspectiveOriginValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface WebkitPrintColorAdjustKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitPrintColorAdjustValues, 'economy' | 'exact'>, Key> {}
+export interface WebkitRubyPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitRubyPositionValues, 'alternate' | 'over' | 'under'>, Key> {
   /**
    * -webkit-ruby-position 的原生 inter-character 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-ruby-position
    */
   readonly interCharacter: SystemKeyword<Key, 'inter-character'>;
-  /**
-   * -webkit-ruby-position 的原生 over 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-ruby-position
-   */
-  readonly over: SystemKeyword<Key, 'over'>;
-  /**
-   * -webkit-ruby-position 的原生 under 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-ruby-position
-   */
-  readonly under: SystemKeyword<Key, 'under'>;
 }
-export interface WebkitScrollSnapTypeKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-scroll-snap-type 的原生 block 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-scroll-snap-type
-   */
-  readonly block: SystemKeyword<Key, 'block'>;
-  /**
-   * -webkit-scroll-snap-type 的原生 both 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-scroll-snap-type
-   */
-  readonly both: SystemKeyword<Key, 'both'>;
-  /**
-   * -webkit-scroll-snap-type 的原生 inline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-scroll-snap-type
-   */
-  readonly inline: SystemKeyword<Key, 'inline'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -webkit-scroll-snap-type 的原生 x 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-scroll-snap-type
-   */
-  readonly x: SystemKeyword<Key, 'x'>;
-  /**
-   * -webkit-scroll-snap-type 的原生 y 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-scroll-snap-type
-   */
-  readonly y: SystemKeyword<Key, 'y'>;
-}
+export interface WebkitScrollSnapTypeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitScrollSnapTypeValues, 'block' | 'both' | 'inline' | 'none' | 'x' | 'y'>,
+      Key
+    > {}
 export interface WebkitShapeMarginKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface WebkitTapHighlightColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface WebkitTextCombineKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-text-combine 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-combine
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * -webkit-text-combine 的原生 digits 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-combine
-   */
-  readonly digits: SystemKeyword<Key, 'digits'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTapHighlightColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface WebkitTextCombineKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitTextCombineValues, 'all' | 'digits' | 'none'>, Key> {}
 export interface WebkitTextDecorationColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface WebkitTextDecorationLineKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-text-decoration-line 的原生 blink 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-line
-   */
-  readonly blink: SystemKeyword<Key, 'blink'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTextDecorationColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface WebkitTextDecorationLineKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTextDecorationLineValues, 'blink' | 'none' | 'overline' | 'underline'>,
+      Key
+    > {
   /**
    * -webkit-text-decoration-line 的原生 grammar-error 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-line
@@ -19964,403 +10798,194 @@ export interface WebkitTextDecorationLineKeywords<
    */
   readonly lineThrough: SystemKeyword<Key, 'line-through'>;
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -webkit-text-decoration-line 的原生 overline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-line
-   */
-  readonly overline: SystemKeyword<Key, 'overline'>;
-  /**
    * -webkit-text-decoration-line 的原生 spelling-error 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-line
    */
   readonly spellingError: SystemKeyword<Key, 'spelling-error'>;
-  /**
-   * -webkit-text-decoration-line 的原生 underline 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-line
-   */
-  readonly underline: SystemKeyword<Key, 'underline'>;
 }
-export interface WebkitTextDecorationSkipKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
+export interface WebkitTextDecorationSkipKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTextDecorationSkipValues, 'edges' | 'none' | 'objects' | 'spaces'>,
+      Key
+    > {
   /**
    * -webkit-text-decoration-skip 的原生 box-decoration 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-skip
    */
   readonly boxDecoration: SystemKeyword<Key, 'box-decoration'>;
   /**
-   * -webkit-text-decoration-skip 的原生 edges 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-skip
-   */
-  readonly edges: SystemKeyword<Key, 'edges'>;
-  /**
    * -webkit-text-decoration-skip 的原生 leading-spaces 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-skip
    */
   readonly leadingSpaces: SystemKeyword<Key, 'leading-spaces'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -webkit-text-decoration-skip 的原生 objects 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-skip
-   */
-  readonly objects: SystemKeyword<Key, 'objects'>;
-  /**
-   * -webkit-text-decoration-skip 的原生 spaces 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-skip
-   */
-  readonly spaces: SystemKeyword<Key, 'spaces'>;
   /**
    * -webkit-text-decoration-skip 的原生 trailing-spaces 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-skip
    */
   readonly trailingSpaces: SystemKeyword<Key, 'trailing-spaces'>;
 }
-export interface WebkitTextDecorationStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-text-decoration-style 的原生 dashed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-style
-   */
-  readonly dashed: SystemKeyword<Key, 'dashed'>;
-  /**
-   * -webkit-text-decoration-style 的原生 dotted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-style
-   */
-  readonly dotted: SystemKeyword<Key, 'dotted'>;
-  /**
-   * -webkit-text-decoration-style 的原生 double 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-style
-   */
-  readonly double: SystemKeyword<Key, 'double'>;
-  /**
-   * -webkit-text-decoration-style 的原生 solid 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-style
-   */
-  readonly solid: SystemKeyword<Key, 'solid'>;
-  /**
-   * -webkit-text-decoration-style 的原生 wavy 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-style
-   */
-  readonly wavy: SystemKeyword<Key, 'wavy'>;
-}
+export interface WebkitTextDecorationStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitTextDecorationStyleValues,
+        'dashed' | 'dotted' | 'double' | 'solid' | 'wavy'
+      >,
+      Key
+    > {}
 export interface WebkitTextEmphasisKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * CSS 颜色关键字 circle；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly circle: SystemKeyword<Key, 'circle'>;
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * CSS 颜色关键字 dot；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly dot: SystemKeyword<Key, 'dot'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitTextEmphasisValues,
+        | 'circle'
+        | 'currentColor'
+        | 'dot'
+        | 'filled'
+        | 'none'
+        | 'open'
+        | 'sesame'
+        | 'transparent'
+        | 'triangle'
+      >,
+      Key
+    > {
   /**
    * CSS 颜色关键字 double-circle；系统颜色会随用户环境和配色设置变化。
    */
   readonly doubleCircle: SystemKeyword<Key, 'double-circle'>;
-  /**
-   * CSS 颜色关键字 filled；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly filled: SystemKeyword<Key, 'filled'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * CSS 颜色关键字 open；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly open: SystemKeyword<Key, 'open'>;
-  /**
-   * CSS 颜色关键字 sesame；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly sesame: SystemKeyword<Key, 'sesame'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-  /**
-   * CSS 颜色关键字 triangle；系统颜色会随用户环境和配色设置变化。
-   */
-  readonly triangle: SystemKeyword<Key, 'triangle'>;
 }
 export interface WebkitTextEmphasisColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface WebkitTextEmphasisPositionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * -webkit-text-emphasis-position 的原生 over 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-position
-   */
-  readonly over: SystemKeyword<Key, 'over'>;
-  /**
-   * -webkit-text-emphasis-position 的原生 under 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-position
-   */
-  readonly under: SystemKeyword<Key, 'under'>;
-}
-export interface WebkitTextEmphasisStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-text-emphasis-style 的原生 circle 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-style
-   */
-  readonly circle: SystemKeyword<Key, 'circle'>;
-  /**
-   * -webkit-text-emphasis-style 的原生 dot 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-style
-   */
-  readonly dot: SystemKeyword<Key, 'dot'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTextEmphasisColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface WebkitTextEmphasisPositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTextEmphasisPositionValues, 'auto' | 'over' | 'under'>,
+      Key
+    > {}
+export interface WebkitTextEmphasisStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<
+        Values.WebkitTextEmphasisStyleValues,
+        'circle' | 'dot' | 'filled' | 'none' | 'open' | 'sesame' | 'triangle'
+      >,
+      Key
+    > {
   /**
    * -webkit-text-emphasis-style 的原生 double-circle 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-style
    */
   readonly doubleCircle: SystemKeyword<Key, 'double-circle'>;
-  /**
-   * -webkit-text-emphasis-style 的原生 filled 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-style
-   */
-  readonly filled: SystemKeyword<Key, 'filled'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * -webkit-text-emphasis-style 的原生 open 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-style
-   */
-  readonly open: SystemKeyword<Key, 'open'>;
-  /**
-   * -webkit-text-emphasis-style 的原生 sesame 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-style
-   */
-  readonly sesame: SystemKeyword<Key, 'sesame'>;
-  /**
-   * -webkit-text-emphasis-style 的原生 triangle 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-style
-   */
-  readonly triangle: SystemKeyword<Key, 'triangle'>;
 }
 export interface WebkitTextFillColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
-export interface WebkitTextOrientationKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-text-orientation 的原生 mixed 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-orientation
-   */
-  readonly mixed: SystemKeyword<Key, 'mixed'>;
-  /**
-   * -webkit-text-orientation 的原生 sideways 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-orientation
-   */
-  readonly sideways: SystemKeyword<Key, 'sideways'>;
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTextFillColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
+export interface WebkitTextOrientationKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTextOrientationValues, 'mixed' | 'sideways' | 'upright'>,
+      Key
+    > {
   /**
    * -webkit-text-orientation 的原生 sideways-right 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-orientation
    */
   readonly sidewaysRight: SystemKeyword<Key, 'sideways-right'>;
-  /**
-   * -webkit-text-orientation 的原生 upright 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-orientation
-   */
-  readonly upright: SystemKeyword<Key, 'upright'>;
 }
-export interface WebkitTextSizeAdjustKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
+export interface WebkitTextSizeAdjustKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitTextSizeAdjustValues, 'auto' | 'none'>, Key> {}
 export interface WebkitTextStrokeKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitTextStrokeValues, 'currentColor' | 'transparent'>, Key> {}
 export interface WebkitTextStrokeColorKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
     NamedColorKeywords<Key>,
     SystemColorKeywords<Key>,
-    DeprecatedSystemColorKeywords<Key> {
-  /**
-   * 引用当前 color 的计算值；用于 color 自身时按继承的颜色解析。
-   */
-  readonly currentColor: SystemKeyword<Key, 'currentColor'>;
-  /**
-   * 完全透明的颜色值；不会隐藏元素、取消布局或阻止交互。
-   */
-  readonly transparent: SystemKeyword<Key, 'transparent'>;
-}
+    DeprecatedSystemColorKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTextStrokeColorValues, 'currentColor' | 'transparent'>,
+      Key
+    > {}
 export interface WebkitTextStrokeWidthKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface WebkitTextUnderlinePositionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
+export interface WebkitTextUnderlinePositionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTextUnderlinePositionValues, 'auto' | 'left' | 'right' | 'under'>,
+      Key
+    > {
   /**
    * -webkit-text-underline-position 的原生 from-font 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-underline-position
    */
   readonly fromFont: SystemKeyword<Key, 'from-font'>;
-  /**
-   * -webkit-text-underline-position 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-underline-position
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -webkit-text-underline-position 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-underline-position
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * -webkit-text-underline-position 的原生 under 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-underline-position
-   */
-  readonly under: SystemKeyword<Key, 'under'>;
 }
-export interface WebkitTouchCalloutKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-touch-callout 的原生 default 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-touch-callout
-   */
-  readonly default: SystemKeyword<Key, 'default'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitTransformKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitTransformOriginKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-transform-origin 的原生 bottom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-origin
-   */
-  readonly bottom: SystemKeyword<Key, 'bottom'>;
-  /**
-   * -webkit-transform-origin 的原生 center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-origin
-   */
-  readonly center: SystemKeyword<Key, 'center'>;
-  /**
-   * -webkit-transform-origin 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-origin
-   */
-  readonly left: SystemKeyword<Key, 'left'>;
-  /**
-   * -webkit-transform-origin 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-origin
-   */
-  readonly right: SystemKeyword<Key, 'right'>;
-  /**
-   * -webkit-transform-origin 的原生 top 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-origin
-   */
-  readonly top: SystemKeyword<Key, 'top'>;
-}
-export interface WebkitTransformStyleKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-transform-style 的原生 flat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-style
-   */
-  readonly flat: SystemKeyword<Key, 'flat'>;
-  /**
-   * -webkit-transform-style 的原生 preserve-3d 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-style
-   */
-  readonly 'preserve-3d': SystemKeyword<Key, 'preserve-3d'>;
-}
-export interface WebkitTransitionKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-transition 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
+export interface WebkitTouchCalloutKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitTouchCalloutValues, 'default' | 'none'>, Key> {}
+export interface WebkitTransformKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitTransformValues, 'none'>, Key> {}
+export interface WebkitTransformOriginKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTransformOriginValues, 'bottom' | 'center' | 'left' | 'right' | 'top'>,
+      Key
+    > {}
+export interface WebkitTransformStyleKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitTransformStyleValues, 'flat' | 'preserve-3d'>, Key> {}
+export interface WebkitTransitionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WebkitTransitionValues, 'all' | 'ease' | 'linear' | 'none' | 'normal'>,
+      Key
+    > {
   /**
    * -webkit-transition 的原生 allow-discrete 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition
    */
   readonly allowDiscrete: SystemKeyword<Key, 'allow-discrete'>;
-  /**
-   * -webkit-transition 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
   /**
    * -webkit-transition 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition
@@ -20376,19 +11001,6 @@ export interface WebkitTransitionKeywords<Key extends PropertyName> extends CssW
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
-  /**
-   * -webkit-transition 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
   /**
    * -webkit-transition 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition
@@ -20406,27 +11018,14 @@ export interface WebkitTransitionDelayKeywords<
 export interface WebkitTransitionDurationKeywords<
   Key extends PropertyName,
 > extends CssWideKeywords<Key> {}
-export interface WebkitTransitionPropertyKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-transition-property 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-property
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-}
-export interface WebkitTransitionTimingFunctionKeywords<
-  Key extends PropertyName,
-> extends CssWideKeywords<Key> {
-  /**
-   * -webkit-transition-timing-function 的原生 ease 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-timing-function
-   */
-  readonly ease: SystemKeyword<Key, 'ease'>;
+export interface WebkitTransitionPropertyKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitTransitionPropertyValues, 'all' | 'none'>, Key> {}
+export interface WebkitTransitionTimingFunctionKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitTransitionTimingFunctionValues, 'ease' | 'linear'>, Key> {
   /**
    * -webkit-transition-timing-function 的原生 ease-in 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-timing-function
@@ -20442,11 +11041,6 @@ export interface WebkitTransitionTimingFunctionKeywords<
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-timing-function
    */
   readonly easeOut: SystemKeyword<Key, 'ease-out'>;
-  /**
-   * -webkit-transition-timing-function 的原生 linear 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-timing-function
-   */
-  readonly linear: SystemKeyword<Key, 'linear'>;
   /**
    * -webkit-transition-timing-function 的原生 step-end 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-timing-function
@@ -20475,24 +11069,10 @@ export interface WebkitUserModifyKeywords<Key extends PropertyName> extends CssW
    */
   readonly readWritePlaintextOnly: SystemKeyword<Key, 'read-write-plaintext-only'>;
 }
-export interface WebkitUserSelectKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 将元素内容作为整体选取单元。
-   */
-  readonly all: SystemKeyword<Key, 'all'>;
-  /**
-   * 由父级与元素上下文决定使用的选取行为。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * 阻止常规文本选取，不是内容保护或访问控制。
-   */
-  readonly none: SystemKeyword<Key, 'none'>;
-  /**
-   * 允许文本选取。
-   */
-  readonly text: SystemKeyword<Key, 'text'>;
-}
+export interface WebkitUserSelectKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WebkitUserSelectValues, 'all' | 'auto' | 'none' | 'text'>, Key> {}
 export interface WebkitWritingModeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
    * -webkit-writing-mode 的原生 horizontal-tb 值；具体布局或绘制效果见该属性参考。
@@ -20520,7 +11100,13 @@ export interface WebkitWritingModeKeywords<Key extends PropertyName> extends Css
    */
   readonly verticalRl: SystemKeyword<Key, 'vertical-rl'>;
 }
-export interface WhiteSpaceKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WhiteSpaceKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<
+      Pick<Values.WhiteSpaceValues, 'collapse' | 'normal' | 'nowrap' | 'pre' | 'preserve' | 'wrap'>,
+      Key
+    > {
   /**
    * white-space 的原生 -moz-pre-wrap 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
@@ -20530,30 +11116,6 @@ export interface WhiteSpaceKeywords<Key extends PropertyName> extends CssWideKey
    * 保留空白并允许在保留的空格后换行；行末空格占据空间。
    */
   readonly breakSpaces: SystemKeyword<Key, 'break-spaces'>;
-  /**
-   * white-space 的原生 collapse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
-   */
-  readonly collapse: SystemKeyword<Key, 'collapse'>;
-  /**
-   * 折叠连续空白和源换行，允许软换行。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * 折叠空白并禁止软换行；不会自行生成省略号。
-   *
-   * 区别：pre 也不进行普通软换行，但会保留连续空白。
-   *
-   * 适用场景：单行标签；结合宽度约束、overflow 和 text-overflow 实现省略。
-   *
-   * @example
-   * css({ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })
-   */
-  readonly nowrap: SystemKeyword<Key, 'nowrap'>;
-  /**
-   * 保留空白和源换行，不进行普通软换行。
-   */
-  readonly pre: SystemKeyword<Key, 'pre'>;
   /**
    * 折叠空格等空白但保留源换行，同时允许软换行。
    */
@@ -20570,11 +11132,6 @@ export interface WhiteSpaceKeywords<Key extends PropertyName> extends CssWideKey
    */
   readonly preWrap: SystemKeyword<Key, 'pre-wrap'>;
   /**
-   * white-space 的原生 preserve 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
-   */
-  readonly preserve: SystemKeyword<Key, 'preserve'>;
-  /**
    * white-space 的原生 preserve-breaks 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
    */
@@ -20584,28 +11141,16 @@ export interface WhiteSpaceKeywords<Key extends PropertyName> extends CssWideKey
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
    */
   readonly preserveSpaces: SystemKeyword<Key, 'preserve-spaces'>;
-  /**
-   * white-space 的原生 wrap 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
-   */
-  readonly wrap: SystemKeyword<Key, 'wrap'>;
 }
-export interface WhiteSpaceCollapseKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WhiteSpaceCollapseKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WhiteSpaceCollapseValues, 'collapse' | 'preserve'>, Key> {
   /**
    * white-space-collapse 的原生 break-spaces 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space-collapse
    */
   readonly breakSpaces: SystemKeyword<Key, 'break-spaces'>;
-  /**
-   * white-space-collapse 的原生 collapse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space-collapse
-   */
-  readonly collapse: SystemKeyword<Key, 'collapse'>;
-  /**
-   * white-space-collapse 的原生 preserve 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space-collapse
-   */
-  readonly preserve: SystemKeyword<Key, 'preserve'>;
   /**
    * white-space-collapse 的原生 preserve-breaks 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space-collapse
@@ -20618,7 +11163,10 @@ export interface WhiteSpaceCollapseKeywords<Key extends PropertyName> extends Cs
   readonly preserveSpaces: SystemKeyword<Key, 'preserve-spaces'>;
 }
 export interface WidowsKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface WidthKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WidthKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WidthValues, 'auto' | 'intrinsic'>, Key> {
   /**
    * width 的原生 -moz-fit-content 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/width
@@ -20645,18 +11193,9 @@ export interface WidthKeywords<Key extends PropertyName> extends CssWideKeywords
    */
   readonly WebkitMaxContent: SystemKeyword<Key, '-webkit-max-content'>;
   /**
-   * 让布局算法决定尺寸，不保证等于父元素尺寸。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
    * 在最小和最大内部尺寸之间按可用空间夹取尺寸。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
-  /**
-   * width 的原生 intrinsic 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/width
-   */
-  readonly intrinsic: SystemKeyword<Key, 'intrinsic'>;
   /**
    * 采用内容的最大内部尺寸，通常不进行软换行。
    */
@@ -20671,23 +11210,18 @@ export interface WidthKeywords<Key extends PropertyName> extends CssWideKeywords
    */
   readonly minIntrinsic: SystemKeyword<Key, 'min-intrinsic'>;
 }
-export interface WillChangeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-  /**
-   * will-change 的原生 contents 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/will-change
-   */
-  readonly contents: SystemKeyword<Key, 'contents'>;
+export interface WillChangeKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.WillChangeValues, 'auto' | 'contents'>, Key> {
   /**
    * will-change 的原生 scroll-position 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/will-change
    */
   readonly scrollPosition: SystemKeyword<Key, 'scroll-position'>;
 }
-export interface WordBreakKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WordBreakKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.WordBreakValues, 'normal'>, Key> {
   /**
    * word-break 的原生 auto-phrase 值；具体布局或绘制效果见该属性参考。
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/word-break
@@ -20706,26 +11240,15 @@ export interface WordBreakKeywords<Key extends PropertyName> extends CssWideKeyw
    * 限制中日韩文字内部断行，其他文字仍按正常规则处理。
    */
   readonly keepAll: SystemKeyword<Key, 'keep-all'>;
-  /**
-   * 按语言的默认断行规则处理。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
-export interface WordSpacingKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-}
-export interface WordWrapKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
+export interface WordSpacingKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.WordSpacingValues, 'normal'>, Key> {}
+export interface WordWrapKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.WordWrapValues, 'normal'>, Key> {
   /**
    * 必要时允许长文本断行，但新增断点不按 anywhere 的方式参与 min-content 计算。
    */
   readonly breakWord: SystemKeyword<Key, 'break-word'>;
-  /**
-   * 只使用正常换行机会，不为长单词额外断行。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
 }
 export interface WritingModeKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
   /**
@@ -20756,23 +11279,12 @@ export interface WritingModeKeywords<Key extends PropertyName> extends CssWideKe
 }
 export interface XKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
 export interface YKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {}
-export interface ZIndexKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
-   */
-  readonly auto: SystemKeyword<Key, 'auto'>;
-}
-export interface ZoomKeywords<Key extends PropertyName> extends CssWideKeywords<Key> {
-  /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
-   */
-  readonly normal: SystemKeyword<Key, 'normal'>;
-  /**
-   * zoom 的原生 reset 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/zoom
-   */
-  readonly reset: SystemKeyword<Key, 'reset'>;
-}
+export interface ZIndexKeywords<Key extends PropertyName>
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.ZIndexValues, 'auto'>, Key> {}
+export interface ZoomKeywords<Key extends PropertyName>
+  extends
+    CssWideKeywords<Key>,
+    SystemKeywordView<Pick<Values.ZoomValues, 'normal' | 'reset'>, Key> {}
 export interface SystemViews {
   /**
    * 设置复选框、单选框等原生控件的强调色；具体使用部位由浏览器决定。

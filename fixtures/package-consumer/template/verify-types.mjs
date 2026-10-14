@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import ts from 'typescript';
+import { createRequire } from 'node:module';
 import { languageServiceHost } from './language-service-host.mjs';
 
 assert.equal(ts.version, '6.0.3');
@@ -19,7 +20,10 @@ assert(
 );
 assert(!options.customConditions?.includes('zerodep-vue-source'));
 const host = languageServiceHost(ts, root, paths, options);
-const service = ts.createLanguageService(host);
+const init = createRequire(import.meta.url)('@zerodep-vue/css/language-service');
+const service = init({ typescript: ts }).create({
+  languageService: ts.createLanguageService(host),
+});
 try {
   const program = service.getProgram();
   const diagnostics = ts.getPreEmitDiagnostics(program);
@@ -102,6 +106,31 @@ try {
         start: entry.textSpan.start,
       })),
       completion: ts.displayPartsToString(detail.displayParts),
+    };
+  }
+  for (const [marker, value] of [
+    ['font', 'inherit'],
+    ['display', 'inline-flex'],
+  ]) {
+    const end = text.indexOf('// literal:' + marker);
+    assert(end > 0);
+    const close = text.lastIndexOf("'", end);
+    const position = text.lastIndexOf("'", close - 1) + 2;
+    const hover = service.getQuickInfoAtPosition(filename, position);
+    assert(/\p{Script=Han}/u.test(ts.displayPartsToString(hover?.documentation)));
+    const completions = service.getCompletionsAtPosition(filename, position, {});
+    assert(completions?.entries.some((entry) => entry.name === value));
+    const details = service.getCompletionEntryDetails(filename, position, value, {});
+    assert(/\p{Script=Han}/u.test(ts.displayPartsToString(details?.documentation)));
+    const definitions = service.getDefinitionAtPosition(filename, position);
+    assert.equal(definitions?.length, 1);
+    assert(realpathSync(definitions[0].fileName).startsWith(realpathSync(root)));
+    assert(
+      definitions[0].fileName.replaceAll('\\', '/').endsWith('/dist/generated/literal-values.d.ts'),
+    );
+    evidence['literal-' + marker] = {
+      docs: ts.displayPartsToString(hover.documentation),
+      definition: definitions[0].fileName.replace(root, '.'),
     };
   }
   writeFileSync(

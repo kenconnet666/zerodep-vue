@@ -16,6 +16,7 @@
     "noEmitOnError": true,
     "skipLibCheck": false,
     "types": [],
-    "customConditions": ["zerodep-vue-source"]
+    "customConditions": ["zerodep-vue-source"],
+    "plugins": [{ "name": "@zerodep-vue/css/language-service" }]
   }
 }

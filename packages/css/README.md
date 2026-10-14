@@ -19,4 +19,6 @@ export const Panel = _component(() => {
 
 完整组合、覆盖、关键字撤销和资源生命周期见 [CSS 文档](https://github.com/kenconnet666/zerodep-vue/blob/master/docs/css.md)，继承和泛型用法见 [主题文档](https://github.com/kenconnet666/zerodep-vue/blob/master/docs/themes.md)。SSR 每个请求独立收集，使用 `getCssHost(context)?.renderStyles()` 输出样式。
 
+普通字符串字面量保留具名值声明。需要 TypeScript 服务提供中文补全详情、hover 与直接导航时，在 tsconfig 的 compilerOptions.plugins 中加入 `{ "name": "@zerodep-vue/css/language-service" }`。该扩展仅用于编辑，不改变类型检查、编译或运行时输出。
+
 默认导出条件使用 dist，包内源码供映射与导航。Node 24 下支持 ESM 和 CommonJS 加载。项目采用 MIT；生成类型与说明的数据来源及保留许可见 THIRD_PARTY_NOTICES.md。
