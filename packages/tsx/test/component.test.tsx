@@ -22,6 +22,31 @@ afterEach(() => {
 });
 
 describe('_component', () => {
+  test('parent-evaluated children update a plain consumer without dynamic props', async () => {
+    const rows = ref(['first']);
+    let calls = 0;
+    const Consumer = defineComponent({
+      setup(_props, { slots }) {
+        return () => <section>{slots.default?.()}</section>;
+      },
+    });
+    const App = _component(() => {
+      const renderRows = () => {
+        calls++;
+        return rows.value.map((row) => <b key={row}>{row}</b>);
+      };
+      return <Consumer>{renderRows()}</Consumer>;
+    });
+    const wrapper = mount(App);
+    mounted.push(wrapper);
+    expect(wrapper.text()).toBe('first');
+    expect(calls).toBe(1);
+    rows.value = ['second', 'third'];
+    await nextTick();
+    expect(wrapper.findAll('b').map((node) => node.text())).toEqual(['second', 'third']);
+    expect(calls).toBe(2);
+  });
+
   test('editable models diagnose native readonly sources while writable computed keeps writeback', async () => {
     const Edit = _component(({ model: state }: { model: Ref<string> }) => (
       <input v-model={state.value} />

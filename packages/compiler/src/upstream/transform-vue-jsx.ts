@@ -425,6 +425,7 @@ function transformJSXElement(
 
   const slotFlag = path.getData('slotFlag') ?? SlotFlags.STABLE
   const optimizeSlots = optimize && slotFlag !== 0
+  let parentEvaluatedSlot = false
   let VNodeChild
 
   if (children.length > 1 || slots) {
@@ -492,6 +493,9 @@ function transformJSXElement(
     } else if (t.isCallExpression(child) && child.loc && isComponent) {
       // the element was generated and doesn't have location information
       if (enableObjectSlots) {
+        // 父 render 中已求值的结果既是快照，也可能是嵌套数组。
+        // 交给 Vue 规范化普通 slot，并让父更新强制传入新结果，不能加编译 slot 标记。
+        parentEvaluatedSlot = !!(state.get('zerodep:authoring') || state.get('zerodep:createVNode'))
         const { scope } = path
         const slotId = scope.generateUidIdentifier('slot')
         if (scope) {
@@ -509,7 +513,7 @@ function transformJSXElement(
                 t.arrayExpression(buildIIFE(path, [slotId])),
               ),
             ),
-            optimizeSlots &&
+            optimizeSlots && !parentEvaluatedSlot &&
               (t.objectProperty(
                 t.identifier('_'),
                 t.numericLiteral(slotFlag),
@@ -555,7 +559,8 @@ function transformJSXElement(
   // 自有接线只接管可能携带 class 元数据的节点；普通字面量保留上游工厂。
   const cssFactory = state.get('zerodep:createVNode')
   // CSS 可隐式增加或撤去 class/style；跨 JSX 分支复用节点时也必须完整比较 props。
-  const effectivePatchFlag = cssFactory && patchFlag > 0 ? patchFlag | PatchFlags.FULL_PROPS : patchFlag
+  const basePatchFlag = parentEvaluatedSlot ? patchFlag | PatchFlags.DYNAMIC_SLOTS : patchFlag
+  const effectivePatchFlag = cssFactory && basePatchFlag > 0 ? basePatchFlag | PatchFlags.FULL_PROPS : basePatchFlag
   const createVNode = t.callExpression(
     cssFactory ? cssFactory(path) : createIdentifier(state, 'createVNode'),
     [

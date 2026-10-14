@@ -14,6 +14,7 @@ const cases = {
   'fragment and namespace':
     'import * as Vue from "vue"; <><Vue.KeepAlive><Panel /></Vue.KeepAlive></>',
   'object slot': '<Panel>{{ default: () => <span>content</span> }}</Panel>',
+  'eager slot call': '<Panel>{rows.map(row => <span key={row.id}>{row.name}</span>)}</Panel>',
   'custom pragma': '/* @jsx create */ <section />',
 };
 

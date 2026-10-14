@@ -6,6 +6,8 @@ compiler 根入口已使用 `packages/compiler/src/upstream` 内的真实 fork �
 
 JSX 核心保留 TypeScript 6.0.3 严格检查适配，并增加一个可选的 CSS VNode 工厂 hook。未启用 CSS 增强的文件继续使用原工厂和 patch flags；增强文件对可能携带 class 元数据的节点使用助手，普通字面量仍用 Vue 工厂。CSS 可增加/撤去属性，因此增强文件的优化 flags 保留 FULL_PROPS，覆盖跨 JSX 分支复用时的隐式 style 删除。
 
+增强文件中，单个调用表达式作为组件 children 时，上游对象 slot 探测会先在父 render 求值。结果可能是节点数组，因此不能标记成已规范化的编译 slot，也不能假设其快照永久稳定。fork 对这一分支交给 Vue 的普通 slot 规范化，并设置动态 slot 更新标记；保证优化模式下列表重排、离场及无动态 props 的消费者仍更新。未增强文件的生成结果继续与固定上游对照。
+
 `@zerodep-vue/compiler/vite` 提供 Vite 8 接入。HMR 与 SSR 模块登记参考官方 vite-plugin-vue 的 a03675e92eb55c02a6a393e311d610ddb3603744 快照；文件筛选、JSX 转换、TypeScript 擦除、source map、导入别名与默认导出由本项目适配，组件发现按导入身份判断。普通 Vue 组件使用 Vue HMR reload，不能将其表述为增强 TSX 已实现保留状态的样式更新。
 
 `@vue/babel-plugin-resolve-type@3.0.0` 与 `@vue/babel-helper-vue-transform-on@3.0.0` 保持精确依赖，直接复用，不复制一套无必要的辅助实现。更新这些版本时必须与 JSX 基线一同验收。

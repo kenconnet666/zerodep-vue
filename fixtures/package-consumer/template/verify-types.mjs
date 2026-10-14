@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import ts from 'typescript';
+import { languageServiceHost } from './language-service-host.mjs';
 
 assert.equal(ts.version, '6.0.3');
 const root = process.cwd();
@@ -12,20 +13,7 @@ assert.equal(parsed.errors.length, 0);
 const options = parsed.options;
 const paths = parsed.fileNames;
 assert(!options.customConditions?.includes('zerodep-vue-source'));
-const host = {
-  getScriptFileNames: () => paths,
-  getScriptVersion: () => '0',
-  getScriptSnapshot: (file) =>
-    existsSync(file) ? ts.ScriptSnapshot.fromString(readFileSync(file, 'utf8')) : undefined,
-  getCurrentDirectory: () => root,
-  getCompilationSettings: () => options,
-  getDefaultLibFileName: (value) => ts.getDefaultLibFilePath(value),
-  fileExists: ts.sys.fileExists,
-  readFile: ts.sys.readFile,
-  readDirectory: ts.sys.readDirectory,
-  directoryExists: ts.sys.directoryExists,
-  getDirectories: ts.sys.getDirectories,
-};
+const host = languageServiceHost(ts, root, paths, options);
 const service = ts.createLanguageService(host);
 try {
   const program = service.getProgram();

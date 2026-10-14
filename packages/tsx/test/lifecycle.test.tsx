@@ -149,6 +149,10 @@ test('TransitionGroup keeps a departing row styled while keyed rows retain ident
   rows.value = ['b', 'a'];
   await nextTick();
   expect(wrapper.get('[data-row=a]').element).toBe(a);
+  expect(wrapper.findAll('[data-row]').map((row) => row.attributes('data-row'))).toEqual([
+    'b',
+    'a',
+  ]);
   rows.value = ['b'];
   await nextTick();
   expect(a.isConnected).toBe(true);

@@ -107,6 +107,7 @@ function lowerRender(setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpre
 }
 
 function lower(call: NodePath<t.CallExpression>, state: State) {
+  state.set('zerodep:authoring', true);
   let setup = call.get('arguments.0');
   // 允许局部命名 setup，但复制其函数，避免改变同一函数在其他调用位置的语义。
   if (setup.isIdentifier()) {

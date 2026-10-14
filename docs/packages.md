@@ -26,3 +26,5 @@ pnpm add -D ./artifacts/zerodep-vue-compiler-0.0.0.tgz @babel/core@8.0.6 vite@8.
 SSR 收集按 app／请求 context 的弱键共享，支持 runtime 被打入不同 bundle 后由外部 getCssHost 读取。不同请求仍各自拥有收集结果，冻结的 context 也无需被修改。构建 SSR 库时仍推荐 externalize Vue，保持应用使用同一响应式实例。
 
 成功的消费者逐文件清理自身临时目录，目录链接只移除链接。清理不触及 pnpm store；失败目录和报告留作复现。Linux/Windows 的完整消费测试由 CI 执行，日常本地只运行变更相关短验证。
+
+消费者创建前先解析临时父目录的真实路径，避免 Windows 短路径/目录链接使安装路径和 ESM/CJS 模块身份不一致。声明语言服务使用当前安装的 TypeScript SDK，并提供 realpath 等完整文件系统能力，使 pnpm 的隔离包布局能正确解析传递声明；这不添加工作区 alias，也不跳过依赖类型检查。

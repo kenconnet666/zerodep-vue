@@ -15,6 +15,10 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前实施
 
+c631f83d30adc3ee26ad0e730b32f591800ab7fe 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38492258325) 中，四组浏览器完成了普通混用、嵌套主题、水合及每组 500 次稳定性循环，HMR/DevTools、上游、CSS、构建、类型和 LSP 均成功。优化作者模式发现提前计算的节点数组被标为编译 slot，Vue 跳过规范化而使 TransitionGroup 丢失离场行为；已仅在增强分支使用普通 slot 规范化和动态更新标记，优化重排/离场与无动态 props 的消费回归通过。
+
+包消费者已走到真实声明检查：语言服务宿主缺少 realpath，pnpm 链接包的传递依赖无法定位；Windows 的短 TEMP 路径又让 ESM/CJS 形成不同的模块路径身份。现已补齐 SDK 路径解析，并在创建消费者之前规范化临时父目录。链接依赖解析和规范路径/所有权清理短测通过；其中 Windows junction 父目录触发的原生 mkdtemp 异常循环已通过先解析父目录消除，本次探针进程及目录已清理。完整包消费仍以修复提交的远程结果为准。
+
 365d849cb40ccfdd0db6dc9a00d2b3a75e90302d 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38486667515) 中，上游、作者、CSS、四组普通浏览器、两组 HMR/DevTools、类型、LSP 和真实 tarball 构建均成功。独立消费者停在两个检查问题：Windows 跨盘符 relative 返回绝对路径，原边界判断误拒绝；Linux 的生产标记检查会命中 tarball 路径注释。现已按路径语义、发射模块和 AST 字符串值检查，继续要求仓库外消费及生产无调试实现。Babel 公开类型依赖的 convert-source-map 声明也移入 compiler 分发依赖。
 
 生命周期验收新增 KeepAlive、Transition/TransitionGroup、async setup/expose、等待中取消及原生模板基础挂载。定点测试复现并修复离场 DOM 仍存在时样式被提前释放，以及 ShadowRoot 重建后缓存样式节点没有恢复的问题。6 个相关运行用例分批通过，真实浏览器的离场/缓存与嵌套主题短例通过；500 次反复挂载、共享宿主保护、隐藏后不再读绑定、ShadowRoot 复用交给远程四组浏览器。最终条件逐项整理在 acceptance.md。

@@ -15,7 +15,9 @@ import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 const marker = '.zerodep-package-consumer.json';
 export async function createOwnedDirectory() {
-  const root = await mkdtemp(join(tmpdir(), 'zerodep-vue-consumer-'));
+  // Windows TEMP 可能使用 RUNNER~1 等短路径。安装及 ESM/CJS 加载必须使用同一真实路径。
+  const parent = await realpath(tmpdir());
+  const root = await realpath(await mkdtemp(join(parent, 'zerodep-vue-consumer-')));
   const token = randomUUID();
   await writeFile(join(root, marker), JSON.stringify({ token }));
   return { root, token };
