@@ -6624,79 +6624,81 @@ export const systemValues = {
   zIndex: sets[11],
   zoom: sets[261],
 } as const;
-export type ColorProperty =
-  | 'accentColor'
-  | 'background'
-  | 'backgroundColor'
-  | 'border'
-  | 'borderBlock'
-  | 'borderBlockColor'
-  | 'borderBlockEnd'
-  | 'borderBlockEndColor'
-  | 'borderBlockStart'
-  | 'borderBlockStartColor'
-  | 'borderBottom'
-  | 'borderBottomColor'
-  | 'borderColor'
-  | 'borderInline'
-  | 'borderInlineColor'
-  | 'borderInlineEnd'
-  | 'borderInlineEndColor'
-  | 'borderInlineStart'
-  | 'borderInlineStartColor'
-  | 'borderLeft'
-  | 'borderLeftColor'
-  | 'borderRight'
-  | 'borderRightColor'
-  | 'borderTop'
-  | 'borderTopColor'
-  | 'caret'
-  | 'caretColor'
-  | 'color'
-  | 'columnRule'
-  | 'columnRuleColor'
-  | 'fill'
-  | 'floodColor'
-  | 'lightingColor'
-  | 'MozBorderBottomColors'
-  | 'MozBorderEndColor'
-  | 'MozBorderLeftColors'
-  | 'MozBorderRightColors'
-  | 'MozBorderStartColor'
-  | 'MozBorderTopColors'
-  | 'MozColumnRule'
-  | 'MozColumnRuleColor'
-  | 'MozOutline'
-  | 'MozOutlineColor'
-  | 'MozTextDecorationColor'
-  | 'msScrollbar3dlightColor'
-  | 'msScrollbarArrowColor'
-  | 'msScrollbarBaseColor'
-  | 'msScrollbarDarkshadowColor'
-  | 'msScrollbarFaceColor'
-  | 'msScrollbarHighlightColor'
-  | 'msScrollbarShadowColor'
-  | 'msScrollbarTrackColor'
-  | 'outline'
-  | 'outlineColor'
-  | 'stopColor'
-  | 'stroke'
-  | 'strokeColor'
-  | 'textDecoration'
-  | 'textDecorationColor'
-  | 'textEmphasis'
-  | 'textEmphasisColor'
-  | 'WebkitBorderBefore'
-  | 'WebkitBorderBeforeColor'
-  | 'WebkitColumnRule'
-  | 'WebkitColumnRuleColor'
-  | 'WebkitTapHighlightColor'
-  | 'WebkitTextDecorationColor'
-  | 'WebkitTextEmphasis'
-  | 'WebkitTextEmphasisColor'
-  | 'WebkitTextFillColor'
-  | 'WebkitTextStroke'
-  | 'WebkitTextStrokeColor';
+export const colorProperties = [
+  'accentColor',
+  'background',
+  'backgroundColor',
+  'border',
+  'borderBlock',
+  'borderBlockColor',
+  'borderBlockEnd',
+  'borderBlockEndColor',
+  'borderBlockStart',
+  'borderBlockStartColor',
+  'borderBottom',
+  'borderBottomColor',
+  'borderColor',
+  'borderInline',
+  'borderInlineColor',
+  'borderInlineEnd',
+  'borderInlineEndColor',
+  'borderInlineStart',
+  'borderInlineStartColor',
+  'borderLeft',
+  'borderLeftColor',
+  'borderRight',
+  'borderRightColor',
+  'borderTop',
+  'borderTopColor',
+  'caret',
+  'caretColor',
+  'color',
+  'columnRule',
+  'columnRuleColor',
+  'fill',
+  'floodColor',
+  'lightingColor',
+  'MozBorderBottomColors',
+  'MozBorderEndColor',
+  'MozBorderLeftColors',
+  'MozBorderRightColors',
+  'MozBorderStartColor',
+  'MozBorderTopColors',
+  'MozColumnRule',
+  'MozColumnRuleColor',
+  'MozOutline',
+  'MozOutlineColor',
+  'MozTextDecorationColor',
+  'msScrollbar3dlightColor',
+  'msScrollbarArrowColor',
+  'msScrollbarBaseColor',
+  'msScrollbarDarkshadowColor',
+  'msScrollbarFaceColor',
+  'msScrollbarHighlightColor',
+  'msScrollbarShadowColor',
+  'msScrollbarTrackColor',
+  'outline',
+  'outlineColor',
+  'stopColor',
+  'stroke',
+  'strokeColor',
+  'textDecoration',
+  'textDecorationColor',
+  'textEmphasis',
+  'textEmphasisColor',
+  'WebkitBorderBefore',
+  'WebkitBorderBeforeColor',
+  'WebkitColumnRule',
+  'WebkitColumnRuleColor',
+  'WebkitTapHighlightColor',
+  'WebkitTextDecorationColor',
+  'WebkitTextEmphasis',
+  'WebkitTextEmphasisColor',
+  'WebkitTextFillColor',
+  'WebkitTextStroke',
+  'WebkitTextStrokeColor',
+] as const;
+export type ColorProperty = (typeof colorProperties)[number];
 export type SystemValue<Key extends keyof typeof systemValues> = Extract<
   (typeof systemValues)[Key][keyof (typeof systemValues)[Key]],
   string

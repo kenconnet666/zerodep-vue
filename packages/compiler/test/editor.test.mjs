@@ -26,6 +26,7 @@ export const ordinaryObject = { font: 'inherit' }; // literal:ordinary
 import { bx as bind, keyframes, globalCss } from '@zerodep-vue/core';
 import * as cssTools from '@zerodep-vue/core';
 import { AppTheme } from './theme-types';
+import type { KeywordView } from '@zerodep-vue/core';
 
 declare const active: boolean;
 declare const business: string;
@@ -45,8 +46,7 @@ s.transformStyle('preserve-3d'); // literal:transform
 s.pointerEvents('visibleFill'); // literal:pointer
 s.touchAction('pan-up'); // literal:touch
 s.maxWidth('none'); // literal:maximum
-function genericTheme<T extends AppTheme>(s: Css<T>) {
- const keywords = s.keywords;
+function genericTheme<T extends AppTheme>(s: Css<T>, keywords: KeywordView<T>) {
   s.display(bind(active ? 'none' : 'inline-flex')).color(keywords.color._brand); // literal:genericTheme
   // @ts-expect-error 表达式增强不改变泛型 T 的属性边界。
   s.padding(keywords.color._brand);
@@ -58,9 +58,13 @@ class ExtendedTheme extends AppTheme {
     _danger: 'red',
   };
 }
-function inheritedTheme<T extends ExtendedTheme>(s: Css<T>) {
- const keywords = s.keywords;
+function inheritedTheme<T extends ExtendedTheme>(s: Css<T>, keywords: KeywordView<T>) {
   return s.color(keywords.color._danger).backgroundColor(keywords.color._brand);
+}
+function themeLiterals<T extends ExtendedTheme>(s: Css<T>) {
+  s.backgroundColor('_brand'); // theme:brand
+  s.borderColor(bind(active ? '_danger' : 'red')); // theme:danger
+  s.padding('_control'); // theme:control
 }
 function identity<T>(value: T): T { return value; }
 s.display(identity('inline-flex')); // literal:otherFunction
@@ -173,10 +177,15 @@ s.boxSizing('not-a-box-model' as const);
         enhanced.getDefinitionAtPosition(filename, position),
         service.getDefinitionAtPosition(filename, position),
       );
-      assert.deepEqual(
-        enhanced.getCompletionsAtPosition(filename, position, {}),
-        service.getCompletionsAtPosition(filename, position, {}),
-      );
+      const completions = enhanced.getCompletionsAtPosition(filename, position, {});
+      const native = service.getCompletionsAtPosition(filename, position, {});
+      if (marker === 'free') {
+        // 自由 CSS 值仍有当前属性的关键词提示，但保留原生候选，不伪造 hover/定义。
+        for (const entry of native?.entries ?? [])
+          assert(completions.entries.some((item) => item.name === entry.name));
+        assert(completions.entries.some((item) => item.name === 'inherit'));
+        assert(!completions.entries.some((item) => item.name === 'border-box'));
+      } else assert.deepEqual(completions, native);
     }
     const namedEnd = source.indexOf('// member:inlineFlex');
     const namedPosition = source.lastIndexOf('inlineFlex', namedEnd);
@@ -218,6 +227,29 @@ s.boxSizing('not-a-box-model' as const);
       );
     }
     const complete = source;
+    for (const [marker, member, description] of [
+      ['brand', '_brand', '品牌主色'],
+      ['danger', '_danger', '危险操作'],
+      ['control', '_control', '纵向与横向'],
+    ]) {
+      const end = source.indexOf('// theme:' + marker);
+      const position = source.lastIndexOf("'" + member + "'", end) + 2;
+      const entries = enhanced.getCompletionsAtPosition(filename, position, {}).entries;
+      assert(entries.some((item) => item.name === member));
+      assert(
+        !entries.some((item) => item.name === (member === '_control' ? '_brand' : '_control')),
+      );
+      const detail = enhanced.getCompletionEntryDetails(filename, position, member, {});
+      assert(ts.displayPartsToString(detail.documentation).includes(description));
+      assert(
+        ts
+          .displayPartsToString(enhanced.getQuickInfoAtPosition(filename, position).documentation)
+          .includes(description),
+      );
+      const definitions = enhanced.getDefinitionAtPosition(filename, position);
+      assert.equal(definitions.length, 1);
+      assert(!definitions[0].fileName.includes('/generated/'));
+    }
     // 实际输入期间的空字符串、部分词和缺失引号都要有候选，随后切回业务对象不能残留上下文。
     for (const expression of ["s.display(bind('", "s.display(bind('in", "s.display('')"]) {
       source = complete + '\n' + expression;

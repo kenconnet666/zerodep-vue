@@ -1,6 +1,13 @@
 import type * as CSS from 'csstype';
 import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
-import type { AllowedSystem, AllowedTheme, SystemKeyword, ThemeReference } from './tokens.ts';
+import type {
+  AllowedSystem,
+  AllowedTheme,
+  SystemKeyword,
+  ThemeReference,
+  ThemeLiteral,
+  ThemeResolver,
+} from './tokens.ts';
 import type { SystemKeywords } from './generated/system.ts';
 import type { KeywordValues } from './generated/literal-values.ts';
 import type { CssAnimation } from './animation-token.ts';
@@ -12,6 +19,7 @@ type InputValue<Key extends PropertyName, T extends SystemKeywords> =
   | KeywordValues[Key]
   | AllowedSystem<Key>
   | AllowedTheme<T, Key>
+  | ThemeLiteral<T, Key>
   | (Key extends
       | 'animation'
       | 'animationName'
@@ -23,6 +31,12 @@ type InputValue<Key extends PropertyName, T extends SystemKeywords> =
       : never);
 export type PropertyValue<Key extends PropertyName, T extends SystemKeywords = SystemKeywords> =
   InputValue<Key, T> | null | CssBinding<InputValue<Key, T> | null> | CssTemplate;
+
+/** 自由 CSS 字符串保留，已知的 _ 名称必须属于当前主题，避免被宽泛 string 吞掉。 */
+export type CheckedPropertyValue<Key extends PropertyName, T extends SystemKeywords, Value> =
+  Value extends CssBinding<infer Bound>
+    ? CssBinding<Exclude<Bound, `_${string}`> | ThemeLiteral<T, Key>>
+    : Exclude<Value, `_${string}`> | ThemeLiteral<T, Key>;
 
 /** 常用伪类保留补全，函数伪类、属性选择器与条件在各作者入口共用。 */
 export type CssCondition =
@@ -52,6 +66,7 @@ export interface Declaration {
   readonly conditions: readonly string[];
   readonly property: string;
   readonly value: Scalar | CssBinding<unknown> | ThemeReference | CssAnimation | CssTemplate | null;
+  readonly resolveTheme?: ThemeResolver;
 }
 export interface StyleSource {
   readonly declarations: readonly Declaration[];

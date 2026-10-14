@@ -1,4 +1,4 @@
-export { useCss, createTheme } from './css/theme.ts';
+export { useCss, keywords, createTheme } from './css/theme.ts';
 export { cx } from './css/composition.ts';
 export { keyframes } from './css/animation.ts';
 export { globalCss } from './css/global.ts';

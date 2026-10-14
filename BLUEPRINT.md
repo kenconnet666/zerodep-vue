@@ -571,9 +571,9 @@ const styles = { root: base, compact };
 
 select(condition, style) 追加相对选择器、伪类、伪元素、属性选择器或 media/supports/container/starting-style 条件。样式可为嵌套条件数组，可复用链和值；普通类名不能重新限定到嵌套条件。variable('--name', value) 声明原生自定义属性；名称和 fallback 显式书写，数字不补 px。
 
-默认 useCss() 只提供系统作者。业务主题继承 SystemKeywords，调用 createTheme(真实实例或 Vue Ref)，返回只包含 useCss()/provide(source) 的 CssTheme<T>。应用可以导出自己的 useCss 供组件使用；无来源的泛型 useCss<AppTheme>() 不成立。主题上下文各有独立 Vue 注入键；provide 必须在 setup 调用，返回当前组件可用的作者，子树通过 useCss 取得最近覆盖。组件外使用该上下文的默认来源。
+默认 useCss() 只提供系统作者。业务主题继承 SystemKeywords，调用 createTheme(真实实例或 Vue Ref)，返回 useCss()/provide(source) 和独立 keywords 视图的 CssTheme<T>。应用在创建主题的模块封装并导出自己的 useCss，组件导入该函数并统一写 const s = useCss()；无来源的泛型 useCss<AppTheme>() 不成立。主题上下文各有独立 Vue 注入键；provide 必须在 setup 调用，返回当前组件可用的作者，子树通过 useCss 取得最近覆盖。组件外使用该上下文的默认来源。
 
-系统关键词写原生字符串或 s.keywords 的系统成员，主题关键词通过 s.keywords 的具名引用保留类型与来源。主题在消费时读取真实来源，不冻结初始值。颜色主题可复用于 72 个兼容颜色属性，不接受错误跨属性组引用。主题成员用 _ 前缀；继承与覆盖遵循普通类字段规则，替换整组时显式合并要保留的成员，不做隐式合并。
+系统值和主题名都直接写字面量并按属性补全，例如 s.display('inline-flex').backgroundColor('_brand')。显式具名引用使用独立 keywords.color._brand，不挂在 s 下。主题在消费时读取真实来源，不冻结初始值。颜色主题可复用于 72 个兼容颜色属性，不接受错误跨属性组引用。主题成员用 _ 前缀；继承与覆盖遵循普通类字段规则，替换整组时显式合并要保留的成员，不做隐式合并。
 
 主题切换通过 Vue Ref，允许成员本身为 Ref。Teleport 跟随逻辑组件来源；SSR 的请求专属来源在请求根提供，或每个请求创建上下文，不能跨请求修改共享全局 Ref。独立主题区域不串值，不向全局 body 写入区域主题。详见 docs/themes.md。
 

@@ -79,7 +79,7 @@ module.exports = function init({ typescript: ts }) {
         // 由真实方法声明定位属性，不按变量名 s 或方法文本猜测，普通业务方法不受影响。
         for (const call of calls) {
           const declaration = checker.getResolvedSignature(call.parent)?.declaration;
-          const declared = declaration?.parameters?.[0]?.type;
+          const declared = declaration?.typeParameters?.[0]?.constraint;
           if (
             !declared ||
             !ts.isTypeReferenceNode(declared) ||
@@ -114,10 +114,35 @@ module.exports = function init({ typescript: ts }) {
               (node) => ts.isTypeOperatorNode(node) && node.operator === ts.SyntaxKind.KeyOfKeyword,
             );
           if (!keyType) continue;
+          const values = checker.getTypeFromTypeNode(keyType.type);
+          const themeMembers = new Map();
+          const receiver =
+            (ts.isPropertyAccessExpression(call) || ts.isElementAccessExpression(call)) &&
+            call.expression;
+          const theme =
+            receiver &&
+            checker.getTypeOfPropertyOfType(checker.getTypeAtLocation(receiver), 'theme');
+          if (theme) {
+            const properties = [property];
+            if (
+              property !== 'color' &&
+              checker.getPropertyOfType(values, 'red') &&
+              checker.getPropertyOfType(values, 'blue')
+            )
+              properties.push('color');
+            for (const name of properties) {
+              const group = checker.getTypeOfPropertyOfType(theme, name);
+              if (!group) continue;
+              for (const symbol of checker.getPropertiesOfType(group))
+                if (symbol.name.startsWith('_') && !themeMembers.has(symbol.name))
+                  themeMembers.set(symbol.name, symbol);
+            }
+          }
           return {
             checker,
             literal,
-            values: checker.getTypeFromTypeNode(keyType.type),
+            values,
+            themeMembers,
             span: {
               start: literal.getStart(source) + 1,
               length: Math.max(0, literal.getWidth(source) - (literal.isUnterminated ? 1 : 2)),
@@ -130,8 +155,14 @@ module.exports = function init({ typescript: ts }) {
         const ctx = context(fileName, position);
         if (!ctx) return;
         const value = name ?? ctx.literal.text;
-        const symbol = ctx.checker.getPropertyOfType(ctx.values, value);
-        const declaration = symbol?.declarations?.find((node) => ts.isPropertySignature(node));
+        const symbol =
+          ctx.themeMembers.get(value) ?? ctx.checker.getPropertyOfType(ctx.values, value);
+        const declaration = symbol?.declarations?.find(
+          (node) =>
+            ts.isPropertySignature(node) ||
+            ts.isPropertyAssignment(node) ||
+            ts.isPropertyDeclaration(node),
+        );
         if (!symbol || !declaration) return;
         const container = declaration.parent.name?.text ?? 'CSS';
         const member = /^[a-zA-Z_$][\w$]*$/.test(symbol.name)
@@ -160,8 +191,10 @@ module.exports = function init({ typescript: ts }) {
         if (!ctx) return prior;
         // bx 的泛型和 as const 等写法可能没有原生候选；仅在确认的 CSS 上下文补齐属性值。
         const names = new Set(prior?.entries.map((entry) => entry.name));
-        const entries = ctx.checker
-          .getPropertiesOfType(ctx.values)
+        const entries = [
+          ...ctx.checker.getPropertiesOfType(ctx.values),
+          ...ctx.themeMembers.values(),
+        ]
           .filter((symbol) => !names.has(symbol.name))
           .map((symbol) => ({
             name: symbol.name,

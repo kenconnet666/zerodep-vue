@@ -124,6 +124,7 @@ try {
     ['binding', 'relative'],
     ['assertion', 'border-box'],
     ['transform', 'preserve-3d'],
+    ['themeBrand', '_brand'],
   ]) {
     const end = text.indexOf('// literal:' + marker);
     assert(end > 0);
@@ -141,7 +142,7 @@ try {
     assert(
       definitions[0].fileName
         .replaceAll('\\', '/')
-        .endsWith('/dist/css/generated/literal-values.d.ts'),
+        .endsWith(marker === 'themeBrand' ? '/App.tsx' : '/dist/css/generated/literal-values.d.ts'),
     );
     evidence['literal-' + marker] = {
       docs: ts.displayPartsToString(hover.documentation),

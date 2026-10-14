@@ -33,7 +33,7 @@ export function binding<T>(read: () => T): CssBinding<T> {
 }
 
 /** 显式标记持续读取的 CSS 值；作者无需手写 getter。 */
-export function bx<T>(value: T): CssBinding<T> {
+export function bx<const T>(value: T): CssBinding<T> {
   void value;
   throw new Error('[bx] 此调用需要 @zerodep-vue/compiler 转换。');
 }

@@ -3,16 +3,17 @@ import { defineConfig, devices } from '@playwright/test';
 const mode = process.env.BROWSER_MODE ?? 'development';
 const browser = process.env.PW_BROWSER ?? 'local';
 const suite = process.env.PW_SUITE ?? 'mixed';
+const suites: Record<string, string[]> = {
+  mixed: ['**/mixed.spec.ts', '**/controls.spec.ts'],
+  hmr: ['**/hmr.spec.ts'],
+  inspector: ['**/inspector.spec.ts'],
+  stability: ['**/stability.spec.ts'],
+};
+if (!Object.hasOwn(suites, suite)) throw new Error('Unknown PW_SUITE: ' + suite);
+if (!['development', 'production'].includes(mode)) throw new Error('Unknown BROWSER_MODE: ' + mode);
 export default defineConfig({
   testDir: './tests',
-  testMatch:
-    suite === 'hmr'
-      ? '**/hmr.spec.ts'
-      : suite === 'inspector'
-        ? '**/inspector.spec.ts'
-        : suite === 'stability'
-          ? '**/stability.spec.ts'
-          : '**/mixed.spec.ts',
+  testMatch: suites[suite]!,
   fullyParallel: suite !== 'hmr',
   workers: suite === 'hmr' ? 1 : 2,
   forbidOnly: !!process.env.CI,

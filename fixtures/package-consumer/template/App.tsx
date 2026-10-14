@@ -1,6 +1,7 @@
 import { ref, shallowRef, Suspense } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import {
+  keywords,
   _component,
   For,
   bx,
@@ -11,7 +12,6 @@ import {
   useCss,
 } from '@zerodep-vue/core';
 const s = useCss();
-const keywords = s.keywords;
 
 export class Palette extends SystemKeywords {
   override readonly color = {
@@ -24,8 +24,9 @@ export class Palette extends SystemKeywords {
   }
 }
 export const palettes = { light: new Palette(), dark: new Palette('#93c5fd') };
-export const themed = createTheme(palettes.light).useCss();
-export const themedKeywords = themed.keywords;
+export const themedContext = createTheme(palettes.light);
+export const themed = themedContext.useCss();
+export const themedKeywords = themedContext.keywords;
 
 export interface InputHandle {
   focus(): void;
@@ -54,8 +55,9 @@ const Async = _component(async () => {
 });
 export const App = _component(() => {
   const currentPalette = shallowRef(palettes.light);
-  const themed = createTheme(currentPalette).useCss();
-  const themedKeywords = themed.keywords;
+  const themedContext = createTheme(currentPalette);
+  const themed = themedContext.useCss();
+  const themedKeywords = themedContext.keywords;
   const text = ref('package-state');
   const gap = ref('12px');
   const fade = keyframes({ from: s.opacity(0.5), to: s.opacity(1) });

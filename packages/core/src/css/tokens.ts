@@ -30,6 +30,10 @@ export type AllowedSystem<Key extends PropertyName> = SystemKeyword<PropertyName
 // 交集保留泛型上界中已知的成员；Extract 的延迟条件会丢失 T extends AppTheme 的可赋值关系。
 export type ThemeNames<T extends SystemKeywords, Key extends PropertyName> = keyof T[Key] &
   `_${string}`;
+/** 目标属性自身的主题名优先，颜色属性同时接受共享 color 组。 */
+export type ThemeLiteral<T extends SystemKeywords, Key extends PropertyName> =
+  ThemeNames<T, Key> | (Key extends ColorProperty ? ThemeNames<T, 'color'> : never);
+export type ThemeResolver = (property: string, name: string) => ThemeReference;
 export type AllowedTheme<T extends SystemKeywords, Key extends PropertyName> =
   | ThemeReference<Key, ThemeNames<T, Key>>
   | (Key extends ColorProperty ? ThemeReference<'color', ThemeNames<T, 'color'>> : never);

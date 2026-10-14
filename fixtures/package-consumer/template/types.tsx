@@ -1,6 +1,7 @@
 import { computed, ref } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import {
+  keywords,
   _component,
   For,
   bx as bind,
@@ -10,10 +11,9 @@ import {
   cx,
 } from '@zerodep-vue/core';
 
-import type { Css, CssInput } from '@zerodep-vue/core';
+import type { Css, CssInput, KeywordView } from '@zerodep-vue/core';
 import { Field, Palette, palettes, themed, themedKeywords } from './App';
 const s = useCss();
-const keywords = s.keywords;
 
 export function selectedTheme() {
   const current = ref(palettes.light);
@@ -24,7 +24,7 @@ export function selectedTheme() {
   // @ts-expect-error 主题入口必须接收继承实例或对应 Ref。
   createTheme({ color: { _brand: 'red' } });
   const s = context.useCss();
-  return s.color(s.keywords.color._brand);
+  return s.color('_brand');
 }
 
 const value = ref('typed');
@@ -52,7 +52,6 @@ export const transform = keywords.transformStyle.preserve3d; /*hover:preserve3d*
 // @ts-expect-error 规范化成员只保留点访问拼写；CSS 字符串仍可使用 preserve-3d。
 keywords.transformStyle['preserve-3d'];
 export function expressionLiterals<T extends Palette>(s: Css<T>, active: boolean) {
-  const keywords = s.keywords;
   return (
     s
       .display(active ? 'none' : 'inline-flex')
@@ -63,7 +62,7 @@ export function expressionLiterals<T extends Palette>(s: Css<T>, active: boolean
       // literal:assertion
       .transformStyle('preserve-3d')
       // literal:transform
-      .color(keywords.color._brand)
+      .color('_brand') // literal:themeBrand
   );
 }
 themed.display(display).color(brand).select(':hover', themed.color(themedKeywords.color._brand));
@@ -72,8 +71,11 @@ s.color(brand);
 // 不同作者生成的 class 仍可直接组合。
 cx(themed.color(brand), s.padding(4));
 
-export function reusable<T extends Palette>(s: Css<T>, external?: CssInput) {
-  const keywords = s.keywords;
+export function reusable<T extends Palette>(
+  s: Css<T>,
+  keywords: KeywordView<T>,
+  external?: CssInput,
+) {
   const genericBrand = keywords.color._brand; /*hover:genericBrand*/
   const genericFlex = keywords.display.flex; /*hover:genericFlex*/
   const named = { root: s.color(genericBrand).display(genericFlex), active: s.color(genericBrand) };

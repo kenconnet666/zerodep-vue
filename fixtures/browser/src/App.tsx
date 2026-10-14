@@ -26,6 +26,7 @@ import {
 import { NButton, NConfigProvider, NDataTable, NInput, NSelect } from '@fixture/naive';
 import type { DataTableColumns } from '@fixture/naive';
 import type { InitialState } from './contracts.ts';
+import { Controls } from './Controls.tsx';
 const s = useCss();
 
 const labelKey: InjectionKey<string> = Symbol('label');
@@ -63,14 +64,11 @@ class RegionTheme extends SystemKeywords {
     this.color = { _brand: color };
   }
 }
-const regionKey: InjectionKey<Readonly<Ref<RegionTheme>>> = Symbol('region-theme');
+const regionTheme = createTheme(new RegionTheme('black'));
 const RegionContent = _component(({ name }: { name: string }) => {
-  const source = inject(regionKey);
-  if (!source) throw new Error('Missing region theme');
-  const themed = createTheme(source).useCss();
-  const themedKeywords = themed.keywords;
+  const themed = regionTheme.useCss();
   return (
-    <div data-testid={`region-${name}`} class={themed.color(themedKeywords.color._brand)}>
+    <div data-testid={`region-${name}`} class={themed.color('_brand')}>
       {name}
     </div>
   );
@@ -85,13 +83,8 @@ const Region = _component(
     name: string;
     children?: VNodeChild;
   }) => {
-    const inherited = inject(regionKey, undefined);
-    const source = computed(() => {
-      const current = theme?.value ?? inherited?.value;
-      if (!current) throw new Error('Missing region theme source');
-      return current;
-    });
-    provide(regionKey, source);
+    // 未指定来源的区域直接继承；覆盖区域用 computed 同时跟随 Ref 容器和值的替换。
+    if (theme) regionTheme.provide(computed(() => theme!.value));
     return (
       <>
         <Teleport to="#dialogs">
@@ -135,6 +128,7 @@ const Content = _component(({ initial }: { initial: InitialState }) => {
   return (
     <main class={s.padding(24).display('grid').gap(16)}>
       <h1>真实源码编译与混用验收</h1>
+      <Controls />
       <NConfigProvider themeOverrides={{ common: { primaryColor: '#a020f0' } }}>
         <section>
           <NInput

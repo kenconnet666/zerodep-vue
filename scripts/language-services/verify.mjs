@@ -156,7 +156,7 @@ try {
     assert(result.complete && result.errors === 0, JSON.stringify(result));
     report.checks.push({ name: 'workspace-file', result });
   }
-  // 同一泛型作者视图必须同时保留系统成员和继承主题成员，不能只证明默认 css 可用。
+  // 泛型作者的字符串参数必须同时提供系统值和主题名的说明，不能只验证显式成员访问。
   const themeFile = 'fixtures/authoring/src/theme-types.tsx';
   const themeText = await readFile(resolve(root, themeFile), 'utf8');
   const themeDiagnostics = await connection.call('diagnostics', { filePath: themeFile });
@@ -165,13 +165,13 @@ try {
     JSON.stringify(themeDiagnostics),
   );
   for (const [needle, member] of [
-    ['keywords.color._brand', '_brand'],
-    ['keywords.display.flex', 'flex'],
+    ["'_brand'", '_brand'],
+    ["'flex'", 'flex'],
   ]) {
     const genericStart = themeText.indexOf('export function reusable');
     const match = themeText.indexOf(needle, genericStart);
     assert(genericStart >= 0 && match >= 0);
-    const index = match + needle.lastIndexOf('.') + 1;
+    const index = match + 2;
     const before = themeText.slice(0, index);
     const query = {
       filePath: themeFile,
@@ -190,7 +190,9 @@ try {
       JSON.stringify(completions),
     );
     assert(/\p{Script=Han}/u.test(JSON.stringify(completions.items)), JSON.stringify(completions));
-    report.checks.push({ name: 'generic-theme-keyword', member, hover, completions });
+    const definitions = await connection.call('definitions', query);
+    assert(definitions.items.length > 0, JSON.stringify(definitions));
+    report.checks.push({ name: 'generic-css-literal', member, hover, completions, definitions });
   }
   const literalFile = 'fixtures/authoring/src/literal-types.tsx';
   const literalText = await readFile(resolve(root, literalFile), 'utf8');

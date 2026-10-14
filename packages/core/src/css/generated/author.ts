@@ -1,5 +1,5 @@
 // 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
-import type { PropertyValue } from '../types.ts';
+import type { PropertyValue, CheckedPropertyValue } from '../types.ts';
 import type { SystemKeywords } from './system.ts';
 import { CssAuthor } from '../author.ts';
 /** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */
@@ -11,7 +11,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
    */
-  alignContent(value: PropertyValue<'alignContent', T>): this {
+  alignContent<const Value extends PropertyValue<'alignContent', T>>(
+    value: Value & CheckedPropertyValue<'alignContent', T, Value>,
+  ): this {
     return this.write('alignContent', value);
   }
   /**
@@ -29,7 +31,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
    */
-  alignItems(value: PropertyValue<'alignItems', T>): this {
+  alignItems<const Value extends PropertyValue<'alignItems', T>>(
+    value: Value & CheckedPropertyValue<'alignItems', T, Value>,
+  ): this {
     return this.write('alignItems', value);
   }
   /**
@@ -39,7 +43,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/alignment-baseline
    */
-  alignmentBaseline(value: PropertyValue<'alignmentBaseline', T>): this {
+  alignmentBaseline<const Value extends PropertyValue<'alignmentBaseline', T>>(
+    value: Value & CheckedPropertyValue<'alignmentBaseline', T, Value>,
+  ): this {
     return this.write('alignmentBaseline', value);
   }
   /**
@@ -55,7 +61,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self
    */
-  alignSelf(value: PropertyValue<'alignSelf', T>): this {
+  alignSelf<const Value extends PropertyValue<'alignSelf', T>>(
+    value: Value & CheckedPropertyValue<'alignSelf', T, Value>,
+  ): this {
     return this.write('alignSelf', value);
   }
   /**
@@ -65,7 +73,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
    */
-  alignTracks(value: PropertyValue<'alignTracks', T>): this {
+  alignTracks<const Value extends PropertyValue<'alignTracks', T>>(
+    value: Value & CheckedPropertyValue<'alignTracks', T, Value>,
+  ): this {
     return this.write('alignTracks', value);
   }
   /**
@@ -75,7 +85,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-name
    */
-  anchorName(value: PropertyValue<'anchorName', T>): this {
+  anchorName<const Value extends PropertyValue<'anchorName', T>>(
+    value: Value & CheckedPropertyValue<'anchorName', T, Value>,
+  ): this {
     return this.write('anchorName', value);
   }
   /**
@@ -85,7 +97,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-scope
    */
-  anchorScope(value: PropertyValue<'anchorScope', T>): this {
+  anchorScope<const Value extends PropertyValue<'anchorScope', T>>(
+    value: Value & CheckedPropertyValue<'anchorScope', T, Value>,
+  ): this {
     return this.write('anchorScope', value);
   }
   /**
@@ -95,7 +109,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/bottom
    */
-  bottom(value: PropertyValue<'bottom', T>): this {
+  bottom<const Value extends PropertyValue<'bottom', T>>(
+    value: Value & CheckedPropertyValue<'bottom', T, Value>,
+  ): this {
     return this.write('bottom', value);
   }
   /**
@@ -105,7 +121,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clear
    */
-  clear(value: PropertyValue<'clear', T>): this {
+  clear<const Value extends PropertyValue<'clear', T>>(
+    value: Value & CheckedPropertyValue<'clear', T, Value>,
+  ): this {
     return this.write('clear', value);
   }
   /**
@@ -115,7 +133,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-count
    */
-  columnCount(value: PropertyValue<'columnCount', T>): this {
+  columnCount<const Value extends PropertyValue<'columnCount', T>>(
+    value: Value & CheckedPropertyValue<'columnCount', T, Value>,
+  ): this {
     return this.write('columnCount', value);
   }
   /**
@@ -125,7 +145,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-fill
    */
-  columnFill(value: PropertyValue<'columnFill', T>): this {
+  columnFill<const Value extends PropertyValue<'columnFill', T>>(
+    value: Value & CheckedPropertyValue<'columnFill', T, Value>,
+  ): this {
     return this.write('columnFill', value);
   }
   /**
@@ -133,7 +155,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/columns
    */
-  columns(value: PropertyValue<'columns', T>): this {
+  columns<const Value extends PropertyValue<'columns', T>>(
+    value: Value & CheckedPropertyValue<'columns', T, Value>,
+  ): this {
     return this.write('columns', value);
   }
   /**
@@ -143,7 +167,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-span
    */
-  columnSpan(value: PropertyValue<'columnSpan', T>): this {
+  columnSpan<const Value extends PropertyValue<'columnSpan', T>>(
+    value: Value & CheckedPropertyValue<'columnSpan', T, Value>,
+  ): this {
     return this.write('columnSpan', value);
   }
   /**
@@ -153,7 +179,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-width
    */
-  columnWidth(value: PropertyValue<'columnWidth', T>): this {
+  columnWidth<const Value extends PropertyValue<'columnWidth', T>>(
+    value: Value & CheckedPropertyValue<'columnWidth', T, Value>,
+  ): this {
     return this.write('columnWidth', value);
   }
   /**
@@ -171,7 +199,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
    */
-  display(value: PropertyValue<'display', T>): this {
+  display<const Value extends PropertyValue<'display', T>>(
+    value: Value & CheckedPropertyValue<'display', T, Value>,
+  ): this {
     return this.write('display', value);
   }
   /**
@@ -189,7 +219,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex
    */
-  flex(value: PropertyValue<'flex', T>): this {
+  flex<const Value extends PropertyValue<'flex', T>>(
+    value: Value & CheckedPropertyValue<'flex', T, Value>,
+  ): this {
     return this.write('flex', value);
   }
   /**
@@ -207,7 +239,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-basis
    */
-  flexBasis(value: PropertyValue<'flexBasis', T>): this {
+  flexBasis<const Value extends PropertyValue<'flexBasis', T>>(
+    value: Value & CheckedPropertyValue<'flexBasis', T, Value>,
+  ): this {
     return this.write('flexBasis', value);
   }
   /**
@@ -223,7 +257,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-direction
    */
-  flexDirection(value: PropertyValue<'flexDirection', T>): this {
+  flexDirection<const Value extends PropertyValue<'flexDirection', T>>(
+    value: Value & CheckedPropertyValue<'flexDirection', T, Value>,
+  ): this {
     return this.write('flexDirection', value);
   }
   /**
@@ -231,7 +267,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow
    */
-  flexFlow(value: PropertyValue<'flexFlow', T>): this {
+  flexFlow<const Value extends PropertyValue<'flexFlow', T>>(
+    value: Value & CheckedPropertyValue<'flexFlow', T, Value>,
+  ): this {
     return this.write('flexFlow', value);
   }
   /**
@@ -247,7 +285,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-grow
    */
-  flexGrow(value: PropertyValue<'flexGrow', T>): this {
+  flexGrow<const Value extends PropertyValue<'flexGrow', T>>(
+    value: Value & CheckedPropertyValue<'flexGrow', T, Value>,
+  ): this {
     return this.write('flexGrow', value);
   }
   /**
@@ -263,7 +303,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-shrink
    */
-  flexShrink(value: PropertyValue<'flexShrink', T>): this {
+  flexShrink<const Value extends PropertyValue<'flexShrink', T>>(
+    value: Value & CheckedPropertyValue<'flexShrink', T, Value>,
+  ): this {
     return this.write('flexShrink', value);
   }
   /**
@@ -279,7 +321,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-wrap
    */
-  flexWrap(value: PropertyValue<'flexWrap', T>): this {
+  flexWrap<const Value extends PropertyValue<'flexWrap', T>>(
+    value: Value & CheckedPropertyValue<'flexWrap', T, Value>,
+  ): this {
     return this.write('flexWrap', value);
   }
   /**
@@ -289,7 +333,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/float
    */
-  float(value: PropertyValue<'float', T>): this {
+  float<const Value extends PropertyValue<'float', T>>(
+    value: Value & CheckedPropertyValue<'float', T, Value>,
+  ): this {
     return this.write('float', value);
   }
   /**
@@ -297,7 +343,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid
    */
-  grid(value: PropertyValue<'grid', T>): this {
+  grid<const Value extends PropertyValue<'grid', T>>(
+    value: Value & CheckedPropertyValue<'grid', T, Value>,
+  ): this {
     return this.write('grid', value);
   }
   /**
@@ -305,7 +353,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-area
    */
-  gridArea(value: PropertyValue<'gridArea', T>): this {
+  gridArea<const Value extends PropertyValue<'gridArea', T>>(
+    value: Value & CheckedPropertyValue<'gridArea', T, Value>,
+  ): this {
     return this.write('gridArea', value);
   }
   /**
@@ -315,7 +365,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-auto-columns
    */
-  gridAutoColumns(value: PropertyValue<'gridAutoColumns', T>): this {
+  gridAutoColumns<const Value extends PropertyValue<'gridAutoColumns', T>>(
+    value: Value & CheckedPropertyValue<'gridAutoColumns', T, Value>,
+  ): this {
     return this.write('gridAutoColumns', value);
   }
   /**
@@ -333,7 +385,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-auto-flow
    */
-  gridAutoFlow(value: PropertyValue<'gridAutoFlow', T>): this {
+  gridAutoFlow<const Value extends PropertyValue<'gridAutoFlow', T>>(
+    value: Value & CheckedPropertyValue<'gridAutoFlow', T, Value>,
+  ): this {
     return this.write('gridAutoFlow', value);
   }
   /**
@@ -343,7 +397,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-auto-rows
    */
-  gridAutoRows(value: PropertyValue<'gridAutoRows', T>): this {
+  gridAutoRows<const Value extends PropertyValue<'gridAutoRows', T>>(
+    value: Value & CheckedPropertyValue<'gridAutoRows', T, Value>,
+  ): this {
     return this.write('gridAutoRows', value);
   }
   /**
@@ -351,7 +407,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column
    */
-  gridColumn(value: PropertyValue<'gridColumn', T>): this {
+  gridColumn<const Value extends PropertyValue<'gridColumn', T>>(
+    value: Value & CheckedPropertyValue<'gridColumn', T, Value>,
+  ): this {
     return this.write('gridColumn', value);
   }
   /**
@@ -361,7 +419,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column-end
    */
-  gridColumnEnd(value: PropertyValue<'gridColumnEnd', T>): this {
+  gridColumnEnd<const Value extends PropertyValue<'gridColumnEnd', T>>(
+    value: Value & CheckedPropertyValue<'gridColumnEnd', T, Value>,
+  ): this {
     return this.write('gridColumnEnd', value);
   }
   /**
@@ -371,7 +431,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column-start
    */
-  gridColumnStart(value: PropertyValue<'gridColumnStart', T>): this {
+  gridColumnStart<const Value extends PropertyValue<'gridColumnStart', T>>(
+    value: Value & CheckedPropertyValue<'gridColumnStart', T, Value>,
+  ): this {
     return this.write('gridColumnStart', value);
   }
   /**
@@ -379,7 +441,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row
    */
-  gridRow(value: PropertyValue<'gridRow', T>): this {
+  gridRow<const Value extends PropertyValue<'gridRow', T>>(
+    value: Value & CheckedPropertyValue<'gridRow', T, Value>,
+  ): this {
     return this.write('gridRow', value);
   }
   /**
@@ -389,7 +453,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row-end
    */
-  gridRowEnd(value: PropertyValue<'gridRowEnd', T>): this {
+  gridRowEnd<const Value extends PropertyValue<'gridRowEnd', T>>(
+    value: Value & CheckedPropertyValue<'gridRowEnd', T, Value>,
+  ): this {
     return this.write('gridRowEnd', value);
   }
   /**
@@ -399,7 +465,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row-start
    */
-  gridRowStart(value: PropertyValue<'gridRowStart', T>): this {
+  gridRowStart<const Value extends PropertyValue<'gridRowStart', T>>(
+    value: Value & CheckedPropertyValue<'gridRowStart', T, Value>,
+  ): this {
     return this.write('gridRowStart', value);
   }
   /**
@@ -407,7 +475,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template
    */
-  gridTemplate(value: PropertyValue<'gridTemplate', T>): this {
+  gridTemplate<const Value extends PropertyValue<'gridTemplate', T>>(
+    value: Value & CheckedPropertyValue<'gridTemplate', T, Value>,
+  ): this {
     return this.write('gridTemplate', value);
   }
   /**
@@ -417,7 +487,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-areas
    */
-  gridTemplateAreas(value: PropertyValue<'gridTemplateAreas', T>): this {
+  gridTemplateAreas<const Value extends PropertyValue<'gridTemplateAreas', T>>(
+    value: Value & CheckedPropertyValue<'gridTemplateAreas', T, Value>,
+  ): this {
     return this.write('gridTemplateAreas', value);
   }
   /**
@@ -433,7 +505,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-columns
    */
-  gridTemplateColumns(value: PropertyValue<'gridTemplateColumns', T>): this {
+  gridTemplateColumns<const Value extends PropertyValue<'gridTemplateColumns', T>>(
+    value: Value & CheckedPropertyValue<'gridTemplateColumns', T, Value>,
+  ): this {
     return this.write('gridTemplateColumns', value);
   }
   /**
@@ -449,7 +523,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-rows
    */
-  gridTemplateRows(value: PropertyValue<'gridTemplateRows', T>): this {
+  gridTemplateRows<const Value extends PropertyValue<'gridTemplateRows', T>>(
+    value: Value & CheckedPropertyValue<'gridTemplateRows', T, Value>,
+  ): this {
     return this.write('gridTemplateRows', value);
   }
   /**
@@ -457,7 +533,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset
    */
-  inset(value: PropertyValue<'inset', T>): this {
+  inset<const Value extends PropertyValue<'inset', T>>(
+    value: Value & CheckedPropertyValue<'inset', T, Value>,
+  ): this {
     return this.write('inset', value);
   }
   /**
@@ -465,7 +543,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-block
    */
-  insetBlock(value: PropertyValue<'insetBlock', T>): this {
+  insetBlock<const Value extends PropertyValue<'insetBlock', T>>(
+    value: Value & CheckedPropertyValue<'insetBlock', T, Value>,
+  ): this {
     return this.write('insetBlock', value);
   }
   /**
@@ -475,7 +555,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-block-end
    */
-  insetBlockEnd(value: PropertyValue<'insetBlockEnd', T>): this {
+  insetBlockEnd<const Value extends PropertyValue<'insetBlockEnd', T>>(
+    value: Value & CheckedPropertyValue<'insetBlockEnd', T, Value>,
+  ): this {
     return this.write('insetBlockEnd', value);
   }
   /**
@@ -485,7 +567,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-block-start
    */
-  insetBlockStart(value: PropertyValue<'insetBlockStart', T>): this {
+  insetBlockStart<const Value extends PropertyValue<'insetBlockStart', T>>(
+    value: Value & CheckedPropertyValue<'insetBlockStart', T, Value>,
+  ): this {
     return this.write('insetBlockStart', value);
   }
   /**
@@ -493,7 +577,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-inline
    */
-  insetInline(value: PropertyValue<'insetInline', T>): this {
+  insetInline<const Value extends PropertyValue<'insetInline', T>>(
+    value: Value & CheckedPropertyValue<'insetInline', T, Value>,
+  ): this {
     return this.write('insetInline', value);
   }
   /**
@@ -503,7 +589,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-inline-end
    */
-  insetInlineEnd(value: PropertyValue<'insetInlineEnd', T>): this {
+  insetInlineEnd<const Value extends PropertyValue<'insetInlineEnd', T>>(
+    value: Value & CheckedPropertyValue<'insetInlineEnd', T, Value>,
+  ): this {
     return this.write('insetInlineEnd', value);
   }
   /**
@@ -513,7 +601,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-inline-start
    */
-  insetInlineStart(value: PropertyValue<'insetInlineStart', T>): this {
+  insetInlineStart<const Value extends PropertyValue<'insetInlineStart', T>>(
+    value: Value & CheckedPropertyValue<'insetInlineStart', T, Value>,
+  ): this {
     return this.write('insetInlineStart', value);
   }
   /**
@@ -529,7 +619,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content
    */
-  justifyContent(value: PropertyValue<'justifyContent', T>): this {
+  justifyContent<const Value extends PropertyValue<'justifyContent', T>>(
+    value: Value & CheckedPropertyValue<'justifyContent', T, Value>,
+  ): this {
     return this.write('justifyContent', value);
   }
   /**
@@ -539,7 +631,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
    */
-  justifyItems(value: PropertyValue<'justifyItems', T>): this {
+  justifyItems<const Value extends PropertyValue<'justifyItems', T>>(
+    value: Value & CheckedPropertyValue<'justifyItems', T, Value>,
+  ): this {
     return this.write('justifyItems', value);
   }
   /**
@@ -549,7 +643,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
    */
-  justifySelf(value: PropertyValue<'justifySelf', T>): this {
+  justifySelf<const Value extends PropertyValue<'justifySelf', T>>(
+    value: Value & CheckedPropertyValue<'justifySelf', T, Value>,
+  ): this {
     return this.write('justifySelf', value);
   }
   /**
@@ -559,7 +655,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
    */
-  justifyTracks(value: PropertyValue<'justifyTracks', T>): this {
+  justifyTracks<const Value extends PropertyValue<'justifyTracks', T>>(
+    value: Value & CheckedPropertyValue<'justifyTracks', T, Value>,
+  ): this {
     return this.write('justifyTracks', value);
   }
   /**
@@ -569,7 +667,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/left
    */
-  left(value: PropertyValue<'left', T>): this {
+  left<const Value extends PropertyValue<'left', T>>(
+    value: Value & CheckedPropertyValue<'left', T, Value>,
+  ): this {
     return this.write('left', value);
   }
   /**
@@ -581,7 +681,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/order
    */
-  order(value: PropertyValue<'order', T>): this {
+  order<const Value extends PropertyValue<'order', T>>(
+    value: Value & CheckedPropertyValue<'order', T, Value>,
+  ): this {
     return this.write('order', value);
   }
   /**
@@ -589,7 +691,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
    */
-  placeContent(value: PropertyValue<'placeContent', T>): this {
+  placeContent<const Value extends PropertyValue<'placeContent', T>>(
+    value: Value & CheckedPropertyValue<'placeContent', T, Value>,
+  ): this {
     return this.write('placeContent', value);
   }
   /**
@@ -597,7 +701,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
    */
-  placeItems(value: PropertyValue<'placeItems', T>): this {
+  placeItems<const Value extends PropertyValue<'placeItems', T>>(
+    value: Value & CheckedPropertyValue<'placeItems', T, Value>,
+  ): this {
     return this.write('placeItems', value);
   }
   /**
@@ -605,7 +711,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
    */
-  placeSelf(value: PropertyValue<'placeSelf', T>): this {
+  placeSelf<const Value extends PropertyValue<'placeSelf', T>>(
+    value: Value & CheckedPropertyValue<'placeSelf', T, Value>,
+  ): this {
     return this.write('placeSelf', value);
   }
   /**
@@ -623,7 +731,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position
    */
-  position(value: PropertyValue<'position', T>): this {
+  position<const Value extends PropertyValue<'position', T>>(
+    value: Value & CheckedPropertyValue<'position', T, Value>,
+  ): this {
     return this.write('position', value);
   }
   /**
@@ -633,7 +743,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-anchor
    */
-  positionAnchor(value: PropertyValue<'positionAnchor', T>): this {
+  positionAnchor<const Value extends PropertyValue<'positionAnchor', T>>(
+    value: Value & CheckedPropertyValue<'positionAnchor', T, Value>,
+  ): this {
     return this.write('positionAnchor', value);
   }
   /**
@@ -643,7 +755,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
    */
-  positionArea(value: PropertyValue<'positionArea', T>): this {
+  positionArea<const Value extends PropertyValue<'positionArea', T>>(
+    value: Value & CheckedPropertyValue<'positionArea', T, Value>,
+  ): this {
     return this.write('positionArea', value);
   }
   /**
@@ -651,7 +765,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
    */
-  positionTry(value: PropertyValue<'positionTry', T>): this {
+  positionTry<const Value extends PropertyValue<'positionTry', T>>(
+    value: Value & CheckedPropertyValue<'positionTry', T, Value>,
+  ): this {
     return this.write('positionTry', value);
   }
   /**
@@ -661,7 +777,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
    */
-  positionTryFallbacks(value: PropertyValue<'positionTryFallbacks', T>): this {
+  positionTryFallbacks<const Value extends PropertyValue<'positionTryFallbacks', T>>(
+    value: Value & CheckedPropertyValue<'positionTryFallbacks', T, Value>,
+  ): this {
     return this.write('positionTryFallbacks', value);
   }
   /**
@@ -671,7 +789,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-order
    */
-  positionTryOrder(value: PropertyValue<'positionTryOrder', T>): this {
+  positionTryOrder<const Value extends PropertyValue<'positionTryOrder', T>>(
+    value: Value & CheckedPropertyValue<'positionTryOrder', T, Value>,
+  ): this {
     return this.write('positionTryOrder', value);
   }
   /**
@@ -681,7 +801,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-visibility
    */
-  positionVisibility(value: PropertyValue<'positionVisibility', T>): this {
+  positionVisibility<const Value extends PropertyValue<'positionVisibility', T>>(
+    value: Value & CheckedPropertyValue<'positionVisibility', T, Value>,
+  ): this {
     return this.write('positionVisibility', value);
   }
   /**
@@ -691,7 +813,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/right
    */
-  right(value: PropertyValue<'right', T>): this {
+  right<const Value extends PropertyValue<'right', T>>(
+    value: Value & CheckedPropertyValue<'right', T, Value>,
+  ): this {
     return this.write('right', value);
   }
   /**
@@ -701,7 +825,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/top
    */
-  top(value: PropertyValue<'top', T>): this {
+  top<const Value extends PropertyValue<'top', T>>(
+    value: Value & CheckedPropertyValue<'top', T, Value>,
+  ): this {
     return this.write('top', value);
   }
   /**
@@ -711,7 +837,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vertical-align
    */
-  verticalAlign(value: PropertyValue<'verticalAlign', T>): this {
+  verticalAlign<const Value extends PropertyValue<'verticalAlign', T>>(
+    value: Value & CheckedPropertyValue<'verticalAlign', T, Value>,
+  ): this {
     return this.write('verticalAlign', value);
   }
   /**
@@ -727,7 +855,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/z-index
    */
-  zIndex(value: PropertyValue<'zIndex', T>): this {
+  zIndex<const Value extends PropertyValue<'zIndex', T>>(
+    value: Value & CheckedPropertyValue<'zIndex', T, Value>,
+  ): this {
     return this.write('zIndex', value);
   }
   /**
@@ -743,7 +873,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/aspect-ratio
    */
-  aspectRatio(value: PropertyValue<'aspectRatio', T>): this {
+  aspectRatio<const Value extends PropertyValue<'aspectRatio', T>>(
+    value: Value & CheckedPropertyValue<'aspectRatio', T, Value>,
+  ): this {
     return this.write('aspectRatio', value);
   }
   /**
@@ -759,7 +891,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/block-size
    */
-  blockSize(value: PropertyValue<'blockSize', T>): this {
+  blockSize<const Value extends PropertyValue<'blockSize', T>>(
+    value: Value & CheckedPropertyValue<'blockSize', T, Value>,
+  ): this {
     return this.write('blockSize', value);
   }
   /**
@@ -775,7 +909,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-sizing
    */
-  boxSizing(value: PropertyValue<'boxSizing', T>): this {
+  boxSizing<const Value extends PropertyValue<'boxSizing', T>>(
+    value: Value & CheckedPropertyValue<'boxSizing', T, Value>,
+  ): this {
     return this.write('boxSizing', value);
   }
   /**
@@ -791,7 +927,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/height
    */
-  height(value: PropertyValue<'height', T>): this {
+  height<const Value extends PropertyValue<'height', T>>(
+    value: Value & CheckedPropertyValue<'height', T, Value>,
+  ): this {
     return this.write('height', value);
   }
   /**
@@ -807,7 +945,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inline-size
    */
-  inlineSize(value: PropertyValue<'inlineSize', T>): this {
+  inlineSize<const Value extends PropertyValue<'inlineSize', T>>(
+    value: Value & CheckedPropertyValue<'inlineSize', T, Value>,
+  ): this {
     return this.write('inlineSize', value);
   }
   /**
@@ -817,7 +957,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-block-size
    */
-  maxBlockSize(value: PropertyValue<'maxBlockSize', T>): this {
+  maxBlockSize<const Value extends PropertyValue<'maxBlockSize', T>>(
+    value: Value & CheckedPropertyValue<'maxBlockSize', T, Value>,
+  ): this {
     return this.write('maxBlockSize', value);
   }
   /**
@@ -827,7 +969,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
    */
-  maxHeight(value: PropertyValue<'maxHeight', T>): this {
+  maxHeight<const Value extends PropertyValue<'maxHeight', T>>(
+    value: Value & CheckedPropertyValue<'maxHeight', T, Value>,
+  ): this {
     return this.write('maxHeight', value);
   }
   /**
@@ -837,7 +981,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-inline-size
    */
-  maxInlineSize(value: PropertyValue<'maxInlineSize', T>): this {
+  maxInlineSize<const Value extends PropertyValue<'maxInlineSize', T>>(
+    value: Value & CheckedPropertyValue<'maxInlineSize', T, Value>,
+  ): this {
     return this.write('maxInlineSize', value);
   }
   /**
@@ -847,7 +993,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-lines
    */
-  maxLines(value: PropertyValue<'maxLines', T>): this {
+  maxLines<const Value extends PropertyValue<'maxLines', T>>(
+    value: Value & CheckedPropertyValue<'maxLines', T, Value>,
+  ): this {
     return this.write('maxLines', value);
   }
   /**
@@ -863,7 +1011,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
    */
-  maxWidth(value: PropertyValue<'maxWidth', T>): this {
+  maxWidth<const Value extends PropertyValue<'maxWidth', T>>(
+    value: Value & CheckedPropertyValue<'maxWidth', T, Value>,
+  ): this {
     return this.write('maxWidth', value);
   }
   /**
@@ -873,7 +1023,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-block-size
    */
-  minBlockSize(value: PropertyValue<'minBlockSize', T>): this {
+  minBlockSize<const Value extends PropertyValue<'minBlockSize', T>>(
+    value: Value & CheckedPropertyValue<'minBlockSize', T, Value>,
+  ): this {
     return this.write('minBlockSize', value);
   }
   /**
@@ -883,7 +1035,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
    */
-  minHeight(value: PropertyValue<'minHeight', T>): this {
+  minHeight<const Value extends PropertyValue<'minHeight', T>>(
+    value: Value & CheckedPropertyValue<'minHeight', T, Value>,
+  ): this {
     return this.write('minHeight', value);
   }
   /**
@@ -893,7 +1047,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-inline-size
    */
-  minInlineSize(value: PropertyValue<'minInlineSize', T>): this {
+  minInlineSize<const Value extends PropertyValue<'minInlineSize', T>>(
+    value: Value & CheckedPropertyValue<'minInlineSize', T, Value>,
+  ): this {
     return this.write('minInlineSize', value);
   }
   /**
@@ -909,7 +1065,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
    */
-  minWidth(value: PropertyValue<'minWidth', T>): this {
+  minWidth<const Value extends PropertyValue<'minWidth', T>>(
+    value: Value & CheckedPropertyValue<'minWidth', T, Value>,
+  ): this {
     return this.write('minWidth', value);
   }
   /**
@@ -929,7 +1087,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/width
    */
-  width(value: PropertyValue<'width', T>): this {
+  width<const Value extends PropertyValue<'width', T>>(
+    value: Value & CheckedPropertyValue<'width', T, Value>,
+  ): this {
     return this.write('width', value);
   }
   /**
@@ -939,7 +1099,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-gap
    */
-  columnGap(value: PropertyValue<'columnGap', T>): this {
+  columnGap<const Value extends PropertyValue<'columnGap', T>>(
+    value: Value & CheckedPropertyValue<'columnGap', T, Value>,
+  ): this {
     return this.write('columnGap', value);
   }
   /**
@@ -953,7 +1115,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/gap
    */
-  gap(value: PropertyValue<'gap', T>): this {
+  gap<const Value extends PropertyValue<'gap', T>>(
+    value: Value & CheckedPropertyValue<'gap', T, Value>,
+  ): this {
     return this.write('gap', value);
   }
   /**
@@ -969,7 +1133,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin
    */
-  margin(value: PropertyValue<'margin', T>): this {
+  margin<const Value extends PropertyValue<'margin', T>>(
+    value: Value & CheckedPropertyValue<'margin', T, Value>,
+  ): this {
     return this.write('margin', value);
   }
   /**
@@ -977,7 +1143,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-block
    */
-  marginBlock(value: PropertyValue<'marginBlock', T>): this {
+  marginBlock<const Value extends PropertyValue<'marginBlock', T>>(
+    value: Value & CheckedPropertyValue<'marginBlock', T, Value>,
+  ): this {
     return this.write('marginBlock', value);
   }
   /**
@@ -987,7 +1155,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-block-end
    */
-  marginBlockEnd(value: PropertyValue<'marginBlockEnd', T>): this {
+  marginBlockEnd<const Value extends PropertyValue<'marginBlockEnd', T>>(
+    value: Value & CheckedPropertyValue<'marginBlockEnd', T, Value>,
+  ): this {
     return this.write('marginBlockEnd', value);
   }
   /**
@@ -997,7 +1167,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-block-start
    */
-  marginBlockStart(value: PropertyValue<'marginBlockStart', T>): this {
+  marginBlockStart<const Value extends PropertyValue<'marginBlockStart', T>>(
+    value: Value & CheckedPropertyValue<'marginBlockStart', T, Value>,
+  ): this {
     return this.write('marginBlockStart', value);
   }
   /**
@@ -1007,7 +1179,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-bottom
    */
-  marginBottom(value: PropertyValue<'marginBottom', T>): this {
+  marginBottom<const Value extends PropertyValue<'marginBottom', T>>(
+    value: Value & CheckedPropertyValue<'marginBottom', T, Value>,
+  ): this {
     return this.write('marginBottom', value);
   }
   /**
@@ -1015,7 +1189,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-inline
    */
-  marginInline(value: PropertyValue<'marginInline', T>): this {
+  marginInline<const Value extends PropertyValue<'marginInline', T>>(
+    value: Value & CheckedPropertyValue<'marginInline', T, Value>,
+  ): this {
     return this.write('marginInline', value);
   }
   /**
@@ -1025,7 +1201,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-inline-end
    */
-  marginInlineEnd(value: PropertyValue<'marginInlineEnd', T>): this {
+  marginInlineEnd<const Value extends PropertyValue<'marginInlineEnd', T>>(
+    value: Value & CheckedPropertyValue<'marginInlineEnd', T, Value>,
+  ): this {
     return this.write('marginInlineEnd', value);
   }
   /**
@@ -1035,7 +1213,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-inline-start
    */
-  marginInlineStart(value: PropertyValue<'marginInlineStart', T>): this {
+  marginInlineStart<const Value extends PropertyValue<'marginInlineStart', T>>(
+    value: Value & CheckedPropertyValue<'marginInlineStart', T, Value>,
+  ): this {
     return this.write('marginInlineStart', value);
   }
   /**
@@ -1045,7 +1225,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-left
    */
-  marginLeft(value: PropertyValue<'marginLeft', T>): this {
+  marginLeft<const Value extends PropertyValue<'marginLeft', T>>(
+    value: Value & CheckedPropertyValue<'marginLeft', T, Value>,
+  ): this {
     return this.write('marginLeft', value);
   }
   /**
@@ -1055,7 +1237,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-right
    */
-  marginRight(value: PropertyValue<'marginRight', T>): this {
+  marginRight<const Value extends PropertyValue<'marginRight', T>>(
+    value: Value & CheckedPropertyValue<'marginRight', T, Value>,
+  ): this {
     return this.write('marginRight', value);
   }
   /**
@@ -1065,7 +1249,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-top
    */
-  marginTop(value: PropertyValue<'marginTop', T>): this {
+  marginTop<const Value extends PropertyValue<'marginTop', T>>(
+    value: Value & CheckedPropertyValue<'marginTop', T, Value>,
+  ): this {
     return this.write('marginTop', value);
   }
   /**
@@ -1075,7 +1261,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-trim
    */
-  marginTrim(value: PropertyValue<'marginTrim', T>): this {
+  marginTrim<const Value extends PropertyValue<'marginTrim', T>>(
+    value: Value & CheckedPropertyValue<'marginTrim', T, Value>,
+  ): this {
     return this.write('marginTrim', value);
   }
   /**
@@ -1089,7 +1277,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding
    */
-  padding(value: PropertyValue<'padding', T>): this {
+  padding<const Value extends PropertyValue<'padding', T>>(
+    value: Value & CheckedPropertyValue<'padding', T, Value>,
+  ): this {
     return this.write('padding', value);
   }
   /**
@@ -1097,7 +1287,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-block
    */
-  paddingBlock(value: PropertyValue<'paddingBlock', T>): this {
+  paddingBlock<const Value extends PropertyValue<'paddingBlock', T>>(
+    value: Value & CheckedPropertyValue<'paddingBlock', T, Value>,
+  ): this {
     return this.write('paddingBlock', value);
   }
   /**
@@ -1107,7 +1299,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-block-end
    */
-  paddingBlockEnd(value: PropertyValue<'paddingBlockEnd', T>): this {
+  paddingBlockEnd<const Value extends PropertyValue<'paddingBlockEnd', T>>(
+    value: Value & CheckedPropertyValue<'paddingBlockEnd', T, Value>,
+  ): this {
     return this.write('paddingBlockEnd', value);
   }
   /**
@@ -1117,7 +1311,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-block-start
    */
-  paddingBlockStart(value: PropertyValue<'paddingBlockStart', T>): this {
+  paddingBlockStart<const Value extends PropertyValue<'paddingBlockStart', T>>(
+    value: Value & CheckedPropertyValue<'paddingBlockStart', T, Value>,
+  ): this {
     return this.write('paddingBlockStart', value);
   }
   /**
@@ -1127,7 +1323,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-bottom
    */
-  paddingBottom(value: PropertyValue<'paddingBottom', T>): this {
+  paddingBottom<const Value extends PropertyValue<'paddingBottom', T>>(
+    value: Value & CheckedPropertyValue<'paddingBottom', T, Value>,
+  ): this {
     return this.write('paddingBottom', value);
   }
   /**
@@ -1135,7 +1333,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-inline
    */
-  paddingInline(value: PropertyValue<'paddingInline', T>): this {
+  paddingInline<const Value extends PropertyValue<'paddingInline', T>>(
+    value: Value & CheckedPropertyValue<'paddingInline', T, Value>,
+  ): this {
     return this.write('paddingInline', value);
   }
   /**
@@ -1145,7 +1345,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-inline-end
    */
-  paddingInlineEnd(value: PropertyValue<'paddingInlineEnd', T>): this {
+  paddingInlineEnd<const Value extends PropertyValue<'paddingInlineEnd', T>>(
+    value: Value & CheckedPropertyValue<'paddingInlineEnd', T, Value>,
+  ): this {
     return this.write('paddingInlineEnd', value);
   }
   /**
@@ -1155,7 +1357,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-inline-start
    */
-  paddingInlineStart(value: PropertyValue<'paddingInlineStart', T>): this {
+  paddingInlineStart<const Value extends PropertyValue<'paddingInlineStart', T>>(
+    value: Value & CheckedPropertyValue<'paddingInlineStart', T, Value>,
+  ): this {
     return this.write('paddingInlineStart', value);
   }
   /**
@@ -1165,7 +1369,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-left
    */
-  paddingLeft(value: PropertyValue<'paddingLeft', T>): this {
+  paddingLeft<const Value extends PropertyValue<'paddingLeft', T>>(
+    value: Value & CheckedPropertyValue<'paddingLeft', T, Value>,
+  ): this {
     return this.write('paddingLeft', value);
   }
   /**
@@ -1175,7 +1381,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-right
    */
-  paddingRight(value: PropertyValue<'paddingRight', T>): this {
+  paddingRight<const Value extends PropertyValue<'paddingRight', T>>(
+    value: Value & CheckedPropertyValue<'paddingRight', T, Value>,
+  ): this {
     return this.write('paddingRight', value);
   }
   /**
@@ -1185,7 +1393,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-top
    */
-  paddingTop(value: PropertyValue<'paddingTop', T>): this {
+  paddingTop<const Value extends PropertyValue<'paddingTop', T>>(
+    value: Value & CheckedPropertyValue<'paddingTop', T, Value>,
+  ): this {
     return this.write('paddingTop', value);
   }
   /**
@@ -1195,7 +1405,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/row-gap
    */
-  rowGap(value: PropertyValue<'rowGap', T>): this {
+  rowGap<const Value extends PropertyValue<'rowGap', T>>(
+    value: Value & CheckedPropertyValue<'rowGap', T, Value>,
+  ): this {
     return this.write('rowGap', value);
   }
   /**
@@ -1205,7 +1417,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/direction
    */
-  direction(value: PropertyValue<'direction', T>): this {
+  direction<const Value extends PropertyValue<'direction', T>>(
+    value: Value & CheckedPropertyValue<'direction', T, Value>,
+  ): this {
     return this.write('direction', value);
   }
   /**
@@ -1213,7 +1427,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font
    */
-  font(value: PropertyValue<'font', T>): this {
+  font<const Value extends PropertyValue<'font', T>>(
+    value: Value & CheckedPropertyValue<'font', T, Value>,
+  ): this {
     return this.write('font', value);
   }
   /**
@@ -1221,7 +1437,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
    */
-  fontFamily(value: PropertyValue<'fontFamily', T>): this {
+  fontFamily<const Value extends PropertyValue<'fontFamily', T>>(
+    value: Value & CheckedPropertyValue<'fontFamily', T, Value>,
+  ): this {
     return this.write('fontFamily', value);
   }
   /**
@@ -1231,7 +1449,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-feature-settings
    */
-  fontFeatureSettings(value: PropertyValue<'fontFeatureSettings', T>): this {
+  fontFeatureSettings<const Value extends PropertyValue<'fontFeatureSettings', T>>(
+    value: Value & CheckedPropertyValue<'fontFeatureSettings', T, Value>,
+  ): this {
     return this.write('fontFeatureSettings', value);
   }
   /**
@@ -1241,7 +1461,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-kerning
    */
-  fontKerning(value: PropertyValue<'fontKerning', T>): this {
+  fontKerning<const Value extends PropertyValue<'fontKerning', T>>(
+    value: Value & CheckedPropertyValue<'fontKerning', T, Value>,
+  ): this {
     return this.write('fontKerning', value);
   }
   /**
@@ -1251,7 +1473,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-language-override
    */
-  fontLanguageOverride(value: PropertyValue<'fontLanguageOverride', T>): this {
+  fontLanguageOverride<const Value extends PropertyValue<'fontLanguageOverride', T>>(
+    value: Value & CheckedPropertyValue<'fontLanguageOverride', T, Value>,
+  ): this {
     return this.write('fontLanguageOverride', value);
   }
   /**
@@ -1261,7 +1485,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-optical-sizing
    */
-  fontOpticalSizing(value: PropertyValue<'fontOpticalSizing', T>): this {
+  fontOpticalSizing<const Value extends PropertyValue<'fontOpticalSizing', T>>(
+    value: Value & CheckedPropertyValue<'fontOpticalSizing', T, Value>,
+  ): this {
     return this.write('fontOpticalSizing', value);
   }
   /**
@@ -1271,7 +1497,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-palette
    */
-  fontPalette(value: PropertyValue<'fontPalette', T>): this {
+  fontPalette<const Value extends PropertyValue<'fontPalette', T>>(
+    value: Value & CheckedPropertyValue<'fontPalette', T, Value>,
+  ): this {
     return this.write('fontPalette', value);
   }
   /**
@@ -1287,7 +1515,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size
    */
-  fontSize(value: PropertyValue<'fontSize', T>): this {
+  fontSize<const Value extends PropertyValue<'fontSize', T>>(
+    value: Value & CheckedPropertyValue<'fontSize', T, Value>,
+  ): this {
     return this.write('fontSize', value);
   }
   /**
@@ -1297,7 +1527,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size-adjust
    */
-  fontSizeAdjust(value: PropertyValue<'fontSizeAdjust', T>): this {
+  fontSizeAdjust<const Value extends PropertyValue<'fontSizeAdjust', T>>(
+    value: Value & CheckedPropertyValue<'fontSizeAdjust', T, Value>,
+  ): this {
     return this.write('fontSizeAdjust', value);
   }
   /**
@@ -1307,7 +1539,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-smooth
    */
-  fontSmooth(value: PropertyValue<'fontSmooth', T>): this {
+  fontSmooth<const Value extends PropertyValue<'fontSmooth', T>>(
+    value: Value & CheckedPropertyValue<'fontSmooth', T, Value>,
+  ): this {
     return this.write('fontSmooth', value);
   }
   /**
@@ -1317,7 +1551,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-style
    */
-  fontStyle(value: PropertyValue<'fontStyle', T>): this {
+  fontStyle<const Value extends PropertyValue<'fontStyle', T>>(
+    value: Value & CheckedPropertyValue<'fontStyle', T, Value>,
+  ): this {
     return this.write('fontStyle', value);
   }
   /**
@@ -1327,7 +1563,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis
    */
-  fontSynthesis(value: PropertyValue<'fontSynthesis', T>): this {
+  fontSynthesis<const Value extends PropertyValue<'fontSynthesis', T>>(
+    value: Value & CheckedPropertyValue<'fontSynthesis', T, Value>,
+  ): this {
     return this.write('fontSynthesis', value);
   }
   /**
@@ -1337,7 +1575,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-position
    */
-  fontSynthesisPosition(value: PropertyValue<'fontSynthesisPosition', T>): this {
+  fontSynthesisPosition<const Value extends PropertyValue<'fontSynthesisPosition', T>>(
+    value: Value & CheckedPropertyValue<'fontSynthesisPosition', T, Value>,
+  ): this {
     return this.write('fontSynthesisPosition', value);
   }
   /**
@@ -1347,7 +1587,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-small-caps
    */
-  fontSynthesisSmallCaps(value: PropertyValue<'fontSynthesisSmallCaps', T>): this {
+  fontSynthesisSmallCaps<const Value extends PropertyValue<'fontSynthesisSmallCaps', T>>(
+    value: Value & CheckedPropertyValue<'fontSynthesisSmallCaps', T, Value>,
+  ): this {
     return this.write('fontSynthesisSmallCaps', value);
   }
   /**
@@ -1357,7 +1599,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-style
    */
-  fontSynthesisStyle(value: PropertyValue<'fontSynthesisStyle', T>): this {
+  fontSynthesisStyle<const Value extends PropertyValue<'fontSynthesisStyle', T>>(
+    value: Value & CheckedPropertyValue<'fontSynthesisStyle', T, Value>,
+  ): this {
     return this.write('fontSynthesisStyle', value);
   }
   /**
@@ -1367,7 +1611,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-weight
    */
-  fontSynthesisWeight(value: PropertyValue<'fontSynthesisWeight', T>): this {
+  fontSynthesisWeight<const Value extends PropertyValue<'fontSynthesisWeight', T>>(
+    value: Value & CheckedPropertyValue<'fontSynthesisWeight', T, Value>,
+  ): this {
     return this.write('fontSynthesisWeight', value);
   }
   /**
@@ -1377,7 +1623,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
    */
-  fontVariant(value: PropertyValue<'fontVariant', T>): this {
+  fontVariant<const Value extends PropertyValue<'fontVariant', T>>(
+    value: Value & CheckedPropertyValue<'fontVariant', T, Value>,
+  ): this {
     return this.write('fontVariant', value);
   }
   /**
@@ -1387,7 +1635,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-alternates
    */
-  fontVariantAlternates(value: PropertyValue<'fontVariantAlternates', T>): this {
+  fontVariantAlternates<const Value extends PropertyValue<'fontVariantAlternates', T>>(
+    value: Value & CheckedPropertyValue<'fontVariantAlternates', T, Value>,
+  ): this {
     return this.write('fontVariantAlternates', value);
   }
   /**
@@ -1397,7 +1647,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-caps
    */
-  fontVariantCaps(value: PropertyValue<'fontVariantCaps', T>): this {
+  fontVariantCaps<const Value extends PropertyValue<'fontVariantCaps', T>>(
+    value: Value & CheckedPropertyValue<'fontVariantCaps', T, Value>,
+  ): this {
     return this.write('fontVariantCaps', value);
   }
   /**
@@ -1407,7 +1659,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
    */
-  fontVariantEastAsian(value: PropertyValue<'fontVariantEastAsian', T>): this {
+  fontVariantEastAsian<const Value extends PropertyValue<'fontVariantEastAsian', T>>(
+    value: Value & CheckedPropertyValue<'fontVariantEastAsian', T, Value>,
+  ): this {
     return this.write('fontVariantEastAsian', value);
   }
   /**
@@ -1417,7 +1671,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-emoji
    */
-  fontVariantEmoji(value: PropertyValue<'fontVariantEmoji', T>): this {
+  fontVariantEmoji<const Value extends PropertyValue<'fontVariantEmoji', T>>(
+    value: Value & CheckedPropertyValue<'fontVariantEmoji', T, Value>,
+  ): this {
     return this.write('fontVariantEmoji', value);
   }
   /**
@@ -1427,7 +1683,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-ligatures
    */
-  fontVariantLigatures(value: PropertyValue<'fontVariantLigatures', T>): this {
+  fontVariantLigatures<const Value extends PropertyValue<'fontVariantLigatures', T>>(
+    value: Value & CheckedPropertyValue<'fontVariantLigatures', T, Value>,
+  ): this {
     return this.write('fontVariantLigatures', value);
   }
   /**
@@ -1437,7 +1695,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-numeric
    */
-  fontVariantNumeric(value: PropertyValue<'fontVariantNumeric', T>): this {
+  fontVariantNumeric<const Value extends PropertyValue<'fontVariantNumeric', T>>(
+    value: Value & CheckedPropertyValue<'fontVariantNumeric', T, Value>,
+  ): this {
     return this.write('fontVariantNumeric', value);
   }
   /**
@@ -1447,7 +1707,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-position
    */
-  fontVariantPosition(value: PropertyValue<'fontVariantPosition', T>): this {
+  fontVariantPosition<const Value extends PropertyValue<'fontVariantPosition', T>>(
+    value: Value & CheckedPropertyValue<'fontVariantPosition', T, Value>,
+  ): this {
     return this.write('fontVariantPosition', value);
   }
   /**
@@ -1457,7 +1719,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variation-settings
    */
-  fontVariationSettings(value: PropertyValue<'fontVariationSettings', T>): this {
+  fontVariationSettings<const Value extends PropertyValue<'fontVariationSettings', T>>(
+    value: Value & CheckedPropertyValue<'fontVariationSettings', T, Value>,
+  ): this {
     return this.write('fontVariationSettings', value);
   }
   /**
@@ -1475,7 +1739,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-weight
    */
-  fontWeight(value: PropertyValue<'fontWeight', T>): this {
+  fontWeight<const Value extends PropertyValue<'fontWeight', T>>(
+    value: Value & CheckedPropertyValue<'fontWeight', T, Value>,
+  ): this {
     return this.write('fontWeight', value);
   }
   /**
@@ -1485,7 +1751,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-width
    */
-  fontWidth(value: PropertyValue<'fontWidth', T>): this {
+  fontWidth<const Value extends PropertyValue<'fontWidth', T>>(
+    value: Value & CheckedPropertyValue<'fontWidth', T, Value>,
+  ): this {
     return this.write('fontWidth', value);
   }
   /**
@@ -1495,7 +1763,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hanging-punctuation
    */
-  hangingPunctuation(value: PropertyValue<'hangingPunctuation', T>): this {
+  hangingPunctuation<const Value extends PropertyValue<'hangingPunctuation', T>>(
+    value: Value & CheckedPropertyValue<'hangingPunctuation', T, Value>,
+  ): this {
     return this.write('hangingPunctuation', value);
   }
   /**
@@ -1505,7 +1775,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hyphens
    */
-  hyphens(value: PropertyValue<'hyphens', T>): this {
+  hyphens<const Value extends PropertyValue<'hyphens', T>>(
+    value: Value & CheckedPropertyValue<'hyphens', T, Value>,
+  ): this {
     return this.write('hyphens', value);
   }
   /**
@@ -1515,7 +1787,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/initial-letter
    */
-  initialLetter(value: PropertyValue<'initialLetter', T>): this {
+  initialLetter<const Value extends PropertyValue<'initialLetter', T>>(
+    value: Value & CheckedPropertyValue<'initialLetter', T, Value>,
+  ): this {
     return this.write('initialLetter', value);
   }
   /**
@@ -1525,7 +1799,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/initial-letter-align
    */
-  initialLetterAlign(value: PropertyValue<'initialLetterAlign', T>): this {
+  initialLetterAlign<const Value extends PropertyValue<'initialLetterAlign', T>>(
+    value: Value & CheckedPropertyValue<'initialLetterAlign', T, Value>,
+  ): this {
     return this.write('initialLetterAlign', value);
   }
   /**
@@ -1535,7 +1811,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/letter-spacing
    */
-  letterSpacing(value: PropertyValue<'letterSpacing', T>): this {
+  letterSpacing<const Value extends PropertyValue<'letterSpacing', T>>(
+    value: Value & CheckedPropertyValue<'letterSpacing', T, Value>,
+  ): this {
     return this.write('letterSpacing', value);
   }
   /**
@@ -1545,7 +1823,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-break
    */
-  lineBreak(value: PropertyValue<'lineBreak', T>): this {
+  lineBreak<const Value extends PropertyValue<'lineBreak', T>>(
+    value: Value & CheckedPropertyValue<'lineBreak', T, Value>,
+  ): this {
     return this.write('lineBreak', value);
   }
   /**
@@ -1555,7 +1835,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-clamp
    */
-  lineClamp(value: PropertyValue<'lineClamp', T>): this {
+  lineClamp<const Value extends PropertyValue<'lineClamp', T>>(
+    value: Value & CheckedPropertyValue<'lineClamp', T, Value>,
+  ): this {
     return this.write('lineClamp', value);
   }
   /**
@@ -1571,7 +1853,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-height
    */
-  lineHeight(value: PropertyValue<'lineHeight', T>): this {
+  lineHeight<const Value extends PropertyValue<'lineHeight', T>>(
+    value: Value & CheckedPropertyValue<'lineHeight', T, Value>,
+  ): this {
     return this.write('lineHeight', value);
   }
   /**
@@ -1581,7 +1865,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-height-step
    */
-  lineHeightStep(value: PropertyValue<'lineHeightStep', T>): this {
+  lineHeightStep<const Value extends PropertyValue<'lineHeightStep', T>>(
+    value: Value & CheckedPropertyValue<'lineHeightStep', T, Value>,
+  ): this {
     return this.write('lineHeightStep', value);
   }
   /**
@@ -1589,7 +1875,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/quotes
    */
-  quotes(value: PropertyValue<'quotes', T>): this {
+  quotes<const Value extends PropertyValue<'quotes', T>>(
+    value: Value & CheckedPropertyValue<'quotes', T, Value>,
+  ): this {
     return this.write('quotes', value);
   }
   /**
@@ -1599,7 +1887,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-align
    */
-  rubyAlign(value: PropertyValue<'rubyAlign', T>): this {
+  rubyAlign<const Value extends PropertyValue<'rubyAlign', T>>(
+    value: Value & CheckedPropertyValue<'rubyAlign', T, Value>,
+  ): this {
     return this.write('rubyAlign', value);
   }
   /**
@@ -1609,7 +1899,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-merge
    */
-  rubyMerge(value: PropertyValue<'rubyMerge', T>): this {
+  rubyMerge<const Value extends PropertyValue<'rubyMerge', T>>(
+    value: Value & CheckedPropertyValue<'rubyMerge', T, Value>,
+  ): this {
     return this.write('rubyMerge', value);
   }
   /**
@@ -1619,7 +1911,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-overhang
    */
-  rubyOverhang(value: PropertyValue<'rubyOverhang', T>): this {
+  rubyOverhang<const Value extends PropertyValue<'rubyOverhang', T>>(
+    value: Value & CheckedPropertyValue<'rubyOverhang', T, Value>,
+  ): this {
     return this.write('rubyOverhang', value);
   }
   /**
@@ -1629,7 +1923,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-position
    */
-  rubyPosition(value: PropertyValue<'rubyPosition', T>): this {
+  rubyPosition<const Value extends PropertyValue<'rubyPosition', T>>(
+    value: Value & CheckedPropertyValue<'rubyPosition', T, Value>,
+  ): this {
     return this.write('rubyPosition', value);
   }
   /**
@@ -1639,7 +1935,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/tab-size
    */
-  tabSize(value: PropertyValue<'tabSize', T>): this {
+  tabSize<const Value extends PropertyValue<'tabSize', T>>(
+    value: Value & CheckedPropertyValue<'tabSize', T, Value>,
+  ): this {
     return this.write('tabSize', value);
   }
   /**
@@ -1657,7 +1955,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align
    */
-  textAlign(value: PropertyValue<'textAlign', T>): this {
+  textAlign<const Value extends PropertyValue<'textAlign', T>>(
+    value: Value & CheckedPropertyValue<'textAlign', T, Value>,
+  ): this {
     return this.write('textAlign', value);
   }
   /**
@@ -1667,7 +1967,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align-last
    */
-  textAlignLast(value: PropertyValue<'textAlignLast', T>): this {
+  textAlignLast<const Value extends PropertyValue<'textAlignLast', T>>(
+    value: Value & CheckedPropertyValue<'textAlignLast', T, Value>,
+  ): this {
     return this.write('textAlignLast', value);
   }
   /**
@@ -1677,7 +1979,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-anchor
    */
-  textAnchor(value: PropertyValue<'textAnchor', T>): this {
+  textAnchor<const Value extends PropertyValue<'textAnchor', T>>(
+    value: Value & CheckedPropertyValue<'textAnchor', T, Value>,
+  ): this {
     return this.write('textAnchor', value);
   }
   /**
@@ -1687,7 +1991,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-autospace
    */
-  textAutospace(value: PropertyValue<'textAutospace', T>): this {
+  textAutospace<const Value extends PropertyValue<'textAutospace', T>>(
+    value: Value & CheckedPropertyValue<'textAutospace', T, Value>,
+  ): this {
     return this.write('textAutospace', value);
   }
   /**
@@ -1697,7 +2003,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box
    */
-  textBox(value: PropertyValue<'textBox', T>): this {
+  textBox<const Value extends PropertyValue<'textBox', T>>(
+    value: Value & CheckedPropertyValue<'textBox', T, Value>,
+  ): this {
     return this.write('textBox', value);
   }
   /**
@@ -1707,7 +2015,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-edge
    */
-  textBoxEdge(value: PropertyValue<'textBoxEdge', T>): this {
+  textBoxEdge<const Value extends PropertyValue<'textBoxEdge', T>>(
+    value: Value & CheckedPropertyValue<'textBoxEdge', T, Value>,
+  ): this {
     return this.write('textBoxEdge', value);
   }
   /**
@@ -1717,7 +2027,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-trim
    */
-  textBoxTrim(value: PropertyValue<'textBoxTrim', T>): this {
+  textBoxTrim<const Value extends PropertyValue<'textBoxTrim', T>>(
+    value: Value & CheckedPropertyValue<'textBoxTrim', T, Value>,
+  ): this {
     return this.write('textBoxTrim', value);
   }
   /**
@@ -1727,7 +2039,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-combine-upright
    */
-  textCombineUpright(value: PropertyValue<'textCombineUpright', T>): this {
+  textCombineUpright<const Value extends PropertyValue<'textCombineUpright', T>>(
+    value: Value & CheckedPropertyValue<'textCombineUpright', T, Value>,
+  ): this {
     return this.write('textCombineUpright', value);
   }
   /**
@@ -1735,7 +2049,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration
    */
-  textDecoration(value: PropertyValue<'textDecoration', T>): this {
+  textDecoration<const Value extends PropertyValue<'textDecoration', T>>(
+    value: Value & CheckedPropertyValue<'textDecoration', T, Value>,
+  ): this {
     return this.write('textDecoration', value);
   }
   /**
@@ -1745,7 +2061,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-color
    */
-  textDecorationColor(value: PropertyValue<'textDecorationColor', T>): this {
+  textDecorationColor<const Value extends PropertyValue<'textDecorationColor', T>>(
+    value: Value & CheckedPropertyValue<'textDecorationColor', T, Value>,
+  ): this {
     return this.write('textDecorationColor', value);
   }
   /**
@@ -1755,7 +2073,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-line
    */
-  textDecorationLine(value: PropertyValue<'textDecorationLine', T>): this {
+  textDecorationLine<const Value extends PropertyValue<'textDecorationLine', T>>(
+    value: Value & CheckedPropertyValue<'textDecorationLine', T, Value>,
+  ): this {
     return this.write('textDecorationLine', value);
   }
   /**
@@ -1765,7 +2085,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip
    */
-  textDecorationSkip(value: PropertyValue<'textDecorationSkip', T>): this {
+  textDecorationSkip<const Value extends PropertyValue<'textDecorationSkip', T>>(
+    value: Value & CheckedPropertyValue<'textDecorationSkip', T, Value>,
+  ): this {
     return this.write('textDecorationSkip', value);
   }
   /**
@@ -1775,7 +2097,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip-ink
    */
-  textDecorationSkipInk(value: PropertyValue<'textDecorationSkipInk', T>): this {
+  textDecorationSkipInk<const Value extends PropertyValue<'textDecorationSkipInk', T>>(
+    value: Value & CheckedPropertyValue<'textDecorationSkipInk', T, Value>,
+  ): this {
     return this.write('textDecorationSkipInk', value);
   }
   /**
@@ -1785,7 +2109,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-style
    */
-  textDecorationStyle(value: PropertyValue<'textDecorationStyle', T>): this {
+  textDecorationStyle<const Value extends PropertyValue<'textDecorationStyle', T>>(
+    value: Value & CheckedPropertyValue<'textDecorationStyle', T, Value>,
+  ): this {
     return this.write('textDecorationStyle', value);
   }
   /**
@@ -1795,7 +2121,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-thickness
    */
-  textDecorationThickness(value: PropertyValue<'textDecorationThickness', T>): this {
+  textDecorationThickness<const Value extends PropertyValue<'textDecorationThickness', T>>(
+    value: Value & CheckedPropertyValue<'textDecorationThickness', T, Value>,
+  ): this {
     return this.write('textDecorationThickness', value);
   }
   /**
@@ -1803,7 +2131,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis
    */
-  textEmphasis(value: PropertyValue<'textEmphasis', T>): this {
+  textEmphasis<const Value extends PropertyValue<'textEmphasis', T>>(
+    value: Value & CheckedPropertyValue<'textEmphasis', T, Value>,
+  ): this {
     return this.write('textEmphasis', value);
   }
   /**
@@ -1813,7 +2143,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-color
    */
-  textEmphasisColor(value: PropertyValue<'textEmphasisColor', T>): this {
+  textEmphasisColor<const Value extends PropertyValue<'textEmphasisColor', T>>(
+    value: Value & CheckedPropertyValue<'textEmphasisColor', T, Value>,
+  ): this {
     return this.write('textEmphasisColor', value);
   }
   /**
@@ -1823,7 +2155,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-position
    */
-  textEmphasisPosition(value: PropertyValue<'textEmphasisPosition', T>): this {
+  textEmphasisPosition<const Value extends PropertyValue<'textEmphasisPosition', T>>(
+    value: Value & CheckedPropertyValue<'textEmphasisPosition', T, Value>,
+  ): this {
     return this.write('textEmphasisPosition', value);
   }
   /**
@@ -1833,7 +2167,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-style
    */
-  textEmphasisStyle(value: PropertyValue<'textEmphasisStyle', T>): this {
+  textEmphasisStyle<const Value extends PropertyValue<'textEmphasisStyle', T>>(
+    value: Value & CheckedPropertyValue<'textEmphasisStyle', T, Value>,
+  ): this {
     return this.write('textEmphasisStyle', value);
   }
   /**
@@ -1843,7 +2179,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-indent
    */
-  textIndent(value: PropertyValue<'textIndent', T>): this {
+  textIndent<const Value extends PropertyValue<'textIndent', T>>(
+    value: Value & CheckedPropertyValue<'textIndent', T, Value>,
+  ): this {
     return this.write('textIndent', value);
   }
   /**
@@ -1853,7 +2191,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-justify
    */
-  textJustify(value: PropertyValue<'textJustify', T>): this {
+  textJustify<const Value extends PropertyValue<'textJustify', T>>(
+    value: Value & CheckedPropertyValue<'textJustify', T, Value>,
+  ): this {
     return this.write('textJustify', value);
   }
   /**
@@ -1863,7 +2203,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-orientation
    */
-  textOrientation(value: PropertyValue<'textOrientation', T>): this {
+  textOrientation<const Value extends PropertyValue<'textOrientation', T>>(
+    value: Value & CheckedPropertyValue<'textOrientation', T, Value>,
+  ): this {
     return this.write('textOrientation', value);
   }
   /**
@@ -1881,7 +2223,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-overflow
    */
-  textOverflow(value: PropertyValue<'textOverflow', T>): this {
+  textOverflow<const Value extends PropertyValue<'textOverflow', T>>(
+    value: Value & CheckedPropertyValue<'textOverflow', T, Value>,
+  ): this {
     return this.write('textOverflow', value);
   }
   /**
@@ -1891,7 +2235,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-rendering
    */
-  textRendering(value: PropertyValue<'textRendering', T>): this {
+  textRendering<const Value extends PropertyValue<'textRendering', T>>(
+    value: Value & CheckedPropertyValue<'textRendering', T, Value>,
+  ): this {
     return this.write('textRendering', value);
   }
   /**
@@ -1901,7 +2247,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-shadow
    */
-  textShadow(value: PropertyValue<'textShadow', T>): this {
+  textShadow<const Value extends PropertyValue<'textShadow', T>>(
+    value: Value & CheckedPropertyValue<'textShadow', T, Value>,
+  ): this {
     return this.write('textShadow', value);
   }
   /**
@@ -1911,7 +2259,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-size-adjust
    */
-  textSizeAdjust(value: PropertyValue<'textSizeAdjust', T>): this {
+  textSizeAdjust<const Value extends PropertyValue<'textSizeAdjust', T>>(
+    value: Value & CheckedPropertyValue<'textSizeAdjust', T, Value>,
+  ): this {
     return this.write('textSizeAdjust', value);
   }
   /**
@@ -1921,7 +2271,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-spacing-trim
    */
-  textSpacingTrim(value: PropertyValue<'textSpacingTrim', T>): this {
+  textSpacingTrim<const Value extends PropertyValue<'textSpacingTrim', T>>(
+    value: Value & CheckedPropertyValue<'textSpacingTrim', T, Value>,
+  ): this {
     return this.write('textSpacingTrim', value);
   }
   /**
@@ -1931,7 +2283,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-transform
    */
-  textTransform(value: PropertyValue<'textTransform', T>): this {
+  textTransform<const Value extends PropertyValue<'textTransform', T>>(
+    value: Value & CheckedPropertyValue<'textTransform', T, Value>,
+  ): this {
     return this.write('textTransform', value);
   }
   /**
@@ -1941,7 +2295,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-underline-offset
    */
-  textUnderlineOffset(value: PropertyValue<'textUnderlineOffset', T>): this {
+  textUnderlineOffset<const Value extends PropertyValue<'textUnderlineOffset', T>>(
+    value: Value & CheckedPropertyValue<'textUnderlineOffset', T, Value>,
+  ): this {
     return this.write('textUnderlineOffset', value);
   }
   /**
@@ -1951,7 +2307,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-underline-position
    */
-  textUnderlinePosition(value: PropertyValue<'textUnderlinePosition', T>): this {
+  textUnderlinePosition<const Value extends PropertyValue<'textUnderlinePosition', T>>(
+    value: Value & CheckedPropertyValue<'textUnderlinePosition', T, Value>,
+  ): this {
     return this.write('textUnderlinePosition', value);
   }
   /**
@@ -1961,7 +2319,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-wrap
    */
-  textWrap(value: PropertyValue<'textWrap', T>): this {
+  textWrap<const Value extends PropertyValue<'textWrap', T>>(
+    value: Value & CheckedPropertyValue<'textWrap', T, Value>,
+  ): this {
     return this.write('textWrap', value);
   }
   /**
@@ -1971,7 +2331,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-wrap-mode
    */
-  textWrapMode(value: PropertyValue<'textWrapMode', T>): this {
+  textWrapMode<const Value extends PropertyValue<'textWrapMode', T>>(
+    value: Value & CheckedPropertyValue<'textWrapMode', T, Value>,
+  ): this {
     return this.write('textWrapMode', value);
   }
   /**
@@ -1981,7 +2343,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-wrap-style
    */
-  textWrapStyle(value: PropertyValue<'textWrapStyle', T>): this {
+  textWrapStyle<const Value extends PropertyValue<'textWrapStyle', T>>(
+    value: Value & CheckedPropertyValue<'textWrapStyle', T, Value>,
+  ): this {
     return this.write('textWrapStyle', value);
   }
   /**
@@ -1991,7 +2355,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/unicode-bidi
    */
-  unicodeBidi(value: PropertyValue<'unicodeBidi', T>): this {
+  unicodeBidi<const Value extends PropertyValue<'unicodeBidi', T>>(
+    value: Value & CheckedPropertyValue<'unicodeBidi', T, Value>,
+  ): this {
     return this.write('unicodeBidi', value);
   }
   /**
@@ -2009,7 +2375,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
    */
-  whiteSpace(value: PropertyValue<'whiteSpace', T>): this {
+  whiteSpace<const Value extends PropertyValue<'whiteSpace', T>>(
+    value: Value & CheckedPropertyValue<'whiteSpace', T, Value>,
+  ): this {
     return this.write('whiteSpace', value);
   }
   /**
@@ -2019,7 +2387,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space-collapse
    */
-  whiteSpaceCollapse(value: PropertyValue<'whiteSpaceCollapse', T>): this {
+  whiteSpaceCollapse<const Value extends PropertyValue<'whiteSpaceCollapse', T>>(
+    value: Value & CheckedPropertyValue<'whiteSpaceCollapse', T, Value>,
+  ): this {
     return this.write('whiteSpaceCollapse', value);
   }
   /**
@@ -2035,7 +2405,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/word-break
    */
-  wordBreak(value: PropertyValue<'wordBreak', T>): this {
+  wordBreak<const Value extends PropertyValue<'wordBreak', T>>(
+    value: Value & CheckedPropertyValue<'wordBreak', T, Value>,
+  ): this {
     return this.write('wordBreak', value);
   }
   /**
@@ -2045,7 +2417,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/word-spacing
    */
-  wordSpacing(value: PropertyValue<'wordSpacing', T>): this {
+  wordSpacing<const Value extends PropertyValue<'wordSpacing', T>>(
+    value: Value & CheckedPropertyValue<'wordSpacing', T, Value>,
+  ): this {
     return this.write('wordSpacing', value);
   }
   /**
@@ -2055,7 +2429,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/word-wrap
    */
-  wordWrap(value: PropertyValue<'wordWrap', T>): this {
+  wordWrap<const Value extends PropertyValue<'wordWrap', T>>(
+    value: Value & CheckedPropertyValue<'wordWrap', T, Value>,
+  ): this {
     return this.write('wordWrap', value);
   }
   /**
@@ -2065,7 +2441,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/writing-mode
    */
-  writingMode(value: PropertyValue<'writingMode', T>): this {
+  writingMode<const Value extends PropertyValue<'writingMode', T>>(
+    value: Value & CheckedPropertyValue<'writingMode', T, Value>,
+  ): this {
     return this.write('writingMode', value);
   }
   /**
@@ -2075,7 +2453,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/accent-color
    */
-  accentColor(value: PropertyValue<'accentColor', T>): this {
+  accentColor<const Value extends PropertyValue<'accentColor', T>>(
+    value: Value & CheckedPropertyValue<'accentColor', T, Value>,
+  ): this {
     return this.write('accentColor', value);
   }
   /**
@@ -2083,7 +2463,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background
    */
-  background(value: PropertyValue<'background', T>): this {
+  background<const Value extends PropertyValue<'background', T>>(
+    value: Value & CheckedPropertyValue<'background', T, Value>,
+  ): this {
     return this.write('background', value);
   }
   /**
@@ -2093,7 +2475,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-attachment
    */
-  backgroundAttachment(value: PropertyValue<'backgroundAttachment', T>): this {
+  backgroundAttachment<const Value extends PropertyValue<'backgroundAttachment', T>>(
+    value: Value & CheckedPropertyValue<'backgroundAttachment', T, Value>,
+  ): this {
     return this.write('backgroundAttachment', value);
   }
   /**
@@ -2103,7 +2487,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
    */
-  backgroundBlendMode(value: PropertyValue<'backgroundBlendMode', T>): this {
+  backgroundBlendMode<const Value extends PropertyValue<'backgroundBlendMode', T>>(
+    value: Value & CheckedPropertyValue<'backgroundBlendMode', T, Value>,
+  ): this {
     return this.write('backgroundBlendMode', value);
   }
   /**
@@ -2113,7 +2499,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-clip
    */
-  backgroundClip(value: PropertyValue<'backgroundClip', T>): this {
+  backgroundClip<const Value extends PropertyValue<'backgroundClip', T>>(
+    value: Value & CheckedPropertyValue<'backgroundClip', T, Value>,
+  ): this {
     return this.write('backgroundClip', value);
   }
   /**
@@ -2123,7 +2511,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-color
    */
-  backgroundColor(value: PropertyValue<'backgroundColor', T>): this {
+  backgroundColor<const Value extends PropertyValue<'backgroundColor', T>>(
+    value: Value & CheckedPropertyValue<'backgroundColor', T, Value>,
+  ): this {
     return this.write('backgroundColor', value);
   }
   /**
@@ -2133,7 +2523,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-image
    */
-  backgroundImage(value: PropertyValue<'backgroundImage', T>): this {
+  backgroundImage<const Value extends PropertyValue<'backgroundImage', T>>(
+    value: Value & CheckedPropertyValue<'backgroundImage', T, Value>,
+  ): this {
     return this.write('backgroundImage', value);
   }
   /**
@@ -2143,7 +2535,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-origin
    */
-  backgroundOrigin(value: PropertyValue<'backgroundOrigin', T>): this {
+  backgroundOrigin<const Value extends PropertyValue<'backgroundOrigin', T>>(
+    value: Value & CheckedPropertyValue<'backgroundOrigin', T, Value>,
+  ): this {
     return this.write('backgroundOrigin', value);
   }
   /**
@@ -2153,7 +2547,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position
    */
-  backgroundPosition(value: PropertyValue<'backgroundPosition', T>): this {
+  backgroundPosition<const Value extends PropertyValue<'backgroundPosition', T>>(
+    value: Value & CheckedPropertyValue<'backgroundPosition', T, Value>,
+  ): this {
     return this.write('backgroundPosition', value);
   }
   /**
@@ -2163,7 +2559,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-x
    */
-  backgroundPositionX(value: PropertyValue<'backgroundPositionX', T>): this {
+  backgroundPositionX<const Value extends PropertyValue<'backgroundPositionX', T>>(
+    value: Value & CheckedPropertyValue<'backgroundPositionX', T, Value>,
+  ): this {
     return this.write('backgroundPositionX', value);
   }
   /**
@@ -2173,7 +2571,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-y
    */
-  backgroundPositionY(value: PropertyValue<'backgroundPositionY', T>): this {
+  backgroundPositionY<const Value extends PropertyValue<'backgroundPositionY', T>>(
+    value: Value & CheckedPropertyValue<'backgroundPositionY', T, Value>,
+  ): this {
     return this.write('backgroundPositionY', value);
   }
   /**
@@ -2183,7 +2583,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-repeat
    */
-  backgroundRepeat(value: PropertyValue<'backgroundRepeat', T>): this {
+  backgroundRepeat<const Value extends PropertyValue<'backgroundRepeat', T>>(
+    value: Value & CheckedPropertyValue<'backgroundRepeat', T, Value>,
+  ): this {
     return this.write('backgroundRepeat', value);
   }
   /**
@@ -2201,7 +2603,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-size
    */
-  backgroundSize(value: PropertyValue<'backgroundSize', T>): this {
+  backgroundSize<const Value extends PropertyValue<'backgroundSize', T>>(
+    value: Value & CheckedPropertyValue<'backgroundSize', T, Value>,
+  ): this {
     return this.write('backgroundSize', value);
   }
   /**
@@ -2211,7 +2615,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret-color
    */
-  caretColor(value: PropertyValue<'caretColor', T>): this {
+  caretColor<const Value extends PropertyValue<'caretColor', T>>(
+    value: Value & CheckedPropertyValue<'caretColor', T, Value>,
+  ): this {
     return this.write('caretColor', value);
   }
   /**
@@ -2227,7 +2633,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color
    */
-  color(value: PropertyValue<'color', T>): this {
+  color<const Value extends PropertyValue<'color', T>>(
+    value: Value & CheckedPropertyValue<'color', T, Value>,
+  ): this {
     return this.write('color', value);
   }
   /**
@@ -2237,7 +2645,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-adjust
    */
-  colorAdjust(value: PropertyValue<'colorAdjust', T>): this {
+  colorAdjust<const Value extends PropertyValue<'colorAdjust', T>>(
+    value: Value & CheckedPropertyValue<'colorAdjust', T, Value>,
+  ): this {
     return this.write('colorAdjust', value);
   }
   /**
@@ -2245,7 +2655,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-interpolation
    */
-  colorInterpolation(value: PropertyValue<'colorInterpolation', T>): this {
+  colorInterpolation<const Value extends PropertyValue<'colorInterpolation', T>>(
+    value: Value & CheckedPropertyValue<'colorInterpolation', T, Value>,
+  ): this {
     return this.write('colorInterpolation', value);
   }
   /**
@@ -2255,7 +2667,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-interpolation-filters
    */
-  colorInterpolationFilters(value: PropertyValue<'colorInterpolationFilters', T>): this {
+  colorInterpolationFilters<const Value extends PropertyValue<'colorInterpolationFilters', T>>(
+    value: Value & CheckedPropertyValue<'colorInterpolationFilters', T, Value>,
+  ): this {
     return this.write('colorInterpolationFilters', value);
   }
   /**
@@ -2263,7 +2677,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-rendering
    */
-  colorRendering(value: PropertyValue<'colorRendering', T>): this {
+  colorRendering<const Value extends PropertyValue<'colorRendering', T>>(
+    value: Value & CheckedPropertyValue<'colorRendering', T, Value>,
+  ): this {
     return this.write('colorRendering', value);
   }
   /**
@@ -2275,7 +2691,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-scheme
    */
-  colorScheme(value: PropertyValue<'colorScheme', T>): this {
+  colorScheme<const Value extends PropertyValue<'colorScheme', T>>(
+    value: Value & CheckedPropertyValue<'colorScheme', T, Value>,
+  ): this {
     return this.write('colorScheme', value);
   }
   /**
@@ -2285,7 +2703,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/print-color-adjust
    */
-  printColorAdjust(value: PropertyValue<'printColorAdjust', T>): this {
+  printColorAdjust<const Value extends PropertyValue<'printColorAdjust', T>>(
+    value: Value & CheckedPropertyValue<'printColorAdjust', T, Value>,
+  ): this {
     return this.write('printColorAdjust', value);
   }
   /**
@@ -2293,7 +2713,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border
    */
-  border(value: PropertyValue<'border', T>): this {
+  border<const Value extends PropertyValue<'border', T>>(
+    value: Value & CheckedPropertyValue<'border', T, Value>,
+  ): this {
     return this.write('border', value);
   }
   /**
@@ -2301,7 +2723,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block
    */
-  borderBlock(value: PropertyValue<'borderBlock', T>): this {
+  borderBlock<const Value extends PropertyValue<'borderBlock', T>>(
+    value: Value & CheckedPropertyValue<'borderBlock', T, Value>,
+  ): this {
     return this.write('borderBlock', value);
   }
   /**
@@ -2311,7 +2735,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-color
    */
-  borderBlockColor(value: PropertyValue<'borderBlockColor', T>): this {
+  borderBlockColor<const Value extends PropertyValue<'borderBlockColor', T>>(
+    value: Value & CheckedPropertyValue<'borderBlockColor', T, Value>,
+  ): this {
     return this.write('borderBlockColor', value);
   }
   /**
@@ -2319,7 +2745,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end
    */
-  borderBlockEnd(value: PropertyValue<'borderBlockEnd', T>): this {
+  borderBlockEnd<const Value extends PropertyValue<'borderBlockEnd', T>>(
+    value: Value & CheckedPropertyValue<'borderBlockEnd', T, Value>,
+  ): this {
     return this.write('borderBlockEnd', value);
   }
   /**
@@ -2329,7 +2757,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-color
    */
-  borderBlockEndColor(value: PropertyValue<'borderBlockEndColor', T>): this {
+  borderBlockEndColor<const Value extends PropertyValue<'borderBlockEndColor', T>>(
+    value: Value & CheckedPropertyValue<'borderBlockEndColor', T, Value>,
+  ): this {
     return this.write('borderBlockEndColor', value);
   }
   /**
@@ -2339,7 +2769,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
    */
-  borderBlockEndStyle(value: PropertyValue<'borderBlockEndStyle', T>): this {
+  borderBlockEndStyle<const Value extends PropertyValue<'borderBlockEndStyle', T>>(
+    value: Value & CheckedPropertyValue<'borderBlockEndStyle', T, Value>,
+  ): this {
     return this.write('borderBlockEndStyle', value);
   }
   /**
@@ -2349,7 +2781,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-width
    */
-  borderBlockEndWidth(value: PropertyValue<'borderBlockEndWidth', T>): this {
+  borderBlockEndWidth<const Value extends PropertyValue<'borderBlockEndWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderBlockEndWidth', T, Value>,
+  ): this {
     return this.write('borderBlockEndWidth', value);
   }
   /**
@@ -2357,7 +2791,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start
    */
-  borderBlockStart(value: PropertyValue<'borderBlockStart', T>): this {
+  borderBlockStart<const Value extends PropertyValue<'borderBlockStart', T>>(
+    value: Value & CheckedPropertyValue<'borderBlockStart', T, Value>,
+  ): this {
     return this.write('borderBlockStart', value);
   }
   /**
@@ -2367,7 +2803,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-color
    */
-  borderBlockStartColor(value: PropertyValue<'borderBlockStartColor', T>): this {
+  borderBlockStartColor<const Value extends PropertyValue<'borderBlockStartColor', T>>(
+    value: Value & CheckedPropertyValue<'borderBlockStartColor', T, Value>,
+  ): this {
     return this.write('borderBlockStartColor', value);
   }
   /**
@@ -2377,7 +2815,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
    */
-  borderBlockStartStyle(value: PropertyValue<'borderBlockStartStyle', T>): this {
+  borderBlockStartStyle<const Value extends PropertyValue<'borderBlockStartStyle', T>>(
+    value: Value & CheckedPropertyValue<'borderBlockStartStyle', T, Value>,
+  ): this {
     return this.write('borderBlockStartStyle', value);
   }
   /**
@@ -2387,7 +2827,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-width
    */
-  borderBlockStartWidth(value: PropertyValue<'borderBlockStartWidth', T>): this {
+  borderBlockStartWidth<const Value extends PropertyValue<'borderBlockStartWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderBlockStartWidth', T, Value>,
+  ): this {
     return this.write('borderBlockStartWidth', value);
   }
   /**
@@ -2397,7 +2839,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
    */
-  borderBlockStyle(value: PropertyValue<'borderBlockStyle', T>): this {
+  borderBlockStyle<const Value extends PropertyValue<'borderBlockStyle', T>>(
+    value: Value & CheckedPropertyValue<'borderBlockStyle', T, Value>,
+  ): this {
     return this.write('borderBlockStyle', value);
   }
   /**
@@ -2407,7 +2851,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-width
    */
-  borderBlockWidth(value: PropertyValue<'borderBlockWidth', T>): this {
+  borderBlockWidth<const Value extends PropertyValue<'borderBlockWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderBlockWidth', T, Value>,
+  ): this {
     return this.write('borderBlockWidth', value);
   }
   /**
@@ -2415,7 +2861,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom
    */
-  borderBottom(value: PropertyValue<'borderBottom', T>): this {
+  borderBottom<const Value extends PropertyValue<'borderBottom', T>>(
+    value: Value & CheckedPropertyValue<'borderBottom', T, Value>,
+  ): this {
     return this.write('borderBottom', value);
   }
   /**
@@ -2425,7 +2873,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-color
    */
-  borderBottomColor(value: PropertyValue<'borderBottomColor', T>): this {
+  borderBottomColor<const Value extends PropertyValue<'borderBottomColor', T>>(
+    value: Value & CheckedPropertyValue<'borderBottomColor', T, Value>,
+  ): this {
     return this.write('borderBottomColor', value);
   }
   /**
@@ -2435,7 +2885,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-left-radius
    */
-  borderBottomLeftRadius(value: PropertyValue<'borderBottomLeftRadius', T>): this {
+  borderBottomLeftRadius<const Value extends PropertyValue<'borderBottomLeftRadius', T>>(
+    value: Value & CheckedPropertyValue<'borderBottomLeftRadius', T, Value>,
+  ): this {
     return this.write('borderBottomLeftRadius', value);
   }
   /**
@@ -2445,7 +2897,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-right-radius
    */
-  borderBottomRightRadius(value: PropertyValue<'borderBottomRightRadius', T>): this {
+  borderBottomRightRadius<const Value extends PropertyValue<'borderBottomRightRadius', T>>(
+    value: Value & CheckedPropertyValue<'borderBottomRightRadius', T, Value>,
+  ): this {
     return this.write('borderBottomRightRadius', value);
   }
   /**
@@ -2455,7 +2909,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
    */
-  borderBottomStyle(value: PropertyValue<'borderBottomStyle', T>): this {
+  borderBottomStyle<const Value extends PropertyValue<'borderBottomStyle', T>>(
+    value: Value & CheckedPropertyValue<'borderBottomStyle', T, Value>,
+  ): this {
     return this.write('borderBottomStyle', value);
   }
   /**
@@ -2465,7 +2921,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-width
    */
-  borderBottomWidth(value: PropertyValue<'borderBottomWidth', T>): this {
+  borderBottomWidth<const Value extends PropertyValue<'borderBottomWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderBottomWidth', T, Value>,
+  ): this {
     return this.write('borderBottomWidth', value);
   }
   /**
@@ -2475,7 +2933,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-collapse
    */
-  borderCollapse(value: PropertyValue<'borderCollapse', T>): this {
+  borderCollapse<const Value extends PropertyValue<'borderCollapse', T>>(
+    value: Value & CheckedPropertyValue<'borderCollapse', T, Value>,
+  ): this {
     return this.write('borderCollapse', value);
   }
   /**
@@ -2483,7 +2943,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-color
    */
-  borderColor(value: PropertyValue<'borderColor', T>): this {
+  borderColor<const Value extends PropertyValue<'borderColor', T>>(
+    value: Value & CheckedPropertyValue<'borderColor', T, Value>,
+  ): this {
     return this.write('borderColor', value);
   }
   /**
@@ -2493,7 +2955,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-end-end-radius
    */
-  borderEndEndRadius(value: PropertyValue<'borderEndEndRadius', T>): this {
+  borderEndEndRadius<const Value extends PropertyValue<'borderEndEndRadius', T>>(
+    value: Value & CheckedPropertyValue<'borderEndEndRadius', T, Value>,
+  ): this {
     return this.write('borderEndEndRadius', value);
   }
   /**
@@ -2503,7 +2967,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-end-start-radius
    */
-  borderEndStartRadius(value: PropertyValue<'borderEndStartRadius', T>): this {
+  borderEndStartRadius<const Value extends PropertyValue<'borderEndStartRadius', T>>(
+    value: Value & CheckedPropertyValue<'borderEndStartRadius', T, Value>,
+  ): this {
     return this.write('borderEndStartRadius', value);
   }
   /**
@@ -2511,7 +2977,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image
    */
-  borderImage(value: PropertyValue<'borderImage', T>): this {
+  borderImage<const Value extends PropertyValue<'borderImage', T>>(
+    value: Value & CheckedPropertyValue<'borderImage', T, Value>,
+  ): this {
     return this.write('borderImage', value);
   }
   /**
@@ -2521,7 +2989,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-outset
    */
-  borderImageOutset(value: PropertyValue<'borderImageOutset', T>): this {
+  borderImageOutset<const Value extends PropertyValue<'borderImageOutset', T>>(
+    value: Value & CheckedPropertyValue<'borderImageOutset', T, Value>,
+  ): this {
     return this.write('borderImageOutset', value);
   }
   /**
@@ -2531,7 +3001,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-repeat
    */
-  borderImageRepeat(value: PropertyValue<'borderImageRepeat', T>): this {
+  borderImageRepeat<const Value extends PropertyValue<'borderImageRepeat', T>>(
+    value: Value & CheckedPropertyValue<'borderImageRepeat', T, Value>,
+  ): this {
     return this.write('borderImageRepeat', value);
   }
   /**
@@ -2541,7 +3013,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-slice
    */
-  borderImageSlice(value: PropertyValue<'borderImageSlice', T>): this {
+  borderImageSlice<const Value extends PropertyValue<'borderImageSlice', T>>(
+    value: Value & CheckedPropertyValue<'borderImageSlice', T, Value>,
+  ): this {
     return this.write('borderImageSlice', value);
   }
   /**
@@ -2551,7 +3025,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-source
    */
-  borderImageSource(value: PropertyValue<'borderImageSource', T>): this {
+  borderImageSource<const Value extends PropertyValue<'borderImageSource', T>>(
+    value: Value & CheckedPropertyValue<'borderImageSource', T, Value>,
+  ): this {
     return this.write('borderImageSource', value);
   }
   /**
@@ -2561,7 +3037,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-width
    */
-  borderImageWidth(value: PropertyValue<'borderImageWidth', T>): this {
+  borderImageWidth<const Value extends PropertyValue<'borderImageWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderImageWidth', T, Value>,
+  ): this {
     return this.write('borderImageWidth', value);
   }
   /**
@@ -2569,7 +3047,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline
    */
-  borderInline(value: PropertyValue<'borderInline', T>): this {
+  borderInline<const Value extends PropertyValue<'borderInline', T>>(
+    value: Value & CheckedPropertyValue<'borderInline', T, Value>,
+  ): this {
     return this.write('borderInline', value);
   }
   /**
@@ -2579,7 +3059,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-color
    */
-  borderInlineColor(value: PropertyValue<'borderInlineColor', T>): this {
+  borderInlineColor<const Value extends PropertyValue<'borderInlineColor', T>>(
+    value: Value & CheckedPropertyValue<'borderInlineColor', T, Value>,
+  ): this {
     return this.write('borderInlineColor', value);
   }
   /**
@@ -2587,7 +3069,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end
    */
-  borderInlineEnd(value: PropertyValue<'borderInlineEnd', T>): this {
+  borderInlineEnd<const Value extends PropertyValue<'borderInlineEnd', T>>(
+    value: Value & CheckedPropertyValue<'borderInlineEnd', T, Value>,
+  ): this {
     return this.write('borderInlineEnd', value);
   }
   /**
@@ -2597,7 +3081,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-color
    */
-  borderInlineEndColor(value: PropertyValue<'borderInlineEndColor', T>): this {
+  borderInlineEndColor<const Value extends PropertyValue<'borderInlineEndColor', T>>(
+    value: Value & CheckedPropertyValue<'borderInlineEndColor', T, Value>,
+  ): this {
     return this.write('borderInlineEndColor', value);
   }
   /**
@@ -2607,7 +3093,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
    */
-  borderInlineEndStyle(value: PropertyValue<'borderInlineEndStyle', T>): this {
+  borderInlineEndStyle<const Value extends PropertyValue<'borderInlineEndStyle', T>>(
+    value: Value & CheckedPropertyValue<'borderInlineEndStyle', T, Value>,
+  ): this {
     return this.write('borderInlineEndStyle', value);
   }
   /**
@@ -2617,7 +3105,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-width
    */
-  borderInlineEndWidth(value: PropertyValue<'borderInlineEndWidth', T>): this {
+  borderInlineEndWidth<const Value extends PropertyValue<'borderInlineEndWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderInlineEndWidth', T, Value>,
+  ): this {
     return this.write('borderInlineEndWidth', value);
   }
   /**
@@ -2625,7 +3115,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start
    */
-  borderInlineStart(value: PropertyValue<'borderInlineStart', T>): this {
+  borderInlineStart<const Value extends PropertyValue<'borderInlineStart', T>>(
+    value: Value & CheckedPropertyValue<'borderInlineStart', T, Value>,
+  ): this {
     return this.write('borderInlineStart', value);
   }
   /**
@@ -2635,7 +3127,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-color
    */
-  borderInlineStartColor(value: PropertyValue<'borderInlineStartColor', T>): this {
+  borderInlineStartColor<const Value extends PropertyValue<'borderInlineStartColor', T>>(
+    value: Value & CheckedPropertyValue<'borderInlineStartColor', T, Value>,
+  ): this {
     return this.write('borderInlineStartColor', value);
   }
   /**
@@ -2645,7 +3139,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
    */
-  borderInlineStartStyle(value: PropertyValue<'borderInlineStartStyle', T>): this {
+  borderInlineStartStyle<const Value extends PropertyValue<'borderInlineStartStyle', T>>(
+    value: Value & CheckedPropertyValue<'borderInlineStartStyle', T, Value>,
+  ): this {
     return this.write('borderInlineStartStyle', value);
   }
   /**
@@ -2655,7 +3151,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-width
    */
-  borderInlineStartWidth(value: PropertyValue<'borderInlineStartWidth', T>): this {
+  borderInlineStartWidth<const Value extends PropertyValue<'borderInlineStartWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderInlineStartWidth', T, Value>,
+  ): this {
     return this.write('borderInlineStartWidth', value);
   }
   /**
@@ -2665,7 +3163,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
    */
-  borderInlineStyle(value: PropertyValue<'borderInlineStyle', T>): this {
+  borderInlineStyle<const Value extends PropertyValue<'borderInlineStyle', T>>(
+    value: Value & CheckedPropertyValue<'borderInlineStyle', T, Value>,
+  ): this {
     return this.write('borderInlineStyle', value);
   }
   /**
@@ -2675,7 +3175,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-width
    */
-  borderInlineWidth(value: PropertyValue<'borderInlineWidth', T>): this {
+  borderInlineWidth<const Value extends PropertyValue<'borderInlineWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderInlineWidth', T, Value>,
+  ): this {
     return this.write('borderInlineWidth', value);
   }
   /**
@@ -2683,7 +3185,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left
    */
-  borderLeft(value: PropertyValue<'borderLeft', T>): this {
+  borderLeft<const Value extends PropertyValue<'borderLeft', T>>(
+    value: Value & CheckedPropertyValue<'borderLeft', T, Value>,
+  ): this {
     return this.write('borderLeft', value);
   }
   /**
@@ -2693,7 +3197,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-color
    */
-  borderLeftColor(value: PropertyValue<'borderLeftColor', T>): this {
+  borderLeftColor<const Value extends PropertyValue<'borderLeftColor', T>>(
+    value: Value & CheckedPropertyValue<'borderLeftColor', T, Value>,
+  ): this {
     return this.write('borderLeftColor', value);
   }
   /**
@@ -2703,7 +3209,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
    */
-  borderLeftStyle(value: PropertyValue<'borderLeftStyle', T>): this {
+  borderLeftStyle<const Value extends PropertyValue<'borderLeftStyle', T>>(
+    value: Value & CheckedPropertyValue<'borderLeftStyle', T, Value>,
+  ): this {
     return this.write('borderLeftStyle', value);
   }
   /**
@@ -2713,7 +3221,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-width
    */
-  borderLeftWidth(value: PropertyValue<'borderLeftWidth', T>): this {
+  borderLeftWidth<const Value extends PropertyValue<'borderLeftWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderLeftWidth', T, Value>,
+  ): this {
     return this.write('borderLeftWidth', value);
   }
   /**
@@ -2727,7 +3237,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-radius
    */
-  borderRadius(value: PropertyValue<'borderRadius', T>): this {
+  borderRadius<const Value extends PropertyValue<'borderRadius', T>>(
+    value: Value & CheckedPropertyValue<'borderRadius', T, Value>,
+  ): this {
     return this.write('borderRadius', value);
   }
   /**
@@ -2735,7 +3247,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right
    */
-  borderRight(value: PropertyValue<'borderRight', T>): this {
+  borderRight<const Value extends PropertyValue<'borderRight', T>>(
+    value: Value & CheckedPropertyValue<'borderRight', T, Value>,
+  ): this {
     return this.write('borderRight', value);
   }
   /**
@@ -2745,7 +3259,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-color
    */
-  borderRightColor(value: PropertyValue<'borderRightColor', T>): this {
+  borderRightColor<const Value extends PropertyValue<'borderRightColor', T>>(
+    value: Value & CheckedPropertyValue<'borderRightColor', T, Value>,
+  ): this {
     return this.write('borderRightColor', value);
   }
   /**
@@ -2755,7 +3271,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
    */
-  borderRightStyle(value: PropertyValue<'borderRightStyle', T>): this {
+  borderRightStyle<const Value extends PropertyValue<'borderRightStyle', T>>(
+    value: Value & CheckedPropertyValue<'borderRightStyle', T, Value>,
+  ): this {
     return this.write('borderRightStyle', value);
   }
   /**
@@ -2765,7 +3283,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-width
    */
-  borderRightWidth(value: PropertyValue<'borderRightWidth', T>): this {
+  borderRightWidth<const Value extends PropertyValue<'borderRightWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderRightWidth', T, Value>,
+  ): this {
     return this.write('borderRightWidth', value);
   }
   /**
@@ -2775,7 +3295,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-spacing
    */
-  borderSpacing(value: PropertyValue<'borderSpacing', T>): this {
+  borderSpacing<const Value extends PropertyValue<'borderSpacing', T>>(
+    value: Value & CheckedPropertyValue<'borderSpacing', T, Value>,
+  ): this {
     return this.write('borderSpacing', value);
   }
   /**
@@ -2785,7 +3307,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-start-end-radius
    */
-  borderStartEndRadius(value: PropertyValue<'borderStartEndRadius', T>): this {
+  borderStartEndRadius<const Value extends PropertyValue<'borderStartEndRadius', T>>(
+    value: Value & CheckedPropertyValue<'borderStartEndRadius', T, Value>,
+  ): this {
     return this.write('borderStartEndRadius', value);
   }
   /**
@@ -2795,7 +3319,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-start-start-radius
    */
-  borderStartStartRadius(value: PropertyValue<'borderStartStartRadius', T>): this {
+  borderStartStartRadius<const Value extends PropertyValue<'borderStartStartRadius', T>>(
+    value: Value & CheckedPropertyValue<'borderStartStartRadius', T, Value>,
+  ): this {
     return this.write('borderStartStartRadius', value);
   }
   /**
@@ -2803,7 +3329,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-style
    */
-  borderStyle(value: PropertyValue<'borderStyle', T>): this {
+  borderStyle<const Value extends PropertyValue<'borderStyle', T>>(
+    value: Value & CheckedPropertyValue<'borderStyle', T, Value>,
+  ): this {
     return this.write('borderStyle', value);
   }
   /**
@@ -2811,7 +3339,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top
    */
-  borderTop(value: PropertyValue<'borderTop', T>): this {
+  borderTop<const Value extends PropertyValue<'borderTop', T>>(
+    value: Value & CheckedPropertyValue<'borderTop', T, Value>,
+  ): this {
     return this.write('borderTop', value);
   }
   /**
@@ -2821,7 +3351,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-color
    */
-  borderTopColor(value: PropertyValue<'borderTopColor', T>): this {
+  borderTopColor<const Value extends PropertyValue<'borderTopColor', T>>(
+    value: Value & CheckedPropertyValue<'borderTopColor', T, Value>,
+  ): this {
     return this.write('borderTopColor', value);
   }
   /**
@@ -2831,7 +3363,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-left-radius
    */
-  borderTopLeftRadius(value: PropertyValue<'borderTopLeftRadius', T>): this {
+  borderTopLeftRadius<const Value extends PropertyValue<'borderTopLeftRadius', T>>(
+    value: Value & CheckedPropertyValue<'borderTopLeftRadius', T, Value>,
+  ): this {
     return this.write('borderTopLeftRadius', value);
   }
   /**
@@ -2841,7 +3375,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-right-radius
    */
-  borderTopRightRadius(value: PropertyValue<'borderTopRightRadius', T>): this {
+  borderTopRightRadius<const Value extends PropertyValue<'borderTopRightRadius', T>>(
+    value: Value & CheckedPropertyValue<'borderTopRightRadius', T, Value>,
+  ): this {
     return this.write('borderTopRightRadius', value);
   }
   /**
@@ -2851,7 +3387,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
    */
-  borderTopStyle(value: PropertyValue<'borderTopStyle', T>): this {
+  borderTopStyle<const Value extends PropertyValue<'borderTopStyle', T>>(
+    value: Value & CheckedPropertyValue<'borderTopStyle', T, Value>,
+  ): this {
     return this.write('borderTopStyle', value);
   }
   /**
@@ -2861,7 +3399,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-width
    */
-  borderTopWidth(value: PropertyValue<'borderTopWidth', T>): this {
+  borderTopWidth<const Value extends PropertyValue<'borderTopWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderTopWidth', T, Value>,
+  ): this {
     return this.write('borderTopWidth', value);
   }
   /**
@@ -2869,7 +3409,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-width
    */
-  borderWidth(value: PropertyValue<'borderWidth', T>): this {
+  borderWidth<const Value extends PropertyValue<'borderWidth', T>>(
+    value: Value & CheckedPropertyValue<'borderWidth', T, Value>,
+  ): this {
     return this.write('borderWidth', value);
   }
   /**
@@ -2877,7 +3419,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule
    */
-  columnRule(value: PropertyValue<'columnRule', T>): this {
+  columnRule<const Value extends PropertyValue<'columnRule', T>>(
+    value: Value & CheckedPropertyValue<'columnRule', T, Value>,
+  ): this {
     return this.write('columnRule', value);
   }
   /**
@@ -2887,7 +3431,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-color
    */
-  columnRuleColor(value: PropertyValue<'columnRuleColor', T>): this {
+  columnRuleColor<const Value extends PropertyValue<'columnRuleColor', T>>(
+    value: Value & CheckedPropertyValue<'columnRuleColor', T, Value>,
+  ): this {
     return this.write('columnRuleColor', value);
   }
   /**
@@ -2897,7 +3443,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
    */
-  columnRuleStyle(value: PropertyValue<'columnRuleStyle', T>): this {
+  columnRuleStyle<const Value extends PropertyValue<'columnRuleStyle', T>>(
+    value: Value & CheckedPropertyValue<'columnRuleStyle', T, Value>,
+  ): this {
     return this.write('columnRuleStyle', value);
   }
   /**
@@ -2907,7 +3455,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-width
    */
-  columnRuleWidth(value: PropertyValue<'columnRuleWidth', T>): this {
+  columnRuleWidth<const Value extends PropertyValue<'columnRuleWidth', T>>(
+    value: Value & CheckedPropertyValue<'columnRuleWidth', T, Value>,
+  ): this {
     return this.write('columnRuleWidth', value);
   }
   /**
@@ -2921,7 +3471,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline
    */
-  outline(value: PropertyValue<'outline', T>): this {
+  outline<const Value extends PropertyValue<'outline', T>>(
+    value: Value & CheckedPropertyValue<'outline', T, Value>,
+  ): this {
     return this.write('outline', value);
   }
   /**
@@ -2931,7 +3483,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-color
    */
-  outlineColor(value: PropertyValue<'outlineColor', T>): this {
+  outlineColor<const Value extends PropertyValue<'outlineColor', T>>(
+    value: Value & CheckedPropertyValue<'outlineColor', T, Value>,
+  ): this {
     return this.write('outlineColor', value);
   }
   /**
@@ -2941,7 +3495,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-offset
    */
-  outlineOffset(value: PropertyValue<'outlineOffset', T>): this {
+  outlineOffset<const Value extends PropertyValue<'outlineOffset', T>>(
+    value: Value & CheckedPropertyValue<'outlineOffset', T, Value>,
+  ): this {
     return this.write('outlineOffset', value);
   }
   /**
@@ -2951,7 +3507,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-style
    */
-  outlineStyle(value: PropertyValue<'outlineStyle', T>): this {
+  outlineStyle<const Value extends PropertyValue<'outlineStyle', T>>(
+    value: Value & CheckedPropertyValue<'outlineStyle', T, Value>,
+  ): this {
     return this.write('outlineStyle', value);
   }
   /**
@@ -2961,7 +3519,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-width
    */
-  outlineWidth(value: PropertyValue<'outlineWidth', T>): this {
+  outlineWidth<const Value extends PropertyValue<'outlineWidth', T>>(
+    value: Value & CheckedPropertyValue<'outlineWidth', T, Value>,
+  ): this {
     return this.write('outlineWidth', value);
   }
   /**
@@ -2971,7 +3531,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/backdrop-filter
    */
-  backdropFilter(value: PropertyValue<'backdropFilter', T>): this {
+  backdropFilter<const Value extends PropertyValue<'backdropFilter', T>>(
+    value: Value & CheckedPropertyValue<'backdropFilter', T, Value>,
+  ): this {
     return this.write('backdropFilter', value);
   }
   /**
@@ -2987,7 +3549,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-shadow
    */
-  boxShadow(value: PropertyValue<'boxShadow', T>): this {
+  boxShadow<const Value extends PropertyValue<'boxShadow', T>>(
+    value: Value & CheckedPropertyValue<'boxShadow', T, Value>,
+  ): this {
     return this.write('boxShadow', value);
   }
   /**
@@ -2997,7 +3561,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip-path
    */
-  clipPath(value: PropertyValue<'clipPath', T>): this {
+  clipPath<const Value extends PropertyValue<'clipPath', T>>(
+    value: Value & CheckedPropertyValue<'clipPath', T, Value>,
+  ): this {
     return this.write('clipPath', value);
   }
   /**
@@ -3007,7 +3573,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip-rule
    */
-  clipRule(value: PropertyValue<'clipRule', T>): this {
+  clipRule<const Value extends PropertyValue<'clipRule', T>>(
+    value: Value & CheckedPropertyValue<'clipRule', T, Value>,
+  ): this {
     return this.write('clipRule', value);
   }
   /**
@@ -3017,7 +3585,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/filter
    */
-  filter(value: PropertyValue<'filter', T>): this {
+  filter<const Value extends PropertyValue<'filter', T>>(
+    value: Value & CheckedPropertyValue<'filter', T, Value>,
+  ): this {
     return this.write('filter', value);
   }
   /**
@@ -3027,7 +3597,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-orientation
    */
-  imageOrientation(value: PropertyValue<'imageOrientation', T>): this {
+  imageOrientation<const Value extends PropertyValue<'imageOrientation', T>>(
+    value: Value & CheckedPropertyValue<'imageOrientation', T, Value>,
+  ): this {
     return this.write('imageOrientation', value);
   }
   /**
@@ -3037,7 +3609,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-rendering
    */
-  imageRendering(value: PropertyValue<'imageRendering', T>): this {
+  imageRendering<const Value extends PropertyValue<'imageRendering', T>>(
+    value: Value & CheckedPropertyValue<'imageRendering', T, Value>,
+  ): this {
     return this.write('imageRendering', value);
   }
   /**
@@ -3047,7 +3621,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-resolution
    */
-  imageResolution(value: PropertyValue<'imageResolution', T>): this {
+  imageResolution<const Value extends PropertyValue<'imageResolution', T>>(
+    value: Value & CheckedPropertyValue<'imageResolution', T, Value>,
+  ): this {
     return this.write('imageResolution', value);
   }
   /**
@@ -3055,7 +3631,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
    */
-  mask(value: PropertyValue<'mask', T>): this {
+  mask<const Value extends PropertyValue<'mask', T>>(
+    value: Value & CheckedPropertyValue<'mask', T, Value>,
+  ): this {
     return this.write('mask', value);
   }
   /**
@@ -3063,7 +3641,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border
    */
-  maskBorder(value: PropertyValue<'maskBorder', T>): this {
+  maskBorder<const Value extends PropertyValue<'maskBorder', T>>(
+    value: Value & CheckedPropertyValue<'maskBorder', T, Value>,
+  ): this {
     return this.write('maskBorder', value);
   }
   /**
@@ -3073,7 +3653,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-mode
    */
-  maskBorderMode(value: PropertyValue<'maskBorderMode', T>): this {
+  maskBorderMode<const Value extends PropertyValue<'maskBorderMode', T>>(
+    value: Value & CheckedPropertyValue<'maskBorderMode', T, Value>,
+  ): this {
     return this.write('maskBorderMode', value);
   }
   /**
@@ -3083,7 +3665,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-outset
    */
-  maskBorderOutset(value: PropertyValue<'maskBorderOutset', T>): this {
+  maskBorderOutset<const Value extends PropertyValue<'maskBorderOutset', T>>(
+    value: Value & CheckedPropertyValue<'maskBorderOutset', T, Value>,
+  ): this {
     return this.write('maskBorderOutset', value);
   }
   /**
@@ -3093,7 +3677,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-repeat
    */
-  maskBorderRepeat(value: PropertyValue<'maskBorderRepeat', T>): this {
+  maskBorderRepeat<const Value extends PropertyValue<'maskBorderRepeat', T>>(
+    value: Value & CheckedPropertyValue<'maskBorderRepeat', T, Value>,
+  ): this {
     return this.write('maskBorderRepeat', value);
   }
   /**
@@ -3103,7 +3689,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-slice
    */
-  maskBorderSlice(value: PropertyValue<'maskBorderSlice', T>): this {
+  maskBorderSlice<const Value extends PropertyValue<'maskBorderSlice', T>>(
+    value: Value & CheckedPropertyValue<'maskBorderSlice', T, Value>,
+  ): this {
     return this.write('maskBorderSlice', value);
   }
   /**
@@ -3113,7 +3701,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-source
    */
-  maskBorderSource(value: PropertyValue<'maskBorderSource', T>): this {
+  maskBorderSource<const Value extends PropertyValue<'maskBorderSource', T>>(
+    value: Value & CheckedPropertyValue<'maskBorderSource', T, Value>,
+  ): this {
     return this.write('maskBorderSource', value);
   }
   /**
@@ -3123,7 +3713,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-width
    */
-  maskBorderWidth(value: PropertyValue<'maskBorderWidth', T>): this {
+  maskBorderWidth<const Value extends PropertyValue<'maskBorderWidth', T>>(
+    value: Value & CheckedPropertyValue<'maskBorderWidth', T, Value>,
+  ): this {
     return this.write('maskBorderWidth', value);
   }
   /**
@@ -3133,7 +3725,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-clip
    */
-  maskClip(value: PropertyValue<'maskClip', T>): this {
+  maskClip<const Value extends PropertyValue<'maskClip', T>>(
+    value: Value & CheckedPropertyValue<'maskClip', T, Value>,
+  ): this {
     return this.write('maskClip', value);
   }
   /**
@@ -3143,7 +3737,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-composite
    */
-  maskComposite(value: PropertyValue<'maskComposite', T>): this {
+  maskComposite<const Value extends PropertyValue<'maskComposite', T>>(
+    value: Value & CheckedPropertyValue<'maskComposite', T, Value>,
+  ): this {
     return this.write('maskComposite', value);
   }
   /**
@@ -3153,7 +3749,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-image
    */
-  maskImage(value: PropertyValue<'maskImage', T>): this {
+  maskImage<const Value extends PropertyValue<'maskImage', T>>(
+    value: Value & CheckedPropertyValue<'maskImage', T, Value>,
+  ): this {
     return this.write('maskImage', value);
   }
   /**
@@ -3163,7 +3761,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-mode
    */
-  maskMode(value: PropertyValue<'maskMode', T>): this {
+  maskMode<const Value extends PropertyValue<'maskMode', T>>(
+    value: Value & CheckedPropertyValue<'maskMode', T, Value>,
+  ): this {
     return this.write('maskMode', value);
   }
   /**
@@ -3173,7 +3773,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-origin
    */
-  maskOrigin(value: PropertyValue<'maskOrigin', T>): this {
+  maskOrigin<const Value extends PropertyValue<'maskOrigin', T>>(
+    value: Value & CheckedPropertyValue<'maskOrigin', T, Value>,
+  ): this {
     return this.write('maskOrigin', value);
   }
   /**
@@ -3183,7 +3785,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-position
    */
-  maskPosition(value: PropertyValue<'maskPosition', T>): this {
+  maskPosition<const Value extends PropertyValue<'maskPosition', T>>(
+    value: Value & CheckedPropertyValue<'maskPosition', T, Value>,
+  ): this {
     return this.write('maskPosition', value);
   }
   /**
@@ -3193,7 +3797,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-repeat
    */
-  maskRepeat(value: PropertyValue<'maskRepeat', T>): this {
+  maskRepeat<const Value extends PropertyValue<'maskRepeat', T>>(
+    value: Value & CheckedPropertyValue<'maskRepeat', T, Value>,
+  ): this {
     return this.write('maskRepeat', value);
   }
   /**
@@ -3203,7 +3809,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-size
    */
-  maskSize(value: PropertyValue<'maskSize', T>): this {
+  maskSize<const Value extends PropertyValue<'maskSize', T>>(
+    value: Value & CheckedPropertyValue<'maskSize', T, Value>,
+  ): this {
     return this.write('maskSize', value);
   }
   /**
@@ -3213,7 +3821,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-type
    */
-  maskType(value: PropertyValue<'maskType', T>): this {
+  maskType<const Value extends PropertyValue<'maskType', T>>(
+    value: Value & CheckedPropertyValue<'maskType', T, Value>,
+  ): this {
     return this.write('maskType', value);
   }
   /**
@@ -3223,7 +3833,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
    */
-  mixBlendMode(value: PropertyValue<'mixBlendMode', T>): this {
+  mixBlendMode<const Value extends PropertyValue<'mixBlendMode', T>>(
+    value: Value & CheckedPropertyValue<'mixBlendMode', T, Value>,
+  ): this {
     return this.write('mixBlendMode', value);
   }
   /**
@@ -3241,7 +3853,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-fit
    */
-  objectFit(value: PropertyValue<'objectFit', T>): this {
+  objectFit<const Value extends PropertyValue<'objectFit', T>>(
+    value: Value & CheckedPropertyValue<'objectFit', T, Value>,
+  ): this {
     return this.write('objectFit', value);
   }
   /**
@@ -3251,7 +3865,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-position
    */
-  objectPosition(value: PropertyValue<'objectPosition', T>): this {
+  objectPosition<const Value extends PropertyValue<'objectPosition', T>>(
+    value: Value & CheckedPropertyValue<'objectPosition', T, Value>,
+  ): this {
     return this.write('objectPosition', value);
   }
   /**
@@ -3261,7 +3877,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-view-box
    */
-  objectViewBox(value: PropertyValue<'objectViewBox', T>): this {
+  objectViewBox<const Value extends PropertyValue<'objectViewBox', T>>(
+    value: Value & CheckedPropertyValue<'objectViewBox', T, Value>,
+  ): this {
     return this.write('objectViewBox', value);
   }
   /**
@@ -3277,7 +3895,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/opacity
    */
-  opacity(value: PropertyValue<'opacity', T>): this {
+  opacity<const Value extends PropertyValue<'opacity', T>>(
+    value: Value & CheckedPropertyValue<'opacity', T, Value>,
+  ): this {
     return this.write('opacity', value);
   }
   /**
@@ -3287,7 +3907,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-image-threshold
    */
-  shapeImageThreshold(value: PropertyValue<'shapeImageThreshold', T>): this {
+  shapeImageThreshold<const Value extends PropertyValue<'shapeImageThreshold', T>>(
+    value: Value & CheckedPropertyValue<'shapeImageThreshold', T, Value>,
+  ): this {
     return this.write('shapeImageThreshold', value);
   }
   /**
@@ -3297,7 +3919,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-margin
    */
-  shapeMargin(value: PropertyValue<'shapeMargin', T>): this {
+  shapeMargin<const Value extends PropertyValue<'shapeMargin', T>>(
+    value: Value & CheckedPropertyValue<'shapeMargin', T, Value>,
+  ): this {
     return this.write('shapeMargin', value);
   }
   /**
@@ -3307,7 +3931,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-outside
    */
-  shapeOutside(value: PropertyValue<'shapeOutside', T>): this {
+  shapeOutside<const Value extends PropertyValue<'shapeOutside', T>>(
+    value: Value & CheckedPropertyValue<'shapeOutside', T, Value>,
+  ): this {
     return this.write('shapeOutside', value);
   }
   /**
@@ -3317,7 +3943,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-rendering
    */
-  shapeRendering(value: PropertyValue<'shapeRendering', T>): this {
+  shapeRendering<const Value extends PropertyValue<'shapeRendering', T>>(
+    value: Value & CheckedPropertyValue<'shapeRendering', T, Value>,
+  ): this {
     return this.write('shapeRendering', value);
   }
   /**
@@ -3325,7 +3953,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
    */
-  animation(value: PropertyValue<'animation', T>): this {
+  animation<const Value extends PropertyValue<'animation', T>>(
+    value: Value & CheckedPropertyValue<'animation', T, Value>,
+  ): this {
     return this.write('animation', value);
   }
   /**
@@ -3335,7 +3965,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-composition
    */
-  animationComposition(value: PropertyValue<'animationComposition', T>): this {
+  animationComposition<const Value extends PropertyValue<'animationComposition', T>>(
+    value: Value & CheckedPropertyValue<'animationComposition', T, Value>,
+  ): this {
     return this.write('animationComposition', value);
   }
   /**
@@ -3345,7 +3977,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-delay
    */
-  animationDelay(value: PropertyValue<'animationDelay', T>): this {
+  animationDelay<const Value extends PropertyValue<'animationDelay', T>>(
+    value: Value & CheckedPropertyValue<'animationDelay', T, Value>,
+  ): this {
     return this.write('animationDelay', value);
   }
   /**
@@ -3355,7 +3989,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-direction
    */
-  animationDirection(value: PropertyValue<'animationDirection', T>): this {
+  animationDirection<const Value extends PropertyValue<'animationDirection', T>>(
+    value: Value & CheckedPropertyValue<'animationDirection', T, Value>,
+  ): this {
     return this.write('animationDirection', value);
   }
   /**
@@ -3365,7 +4001,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-duration
    */
-  animationDuration(value: PropertyValue<'animationDuration', T>): this {
+  animationDuration<const Value extends PropertyValue<'animationDuration', T>>(
+    value: Value & CheckedPropertyValue<'animationDuration', T, Value>,
+  ): this {
     return this.write('animationDuration', value);
   }
   /**
@@ -3383,7 +4021,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-fill-mode
    */
-  animationFillMode(value: PropertyValue<'animationFillMode', T>): this {
+  animationFillMode<const Value extends PropertyValue<'animationFillMode', T>>(
+    value: Value & CheckedPropertyValue<'animationFillMode', T, Value>,
+  ): this {
     return this.write('animationFillMode', value);
   }
   /**
@@ -3393,7 +4033,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-iteration-count
    */
-  animationIterationCount(value: PropertyValue<'animationIterationCount', T>): this {
+  animationIterationCount<const Value extends PropertyValue<'animationIterationCount', T>>(
+    value: Value & CheckedPropertyValue<'animationIterationCount', T, Value>,
+  ): this {
     return this.write('animationIterationCount', value);
   }
   /**
@@ -3403,7 +4045,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-name
    */
-  animationName(value: PropertyValue<'animationName', T>): this {
+  animationName<const Value extends PropertyValue<'animationName', T>>(
+    value: Value & CheckedPropertyValue<'animationName', T, Value>,
+  ): this {
     return this.write('animationName', value);
   }
   /**
@@ -3413,7 +4057,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-play-state
    */
-  animationPlayState(value: PropertyValue<'animationPlayState', T>): this {
+  animationPlayState<const Value extends PropertyValue<'animationPlayState', T>>(
+    value: Value & CheckedPropertyValue<'animationPlayState', T, Value>,
+  ): this {
     return this.write('animationPlayState', value);
   }
   /**
@@ -3421,7 +4067,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range
    */
-  animationRange(value: PropertyValue<'animationRange', T>): this {
+  animationRange<const Value extends PropertyValue<'animationRange', T>>(
+    value: Value & CheckedPropertyValue<'animationRange', T, Value>,
+  ): this {
     return this.write('animationRange', value);
   }
   /**
@@ -3431,7 +4079,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-end
    */
-  animationRangeEnd(value: PropertyValue<'animationRangeEnd', T>): this {
+  animationRangeEnd<const Value extends PropertyValue<'animationRangeEnd', T>>(
+    value: Value & CheckedPropertyValue<'animationRangeEnd', T, Value>,
+  ): this {
     return this.write('animationRangeEnd', value);
   }
   /**
@@ -3441,7 +4091,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-start
    */
-  animationRangeStart(value: PropertyValue<'animationRangeStart', T>): this {
+  animationRangeStart<const Value extends PropertyValue<'animationRangeStart', T>>(
+    value: Value & CheckedPropertyValue<'animationRangeStart', T, Value>,
+  ): this {
     return this.write('animationRangeStart', value);
   }
   /**
@@ -3451,7 +4103,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timeline
    */
-  animationTimeline(value: PropertyValue<'animationTimeline', T>): this {
+  animationTimeline<const Value extends PropertyValue<'animationTimeline', T>>(
+    value: Value & CheckedPropertyValue<'animationTimeline', T, Value>,
+  ): this {
     return this.write('animationTimeline', value);
   }
   /**
@@ -3461,7 +4115,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timing-function
    */
-  animationTimingFunction(value: PropertyValue<'animationTimingFunction', T>): this {
+  animationTimingFunction<const Value extends PropertyValue<'animationTimingFunction', T>>(
+    value: Value & CheckedPropertyValue<'animationTimingFunction', T, Value>,
+  ): this {
     return this.write('animationTimingFunction', value);
   }
   /**
@@ -3471,7 +4127,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/backface-visibility
    */
-  backfaceVisibility(value: PropertyValue<'backfaceVisibility', T>): this {
+  backfaceVisibility<const Value extends PropertyValue<'backfaceVisibility', T>>(
+    value: Value & CheckedPropertyValue<'backfaceVisibility', T, Value>,
+  ): this {
     return this.write('backfaceVisibility', value);
   }
   /**
@@ -3479,7 +4137,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
    */
-  offset(value: PropertyValue<'offset', T>): this {
+  offset<const Value extends PropertyValue<'offset', T>>(
+    value: Value & CheckedPropertyValue<'offset', T, Value>,
+  ): this {
     return this.write('offset', value);
   }
   /**
@@ -3489,7 +4149,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-anchor
    */
-  offsetAnchor(value: PropertyValue<'offsetAnchor', T>): this {
+  offsetAnchor<const Value extends PropertyValue<'offsetAnchor', T>>(
+    value: Value & CheckedPropertyValue<'offsetAnchor', T, Value>,
+  ): this {
     return this.write('offsetAnchor', value);
   }
   /**
@@ -3499,7 +4161,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-distance
    */
-  offsetDistance(value: PropertyValue<'offsetDistance', T>): this {
+  offsetDistance<const Value extends PropertyValue<'offsetDistance', T>>(
+    value: Value & CheckedPropertyValue<'offsetDistance', T, Value>,
+  ): this {
     return this.write('offsetDistance', value);
   }
   /**
@@ -3509,7 +4173,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-path
    */
-  offsetPath(value: PropertyValue<'offsetPath', T>): this {
+  offsetPath<const Value extends PropertyValue<'offsetPath', T>>(
+    value: Value & CheckedPropertyValue<'offsetPath', T, Value>,
+  ): this {
     return this.write('offsetPath', value);
   }
   /**
@@ -3519,7 +4185,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-position
    */
-  offsetPosition(value: PropertyValue<'offsetPosition', T>): this {
+  offsetPosition<const Value extends PropertyValue<'offsetPosition', T>>(
+    value: Value & CheckedPropertyValue<'offsetPosition', T, Value>,
+  ): this {
     return this.write('offsetPosition', value);
   }
   /**
@@ -3529,7 +4197,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-rotate
    */
-  offsetRotate(value: PropertyValue<'offsetRotate', T>): this {
+  offsetRotate<const Value extends PropertyValue<'offsetRotate', T>>(
+    value: Value & CheckedPropertyValue<'offsetRotate', T, Value>,
+  ): this {
     return this.write('offsetRotate', value);
   }
   /**
@@ -3539,7 +4209,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-rotation
    */
-  offsetRotation(value: PropertyValue<'offsetRotation', T>): this {
+  offsetRotation<const Value extends PropertyValue<'offsetRotation', T>>(
+    value: Value & CheckedPropertyValue<'offsetRotation', T, Value>,
+  ): this {
     return this.write('offsetRotation', value);
   }
   /**
@@ -3549,7 +4221,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective
    */
-  perspective(value: PropertyValue<'perspective', T>): this {
+  perspective<const Value extends PropertyValue<'perspective', T>>(
+    value: Value & CheckedPropertyValue<'perspective', T, Value>,
+  ): this {
     return this.write('perspective', value);
   }
   /**
@@ -3559,7 +4233,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective-origin
    */
-  perspectiveOrigin(value: PropertyValue<'perspectiveOrigin', T>): this {
+  perspectiveOrigin<const Value extends PropertyValue<'perspectiveOrigin', T>>(
+    value: Value & CheckedPropertyValue<'perspectiveOrigin', T, Value>,
+  ): this {
     return this.write('perspectiveOrigin', value);
   }
   /**
@@ -3569,7 +4245,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/rotate
    */
-  rotate(value: PropertyValue<'rotate', T>): this {
+  rotate<const Value extends PropertyValue<'rotate', T>>(
+    value: Value & CheckedPropertyValue<'rotate', T, Value>,
+  ): this {
     return this.write('rotate', value);
   }
   /**
@@ -3579,7 +4257,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scale
    */
-  scale(value: PropertyValue<'scale', T>): this {
+  scale<const Value extends PropertyValue<'scale', T>>(
+    value: Value & CheckedPropertyValue<'scale', T, Value>,
+  ): this {
     return this.write('scale', value);
   }
   /**
@@ -3595,7 +4275,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform
    */
-  transform(value: PropertyValue<'transform', T>): this {
+  transform<const Value extends PropertyValue<'transform', T>>(
+    value: Value & CheckedPropertyValue<'transform', T, Value>,
+  ): this {
     return this.write('transform', value);
   }
   /**
@@ -3605,7 +4287,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-box
    */
-  transformBox(value: PropertyValue<'transformBox', T>): this {
+  transformBox<const Value extends PropertyValue<'transformBox', T>>(
+    value: Value & CheckedPropertyValue<'transformBox', T, Value>,
+  ): this {
     return this.write('transformBox', value);
   }
   /**
@@ -3615,7 +4299,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-origin
    */
-  transformOrigin(value: PropertyValue<'transformOrigin', T>): this {
+  transformOrigin<const Value extends PropertyValue<'transformOrigin', T>>(
+    value: Value & CheckedPropertyValue<'transformOrigin', T, Value>,
+  ): this {
     return this.write('transformOrigin', value);
   }
   /**
@@ -3625,7 +4311,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-style
    */
-  transformStyle(value: PropertyValue<'transformStyle', T>): this {
+  transformStyle<const Value extends PropertyValue<'transformStyle', T>>(
+    value: Value & CheckedPropertyValue<'transformStyle', T, Value>,
+  ): this {
     return this.write('transformStyle', value);
   }
   /**
@@ -3639,7 +4327,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition
    */
-  transition(value: PropertyValue<'transition', T>): this {
+  transition<const Value extends PropertyValue<'transition', T>>(
+    value: Value & CheckedPropertyValue<'transition', T, Value>,
+  ): this {
     return this.write('transition', value);
   }
   /**
@@ -3649,7 +4339,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-behavior
    */
-  transitionBehavior(value: PropertyValue<'transitionBehavior', T>): this {
+  transitionBehavior<const Value extends PropertyValue<'transitionBehavior', T>>(
+    value: Value & CheckedPropertyValue<'transitionBehavior', T, Value>,
+  ): this {
     return this.write('transitionBehavior', value);
   }
   /**
@@ -3659,7 +4351,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-delay
    */
-  transitionDelay(value: PropertyValue<'transitionDelay', T>): this {
+  transitionDelay<const Value extends PropertyValue<'transitionDelay', T>>(
+    value: Value & CheckedPropertyValue<'transitionDelay', T, Value>,
+  ): this {
     return this.write('transitionDelay', value);
   }
   /**
@@ -3669,7 +4363,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-duration
    */
-  transitionDuration(value: PropertyValue<'transitionDuration', T>): this {
+  transitionDuration<const Value extends PropertyValue<'transitionDuration', T>>(
+    value: Value & CheckedPropertyValue<'transitionDuration', T, Value>,
+  ): this {
     return this.write('transitionDuration', value);
   }
   /**
@@ -3677,7 +4373,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-property
    */
-  transitionProperty(value: PropertyValue<'transitionProperty', T>): this {
+  transitionProperty<const Value extends PropertyValue<'transitionProperty', T>>(
+    value: Value & CheckedPropertyValue<'transitionProperty', T, Value>,
+  ): this {
     return this.write('transitionProperty', value);
   }
   /**
@@ -3687,7 +4385,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-timing-function
    */
-  transitionTimingFunction(value: PropertyValue<'transitionTimingFunction', T>): this {
+  transitionTimingFunction<const Value extends PropertyValue<'transitionTimingFunction', T>>(
+    value: Value & CheckedPropertyValue<'transitionTimingFunction', T, Value>,
+  ): this {
     return this.write('transitionTimingFunction', value);
   }
   /**
@@ -3697,7 +4397,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/translate
    */
-  translate(value: PropertyValue<'translate', T>): this {
+  translate<const Value extends PropertyValue<'translate', T>>(
+    value: Value & CheckedPropertyValue<'translate', T, Value>,
+  ): this {
     return this.write('translate', value);
   }
   /**
@@ -3707,7 +4409,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-transition-class
    */
-  viewTransitionClass(value: PropertyValue<'viewTransitionClass', T>): this {
+  viewTransitionClass<const Value extends PropertyValue<'viewTransitionClass', T>>(
+    value: Value & CheckedPropertyValue<'viewTransitionClass', T, Value>,
+  ): this {
     return this.write('viewTransitionClass', value);
   }
   /**
@@ -3717,7 +4421,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-transition-name
    */
-  viewTransitionName(value: PropertyValue<'viewTransitionName', T>): this {
+  viewTransitionName<const Value extends PropertyValue<'viewTransitionName', T>>(
+    value: Value & CheckedPropertyValue<'viewTransitionName', T, Value>,
+  ): this {
     return this.write('viewTransitionName', value);
   }
   /**
@@ -3735,7 +4441,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow
    */
-  overflow(value: PropertyValue<'overflow', T>): this {
+  overflow<const Value extends PropertyValue<'overflow', T>>(
+    value: Value & CheckedPropertyValue<'overflow', T, Value>,
+  ): this {
     return this.write('overflow', value);
   }
   /**
@@ -3745,7 +4453,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-anchor
    */
-  overflowAnchor(value: PropertyValue<'overflowAnchor', T>): this {
+  overflowAnchor<const Value extends PropertyValue<'overflowAnchor', T>>(
+    value: Value & CheckedPropertyValue<'overflowAnchor', T, Value>,
+  ): this {
     return this.write('overflowAnchor', value);
   }
   /**
@@ -3755,7 +4465,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-block
    */
-  overflowBlock(value: PropertyValue<'overflowBlock', T>): this {
+  overflowBlock<const Value extends PropertyValue<'overflowBlock', T>>(
+    value: Value & CheckedPropertyValue<'overflowBlock', T, Value>,
+  ): this {
     return this.write('overflowBlock', value);
   }
   /**
@@ -3765,7 +4477,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-clip-box
    */
-  overflowClipBox(value: PropertyValue<'overflowClipBox', T>): this {
+  overflowClipBox<const Value extends PropertyValue<'overflowClipBox', T>>(
+    value: Value & CheckedPropertyValue<'overflowClipBox', T, Value>,
+  ): this {
     return this.write('overflowClipBox', value);
   }
   /**
@@ -3775,7 +4489,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-clip-margin
    */
-  overflowClipMargin(value: PropertyValue<'overflowClipMargin', T>): this {
+  overflowClipMargin<const Value extends PropertyValue<'overflowClipMargin', T>>(
+    value: Value & CheckedPropertyValue<'overflowClipMargin', T, Value>,
+  ): this {
     return this.write('overflowClipMargin', value);
   }
   /**
@@ -3785,7 +4501,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-inline
    */
-  overflowInline(value: PropertyValue<'overflowInline', T>): this {
+  overflowInline<const Value extends PropertyValue<'overflowInline', T>>(
+    value: Value & CheckedPropertyValue<'overflowInline', T, Value>,
+  ): this {
     return this.write('overflowInline', value);
   }
   /**
@@ -3801,7 +4519,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-wrap
    */
-  overflowWrap(value: PropertyValue<'overflowWrap', T>): this {
+  overflowWrap<const Value extends PropertyValue<'overflowWrap', T>>(
+    value: Value & CheckedPropertyValue<'overflowWrap', T, Value>,
+  ): this {
     return this.write('overflowWrap', value);
   }
   /**
@@ -3819,7 +4539,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-x
    */
-  overflowX(value: PropertyValue<'overflowX', T>): this {
+  overflowX<const Value extends PropertyValue<'overflowX', T>>(
+    value: Value & CheckedPropertyValue<'overflowX', T, Value>,
+  ): this {
     return this.write('overflowX', value);
   }
   /**
@@ -3837,7 +4559,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-y
    */
-  overflowY(value: PropertyValue<'overflowY', T>): this {
+  overflowY<const Value extends PropertyValue<'overflowY', T>>(
+    value: Value & CheckedPropertyValue<'overflowY', T, Value>,
+  ): this {
     return this.write('overflowY', value);
   }
   /**
@@ -3853,7 +4577,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior
    */
-  overscrollBehavior(value: PropertyValue<'overscrollBehavior', T>): this {
+  overscrollBehavior<const Value extends PropertyValue<'overscrollBehavior', T>>(
+    value: Value & CheckedPropertyValue<'overscrollBehavior', T, Value>,
+  ): this {
     return this.write('overscrollBehavior', value);
   }
   /**
@@ -3863,7 +4589,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-block
    */
-  overscrollBehaviorBlock(value: PropertyValue<'overscrollBehaviorBlock', T>): this {
+  overscrollBehaviorBlock<const Value extends PropertyValue<'overscrollBehaviorBlock', T>>(
+    value: Value & CheckedPropertyValue<'overscrollBehaviorBlock', T, Value>,
+  ): this {
     return this.write('overscrollBehaviorBlock', value);
   }
   /**
@@ -3873,7 +4601,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-inline
    */
-  overscrollBehaviorInline(value: PropertyValue<'overscrollBehaviorInline', T>): this {
+  overscrollBehaviorInline<const Value extends PropertyValue<'overscrollBehaviorInline', T>>(
+    value: Value & CheckedPropertyValue<'overscrollBehaviorInline', T, Value>,
+  ): this {
     return this.write('overscrollBehaviorInline', value);
   }
   /**
@@ -3883,7 +4613,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-x
    */
-  overscrollBehaviorX(value: PropertyValue<'overscrollBehaviorX', T>): this {
+  overscrollBehaviorX<const Value extends PropertyValue<'overscrollBehaviorX', T>>(
+    value: Value & CheckedPropertyValue<'overscrollBehaviorX', T, Value>,
+  ): this {
     return this.write('overscrollBehaviorX', value);
   }
   /**
@@ -3893,7 +4625,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-y
    */
-  overscrollBehaviorY(value: PropertyValue<'overscrollBehaviorY', T>): this {
+  overscrollBehaviorY<const Value extends PropertyValue<'overscrollBehaviorY', T>>(
+    value: Value & CheckedPropertyValue<'overscrollBehaviorY', T, Value>,
+  ): this {
     return this.write('overscrollBehaviorY', value);
   }
   /**
@@ -3903,7 +4637,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scrollbar-color
    */
-  scrollbarColor(value: PropertyValue<'scrollbarColor', T>): this {
+  scrollbarColor<const Value extends PropertyValue<'scrollbarColor', T>>(
+    value: Value & CheckedPropertyValue<'scrollbarColor', T, Value>,
+  ): this {
     return this.write('scrollbarColor', value);
   }
   /**
@@ -3913,7 +4649,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scrollbar-gutter
    */
-  scrollbarGutter(value: PropertyValue<'scrollbarGutter', T>): this {
+  scrollbarGutter<const Value extends PropertyValue<'scrollbarGutter', T>>(
+    value: Value & CheckedPropertyValue<'scrollbarGutter', T, Value>,
+  ): this {
     return this.write('scrollbarGutter', value);
   }
   /**
@@ -3923,7 +4661,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scrollbar-width
    */
-  scrollbarWidth(value: PropertyValue<'scrollbarWidth', T>): this {
+  scrollbarWidth<const Value extends PropertyValue<'scrollbarWidth', T>>(
+    value: Value & CheckedPropertyValue<'scrollbarWidth', T, Value>,
+  ): this {
     return this.write('scrollbarWidth', value);
   }
   /**
@@ -3939,7 +4679,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-behavior
    */
-  scrollBehavior(value: PropertyValue<'scrollBehavior', T>): this {
+  scrollBehavior<const Value extends PropertyValue<'scrollBehavior', T>>(
+    value: Value & CheckedPropertyValue<'scrollBehavior', T, Value>,
+  ): this {
     return this.write('scrollBehavior', value);
   }
   /**
@@ -3949,7 +4691,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-initial-target
    */
-  scrollInitialTarget(value: PropertyValue<'scrollInitialTarget', T>): this {
+  scrollInitialTarget<const Value extends PropertyValue<'scrollInitialTarget', T>>(
+    value: Value & CheckedPropertyValue<'scrollInitialTarget', T, Value>,
+  ): this {
     return this.write('scrollInitialTarget', value);
   }
   /**
@@ -3957,7 +4701,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin
    */
-  scrollMargin(value: PropertyValue<'scrollMargin', T>): this {
+  scrollMargin<const Value extends PropertyValue<'scrollMargin', T>>(
+    value: Value & CheckedPropertyValue<'scrollMargin', T, Value>,
+  ): this {
     return this.write('scrollMargin', value);
   }
   /**
@@ -3965,7 +4711,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-block
    */
-  scrollMarginBlock(value: PropertyValue<'scrollMarginBlock', T>): this {
+  scrollMarginBlock<const Value extends PropertyValue<'scrollMarginBlock', T>>(
+    value: Value & CheckedPropertyValue<'scrollMarginBlock', T, Value>,
+  ): this {
     return this.write('scrollMarginBlock', value);
   }
   /**
@@ -3975,7 +4723,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-block-end
    */
-  scrollMarginBlockEnd(value: PropertyValue<'scrollMarginBlockEnd', T>): this {
+  scrollMarginBlockEnd<const Value extends PropertyValue<'scrollMarginBlockEnd', T>>(
+    value: Value & CheckedPropertyValue<'scrollMarginBlockEnd', T, Value>,
+  ): this {
     return this.write('scrollMarginBlockEnd', value);
   }
   /**
@@ -3985,7 +4735,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-block-start
    */
-  scrollMarginBlockStart(value: PropertyValue<'scrollMarginBlockStart', T>): this {
+  scrollMarginBlockStart<const Value extends PropertyValue<'scrollMarginBlockStart', T>>(
+    value: Value & CheckedPropertyValue<'scrollMarginBlockStart', T, Value>,
+  ): this {
     return this.write('scrollMarginBlockStart', value);
   }
   /**
@@ -3995,7 +4747,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-bottom
    */
-  scrollMarginBottom(value: PropertyValue<'scrollMarginBottom', T>): this {
+  scrollMarginBottom<const Value extends PropertyValue<'scrollMarginBottom', T>>(
+    value: Value & CheckedPropertyValue<'scrollMarginBottom', T, Value>,
+  ): this {
     return this.write('scrollMarginBottom', value);
   }
   /**
@@ -4003,7 +4757,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-inline
    */
-  scrollMarginInline(value: PropertyValue<'scrollMarginInline', T>): this {
+  scrollMarginInline<const Value extends PropertyValue<'scrollMarginInline', T>>(
+    value: Value & CheckedPropertyValue<'scrollMarginInline', T, Value>,
+  ): this {
     return this.write('scrollMarginInline', value);
   }
   /**
@@ -4013,7 +4769,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-inline-end
    */
-  scrollMarginInlineEnd(value: PropertyValue<'scrollMarginInlineEnd', T>): this {
+  scrollMarginInlineEnd<const Value extends PropertyValue<'scrollMarginInlineEnd', T>>(
+    value: Value & CheckedPropertyValue<'scrollMarginInlineEnd', T, Value>,
+  ): this {
     return this.write('scrollMarginInlineEnd', value);
   }
   /**
@@ -4023,7 +4781,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-inline-start
    */
-  scrollMarginInlineStart(value: PropertyValue<'scrollMarginInlineStart', T>): this {
+  scrollMarginInlineStart<const Value extends PropertyValue<'scrollMarginInlineStart', T>>(
+    value: Value & CheckedPropertyValue<'scrollMarginInlineStart', T, Value>,
+  ): this {
     return this.write('scrollMarginInlineStart', value);
   }
   /**
@@ -4033,7 +4793,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-left
    */
-  scrollMarginLeft(value: PropertyValue<'scrollMarginLeft', T>): this {
+  scrollMarginLeft<const Value extends PropertyValue<'scrollMarginLeft', T>>(
+    value: Value & CheckedPropertyValue<'scrollMarginLeft', T, Value>,
+  ): this {
     return this.write('scrollMarginLeft', value);
   }
   /**
@@ -4043,7 +4805,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-right
    */
-  scrollMarginRight(value: PropertyValue<'scrollMarginRight', T>): this {
+  scrollMarginRight<const Value extends PropertyValue<'scrollMarginRight', T>>(
+    value: Value & CheckedPropertyValue<'scrollMarginRight', T, Value>,
+  ): this {
     return this.write('scrollMarginRight', value);
   }
   /**
@@ -4053,7 +4817,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-top
    */
-  scrollMarginTop(value: PropertyValue<'scrollMarginTop', T>): this {
+  scrollMarginTop<const Value extends PropertyValue<'scrollMarginTop', T>>(
+    value: Value & CheckedPropertyValue<'scrollMarginTop', T, Value>,
+  ): this {
     return this.write('scrollMarginTop', value);
   }
   /**
@@ -4061,7 +4827,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding
    */
-  scrollPadding(value: PropertyValue<'scrollPadding', T>): this {
+  scrollPadding<const Value extends PropertyValue<'scrollPadding', T>>(
+    value: Value & CheckedPropertyValue<'scrollPadding', T, Value>,
+  ): this {
     return this.write('scrollPadding', value);
   }
   /**
@@ -4069,7 +4837,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-block
    */
-  scrollPaddingBlock(value: PropertyValue<'scrollPaddingBlock', T>): this {
+  scrollPaddingBlock<const Value extends PropertyValue<'scrollPaddingBlock', T>>(
+    value: Value & CheckedPropertyValue<'scrollPaddingBlock', T, Value>,
+  ): this {
     return this.write('scrollPaddingBlock', value);
   }
   /**
@@ -4079,7 +4849,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-block-end
    */
-  scrollPaddingBlockEnd(value: PropertyValue<'scrollPaddingBlockEnd', T>): this {
+  scrollPaddingBlockEnd<const Value extends PropertyValue<'scrollPaddingBlockEnd', T>>(
+    value: Value & CheckedPropertyValue<'scrollPaddingBlockEnd', T, Value>,
+  ): this {
     return this.write('scrollPaddingBlockEnd', value);
   }
   /**
@@ -4089,7 +4861,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-block-start
    */
-  scrollPaddingBlockStart(value: PropertyValue<'scrollPaddingBlockStart', T>): this {
+  scrollPaddingBlockStart<const Value extends PropertyValue<'scrollPaddingBlockStart', T>>(
+    value: Value & CheckedPropertyValue<'scrollPaddingBlockStart', T, Value>,
+  ): this {
     return this.write('scrollPaddingBlockStart', value);
   }
   /**
@@ -4099,7 +4873,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-bottom
    */
-  scrollPaddingBottom(value: PropertyValue<'scrollPaddingBottom', T>): this {
+  scrollPaddingBottom<const Value extends PropertyValue<'scrollPaddingBottom', T>>(
+    value: Value & CheckedPropertyValue<'scrollPaddingBottom', T, Value>,
+  ): this {
     return this.write('scrollPaddingBottom', value);
   }
   /**
@@ -4107,7 +4883,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-inline
    */
-  scrollPaddingInline(value: PropertyValue<'scrollPaddingInline', T>): this {
+  scrollPaddingInline<const Value extends PropertyValue<'scrollPaddingInline', T>>(
+    value: Value & CheckedPropertyValue<'scrollPaddingInline', T, Value>,
+  ): this {
     return this.write('scrollPaddingInline', value);
   }
   /**
@@ -4117,7 +4895,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-inline-end
    */
-  scrollPaddingInlineEnd(value: PropertyValue<'scrollPaddingInlineEnd', T>): this {
+  scrollPaddingInlineEnd<const Value extends PropertyValue<'scrollPaddingInlineEnd', T>>(
+    value: Value & CheckedPropertyValue<'scrollPaddingInlineEnd', T, Value>,
+  ): this {
     return this.write('scrollPaddingInlineEnd', value);
   }
   /**
@@ -4127,7 +4907,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-inline-start
    */
-  scrollPaddingInlineStart(value: PropertyValue<'scrollPaddingInlineStart', T>): this {
+  scrollPaddingInlineStart<const Value extends PropertyValue<'scrollPaddingInlineStart', T>>(
+    value: Value & CheckedPropertyValue<'scrollPaddingInlineStart', T, Value>,
+  ): this {
     return this.write('scrollPaddingInlineStart', value);
   }
   /**
@@ -4137,7 +4919,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-left
    */
-  scrollPaddingLeft(value: PropertyValue<'scrollPaddingLeft', T>): this {
+  scrollPaddingLeft<const Value extends PropertyValue<'scrollPaddingLeft', T>>(
+    value: Value & CheckedPropertyValue<'scrollPaddingLeft', T, Value>,
+  ): this {
     return this.write('scrollPaddingLeft', value);
   }
   /**
@@ -4147,7 +4931,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-right
    */
-  scrollPaddingRight(value: PropertyValue<'scrollPaddingRight', T>): this {
+  scrollPaddingRight<const Value extends PropertyValue<'scrollPaddingRight', T>>(
+    value: Value & CheckedPropertyValue<'scrollPaddingRight', T, Value>,
+  ): this {
     return this.write('scrollPaddingRight', value);
   }
   /**
@@ -4157,7 +4943,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-top
    */
-  scrollPaddingTop(value: PropertyValue<'scrollPaddingTop', T>): this {
+  scrollPaddingTop<const Value extends PropertyValue<'scrollPaddingTop', T>>(
+    value: Value & CheckedPropertyValue<'scrollPaddingTop', T, Value>,
+  ): this {
     return this.write('scrollPaddingTop', value);
   }
   /**
@@ -4167,7 +4955,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-align
    */
-  scrollSnapAlign(value: PropertyValue<'scrollSnapAlign', T>): this {
+  scrollSnapAlign<const Value extends PropertyValue<'scrollSnapAlign', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapAlign', T, Value>,
+  ): this {
     return this.write('scrollSnapAlign', value);
   }
   /**
@@ -4175,7 +4965,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin
    */
-  scrollSnapMargin(value: PropertyValue<'scrollSnapMargin', T>): this {
+  scrollSnapMargin<const Value extends PropertyValue<'scrollSnapMargin', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapMargin', T, Value>,
+  ): this {
     return this.write('scrollSnapMargin', value);
   }
   /**
@@ -4185,7 +4977,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-bottom
    */
-  scrollSnapMarginBottom(value: PropertyValue<'scrollSnapMarginBottom', T>): this {
+  scrollSnapMarginBottom<const Value extends PropertyValue<'scrollSnapMarginBottom', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapMarginBottom', T, Value>,
+  ): this {
     return this.write('scrollSnapMarginBottom', value);
   }
   /**
@@ -4195,7 +4989,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-left
    */
-  scrollSnapMarginLeft(value: PropertyValue<'scrollSnapMarginLeft', T>): this {
+  scrollSnapMarginLeft<const Value extends PropertyValue<'scrollSnapMarginLeft', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapMarginLeft', T, Value>,
+  ): this {
     return this.write('scrollSnapMarginLeft', value);
   }
   /**
@@ -4205,7 +5001,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-right
    */
-  scrollSnapMarginRight(value: PropertyValue<'scrollSnapMarginRight', T>): this {
+  scrollSnapMarginRight<const Value extends PropertyValue<'scrollSnapMarginRight', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapMarginRight', T, Value>,
+  ): this {
     return this.write('scrollSnapMarginRight', value);
   }
   /**
@@ -4215,7 +5013,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-top
    */
-  scrollSnapMarginTop(value: PropertyValue<'scrollSnapMarginTop', T>): this {
+  scrollSnapMarginTop<const Value extends PropertyValue<'scrollSnapMarginTop', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapMarginTop', T, Value>,
+  ): this {
     return this.write('scrollSnapMarginTop', value);
   }
   /**
@@ -4225,7 +5025,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-stop
    */
-  scrollSnapStop(value: PropertyValue<'scrollSnapStop', T>): this {
+  scrollSnapStop<const Value extends PropertyValue<'scrollSnapStop', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapStop', T, Value>,
+  ): this {
     return this.write('scrollSnapStop', value);
   }
   /**
@@ -4239,7 +5041,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type
    */
-  scrollSnapType(value: PropertyValue<'scrollSnapType', T>): this {
+  scrollSnapType<const Value extends PropertyValue<'scrollSnapType', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapType', T, Value>,
+  ): this {
     return this.write('scrollSnapType', value);
   }
   /**
@@ -4247,7 +5051,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline
    */
-  scrollTimeline(value: PropertyValue<'scrollTimeline', T>): this {
+  scrollTimeline<const Value extends PropertyValue<'scrollTimeline', T>>(
+    value: Value & CheckedPropertyValue<'scrollTimeline', T, Value>,
+  ): this {
     return this.write('scrollTimeline', value);
   }
   /**
@@ -4257,7 +5063,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline-axis
    */
-  scrollTimelineAxis(value: PropertyValue<'scrollTimelineAxis', T>): this {
+  scrollTimelineAxis<const Value extends PropertyValue<'scrollTimelineAxis', T>>(
+    value: Value & CheckedPropertyValue<'scrollTimelineAxis', T, Value>,
+  ): this {
     return this.write('scrollTimelineAxis', value);
   }
   /**
@@ -4267,7 +5075,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline-name
    */
-  scrollTimelineName(value: PropertyValue<'scrollTimelineName', T>): this {
+  scrollTimelineName<const Value extends PropertyValue<'scrollTimelineName', T>>(
+    value: Value & CheckedPropertyValue<'scrollTimelineName', T, Value>,
+  ): this {
     return this.write('scrollTimelineName', value);
   }
   /**
@@ -4277,7 +5087,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
    */
-  appearance(value: PropertyValue<'appearance', T>): this {
+  appearance<const Value extends PropertyValue<'appearance', T>>(
+    value: Value & CheckedPropertyValue<'appearance', T, Value>,
+  ): this {
     return this.write('appearance', value);
   }
   /**
@@ -4285,7 +5097,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret
    */
-  caret(value: PropertyValue<'caret', T>): this {
+  caret<const Value extends PropertyValue<'caret', T>>(
+    value: Value & CheckedPropertyValue<'caret', T, Value>,
+  ): this {
     return this.write('caret', value);
   }
   /**
@@ -4295,7 +5109,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret-shape
    */
-  caretShape(value: PropertyValue<'caretShape', T>): this {
+  caretShape<const Value extends PropertyValue<'caretShape', T>>(
+    value: Value & CheckedPropertyValue<'caretShape', T, Value>,
+  ): this {
     return this.write('caretShape', value);
   }
   /**
@@ -4313,7 +5129,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/content-visibility
    */
-  contentVisibility(value: PropertyValue<'contentVisibility', T>): this {
+  contentVisibility<const Value extends PropertyValue<'contentVisibility', T>>(
+    value: Value & CheckedPropertyValue<'contentVisibility', T, Value>,
+  ): this {
     return this.write('contentVisibility', value);
   }
   /**
@@ -4323,7 +5141,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
    */
-  cursor(value: PropertyValue<'cursor', T>): this {
+  cursor<const Value extends PropertyValue<'cursor', T>>(
+    value: Value & CheckedPropertyValue<'cursor', T, Value>,
+  ): this {
     return this.write('cursor', value);
   }
   /**
@@ -4341,7 +5161,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
    */
-  pointerEvents(value: PropertyValue<'pointerEvents', T>): this {
+  pointerEvents<const Value extends PropertyValue<'pointerEvents', T>>(
+    value: Value & CheckedPropertyValue<'pointerEvents', T, Value>,
+  ): this {
     return this.write('pointerEvents', value);
   }
   /**
@@ -4351,7 +5173,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/resize
    */
-  resize(value: PropertyValue<'resize', T>): this {
+  resize<const Value extends PropertyValue<'resize', T>>(
+    value: Value & CheckedPropertyValue<'resize', T, Value>,
+  ): this {
     return this.write('resize', value);
   }
   /**
@@ -4369,7 +5193,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
    */
-  touchAction(value: PropertyValue<'touchAction', T>): this {
+  touchAction<const Value extends PropertyValue<'touchAction', T>>(
+    value: Value & CheckedPropertyValue<'touchAction', T, Value>,
+  ): this {
     return this.write('touchAction', value);
   }
   /**
@@ -4385,7 +5211,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/user-select
    */
-  userSelect(value: PropertyValue<'userSelect', T>): this {
+  userSelect<const Value extends PropertyValue<'userSelect', T>>(
+    value: Value & CheckedPropertyValue<'userSelect', T, Value>,
+  ): this {
     return this.write('userSelect', value);
   }
   /**
@@ -4401,7 +5229,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/visibility
    */
-  visibility(value: PropertyValue<'visibility', T>): this {
+  visibility<const Value extends PropertyValue<'visibility', T>>(
+    value: Value & CheckedPropertyValue<'visibility', T, Value>,
+  ): this {
     return this.write('visibility', value);
   }
   /**
@@ -4411,7 +5241,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
    */
-  breakAfter(value: PropertyValue<'breakAfter', T>): this {
+  breakAfter<const Value extends PropertyValue<'breakAfter', T>>(
+    value: Value & CheckedPropertyValue<'breakAfter', T, Value>,
+  ): this {
     return this.write('breakAfter', value);
   }
   /**
@@ -4421,7 +5253,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
    */
-  breakBefore(value: PropertyValue<'breakBefore', T>): this {
+  breakBefore<const Value extends PropertyValue<'breakBefore', T>>(
+    value: Value & CheckedPropertyValue<'breakBefore', T, Value>,
+  ): this {
     return this.write('breakBefore', value);
   }
   /**
@@ -4431,7 +5265,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-inside
    */
-  breakInside(value: PropertyValue<'breakInside', T>): this {
+  breakInside<const Value extends PropertyValue<'breakInside', T>>(
+    value: Value & CheckedPropertyValue<'breakInside', T, Value>,
+  ): this {
     return this.write('breakInside', value);
   }
   /**
@@ -4441,7 +5277,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caption-side
    */
-  captionSide(value: PropertyValue<'captionSide', T>): this {
+  captionSide<const Value extends PropertyValue<'captionSide', T>>(
+    value: Value & CheckedPropertyValue<'captionSide', T, Value>,
+  ): this {
     return this.write('captionSide', value);
   }
   /**
@@ -4459,7 +5297,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain
    */
-  contain(value: PropertyValue<'contain', T>): this {
+  contain<const Value extends PropertyValue<'contain', T>>(
+    value: Value & CheckedPropertyValue<'contain', T, Value>,
+  ): this {
     return this.write('contain', value);
   }
   /**
@@ -4467,7 +5307,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/container
    */
-  container(value: PropertyValue<'container', T>): this {
+  container<const Value extends PropertyValue<'container', T>>(
+    value: Value & CheckedPropertyValue<'container', T, Value>,
+  ): this {
     return this.write('container', value);
   }
   /**
@@ -4477,7 +5319,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/container-name
    */
-  containerName(value: PropertyValue<'containerName', T>): this {
+  containerName<const Value extends PropertyValue<'containerName', T>>(
+    value: Value & CheckedPropertyValue<'containerName', T, Value>,
+  ): this {
     return this.write('containerName', value);
   }
   /**
@@ -4495,7 +5339,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/container-type
    */
-  containerType(value: PropertyValue<'containerType', T>): this {
+  containerType<const Value extends PropertyValue<'containerType', T>>(
+    value: Value & CheckedPropertyValue<'containerType', T, Value>,
+  ): this {
     return this.write('containerType', value);
   }
   /**
@@ -4505,7 +5351,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-block-size
    */
-  containIntrinsicBlockSize(value: PropertyValue<'containIntrinsicBlockSize', T>): this {
+  containIntrinsicBlockSize<const Value extends PropertyValue<'containIntrinsicBlockSize', T>>(
+    value: Value & CheckedPropertyValue<'containIntrinsicBlockSize', T, Value>,
+  ): this {
     return this.write('containIntrinsicBlockSize', value);
   }
   /**
@@ -4515,7 +5363,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-height
    */
-  containIntrinsicHeight(value: PropertyValue<'containIntrinsicHeight', T>): this {
+  containIntrinsicHeight<const Value extends PropertyValue<'containIntrinsicHeight', T>>(
+    value: Value & CheckedPropertyValue<'containIntrinsicHeight', T, Value>,
+  ): this {
     return this.write('containIntrinsicHeight', value);
   }
   /**
@@ -4525,7 +5375,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-inline-size
    */
-  containIntrinsicInlineSize(value: PropertyValue<'containIntrinsicInlineSize', T>): this {
+  containIntrinsicInlineSize<const Value extends PropertyValue<'containIntrinsicInlineSize', T>>(
+    value: Value & CheckedPropertyValue<'containIntrinsicInlineSize', T, Value>,
+  ): this {
     return this.write('containIntrinsicInlineSize', value);
   }
   /**
@@ -4533,7 +5385,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-size
    */
-  containIntrinsicSize(value: PropertyValue<'containIntrinsicSize', T>): this {
+  containIntrinsicSize<const Value extends PropertyValue<'containIntrinsicSize', T>>(
+    value: Value & CheckedPropertyValue<'containIntrinsicSize', T, Value>,
+  ): this {
     return this.write('containIntrinsicSize', value);
   }
   /**
@@ -4543,7 +5397,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-width
    */
-  containIntrinsicWidth(value: PropertyValue<'containIntrinsicWidth', T>): this {
+  containIntrinsicWidth<const Value extends PropertyValue<'containIntrinsicWidth', T>>(
+    value: Value & CheckedPropertyValue<'containIntrinsicWidth', T, Value>,
+  ): this {
     return this.write('containIntrinsicWidth', value);
   }
   /**
@@ -4553,7 +5409,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/content
    */
-  content(value: PropertyValue<'content', T>): this {
+  content<const Value extends PropertyValue<'content', T>>(
+    value: Value & CheckedPropertyValue<'content', T, Value>,
+  ): this {
     return this.write('content', value);
   }
   /**
@@ -4563,7 +5421,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/counter-increment
    */
-  counterIncrement(value: PropertyValue<'counterIncrement', T>): this {
+  counterIncrement<const Value extends PropertyValue<'counterIncrement', T>>(
+    value: Value & CheckedPropertyValue<'counterIncrement', T, Value>,
+  ): this {
     return this.write('counterIncrement', value);
   }
   /**
@@ -4573,7 +5433,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/counter-reset
    */
-  counterReset(value: PropertyValue<'counterReset', T>): this {
+  counterReset<const Value extends PropertyValue<'counterReset', T>>(
+    value: Value & CheckedPropertyValue<'counterReset', T, Value>,
+  ): this {
     return this.write('counterReset', value);
   }
   /**
@@ -4583,7 +5445,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/counter-set
    */
-  counterSet(value: PropertyValue<'counterSet', T>): this {
+  counterSet<const Value extends PropertyValue<'counterSet', T>>(
+    value: Value & CheckedPropertyValue<'counterSet', T, Value>,
+  ): this {
     return this.write('counterSet', value);
   }
   /**
@@ -4593,7 +5457,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/empty-cells
    */
-  emptyCells(value: PropertyValue<'emptyCells', T>): this {
+  emptyCells<const Value extends PropertyValue<'emptyCells', T>>(
+    value: Value & CheckedPropertyValue<'emptyCells', T, Value>,
+  ): this {
     return this.write('emptyCells', value);
   }
   /**
@@ -4601,7 +5467,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style
    */
-  listStyle(value: PropertyValue<'listStyle', T>): this {
+  listStyle<const Value extends PropertyValue<'listStyle', T>>(
+    value: Value & CheckedPropertyValue<'listStyle', T, Value>,
+  ): this {
     return this.write('listStyle', value);
   }
   /**
@@ -4611,7 +5479,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style-image
    */
-  listStyleImage(value: PropertyValue<'listStyleImage', T>): this {
+  listStyleImage<const Value extends PropertyValue<'listStyleImage', T>>(
+    value: Value & CheckedPropertyValue<'listStyleImage', T, Value>,
+  ): this {
     return this.write('listStyleImage', value);
   }
   /**
@@ -4621,7 +5491,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style-position
    */
-  listStylePosition(value: PropertyValue<'listStylePosition', T>): this {
+  listStylePosition<const Value extends PropertyValue<'listStylePosition', T>>(
+    value: Value & CheckedPropertyValue<'listStylePosition', T, Value>,
+  ): this {
     return this.write('listStylePosition', value);
   }
   /**
@@ -4631,7 +5503,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style-type
    */
-  listStyleType(value: PropertyValue<'listStyleType', T>): this {
+  listStyleType<const Value extends PropertyValue<'listStyleType', T>>(
+    value: Value & CheckedPropertyValue<'listStyleType', T, Value>,
+  ): this {
     return this.write('listStyleType', value);
   }
   /**
@@ -4641,7 +5515,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/orphans
    */
-  orphans(value: PropertyValue<'orphans', T>): this {
+  orphans<const Value extends PropertyValue<'orphans', T>>(
+    value: Value & CheckedPropertyValue<'orphans', T, Value>,
+  ): this {
     return this.write('orphans', value);
   }
   /**
@@ -4651,7 +5527,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page
    */
-  page(value: PropertyValue<'page', T>): this {
+  page<const Value extends PropertyValue<'page', T>>(
+    value: Value & CheckedPropertyValue<'page', T, Value>,
+  ): this {
     return this.write('page', value);
   }
   /**
@@ -4661,7 +5539,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/table-layout
    */
-  tableLayout(value: PropertyValue<'tableLayout', T>): this {
+  tableLayout<const Value extends PropertyValue<'tableLayout', T>>(
+    value: Value & CheckedPropertyValue<'tableLayout', T, Value>,
+  ): this {
     return this.write('tableLayout', value);
   }
   /**
@@ -4671,7 +5551,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/widows
    */
-  widows(value: PropertyValue<'widows', T>): this {
+  widows<const Value extends PropertyValue<'widows', T>>(
+    value: Value & CheckedPropertyValue<'widows', T, Value>,
+  ): this {
     return this.write('widows', value);
   }
   /**
@@ -4681,7 +5563,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/baseline-shift
    */
-  baselineShift(value: PropertyValue<'baselineShift', T>): this {
+  baselineShift<const Value extends PropertyValue<'baselineShift', T>>(
+    value: Value & CheckedPropertyValue<'baselineShift', T, Value>,
+  ): this {
     return this.write('baselineShift', value);
   }
   /**
@@ -4691,7 +5575,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/dominant-baseline
    */
-  dominantBaseline(value: PropertyValue<'dominantBaseline', T>): this {
+  dominantBaseline<const Value extends PropertyValue<'dominantBaseline', T>>(
+    value: Value & CheckedPropertyValue<'dominantBaseline', T, Value>,
+  ): this {
     return this.write('dominantBaseline', value);
   }
   /**
@@ -4701,7 +5587,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/fill
    */
-  fill(value: PropertyValue<'fill', T>): this {
+  fill<const Value extends PropertyValue<'fill', T>>(
+    value: Value & CheckedPropertyValue<'fill', T, Value>,
+  ): this {
     return this.write('fill', value);
   }
   /**
@@ -4711,7 +5599,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/fill-opacity
    */
-  fillOpacity(value: PropertyValue<'fillOpacity', T>): this {
+  fillOpacity<const Value extends PropertyValue<'fillOpacity', T>>(
+    value: Value & CheckedPropertyValue<'fillOpacity', T, Value>,
+  ): this {
     return this.write('fillOpacity', value);
   }
   /**
@@ -4721,7 +5611,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/fill-rule
    */
-  fillRule(value: PropertyValue<'fillRule', T>): this {
+  fillRule<const Value extends PropertyValue<'fillRule', T>>(
+    value: Value & CheckedPropertyValue<'fillRule', T, Value>,
+  ): this {
     return this.write('fillRule', value);
   }
   /**
@@ -4731,7 +5623,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flood-color
    */
-  floodColor(value: PropertyValue<'floodColor', T>): this {
+  floodColor<const Value extends PropertyValue<'floodColor', T>>(
+    value: Value & CheckedPropertyValue<'floodColor', T, Value>,
+  ): this {
     return this.write('floodColor', value);
   }
   /**
@@ -4741,7 +5635,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flood-opacity
    */
-  floodOpacity(value: PropertyValue<'floodOpacity', T>): this {
+  floodOpacity<const Value extends PropertyValue<'floodOpacity', T>>(
+    value: Value & CheckedPropertyValue<'floodOpacity', T, Value>,
+  ): this {
     return this.write('floodOpacity', value);
   }
   /**
@@ -4749,7 +5645,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/glyph-orientation-vertical
    */
-  glyphOrientationVertical(value: PropertyValue<'glyphOrientationVertical', T>): this {
+  glyphOrientationVertical<const Value extends PropertyValue<'glyphOrientationVertical', T>>(
+    value: Value & CheckedPropertyValue<'glyphOrientationVertical', T, Value>,
+  ): this {
     return this.write('glyphOrientationVertical', value);
   }
   /**
@@ -4759,7 +5657,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/lighting-color
    */
-  lightingColor(value: PropertyValue<'lightingColor', T>): this {
+  lightingColor<const Value extends PropertyValue<'lightingColor', T>>(
+    value: Value & CheckedPropertyValue<'lightingColor', T, Value>,
+  ): this {
     return this.write('lightingColor', value);
   }
   /**
@@ -4767,7 +5667,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker
    */
-  marker(value: PropertyValue<'marker', T>): this {
+  marker<const Value extends PropertyValue<'marker', T>>(
+    value: Value & CheckedPropertyValue<'marker', T, Value>,
+  ): this {
     return this.write('marker', value);
   }
   /**
@@ -4777,7 +5679,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker-end
    */
-  markerEnd(value: PropertyValue<'markerEnd', T>): this {
+  markerEnd<const Value extends PropertyValue<'markerEnd', T>>(
+    value: Value & CheckedPropertyValue<'markerEnd', T, Value>,
+  ): this {
     return this.write('markerEnd', value);
   }
   /**
@@ -4787,7 +5691,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker-mid
    */
-  markerMid(value: PropertyValue<'markerMid', T>): this {
+  markerMid<const Value extends PropertyValue<'markerMid', T>>(
+    value: Value & CheckedPropertyValue<'markerMid', T, Value>,
+  ): this {
     return this.write('markerMid', value);
   }
   /**
@@ -4797,7 +5703,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker-start
    */
-  markerStart(value: PropertyValue<'markerStart', T>): this {
+  markerStart<const Value extends PropertyValue<'markerStart', T>>(
+    value: Value & CheckedPropertyValue<'markerStart', T, Value>,
+  ): this {
     return this.write('markerStart', value);
   }
   /**
@@ -4807,7 +5715,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/paint-order
    */
-  paintOrder(value: PropertyValue<'paintOrder', T>): this {
+  paintOrder<const Value extends PropertyValue<'paintOrder', T>>(
+    value: Value & CheckedPropertyValue<'paintOrder', T, Value>,
+  ): this {
     return this.write('paintOrder', value);
   }
   /**
@@ -4817,7 +5727,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stop-color
    */
-  stopColor(value: PropertyValue<'stopColor', T>): this {
+  stopColor<const Value extends PropertyValue<'stopColor', T>>(
+    value: Value & CheckedPropertyValue<'stopColor', T, Value>,
+  ): this {
     return this.write('stopColor', value);
   }
   /**
@@ -4827,7 +5739,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stop-opacity
    */
-  stopOpacity(value: PropertyValue<'stopOpacity', T>): this {
+  stopOpacity<const Value extends PropertyValue<'stopOpacity', T>>(
+    value: Value & CheckedPropertyValue<'stopOpacity', T, Value>,
+  ): this {
     return this.write('stopOpacity', value);
   }
   /**
@@ -4835,7 +5749,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke
    */
-  stroke(value: PropertyValue<'stroke', T>): this {
+  stroke<const Value extends PropertyValue<'stroke', T>>(
+    value: Value & CheckedPropertyValue<'stroke', T, Value>,
+  ): this {
     return this.write('stroke', value);
   }
   /**
@@ -4845,7 +5761,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-dasharray
    */
-  strokeDasharray(value: PropertyValue<'strokeDasharray', T>): this {
+  strokeDasharray<const Value extends PropertyValue<'strokeDasharray', T>>(
+    value: Value & CheckedPropertyValue<'strokeDasharray', T, Value>,
+  ): this {
     return this.write('strokeDasharray', value);
   }
   /**
@@ -4855,7 +5773,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-dashoffset
    */
-  strokeDashoffset(value: PropertyValue<'strokeDashoffset', T>): this {
+  strokeDashoffset<const Value extends PropertyValue<'strokeDashoffset', T>>(
+    value: Value & CheckedPropertyValue<'strokeDashoffset', T, Value>,
+  ): this {
     return this.write('strokeDashoffset', value);
   }
   /**
@@ -4865,7 +5785,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-linecap
    */
-  strokeLinecap(value: PropertyValue<'strokeLinecap', T>): this {
+  strokeLinecap<const Value extends PropertyValue<'strokeLinecap', T>>(
+    value: Value & CheckedPropertyValue<'strokeLinecap', T, Value>,
+  ): this {
     return this.write('strokeLinecap', value);
   }
   /**
@@ -4875,7 +5797,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-linejoin
    */
-  strokeLinejoin(value: PropertyValue<'strokeLinejoin', T>): this {
+  strokeLinejoin<const Value extends PropertyValue<'strokeLinejoin', T>>(
+    value: Value & CheckedPropertyValue<'strokeLinejoin', T, Value>,
+  ): this {
     return this.write('strokeLinejoin', value);
   }
   /**
@@ -4885,7 +5809,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-miterlimit
    */
-  strokeMiterlimit(value: PropertyValue<'strokeMiterlimit', T>): this {
+  strokeMiterlimit<const Value extends PropertyValue<'strokeMiterlimit', T>>(
+    value: Value & CheckedPropertyValue<'strokeMiterlimit', T, Value>,
+  ): this {
     return this.write('strokeMiterlimit', value);
   }
   /**
@@ -4895,7 +5821,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-opacity
    */
-  strokeOpacity(value: PropertyValue<'strokeOpacity', T>): this {
+  strokeOpacity<const Value extends PropertyValue<'strokeOpacity', T>>(
+    value: Value & CheckedPropertyValue<'strokeOpacity', T, Value>,
+  ): this {
     return this.write('strokeOpacity', value);
   }
   /**
@@ -4905,7 +5833,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-width
    */
-  strokeWidth(value: PropertyValue<'strokeWidth', T>): this {
+  strokeWidth<const Value extends PropertyValue<'strokeWidth', T>>(
+    value: Value & CheckedPropertyValue<'strokeWidth', T, Value>,
+  ): this {
     return this.write('strokeWidth', value);
   }
   /**
@@ -4915,7 +5845,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vector-effect
    */
-  vectorEffect(value: PropertyValue<'vectorEffect', T>): this {
+  vectorEffect<const Value extends PropertyValue<'vectorEffect', T>>(
+    value: Value & CheckedPropertyValue<'vectorEffect', T, Value>,
+  ): this {
     return this.write('vectorEffect', value);
   }
   /**
@@ -4926,7 +5858,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-align
    */
-  boxAlign(value: PropertyValue<'boxAlign', T>): this {
+  boxAlign<const Value extends PropertyValue<'boxAlign', T>>(
+    value: Value & CheckedPropertyValue<'boxAlign', T, Value>,
+  ): this {
     return this.write('boxAlign', value);
   }
   /**
@@ -4937,7 +5871,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-direction
    */
-  boxDirection(value: PropertyValue<'boxDirection', T>): this {
+  boxDirection<const Value extends PropertyValue<'boxDirection', T>>(
+    value: Value & CheckedPropertyValue<'boxDirection', T, Value>,
+  ): this {
     return this.write('boxDirection', value);
   }
   /**
@@ -4948,7 +5884,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-flex
    */
-  boxFlex(value: PropertyValue<'boxFlex', T>): this {
+  boxFlex<const Value extends PropertyValue<'boxFlex', T>>(
+    value: Value & CheckedPropertyValue<'boxFlex', T, Value>,
+  ): this {
     return this.write('boxFlex', value);
   }
   /**
@@ -4959,7 +5897,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-flex-group
    */
-  boxFlexGroup(value: PropertyValue<'boxFlexGroup', T>): this {
+  boxFlexGroup<const Value extends PropertyValue<'boxFlexGroup', T>>(
+    value: Value & CheckedPropertyValue<'boxFlexGroup', T, Value>,
+  ): this {
     return this.write('boxFlexGroup', value);
   }
   /**
@@ -4970,7 +5910,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-lines
    */
-  boxLines(value: PropertyValue<'boxLines', T>): this {
+  boxLines<const Value extends PropertyValue<'boxLines', T>>(
+    value: Value & CheckedPropertyValue<'boxLines', T, Value>,
+  ): this {
     return this.write('boxLines', value);
   }
   /**
@@ -4981,7 +5923,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-ordinal-group
    */
-  boxOrdinalGroup(value: PropertyValue<'boxOrdinalGroup', T>): this {
+  boxOrdinalGroup<const Value extends PropertyValue<'boxOrdinalGroup', T>>(
+    value: Value & CheckedPropertyValue<'boxOrdinalGroup', T, Value>,
+  ): this {
     return this.write('boxOrdinalGroup', value);
   }
   /**
@@ -4992,7 +5936,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-orient
    */
-  boxOrient(value: PropertyValue<'boxOrient', T>): this {
+  boxOrient<const Value extends PropertyValue<'boxOrient', T>>(
+    value: Value & CheckedPropertyValue<'boxOrient', T, Value>,
+  ): this {
     return this.write('boxOrient', value);
   }
   /**
@@ -5003,7 +5949,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-pack
    */
-  boxPack(value: PropertyValue<'boxPack', T>): this {
+  boxPack<const Value extends PropertyValue<'boxPack', T>>(
+    value: Value & CheckedPropertyValue<'boxPack', T, Value>,
+  ): this {
     return this.write('boxPack', value);
   }
   /**
@@ -5014,7 +5962,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip
    */
-  clip(value: PropertyValue<'clip', T>): this {
+  clip<const Value extends PropertyValue<'clip', T>>(
+    value: Value & CheckedPropertyValue<'clip', T, Value>,
+  ): this {
     return this.write('clip', value);
   }
   /**
@@ -5025,7 +5975,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-stretch
    */
-  fontStretch(value: PropertyValue<'fontStretch', T>): this {
+  fontStretch<const Value extends PropertyValue<'fontStretch', T>>(
+    value: Value & CheckedPropertyValue<'fontStretch', T, Value>,
+  ): this {
     return this.write('fontStretch', value);
   }
   /**
@@ -5037,7 +5989,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column-gap
    */
-  gridColumnGap(value: PropertyValue<'gridColumnGap', T>): this {
+  gridColumnGap<const Value extends PropertyValue<'gridColumnGap', T>>(
+    value: Value & CheckedPropertyValue<'gridColumnGap', T, Value>,
+  ): this {
     return this.write('gridColumnGap', value);
   }
   /**
@@ -5047,7 +6001,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-gap
    */
-  gridGap(value: PropertyValue<'gridGap', T>): this {
+  gridGap<const Value extends PropertyValue<'gridGap', T>>(
+    value: Value & CheckedPropertyValue<'gridGap', T, Value>,
+  ): this {
     return this.write('gridGap', value);
   }
   /**
@@ -5059,7 +6015,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row-gap
    */
-  gridRowGap(value: PropertyValue<'gridRowGap', T>): this {
+  gridRowGap<const Value extends PropertyValue<'gridRowGap', T>>(
+    value: Value & CheckedPropertyValue<'gridRowGap', T, Value>,
+  ): this {
     return this.write('gridRowGap', value);
   }
   /**
@@ -5070,7 +6028,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ime-mode
    */
-  imeMode(value: PropertyValue<'imeMode', T>): this {
+  imeMode<const Value extends PropertyValue<'imeMode', T>>(
+    value: Value & CheckedPropertyValue<'imeMode', T, Value>,
+  ): this {
     return this.write('imeMode', value);
   }
   /**
@@ -5082,7 +6042,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
    */
-  insetArea(value: PropertyValue<'insetArea', T>): this {
+  insetArea<const Value extends PropertyValue<'insetArea', T>>(
+    value: Value & CheckedPropertyValue<'insetArea', T, Value>,
+  ): this {
     return this.write('insetArea', value);
   }
   /**
@@ -5094,7 +6056,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-align
    */
-  KhtmlBoxAlign(value: PropertyValue<'KhtmlBoxAlign', T>): this {
+  KhtmlBoxAlign<const Value extends PropertyValue<'KhtmlBoxAlign', T>>(
+    value: Value & CheckedPropertyValue<'KhtmlBoxAlign', T, Value>,
+  ): this {
     return this.write('KhtmlBoxAlign', value);
   }
   /**
@@ -5106,7 +6070,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-direction
    */
-  KhtmlBoxDirection(value: PropertyValue<'KhtmlBoxDirection', T>): this {
+  KhtmlBoxDirection<const Value extends PropertyValue<'KhtmlBoxDirection', T>>(
+    value: Value & CheckedPropertyValue<'KhtmlBoxDirection', T, Value>,
+  ): this {
     return this.write('KhtmlBoxDirection', value);
   }
   /**
@@ -5118,7 +6084,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-flex
    */
-  KhtmlBoxFlex(value: PropertyValue<'KhtmlBoxFlex', T>): this {
+  KhtmlBoxFlex<const Value extends PropertyValue<'KhtmlBoxFlex', T>>(
+    value: Value & CheckedPropertyValue<'KhtmlBoxFlex', T, Value>,
+  ): this {
     return this.write('KhtmlBoxFlex', value);
   }
   /**
@@ -5130,7 +6098,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-flex-group
    */
-  KhtmlBoxFlexGroup(value: PropertyValue<'KhtmlBoxFlexGroup', T>): this {
+  KhtmlBoxFlexGroup<const Value extends PropertyValue<'KhtmlBoxFlexGroup', T>>(
+    value: Value & CheckedPropertyValue<'KhtmlBoxFlexGroup', T, Value>,
+  ): this {
     return this.write('KhtmlBoxFlexGroup', value);
   }
   /**
@@ -5142,7 +6112,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-lines
    */
-  KhtmlBoxLines(value: PropertyValue<'KhtmlBoxLines', T>): this {
+  KhtmlBoxLines<const Value extends PropertyValue<'KhtmlBoxLines', T>>(
+    value: Value & CheckedPropertyValue<'KhtmlBoxLines', T, Value>,
+  ): this {
     return this.write('KhtmlBoxLines', value);
   }
   /**
@@ -5154,7 +6126,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-ordinal-group
    */
-  KhtmlBoxOrdinalGroup(value: PropertyValue<'KhtmlBoxOrdinalGroup', T>): this {
+  KhtmlBoxOrdinalGroup<const Value extends PropertyValue<'KhtmlBoxOrdinalGroup', T>>(
+    value: Value & CheckedPropertyValue<'KhtmlBoxOrdinalGroup', T, Value>,
+  ): this {
     return this.write('KhtmlBoxOrdinalGroup', value);
   }
   /**
@@ -5166,7 +6140,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-orient
    */
-  KhtmlBoxOrient(value: PropertyValue<'KhtmlBoxOrient', T>): this {
+  KhtmlBoxOrient<const Value extends PropertyValue<'KhtmlBoxOrient', T>>(
+    value: Value & CheckedPropertyValue<'KhtmlBoxOrient', T, Value>,
+  ): this {
     return this.write('KhtmlBoxOrient', value);
   }
   /**
@@ -5178,7 +6154,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-pack
    */
-  KhtmlBoxPack(value: PropertyValue<'KhtmlBoxPack', T>): this {
+  KhtmlBoxPack<const Value extends PropertyValue<'KhtmlBoxPack', T>>(
+    value: Value & CheckedPropertyValue<'KhtmlBoxPack', T, Value>,
+  ): this {
     return this.write('KhtmlBoxPack', value);
   }
   /**
@@ -5190,7 +6168,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-line-break
    */
-  KhtmlLineBreak(value: PropertyValue<'KhtmlLineBreak', T>): this {
+  KhtmlLineBreak<const Value extends PropertyValue<'KhtmlLineBreak', T>>(
+    value: Value & CheckedPropertyValue<'KhtmlLineBreak', T, Value>,
+  ): this {
     return this.write('KhtmlLineBreak', value);
   }
   /**
@@ -5208,7 +6188,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-opacity
    */
-  KhtmlOpacity(value: PropertyValue<'KhtmlOpacity', T>): this {
+  KhtmlOpacity<const Value extends PropertyValue<'KhtmlOpacity', T>>(
+    value: Value & CheckedPropertyValue<'KhtmlOpacity', T, Value>,
+  ): this {
     return this.write('KhtmlOpacity', value);
   }
   /**
@@ -5226,7 +6208,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-user-select
    */
-  KhtmlUserSelect(value: PropertyValue<'KhtmlUserSelect', T>): this {
+  KhtmlUserSelect<const Value extends PropertyValue<'KhtmlUserSelect', T>>(
+    value: Value & CheckedPropertyValue<'KhtmlUserSelect', T, Value>,
+  ): this {
     return this.write('KhtmlUserSelect', value);
   }
   /**
@@ -5235,7 +6219,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
    */
-  MozAnimation(value: PropertyValue<'MozAnimation', T>): this {
+  MozAnimation<const Value extends PropertyValue<'MozAnimation', T>>(
+    value: Value & CheckedPropertyValue<'MozAnimation', T, Value>,
+  ): this {
     return this.write('MozAnimation', value);
   }
   /**
@@ -5246,7 +6232,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-delay
    */
-  MozAnimationDelay(value: PropertyValue<'MozAnimationDelay', T>): this {
+  MozAnimationDelay<const Value extends PropertyValue<'MozAnimationDelay', T>>(
+    value: Value & CheckedPropertyValue<'MozAnimationDelay', T, Value>,
+  ): this {
     return this.write('MozAnimationDelay', value);
   }
   /**
@@ -5257,7 +6245,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-direction
    */
-  MozAnimationDirection(value: PropertyValue<'MozAnimationDirection', T>): this {
+  MozAnimationDirection<const Value extends PropertyValue<'MozAnimationDirection', T>>(
+    value: Value & CheckedPropertyValue<'MozAnimationDirection', T, Value>,
+  ): this {
     return this.write('MozAnimationDirection', value);
   }
   /**
@@ -5268,7 +6258,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-duration
    */
-  MozAnimationDuration(value: PropertyValue<'MozAnimationDuration', T>): this {
+  MozAnimationDuration<const Value extends PropertyValue<'MozAnimationDuration', T>>(
+    value: Value & CheckedPropertyValue<'MozAnimationDuration', T, Value>,
+  ): this {
     return this.write('MozAnimationDuration', value);
   }
   /**
@@ -5287,7 +6279,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-fill-mode
    */
-  MozAnimationFillMode(value: PropertyValue<'MozAnimationFillMode', T>): this {
+  MozAnimationFillMode<const Value extends PropertyValue<'MozAnimationFillMode', T>>(
+    value: Value & CheckedPropertyValue<'MozAnimationFillMode', T, Value>,
+  ): this {
     return this.write('MozAnimationFillMode', value);
   }
   /**
@@ -5298,7 +6292,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-iteration-count
    */
-  MozAnimationIterationCount(value: PropertyValue<'MozAnimationIterationCount', T>): this {
+  MozAnimationIterationCount<const Value extends PropertyValue<'MozAnimationIterationCount', T>>(
+    value: Value & CheckedPropertyValue<'MozAnimationIterationCount', T, Value>,
+  ): this {
     return this.write('MozAnimationIterationCount', value);
   }
   /**
@@ -5309,7 +6305,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-name
    */
-  MozAnimationName(value: PropertyValue<'MozAnimationName', T>): this {
+  MozAnimationName<const Value extends PropertyValue<'MozAnimationName', T>>(
+    value: Value & CheckedPropertyValue<'MozAnimationName', T, Value>,
+  ): this {
     return this.write('MozAnimationName', value);
   }
   /**
@@ -5320,7 +6318,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-play-state
    */
-  MozAnimationPlayState(value: PropertyValue<'MozAnimationPlayState', T>): this {
+  MozAnimationPlayState<const Value extends PropertyValue<'MozAnimationPlayState', T>>(
+    value: Value & CheckedPropertyValue<'MozAnimationPlayState', T, Value>,
+  ): this {
     return this.write('MozAnimationPlayState', value);
   }
   /**
@@ -5331,7 +6331,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-timing-function
    */
-  MozAnimationTimingFunction(value: PropertyValue<'MozAnimationTimingFunction', T>): this {
+  MozAnimationTimingFunction<const Value extends PropertyValue<'MozAnimationTimingFunction', T>>(
+    value: Value & CheckedPropertyValue<'MozAnimationTimingFunction', T, Value>,
+  ): this {
     return this.write('MozAnimationTimingFunction', value);
   }
   /**
@@ -5342,7 +6344,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
-  MozAppearance(value: PropertyValue<'MozAppearance', T>): this {
+  MozAppearance<const Value extends PropertyValue<'MozAppearance', T>>(
+    value: Value & CheckedPropertyValue<'MozAppearance', T, Value>,
+  ): this {
     return this.write('MozAppearance', value);
   }
   /**
@@ -5353,7 +6357,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-backface-visibility
    */
-  MozBackfaceVisibility(value: PropertyValue<'MozBackfaceVisibility', T>): this {
+  MozBackfaceVisibility<const Value extends PropertyValue<'MozBackfaceVisibility', T>>(
+    value: Value & CheckedPropertyValue<'MozBackfaceVisibility', T, Value>,
+  ): this {
     return this.write('MozBackfaceVisibility', value);
   }
   /**
@@ -5365,7 +6371,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-background-clip
    */
-  MozBackgroundClip(value: PropertyValue<'MozBackgroundClip', T>): this {
+  MozBackgroundClip<const Value extends PropertyValue<'MozBackgroundClip', T>>(
+    value: Value & CheckedPropertyValue<'MozBackgroundClip', T, Value>,
+  ): this {
     return this.write('MozBackgroundClip', value);
   }
   /**
@@ -5377,7 +6385,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-background-origin
    */
-  MozBackgroundOrigin(value: PropertyValue<'MozBackgroundOrigin', T>): this {
+  MozBackgroundOrigin<const Value extends PropertyValue<'MozBackgroundOrigin', T>>(
+    value: Value & CheckedPropertyValue<'MozBackgroundOrigin', T, Value>,
+  ): this {
     return this.write('MozBackgroundOrigin', value);
   }
   /**
@@ -5397,7 +6407,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-background-size
    */
-  MozBackgroundSize(value: PropertyValue<'MozBackgroundSize', T>): this {
+  MozBackgroundSize<const Value extends PropertyValue<'MozBackgroundSize', T>>(
+    value: Value & CheckedPropertyValue<'MozBackgroundSize', T, Value>,
+  ): this {
     return this.write('MozBackgroundSize', value);
   }
   /**
@@ -5408,7 +6420,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-binding
    */
-  MozBinding(value: PropertyValue<'MozBinding', T>): this {
+  MozBinding<const Value extends PropertyValue<'MozBinding', T>>(
+    value: Value & CheckedPropertyValue<'MozBinding', T, Value>,
+  ): this {
     return this.write('MozBinding', value);
   }
   /**
@@ -5419,7 +6433,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-bottom-colors
    */
-  MozBorderBottomColors(value: PropertyValue<'MozBorderBottomColors', T>): this {
+  MozBorderBottomColors<const Value extends PropertyValue<'MozBorderBottomColors', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderBottomColors', T, Value>,
+  ): this {
     return this.write('MozBorderBottomColors', value);
   }
   /**
@@ -5430,7 +6446,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-color
    */
-  MozBorderEndColor(value: PropertyValue<'MozBorderEndColor', T>): this {
+  MozBorderEndColor<const Value extends PropertyValue<'MozBorderEndColor', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderEndColor', T, Value>,
+  ): this {
     return this.write('MozBorderEndColor', value);
   }
   /**
@@ -5441,7 +6459,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
    */
-  MozBorderEndStyle(value: PropertyValue<'MozBorderEndStyle', T>): this {
+  MozBorderEndStyle<const Value extends PropertyValue<'MozBorderEndStyle', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderEndStyle', T, Value>,
+  ): this {
     return this.write('MozBorderEndStyle', value);
   }
   /**
@@ -5452,7 +6472,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-width
    */
-  MozBorderEndWidth(value: PropertyValue<'MozBorderEndWidth', T>): this {
+  MozBorderEndWidth<const Value extends PropertyValue<'MozBorderEndWidth', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderEndWidth', T, Value>,
+  ): this {
     return this.write('MozBorderEndWidth', value);
   }
   /**
@@ -5461,7 +6483,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-image
    */
-  MozBorderImage(value: PropertyValue<'MozBorderImage', T>): this {
+  MozBorderImage<const Value extends PropertyValue<'MozBorderImage', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderImage', T, Value>,
+  ): this {
     return this.write('MozBorderImage', value);
   }
   /**
@@ -5472,7 +6496,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-left-colors
    */
-  MozBorderLeftColors(value: PropertyValue<'MozBorderLeftColors', T>): this {
+  MozBorderLeftColors<const Value extends PropertyValue<'MozBorderLeftColors', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderLeftColors', T, Value>,
+  ): this {
     return this.write('MozBorderLeftColors', value);
   }
   /**
@@ -5488,7 +6514,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius
    */
-  MozBorderRadius(value: PropertyValue<'MozBorderRadius', T>): this {
+  MozBorderRadius<const Value extends PropertyValue<'MozBorderRadius', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderRadius', T, Value>,
+  ): this {
     return this.write('MozBorderRadius', value);
   }
   /**
@@ -5500,7 +6528,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-bottomleft
    */
-  MozBorderRadiusBottomleft(value: PropertyValue<'MozBorderRadiusBottomleft', T>): this {
+  MozBorderRadiusBottomleft<const Value extends PropertyValue<'MozBorderRadiusBottomleft', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderRadiusBottomleft', T, Value>,
+  ): this {
     return this.write('MozBorderRadiusBottomleft', value);
   }
   /**
@@ -5512,7 +6542,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-bottomright
    */
-  MozBorderRadiusBottomright(value: PropertyValue<'MozBorderRadiusBottomright', T>): this {
+  MozBorderRadiusBottomright<const Value extends PropertyValue<'MozBorderRadiusBottomright', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderRadiusBottomright', T, Value>,
+  ): this {
     return this.write('MozBorderRadiusBottomright', value);
   }
   /**
@@ -5524,7 +6556,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-topleft
    */
-  MozBorderRadiusTopleft(value: PropertyValue<'MozBorderRadiusTopleft', T>): this {
+  MozBorderRadiusTopleft<const Value extends PropertyValue<'MozBorderRadiusTopleft', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderRadiusTopleft', T, Value>,
+  ): this {
     return this.write('MozBorderRadiusTopleft', value);
   }
   /**
@@ -5536,7 +6570,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-topright
    */
-  MozBorderRadiusTopright(value: PropertyValue<'MozBorderRadiusTopright', T>): this {
+  MozBorderRadiusTopright<const Value extends PropertyValue<'MozBorderRadiusTopright', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderRadiusTopright', T, Value>,
+  ): this {
     return this.write('MozBorderRadiusTopright', value);
   }
   /**
@@ -5547,7 +6583,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-right-colors
    */
-  MozBorderRightColors(value: PropertyValue<'MozBorderRightColors', T>): this {
+  MozBorderRightColors<const Value extends PropertyValue<'MozBorderRightColors', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderRightColors', T, Value>,
+  ): this {
     return this.write('MozBorderRightColors', value);
   }
   /**
@@ -5558,7 +6596,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-color
    */
-  MozBorderStartColor(value: PropertyValue<'MozBorderStartColor', T>): this {
+  MozBorderStartColor<const Value extends PropertyValue<'MozBorderStartColor', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderStartColor', T, Value>,
+  ): this {
     return this.write('MozBorderStartColor', value);
   }
   /**
@@ -5569,7 +6609,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
    */
-  MozBorderStartStyle(value: PropertyValue<'MozBorderStartStyle', T>): this {
+  MozBorderStartStyle<const Value extends PropertyValue<'MozBorderStartStyle', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderStartStyle', T, Value>,
+  ): this {
     return this.write('MozBorderStartStyle', value);
   }
   /**
@@ -5580,7 +6622,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-top-colors
    */
-  MozBorderTopColors(value: PropertyValue<'MozBorderTopColors', T>): this {
+  MozBorderTopColors<const Value extends PropertyValue<'MozBorderTopColors', T>>(
+    value: Value & CheckedPropertyValue<'MozBorderTopColors', T, Value>,
+  ): this {
     return this.write('MozBorderTopColors', value);
   }
   /**
@@ -5592,7 +6636,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-align
    */
-  MozBoxAlign(value: PropertyValue<'MozBoxAlign', T>): this {
+  MozBoxAlign<const Value extends PropertyValue<'MozBoxAlign', T>>(
+    value: Value & CheckedPropertyValue<'MozBoxAlign', T, Value>,
+  ): this {
     return this.write('MozBoxAlign', value);
   }
   /**
@@ -5604,7 +6650,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-direction
    */
-  MozBoxDirection(value: PropertyValue<'MozBoxDirection', T>): this {
+  MozBoxDirection<const Value extends PropertyValue<'MozBoxDirection', T>>(
+    value: Value & CheckedPropertyValue<'MozBoxDirection', T, Value>,
+  ): this {
     return this.write('MozBoxDirection', value);
   }
   /**
@@ -5616,7 +6664,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-flex
    */
-  MozBoxFlex(value: PropertyValue<'MozBoxFlex', T>): this {
+  MozBoxFlex<const Value extends PropertyValue<'MozBoxFlex', T>>(
+    value: Value & CheckedPropertyValue<'MozBoxFlex', T, Value>,
+  ): this {
     return this.write('MozBoxFlex', value);
   }
   /**
@@ -5628,7 +6678,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-ordinal-group
    */
-  MozBoxOrdinalGroup(value: PropertyValue<'MozBoxOrdinalGroup', T>): this {
+  MozBoxOrdinalGroup<const Value extends PropertyValue<'MozBoxOrdinalGroup', T>>(
+    value: Value & CheckedPropertyValue<'MozBoxOrdinalGroup', T, Value>,
+  ): this {
     return this.write('MozBoxOrdinalGroup', value);
   }
   /**
@@ -5640,7 +6692,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-orient
    */
-  MozBoxOrient(value: PropertyValue<'MozBoxOrient', T>): this {
+  MozBoxOrient<const Value extends PropertyValue<'MozBoxOrient', T>>(
+    value: Value & CheckedPropertyValue<'MozBoxOrient', T, Value>,
+  ): this {
     return this.write('MozBoxOrient', value);
   }
   /**
@@ -5652,7 +6706,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-pack
    */
-  MozBoxPack(value: PropertyValue<'MozBoxPack', T>): this {
+  MozBoxPack<const Value extends PropertyValue<'MozBoxPack', T>>(
+    value: Value & CheckedPropertyValue<'MozBoxPack', T, Value>,
+  ): this {
     return this.write('MozBoxPack', value);
   }
   /**
@@ -5670,7 +6726,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-shadow
    */
-  MozBoxShadow(value: PropertyValue<'MozBoxShadow', T>): this {
+  MozBoxShadow<const Value extends PropertyValue<'MozBoxShadow', T>>(
+    value: Value & CheckedPropertyValue<'MozBoxShadow', T, Value>,
+  ): this {
     return this.write('MozBoxShadow', value);
   }
   /**
@@ -5687,7 +6745,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-sizing
    */
-  MozBoxSizing(value: PropertyValue<'MozBoxSizing', T>): this {
+  MozBoxSizing<const Value extends PropertyValue<'MozBoxSizing', T>>(
+    value: Value & CheckedPropertyValue<'MozBoxSizing', T, Value>,
+  ): this {
     return this.write('MozBoxSizing', value);
   }
   /**
@@ -5699,7 +6759,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-count
    */
-  MozColumnCount(value: PropertyValue<'MozColumnCount', T>): this {
+  MozColumnCount<const Value extends PropertyValue<'MozColumnCount', T>>(
+    value: Value & CheckedPropertyValue<'MozColumnCount', T, Value>,
+  ): this {
     return this.write('MozColumnCount', value);
   }
   /**
@@ -5711,7 +6773,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-fill
    */
-  MozColumnFill(value: PropertyValue<'MozColumnFill', T>): this {
+  MozColumnFill<const Value extends PropertyValue<'MozColumnFill', T>>(
+    value: Value & CheckedPropertyValue<'MozColumnFill', T, Value>,
+  ): this {
     return this.write('MozColumnFill', value);
   }
   /**
@@ -5720,7 +6784,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule
    */
-  MozColumnRule(value: PropertyValue<'MozColumnRule', T>): this {
+  MozColumnRule<const Value extends PropertyValue<'MozColumnRule', T>>(
+    value: Value & CheckedPropertyValue<'MozColumnRule', T, Value>,
+  ): this {
     return this.write('MozColumnRule', value);
   }
   /**
@@ -5731,7 +6797,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-color
    */
-  MozColumnRuleColor(value: PropertyValue<'MozColumnRuleColor', T>): this {
+  MozColumnRuleColor<const Value extends PropertyValue<'MozColumnRuleColor', T>>(
+    value: Value & CheckedPropertyValue<'MozColumnRuleColor', T, Value>,
+  ): this {
     return this.write('MozColumnRuleColor', value);
   }
   /**
@@ -5742,7 +6810,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
    */
-  MozColumnRuleStyle(value: PropertyValue<'MozColumnRuleStyle', T>): this {
+  MozColumnRuleStyle<const Value extends PropertyValue<'MozColumnRuleStyle', T>>(
+    value: Value & CheckedPropertyValue<'MozColumnRuleStyle', T, Value>,
+  ): this {
     return this.write('MozColumnRuleStyle', value);
   }
   /**
@@ -5753,7 +6823,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-width
    */
-  MozColumnRuleWidth(value: PropertyValue<'MozColumnRuleWidth', T>): this {
+  MozColumnRuleWidth<const Value extends PropertyValue<'MozColumnRuleWidth', T>>(
+    value: Value & CheckedPropertyValue<'MozColumnRuleWidth', T, Value>,
+  ): this {
     return this.write('MozColumnRuleWidth', value);
   }
   /**
@@ -5762,7 +6834,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-columns
    */
-  MozColumns(value: PropertyValue<'MozColumns', T>): this {
+  MozColumns<const Value extends PropertyValue<'MozColumns', T>>(
+    value: Value & CheckedPropertyValue<'MozColumns', T, Value>,
+  ): this {
     return this.write('MozColumns', value);
   }
   /**
@@ -5773,7 +6847,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-width
    */
-  MozColumnWidth(value: PropertyValue<'MozColumnWidth', T>): this {
+  MozColumnWidth<const Value extends PropertyValue<'MozColumnWidth', T>>(
+    value: Value & CheckedPropertyValue<'MozColumnWidth', T, Value>,
+  ): this {
     return this.write('MozColumnWidth', value);
   }
   /**
@@ -5784,7 +6860,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-context-properties
    */
-  MozContextProperties(value: PropertyValue<'MozContextProperties', T>): this {
+  MozContextProperties<const Value extends PropertyValue<'MozContextProperties', T>>(
+    value: Value & CheckedPropertyValue<'MozContextProperties', T, Value>,
+  ): this {
     return this.write('MozContextProperties', value);
   }
   /**
@@ -5796,7 +6874,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-float-edge
    */
-  MozFloatEdge(value: PropertyValue<'MozFloatEdge', T>): this {
+  MozFloatEdge<const Value extends PropertyValue<'MozFloatEdge', T>>(
+    value: Value & CheckedPropertyValue<'MozFloatEdge', T, Value>,
+  ): this {
     return this.write('MozFloatEdge', value);
   }
   /**
@@ -5807,7 +6887,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-font-feature-settings
    */
-  MozFontFeatureSettings(value: PropertyValue<'MozFontFeatureSettings', T>): this {
+  MozFontFeatureSettings<const Value extends PropertyValue<'MozFontFeatureSettings', T>>(
+    value: Value & CheckedPropertyValue<'MozFontFeatureSettings', T, Value>,
+  ): this {
     return this.write('MozFontFeatureSettings', value);
   }
   /**
@@ -5818,7 +6900,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-font-language-override
    */
-  MozFontLanguageOverride(value: PropertyValue<'MozFontLanguageOverride', T>): this {
+  MozFontLanguageOverride<const Value extends PropertyValue<'MozFontLanguageOverride', T>>(
+    value: Value & CheckedPropertyValue<'MozFontLanguageOverride', T, Value>,
+  ): this {
     return this.write('MozFontLanguageOverride', value);
   }
   /**
@@ -5830,7 +6914,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-force-broken-image-icon
    */
-  MozForceBrokenImageIcon(value: PropertyValue<'MozForceBrokenImageIcon', T>): this {
+  MozForceBrokenImageIcon<const Value extends PropertyValue<'MozForceBrokenImageIcon', T>>(
+    value: Value & CheckedPropertyValue<'MozForceBrokenImageIcon', T, Value>,
+  ): this {
     return this.write('MozForceBrokenImageIcon', value);
   }
   /**
@@ -5841,7 +6927,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-hyphens
    */
-  MozHyphens(value: PropertyValue<'MozHyphens', T>): this {
+  MozHyphens<const Value extends PropertyValue<'MozHyphens', T>>(
+    value: Value & CheckedPropertyValue<'MozHyphens', T, Value>,
+  ): this {
     return this.write('MozHyphens', value);
   }
   /**
@@ -5852,7 +6940,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-margin-end
    */
-  MozMarginEnd(value: PropertyValue<'MozMarginEnd', T>): this {
+  MozMarginEnd<const Value extends PropertyValue<'MozMarginEnd', T>>(
+    value: Value & CheckedPropertyValue<'MozMarginEnd', T, Value>,
+  ): this {
     return this.write('MozMarginEnd', value);
   }
   /**
@@ -5863,7 +6953,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-margin-start
    */
-  MozMarginStart(value: PropertyValue<'MozMarginStart', T>): this {
+  MozMarginStart<const Value extends PropertyValue<'MozMarginStart', T>>(
+    value: Value & CheckedPropertyValue<'MozMarginStart', T, Value>,
+  ): this {
     return this.write('MozMarginStart', value);
   }
   /**
@@ -5881,7 +6973,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-opacity
    */
-  MozOpacity(value: PropertyValue<'MozOpacity', T>): this {
+  MozOpacity<const Value extends PropertyValue<'MozOpacity', T>>(
+    value: Value & CheckedPropertyValue<'MozOpacity', T, Value>,
+  ): this {
     return this.write('MozOpacity', value);
   }
   /**
@@ -5892,7 +6986,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-orient
    */
-  MozOrient(value: PropertyValue<'MozOrient', T>): this {
+  MozOrient<const Value extends PropertyValue<'MozOrient', T>>(
+    value: Value & CheckedPropertyValue<'MozOrient', T, Value>,
+  ): this {
     return this.write('MozOrient', value);
   }
   /**
@@ -5903,7 +6999,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-osx-font-smoothing
    */
-  MozOsxFontSmoothing(value: PropertyValue<'MozOsxFontSmoothing', T>): this {
+  MozOsxFontSmoothing<const Value extends PropertyValue<'MozOsxFontSmoothing', T>>(
+    value: Value & CheckedPropertyValue<'MozOsxFontSmoothing', T, Value>,
+  ): this {
     return this.write('MozOsxFontSmoothing', value);
   }
   /**
@@ -5919,7 +7017,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline
    */
-  MozOutline(value: PropertyValue<'MozOutline', T>): this {
+  MozOutline<const Value extends PropertyValue<'MozOutline', T>>(
+    value: Value & CheckedPropertyValue<'MozOutline', T, Value>,
+  ): this {
     return this.write('MozOutline', value);
   }
   /**
@@ -5931,7 +7031,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-color
    */
-  MozOutlineColor(value: PropertyValue<'MozOutlineColor', T>): this {
+  MozOutlineColor<const Value extends PropertyValue<'MozOutlineColor', T>>(
+    value: Value & CheckedPropertyValue<'MozOutlineColor', T, Value>,
+  ): this {
     return this.write('MozOutlineColor', value);
   }
   /**
@@ -5940,7 +7042,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius
    */
-  MozOutlineRadius(value: PropertyValue<'MozOutlineRadius', T>): this {
+  MozOutlineRadius<const Value extends PropertyValue<'MozOutlineRadius', T>>(
+    value: Value & CheckedPropertyValue<'MozOutlineRadius', T, Value>,
+  ): this {
     return this.write('MozOutlineRadius', value);
   }
   /**
@@ -5951,7 +7055,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-bottomleft
    */
-  MozOutlineRadiusBottomleft(value: PropertyValue<'MozOutlineRadiusBottomleft', T>): this {
+  MozOutlineRadiusBottomleft<const Value extends PropertyValue<'MozOutlineRadiusBottomleft', T>>(
+    value: Value & CheckedPropertyValue<'MozOutlineRadiusBottomleft', T, Value>,
+  ): this {
     return this.write('MozOutlineRadiusBottomleft', value);
   }
   /**
@@ -5962,7 +7068,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-bottomright
    */
-  MozOutlineRadiusBottomright(value: PropertyValue<'MozOutlineRadiusBottomright', T>): this {
+  MozOutlineRadiusBottomright<const Value extends PropertyValue<'MozOutlineRadiusBottomright', T>>(
+    value: Value & CheckedPropertyValue<'MozOutlineRadiusBottomright', T, Value>,
+  ): this {
     return this.write('MozOutlineRadiusBottomright', value);
   }
   /**
@@ -5973,7 +7081,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-topleft
    */
-  MozOutlineRadiusTopleft(value: PropertyValue<'MozOutlineRadiusTopleft', T>): this {
+  MozOutlineRadiusTopleft<const Value extends PropertyValue<'MozOutlineRadiusTopleft', T>>(
+    value: Value & CheckedPropertyValue<'MozOutlineRadiusTopleft', T, Value>,
+  ): this {
     return this.write('MozOutlineRadiusTopleft', value);
   }
   /**
@@ -5984,7 +7094,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-topright
    */
-  MozOutlineRadiusTopright(value: PropertyValue<'MozOutlineRadiusTopright', T>): this {
+  MozOutlineRadiusTopright<const Value extends PropertyValue<'MozOutlineRadiusTopright', T>>(
+    value: Value & CheckedPropertyValue<'MozOutlineRadiusTopright', T, Value>,
+  ): this {
     return this.write('MozOutlineRadiusTopright', value);
   }
   /**
@@ -5996,7 +7108,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-style
    */
-  MozOutlineStyle(value: PropertyValue<'MozOutlineStyle', T>): this {
+  MozOutlineStyle<const Value extends PropertyValue<'MozOutlineStyle', T>>(
+    value: Value & CheckedPropertyValue<'MozOutlineStyle', T, Value>,
+  ): this {
     return this.write('MozOutlineStyle', value);
   }
   /**
@@ -6008,7 +7122,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-width
    */
-  MozOutlineWidth(value: PropertyValue<'MozOutlineWidth', T>): this {
+  MozOutlineWidth<const Value extends PropertyValue<'MozOutlineWidth', T>>(
+    value: Value & CheckedPropertyValue<'MozOutlineWidth', T, Value>,
+  ): this {
     return this.write('MozOutlineWidth', value);
   }
   /**
@@ -6019,7 +7135,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-padding-end
    */
-  MozPaddingEnd(value: PropertyValue<'MozPaddingEnd', T>): this {
+  MozPaddingEnd<const Value extends PropertyValue<'MozPaddingEnd', T>>(
+    value: Value & CheckedPropertyValue<'MozPaddingEnd', T, Value>,
+  ): this {
     return this.write('MozPaddingEnd', value);
   }
   /**
@@ -6030,7 +7148,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-padding-start
    */
-  MozPaddingStart(value: PropertyValue<'MozPaddingStart', T>): this {
+  MozPaddingStart<const Value extends PropertyValue<'MozPaddingStart', T>>(
+    value: Value & CheckedPropertyValue<'MozPaddingStart', T, Value>,
+  ): this {
     return this.write('MozPaddingStart', value);
   }
   /**
@@ -6041,7 +7161,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-perspective
    */
-  MozPerspective(value: PropertyValue<'MozPerspective', T>): this {
+  MozPerspective<const Value extends PropertyValue<'MozPerspective', T>>(
+    value: Value & CheckedPropertyValue<'MozPerspective', T, Value>,
+  ): this {
     return this.write('MozPerspective', value);
   }
   /**
@@ -6052,7 +7174,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-perspective-origin
    */
-  MozPerspectiveOrigin(value: PropertyValue<'MozPerspectiveOrigin', T>): this {
+  MozPerspectiveOrigin<const Value extends PropertyValue<'MozPerspectiveOrigin', T>>(
+    value: Value & CheckedPropertyValue<'MozPerspectiveOrigin', T, Value>,
+  ): this {
     return this.write('MozPerspectiveOrigin', value);
   }
   /**
@@ -6063,7 +7187,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-stack-sizing
    */
-  MozStackSizing(value: PropertyValue<'MozStackSizing', T>): this {
+  MozStackSizing<const Value extends PropertyValue<'MozStackSizing', T>>(
+    value: Value & CheckedPropertyValue<'MozStackSizing', T, Value>,
+  ): this {
     return this.write('MozStackSizing', value);
   }
   /**
@@ -6074,7 +7200,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-tab-size
    */
-  MozTabSize(value: PropertyValue<'MozTabSize', T>): this {
+  MozTabSize<const Value extends PropertyValue<'MozTabSize', T>>(
+    value: Value & CheckedPropertyValue<'MozTabSize', T, Value>,
+  ): this {
     return this.write('MozTabSize', value);
   }
   /**
@@ -6086,7 +7214,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-align-last
    */
-  MozTextAlignLast(value: PropertyValue<'MozTextAlignLast', T>): this {
+  MozTextAlignLast<const Value extends PropertyValue<'MozTextAlignLast', T>>(
+    value: Value & CheckedPropertyValue<'MozTextAlignLast', T, Value>,
+  ): this {
     return this.write('MozTextAlignLast', value);
   }
   /**
@@ -6097,7 +7227,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-blink
    */
-  MozTextBlink(value: PropertyValue<'MozTextBlink', T>): this {
+  MozTextBlink<const Value extends PropertyValue<'MozTextBlink', T>>(
+    value: Value & CheckedPropertyValue<'MozTextBlink', T, Value>,
+  ): this {
     return this.write('MozTextBlink', value);
   }
   /**
@@ -6109,7 +7241,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-color
    */
-  MozTextDecorationColor(value: PropertyValue<'MozTextDecorationColor', T>): this {
+  MozTextDecorationColor<const Value extends PropertyValue<'MozTextDecorationColor', T>>(
+    value: Value & CheckedPropertyValue<'MozTextDecorationColor', T, Value>,
+  ): this {
     return this.write('MozTextDecorationColor', value);
   }
   /**
@@ -6121,7 +7255,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-line
    */
-  MozTextDecorationLine(value: PropertyValue<'MozTextDecorationLine', T>): this {
+  MozTextDecorationLine<const Value extends PropertyValue<'MozTextDecorationLine', T>>(
+    value: Value & CheckedPropertyValue<'MozTextDecorationLine', T, Value>,
+  ): this {
     return this.write('MozTextDecorationLine', value);
   }
   /**
@@ -6133,7 +7269,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-style
    */
-  MozTextDecorationStyle(value: PropertyValue<'MozTextDecorationStyle', T>): this {
+  MozTextDecorationStyle<const Value extends PropertyValue<'MozTextDecorationStyle', T>>(
+    value: Value & CheckedPropertyValue<'MozTextDecorationStyle', T, Value>,
+  ): this {
     return this.write('MozTextDecorationStyle', value);
   }
   /**
@@ -6144,7 +7282,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-size-adjust
    */
-  MozTextSizeAdjust(value: PropertyValue<'MozTextSizeAdjust', T>): this {
+  MozTextSizeAdjust<const Value extends PropertyValue<'MozTextSizeAdjust', T>>(
+    value: Value & CheckedPropertyValue<'MozTextSizeAdjust', T, Value>,
+  ): this {
     return this.write('MozTextSizeAdjust', value);
   }
   /**
@@ -6161,7 +7301,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform
    */
-  MozTransform(value: PropertyValue<'MozTransform', T>): this {
+  MozTransform<const Value extends PropertyValue<'MozTransform', T>>(
+    value: Value & CheckedPropertyValue<'MozTransform', T, Value>,
+  ): this {
     return this.write('MozTransform', value);
   }
   /**
@@ -6172,7 +7314,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-origin
    */
-  MozTransformOrigin(value: PropertyValue<'MozTransformOrigin', T>): this {
+  MozTransformOrigin<const Value extends PropertyValue<'MozTransformOrigin', T>>(
+    value: Value & CheckedPropertyValue<'MozTransformOrigin', T, Value>,
+  ): this {
     return this.write('MozTransformOrigin', value);
   }
   /**
@@ -6183,7 +7327,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-style
    */
-  MozTransformStyle(value: PropertyValue<'MozTransformStyle', T>): this {
+  MozTransformStyle<const Value extends PropertyValue<'MozTransformStyle', T>>(
+    value: Value & CheckedPropertyValue<'MozTransformStyle', T, Value>,
+  ): this {
     return this.write('MozTransformStyle', value);
   }
   /**
@@ -6198,7 +7344,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition
    */
-  MozTransition(value: PropertyValue<'MozTransition', T>): this {
+  MozTransition<const Value extends PropertyValue<'MozTransition', T>>(
+    value: Value & CheckedPropertyValue<'MozTransition', T, Value>,
+  ): this {
     return this.write('MozTransition', value);
   }
   /**
@@ -6210,7 +7358,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-delay
    */
-  MozTransitionDelay(value: PropertyValue<'MozTransitionDelay', T>): this {
+  MozTransitionDelay<const Value extends PropertyValue<'MozTransitionDelay', T>>(
+    value: Value & CheckedPropertyValue<'MozTransitionDelay', T, Value>,
+  ): this {
     return this.write('MozTransitionDelay', value);
   }
   /**
@@ -6222,7 +7372,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-duration
    */
-  MozTransitionDuration(value: PropertyValue<'MozTransitionDuration', T>): this {
+  MozTransitionDuration<const Value extends PropertyValue<'MozTransitionDuration', T>>(
+    value: Value & CheckedPropertyValue<'MozTransitionDuration', T, Value>,
+  ): this {
     return this.write('MozTransitionDuration', value);
   }
   /**
@@ -6232,7 +7384,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-property
    */
-  MozTransitionProperty(value: PropertyValue<'MozTransitionProperty', T>): this {
+  MozTransitionProperty<const Value extends PropertyValue<'MozTransitionProperty', T>>(
+    value: Value & CheckedPropertyValue<'MozTransitionProperty', T, Value>,
+  ): this {
     return this.write('MozTransitionProperty', value);
   }
   /**
@@ -6244,7 +7398,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-timing-function
    */
-  MozTransitionTimingFunction(value: PropertyValue<'MozTransitionTimingFunction', T>): this {
+  MozTransitionTimingFunction<const Value extends PropertyValue<'MozTransitionTimingFunction', T>>(
+    value: Value & CheckedPropertyValue<'MozTransitionTimingFunction', T, Value>,
+  ): this {
     return this.write('MozTransitionTimingFunction', value);
   }
   /**
@@ -6256,7 +7412,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-focus
    */
-  MozUserFocus(value: PropertyValue<'MozUserFocus', T>): this {
+  MozUserFocus<const Value extends PropertyValue<'MozUserFocus', T>>(
+    value: Value & CheckedPropertyValue<'MozUserFocus', T, Value>,
+  ): this {
     return this.write('MozUserFocus', value);
   }
   /**
@@ -6268,7 +7426,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-input
    */
-  MozUserInput(value: PropertyValue<'MozUserInput', T>): this {
+  MozUserInput<const Value extends PropertyValue<'MozUserInput', T>>(
+    value: Value & CheckedPropertyValue<'MozUserInput', T, Value>,
+  ): this {
     return this.write('MozUserInput', value);
   }
   /**
@@ -6279,7 +7439,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-modify
    */
-  MozUserModify(value: PropertyValue<'MozUserModify', T>): this {
+  MozUserModify<const Value extends PropertyValue<'MozUserModify', T>>(
+    value: Value & CheckedPropertyValue<'MozUserModify', T, Value>,
+  ): this {
     return this.write('MozUserModify', value);
   }
   /**
@@ -6296,7 +7458,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-select
    */
-  MozUserSelect(value: PropertyValue<'MozUserSelect', T>): this {
+  MozUserSelect<const Value extends PropertyValue<'MozUserSelect', T>>(
+    value: Value & CheckedPropertyValue<'MozUserSelect', T, Value>,
+  ): this {
     return this.write('MozUserSelect', value);
   }
   /**
@@ -6307,7 +7471,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-dragging
    */
-  MozWindowDragging(value: PropertyValue<'MozWindowDragging', T>): this {
+  MozWindowDragging<const Value extends PropertyValue<'MozWindowDragging', T>>(
+    value: Value & CheckedPropertyValue<'MozWindowDragging', T, Value>,
+  ): this {
     return this.write('MozWindowDragging', value);
   }
   /**
@@ -6318,7 +7484,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-shadow
    */
-  MozWindowShadow(value: PropertyValue<'MozWindowShadow', T>): this {
+  MozWindowShadow<const Value extends PropertyValue<'MozWindowShadow', T>>(
+    value: Value & CheckedPropertyValue<'MozWindowShadow', T, Value>,
+  ): this {
     return this.write('MozWindowShadow', value);
   }
   /**
@@ -6329,7 +7497,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-accelerator
    */
-  msAccelerator(value: PropertyValue<'msAccelerator', T>): this {
+  msAccelerator<const Value extends PropertyValue<'msAccelerator', T>>(
+    value: Value & CheckedPropertyValue<'msAccelerator', T, Value>,
+  ): this {
     return this.write('msAccelerator', value);
   }
   /**
@@ -6340,7 +7510,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-block-progression
    */
-  msBlockProgression(value: PropertyValue<'msBlockProgression', T>): this {
+  msBlockProgression<const Value extends PropertyValue<'msBlockProgression', T>>(
+    value: Value & CheckedPropertyValue<'msBlockProgression', T, Value>,
+  ): this {
     return this.write('msBlockProgression', value);
   }
   /**
@@ -6351,7 +7523,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-chaining
    */
-  msContentZoomChaining(value: PropertyValue<'msContentZoomChaining', T>): this {
+  msContentZoomChaining<const Value extends PropertyValue<'msContentZoomChaining', T>>(
+    value: Value & CheckedPropertyValue<'msContentZoomChaining', T, Value>,
+  ): this {
     return this.write('msContentZoomChaining', value);
   }
   /**
@@ -6360,7 +7534,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zooming
    */
-  msContentZooming(value: PropertyValue<'msContentZooming', T>): this {
+  msContentZooming<const Value extends PropertyValue<'msContentZooming', T>>(
+    value: Value & CheckedPropertyValue<'msContentZooming', T, Value>,
+  ): this {
     return this.write('msContentZooming', value);
   }
   /**
@@ -6369,7 +7545,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-limit
    */
-  msContentZoomLimit(value: PropertyValue<'msContentZoomLimit', T>): this {
+  msContentZoomLimit<const Value extends PropertyValue<'msContentZoomLimit', T>>(
+    value: Value & CheckedPropertyValue<'msContentZoomLimit', T, Value>,
+  ): this {
     return this.write('msContentZoomLimit', value);
   }
   /**
@@ -6380,7 +7558,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-limit-max
    */
-  msContentZoomLimitMax(value: PropertyValue<'msContentZoomLimitMax', T>): this {
+  msContentZoomLimitMax<const Value extends PropertyValue<'msContentZoomLimitMax', T>>(
+    value: Value & CheckedPropertyValue<'msContentZoomLimitMax', T, Value>,
+  ): this {
     return this.write('msContentZoomLimitMax', value);
   }
   /**
@@ -6391,7 +7571,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-limit-min
    */
-  msContentZoomLimitMin(value: PropertyValue<'msContentZoomLimitMin', T>): this {
+  msContentZoomLimitMin<const Value extends PropertyValue<'msContentZoomLimitMin', T>>(
+    value: Value & CheckedPropertyValue<'msContentZoomLimitMin', T, Value>,
+  ): this {
     return this.write('msContentZoomLimitMin', value);
   }
   /**
@@ -6400,7 +7582,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap
    */
-  msContentZoomSnap(value: PropertyValue<'msContentZoomSnap', T>): this {
+  msContentZoomSnap<const Value extends PropertyValue<'msContentZoomSnap', T>>(
+    value: Value & CheckedPropertyValue<'msContentZoomSnap', T, Value>,
+  ): this {
     return this.write('msContentZoomSnap', value);
   }
   /**
@@ -6411,7 +7595,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap-points
    */
-  msContentZoomSnapPoints(value: PropertyValue<'msContentZoomSnapPoints', T>): this {
+  msContentZoomSnapPoints<const Value extends PropertyValue<'msContentZoomSnapPoints', T>>(
+    value: Value & CheckedPropertyValue<'msContentZoomSnapPoints', T, Value>,
+  ): this {
     return this.write('msContentZoomSnapPoints', value);
   }
   /**
@@ -6422,7 +7608,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap-type
    */
-  msContentZoomSnapType(value: PropertyValue<'msContentZoomSnapType', T>): this {
+  msContentZoomSnapType<const Value extends PropertyValue<'msContentZoomSnapType', T>>(
+    value: Value & CheckedPropertyValue<'msContentZoomSnapType', T, Value>,
+  ): this {
     return this.write('msContentZoomSnapType', value);
   }
   /**
@@ -6431,7 +7619,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-filter
    */
-  msFilter(value: PropertyValue<'msFilter', T>): this {
+  msFilter<const Value extends PropertyValue<'msFilter', T>>(
+    value: Value & CheckedPropertyValue<'msFilter', T, Value>,
+  ): this {
     return this.write('msFilter', value);
   }
   /**
@@ -6450,7 +7640,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex
    */
-  msFlex(value: PropertyValue<'msFlex', T>): this {
+  msFlex<const Value extends PropertyValue<'msFlex', T>>(
+    value: Value & CheckedPropertyValue<'msFlex', T, Value>,
+  ): this {
     return this.write('msFlex', value);
   }
   /**
@@ -6467,7 +7659,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex-direction
    */
-  msFlexDirection(value: PropertyValue<'msFlexDirection', T>): this {
+  msFlexDirection<const Value extends PropertyValue<'msFlexDirection', T>>(
+    value: Value & CheckedPropertyValue<'msFlexDirection', T, Value>,
+  ): this {
     return this.write('msFlexDirection', value);
   }
   /**
@@ -6478,7 +7672,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex-positive
    */
-  msFlexPositive(value: PropertyValue<'msFlexPositive', T>): this {
+  msFlexPositive<const Value extends PropertyValue<'msFlexPositive', T>>(
+    value: Value & CheckedPropertyValue<'msFlexPositive', T, Value>,
+  ): this {
     return this.write('msFlexPositive', value);
   }
   /**
@@ -6489,7 +7685,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flow-from
    */
-  msFlowFrom(value: PropertyValue<'msFlowFrom', T>): this {
+  msFlowFrom<const Value extends PropertyValue<'msFlowFrom', T>>(
+    value: Value & CheckedPropertyValue<'msFlowFrom', T, Value>,
+  ): this {
     return this.write('msFlowFrom', value);
   }
   /**
@@ -6500,7 +7698,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flow-into
    */
-  msFlowInto(value: PropertyValue<'msFlowInto', T>): this {
+  msFlowInto<const Value extends PropertyValue<'msFlowInto', T>>(
+    value: Value & CheckedPropertyValue<'msFlowInto', T, Value>,
+  ): this {
     return this.write('msFlowInto', value);
   }
   /**
@@ -6511,7 +7711,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-grid-columns
    */
-  msGridColumns(value: PropertyValue<'msGridColumns', T>): this {
+  msGridColumns<const Value extends PropertyValue<'msGridColumns', T>>(
+    value: Value & CheckedPropertyValue<'msGridColumns', T, Value>,
+  ): this {
     return this.write('msGridColumns', value);
   }
   /**
@@ -6522,7 +7724,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-grid-rows
    */
-  msGridRows(value: PropertyValue<'msGridRows', T>): this {
+  msGridRows<const Value extends PropertyValue<'msGridRows', T>>(
+    value: Value & CheckedPropertyValue<'msGridRows', T, Value>,
+  ): this {
     return this.write('msGridRows', value);
   }
   /**
@@ -6533,7 +7737,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-high-contrast-adjust
    */
-  msHighContrastAdjust(value: PropertyValue<'msHighContrastAdjust', T>): this {
+  msHighContrastAdjust<const Value extends PropertyValue<'msHighContrastAdjust', T>>(
+    value: Value & CheckedPropertyValue<'msHighContrastAdjust', T, Value>,
+  ): this {
     return this.write('msHighContrastAdjust', value);
   }
   /**
@@ -6544,7 +7750,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphenate-limit-chars
    */
-  msHyphenateLimitChars(value: PropertyValue<'msHyphenateLimitChars', T>): this {
+  msHyphenateLimitChars<const Value extends PropertyValue<'msHyphenateLimitChars', T>>(
+    value: Value & CheckedPropertyValue<'msHyphenateLimitChars', T, Value>,
+  ): this {
     return this.write('msHyphenateLimitChars', value);
   }
   /**
@@ -6555,7 +7763,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphenate-limit-lines
    */
-  msHyphenateLimitLines(value: PropertyValue<'msHyphenateLimitLines', T>): this {
+  msHyphenateLimitLines<const Value extends PropertyValue<'msHyphenateLimitLines', T>>(
+    value: Value & CheckedPropertyValue<'msHyphenateLimitLines', T, Value>,
+  ): this {
     return this.write('msHyphenateLimitLines', value);
   }
   /**
@@ -6566,7 +7776,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphenate-limit-zone
    */
-  msHyphenateLimitZone(value: PropertyValue<'msHyphenateLimitZone', T>): this {
+  msHyphenateLimitZone<const Value extends PropertyValue<'msHyphenateLimitZone', T>>(
+    value: Value & CheckedPropertyValue<'msHyphenateLimitZone', T, Value>,
+  ): this {
     return this.write('msHyphenateLimitZone', value);
   }
   /**
@@ -6577,7 +7789,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphens
    */
-  msHyphens(value: PropertyValue<'msHyphens', T>): this {
+  msHyphens<const Value extends PropertyValue<'msHyphens', T>>(
+    value: Value & CheckedPropertyValue<'msHyphens', T, Value>,
+  ): this {
     return this.write('msHyphens', value);
   }
   /**
@@ -6588,7 +7802,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-ime-align
    */
-  msImeAlign(value: PropertyValue<'msImeAlign', T>): this {
+  msImeAlign<const Value extends PropertyValue<'msImeAlign', T>>(
+    value: Value & CheckedPropertyValue<'msImeAlign', T, Value>,
+  ): this {
     return this.write('msImeAlign', value);
   }
   /**
@@ -6600,7 +7816,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-ime-mode
    */
-  msImeMode(value: PropertyValue<'msImeMode', T>): this {
+  msImeMode<const Value extends PropertyValue<'msImeMode', T>>(
+    value: Value & CheckedPropertyValue<'msImeMode', T, Value>,
+  ): this {
     return this.write('msImeMode', value);
   }
   /**
@@ -6611,7 +7829,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-line-break
    */
-  msLineBreak(value: PropertyValue<'msLineBreak', T>): this {
+  msLineBreak<const Value extends PropertyValue<'msLineBreak', T>>(
+    value: Value & CheckedPropertyValue<'msLineBreak', T, Value>,
+  ): this {
     return this.write('msLineBreak', value);
   }
   /**
@@ -6624,7 +7844,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-order
    */
-  msOrder(value: PropertyValue<'msOrder', T>): this {
+  msOrder<const Value extends PropertyValue<'msOrder', T>>(
+    value: Value & CheckedPropertyValue<'msOrder', T, Value>,
+  ): this {
     return this.write('msOrder', value);
   }
   /**
@@ -6635,7 +7857,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-style
    */
-  msOverflowStyle(value: PropertyValue<'msOverflowStyle', T>): this {
+  msOverflowStyle<const Value extends PropertyValue<'msOverflowStyle', T>>(
+    value: Value & CheckedPropertyValue<'msOverflowStyle', T, Value>,
+  ): this {
     return this.write('msOverflowStyle', value);
   }
   /**
@@ -6654,7 +7878,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-x
    */
-  msOverflowX(value: PropertyValue<'msOverflowX', T>): this {
+  msOverflowX<const Value extends PropertyValue<'msOverflowX', T>>(
+    value: Value & CheckedPropertyValue<'msOverflowX', T, Value>,
+  ): this {
     return this.write('msOverflowX', value);
   }
   /**
@@ -6673,7 +7899,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-y
    */
-  msOverflowY(value: PropertyValue<'msOverflowY', T>): this {
+  msOverflowY<const Value extends PropertyValue<'msOverflowY', T>>(
+    value: Value & CheckedPropertyValue<'msOverflowY', T, Value>,
+  ): this {
     return this.write('msOverflowY', value);
   }
   /**
@@ -6682,7 +7910,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar3dlight-color
    */
-  msScrollbar3dlightColor(value: PropertyValue<'msScrollbar3dlightColor', T>): this {
+  msScrollbar3dlightColor<const Value extends PropertyValue<'msScrollbar3dlightColor', T>>(
+    value: Value & CheckedPropertyValue<'msScrollbar3dlightColor', T, Value>,
+  ): this {
     return this.write('msScrollbar3dlightColor', value);
   }
   /**
@@ -6693,7 +7923,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-arrow-color
    */
-  msScrollbarArrowColor(value: PropertyValue<'msScrollbarArrowColor', T>): this {
+  msScrollbarArrowColor<const Value extends PropertyValue<'msScrollbarArrowColor', T>>(
+    value: Value & CheckedPropertyValue<'msScrollbarArrowColor', T, Value>,
+  ): this {
     return this.write('msScrollbarArrowColor', value);
   }
   /**
@@ -6702,7 +7934,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-base-color
    */
-  msScrollbarBaseColor(value: PropertyValue<'msScrollbarBaseColor', T>): this {
+  msScrollbarBaseColor<const Value extends PropertyValue<'msScrollbarBaseColor', T>>(
+    value: Value & CheckedPropertyValue<'msScrollbarBaseColor', T, Value>,
+  ): this {
     return this.write('msScrollbarBaseColor', value);
   }
   /**
@@ -6713,7 +7947,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-darkshadow-color
    */
-  msScrollbarDarkshadowColor(value: PropertyValue<'msScrollbarDarkshadowColor', T>): this {
+  msScrollbarDarkshadowColor<const Value extends PropertyValue<'msScrollbarDarkshadowColor', T>>(
+    value: Value & CheckedPropertyValue<'msScrollbarDarkshadowColor', T, Value>,
+  ): this {
     return this.write('msScrollbarDarkshadowColor', value);
   }
   /**
@@ -6724,7 +7960,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-face-color
    */
-  msScrollbarFaceColor(value: PropertyValue<'msScrollbarFaceColor', T>): this {
+  msScrollbarFaceColor<const Value extends PropertyValue<'msScrollbarFaceColor', T>>(
+    value: Value & CheckedPropertyValue<'msScrollbarFaceColor', T, Value>,
+  ): this {
     return this.write('msScrollbarFaceColor', value);
   }
   /**
@@ -6735,7 +7973,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-highlight-color
    */
-  msScrollbarHighlightColor(value: PropertyValue<'msScrollbarHighlightColor', T>): this {
+  msScrollbarHighlightColor<const Value extends PropertyValue<'msScrollbarHighlightColor', T>>(
+    value: Value & CheckedPropertyValue<'msScrollbarHighlightColor', T, Value>,
+  ): this {
     return this.write('msScrollbarHighlightColor', value);
   }
   /**
@@ -6746,7 +7986,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-shadow-color
    */
-  msScrollbarShadowColor(value: PropertyValue<'msScrollbarShadowColor', T>): this {
+  msScrollbarShadowColor<const Value extends PropertyValue<'msScrollbarShadowColor', T>>(
+    value: Value & CheckedPropertyValue<'msScrollbarShadowColor', T, Value>,
+  ): this {
     return this.write('msScrollbarShadowColor', value);
   }
   /**
@@ -6757,7 +7999,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-track-color
    */
-  msScrollbarTrackColor(value: PropertyValue<'msScrollbarTrackColor', T>): this {
+  msScrollbarTrackColor<const Value extends PropertyValue<'msScrollbarTrackColor', T>>(
+    value: Value & CheckedPropertyValue<'msScrollbarTrackColor', T, Value>,
+  ): this {
     return this.write('msScrollbarTrackColor', value);
   }
   /**
@@ -6768,7 +8012,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-chaining
    */
-  msScrollChaining(value: PropertyValue<'msScrollChaining', T>): this {
+  msScrollChaining<const Value extends PropertyValue<'msScrollChaining', T>>(
+    value: Value & CheckedPropertyValue<'msScrollChaining', T, Value>,
+  ): this {
     return this.write('msScrollChaining', value);
   }
   /**
@@ -6777,7 +8023,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit
    */
-  msScrollLimit(value: PropertyValue<'msScrollLimit', T>): this {
+  msScrollLimit<const Value extends PropertyValue<'msScrollLimit', T>>(
+    value: Value & CheckedPropertyValue<'msScrollLimit', T, Value>,
+  ): this {
     return this.write('msScrollLimit', value);
   }
   /**
@@ -6788,7 +8036,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-x-max
    */
-  msScrollLimitXMax(value: PropertyValue<'msScrollLimitXMax', T>): this {
+  msScrollLimitXMax<const Value extends PropertyValue<'msScrollLimitXMax', T>>(
+    value: Value & CheckedPropertyValue<'msScrollLimitXMax', T, Value>,
+  ): this {
     return this.write('msScrollLimitXMax', value);
   }
   /**
@@ -6799,7 +8049,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-x-min
    */
-  msScrollLimitXMin(value: PropertyValue<'msScrollLimitXMin', T>): this {
+  msScrollLimitXMin<const Value extends PropertyValue<'msScrollLimitXMin', T>>(
+    value: Value & CheckedPropertyValue<'msScrollLimitXMin', T, Value>,
+  ): this {
     return this.write('msScrollLimitXMin', value);
   }
   /**
@@ -6810,7 +8062,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-y-max
    */
-  msScrollLimitYMax(value: PropertyValue<'msScrollLimitYMax', T>): this {
+  msScrollLimitYMax<const Value extends PropertyValue<'msScrollLimitYMax', T>>(
+    value: Value & CheckedPropertyValue<'msScrollLimitYMax', T, Value>,
+  ): this {
     return this.write('msScrollLimitYMax', value);
   }
   /**
@@ -6821,7 +8075,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-y-min
    */
-  msScrollLimitYMin(value: PropertyValue<'msScrollLimitYMin', T>): this {
+  msScrollLimitYMin<const Value extends PropertyValue<'msScrollLimitYMin', T>>(
+    value: Value & CheckedPropertyValue<'msScrollLimitYMin', T, Value>,
+  ): this {
     return this.write('msScrollLimitYMin', value);
   }
   /**
@@ -6832,7 +8088,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-rails
    */
-  msScrollRails(value: PropertyValue<'msScrollRails', T>): this {
+  msScrollRails<const Value extends PropertyValue<'msScrollRails', T>>(
+    value: Value & CheckedPropertyValue<'msScrollRails', T, Value>,
+  ): this {
     return this.write('msScrollRails', value);
   }
   /**
@@ -6843,7 +8101,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-points-x
    */
-  msScrollSnapPointsX(value: PropertyValue<'msScrollSnapPointsX', T>): this {
+  msScrollSnapPointsX<const Value extends PropertyValue<'msScrollSnapPointsX', T>>(
+    value: Value & CheckedPropertyValue<'msScrollSnapPointsX', T, Value>,
+  ): this {
     return this.write('msScrollSnapPointsX', value);
   }
   /**
@@ -6854,7 +8114,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-points-y
    */
-  msScrollSnapPointsY(value: PropertyValue<'msScrollSnapPointsY', T>): this {
+  msScrollSnapPointsY<const Value extends PropertyValue<'msScrollSnapPointsY', T>>(
+    value: Value & CheckedPropertyValue<'msScrollSnapPointsY', T, Value>,
+  ): this {
     return this.write('msScrollSnapPointsY', value);
   }
   /**
@@ -6869,7 +8131,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-type
    */
-  msScrollSnapType(value: PropertyValue<'msScrollSnapType', T>): this {
+  msScrollSnapType<const Value extends PropertyValue<'msScrollSnapType', T>>(
+    value: Value & CheckedPropertyValue<'msScrollSnapType', T, Value>,
+  ): this {
     return this.write('msScrollSnapType', value);
   }
   /**
@@ -6878,7 +8142,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-x
    */
-  msScrollSnapX(value: PropertyValue<'msScrollSnapX', T>): this {
+  msScrollSnapX<const Value extends PropertyValue<'msScrollSnapX', T>>(
+    value: Value & CheckedPropertyValue<'msScrollSnapX', T, Value>,
+  ): this {
     return this.write('msScrollSnapX', value);
   }
   /**
@@ -6887,7 +8153,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-y
    */
-  msScrollSnapY(value: PropertyValue<'msScrollSnapY', T>): this {
+  msScrollSnapY<const Value extends PropertyValue<'msScrollSnapY', T>>(
+    value: Value & CheckedPropertyValue<'msScrollSnapY', T, Value>,
+  ): this {
     return this.write('msScrollSnapY', value);
   }
   /**
@@ -6898,7 +8166,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-translation
    */
-  msScrollTranslation(value: PropertyValue<'msScrollTranslation', T>): this {
+  msScrollTranslation<const Value extends PropertyValue<'msScrollTranslation', T>>(
+    value: Value & CheckedPropertyValue<'msScrollTranslation', T, Value>,
+  ): this {
     return this.write('msScrollTranslation', value);
   }
   /**
@@ -6909,7 +8179,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-autospace
    */
-  msTextAutospace(value: PropertyValue<'msTextAutospace', T>): this {
+  msTextAutospace<const Value extends PropertyValue<'msTextAutospace', T>>(
+    value: Value & CheckedPropertyValue<'msTextAutospace', T, Value>,
+  ): this {
     return this.write('msTextAutospace', value);
   }
   /**
@@ -6920,7 +8192,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-combine-horizontal
    */
-  msTextCombineHorizontal(value: PropertyValue<'msTextCombineHorizontal', T>): this {
+  msTextCombineHorizontal<const Value extends PropertyValue<'msTextCombineHorizontal', T>>(
+    value: Value & CheckedPropertyValue<'msTextCombineHorizontal', T, Value>,
+  ): this {
     return this.write('msTextCombineHorizontal', value);
   }
   /**
@@ -6939,7 +8213,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-overflow
    */
-  msTextOverflow(value: PropertyValue<'msTextOverflow', T>): this {
+  msTextOverflow<const Value extends PropertyValue<'msTextOverflow', T>>(
+    value: Value & CheckedPropertyValue<'msTextOverflow', T, Value>,
+  ): this {
     return this.write('msTextOverflow', value);
   }
   /**
@@ -6958,7 +8234,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
    */
-  msTouchAction(value: PropertyValue<'msTouchAction', T>): this {
+  msTouchAction<const Value extends PropertyValue<'msTouchAction', T>>(
+    value: Value & CheckedPropertyValue<'msTouchAction', T, Value>,
+  ): this {
     return this.write('msTouchAction', value);
   }
   /**
@@ -6969,7 +8247,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-select
    */
-  msTouchSelect(value: PropertyValue<'msTouchSelect', T>): this {
+  msTouchSelect<const Value extends PropertyValue<'msTouchSelect', T>>(
+    value: Value & CheckedPropertyValue<'msTouchSelect', T, Value>,
+  ): this {
     return this.write('msTouchSelect', value);
   }
   /**
@@ -6986,7 +8266,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transform
    */
-  msTransform(value: PropertyValue<'msTransform', T>): this {
+  msTransform<const Value extends PropertyValue<'msTransform', T>>(
+    value: Value & CheckedPropertyValue<'msTransform', T, Value>,
+  ): this {
     return this.write('msTransform', value);
   }
   /**
@@ -6997,7 +8279,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transform-origin
    */
-  msTransformOrigin(value: PropertyValue<'msTransformOrigin', T>): this {
+  msTransformOrigin<const Value extends PropertyValue<'msTransformOrigin', T>>(
+    value: Value & CheckedPropertyValue<'msTransformOrigin', T, Value>,
+  ): this {
     return this.write('msTransformOrigin', value);
   }
   /**
@@ -7012,7 +8296,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition
    */
-  msTransition(value: PropertyValue<'msTransition', T>): this {
+  msTransition<const Value extends PropertyValue<'msTransition', T>>(
+    value: Value & CheckedPropertyValue<'msTransition', T, Value>,
+  ): this {
     return this.write('msTransition', value);
   }
   /**
@@ -7023,7 +8309,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-delay
    */
-  msTransitionDelay(value: PropertyValue<'msTransitionDelay', T>): this {
+  msTransitionDelay<const Value extends PropertyValue<'msTransitionDelay', T>>(
+    value: Value & CheckedPropertyValue<'msTransitionDelay', T, Value>,
+  ): this {
     return this.write('msTransitionDelay', value);
   }
   /**
@@ -7034,7 +8322,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-duration
    */
-  msTransitionDuration(value: PropertyValue<'msTransitionDuration', T>): this {
+  msTransitionDuration<const Value extends PropertyValue<'msTransitionDuration', T>>(
+    value: Value & CheckedPropertyValue<'msTransitionDuration', T, Value>,
+  ): this {
     return this.write('msTransitionDuration', value);
   }
   /**
@@ -7043,7 +8333,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-property
    */
-  msTransitionProperty(value: PropertyValue<'msTransitionProperty', T>): this {
+  msTransitionProperty<const Value extends PropertyValue<'msTransitionProperty', T>>(
+    value: Value & CheckedPropertyValue<'msTransitionProperty', T, Value>,
+  ): this {
     return this.write('msTransitionProperty', value);
   }
   /**
@@ -7054,7 +8346,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-timing-function
    */
-  msTransitionTimingFunction(value: PropertyValue<'msTransitionTimingFunction', T>): this {
+  msTransitionTimingFunction<const Value extends PropertyValue<'msTransitionTimingFunction', T>>(
+    value: Value & CheckedPropertyValue<'msTransitionTimingFunction', T, Value>,
+  ): this {
     return this.write('msTransitionTimingFunction', value);
   }
   /**
@@ -7071,7 +8365,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-user-select
    */
-  msUserSelect(value: PropertyValue<'msUserSelect', T>): this {
+  msUserSelect<const Value extends PropertyValue<'msUserSelect', T>>(
+    value: Value & CheckedPropertyValue<'msUserSelect', T, Value>,
+  ): this {
     return this.write('msUserSelect', value);
   }
   /**
@@ -7088,7 +8384,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-word-break
    */
-  msWordBreak(value: PropertyValue<'msWordBreak', T>): this {
+  msWordBreak<const Value extends PropertyValue<'msWordBreak', T>>(
+    value: Value & CheckedPropertyValue<'msWordBreak', T, Value>,
+  ): this {
     return this.write('msWordBreak', value);
   }
   /**
@@ -7099,7 +8397,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-flow
    */
-  msWrapFlow(value: PropertyValue<'msWrapFlow', T>): this {
+  msWrapFlow<const Value extends PropertyValue<'msWrapFlow', T>>(
+    value: Value & CheckedPropertyValue<'msWrapFlow', T, Value>,
+  ): this {
     return this.write('msWrapFlow', value);
   }
   /**
@@ -7110,7 +8410,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-margin
    */
-  msWrapMargin(value: PropertyValue<'msWrapMargin', T>): this {
+  msWrapMargin<const Value extends PropertyValue<'msWrapMargin', T>>(
+    value: Value & CheckedPropertyValue<'msWrapMargin', T, Value>,
+  ): this {
     return this.write('msWrapMargin', value);
   }
   /**
@@ -7121,7 +8423,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-through
    */
-  msWrapThrough(value: PropertyValue<'msWrapThrough', T>): this {
+  msWrapThrough<const Value extends PropertyValue<'msWrapThrough', T>>(
+    value: Value & CheckedPropertyValue<'msWrapThrough', T, Value>,
+  ): this {
     return this.write('msWrapThrough', value);
   }
   /**
@@ -7132,7 +8436,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-writing-mode
    */
-  msWritingMode(value: PropertyValue<'msWritingMode', T>): this {
+  msWritingMode<const Value extends PropertyValue<'msWritingMode', T>>(
+    value: Value & CheckedPropertyValue<'msWritingMode', T, Value>,
+  ): this {
     return this.write('msWritingMode', value);
   }
   /**
@@ -7142,7 +8448,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
    */
-  OAnimation(value: PropertyValue<'OAnimation', T>): this {
+  OAnimation<const Value extends PropertyValue<'OAnimation', T>>(
+    value: Value & CheckedPropertyValue<'OAnimation', T, Value>,
+  ): this {
     return this.write('OAnimation', value);
   }
   /**
@@ -7154,7 +8462,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-delay
    */
-  OAnimationDelay(value: PropertyValue<'OAnimationDelay', T>): this {
+  OAnimationDelay<const Value extends PropertyValue<'OAnimationDelay', T>>(
+    value: Value & CheckedPropertyValue<'OAnimationDelay', T, Value>,
+  ): this {
     return this.write('OAnimationDelay', value);
   }
   /**
@@ -7166,7 +8476,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-direction
    */
-  OAnimationDirection(value: PropertyValue<'OAnimationDirection', T>): this {
+  OAnimationDirection<const Value extends PropertyValue<'OAnimationDirection', T>>(
+    value: Value & CheckedPropertyValue<'OAnimationDirection', T, Value>,
+  ): this {
     return this.write('OAnimationDirection', value);
   }
   /**
@@ -7178,7 +8490,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-duration
    */
-  OAnimationDuration(value: PropertyValue<'OAnimationDuration', T>): this {
+  OAnimationDuration<const Value extends PropertyValue<'OAnimationDuration', T>>(
+    value: Value & CheckedPropertyValue<'OAnimationDuration', T, Value>,
+  ): this {
     return this.write('OAnimationDuration', value);
   }
   /**
@@ -7198,7 +8512,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-fill-mode
    */
-  OAnimationFillMode(value: PropertyValue<'OAnimationFillMode', T>): this {
+  OAnimationFillMode<const Value extends PropertyValue<'OAnimationFillMode', T>>(
+    value: Value & CheckedPropertyValue<'OAnimationFillMode', T, Value>,
+  ): this {
     return this.write('OAnimationFillMode', value);
   }
   /**
@@ -7210,7 +8526,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-iteration-count
    */
-  OAnimationIterationCount(value: PropertyValue<'OAnimationIterationCount', T>): this {
+  OAnimationIterationCount<const Value extends PropertyValue<'OAnimationIterationCount', T>>(
+    value: Value & CheckedPropertyValue<'OAnimationIterationCount', T, Value>,
+  ): this {
     return this.write('OAnimationIterationCount', value);
   }
   /**
@@ -7222,7 +8540,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-name
    */
-  OAnimationName(value: PropertyValue<'OAnimationName', T>): this {
+  OAnimationName<const Value extends PropertyValue<'OAnimationName', T>>(
+    value: Value & CheckedPropertyValue<'OAnimationName', T, Value>,
+  ): this {
     return this.write('OAnimationName', value);
   }
   /**
@@ -7234,7 +8554,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-play-state
    */
-  OAnimationPlayState(value: PropertyValue<'OAnimationPlayState', T>): this {
+  OAnimationPlayState<const Value extends PropertyValue<'OAnimationPlayState', T>>(
+    value: Value & CheckedPropertyValue<'OAnimationPlayState', T, Value>,
+  ): this {
     return this.write('OAnimationPlayState', value);
   }
   /**
@@ -7246,7 +8568,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-timing-function
    */
-  OAnimationTimingFunction(value: PropertyValue<'OAnimationTimingFunction', T>): this {
+  OAnimationTimingFunction<const Value extends PropertyValue<'OAnimationTimingFunction', T>>(
+    value: Value & CheckedPropertyValue<'OAnimationTimingFunction', T, Value>,
+  ): this {
     return this.write('OAnimationTimingFunction', value);
   }
   /**
@@ -7266,7 +8590,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-background-size
    */
-  OBackgroundSize(value: PropertyValue<'OBackgroundSize', T>): this {
+  OBackgroundSize<const Value extends PropertyValue<'OBackgroundSize', T>>(
+    value: Value & CheckedPropertyValue<'OBackgroundSize', T, Value>,
+  ): this {
     return this.write('OBackgroundSize', value);
   }
   /**
@@ -7276,7 +8602,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-border-image
    */
-  OBorderImage(value: PropertyValue<'OBorderImage', T>): this {
+  OBorderImage<const Value extends PropertyValue<'OBorderImage', T>>(
+    value: Value & CheckedPropertyValue<'OBorderImage', T, Value>,
+  ): this {
     return this.write('OBorderImage', value);
   }
   /**
@@ -7286,7 +8614,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-block
    */
-  offsetBlock(value: PropertyValue<'offsetBlock', T>): this {
+  offsetBlock<const Value extends PropertyValue<'offsetBlock', T>>(
+    value: Value & CheckedPropertyValue<'offsetBlock', T, Value>,
+  ): this {
     return this.write('offsetBlock', value);
   }
   /**
@@ -7298,7 +8628,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-block-end
    */
-  offsetBlockEnd(value: PropertyValue<'offsetBlockEnd', T>): this {
+  offsetBlockEnd<const Value extends PropertyValue<'offsetBlockEnd', T>>(
+    value: Value & CheckedPropertyValue<'offsetBlockEnd', T, Value>,
+  ): this {
     return this.write('offsetBlockEnd', value);
   }
   /**
@@ -7310,7 +8642,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-block-start
    */
-  offsetBlockStart(value: PropertyValue<'offsetBlockStart', T>): this {
+  offsetBlockStart<const Value extends PropertyValue<'offsetBlockStart', T>>(
+    value: Value & CheckedPropertyValue<'offsetBlockStart', T, Value>,
+  ): this {
     return this.write('offsetBlockStart', value);
   }
   /**
@@ -7320,7 +8654,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-inline
    */
-  offsetInline(value: PropertyValue<'offsetInline', T>): this {
+  offsetInline<const Value extends PropertyValue<'offsetInline', T>>(
+    value: Value & CheckedPropertyValue<'offsetInline', T, Value>,
+  ): this {
     return this.write('offsetInline', value);
   }
   /**
@@ -7332,7 +8668,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-inline-end
    */
-  offsetInlineEnd(value: PropertyValue<'offsetInlineEnd', T>): this {
+  offsetInlineEnd<const Value extends PropertyValue<'offsetInlineEnd', T>>(
+    value: Value & CheckedPropertyValue<'offsetInlineEnd', T, Value>,
+  ): this {
     return this.write('offsetInlineEnd', value);
   }
   /**
@@ -7344,7 +8682,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-inline-start
    */
-  offsetInlineStart(value: PropertyValue<'offsetInlineStart', T>): this {
+  offsetInlineStart<const Value extends PropertyValue<'offsetInlineStart', T>>(
+    value: Value & CheckedPropertyValue<'offsetInlineStart', T, Value>,
+  ): this {
     return this.write('offsetInlineStart', value);
   }
   /**
@@ -7364,7 +8704,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-object-fit
    */
-  OObjectFit(value: PropertyValue<'OObjectFit', T>): this {
+  OObjectFit<const Value extends PropertyValue<'OObjectFit', T>>(
+    value: Value & CheckedPropertyValue<'OObjectFit', T, Value>,
+  ): this {
     return this.write('OObjectFit', value);
   }
   /**
@@ -7376,7 +8718,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-object-position
    */
-  OObjectPosition(value: PropertyValue<'OObjectPosition', T>): this {
+  OObjectPosition<const Value extends PropertyValue<'OObjectPosition', T>>(
+    value: Value & CheckedPropertyValue<'OObjectPosition', T, Value>,
+  ): this {
     return this.write('OObjectPosition', value);
   }
   /**
@@ -7388,7 +8732,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-tab-size
    */
-  OTabSize(value: PropertyValue<'OTabSize', T>): this {
+  OTabSize<const Value extends PropertyValue<'OTabSize', T>>(
+    value: Value & CheckedPropertyValue<'OTabSize', T, Value>,
+  ): this {
     return this.write('OTabSize', value);
   }
   /**
@@ -7408,7 +8754,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-text-overflow
    */
-  OTextOverflow(value: PropertyValue<'OTextOverflow', T>): this {
+  OTextOverflow<const Value extends PropertyValue<'OTextOverflow', T>>(
+    value: Value & CheckedPropertyValue<'OTextOverflow', T, Value>,
+  ): this {
     return this.write('OTextOverflow', value);
   }
   /**
@@ -7426,7 +8774,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transform
    */
-  OTransform(value: PropertyValue<'OTransform', T>): this {
+  OTransform<const Value extends PropertyValue<'OTransform', T>>(
+    value: Value & CheckedPropertyValue<'OTransform', T, Value>,
+  ): this {
     return this.write('OTransform', value);
   }
   /**
@@ -7438,7 +8788,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transform-origin
    */
-  OTransformOrigin(value: PropertyValue<'OTransformOrigin', T>): this {
+  OTransformOrigin<const Value extends PropertyValue<'OTransformOrigin', T>>(
+    value: Value & CheckedPropertyValue<'OTransformOrigin', T, Value>,
+  ): this {
     return this.write('OTransformOrigin', value);
   }
   /**
@@ -7454,7 +8806,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition
    */
-  OTransition(value: PropertyValue<'OTransition', T>): this {
+  OTransition<const Value extends PropertyValue<'OTransition', T>>(
+    value: Value & CheckedPropertyValue<'OTransition', T, Value>,
+  ): this {
     return this.write('OTransition', value);
   }
   /**
@@ -7466,7 +8820,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-delay
    */
-  OTransitionDelay(value: PropertyValue<'OTransitionDelay', T>): this {
+  OTransitionDelay<const Value extends PropertyValue<'OTransitionDelay', T>>(
+    value: Value & CheckedPropertyValue<'OTransitionDelay', T, Value>,
+  ): this {
     return this.write('OTransitionDelay', value);
   }
   /**
@@ -7478,7 +8834,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-duration
    */
-  OTransitionDuration(value: PropertyValue<'OTransitionDuration', T>): this {
+  OTransitionDuration<const Value extends PropertyValue<'OTransitionDuration', T>>(
+    value: Value & CheckedPropertyValue<'OTransitionDuration', T, Value>,
+  ): this {
     return this.write('OTransitionDuration', value);
   }
   /**
@@ -7488,7 +8846,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-property
    */
-  OTransitionProperty(value: PropertyValue<'OTransitionProperty', T>): this {
+  OTransitionProperty<const Value extends PropertyValue<'OTransitionProperty', T>>(
+    value: Value & CheckedPropertyValue<'OTransitionProperty', T, Value>,
+  ): this {
     return this.write('OTransitionProperty', value);
   }
   /**
@@ -7500,7 +8860,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-timing-function
    */
-  OTransitionTimingFunction(value: PropertyValue<'OTransitionTimingFunction', T>): this {
+  OTransitionTimingFunction<const Value extends PropertyValue<'OTransitionTimingFunction', T>>(
+    value: Value & CheckedPropertyValue<'OTransitionTimingFunction', T, Value>,
+  ): this {
     return this.write('OTransitionTimingFunction', value);
   }
   /**
@@ -7512,7 +8874,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-after
    */
-  pageBreakAfter(value: PropertyValue<'pageBreakAfter', T>): this {
+  pageBreakAfter<const Value extends PropertyValue<'pageBreakAfter', T>>(
+    value: Value & CheckedPropertyValue<'pageBreakAfter', T, Value>,
+  ): this {
     return this.write('pageBreakAfter', value);
   }
   /**
@@ -7524,7 +8888,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-before
    */
-  pageBreakBefore(value: PropertyValue<'pageBreakBefore', T>): this {
+  pageBreakBefore<const Value extends PropertyValue<'pageBreakBefore', T>>(
+    value: Value & CheckedPropertyValue<'pageBreakBefore', T, Value>,
+  ): this {
     return this.write('pageBreakBefore', value);
   }
   /**
@@ -7536,7 +8902,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-inside
    */
-  pageBreakInside(value: PropertyValue<'pageBreakInside', T>): this {
+  pageBreakInside<const Value extends PropertyValue<'pageBreakInside', T>>(
+    value: Value & CheckedPropertyValue<'pageBreakInside', T, Value>,
+  ): this {
     return this.write('pageBreakInside', value);
   }
   /**
@@ -7548,7 +8916,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
    */
-  positionTryOptions(value: PropertyValue<'positionTryOptions', T>): this {
+  positionTryOptions<const Value extends PropertyValue<'positionTryOptions', T>>(
+    value: Value & CheckedPropertyValue<'positionTryOptions', T, Value>,
+  ): this {
     return this.write('positionTryOptions', value);
   }
   /**
@@ -7559,7 +8929,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-coordinate
    */
-  scrollSnapCoordinate(value: PropertyValue<'scrollSnapCoordinate', T>): this {
+  scrollSnapCoordinate<const Value extends PropertyValue<'scrollSnapCoordinate', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapCoordinate', T, Value>,
+  ): this {
     return this.write('scrollSnapCoordinate', value);
   }
   /**
@@ -7570,7 +8942,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-destination
    */
-  scrollSnapDestination(value: PropertyValue<'scrollSnapDestination', T>): this {
+  scrollSnapDestination<const Value extends PropertyValue<'scrollSnapDestination', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapDestination', T, Value>,
+  ): this {
     return this.write('scrollSnapDestination', value);
   }
   /**
@@ -7581,7 +8955,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-points-x
    */
-  scrollSnapPointsX(value: PropertyValue<'scrollSnapPointsX', T>): this {
+  scrollSnapPointsX<const Value extends PropertyValue<'scrollSnapPointsX', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapPointsX', T, Value>,
+  ): this {
     return this.write('scrollSnapPointsX', value);
   }
   /**
@@ -7592,7 +8968,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-points-y
    */
-  scrollSnapPointsY(value: PropertyValue<'scrollSnapPointsY', T>): this {
+  scrollSnapPointsY<const Value extends PropertyValue<'scrollSnapPointsY', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapPointsY', T, Value>,
+  ): this {
     return this.write('scrollSnapPointsY', value);
   }
   /**
@@ -7603,7 +8981,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type-x
    */
-  scrollSnapTypeX(value: PropertyValue<'scrollSnapTypeX', T>): this {
+  scrollSnapTypeX<const Value extends PropertyValue<'scrollSnapTypeX', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapTypeX', T, Value>,
+  ): this {
     return this.write('scrollSnapTypeX', value);
   }
   /**
@@ -7614,7 +8994,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type-y
    */
-  scrollSnapTypeY(value: PropertyValue<'scrollSnapTypeY', T>): this {
+  scrollSnapTypeY<const Value extends PropertyValue<'scrollSnapTypeY', T>>(
+    value: Value & CheckedPropertyValue<'scrollSnapTypeY', T, Value>,
+  ): this {
     return this.write('scrollSnapTypeY', value);
   }
   /**
@@ -7625,7 +9007,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
    */
-  WebkitAlignContent(value: PropertyValue<'WebkitAlignContent', T>): this {
+  WebkitAlignContent<const Value extends PropertyValue<'WebkitAlignContent', T>>(
+    value: Value & CheckedPropertyValue<'WebkitAlignContent', T, Value>,
+  ): this {
     return this.write('WebkitAlignContent', value);
   }
   /**
@@ -7644,7 +9028,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
    */
-  WebkitAlignItems(value: PropertyValue<'WebkitAlignItems', T>): this {
+  WebkitAlignItems<const Value extends PropertyValue<'WebkitAlignItems', T>>(
+    value: Value & CheckedPropertyValue<'WebkitAlignItems', T, Value>,
+  ): this {
     return this.write('WebkitAlignItems', value);
   }
   /**
@@ -7661,7 +9047,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-self
    */
-  WebkitAlignSelf(value: PropertyValue<'WebkitAlignSelf', T>): this {
+  WebkitAlignSelf<const Value extends PropertyValue<'WebkitAlignSelf', T>>(
+    value: Value & CheckedPropertyValue<'WebkitAlignSelf', T, Value>,
+  ): this {
     return this.write('WebkitAlignSelf', value);
   }
   /**
@@ -7670,7 +9058,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
    */
-  WebkitAnimation(value: PropertyValue<'WebkitAnimation', T>): this {
+  WebkitAnimation<const Value extends PropertyValue<'WebkitAnimation', T>>(
+    value: Value & CheckedPropertyValue<'WebkitAnimation', T, Value>,
+  ): this {
     return this.write('WebkitAnimation', value);
   }
   /**
@@ -7681,7 +9071,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-delay
    */
-  WebkitAnimationDelay(value: PropertyValue<'WebkitAnimationDelay', T>): this {
+  WebkitAnimationDelay<const Value extends PropertyValue<'WebkitAnimationDelay', T>>(
+    value: Value & CheckedPropertyValue<'WebkitAnimationDelay', T, Value>,
+  ): this {
     return this.write('WebkitAnimationDelay', value);
   }
   /**
@@ -7692,7 +9084,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-direction
    */
-  WebkitAnimationDirection(value: PropertyValue<'WebkitAnimationDirection', T>): this {
+  WebkitAnimationDirection<const Value extends PropertyValue<'WebkitAnimationDirection', T>>(
+    value: Value & CheckedPropertyValue<'WebkitAnimationDirection', T, Value>,
+  ): this {
     return this.write('WebkitAnimationDirection', value);
   }
   /**
@@ -7703,7 +9097,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-duration
    */
-  WebkitAnimationDuration(value: PropertyValue<'WebkitAnimationDuration', T>): this {
+  WebkitAnimationDuration<const Value extends PropertyValue<'WebkitAnimationDuration', T>>(
+    value: Value & CheckedPropertyValue<'WebkitAnimationDuration', T, Value>,
+  ): this {
     return this.write('WebkitAnimationDuration', value);
   }
   /**
@@ -7722,7 +9118,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-fill-mode
    */
-  WebkitAnimationFillMode(value: PropertyValue<'WebkitAnimationFillMode', T>): this {
+  WebkitAnimationFillMode<const Value extends PropertyValue<'WebkitAnimationFillMode', T>>(
+    value: Value & CheckedPropertyValue<'WebkitAnimationFillMode', T, Value>,
+  ): this {
     return this.write('WebkitAnimationFillMode', value);
   }
   /**
@@ -7733,7 +9131,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-iteration-count
    */
-  WebkitAnimationIterationCount(value: PropertyValue<'WebkitAnimationIterationCount', T>): this {
+  WebkitAnimationIterationCount<
+    const Value extends PropertyValue<'WebkitAnimationIterationCount', T>,
+  >(value: Value & CheckedPropertyValue<'WebkitAnimationIterationCount', T, Value>): this {
     return this.write('WebkitAnimationIterationCount', value);
   }
   /**
@@ -7744,7 +9144,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-name
    */
-  WebkitAnimationName(value: PropertyValue<'WebkitAnimationName', T>): this {
+  WebkitAnimationName<const Value extends PropertyValue<'WebkitAnimationName', T>>(
+    value: Value & CheckedPropertyValue<'WebkitAnimationName', T, Value>,
+  ): this {
     return this.write('WebkitAnimationName', value);
   }
   /**
@@ -7755,7 +9157,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-play-state
    */
-  WebkitAnimationPlayState(value: PropertyValue<'WebkitAnimationPlayState', T>): this {
+  WebkitAnimationPlayState<const Value extends PropertyValue<'WebkitAnimationPlayState', T>>(
+    value: Value & CheckedPropertyValue<'WebkitAnimationPlayState', T, Value>,
+  ): this {
     return this.write('WebkitAnimationPlayState', value);
   }
   /**
@@ -7766,7 +9170,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-timing-function
    */
-  WebkitAnimationTimingFunction(value: PropertyValue<'WebkitAnimationTimingFunction', T>): this {
+  WebkitAnimationTimingFunction<
+    const Value extends PropertyValue<'WebkitAnimationTimingFunction', T>,
+  >(value: Value & CheckedPropertyValue<'WebkitAnimationTimingFunction', T, Value>): this {
     return this.write('WebkitAnimationTimingFunction', value);
   }
   /**
@@ -7777,7 +9183,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
    */
-  WebkitAppearance(value: PropertyValue<'WebkitAppearance', T>): this {
+  WebkitAppearance<const Value extends PropertyValue<'WebkitAppearance', T>>(
+    value: Value & CheckedPropertyValue<'WebkitAppearance', T, Value>,
+  ): this {
     return this.write('WebkitAppearance', value);
   }
   /**
@@ -7788,7 +9196,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-backdrop-filter
    */
-  WebkitBackdropFilter(value: PropertyValue<'WebkitBackdropFilter', T>): this {
+  WebkitBackdropFilter<const Value extends PropertyValue<'WebkitBackdropFilter', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBackdropFilter', T, Value>,
+  ): this {
     return this.write('WebkitBackdropFilter', value);
   }
   /**
@@ -7799,7 +9209,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-backface-visibility
    */
-  WebkitBackfaceVisibility(value: PropertyValue<'WebkitBackfaceVisibility', T>): this {
+  WebkitBackfaceVisibility<const Value extends PropertyValue<'WebkitBackfaceVisibility', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBackfaceVisibility', T, Value>,
+  ): this {
     return this.write('WebkitBackfaceVisibility', value);
   }
   /**
@@ -7810,7 +9222,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-background-clip
    */
-  WebkitBackgroundClip(value: PropertyValue<'WebkitBackgroundClip', T>): this {
+  WebkitBackgroundClip<const Value extends PropertyValue<'WebkitBackgroundClip', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBackgroundClip', T, Value>,
+  ): this {
     return this.write('WebkitBackgroundClip', value);
   }
   /**
@@ -7821,7 +9235,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-background-origin
    */
-  WebkitBackgroundOrigin(value: PropertyValue<'WebkitBackgroundOrigin', T>): this {
+  WebkitBackgroundOrigin<const Value extends PropertyValue<'WebkitBackgroundOrigin', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBackgroundOrigin', T, Value>,
+  ): this {
     return this.write('WebkitBackgroundOrigin', value);
   }
   /**
@@ -7840,7 +9256,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-background-size
    */
-  WebkitBackgroundSize(value: PropertyValue<'WebkitBackgroundSize', T>): this {
+  WebkitBackgroundSize<const Value extends PropertyValue<'WebkitBackgroundSize', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBackgroundSize', T, Value>,
+  ): this {
     return this.write('WebkitBackgroundSize', value);
   }
   /**
@@ -7849,7 +9267,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before
    */
-  WebkitBorderBefore(value: PropertyValue<'WebkitBorderBefore', T>): this {
+  WebkitBorderBefore<const Value extends PropertyValue<'WebkitBorderBefore', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBorderBefore', T, Value>,
+  ): this {
     return this.write('WebkitBorderBefore', value);
   }
   /**
@@ -7860,7 +9280,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-color
    */
-  WebkitBorderBeforeColor(value: PropertyValue<'WebkitBorderBeforeColor', T>): this {
+  WebkitBorderBeforeColor<const Value extends PropertyValue<'WebkitBorderBeforeColor', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBorderBeforeColor', T, Value>,
+  ): this {
     return this.write('WebkitBorderBeforeColor', value);
   }
   /**
@@ -7871,7 +9293,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
    */
-  WebkitBorderBeforeStyle(value: PropertyValue<'WebkitBorderBeforeStyle', T>): this {
+  WebkitBorderBeforeStyle<const Value extends PropertyValue<'WebkitBorderBeforeStyle', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBorderBeforeStyle', T, Value>,
+  ): this {
     return this.write('WebkitBorderBeforeStyle', value);
   }
   /**
@@ -7882,7 +9306,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-width
    */
-  WebkitBorderBeforeWidth(value: PropertyValue<'WebkitBorderBeforeWidth', T>): this {
+  WebkitBorderBeforeWidth<const Value extends PropertyValue<'WebkitBorderBeforeWidth', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBorderBeforeWidth', T, Value>,
+  ): this {
     return this.write('WebkitBorderBeforeWidth', value);
   }
   /**
@@ -7893,7 +9319,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-bottom-left-radius
    */
-  WebkitBorderBottomLeftRadius(value: PropertyValue<'WebkitBorderBottomLeftRadius', T>): this {
+  WebkitBorderBottomLeftRadius<
+    const Value extends PropertyValue<'WebkitBorderBottomLeftRadius', T>,
+  >(value: Value & CheckedPropertyValue<'WebkitBorderBottomLeftRadius', T, Value>): this {
     return this.write('WebkitBorderBottomLeftRadius', value);
   }
   /**
@@ -7904,7 +9332,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-bottom-right-radius
    */
-  WebkitBorderBottomRightRadius(value: PropertyValue<'WebkitBorderBottomRightRadius', T>): this {
+  WebkitBorderBottomRightRadius<
+    const Value extends PropertyValue<'WebkitBorderBottomRightRadius', T>,
+  >(value: Value & CheckedPropertyValue<'WebkitBorderBottomRightRadius', T, Value>): this {
     return this.write('WebkitBorderBottomRightRadius', value);
   }
   /**
@@ -7913,7 +9343,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-image
    */
-  WebkitBorderImage(value: PropertyValue<'WebkitBorderImage', T>): this {
+  WebkitBorderImage<const Value extends PropertyValue<'WebkitBorderImage', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBorderImage', T, Value>,
+  ): this {
     return this.write('WebkitBorderImage', value);
   }
   /**
@@ -7924,7 +9356,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-image-slice
    */
-  WebkitBorderImageSlice(value: PropertyValue<'WebkitBorderImageSlice', T>): this {
+  WebkitBorderImageSlice<const Value extends PropertyValue<'WebkitBorderImageSlice', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBorderImageSlice', T, Value>,
+  ): this {
     return this.write('WebkitBorderImageSlice', value);
   }
   /**
@@ -7939,7 +9373,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-radius
    */
-  WebkitBorderRadius(value: PropertyValue<'WebkitBorderRadius', T>): this {
+  WebkitBorderRadius<const Value extends PropertyValue<'WebkitBorderRadius', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBorderRadius', T, Value>,
+  ): this {
     return this.write('WebkitBorderRadius', value);
   }
   /**
@@ -7950,7 +9386,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-top-left-radius
    */
-  WebkitBorderTopLeftRadius(value: PropertyValue<'WebkitBorderTopLeftRadius', T>): this {
+  WebkitBorderTopLeftRadius<const Value extends PropertyValue<'WebkitBorderTopLeftRadius', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBorderTopLeftRadius', T, Value>,
+  ): this {
     return this.write('WebkitBorderTopLeftRadius', value);
   }
   /**
@@ -7961,7 +9399,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-top-right-radius
    */
-  WebkitBorderTopRightRadius(value: PropertyValue<'WebkitBorderTopRightRadius', T>): this {
+  WebkitBorderTopRightRadius<const Value extends PropertyValue<'WebkitBorderTopRightRadius', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBorderTopRightRadius', T, Value>,
+  ): this {
     return this.write('WebkitBorderTopRightRadius', value);
   }
   /**
@@ -7973,7 +9413,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-align
    */
-  WebkitBoxAlign(value: PropertyValue<'WebkitBoxAlign', T>): this {
+  WebkitBoxAlign<const Value extends PropertyValue<'WebkitBoxAlign', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxAlign', T, Value>,
+  ): this {
     return this.write('WebkitBoxAlign', value);
   }
   /**
@@ -7984,7 +9426,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-decoration-break
    */
-  WebkitBoxDecorationBreak(value: PropertyValue<'WebkitBoxDecorationBreak', T>): this {
+  WebkitBoxDecorationBreak<const Value extends PropertyValue<'WebkitBoxDecorationBreak', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxDecorationBreak', T, Value>,
+  ): this {
     return this.write('WebkitBoxDecorationBreak', value);
   }
   /**
@@ -7996,7 +9440,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-direction
    */
-  WebkitBoxDirection(value: PropertyValue<'WebkitBoxDirection', T>): this {
+  WebkitBoxDirection<const Value extends PropertyValue<'WebkitBoxDirection', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxDirection', T, Value>,
+  ): this {
     return this.write('WebkitBoxDirection', value);
   }
   /**
@@ -8008,7 +9454,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-flex
    */
-  WebkitBoxFlex(value: PropertyValue<'WebkitBoxFlex', T>): this {
+  WebkitBoxFlex<const Value extends PropertyValue<'WebkitBoxFlex', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxFlex', T, Value>,
+  ): this {
     return this.write('WebkitBoxFlex', value);
   }
   /**
@@ -8020,7 +9468,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-flex-group
    */
-  WebkitBoxFlexGroup(value: PropertyValue<'WebkitBoxFlexGroup', T>): this {
+  WebkitBoxFlexGroup<const Value extends PropertyValue<'WebkitBoxFlexGroup', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxFlexGroup', T, Value>,
+  ): this {
     return this.write('WebkitBoxFlexGroup', value);
   }
   /**
@@ -8032,7 +9482,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-lines
    */
-  WebkitBoxLines(value: PropertyValue<'WebkitBoxLines', T>): this {
+  WebkitBoxLines<const Value extends PropertyValue<'WebkitBoxLines', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxLines', T, Value>,
+  ): this {
     return this.write('WebkitBoxLines', value);
   }
   /**
@@ -8044,7 +9496,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-ordinal-group
    */
-  WebkitBoxOrdinalGroup(value: PropertyValue<'WebkitBoxOrdinalGroup', T>): this {
+  WebkitBoxOrdinalGroup<const Value extends PropertyValue<'WebkitBoxOrdinalGroup', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxOrdinalGroup', T, Value>,
+  ): this {
     return this.write('WebkitBoxOrdinalGroup', value);
   }
   /**
@@ -8055,7 +9509,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-orient
    */
-  WebkitBoxOrient(value: PropertyValue<'WebkitBoxOrient', T>): this {
+  WebkitBoxOrient<const Value extends PropertyValue<'WebkitBoxOrient', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxOrient', T, Value>,
+  ): this {
     return this.write('WebkitBoxOrient', value);
   }
   /**
@@ -8067,7 +9523,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-pack
    */
-  WebkitBoxPack(value: PropertyValue<'WebkitBoxPack', T>): this {
+  WebkitBoxPack<const Value extends PropertyValue<'WebkitBoxPack', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxPack', T, Value>,
+  ): this {
     return this.write('WebkitBoxPack', value);
   }
   /**
@@ -8078,7 +9536,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-reflect
    */
-  WebkitBoxReflect(value: PropertyValue<'WebkitBoxReflect', T>): this {
+  WebkitBoxReflect<const Value extends PropertyValue<'WebkitBoxReflect', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxReflect', T, Value>,
+  ): this {
     return this.write('WebkitBoxReflect', value);
   }
   /**
@@ -8095,7 +9555,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-shadow
    */
-  WebkitBoxShadow(value: PropertyValue<'WebkitBoxShadow', T>): this {
+  WebkitBoxShadow<const Value extends PropertyValue<'WebkitBoxShadow', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxShadow', T, Value>,
+  ): this {
     return this.write('WebkitBoxShadow', value);
   }
   /**
@@ -8112,7 +9574,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-sizing
    */
-  WebkitBoxSizing(value: PropertyValue<'WebkitBoxSizing', T>): this {
+  WebkitBoxSizing<const Value extends PropertyValue<'WebkitBoxSizing', T>>(
+    value: Value & CheckedPropertyValue<'WebkitBoxSizing', T, Value>,
+  ): this {
     return this.write('WebkitBoxSizing', value);
   }
   /**
@@ -8123,7 +9587,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-clip-path
    */
-  WebkitClipPath(value: PropertyValue<'WebkitClipPath', T>): this {
+  WebkitClipPath<const Value extends PropertyValue<'WebkitClipPath', T>>(
+    value: Value & CheckedPropertyValue<'WebkitClipPath', T, Value>,
+  ): this {
     return this.write('WebkitClipPath', value);
   }
   /**
@@ -8134,7 +9600,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-count
    */
-  WebkitColumnCount(value: PropertyValue<'WebkitColumnCount', T>): this {
+  WebkitColumnCount<const Value extends PropertyValue<'WebkitColumnCount', T>>(
+    value: Value & CheckedPropertyValue<'WebkitColumnCount', T, Value>,
+  ): this {
     return this.write('WebkitColumnCount', value);
   }
   /**
@@ -8145,7 +9613,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-fill
    */
-  WebkitColumnFill(value: PropertyValue<'WebkitColumnFill', T>): this {
+  WebkitColumnFill<const Value extends PropertyValue<'WebkitColumnFill', T>>(
+    value: Value & CheckedPropertyValue<'WebkitColumnFill', T, Value>,
+  ): this {
     return this.write('WebkitColumnFill', value);
   }
   /**
@@ -8154,7 +9624,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule
    */
-  WebkitColumnRule(value: PropertyValue<'WebkitColumnRule', T>): this {
+  WebkitColumnRule<const Value extends PropertyValue<'WebkitColumnRule', T>>(
+    value: Value & CheckedPropertyValue<'WebkitColumnRule', T, Value>,
+  ): this {
     return this.write('WebkitColumnRule', value);
   }
   /**
@@ -8165,7 +9637,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-color
    */
-  WebkitColumnRuleColor(value: PropertyValue<'WebkitColumnRuleColor', T>): this {
+  WebkitColumnRuleColor<const Value extends PropertyValue<'WebkitColumnRuleColor', T>>(
+    value: Value & CheckedPropertyValue<'WebkitColumnRuleColor', T, Value>,
+  ): this {
     return this.write('WebkitColumnRuleColor', value);
   }
   /**
@@ -8176,7 +9650,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
    */
-  WebkitColumnRuleStyle(value: PropertyValue<'WebkitColumnRuleStyle', T>): this {
+  WebkitColumnRuleStyle<const Value extends PropertyValue<'WebkitColumnRuleStyle', T>>(
+    value: Value & CheckedPropertyValue<'WebkitColumnRuleStyle', T, Value>,
+  ): this {
     return this.write('WebkitColumnRuleStyle', value);
   }
   /**
@@ -8187,7 +9663,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-width
    */
-  WebkitColumnRuleWidth(value: PropertyValue<'WebkitColumnRuleWidth', T>): this {
+  WebkitColumnRuleWidth<const Value extends PropertyValue<'WebkitColumnRuleWidth', T>>(
+    value: Value & CheckedPropertyValue<'WebkitColumnRuleWidth', T, Value>,
+  ): this {
     return this.write('WebkitColumnRuleWidth', value);
   }
   /**
@@ -8196,7 +9674,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-columns
    */
-  WebkitColumns(value: PropertyValue<'WebkitColumns', T>): this {
+  WebkitColumns<const Value extends PropertyValue<'WebkitColumns', T>>(
+    value: Value & CheckedPropertyValue<'WebkitColumns', T, Value>,
+  ): this {
     return this.write('WebkitColumns', value);
   }
   /**
@@ -8207,7 +9687,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-span
    */
-  WebkitColumnSpan(value: PropertyValue<'WebkitColumnSpan', T>): this {
+  WebkitColumnSpan<const Value extends PropertyValue<'WebkitColumnSpan', T>>(
+    value: Value & CheckedPropertyValue<'WebkitColumnSpan', T, Value>,
+  ): this {
     return this.write('WebkitColumnSpan', value);
   }
   /**
@@ -8218,7 +9700,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-width
    */
-  WebkitColumnWidth(value: PropertyValue<'WebkitColumnWidth', T>): this {
+  WebkitColumnWidth<const Value extends PropertyValue<'WebkitColumnWidth', T>>(
+    value: Value & CheckedPropertyValue<'WebkitColumnWidth', T, Value>,
+  ): this {
     return this.write('WebkitColumnWidth', value);
   }
   /**
@@ -8229,7 +9713,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-filter
    */
-  WebkitFilter(value: PropertyValue<'WebkitFilter', T>): this {
+  WebkitFilter<const Value extends PropertyValue<'WebkitFilter', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFilter', T, Value>,
+  ): this {
     return this.write('WebkitFilter', value);
   }
   /**
@@ -8248,7 +9734,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex
    */
-  WebkitFlex(value: PropertyValue<'WebkitFlex', T>): this {
+  WebkitFlex<const Value extends PropertyValue<'WebkitFlex', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFlex', T, Value>,
+  ): this {
     return this.write('WebkitFlex', value);
   }
   /**
@@ -8267,7 +9755,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-basis
    */
-  WebkitFlexBasis(value: PropertyValue<'WebkitFlexBasis', T>): this {
+  WebkitFlexBasis<const Value extends PropertyValue<'WebkitFlexBasis', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFlexBasis', T, Value>,
+  ): this {
     return this.write('WebkitFlexBasis', value);
   }
   /**
@@ -8284,7 +9774,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-direction
    */
-  WebkitFlexDirection(value: PropertyValue<'WebkitFlexDirection', T>): this {
+  WebkitFlexDirection<const Value extends PropertyValue<'WebkitFlexDirection', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFlexDirection', T, Value>,
+  ): this {
     return this.write('WebkitFlexDirection', value);
   }
   /**
@@ -8293,7 +9785,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-flow
    */
-  WebkitFlexFlow(value: PropertyValue<'WebkitFlexFlow', T>): this {
+  WebkitFlexFlow<const Value extends PropertyValue<'WebkitFlexFlow', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFlexFlow', T, Value>,
+  ): this {
     return this.write('WebkitFlexFlow', value);
   }
   /**
@@ -8310,7 +9804,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-grow
    */
-  WebkitFlexGrow(value: PropertyValue<'WebkitFlexGrow', T>): this {
+  WebkitFlexGrow<const Value extends PropertyValue<'WebkitFlexGrow', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFlexGrow', T, Value>,
+  ): this {
     return this.write('WebkitFlexGrow', value);
   }
   /**
@@ -8327,7 +9823,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-shrink
    */
-  WebkitFlexShrink(value: PropertyValue<'WebkitFlexShrink', T>): this {
+  WebkitFlexShrink<const Value extends PropertyValue<'WebkitFlexShrink', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFlexShrink', T, Value>,
+  ): this {
     return this.write('WebkitFlexShrink', value);
   }
   /**
@@ -8344,7 +9842,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-wrap
    */
-  WebkitFlexWrap(value: PropertyValue<'WebkitFlexWrap', T>): this {
+  WebkitFlexWrap<const Value extends PropertyValue<'WebkitFlexWrap', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFlexWrap', T, Value>,
+  ): this {
     return this.write('WebkitFlexWrap', value);
   }
   /**
@@ -8355,7 +9855,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-feature-settings
    */
-  WebkitFontFeatureSettings(value: PropertyValue<'WebkitFontFeatureSettings', T>): this {
+  WebkitFontFeatureSettings<const Value extends PropertyValue<'WebkitFontFeatureSettings', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFontFeatureSettings', T, Value>,
+  ): this {
     return this.write('WebkitFontFeatureSettings', value);
   }
   /**
@@ -8366,7 +9868,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-kerning
    */
-  WebkitFontKerning(value: PropertyValue<'WebkitFontKerning', T>): this {
+  WebkitFontKerning<const Value extends PropertyValue<'WebkitFontKerning', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFontKerning', T, Value>,
+  ): this {
     return this.write('WebkitFontKerning', value);
   }
   /**
@@ -8377,7 +9881,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-smoothing
    */
-  WebkitFontSmoothing(value: PropertyValue<'WebkitFontSmoothing', T>): this {
+  WebkitFontSmoothing<const Value extends PropertyValue<'WebkitFontSmoothing', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFontSmoothing', T, Value>,
+  ): this {
     return this.write('WebkitFontSmoothing', value);
   }
   /**
@@ -8388,7 +9894,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-variant-ligatures
    */
-  WebkitFontVariantLigatures(value: PropertyValue<'WebkitFontVariantLigatures', T>): this {
+  WebkitFontVariantLigatures<const Value extends PropertyValue<'WebkitFontVariantLigatures', T>>(
+    value: Value & CheckedPropertyValue<'WebkitFontVariantLigatures', T, Value>,
+  ): this {
     return this.write('WebkitFontVariantLigatures', value);
   }
   /**
@@ -8399,7 +9907,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-hyphenate-character
    */
-  WebkitHyphenateCharacter(value: PropertyValue<'WebkitHyphenateCharacter', T>): this {
+  WebkitHyphenateCharacter<const Value extends PropertyValue<'WebkitHyphenateCharacter', T>>(
+    value: Value & CheckedPropertyValue<'WebkitHyphenateCharacter', T, Value>,
+  ): this {
     return this.write('WebkitHyphenateCharacter', value);
   }
   /**
@@ -8410,7 +9920,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-hyphens
    */
-  WebkitHyphens(value: PropertyValue<'WebkitHyphens', T>): this {
+  WebkitHyphens<const Value extends PropertyValue<'WebkitHyphens', T>>(
+    value: Value & CheckedPropertyValue<'WebkitHyphens', T, Value>,
+  ): this {
     return this.write('WebkitHyphens', value);
   }
   /**
@@ -8421,7 +9933,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-initial-letter
    */
-  WebkitInitialLetter(value: PropertyValue<'WebkitInitialLetter', T>): this {
+  WebkitInitialLetter<const Value extends PropertyValue<'WebkitInitialLetter', T>>(
+    value: Value & CheckedPropertyValue<'WebkitInitialLetter', T, Value>,
+  ): this {
     return this.write('WebkitInitialLetter', value);
   }
   /**
@@ -8438,7 +9952,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-justify-content
    */
-  WebkitJustifyContent(value: PropertyValue<'WebkitJustifyContent', T>): this {
+  WebkitJustifyContent<const Value extends PropertyValue<'WebkitJustifyContent', T>>(
+    value: Value & CheckedPropertyValue<'WebkitJustifyContent', T, Value>,
+  ): this {
     return this.write('WebkitJustifyContent', value);
   }
   /**
@@ -8449,7 +9965,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-line-break
    */
-  WebkitLineBreak(value: PropertyValue<'WebkitLineBreak', T>): this {
+  WebkitLineBreak<const Value extends PropertyValue<'WebkitLineBreak', T>>(
+    value: Value & CheckedPropertyValue<'WebkitLineBreak', T, Value>,
+  ): this {
     return this.write('WebkitLineBreak', value);
   }
   /**
@@ -8459,7 +9977,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-line-clamp
    */
-  WebkitLineClamp(value: PropertyValue<'WebkitLineClamp', T>): this {
+  WebkitLineClamp<const Value extends PropertyValue<'WebkitLineClamp', T>>(
+    value: Value & CheckedPropertyValue<'WebkitLineClamp', T, Value>,
+  ): this {
     return this.write('WebkitLineClamp', value);
   }
   /**
@@ -8470,7 +9990,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-logical-height
    */
-  WebkitLogicalHeight(value: PropertyValue<'WebkitLogicalHeight', T>): this {
+  WebkitLogicalHeight<const Value extends PropertyValue<'WebkitLogicalHeight', T>>(
+    value: Value & CheckedPropertyValue<'WebkitLogicalHeight', T, Value>,
+  ): this {
     return this.write('WebkitLogicalHeight', value);
   }
   /**
@@ -8481,7 +10003,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-logical-width
    */
-  WebkitLogicalWidth(value: PropertyValue<'WebkitLogicalWidth', T>): this {
+  WebkitLogicalWidth<const Value extends PropertyValue<'WebkitLogicalWidth', T>>(
+    value: Value & CheckedPropertyValue<'WebkitLogicalWidth', T, Value>,
+  ): this {
     return this.write('WebkitLogicalWidth', value);
   }
   /**
@@ -8492,7 +10016,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-margin-end
    */
-  WebkitMarginEnd(value: PropertyValue<'WebkitMarginEnd', T>): this {
+  WebkitMarginEnd<const Value extends PropertyValue<'WebkitMarginEnd', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMarginEnd', T, Value>,
+  ): this {
     return this.write('WebkitMarginEnd', value);
   }
   /**
@@ -8503,7 +10029,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-margin-start
    */
-  WebkitMarginStart(value: PropertyValue<'WebkitMarginStart', T>): this {
+  WebkitMarginStart<const Value extends PropertyValue<'WebkitMarginStart', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMarginStart', T, Value>,
+  ): this {
     return this.write('WebkitMarginStart', value);
   }
   /**
@@ -8512,7 +10040,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
    */
-  WebkitMask(value: PropertyValue<'WebkitMask', T>): this {
+  WebkitMask<const Value extends PropertyValue<'WebkitMask', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMask', T, Value>,
+  ): this {
     return this.write('WebkitMask', value);
   }
   /**
@@ -8523,7 +10053,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-attachment
    */
-  WebkitMaskAttachment(value: PropertyValue<'WebkitMaskAttachment', T>): this {
+  WebkitMaskAttachment<const Value extends PropertyValue<'WebkitMaskAttachment', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskAttachment', T, Value>,
+  ): this {
     return this.write('WebkitMaskAttachment', value);
   }
   /**
@@ -8532,7 +10064,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image
    */
-  WebkitMaskBoxImage(value: PropertyValue<'WebkitMaskBoxImage', T>): this {
+  WebkitMaskBoxImage<const Value extends PropertyValue<'WebkitMaskBoxImage', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskBoxImage', T, Value>,
+  ): this {
     return this.write('WebkitMaskBoxImage', value);
   }
   /**
@@ -8543,7 +10077,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-outset
    */
-  WebkitMaskBoxImageOutset(value: PropertyValue<'WebkitMaskBoxImageOutset', T>): this {
+  WebkitMaskBoxImageOutset<const Value extends PropertyValue<'WebkitMaskBoxImageOutset', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskBoxImageOutset', T, Value>,
+  ): this {
     return this.write('WebkitMaskBoxImageOutset', value);
   }
   /**
@@ -8554,7 +10090,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-repeat
    */
-  WebkitMaskBoxImageRepeat(value: PropertyValue<'WebkitMaskBoxImageRepeat', T>): this {
+  WebkitMaskBoxImageRepeat<const Value extends PropertyValue<'WebkitMaskBoxImageRepeat', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskBoxImageRepeat', T, Value>,
+  ): this {
     return this.write('WebkitMaskBoxImageRepeat', value);
   }
   /**
@@ -8565,7 +10103,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-slice
    */
-  WebkitMaskBoxImageSlice(value: PropertyValue<'WebkitMaskBoxImageSlice', T>): this {
+  WebkitMaskBoxImageSlice<const Value extends PropertyValue<'WebkitMaskBoxImageSlice', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskBoxImageSlice', T, Value>,
+  ): this {
     return this.write('WebkitMaskBoxImageSlice', value);
   }
   /**
@@ -8576,7 +10116,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-source
    */
-  WebkitMaskBoxImageSource(value: PropertyValue<'WebkitMaskBoxImageSource', T>): this {
+  WebkitMaskBoxImageSource<const Value extends PropertyValue<'WebkitMaskBoxImageSource', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskBoxImageSource', T, Value>,
+  ): this {
     return this.write('WebkitMaskBoxImageSource', value);
   }
   /**
@@ -8587,7 +10129,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-width
    */
-  WebkitMaskBoxImageWidth(value: PropertyValue<'WebkitMaskBoxImageWidth', T>): this {
+  WebkitMaskBoxImageWidth<const Value extends PropertyValue<'WebkitMaskBoxImageWidth', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskBoxImageWidth', T, Value>,
+  ): this {
     return this.write('WebkitMaskBoxImageWidth', value);
   }
   /**
@@ -8598,7 +10142,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-clip
    */
-  WebkitMaskClip(value: PropertyValue<'WebkitMaskClip', T>): this {
+  WebkitMaskClip<const Value extends PropertyValue<'WebkitMaskClip', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskClip', T, Value>,
+  ): this {
     return this.write('WebkitMaskClip', value);
   }
   /**
@@ -8609,7 +10155,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-composite
    */
-  WebkitMaskComposite(value: PropertyValue<'WebkitMaskComposite', T>): this {
+  WebkitMaskComposite<const Value extends PropertyValue<'WebkitMaskComposite', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskComposite', T, Value>,
+  ): this {
     return this.write('WebkitMaskComposite', value);
   }
   /**
@@ -8620,7 +10168,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-image
    */
-  WebkitMaskImage(value: PropertyValue<'WebkitMaskImage', T>): this {
+  WebkitMaskImage<const Value extends PropertyValue<'WebkitMaskImage', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskImage', T, Value>,
+  ): this {
     return this.write('WebkitMaskImage', value);
   }
   /**
@@ -8631,7 +10181,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-origin
    */
-  WebkitMaskOrigin(value: PropertyValue<'WebkitMaskOrigin', T>): this {
+  WebkitMaskOrigin<const Value extends PropertyValue<'WebkitMaskOrigin', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskOrigin', T, Value>,
+  ): this {
     return this.write('WebkitMaskOrigin', value);
   }
   /**
@@ -8642,7 +10194,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position
    */
-  WebkitMaskPosition(value: PropertyValue<'WebkitMaskPosition', T>): this {
+  WebkitMaskPosition<const Value extends PropertyValue<'WebkitMaskPosition', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskPosition', T, Value>,
+  ): this {
     return this.write('WebkitMaskPosition', value);
   }
   /**
@@ -8653,7 +10207,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-x
    */
-  WebkitMaskPositionX(value: PropertyValue<'WebkitMaskPositionX', T>): this {
+  WebkitMaskPositionX<const Value extends PropertyValue<'WebkitMaskPositionX', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskPositionX', T, Value>,
+  ): this {
     return this.write('WebkitMaskPositionX', value);
   }
   /**
@@ -8664,7 +10220,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-y
    */
-  WebkitMaskPositionY(value: PropertyValue<'WebkitMaskPositionY', T>): this {
+  WebkitMaskPositionY<const Value extends PropertyValue<'WebkitMaskPositionY', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskPositionY', T, Value>,
+  ): this {
     return this.write('WebkitMaskPositionY', value);
   }
   /**
@@ -8675,7 +10233,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat
    */
-  WebkitMaskRepeat(value: PropertyValue<'WebkitMaskRepeat', T>): this {
+  WebkitMaskRepeat<const Value extends PropertyValue<'WebkitMaskRepeat', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskRepeat', T, Value>,
+  ): this {
     return this.write('WebkitMaskRepeat', value);
   }
   /**
@@ -8686,7 +10246,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-x
    */
-  WebkitMaskRepeatX(value: PropertyValue<'WebkitMaskRepeatX', T>): this {
+  WebkitMaskRepeatX<const Value extends PropertyValue<'WebkitMaskRepeatX', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskRepeatX', T, Value>,
+  ): this {
     return this.write('WebkitMaskRepeatX', value);
   }
   /**
@@ -8697,7 +10259,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-y
    */
-  WebkitMaskRepeatY(value: PropertyValue<'WebkitMaskRepeatY', T>): this {
+  WebkitMaskRepeatY<const Value extends PropertyValue<'WebkitMaskRepeatY', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskRepeatY', T, Value>,
+  ): this {
     return this.write('WebkitMaskRepeatY', value);
   }
   /**
@@ -8708,7 +10272,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-size
    */
-  WebkitMaskSize(value: PropertyValue<'WebkitMaskSize', T>): this {
+  WebkitMaskSize<const Value extends PropertyValue<'WebkitMaskSize', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaskSize', T, Value>,
+  ): this {
     return this.write('WebkitMaskSize', value);
   }
   /**
@@ -8719,7 +10285,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-max-inline-size
    */
-  WebkitMaxInlineSize(value: PropertyValue<'WebkitMaxInlineSize', T>): this {
+  WebkitMaxInlineSize<const Value extends PropertyValue<'WebkitMaxInlineSize', T>>(
+    value: Value & CheckedPropertyValue<'WebkitMaxInlineSize', T, Value>,
+  ): this {
     return this.write('WebkitMaxInlineSize', value);
   }
   /**
@@ -8732,7 +10300,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-order
    */
-  WebkitOrder(value: PropertyValue<'WebkitOrder', T>): this {
+  WebkitOrder<const Value extends PropertyValue<'WebkitOrder', T>>(
+    value: Value & CheckedPropertyValue<'WebkitOrder', T, Value>,
+  ): this {
     return this.write('WebkitOrder', value);
   }
   /**
@@ -8743,7 +10313,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-overflow-scrolling
    */
-  WebkitOverflowScrolling(value: PropertyValue<'WebkitOverflowScrolling', T>): this {
+  WebkitOverflowScrolling<const Value extends PropertyValue<'WebkitOverflowScrolling', T>>(
+    value: Value & CheckedPropertyValue<'WebkitOverflowScrolling', T, Value>,
+  ): this {
     return this.write('WebkitOverflowScrolling', value);
   }
   /**
@@ -8754,7 +10326,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-padding-end
    */
-  WebkitPaddingEnd(value: PropertyValue<'WebkitPaddingEnd', T>): this {
+  WebkitPaddingEnd<const Value extends PropertyValue<'WebkitPaddingEnd', T>>(
+    value: Value & CheckedPropertyValue<'WebkitPaddingEnd', T, Value>,
+  ): this {
     return this.write('WebkitPaddingEnd', value);
   }
   /**
@@ -8765,7 +10339,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-padding-start
    */
-  WebkitPaddingStart(value: PropertyValue<'WebkitPaddingStart', T>): this {
+  WebkitPaddingStart<const Value extends PropertyValue<'WebkitPaddingStart', T>>(
+    value: Value & CheckedPropertyValue<'WebkitPaddingStart', T, Value>,
+  ): this {
     return this.write('WebkitPaddingStart', value);
   }
   /**
@@ -8776,7 +10352,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-perspective
    */
-  WebkitPerspective(value: PropertyValue<'WebkitPerspective', T>): this {
+  WebkitPerspective<const Value extends PropertyValue<'WebkitPerspective', T>>(
+    value: Value & CheckedPropertyValue<'WebkitPerspective', T, Value>,
+  ): this {
     return this.write('WebkitPerspective', value);
   }
   /**
@@ -8787,7 +10365,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-perspective-origin
    */
-  WebkitPerspectiveOrigin(value: PropertyValue<'WebkitPerspectiveOrigin', T>): this {
+  WebkitPerspectiveOrigin<const Value extends PropertyValue<'WebkitPerspectiveOrigin', T>>(
+    value: Value & CheckedPropertyValue<'WebkitPerspectiveOrigin', T, Value>,
+  ): this {
     return this.write('WebkitPerspectiveOrigin', value);
   }
   /**
@@ -8798,7 +10378,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-print-color-adjust
    */
-  WebkitPrintColorAdjust(value: PropertyValue<'WebkitPrintColorAdjust', T>): this {
+  WebkitPrintColorAdjust<const Value extends PropertyValue<'WebkitPrintColorAdjust', T>>(
+    value: Value & CheckedPropertyValue<'WebkitPrintColorAdjust', T, Value>,
+  ): this {
     return this.write('WebkitPrintColorAdjust', value);
   }
   /**
@@ -8809,7 +10391,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-ruby-position
    */
-  WebkitRubyPosition(value: PropertyValue<'WebkitRubyPosition', T>): this {
+  WebkitRubyPosition<const Value extends PropertyValue<'WebkitRubyPosition', T>>(
+    value: Value & CheckedPropertyValue<'WebkitRubyPosition', T, Value>,
+  ): this {
     return this.write('WebkitRubyPosition', value);
   }
   /**
@@ -8824,7 +10408,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-scroll-snap-type
    */
-  WebkitScrollSnapType(value: PropertyValue<'WebkitScrollSnapType', T>): this {
+  WebkitScrollSnapType<const Value extends PropertyValue<'WebkitScrollSnapType', T>>(
+    value: Value & CheckedPropertyValue<'WebkitScrollSnapType', T, Value>,
+  ): this {
     return this.write('WebkitScrollSnapType', value);
   }
   /**
@@ -8835,7 +10421,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-shape-margin
    */
-  WebkitShapeMargin(value: PropertyValue<'WebkitShapeMargin', T>): this {
+  WebkitShapeMargin<const Value extends PropertyValue<'WebkitShapeMargin', T>>(
+    value: Value & CheckedPropertyValue<'WebkitShapeMargin', T, Value>,
+  ): this {
     return this.write('WebkitShapeMargin', value);
   }
   /**
@@ -8846,7 +10434,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-tap-highlight-color
    */
-  WebkitTapHighlightColor(value: PropertyValue<'WebkitTapHighlightColor', T>): this {
+  WebkitTapHighlightColor<const Value extends PropertyValue<'WebkitTapHighlightColor', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTapHighlightColor', T, Value>,
+  ): this {
     return this.write('WebkitTapHighlightColor', value);
   }
   /**
@@ -8857,7 +10447,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-combine
    */
-  WebkitTextCombine(value: PropertyValue<'WebkitTextCombine', T>): this {
+  WebkitTextCombine<const Value extends PropertyValue<'WebkitTextCombine', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextCombine', T, Value>,
+  ): this {
     return this.write('WebkitTextCombine', value);
   }
   /**
@@ -8868,7 +10460,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-color
    */
-  WebkitTextDecorationColor(value: PropertyValue<'WebkitTextDecorationColor', T>): this {
+  WebkitTextDecorationColor<const Value extends PropertyValue<'WebkitTextDecorationColor', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextDecorationColor', T, Value>,
+  ): this {
     return this.write('WebkitTextDecorationColor', value);
   }
   /**
@@ -8879,7 +10473,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-line
    */
-  WebkitTextDecorationLine(value: PropertyValue<'WebkitTextDecorationLine', T>): this {
+  WebkitTextDecorationLine<const Value extends PropertyValue<'WebkitTextDecorationLine', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextDecorationLine', T, Value>,
+  ): this {
     return this.write('WebkitTextDecorationLine', value);
   }
   /**
@@ -8890,7 +10486,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-skip
    */
-  WebkitTextDecorationSkip(value: PropertyValue<'WebkitTextDecorationSkip', T>): this {
+  WebkitTextDecorationSkip<const Value extends PropertyValue<'WebkitTextDecorationSkip', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextDecorationSkip', T, Value>,
+  ): this {
     return this.write('WebkitTextDecorationSkip', value);
   }
   /**
@@ -8901,7 +10499,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-style
    */
-  WebkitTextDecorationStyle(value: PropertyValue<'WebkitTextDecorationStyle', T>): this {
+  WebkitTextDecorationStyle<const Value extends PropertyValue<'WebkitTextDecorationStyle', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextDecorationStyle', T, Value>,
+  ): this {
     return this.write('WebkitTextDecorationStyle', value);
   }
   /**
@@ -8910,7 +10510,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis
    */
-  WebkitTextEmphasis(value: PropertyValue<'WebkitTextEmphasis', T>): this {
+  WebkitTextEmphasis<const Value extends PropertyValue<'WebkitTextEmphasis', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextEmphasis', T, Value>,
+  ): this {
     return this.write('WebkitTextEmphasis', value);
   }
   /**
@@ -8921,7 +10523,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-color
    */
-  WebkitTextEmphasisColor(value: PropertyValue<'WebkitTextEmphasisColor', T>): this {
+  WebkitTextEmphasisColor<const Value extends PropertyValue<'WebkitTextEmphasisColor', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextEmphasisColor', T, Value>,
+  ): this {
     return this.write('WebkitTextEmphasisColor', value);
   }
   /**
@@ -8932,7 +10536,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-position
    */
-  WebkitTextEmphasisPosition(value: PropertyValue<'WebkitTextEmphasisPosition', T>): this {
+  WebkitTextEmphasisPosition<const Value extends PropertyValue<'WebkitTextEmphasisPosition', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextEmphasisPosition', T, Value>,
+  ): this {
     return this.write('WebkitTextEmphasisPosition', value);
   }
   /**
@@ -8943,7 +10549,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-style
    */
-  WebkitTextEmphasisStyle(value: PropertyValue<'WebkitTextEmphasisStyle', T>): this {
+  WebkitTextEmphasisStyle<const Value extends PropertyValue<'WebkitTextEmphasisStyle', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextEmphasisStyle', T, Value>,
+  ): this {
     return this.write('WebkitTextEmphasisStyle', value);
   }
   /**
@@ -8954,7 +10562,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-fill-color
    */
-  WebkitTextFillColor(value: PropertyValue<'WebkitTextFillColor', T>): this {
+  WebkitTextFillColor<const Value extends PropertyValue<'WebkitTextFillColor', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextFillColor', T, Value>,
+  ): this {
     return this.write('WebkitTextFillColor', value);
   }
   /**
@@ -8965,7 +10575,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-orientation
    */
-  WebkitTextOrientation(value: PropertyValue<'WebkitTextOrientation', T>): this {
+  WebkitTextOrientation<const Value extends PropertyValue<'WebkitTextOrientation', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextOrientation', T, Value>,
+  ): this {
     return this.write('WebkitTextOrientation', value);
   }
   /**
@@ -8976,7 +10588,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-size-adjust
    */
-  WebkitTextSizeAdjust(value: PropertyValue<'WebkitTextSizeAdjust', T>): this {
+  WebkitTextSizeAdjust<const Value extends PropertyValue<'WebkitTextSizeAdjust', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextSizeAdjust', T, Value>,
+  ): this {
     return this.write('WebkitTextSizeAdjust', value);
   }
   /**
@@ -8985,7 +10599,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-stroke
    */
-  WebkitTextStroke(value: PropertyValue<'WebkitTextStroke', T>): this {
+  WebkitTextStroke<const Value extends PropertyValue<'WebkitTextStroke', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextStroke', T, Value>,
+  ): this {
     return this.write('WebkitTextStroke', value);
   }
   /**
@@ -8996,7 +10612,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-stroke-color
    */
-  WebkitTextStrokeColor(value: PropertyValue<'WebkitTextStrokeColor', T>): this {
+  WebkitTextStrokeColor<const Value extends PropertyValue<'WebkitTextStrokeColor', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextStrokeColor', T, Value>,
+  ): this {
     return this.write('WebkitTextStrokeColor', value);
   }
   /**
@@ -9007,7 +10625,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-stroke-width
    */
-  WebkitTextStrokeWidth(value: PropertyValue<'WebkitTextStrokeWidth', T>): this {
+  WebkitTextStrokeWidth<const Value extends PropertyValue<'WebkitTextStrokeWidth', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextStrokeWidth', T, Value>,
+  ): this {
     return this.write('WebkitTextStrokeWidth', value);
   }
   /**
@@ -9018,7 +10638,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-underline-position
    */
-  WebkitTextUnderlinePosition(value: PropertyValue<'WebkitTextUnderlinePosition', T>): this {
+  WebkitTextUnderlinePosition<const Value extends PropertyValue<'WebkitTextUnderlinePosition', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTextUnderlinePosition', T, Value>,
+  ): this {
     return this.write('WebkitTextUnderlinePosition', value);
   }
   /**
@@ -9029,7 +10651,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-touch-callout
    */
-  WebkitTouchCallout(value: PropertyValue<'WebkitTouchCallout', T>): this {
+  WebkitTouchCallout<const Value extends PropertyValue<'WebkitTouchCallout', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTouchCallout', T, Value>,
+  ): this {
     return this.write('WebkitTouchCallout', value);
   }
   /**
@@ -9046,7 +10670,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform
    */
-  WebkitTransform(value: PropertyValue<'WebkitTransform', T>): this {
+  WebkitTransform<const Value extends PropertyValue<'WebkitTransform', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTransform', T, Value>,
+  ): this {
     return this.write('WebkitTransform', value);
   }
   /**
@@ -9057,7 +10683,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-origin
    */
-  WebkitTransformOrigin(value: PropertyValue<'WebkitTransformOrigin', T>): this {
+  WebkitTransformOrigin<const Value extends PropertyValue<'WebkitTransformOrigin', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTransformOrigin', T, Value>,
+  ): this {
     return this.write('WebkitTransformOrigin', value);
   }
   /**
@@ -9068,7 +10696,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-style
    */
-  WebkitTransformStyle(value: PropertyValue<'WebkitTransformStyle', T>): this {
+  WebkitTransformStyle<const Value extends PropertyValue<'WebkitTransformStyle', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTransformStyle', T, Value>,
+  ): this {
     return this.write('WebkitTransformStyle', value);
   }
   /**
@@ -9083,7 +10713,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition
    */
-  WebkitTransition(value: PropertyValue<'WebkitTransition', T>): this {
+  WebkitTransition<const Value extends PropertyValue<'WebkitTransition', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTransition', T, Value>,
+  ): this {
     return this.write('WebkitTransition', value);
   }
   /**
@@ -9094,7 +10726,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-delay
    */
-  WebkitTransitionDelay(value: PropertyValue<'WebkitTransitionDelay', T>): this {
+  WebkitTransitionDelay<const Value extends PropertyValue<'WebkitTransitionDelay', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTransitionDelay', T, Value>,
+  ): this {
     return this.write('WebkitTransitionDelay', value);
   }
   /**
@@ -9105,7 +10739,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-duration
    */
-  WebkitTransitionDuration(value: PropertyValue<'WebkitTransitionDuration', T>): this {
+  WebkitTransitionDuration<const Value extends PropertyValue<'WebkitTransitionDuration', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTransitionDuration', T, Value>,
+  ): this {
     return this.write('WebkitTransitionDuration', value);
   }
   /**
@@ -9114,7 +10750,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-property
    */
-  WebkitTransitionProperty(value: PropertyValue<'WebkitTransitionProperty', T>): this {
+  WebkitTransitionProperty<const Value extends PropertyValue<'WebkitTransitionProperty', T>>(
+    value: Value & CheckedPropertyValue<'WebkitTransitionProperty', T, Value>,
+  ): this {
     return this.write('WebkitTransitionProperty', value);
   }
   /**
@@ -9125,7 +10763,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-timing-function
    */
-  WebkitTransitionTimingFunction(value: PropertyValue<'WebkitTransitionTimingFunction', T>): this {
+  WebkitTransitionTimingFunction<
+    const Value extends PropertyValue<'WebkitTransitionTimingFunction', T>,
+  >(value: Value & CheckedPropertyValue<'WebkitTransitionTimingFunction', T, Value>): this {
     return this.write('WebkitTransitionTimingFunction', value);
   }
   /**
@@ -9136,7 +10776,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-user-modify
    */
-  WebkitUserModify(value: PropertyValue<'WebkitUserModify', T>): this {
+  WebkitUserModify<const Value extends PropertyValue<'WebkitUserModify', T>>(
+    value: Value & CheckedPropertyValue<'WebkitUserModify', T, Value>,
+  ): this {
     return this.write('WebkitUserModify', value);
   }
   /**
@@ -9153,7 +10795,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-user-select
    */
-  WebkitUserSelect(value: PropertyValue<'WebkitUserSelect', T>): this {
+  WebkitUserSelect<const Value extends PropertyValue<'WebkitUserSelect', T>>(
+    value: Value & CheckedPropertyValue<'WebkitUserSelect', T, Value>,
+  ): this {
     return this.write('WebkitUserSelect', value);
   }
   /**
@@ -9164,7 +10808,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-writing-mode
    */
-  WebkitWritingMode(value: PropertyValue<'WebkitWritingMode', T>): this {
+  WebkitWritingMode<const Value extends PropertyValue<'WebkitWritingMode', T>>(
+    value: Value & CheckedPropertyValue<'WebkitWritingMode', T, Value>,
+  ): this {
     return this.write('WebkitWritingMode', value);
   }
   /**
@@ -9172,7 +10818,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/all
    */
-  all(value: PropertyValue<'all', T>): this {
+  all<const Value extends PropertyValue<'all', T>>(
+    value: Value & CheckedPropertyValue<'all', T, Value>,
+  ): this {
     return this.write('all', value);
   }
   /**
@@ -9182,7 +10830,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-decoration-break
    */
-  boxDecorationBreak(value: PropertyValue<'boxDecorationBreak', T>): this {
+  boxDecorationBreak<const Value extends PropertyValue<'boxDecorationBreak', T>>(
+    value: Value & CheckedPropertyValue<'boxDecorationBreak', T, Value>,
+  ): this {
     return this.write('boxDecorationBreak', value);
   }
   /**
@@ -9192,7 +10842,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cx
    */
-  cx(value: PropertyValue<'cx', T>): this {
+  cx<const Value extends PropertyValue<'cx', T>>(
+    value: Value & CheckedPropertyValue<'cx', T, Value>,
+  ): this {
     return this.write('cx', value);
   }
   /**
@@ -9202,7 +10854,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cy
    */
-  cy(value: PropertyValue<'cy', T>): this {
+  cy<const Value extends PropertyValue<'cy', T>>(
+    value: Value & CheckedPropertyValue<'cy', T, Value>,
+  ): this {
     return this.write('cy', value);
   }
   /**
@@ -9212,7 +10866,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/d
    */
-  d(value: PropertyValue<'d', T>): this {
+  d<const Value extends PropertyValue<'d', T>>(
+    value: Value & CheckedPropertyValue<'d', T, Value>,
+  ): this {
     return this.write('d', value);
   }
   /**
@@ -9222,7 +10878,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/field-sizing
    */
-  fieldSizing(value: PropertyValue<'fieldSizing', T>): this {
+  fieldSizing<const Value extends PropertyValue<'fieldSizing', T>>(
+    value: Value & CheckedPropertyValue<'fieldSizing', T, Value>,
+  ): this {
     return this.write('fieldSizing', value);
   }
   /**
@@ -9232,7 +10890,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/forced-color-adjust
    */
-  forcedColorAdjust(value: PropertyValue<'forcedColorAdjust', T>): this {
+  forcedColorAdjust<const Value extends PropertyValue<'forcedColorAdjust', T>>(
+    value: Value & CheckedPropertyValue<'forcedColorAdjust', T, Value>,
+  ): this {
     return this.write('forcedColorAdjust', value);
   }
   /**
@@ -9242,7 +10902,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hyphenate-character
    */
-  hyphenateCharacter(value: PropertyValue<'hyphenateCharacter', T>): this {
+  hyphenateCharacter<const Value extends PropertyValue<'hyphenateCharacter', T>>(
+    value: Value & CheckedPropertyValue<'hyphenateCharacter', T, Value>,
+  ): this {
     return this.write('hyphenateCharacter', value);
   }
   /**
@@ -9252,7 +10914,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hyphenate-limit-chars
    */
-  hyphenateLimitChars(value: PropertyValue<'hyphenateLimitChars', T>): this {
+  hyphenateLimitChars<const Value extends PropertyValue<'hyphenateLimitChars', T>>(
+    value: Value & CheckedPropertyValue<'hyphenateLimitChars', T, Value>,
+  ): this {
     return this.write('hyphenateLimitChars', value);
   }
   /**
@@ -9262,7 +10926,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/interpolate-size
    */
-  interpolateSize(value: PropertyValue<'interpolateSize', T>): this {
+  interpolateSize<const Value extends PropertyValue<'interpolateSize', T>>(
+    value: Value & CheckedPropertyValue<'interpolateSize', T, Value>,
+  ): this {
     return this.write('interpolateSize', value);
   }
   /**
@@ -9278,7 +10944,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/isolation
    */
-  isolation(value: PropertyValue<'isolation', T>): this {
+  isolation<const Value extends PropertyValue<'isolation', T>>(
+    value: Value & CheckedPropertyValue<'isolation', T, Value>,
+  ): this {
     return this.write('isolation', value);
   }
   /**
@@ -9288,7 +10956,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/masonry-auto-flow
    */
-  masonryAutoFlow(value: PropertyValue<'masonryAutoFlow', T>): this {
+  masonryAutoFlow<const Value extends PropertyValue<'masonryAutoFlow', T>>(
+    value: Value & CheckedPropertyValue<'masonryAutoFlow', T, Value>,
+  ): this {
     return this.write('masonryAutoFlow', value);
   }
   /**
@@ -9298,7 +10968,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/math-depth
    */
-  mathDepth(value: PropertyValue<'mathDepth', T>): this {
+  mathDepth<const Value extends PropertyValue<'mathDepth', T>>(
+    value: Value & CheckedPropertyValue<'mathDepth', T, Value>,
+  ): this {
     return this.write('mathDepth', value);
   }
   /**
@@ -9308,7 +10980,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/math-shift
    */
-  mathShift(value: PropertyValue<'mathShift', T>): this {
+  mathShift<const Value extends PropertyValue<'mathShift', T>>(
+    value: Value & CheckedPropertyValue<'mathShift', T, Value>,
+  ): this {
     return this.write('mathShift', value);
   }
   /**
@@ -9318,7 +10992,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/math-style
    */
-  mathStyle(value: PropertyValue<'mathStyle', T>): this {
+  mathStyle<const Value extends PropertyValue<'mathStyle', T>>(
+    value: Value & CheckedPropertyValue<'mathStyle', T, Value>,
+  ): this {
     return this.write('mathStyle', value);
   }
   /**
@@ -9326,7 +11002,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
    */
-  motion(value: PropertyValue<'motion', T>): this {
+  motion<const Value extends PropertyValue<'motion', T>>(
+    value: Value & CheckedPropertyValue<'motion', T, Value>,
+  ): this {
     return this.write('motion', value);
   }
   /**
@@ -9336,7 +11014,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-distance
    */
-  motionDistance(value: PropertyValue<'motionDistance', T>): this {
+  motionDistance<const Value extends PropertyValue<'motionDistance', T>>(
+    value: Value & CheckedPropertyValue<'motionDistance', T, Value>,
+  ): this {
     return this.write('motionDistance', value);
   }
   /**
@@ -9346,7 +11026,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-path
    */
-  motionPath(value: PropertyValue<'motionPath', T>): this {
+  motionPath<const Value extends PropertyValue<'motionPath', T>>(
+    value: Value & CheckedPropertyValue<'motionPath', T, Value>,
+  ): this {
     return this.write('motionPath', value);
   }
   /**
@@ -9356,7 +11038,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-rotation
    */
-  motionRotation(value: PropertyValue<'motionRotation', T>): this {
+  motionRotation<const Value extends PropertyValue<'motionRotation', T>>(
+    value: Value & CheckedPropertyValue<'motionRotation', T, Value>,
+  ): this {
     return this.write('motionRotation', value);
   }
   /**
@@ -9366,7 +11050,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overlay
    */
-  overlay(value: PropertyValue<'overlay', T>): this {
+  overlay<const Value extends PropertyValue<'overlay', T>>(
+    value: Value & CheckedPropertyValue<'overlay', T, Value>,
+  ): this {
     return this.write('overlay', value);
   }
   /**
@@ -9376,7 +11062,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/r
    */
-  r(value: PropertyValue<'r', T>): this {
+  r<const Value extends PropertyValue<'r', T>>(
+    value: Value & CheckedPropertyValue<'r', T, Value>,
+  ): this {
     return this.write('r', value);
   }
   /**
@@ -9386,7 +11074,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/rx
    */
-  rx(value: PropertyValue<'rx', T>): this {
+  rx<const Value extends PropertyValue<'rx', T>>(
+    value: Value & CheckedPropertyValue<'rx', T, Value>,
+  ): this {
     return this.write('rx', value);
   }
   /**
@@ -9396,7 +11086,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ry
    */
-  ry(value: PropertyValue<'ry', T>): this {
+  ry<const Value extends PropertyValue<'ry', T>>(
+    value: Value & CheckedPropertyValue<'ry', T, Value>,
+  ): this {
     return this.write('ry', value);
   }
   /**
@@ -9406,7 +11098,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/speak-as
    */
-  speakAs(value: PropertyValue<'speakAs', T>): this {
+  speakAs<const Value extends PropertyValue<'speakAs', T>>(
+    value: Value & CheckedPropertyValue<'speakAs', T, Value>,
+  ): this {
     return this.write('speakAs', value);
   }
   /**
@@ -9416,7 +11110,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-color
    */
-  strokeColor(value: PropertyValue<'strokeColor', T>): this {
+  strokeColor<const Value extends PropertyValue<'strokeColor', T>>(
+    value: Value & CheckedPropertyValue<'strokeColor', T, Value>,
+  ): this {
     return this.write('strokeColor', value);
   }
   /**
@@ -9426,7 +11122,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/timeline-scope
    */
-  timelineScope(value: PropertyValue<'timelineScope', T>): this {
+  timelineScope<const Value extends PropertyValue<'timelineScope', T>>(
+    value: Value & CheckedPropertyValue<'timelineScope', T, Value>,
+  ): this {
     return this.write('timelineScope', value);
   }
   /**
@@ -9434,7 +11132,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline
    */
-  viewTimeline(value: PropertyValue<'viewTimeline', T>): this {
+  viewTimeline<const Value extends PropertyValue<'viewTimeline', T>>(
+    value: Value & CheckedPropertyValue<'viewTimeline', T, Value>,
+  ): this {
     return this.write('viewTimeline', value);
   }
   /**
@@ -9444,7 +11144,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-axis
    */
-  viewTimelineAxis(value: PropertyValue<'viewTimelineAxis', T>): this {
+  viewTimelineAxis<const Value extends PropertyValue<'viewTimelineAxis', T>>(
+    value: Value & CheckedPropertyValue<'viewTimelineAxis', T, Value>,
+  ): this {
     return this.write('viewTimelineAxis', value);
   }
   /**
@@ -9454,7 +11156,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-inset
    */
-  viewTimelineInset(value: PropertyValue<'viewTimelineInset', T>): this {
+  viewTimelineInset<const Value extends PropertyValue<'viewTimelineInset', T>>(
+    value: Value & CheckedPropertyValue<'viewTimelineInset', T, Value>,
+  ): this {
     return this.write('viewTimelineInset', value);
   }
   /**
@@ -9464,7 +11168,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-name
    */
-  viewTimelineName(value: PropertyValue<'viewTimelineName', T>): this {
+  viewTimelineName<const Value extends PropertyValue<'viewTimelineName', T>>(
+    value: Value & CheckedPropertyValue<'viewTimelineName', T, Value>,
+  ): this {
     return this.write('viewTimelineName', value);
   }
   /**
@@ -9476,7 +11182,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/will-change
    */
-  willChange(value: PropertyValue<'willChange', T>): this {
+  willChange<const Value extends PropertyValue<'willChange', T>>(
+    value: Value & CheckedPropertyValue<'willChange', T, Value>,
+  ): this {
     return this.write('willChange', value);
   }
   /**
@@ -9486,7 +11194,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/x
    */
-  x(value: PropertyValue<'x', T>): this {
+  x<const Value extends PropertyValue<'x', T>>(
+    value: Value & CheckedPropertyValue<'x', T, Value>,
+  ): this {
     return this.write('x', value);
   }
   /**
@@ -9496,7 +11206,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/y
    */
-  y(value: PropertyValue<'y', T>): this {
+  y<const Value extends PropertyValue<'y', T>>(
+    value: Value & CheckedPropertyValue<'y', T, Value>,
+  ): this {
     return this.write('y', value);
   }
   /**
@@ -9506,7 +11218,9 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T>
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/zoom
    */
-  zoom(value: PropertyValue<'zoom', T>): this {
+  zoom<const Value extends PropertyValue<'zoom', T>>(
+    value: Value & CheckedPropertyValue<'zoom', T, Value>,
+  ): this {
     return this.write('zoom', value);
   }
 }

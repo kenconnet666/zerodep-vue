@@ -281,7 +281,7 @@ for (const property of properties) {
     .get(propertyGroup(name, svg, obsolete))
     .push(
       comment +
-        `${name}(value: PropertyValue<${JSON.stringify(name)}, T>): this { return this.write(${JSON.stringify(name)}, value); }`,
+        `${name}<const Value extends PropertyValue<${JSON.stringify(name)}, T>>(value: Value & CheckedPropertyValue<${JSON.stringify(name)}, T, Value>): this { return this.write(${JSON.stringify(name)}, value); }`,
     );
   viewLines.push(comment + `readonly ${name}: ${typeName}<${JSON.stringify(name)}>;`);
   const runtimeSignature = JSON.stringify(members);
@@ -310,11 +310,11 @@ const outputs = {
     `\nexport interface SystemViews {\n${viewLines.join('\n')}\n}\n`,
   'author.ts':
     header +
-    `import type { PropertyValue } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\nimport { CssAuthor } from '../author.ts';\n` +
+    `import type { PropertyValue, CheckedPropertyValue } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\nimport { CssAuthor } from '../author.ts';\n` +
     `/** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */\nexport class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T> {\n${propertyGroups.map(([name]) => groups.get(name).join('\n')).join('\n')}\n}\n`,
   'keywords.ts':
     header +
-    `const sets = ${JSON.stringify(runtimeSets)} as const;\nexport const systemValues = {\n${runtimeLines.join('\n')}\n} as const;\nexport type ColorProperty = ${colorNames.map(JSON.stringify).join(' | ')};\nexport type SystemValue<Key extends keyof typeof systemValues> = Extract<(typeof systemValues)[Key][keyof (typeof systemValues)[Key]], string>;\n`,
+    `const sets = ${JSON.stringify(runtimeSets)} as const;\nexport const systemValues = {\n${runtimeLines.join('\n')}\n} as const;\nexport const colorProperties = ${JSON.stringify(colorNames)} as const;\nexport type ColorProperty = (typeof colorProperties)[number];\nexport type SystemValue<Key extends keyof typeof systemValues> = Extract<(typeof systemValues)[Key][keyof (typeof systemValues)[Key]], string>;\n`,
 };
 const destination = resolve(root, 'packages/core/src/css/generated');
 await mkdir(destination, { recursive: true });

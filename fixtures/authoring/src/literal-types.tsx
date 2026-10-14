@@ -1,7 +1,6 @@
-import { useCss, bx } from '@zerodep-vue/core';
+import { keywords, useCss, bx } from '@zerodep-vue/core';
 import type { Css, SystemKeywords } from '@zerodep-vue/core';
 const s = useCss();
-const keywords = s.keywords;
 
 export const literalStyle = s
   .font('inherit') // literal:font

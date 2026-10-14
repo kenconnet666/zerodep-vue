@@ -1,8 +1,7 @@
-import { SystemKeywords, createTheme, useCss, cx } from '@zerodep-vue/core';
+import { keywords, SystemKeywords, createTheme, useCss, cx, bx } from '@zerodep-vue/core';
 import type { Css, CssInput } from '@zerodep-vue/core';
 import { shallowRef } from 'vue';
 const s = useCss();
-const keywords = s.keywords;
 
 export class AppTheme extends SystemKeywords {
   override readonly color = {
@@ -28,9 +27,10 @@ selectTheme(themes.dark);
 selectTheme(new SystemKeywords());
 export const appTheme = createTheme(source);
 export const themed = appTheme.useCss();
-export const themedKeywords = themed.keywords;
-export const inferred = createTheme(new AppTheme()).useCss();
-export const inferredKeywords = inferred.keywords;
+export const themedKeywords = appTheme.keywords;
+export const inferredContext = createTheme(new AppTheme());
+export const inferred = inferredContext.useCss();
+export const inferredKeywords = inferredContext.keywords;
 export const styles = themed
   .display(themedKeywords.display.flex)
   .color(themedKeywords.color._brand)
@@ -62,32 +62,30 @@ createTheme(new InvalidTheme());
 export const child = new (class extends AppTheme {
   override readonly color = { ...new AppTheme().color, _danger: 'red' };
 })();
-export const inherited = createTheme(child).useCss();
-export const inheritedKeywords = inherited.keywords;
+export const inheritedContext = createTheme(child);
+export const inherited = inheritedContext.useCss();
+export const inheritedKeywords = inheritedContext.keywords;
 inherited
   .color(inheritedKeywords.color._brand)
   .select(':disabled', inherited.color(inheritedKeywords.color._danger));
 
 export function reusable<T extends AppTheme>(s: Css<T>) {
-  const keywords = s.keywords;
-  return s.color(keywords.color._brand).select(':hover', s.backgroundColor(keywords.color._brand));
+  return s.color(bx('_brand')).select(':hover', s.backgroundColor('_brand')).display('flex');
 }
 
-/** 声明时保留 T；组合只接收已经检查的样式值，无需再次携带主题泛型。 */
+/** 泛型作者保留主题字面量；组合只接收已经检查的样式值。 */
 export function reusableGroup<T extends AppTheme>(s: Css<T>, external?: CssInput) {
-  const keywords = s.keywords;
-  const named = {
-    base: s.display(keywords.display.flex).color(keywords.color._brand),
-    active: s.color(keywords.color._brand),
-  };
-  const nested = s
-    .select(':hover', [named.active, s.padding(keywords.padding._control)])
-    .select('@media (width < 600px)', s.color(keywords.color._brand));
-  return cx(named.base, nested, external);
+  const named = { base: s.display('flex').color('_brand'), active: s.color('_brand') };
+  return cx(named.base, s.select(':hover', [named.active, s.padding('_control')]), external);
 }
-reusableGroup(
-  inherited,
-  inherited.select(':hover', inherited.color(inheritedKeywords.color._danger)),
-);
-// @ts-expect-error 嵌套数组也保留属性兼容性。
-themed.select(':hover', [themed.padding(themedKeywords.color._brand)]);
+reusableGroup(inherited, inherited.select(':hover', inherited.color('_danger')));
+// @ts-expect-error 颜色主题名不能用于间距。
+themed.padding('_brand');
+// @ts-expect-error 未声明主题名不能被宽泛 CSS 字符串吞掉。
+themed.backgroundColor('_missing');
+// @ts-expect-error 默认系统作者没有业务主题名。
+s.color('_brand');
+// @ts-expect-error 作者没有关键词成员，显式引用使用独立 keywords。
+s.keywords;
+// @ts-expect-error 动态绑定中的已知错误主题字面量也被拒绝。
+themed.color(bx('_missing'));

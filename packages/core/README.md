@@ -17,6 +17,6 @@ export const Panel = _component(() => {
 
 属性调用返回新样式，原样式不变；可直接用于 class，cx 按顺序组合。具名样式使用普通对象。旧 css 对象作者和 cx 批量命名入口已移除。
 
-业务主题继承 SystemKeywords，通过 createTheme(实例或 Ref) 返回带类型的 useCss/provide；关键词使用 s.keywords。keyframes 的帧映射、globalCss 的选择器映射统一接收链式样式。bx 由 @zerodep-vue/compiler 捕获，运行时消费 class 时隐式接入 style。
+业务主题继承 SystemKeywords，通过 createTheme(实例或 Ref) 返回带类型的 useCss/provide；常规属性直接写字面量，例如 .backgroundColor('_brand')；显式引用使用独立的 keywords.color._brand。keyframes 的帧映射、globalCss 的选择器映射统一接收链式样式。bx 由 @zerodep-vue/compiler 捕获，运行时消费 class 时隐式接入 style。
 
 _component 初始化一次，返回区域进入 Vue render；props 解构、默认值和共享 Ref 保持更新语义。列表使用 For 或普通 map。TypeScript 使用 jsx: 'preserve'，不设置 jsxImportSource；导入 core 自动载入增强 JSX 声明。普通 Vue 文件可以用 /** @jsxImportSource vue */ 保留原生类型。生命周期、Ref、expose、Teleport 和 Suspense 使用 Vue API。

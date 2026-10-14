@@ -307,8 +307,9 @@ test('independent runtime themes retain their values through Teleport and one re
   const second = shallowRef(new RegionTheme('blue'));
   const showFirst = ref(true);
   const Region = _component(({ theme, name }: { theme: Ref<RegionTheme>; name: string }) => {
-    const themed = createTheme(theme).useCss();
-    const themedKeywords = themed.keywords;
+    const themedContext = createTheme(theme);
+    const themed = themedContext.useCss();
+    const themedKeywords = themedContext.keywords;
     const style = themed.color(themedKeywords.color._brand).display(themedKeywords.display.block);
     return (
       <Teleport to="body">
@@ -343,8 +344,9 @@ test('independent runtime themes retain their values through Teleport and one re
 
 test('SSR Teleport emits the correct per-request theme variables', async () => {
   const Page = _component(({ color }: { color: string }) => {
-    const themed = createTheme(new RegionTheme(color)).useCss();
-    const themedKeywords = themed.keywords;
+    const themedContext = createTheme(new RegionTheme(color));
+    const themed = themedContext.useCss();
+    const themedKeywords = themedContext.keywords;
     return (
       <Teleport to="#dialogs">
         <div class={themed.color(themedKeywords.color._brand)}>theme</div>

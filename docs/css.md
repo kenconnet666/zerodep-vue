@@ -84,7 +84,7 @@ const fade = keyframes({
   from: s.opacity(bx(start.value)),
   '50%, to': s.opacity(1),
 });
-globalCss('page', { 'body, main': s.margin(0).color(s.keywords.color.CanvasText) });
+globalCss('page', { 'body, main': s.margin(0).color('CanvasText') });
 <div class={s.animation(`${fade} 1s ease`)} />;
 ```
 

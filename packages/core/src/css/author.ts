@@ -9,7 +9,9 @@ import type {
 } from './types.ts';
 import type { SystemKeywords } from './generated/system.ts';
 import type { KeywordView } from './theme.ts';
+import { colorProperties } from './generated/keywords.ts';
 import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
+import type { ThemeReference, ThemeResolver } from './tokens.ts';
 import { isBinding, isTemplate } from './bindings.ts';
 import { isAnimation } from './animation-token.ts';
 import { declarations } from './composition.ts';
@@ -20,15 +22,23 @@ interface Link {
   readonly part: ClassPart;
 }
 const snapshots = new WeakMap<object, readonly ClassPart[]>();
+const colors = new Set<string>(colorProperties);
 const root = Object.freeze({ selector: '&', target: '&', conditions: Object.freeze([]) });
 
 /** 链共享不可变前缀；只有消费/组合时才展开，追加属性不复制已有声明。 */
 export class CssAuthor<T extends SystemKeywords> implements CssClass {
-  readonly keywords: KeywordView<T>;
+  private readonly theme: KeywordView<T>;
+  private readonly resolveTheme: ThemeResolver;
   private readonly tail: Link | undefined;
 
   constructor(keywords: KeywordView<T>) {
-    this.keywords = keywords;
+    this.theme = keywords;
+    this.resolveTheme = (property, name): ThemeReference => {
+      const group = Reflect.get(keywords, property);
+      if (group && name in group) return Reflect.get(group, name);
+      if (colors.has(property) && name in keywords.color) return Reflect.get(keywords.color, name);
+      throw new Error(`当前主题的 ${property} 没有关键字 ${name}。`);
+    };
     this.tail = undefined;
     Object.freeze(this);
   }
@@ -48,7 +58,8 @@ export class CssAuthor<T extends SystemKeywords> implements CssClass {
     if (!entries.length) return this;
     return Object.freeze(
       Object.create(Object.getPrototypeOf(this), {
-        keywords: { value: this.keywords },
+        theme: { value: this.theme },
+        resolveTheme: { value: this.resolveTheme },
         tail: {
           value: Object.freeze({
             previous: this.tail,
@@ -60,8 +71,11 @@ export class CssAuthor<T extends SystemKeywords> implements CssClass {
   }
 
   protected write(property: string, input: unknown): this {
-    const value = isKeyword(input) ? input[KEYWORD].value : input;
+    let value = isKeyword(input) ? input[KEYWORD].value : input;
     if (value === undefined) return this;
+    const themed = !property.startsWith('--');
+    if (themed && typeof value === 'string' && value.startsWith('_'))
+      value = this.resolveTheme(property, value);
     if (
       value !== null &&
       typeof value !== 'string' &&
@@ -72,7 +86,18 @@ export class CssAuthor<T extends SystemKeywords> implements CssClass {
       !isAnimation(value)
     )
       throw new Error(`CSS 属性 ${property} 需要属性值。`);
-    return this.append(Object.freeze([Object.freeze({ ...root, property, value })]));
+    return this.append(
+      Object.freeze([
+        Object.freeze({
+          ...root,
+          property,
+          value,
+          ...(themed && (isBinding(value) || isTemplate(value))
+            ? { resolveTheme: this.resolveTheme }
+            : {}),
+        }),
+      ]),
+    );
   }
 
   /** 在当前样式后追加相对选择器或局部条件，不改变被复用的样式。 */

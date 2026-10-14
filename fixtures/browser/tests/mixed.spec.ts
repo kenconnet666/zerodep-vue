@@ -1,24 +1,5 @@
-import { test as base, expect } from '@playwright/test';
+import { test, expect } from './test.ts';
 import type {} from '../src/contracts.ts';
-
-const test = base.extend<{ errors: string[] }>({
-  errors: [
-    async ({ page }, use) => {
-      const errors: string[] = [];
-      page.on('pageerror', (error) => errors.push(error.message));
-      page.on('console', (message) => {
-        if (
-          message.type() === 'error' ||
-          (message.type() === 'warning' && message.text().includes('[Vue warn]'))
-        )
-          errors.push(message.text());
-      });
-      await use(errors);
-      expect(errors).toEqual([]);
-    },
-    { auto: true },
-  ],
-});
 
 test('Naive and own inputs share values across reset, Ref replacement, focus and slots', async ({
   page,

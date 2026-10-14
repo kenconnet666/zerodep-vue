@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './test.ts';
 import { readFile } from 'node:fs/promises';
 import type { InspectedNode } from '@zerodep-vue/core';
 import type {} from '../src/contracts.ts';
@@ -6,8 +6,6 @@ import type {} from '../src/contracts.ts';
 test('real DevTools inspector reports consumed provenance without executing getters', async ({
   page,
 }) => {
-  const errors: string[] = [];
-  page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/inspector');
   await expect(page.getByTestId('inspected')).toHaveCSS('width', '24px');
   const counts = await page.evaluate(() => window.__inspectionReads!());
@@ -56,5 +54,4 @@ test('real DevTools inspector reports consumed provenance without executing gett
   await page.evaluate(() => window.__fixture!.unmount());
   expect(await page.evaluate(() => window.__fixture!.inspectCss!())).toEqual([]);
   expect(await page.evaluate(() => window.__fixture!.host.stats().globalRules)).toBe(0);
-  expect(errors).toEqual([]);
 });

@@ -20,7 +20,7 @@ s.color(bx(123));
 s.select(':hover', styles.label)
   .select(':nth-child(2n)', s.color('red'))
   .select('[data-active]', styles.root);
-s.display('flex').select('@supports (display: grid)', s.display(s.keywords.display.grid));
+s.display('flex').select('@supports (display: grid)', s.display('grid'));
 // @ts-expect-error 组合不接受旧 CSS 对象，也不猜测条件类名对象。
 cx({ color: 'red' });
 // @ts-expect-error 布尔真值不是样式。

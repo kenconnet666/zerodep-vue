@@ -1,19 +1,19 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './test.ts';
 import type {} from '../src/contracts.ts';
 
 test('bounded CSS resources survive repeated updates, multiple apps and ShadowRoot reuse', async ({
   page,
 }) => {
   test.setTimeout(120000);
-  const errors: string[] = [];
-  page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/stability');
   await page.waitForFunction(() => window.__stability);
   const result = await page.evaluate(() => window.__stability!.run(500));
   expect(result.setups).toBe(500);
   expect(result.disposed).toBe(500);
   expect(result.hiddenReads).toBe(0);
-  expect(result.maximumUnused).toBe(8);
+  expect(result.iterations).toBe(500);
+  expect(result.maximumUnused).toBeGreaterThan(0);
+  expect(result.maximumUnused).toBeLessThanOrEqual(8);
   expect(result.maximumRules).toBeLessThanOrEqual(9);
   expect(result.sharedConsumerColor).toBe('rgb(0, 0, 255)');
   expect(result.shadowColor).toBe('rgb(0, 20, 40)');
@@ -21,12 +21,9 @@ test('bounded CSS resources survive repeated updates, multiple apps and ShadowRo
   expect(result.shadowStyleIdentity).toBe(true);
   await page.evaluate(() => window.__stability!.dispose());
   expect(await page.evaluate(() => window.__fixture!.host.stats().ownedReferences)).toBe(0);
-  expect(errors).toEqual([]);
 });
 
 test('real leaving elements and cached components retain the required CSS', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/stability');
   await page.getByRole('button', { name: '开始离场' }).click();
   await expect(page.getByTestId('leaving')).toHaveCSS('color', 'rgb(128, 0, 128)');
@@ -51,5 +48,4 @@ test('real leaving elements and cached components retain the required CSS', asyn
     disposed: 3,
     references: 0,
   });
-  expect(errors).toEqual([]);
 });

@@ -166,10 +166,14 @@ export function resolveClass(
   };
   for (const declaration of composed.declarations) {
     const { value: input, property } = declaration;
+    const themeValue = (value: unknown) =>
+      typeof value === 'string' && value.startsWith('_') && declaration.resolveTheme
+        ? read(declaration.resolveTheme(property, value))
+        : value;
     if (input === null) continue;
     let parts: Part[];
     if (isBinding(input) || isThemeReference(input)) {
-      const current = read(input);
+      const current = isBinding(input) ? themeValue(read(input)) : read(input);
       if (current == null) continue;
       const text = renderValue(current, property);
       const keyword = cssWide(text);
@@ -177,7 +181,7 @@ export function resolveClass(
         keyword || options.literal ? [keyword ?? text] : [{ variable: variables.push(text) - 1 }];
     } else if (isTemplate(input)) {
       const evaluated = input[TEMPLATE].map((part) =>
-        isBinding(part) || isThemeReference(part) ? read(part) : part,
+        isBinding(part) ? themeValue(read(part)) : isThemeReference(part) ? read(part) : part,
       );
       if (evaluated.some((part) => part == null)) continue;
       // 静态模板片段可以是不完整的括号前缀；单个绑定值与最终声明才需要完整语法。

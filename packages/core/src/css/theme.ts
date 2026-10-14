@@ -17,6 +17,8 @@ export type KeywordView<T extends SystemKeywords> = {
 };
 /** 同一个主题类型拥有独立注入键；覆盖只影响其逻辑子树。 */
 export interface CssTheme<T extends SystemKeywords> {
+  /** 显式引用默认来源的关键字；常规属性链直接使用字面量自动补全。 */
+  readonly keywords: KeywordView<T>;
   /** 取得当前区域的不可变作者；组件外使用该主题的默认来源。 */
   useCss(): Css<T>;
   /** 在 setup 中提供区域主题；返回相同作者供当前组件使用。 */
@@ -141,9 +143,11 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
 
 /** 创建有真实来源的主题上下文；T 来自实例，不依靠调用方的类型断言。 */
 export function createTheme<T extends SystemKeywords>(source: ThemeSource<T>): CssTheme<T> {
-  const fallback = new Css<T>(keywordView(source));
+  const keywords = keywordView(source);
+  const fallback = new Css<T>(keywords);
   const key: InjectionKey<Css<T>> = Symbol('CSS theme');
   return Object.freeze({
+    keywords,
     useCss(): Css<T> {
       return hasInjectionContext() ? inject(key, fallback) : fallback;
     },
@@ -157,4 +161,4 @@ export function createTheme<T extends SystemKeywords>(source: ThemeSource<T>): C
 }
 
 /** 默认作者只包含系统关键字；业务主题导出 createTheme 返回的 useCss。 */
-export const { useCss } = createTheme(new SystemKeywords());
+export const { useCss, keywords } = createTheme(new SystemKeywords());

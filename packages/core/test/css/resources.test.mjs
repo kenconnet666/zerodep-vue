@@ -1,10 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { createTheme, SystemKeywords, keyframes, useCss, cx } from '../../src/index.ts';
+import { keywords, createTheme, SystemKeywords, keyframes, useCss, cx } from '../../src/index.ts';
 import { binding, template } from '../../src/css/bindings.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
 const s = useCss();
-const keywords = s.keywords;
 
 test('plain CSS custom properties retain native fallbacks and condition composition', () => {
   const resolved = resolveClass(
@@ -30,8 +29,9 @@ test('plain custom properties share dynamic and inherited theme resolution', () 
   class Theme extends SystemKeywords {
     color = { _brand: 'purple' };
   }
-  const themed = createTheme(new Theme()).useCss();
-  const keywords = themed.keywords;
+  const themedContext = createTheme(new Theme());
+  const themed = themedContext.useCss();
+  const keywords = themedContext.keywords;
   let padding = '12px';
   const style = themed.variable('--card-accent', keywords.color._brand).variable(
     '--card-padding',
