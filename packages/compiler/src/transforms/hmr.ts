@@ -250,8 +250,9 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
             return;
           parent = parent.parentPath;
         }
-        extras.set('$this', t.thisExpression());
-        reference.replaceWith(read('$this'));
+        // @ 不能出现在变量名中，内部接收者字段不会覆盖用户的 $this 等词法绑定。
+        extras.set('@this', t.thisExpression());
+        reference.replaceWith(read('@this'));
       },
     });
     const accessors: t.ObjectMethod[] = [];

@@ -119,3 +119,54 @@ test('hot named styles, custom properties, animations and globals retain live de
   scope.stop();
   host.dispose();
 });
+
+test('HMR prune completes remaining cleanup after failure and permits reentry', () => {
+  const hot = context();
+  const module = registerModule(hot, 'same', {});
+  const error = new Error('first cleanup failed');
+  const calls = [];
+  module.onceGlobal('first', () => () => {
+    calls.push('first');
+    hot.cleanup();
+    throw error;
+  });
+  module.onceGlobal('last', () => () => {
+    calls.push('last');
+  });
+  assert.throws(
+    () => hot.cleanup(),
+    (actual) => actual === error,
+  );
+  assert.deepEqual(calls, ['first', 'last']);
+  hot.cleanup();
+  assert.deepEqual(calls, ['first', 'last']);
+});
+
+test('failed HMR setup replacement clears old registrations and can be retried', () => {
+  const hot = context();
+  const module = registerModule(hot, 'old', {});
+  const failures = [new Error('a'), new Error('b')];
+  let calls = 0;
+  for (const [index, failure] of failures.entries())
+    module.onceGlobal(String(index), () => () => {
+      calls++;
+      throw failure;
+    });
+  assert.throws(
+    () => registerModule(hot, 'new', {}),
+    (error) => {
+      assert(error instanceof AggregateError);
+      assert.deepEqual(error.errors, failures);
+      return true;
+    },
+  );
+  const next = registerModule(hot, 'new', {});
+  let stopped = 0;
+  next.onceGlobal('new', () => () => {
+    stopped++;
+  });
+  assert.equal(compatible(hot, 'new'), true);
+  hot.cleanup();
+  assert.equal(calls, 2);
+  assert.equal(stopped, 1);
+});

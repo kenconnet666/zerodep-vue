@@ -87,3 +87,66 @@ test('cached rules are restored after a reused ShadowRoot container is cleared',
     dom.window.close();
   }
 });
+
+test('disposal continues after a callback fails and releases all host-owned rules', () => {
+  const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>');
+  const host = createCssHost({ target: dom.window.document.head, maxUnusedRules: 0 });
+  try {
+    host.acquire(rule('red'));
+    host.acquireGlobal('page', 'body{color:blue;}');
+    host.collect(rule('green'));
+    const error = new Error('consumer cleanup failed');
+    const calls = [];
+    host.onDispose(() => {
+      calls.push('first');
+      throw error;
+    });
+    host.onDispose(() => {
+      calls.push('last');
+    });
+    assert.throws(
+      () => host.dispose(),
+      (actual) => actual === error,
+    );
+    assert.deepEqual(calls, ['first', 'last']);
+    assert.equal(host.stats().ownedReferences, 0);
+    assert.equal(host.stats().globalRules, 0);
+    assert.equal(host.stats().rules, 0);
+    assert.equal(host.renderStyles(), '');
+    assert.equal(dom.window.document.head.children.length, 0);
+    host.dispose();
+    assert.deepEqual(calls, ['first', 'last']);
+  } finally {
+    host.dispose();
+    dom.window.close();
+  }
+});
+
+test('disposal allows reentry and reports multiple failures after cleanup', () => {
+  const host = createCssHost({ target: null });
+  host.acquireGlobal('page', 'body{color:red;}');
+  const first = new Error('first');
+  const last = new Error('last');
+  const calls = [];
+  host.onDispose(() => {
+    calls.push('first');
+    host.dispose();
+    throw first;
+  });
+  host.onDispose(() => {
+    calls.push('last');
+    throw last;
+  });
+  assert.throws(
+    () => host.dispose(),
+    (error) => {
+      assert(error instanceof AggregateError);
+      assert.deepEqual(error.errors, [first, last]);
+      return true;
+    },
+  );
+  assert.deepEqual(calls, ['first', 'last']);
+  assert.equal(host.stats().ownedReferences, 0);
+  assert.equal(host.renderStyles(), '');
+  host.dispose();
+});

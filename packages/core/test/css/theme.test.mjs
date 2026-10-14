@@ -320,3 +320,48 @@ test('theme entries defer source reads, retry invalid sources and share only cur
   sourceValue = { color: { _brand: 'wrong' } };
   assert.throws(() => resolveClass(style), /真实主题实例/);
 });
+
+test('live theme views reject structural locks without poisoning later reads or replacements', () => {
+  for (const operation of [
+    Object.freeze,
+    Object.seal,
+    Object.preventExtensions,
+    (view) => Object.setPrototypeOf(view, {}),
+    (view) => Object.defineProperty(view, 'color', { value: { _brand: 'locked' } }),
+  ]) {
+    const source = shallowRef(new Theme());
+    const view = createCssContext(source).useTheme();
+    assert.throws(() => operation(view), /可替换主题映射/);
+    assert.equal(view.color._brand, 'red');
+    assert(Object.keys(view).includes('color'));
+    assert(Object.isExtensible(view));
+    const next = new Theme();
+    next.color._brand = 'blue';
+    source.value = next;
+    assert.equal(view.color._brand, 'blue');
+  }
+});
+
+test('configurable theme definitions are forwarded to the current source', () => {
+  const first = new Theme();
+  const source = shallowRef(first);
+  const view = createCssContext(source).useTheme();
+  Object.defineProperty(view, 'padding', {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: { _control: '2px' },
+  });
+  assert.equal(first.padding._control, '2px');
+  const next = new Theme();
+  source.value = next;
+  assert.equal(view.padding._control, '8px 12px');
+  Object.defineProperty(view, 'padding', {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: { _control: '4px' },
+  });
+  assert.equal(next.padding._control, '4px');
+  assert.equal(first.padding._control, '2px');
+});

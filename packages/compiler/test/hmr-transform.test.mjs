@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { parseAsync } from '@babel/core';
 import { vitePlugin as vueTsx } from '../src/index.ts';
+import { resolveClass } from '../../core/src/css/resolve.ts';
 
 async function compile(source, command = 'serve', ssr = false) {
   const plugin = vueTsx();
@@ -15,6 +16,29 @@ async function compile(source, command = 'serve', ssr = false) {
   return (await plugin.transform(source, '/project/App.tsx', { ssr })).code;
 }
 const stamp = (code) => code.match(/import\.meta\.hot,\s*"([a-f0-9]{24})"/)?.[1];
+
+test('HMR factory environments keep user dollar names separate from this receivers', async () => {
+  const code = await compile(`import {createCssContext, SystemKeywords} from '@zerodep-vue/core';
+    const {useCss} = createCssContext(new SystemKeywords());
+    const s = useCss();
+    export function paint() {
+      const $this = '"local"';
+      const $$this = 'extra';
+      return s.content($this).color(this.color).padding($$this.length);
+    }`);
+  const entry = new URL('../../core/src/index.ts', import.meta.url).href;
+  const executable = code.replace(/(['"])@zerodep-vue\/core\1/g, JSON.stringify(entry));
+  // 在内存执行真实开发编译输出，不落地探针文件；data 模块没有 Vite hot，使用其正常回退。
+  const module = await import(
+    'data:text/javascript;base64,' + Buffer.from(executable).toString('base64')
+  );
+  for (const color of ['red', 'blue']) {
+    const resolved = resolveClass(module.paint.call({ color }));
+    assert(resolved.cssText.includes('content:"local";'));
+    assert(resolved.cssText.includes(`color:${color};`));
+    assert(resolved.cssText.includes('padding:5px;'));
+  }
+});
 const source = `import { ref } from 'vue'; import { _component } from '@zerodep-vue/core'; import { bx, cx, globalCss } from '@zerodep-vue/core';
 import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = createCssContext(new SystemKeywords());

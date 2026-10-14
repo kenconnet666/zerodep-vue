@@ -1,4 +1,5 @@
 import { transformAsync, types as t } from '@babel/core';
+import { addNamed } from '@babel/helper-module-imports';
 import type { PluginItem, PluginObject } from '@babel/core';
 import presetTypeScript from '@babel/preset-typescript';
 import { createHash } from 'node:crypto';
@@ -50,6 +51,7 @@ function componentMetadata(
   exports: ComponentExport[],
   filename: string,
   hot?: (value: HotTransform | undefined) => void,
+  ssrFilename?: string,
 ): PluginObject {
   return {
     visitor: {
@@ -57,7 +59,6 @@ function componentMetadata(
         exit(program) {
           const isComponent = (node: t.Node | null | undefined): boolean => {
             if (!t.isCallExpression(node)) return false;
-            if (!t.isIdentifier(node.callee)) return false;
             const name = importedName(program.scope, node.callee, coreModule);
             return (
               importedName(program.scope, node.callee, 'vue') === 'defineComponent' ||
@@ -86,14 +87,10 @@ function componentMetadata(
             if (!t.isVariableDeclaration(declaration)) continue;
             for (const item of declaration.declarations) {
               if (!t.isIdentifier(item.id) || !isComponent(item.init)) continue;
-              const binding =
-                t.isCallExpression(item.init) && t.isIdentifier(item.init.callee)
-                  ? program.scope.getBinding(item.init.callee.name)
-                  : undefined;
               const own =
-                binding?.path.parentPath?.isImportDeclaration() &&
-                binding.path.parentPath.node.source.value !== 'vue';
-              locals.set(item.id.name, !!own);
+                t.isCallExpression(item.init) &&
+                importedName(program.scope, item.init.callee, coreModule) !== undefined;
+              locals.set(item.id.name, own);
               if (item.init) t.addComment(item.init, 'leading', '#__PURE__');
             }
           }
@@ -123,6 +120,20 @@ function componentMetadata(
                 }
                 break;
             }
+          }
+          if (ssrFilename !== undefined && exports.length) {
+            // 与用户声明共享 Babel 作用域，助手名称自动避让，注册代码也进入原始映射。
+            const register = addNamed(program, 'register', ssrPublicId);
+            for (const local of new Set(exports.map((item) => item.local)))
+              program.pushContainer(
+                'body',
+                t.expressionStatement(
+                  t.callExpression(t.cloneNode(register), [
+                    t.identifier(local),
+                    t.stringLiteral(ssrFilename),
+                  ]),
+                ),
+              );
           }
           if (hot) {
             instrumentDevtools(program, normalizePath(filename));
@@ -222,18 +233,14 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
                     hot = value;
                   }
                 : undefined,
+              context?.ssr ? normalizePath(relative(root, file)) : undefined,
             ),
         ],
         presets: /\.tsx?$/.test(file) ? [presetTypeScript] : [],
       });
       if (!result?.code) return;
       let output = result.code;
-      if (context?.ssr && exports.length) {
-        output += `\nimport { register as __zdRegister } from ${JSON.stringify(ssrPublicId)};`;
-        for (const component of new Set(exports.map((item) => item.local))) {
-          output += `\n__zdRegister(${component}, ${JSON.stringify(normalizePath(relative(root, file)))});`;
-        }
-      } else if (development && (exports.length || hot?.managed)) {
+      if (!context?.ssr && development && (exports.length || hot?.managed)) {
         const updates: string[] = [];
         if (exports.length)
           updates.push(

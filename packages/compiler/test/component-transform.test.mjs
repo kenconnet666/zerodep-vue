@@ -53,6 +53,34 @@ test('invalid prop reassignment and ambiguous initialization have located errors
   );
 });
 
+test('render initialization recognizes namespace calls and watcher aliases', async () => {
+  for (const expression of [
+    'Vue.ref(0)',
+    'Vue["computed"](() => 0)',
+    'Vue.watchSyncEffect(() => {})',
+    'Vue.watchPostEffect(() => {})',
+    'Vue.effectScope()',
+    'observe(() => {})',
+  ]) {
+    await assert.rejects(
+      compile(`import {_component} from '@zerodep-vue/core';
+      import * as Vue from 'vue'; import {watchSyncEffect as observe} from 'vue';
+      const App = _component(() => { if (ready) return <div/>;
+        const state = ${expression}; return <span>{state}</span>; });`),
+      /ZV_RENDER_INIT/,
+    );
+  }
+  const allowed = await compile(`import {_component} from '@zerodep-vue/core';
+    import * as Vue from 'vue';
+    const App = _component(() => { if (ready) return <div/>;
+      const later = () => Vue.ref(0); return <button onClick={later}/>; });`);
+  assert(allowed.includes('Vue.ref(0)'));
+  const business = await compile(`import {_component} from '@zerodep-vue/core';
+    const Vue = {ref: () => 'ordinary'};
+    const App = _component(() => { if (ready) return <div/>; return <span>{Vue.ref()}</span>; });`);
+  assert(business.includes('Vue.ref()'));
+});
+
 test('default parameter order has located diagnostics but deferred callbacks can read later props', async () => {
   for (const code of ['{a=a}', '{a=b,b=1}', '{a=ctx},ctx']) {
     await assert.rejects(

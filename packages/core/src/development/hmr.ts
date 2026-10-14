@@ -20,8 +20,20 @@ interface ModuleState {
 const stateKey = '__zerodepHmr';
 
 function dispose(state: ModuleState | undefined) {
-  if (state) for (const stop of state.globals.values()) stop();
-  state?.globals.clear();
+  if (!state) return;
+  const stops = [...state.globals.values()];
+  // 先撤销登记，避免重入或失败后重复调用；一个规则的清理失败不能留下其他规则。
+  state.globals.clear();
+  const errors: unknown[] = [];
+  for (const stop of stops) {
+    try {
+      stop();
+    } catch (error) {
+      errors.push(error);
+    }
+  }
+  if (errors.length === 1) throw errors[0];
+  if (errors.length > 1) throw new AggregateError(errors, 'HMR 全局样式清理时发生多个错误。');
 }
 
 /** @internal 当前 Vite module.data 保存单个版本，不建立模块或实例历史表。 */

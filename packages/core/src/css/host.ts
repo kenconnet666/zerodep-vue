@@ -304,13 +304,27 @@ export class CssHost {
     };
   }
   dispose(): void {
-    for (const stop of [...this.disposers]) stop();
+    const errors: unknown[] = [];
+    const run = (cleanup: () => void) => {
+      try {
+        cleanup();
+      } catch (error) {
+        errors.push(error);
+      }
+    };
+    // 先撤销登记，回调重入 dispose 时不会再次执行自己；单个异常不阻断其他所有者清理。
+    const stops = [...this.disposers];
     this.disposers.clear();
-    for (const release of [...this.owned]) release();
+    for (const stop of stops) run(stop);
+    const releases = [...this.owned];
+    this.owned.clear();
+    for (const release of releases) run(release);
     this.collected.clear();
     this.collectedNames.clear();
     this.collectedGlobals.clear();
     this.collectionOrder.clear();
+    if (errors.length === 1) throw errors[0];
+    if (errors.length > 1) throw new AggregateError(errors, 'CSS 宿主清理时发生多个错误。');
   }
 }
 

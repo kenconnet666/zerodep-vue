@@ -38,16 +38,8 @@ function lowerRender(setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpre
           path.skip();
         },
         CallExpression(path) {
-          if (!t.isIdentifier(path.node.callee)) return;
-          const binding = path.scope.getBinding(path.node.callee.name);
-          if (
-            !binding?.path.isImportSpecifier() ||
-            !binding.path.parentPath.isImportDeclaration() ||
-            binding.path.parentPath.node.source.value !== 'vue'
-          )
-            return;
-          const imported = binding.path.node.imported;
-          const name = t.isIdentifier(imported) ? imported.name : imported.value;
+          const name = importedName(path.scope, path.node.callee, 'vue');
+          if (!name) return;
           if (
             /^on[A-Z]/.test(name) ||
             [
@@ -58,6 +50,9 @@ function lowerRender(setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpre
               'computed',
               'watch',
               'watchEffect',
+              'watchSyncEffect',
+              'watchPostEffect',
+              'effectScope',
               'provide',
             ].includes(name)
           ) {

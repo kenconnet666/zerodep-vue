@@ -82,6 +82,18 @@ function liveTheme<T extends object>(read: () => T): T {
       // 空转发目标不拥有来源的不可配置字段，描述符必须允许下一次来源替换。
       return descriptor && { ...descriptor, configurable: true };
     },
+    defineProperty(_target, key, descriptor) {
+      if (descriptor.configurable !== true)
+        throw new TypeError('可替换主题映射只允许可配置的字段定义；固定字段请在主题来源上声明。');
+      return Reflect.defineProperty(read(), key, descriptor);
+    },
+    preventExtensions() {
+      // 冻结空转发目标会破坏 Proxy 不变量，之后连枚举也会失败；必须在修改目标前拒绝。
+      throw new TypeError('可替换主题映射不能冻结或封闭；请在主题来源上设置约束。');
+    },
+    setPrototypeOf() {
+      throw new TypeError('可替换主题映射的原型跟随来源；请替换主题来源。');
+    },
   });
 }
 

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { parseSync } from '@babel/core';
 import { mkdtempSync, mkdirSync, writeFileSync, unlinkSync, rmdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -83,4 +84,45 @@ test('SSR registers modules without client HMR and production removes HMR', asyn
   const built = await configured('build').transform(code, '/project/App.tsx');
   assert(!built.code.includes('__VUE_HMR_RUNTIME__'));
   assert(built.code.includes('#__PURE__'));
+});
+
+test('Vite recognizes namespace components while ignoring business lookalikes', async () => {
+  for (const expression of ['Vue.defineComponent', 'Vue["defineComponent"]']) {
+    const code = `import * as Vue from 'vue'; export default ${expression}(() => () => <div/>);`;
+    const hmr = await configured().transform(code, '/project/Namespace.tsx');
+    assert(hmr.code.includes('__VUE_HMR_RUNTIME__.createRecord'));
+    assert(hmr.code.includes('updated["default"]'));
+    const ssr = await configured().transform(code, '/project/Namespace.tsx', { ssr: true });
+    assert(ssr.code.includes('virtual:zerodep-vue/ssr-register'));
+    assert(!ssr.code.includes('import.meta.hot'));
+  }
+  const business = `const Vue = {defineComponent: value => value};
+    export const App = Vue.defineComponent(() => <div/>);`;
+  const result = await configured().transform(business, '/project/Business.tsx', { ssr: true });
+  assert(!result.code.includes('virtual:zerodep-vue/ssr-register'));
+});
+
+test('SSR registration helpers avoid user bindings and retain original source maps', async () => {
+  const code = `import {defineComponent} from 'vue';
+    const __zdRegister = 1;
+    const _register = 2;
+    export const App = defineComponent(() => () => <div>{__zdRegister + _register}</div>);`;
+  const result = await configured().transform(code, '/project/Bindings.tsx', { ssr: true });
+  const ast = parseSync(result.code, { sourceType: 'module' });
+  const registration = ast.program.body.find(
+    (node) =>
+      node.type === 'ImportDeclaration' && node.source.value === 'virtual:zerodep-vue/ssr-register',
+  );
+  assert(registration);
+  const local = registration.specifiers[0].local.name;
+  assert(!['__zdRegister', '_register'].includes(local));
+  assert(
+    ast.program.body.some(
+      (node) =>
+        node.type === 'ExpressionStatement' &&
+        node.expression.type === 'CallExpression' &&
+        node.expression.callee.name === local,
+    ),
+  );
+  assert.deepEqual(JSON.parse(result.map).sourcesContent, [code]);
 });
