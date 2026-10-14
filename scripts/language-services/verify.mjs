@@ -164,11 +164,13 @@ try {
     JSON.stringify(themeDiagnostics),
   );
   for (const [needle, member] of [
-    ['author.keywords.color._brand', '_brand'],
-    ['author.keywords.display.flex', 'flex'],
+    ['keywords.color._brand', '_brand'],
+    ['keywords.display.flex', 'flex'],
   ]) {
-    const index = themeText.indexOf(needle) + needle.lastIndexOf('.') + 1;
-    assert(themeText.includes(needle));
+    const genericStart = themeText.indexOf('export function reusable');
+    const match = themeText.indexOf(needle, genericStart);
+    assert(genericStart >= 0 && match >= 0);
+    const index = match + needle.lastIndexOf('.') + 1;
     const before = themeText.slice(0, index);
     const query = {
       filePath: themeFile,

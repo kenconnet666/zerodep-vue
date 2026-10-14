@@ -15,7 +15,7 @@ import {
 } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import { _component } from '@zerodep-vue/tsx';
-import { bx, css, createCssHost } from '@zerodep-vue/css';
+import { bx, css, createCssHost, keyframes, globalCss } from '@zerodep-vue/css';
 
 const wrappers: VueWrapper[] = [];
 const containers: HTMLElement[] = [];
@@ -37,7 +37,7 @@ test('Transition retains class and animation resources until its real DOM remova
   const visible = ref(true);
   let finish: (() => void) | undefined;
   const Leaf = _component(() => {
-    const fade = css.keyframes({ from: { opacity: 1 }, to: { opacity: 0 } });
+    const fade = keyframes({ from: { opacity: 1 }, to: { opacity: 0 } });
     return <div class={css({ color: 'red', animationName: fade })}>leaving</div>;
   });
   const App = _component(() => (
@@ -234,7 +234,7 @@ test('a cancelled pending async component releases setup resources and never mou
     onScopeDispose(() => {
       disposed++;
     });
-    css.global('pending-scope', { ':root': { color: 'red' } });
+    globalCss('pending-scope', { ':root': { color: 'red' } });
     await gate;
     return <div class={css({ color: 'blue' })}>late</div>;
   });

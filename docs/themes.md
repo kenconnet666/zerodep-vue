@@ -1,6 +1,6 @@
 # 系统关键字、继承主题与泛型
 
-默认 css 具有系统关键字，没有业务主题名。createCss 将主题类型与真实实例或 Vue Ref 一起绑定，主题成员使用 _ 前缀，避免覆盖系统值。
+默认 keywords 具有系统关键字，没有业务主题名。createCss 将主题类型与真实实例或 Vue Ref 一起绑定，返回可按需解构的 CssContext<T>。css、cx、keywords 以及需要主题约束的 keyframes、createTheme、globalCss 共享同一个 T；defineVars 不依赖主题来源，直接从包导入。主题成员使用 _ 前缀，避免覆盖系统值。
 
 ```tsx
 import { shallowRef } from 'vue';
@@ -18,18 +18,18 @@ class AppTheme extends SystemKeywords {
 }
 
 const theme = shallowRef(new AppTheme());
-const css = createCss<AppTheme>(theme);
-const styles = css.create({
+const { css, cx, keywords } = createCss<AppTheme>(theme);
+const styles = cx({
   root: {
-    display: css.keywords.display.flex,
-    color: css.keywords.color._brand,
-    padding: css.keywords.padding._control,
-    ':hover': { borderColor: css.keywords.color._brand },
+    display: keywords.display.flex,
+    color: keywords.color._brand,
+    padding: keywords.padding._control,
+    ':hover': { borderColor: keywords.color._brand },
   },
 });
 ```
 
-`createCss(new AppTheme())` 可推断 T；显式泛型适用于固定库边界。仅写 `createCss<AppTheme>()` 没有真实来源会被拒绝。Css<T>、CssObject<T>、具名声明和嵌套条件保留主题约束，不使用全局 module augmentation。
+`createCss(new AppTheme())` 可推断 T；显式泛型适用于固定库边界。仅写 `createCss<AppTheme>()` 没有真实来源会被拒绝。Css<T>、Cx<T>、CssContext<T>、CssObject<T> 和嵌套条件保留主题约束，不使用全局 module augmentation。
 
 系统关键字引用是固定值，在 CSS 中直接发射。主题引用在消费时读取真实来源，并使用元素级变量。替换 theme.value 会更新实际消费元素，定义 styles 时不会冻结初始颜色。普通非响应式主题对象仍遵循 JavaScript；需要自动更新时使用 Vue 的 ref/reactive。成员值也可以使用 Vue Ref。
 

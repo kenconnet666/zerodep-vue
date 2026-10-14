@@ -1,7 +1,7 @@
 /** @jsxImportSource @zerodep-vue/tsx */
 import { ref } from 'vue';
 import { _component } from '@zerodep-vue/tsx';
-import { bx, css } from '@zerodep-vue/css';
+import { bx, css, globalCss } from '@zerodep-vue/css';
 import type {} from './contracts.ts';
 
 export default _component(() => {
@@ -19,7 +19,7 @@ export default _component(() => {
   };
   const base = css({ width: bx(readWidth()), color: bx(ignoredColor()), padding: 8 });
   const overrides = css({ color: 'green', padding: null });
-  css.global('inspected-global', { body: { margin: 0 } });
+  globalCss('inspected-global', { body: { margin: 0 } });
   window.__inspectionReads = () => ({ used, unused });
   return (
     <section>

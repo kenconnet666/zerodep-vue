@@ -43,15 +43,51 @@ function imported(scope: Scope, node: t.Node, source: string, name: string): boo
   }
   return false;
 }
-function author(scope: Scope, node: t.Node): boolean {
-  if (imported(scope, node, cssModule, 'css')) return true;
+function context(scope: Scope, node: t.Node, seen = new Set<t.Node>()): boolean {
+  if (t.isCallExpression(node)) return imported(scope, node.callee, cssModule, 'createCss');
   if (!t.isIdentifier(node)) return false;
   const binding = scope.getBinding(node.name);
-  if (!binding?.constant || !binding.path.isVariableDeclarator()) return false;
+  if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
+    return false;
+  seen.add(binding.path.node);
   const init = binding.path.node.init;
+  return !!init && t.isIdentifier(binding.path.node.id) && context(binding.path.scope, init, seen);
+}
+
+/** 按真实 binding 追踪默认导入、命名空间、主题上下文与解构别名，局部同名对象不接管。 */
+function entry(scope: Scope, node: t.Node, name: string, seen = new Set<t.Node>()): boolean {
+  if (imported(scope, node, cssModule, name)) return true;
+  if (t.isMemberExpression(node)) return property(node) === name && context(scope, node.object);
+  if (!t.isIdentifier(node)) return false;
+  const binding = scope.getBinding(node.name);
+  if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
+    return false;
+  seen.add(binding.path.node);
+  const { id, init } = binding.path.node;
+  if (!init) return false;
+  if (t.isIdentifier(id)) return entry(binding.path.scope, init, name, seen);
   return (
-    t.isCallExpression(init) && imported(binding.path.scope, init.callee, cssModule, 'createCss')
+    t.isObjectPattern(id) &&
+    context(binding.path.scope, init) &&
+    id.properties.some(
+      (item) =>
+        t.isObjectProperty(item) &&
+        property(item) === name &&
+        t.isIdentifier(item.value, { name: node.name }),
+    )
   );
+}
+
+const cssEntries = new Map([
+  ['css', 'class'],
+  ['cx', 'create'],
+  ['createTheme', 'createTheme'],
+  ['defineVars', 'defineVars'],
+  ['keyframes', 'keyframes'],
+  ['globalCss', 'global'],
+]);
+export function cssCallKind(scope: Scope, node: t.Node): string | undefined {
+  for (const [name, kind] of cssEntries) if (entry(scope, node, name)) return kind;
 }
 
 /** HMR 不依赖源码排版、位置或临时 raw 文本，只比较未被隔离的初始化结构。 */
@@ -171,15 +207,8 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
       let kind = call.node.extra?.zerodepCssKind as string | undefined;
       if (kind) {
         /* 开发来源包装与原 CSS 调用一起热替换。 */
-      } else if (author(call.scope, callee)) kind = 'class';
-      else if (t.isMemberExpression(callee) && author(call.scope, callee.object)) {
-        const method = property(callee);
-        if (method === 'createTheme') kind = 'class';
-        else if (
-          ['create', 'keyframes', 'defineVars', 'firstThatWorks', 'global'].includes(method ?? '')
-        )
-          kind = method;
-      }
+      } else kind = cssCallKind(call.scope, callee);
+      if (kind === 'createTheme') kind = 'class';
       if (!kind) return;
       const target = kind === 'global' ? call.get('arguments')[1] : call;
       if (!target?.isExpression() || !liftable(target)) return;
@@ -341,4 +370,4 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
   return { signature: stamp, compatible: compatible.name, managed };
 }
 
-export { author as isCssAuthor, imported as isImported };
+export { imported as isImported };

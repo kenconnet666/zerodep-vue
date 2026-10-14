@@ -2,7 +2,7 @@
 import { createApp, KeepAlive, nextTick, onScopeDispose, ref, Transition } from 'vue';
 import type { Ref } from 'vue';
 import { _component } from '@zerodep-vue/tsx';
-import { bx, css, createCssHost } from '@zerodep-vue/css';
+import { bx, css, createCssHost, keyframes } from '@zerodep-vue/css';
 import type { StabilityReport } from './contracts.ts';
 
 function scene(label: string) {
@@ -22,7 +22,7 @@ function scene(label: string) {
       return (value.value % 40) + 10;
     };
     const size = bx(read());
-    const pulse = css.keyframes({ from: { opacity: 0.5 }, to: { opacity: 1 } });
+    const pulse = keyframes({ from: { opacity: 0.5 }, to: { opacity: 1 } });
     const style = css({
       width: size,
       height: size,
@@ -99,7 +99,7 @@ const Cached = _component(({ name }: { name: string }) => {
   );
 });
 const Leaving = _component(() => {
-  const fade = css.keyframes({ from: { opacity: 1 }, to: { opacity: 0.5 } });
+  const fade = keyframes({ from: { opacity: 1 }, to: { opacity: 0.5 } });
   return (
     <div data-testid="leaving" class={css({ color: 'purple', animation: `${fade} 1s infinite` })}>
       leaving

@@ -4,7 +4,7 @@ import { normalizeClass } from 'vue';
 import { compose } from './core.ts';
 import { CLASS, isCssClass } from './types.ts';
 import type { ClassPart, ClassValue, Declaration } from './types.ts';
-import { BINDING, FALLBACK, TEMPLATE, isBinding, isFallback, isTemplate } from './values.ts';
+import { BINDING, TEMPLATE, isBinding, isTemplate } from './values.ts';
 import type { CssBinding, Scalar } from './values.ts';
 import { scopedSelector, validateFragment } from './syntax.ts';
 import { KEYWORD, THEME, isKeyword, isThemeReference } from './tokens.ts';
@@ -168,16 +168,14 @@ export function resolveClass(
   for (const declaration of composed.declarations) {
     const { value: input, property } = declaration;
     if (input === null) continue;
-    let values: Part[][];
+    let parts: Part[];
     if (isBinding(input) || isThemeReference(input)) {
       const current = read(input);
       if (current == null) continue;
       const text = renderValue(current, property);
       const keyword = cssWide(text);
-      values =
-        keyword || options.literal
-          ? [[keyword ?? text]]
-          : [[{ variable: variables.push(text) - 1 }]];
+      parts =
+        keyword || options.literal ? [keyword ?? text] : [{ variable: variables.push(text) - 1 }];
     } else if (isTemplate(input)) {
       const evaluated = input[TEMPLATE].map((part) =>
         isBinding(part) || isThemeReference(part) ? read(part) : part,
@@ -194,37 +192,27 @@ export function resolveClass(
             : String(part),
       );
       const keyword = cssWide(strings.join(''));
-      if (keyword) values = [[keyword]];
+      if (keyword) parts = [keyword];
       else {
-        values = [
-          input[TEMPLATE].map((part, index) => {
-            const text = strings[index]!;
-            if (!isBinding(part) && !isThemeReference(part)) return text;
-            if (cssWide(text))
-              throw new Error(`CSS ${property} 的复合值不能把 CSS-wide keyword 当作普通片段。`);
-            return options.literal ? text : { variable: variables.push(text) - 1 };
-          }),
-        ];
+        parts = input[TEMPLATE].map((part, index) => {
+          const text = strings[index]!;
+          if (!isBinding(part) && !isThemeReference(part)) return text;
+          if (cssWide(text))
+            throw new Error(`CSS ${property} 的复合值不能把 CSS-wide keyword 当作普通片段。`);
+          return options.literal ? text : { variable: variables.push(text) - 1 };
+        });
         validateFragment(strings.join(''));
       }
-    } else if (isFallback(input))
-      values = [...input[FALLBACK]]
-        .reverse()
-        .map((item) => [scalar(isThemeReference(item) ? read(item) : item, property)]);
-    else values = [[renderValue(input, property)]];
-    for (const parts of values)
-      prepared.push({
-        selector: declaration.selector,
-        conditions: declaration.conditions,
-        property: propertyName(property),
-        parts,
-      });
-    observedValues?.set(
-      declaration,
-      values.map((parts) =>
-        parts.map((part) => (typeof part === 'string' ? part : variables[part.variable])).join(''),
-      ),
-    );
+    } else parts = [renderValue(input, property)];
+    prepared.push({
+      selector: declaration.selector,
+      conditions: declaration.conditions,
+      property: propertyName(property),
+      parts,
+    });
+    observedValues?.set(declaration, [
+      parts.map((part) => (typeof part === 'string' ? part : variables[part.variable])).join(''),
+    ]);
   }
   const ruleName = prepared.length
     ? 'zv-' + hash((options.namespace ?? '') + JSON.stringify(prepared))

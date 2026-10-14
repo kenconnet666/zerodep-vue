@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createSSRApp, ref } from 'vue';
-import { css, createCssHost, getCssHost } from '../src/index.ts';
+import { css, createCssHost, getCssHost, keyframes, globalCss } from '../src/index.ts';
 import { renderToString } from '@vue/server-renderer';
 import { binding } from '../src/values.ts';
 import { resolveClass } from '../src/resolve.ts';
@@ -41,7 +41,7 @@ test('inspection uses consumed values, records override/clear provenance and nev
 
 test('animation frame inspection keeps declaration and binding locations', () => {
   const fade = traceCss(
-    css.keyframes({
+    keyframes({
       from: {
         opacity: traceCss(
           binding(() => 0.3),
@@ -75,7 +75,7 @@ test('global inspection follows active leases and releases data with the host', 
     },
     source(30, 'global'),
   );
-  const stop = css.global('page', rules, { host });
+  const stop = globalCss('page', rules, { host });
   assert.equal(inspectApp(app)[0].source.line, 30);
   assert.equal(inspectApp(app)[0].snapshot.cssText, 'body{color:red;}');
   assert.equal(reads, 1);
@@ -90,7 +90,7 @@ test('global inspection follows active leases and releases data with the host', 
 test('client development tooling does not retain SSR request registrations', async () => {
   const app = createSSRApp({
     setup() {
-      css.global('request', { body: { color: 'red' } });
+      globalCss('request', { body: { color: 'red' } });
       return () => null;
     },
   });

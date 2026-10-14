@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { JSDOM } from 'jsdom';
 import { effectScope, ref, shallowRef } from 'vue';
-import { css, createCssHost } from '../src/index.ts';
+import { createCssHost, keyframes, globalCss } from '../src/index.ts';
 import { binding } from '../src/values.ts';
 
 test('global reactive rules keep cascade position and stop when their scope ends', () => {
@@ -21,7 +21,7 @@ test('global reactive rules keep cascade position and stop when their scope ends
         ':hover': { opacity: 0.8 },
       },
     });
-    scope.run(() => css.global('page', rules, { host }));
+    scope.run(() => globalCss('page', rules, { host }));
     const node = dom.window.document.head.firstElementChild;
     const other = host.acquireGlobal('later', 'body{color:blue;}');
     assert.equal(reads, 1);
@@ -50,7 +50,7 @@ test('global names protect other owners and a host disposal stops external react
   const host = createCssHost({ target: null });
   const value = ref('red');
   let reads = 0;
-  const stop = css.global(
+  const stop = globalCss(
     'reset',
     {
       body: {
@@ -82,7 +82,7 @@ test('failed initial global resolution leaves no reactive subscriptions', (t) =>
   let reads = 0;
   assert.throws(
     () =>
-      css.global(
+      globalCss(
         'invalid',
         {
           body: {
@@ -100,7 +100,7 @@ test('failed initial global resolution leaves no reactive subscriptions', (t) =>
   // 在读取 color 后失败，确保已经发生的响应式读取也没有遗留订阅。
   assert.throws(
     () =>
-      css.global(
+      globalCss(
         'invalid-value',
         {
           body: {
@@ -153,18 +153,18 @@ test('SSR preserves global/ordinary collection order and client adopts the same 
 test('global rules resolve dynamic animations literally and reject invalid boundaries', () => {
   const host = createCssHost({ target: null });
   const value = ref(0.2);
-  const fade = css.keyframes({ from: { opacity: binding(() => value.value) }, to: { opacity: 1 } });
-  css.global('animated', { body: { animationName: fade } }, { host });
+  const fade = keyframes({ from: { opacity: binding(() => value.value) }, to: { opacity: 1 } });
+  globalCss('animated', { body: { animationName: fade } }, { host });
   assert(host.cssText().includes('from{opacity:0.2;}'));
   assert(!host.cssText().includes('var(--zv-'));
   value.value = 0.8;
   assert(host.cssText().includes('from{opacity:0.8;}'));
   assert(!host.cssText().includes('opacity:0.2'));
   assert.equal(host.stats().globalRules, 1);
-  assert.throws(() => css.global('bad', { body: { color: 'red' } }), /显式 host/);
-  assert.throws(() => css.global('bad', { '&': { color: 'red' } }, { host }), /根选择器/);
+  assert.throws(() => globalCss('bad', { body: { color: 'red' } }), /显式 host/);
+  assert.throws(() => globalCss('bad', { '&': { color: 'red' } }, { host }), /根选择器/);
   assert.throws(
-    () => css.global('bad', { 'body;html': { color: 'red' } }, { host }),
+    () => globalCss('bad', { 'body;html': { color: 'red' } }, { host }),
     /语法或声明边界/,
   );
   host.dispose();

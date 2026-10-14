@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { css, create } from '../src/core.ts';
 import { resolveClass } from '../src/resolve.ts';
-import { binding, firstThatWorks, template } from '../src/values.ts';
+import { binding, template } from '../src/values.ts';
 
 test('later declarations replace only the same selector, condition and property', () => {
   const base = css({
@@ -114,9 +114,13 @@ test('an overridden binding is not read and a shared active binding is read once
   assert.deepEqual(Object.values(result.variables), ['10px', '10px']);
 });
 
-test('native classes, fallback order, conditions and shorthands preserve declaration order', () => {
+test('native classes, supports conditions and shorthands preserve declaration order', () => {
   const styles = create({
-    root: { display: firstThatWorks('grid', 'flex'), '@media (width < 600px)': { padding: 4 } },
+    root: {
+      display: 'flex',
+      '@supports (display: grid)': { display: 'grid' },
+      '@media (width < 600px)': { padding: 4 },
+    },
   });
   const result = resolveClass([
     'plain',
@@ -125,7 +129,9 @@ test('native classes, fallback order, conditions and shorthands preserve declara
     css({ marginTop: 1 }, { margin: 2 }),
   ]);
   assert(result.className.startsWith('plain active zv-'));
-  assert(result.cssText.includes('display:flex;display:grid;'));
+  assert(result.cssText.includes('display:flex;'));
+  assert(result.cssText.includes('@supports (display: grid)'));
+  assert(result.cssText.includes('display:grid;'));
   assert(result.cssText.includes('@media (width < 600px)'));
   assert(result.cssText.includes('margin-top:1px;margin:2px;'));
 });

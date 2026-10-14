@@ -161,7 +161,7 @@ BLUEPRINT.md
 
 1. `_component`、`css`、`bx` 等工具按导入来源和 binding 身份识别，支持导入别名；同名局部变量、遮蔽绑定和其他库的同名函数不转换。
 2. `_component` 的组件参数和返回边界可以增强，普通 `defineComponent`、普通函数和其局部变量仍遵循上游行为。CSS 工具可以在普通 Vue TSX 中使用，不要求先改写组件声明。
-3. `css(...)` 返回用于 `class` 的值，`css.create(...)` 的成员也是 class 值。运行时内部保留样式组合与绑定元数据，作者不需要另传样式描述 prop 或拆出 style。
+3. `css(...)` 返回用于 `class` 的值，`cx(...)` 的成员也是 class 值。运行时内部保留样式组合与绑定元数据，作者不需要另传样式描述 prop 或拆出 style。
 4. 编译器在 JSX class、spread 与 VNode props 接线处识别本库产生的 class，先保留其元数据，再交给 Vue 归一化。普通字符串、class 数组和条件对象保持原来的行为；不能只因普通对象具有某些键就把它当 CSS。
 5. 绑定信息随 class 的变量、数组组合和自有组件转发保留；在最终元素边界隐式解析并合并对应的内联 style。经过第三方组件边界时，由编译器先生成它能接收的常规 class/style。
 6. `For` 是有类型的 Vue 工具组件，不靠全局识别名称 `For` 改写任意 JSX。
@@ -545,7 +545,7 @@ Transition、TransitionGroup、KeepAlive、Teleport 和 defineAsyncComponent 等
 ### 7.1 声明与常用工具
 
 ```tsx
-const styles = css.create({
+const styles = cx({
   root: {
     display: 'inline-flex',
     gap: '8px',
@@ -571,19 +571,18 @@ const styles = css.create({
 
 同一状态的多个属性按 `:hover`、`:disabled` 分组，支持伪元素、组合选择器及局部条件。常用选择器提供补全，复杂关系写 `&:hover:not(:disabled)` 等正常 CSS 形式。
 
-`css(...)` 返回 class 值，`css.create(...)` 返回具名样式集合；作者通过 `class={css(styles.root, external)}` 应用。create 只负责具名组织，使用相同的运行时描述协议。组合与绑定所需的描述由运行时在内部保留，不要求作者接触；创建时不要求 DOM、不立即插入样式。普通声明、条件与组合在运行时完成，不把 CSS API 变成必须静态求值的编译 DSL。
+`css(...)` 返回 class 值，`cx(...)` 返回具名样式集合；作者通过 `class={css(styles.root, external)}` 应用。create 只负责具名组织，使用相同的运行时描述协议。组合与绑定所需的描述由运行时在内部保留，不要求作者接触；创建时不要求 DOM、不立即插入样式。普通声明、条件与组合在运行时完成，不把 CSS API 变成必须静态求值的编译 DSL。
 
-| API                                 | 用途                                                     |
-| ----------------------------------- | -------------------------------------------------------- |
-| `css(...)`                          | 单处对象声明、有序组合与条件项，返回 class               |
-| `css.create({...})`                 | 有类型的具名 class 集合                                  |
-| `createCss<T>(source)`              | 绑定实际主题来源，提供类型明确的运行时 CSS 作者入口      |
-| `css.keywords`                      | 按属性提供系统/主题关键字视图，保留成员类型和注释        |
-| `bx(expression)`                    | 捕获动态值，作者不写 getter                              |
-| `css.defineVars`、`css.createTheme` | 类型化变量组与主题覆盖，复用继承主题相同的变量和宿主协议 |
-| `css.keyframes`                     | 可复用动画资源                                           |
-| `css.firstThatWorks`                | 按首选到备选传值，输出正确的 CSS 降级声明顺序            |
-| `css.global`                        | 显式全局规则，注册和释放归宿主管理                       |
+| API                         | 用途                                                     |
+| --------------------------- | -------------------------------------------------------- |
+| `css(...)`                  | 单处对象声明、有序组合与条件项，返回 class               |
+| `cx({...})`                 | 有类型的具名 class 集合                                  |
+| `createCss<T>(source)`      | 绑定实际主题来源，提供类型明确的运行时 CSS 作者入口      |
+| `keywords`                  | 按属性提供系统/主题关键字视图，保留成员类型和注释        |
+| `bx(expression)`            | 捕获动态值，作者不写 getter                              |
+| `defineVars`、`createTheme` | 类型化变量组与主题覆盖，复用继承主题相同的变量和宿主协议 |
+| `keyframes`                 | 可复用动画资源                                           |
+| `globalCss`                 | 显式全局规则，注册和释放归宿主管理                       |
 
 recipes、庞大的变体 DSL、原子 CSS 和字符串选择器解析语言不作为基础前提。用普通 JS 条件、对象索引和数组组合即可表达常见 variants。
 
@@ -620,16 +619,16 @@ class AppTheme extends SystemKeywords {
 }
 
 const theme = shallowRef<AppTheme>(new AppTheme());
-const css = createCss<AppTheme>(theme);
+const { css, cx, keywords } = createCss<AppTheme>(theme);
 
-const styles = css.create({
+const styles = cx({
   root: {
     display: 'inline-flex',
-    color: css.keywords.color._brand,
-    padding: css.keywords.padding._control,
+    color: keywords.color._brand,
+    padding: keywords.padding._control,
 
     ':hover': {
-      color: css.keywords.color._brandHover,
+      color: keywords.color._brandHover,
     },
   },
 });
@@ -637,9 +636,9 @@ const styles = css.create({
 return <button class={styles.root}>确认</button>;
 ```
 
-`createCss<T>(source)` 返回可调用、带 `create` 等工具方法的 `Css<T>`，因此仍可写 `class={css({...})}`。`createCss(new AppTheme())` 也应从实参推导 T；显式泛型用于共享工具、库边界和需要固定主题接口的场景。`createCss` 属于 CSS 工具，不加下划线。
+`createCss<T>(source)` 返回 `CssContext<T>`，包含同一主题来源的 `css`、`cx`、`keywords` 以及按 T 校验的 `keyframes`、`createTheme`、`globalCss`。`css` 是纯组合函数，工具使用 `cx`、`keyframes` 等，关键字独立使用 `keywords.xx`。`createCss(new AppTheme())` 也应从实参推导 T；显式泛型用于共享工具、库边界和需要固定主题接口的场景。`createCss` 属于 CSS 工具，不加下划线。
 
-`css.keywords` 是带类型和成员注释的关键字视图。系统值可以直接写字符串；主题成员通过具名引用保留来源、属性约束与说明，其结果是运行时主题引用，不能在定义样式时就冻结成第一次读取的颜色或间距。
+`keywords` 是带类型和成员注释的关键字视图。系统值可以直接写字符串；主题成员通过具名引用保留来源、属性约束与说明，其结果是运行时主题引用，不能在定义样式时就冻结成第一次读取的颜色或间距。
 
 泛型与继承必须满足：
 
@@ -647,15 +646,15 @@ return <button class={styles.root}>确认</button>;
 - 默认入口的 T 为 `SystemKeywords`；应用主题不通过全局 module augmentation 污染其他组件库的补全。
 - 子主题保留继承的成员与类型，可以增加主题关键字或覆盖已有主题值；系统关键字不能被当作主题 token 重定义。
 - 类型化主题成员按兼容的 CSS 值域约束。颜色 token 应能在 color、backgroundColor、borderColor 等兼容的颜色位置复用，不要求复制同一主题值；不能把它用作 padding 的间距值。对应正反向用例必须验证，不能简单把所有主题值放宽为 string、数字或对象。
-- T 必须传入伪类、伪元素、媒体条件、`css.create`、组合函数和可复用 `CssObject<T>`，不能进入嵌套对象后退化成 any。
+- T 必须传入伪类、伪元素、媒体条件、`cx`、组合函数和可复用 `CssObject<T>`，不能进入嵌套对象后退化成 any。
 - 主题来源可在运行时通过 Vue Ref 替换。值在使用范围解析，嵌套使用及 SSR 请求互相隔离，不建立一个可变的全局“当前主题”。
-- `css.defineVars` / `css.createTheme` 与继承主题复用同一变量引用和宿主协议，不维护相互竞争的主题系统。
+- `defineVars` / `createTheme` 与继承主题复用同一变量引用和宿主协议，不维护相互竞争的主题系统。
 
-变量组用 `css.defineVars('稳定命名空间', { color: 'red', gap: '8px' })` 声明。显式命名空间保证独立服务端请求、客户端与重复模块加载得到一致名称，不依赖模块执行顺序或编译时值求解。每个引用携带原生 CSS var fallback，`css.createTheme(vars, { color: value })` 返回普通 class，可按状态分组并使用主题引用或 bx。自定义变量没有隐式单位，长度默认值明确写单位。
+变量组用 `defineVars('稳定命名空间', { color: 'red', gap: '8px' })` 声明。显式命名空间保证独立服务端请求、客户端与重复模块加载得到一致名称，不依赖模块执行顺序或编译时值求解。每个引用携带原生 CSS var fallback，`createTheme(vars, { color: value })` 返回普通 class，可按状态分组并使用主题引用或 bx。自定义变量没有隐式单位，长度默认值明确写单位。
 
-`css.keyframes({ from: {...}, to: {...} })` 返回动画引用，直接用于 animationName 或编译接线的 animation 模板。关键帧内主题和 bx 在使用动画的元素渲染时读取，各帧和各动画具有独立变量位置。资源随主规则一同收集、采用、取得与释放；覆盖掉的动画不求值，不维护永久全局动画表。
+`keyframes({ from: {...}, to: {...} })` 返回动画引用，直接用于 animationName 或编译接线的 animation 模板。关键帧内主题和 bx 在使用动画的元素渲染时读取，各帧和各动画具有独立变量位置。资源随主规则一同收集、采用、取得与释放；覆盖掉的动画不求值，不维护永久全局动画表。
 
-`css.global('稳定名称', { 'body, main': {...} })` 在组件 setup 注册显式全局规则；组件外必须提供 `{ host }`。返回幂等清理函数，Vue 作用域或宿主结束也会自动清理。它在自己的 Vue effect 中读取 bx/主题，写入字面 CSS 并原位更新同一 style 节点，保持层叠位置。相同静态定义可以共用；需要持续变化的命名规则由应用或区域入口注册一次，多个所有者争写不同值时报错。SSR 保持全局/普通规则的实际收集顺序，渲染结束停止读取，样式仍可从请求 context 输出。
+`globalCss('稳定名称', { 'body, main': {...} })` 在组件 setup 注册显式全局规则；组件外必须提供 `{ host }`。返回幂等清理函数，Vue 作用域或宿主结束也会自动清理。它在自己的 Vue effect 中读取 bx/主题，写入字面 CSS 并原位更新同一 style 节点，保持层叠位置。相同静态定义可以共用；需要持续变化的命名规则由应用或区域入口注册一次，多个所有者争写不同值时报错。SSR 保持全局/普通规则的实际收集顺序，渲染结束停止读取，样式仍可从请求 context 输出。
 
 - 原生 CSS 字符串和主题关键字引用须区分。保留原生自由输入时，不能让不存在的主题成员通过；如果提供主题名短写，也必须有独立的字面量校验和运行时诊断，不能被宽泛 string 类型吞掉。
 
@@ -782,7 +781,7 @@ SSR 使用同样的 class/绑定解析协议，把变量 style 放入 VNode/HTML
 - 浏览器宿主按 app/目标样式容器管理共享规则、活动引用和有界缓存，不能删除其他活动消费者的规则。
 - class 值创建、render 求值、真实消费和释放分开；内部元数据有明确所有权，未挂载或已卸载的分支不留下永久订阅或样式引用。
 - SSR 宿主按请求隔离，类名与收集顺序可复现，hydrate 复用已有规则，不跨请求泄漏主题或变量。
-- `css.global`、主题与 keyframes 使用同样清楚的宿主生命周期，不靠无界模块全局表。
+- `globalCss`、主题与 keyframes 使用同样清楚的宿主生命周期，不靠无界模块全局表。
 - 默认按最终组合生成可复用规则类。规则共享或内部拆分类策略依据产物体积、运行开销与维护成本评估，并保持相同的作者组合语义；不把尚未验证的内部优化路线预先写成永久禁用项。
 
 `@layer` 只作为可选的宿主整体配置。默认不强制开启，不为每次组合创建动态 layer，也不靠层名数量表达样式先后。`revert-layer` 保留 CSS 层回退含义，不能恢复已经在描述合并中被清除的旧项。
@@ -925,7 +924,7 @@ return <div class={css({ width: bx(width.value) })} />;
 | 3 状态与 TSX 混用    | Vue Ref、toRef/toRefs、可写 computed、`For`、v-model/ref/expose；双向嵌套与 Naive 共享状态        | 字段双向读写与根对象替换，以及固定混用清单的 slots、provider、事件和清理通过                                   |
 | 4 CSS 声明与覆盖     | class 返回、系统关键字、基础泛型类型、隐式 style 接线、声明位置组合/删除、伪类条件与规则宿主      | 普通 class 不变；属性和系统关键字补全、元数据转发、style 合并、缓存及生命周期通过                              |
 | 5 bx 与动态恢复      | 捕获、多变量、别名、条件/回调作用域、CSS-wide keyword、变量撤销与恢复                             | 每类作用域和关键字回归通过；没有重复求值、失效订阅或无界规则增长                                               |
-| 6 CSS 完整工具       | 继承主题、泛型 T 与运行时来源、变量、keyframes、降级值、global、类型和中文说明                    | 主题扩展及切换、属性组约束、SSR 隔离、声明消费中的补全/hover 注释与资源释放通过                                |
+| 6 CSS 完整工具       | 继承主题、泛型 T 与运行时来源、变量、keyframes、globalCss、类型和中文说明                         | 主题扩展及切换、属性组约束、SSR 隔离、声明消费中的补全/hover 注释与资源释放通过                                |
 | 7 工程与最终兼容验收 | 完成 HMR、SSR/hydrate、source map、生产/开发、打包后消费；全量 Naive 与混用回归                   | 第 8.5 节全部达成，并保存输入版本、日志、文件命中和交互证据                                                    |
 | 8 文档与发布准备     | 完成作者、CSS、兼容范围、上游差异与升级文档；检查包内容和许可                                     | 发布产物与文档一致；安装示例可复现；所有必需阶段有证据                                                         |
 

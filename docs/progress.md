@@ -15,7 +15,9 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前 CSS API 修订（待本次远程验收）
 
-2026-10-14 按作者约定调整 CSS：按选择器、条件路径与属性合并，后项添加或覆盖当前位置，null 只删除当前位置；组件样式统一经过 css()，外部输入使用 CssInput<T>。嵌套条件支持结构化样式复用和条件数组，普通类名给出明确诊断。firstThatWorks 支持系统/主题引用与字面值混合，条件类型在声明和变量覆盖之间统一。
+入口进一步收敛为独立函数：css 声明/组合，cx 定义具名样式，keywords 独立取值，defineVars/createTheme/keyframes/globalCss 各自导出。createCss 返回携带同一 T 的 CssContext，支持解构和别名；编译器、HMR 与 DevTools 同步追踪绑定身份。已移除降级辅助函数及其类型、运行时和调试分支，兼容条件使用普通 CSS 与 @supports。前一轮 f19426b 的 CI 已全部成功，本轮新入口和删除项仍以新提交结果为准。
+
+2026-10-14 按作者约定调整 CSS：按选择器、条件路径与属性合并，后项添加或覆盖当前位置，null 只删除当前位置；组件样式统一经过 css()，外部输入使用 CssInput<T>。嵌套条件支持结构化样式复用和条件数组，普通类名给出明确诊断。条件类型在声明和变量覆盖之间统一。
 
 生成器保留系统基础和继承主题 T，采用语义关键字类型、公共值集合和 14 类属性接口。关键字只保留规范化成员拼写，94 个旧链式示例改成对象 API。泛型作者的正反向类型夹具、系统/主题 hover 与补全、发布声明消费者同步扩展。本地只做受影响文件的 LSP 及短测试；完整构建、跨平台声明消费和浏览器语义以本次新提交 CI 为准，不能沿用下面的旧版本通过结论。
 
@@ -67,7 +69,7 @@ HMR 已实现独立 render/样式函数与原实例环境接线，初始化签�
 
 4fa7863a4b043914b65359344c74e72c4a5defb0 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38467772874) 全部成功，变量组、关键帧、发布类型构建、两种作者模式及旧 TSX 基线没有退化。
 
-css.global 已接入 Vue effectScope 与样式宿主，支持命名规则原位更新、源 Ref 替换、显式提前释放、作用域/宿主清理、名称冲突诊断与 SSR 采用。请求收集器保持全局/普通规则顺序，SSR watcher 在渲染结束停止但结果仍可输出。局部测试覆盖作用域停止、首次求值失败无遗留订阅、多所有者保护、请求隔离及原节点采用；完整回归交给本次提交的远程 CI。
+globalCss 已接入 Vue effectScope 与样式宿主，支持命名规则原位更新、源 Ref 替换、显式提前释放、作用域/宿主清理、名称冲突诊断与 SSR 采用。请求收集器保持全局/普通规则顺序，SSR watcher 在渲染结束停止但结果仍可输出。局部测试覆盖作用域停止、首次求值失败无遗留订阅、多所有者保护、请求隔离及原节点采用；完整回归交给本次提交的远程 CI。
 
 ad5043ebe93033895bc4b4ab89e0756adf10ad44 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38465021762) 全部成功，包括系统关键字生成一致性、继承主题、泛型类型、两个作者模式、上游及 Naive 全生产源码基线。
 
@@ -79,7 +81,7 @@ ad5043ebe93033895bc4b4ab89e0756adf10ad44 的 [远程 CI](https://github.com/kenc
 
 主题集成短测发现 Vue 类型解析会回写 AST 并产生循环作用域引用，已改为缓存原始树、每个组件使用私有副本，位置遍历也防止回访。修复后两个主题区域通过 Teleport 同时更新/移除的短测通过；完整生成一致性、主题和 SSR 回归交给对应提交的 CI。
 
-fe589202f99e8a9856a586453079dcc2352d98fe 的 [远程运行](https://github.com/kenconnet666/zerodep-vue/actions/runs/38456895611) 中，compiler、上游、CSS、default/optimized 作者运行、Naive 与 LSP 任务通过；类型和构建被 css.create 内部 Object.entries 对泛型 Record 的 unknown 推断阻断。修复改为按 Name 键读取原记录，保留外部属性拼写与值类型检查，不放宽作者契约。
+fe589202f99e8a9856a586453079dcc2352d98fe 的 [远程运行](https://github.com/kenconnet666/zerodep-vue/actions/runs/38456895611) 中，compiler、上游、CSS、default/optimized 作者运行、Naive 与 LSP 任务通过；类型和构建被 cx 内部 Object.entries 对泛型 Record 的 unknown 推断阻断。修复改为按 Name 键读取原记录，保留外部属性拼写与值类型检查，不放宽作者契约。
 
 class/bx 接线已进入整合验证：自有组件保留描述到实际元素，旧组件获得普通 class/style；自有 render 在完成外部 class 组合后统一解析，避免提前读取被覆盖的默认绑定。普通 Vue cloneVNode 的导入会接入同一元数据协议。局部短测覆盖多变量、关键字撤销、优化模式跨组件更新、覆盖与克隆；完整回归由下一次提交的远程任务执行。
 

@@ -1,18 +1,17 @@
 import { isRef, unref } from 'vue';
 import type { Ref } from 'vue';
 import { css as compose, create } from './core.ts';
-import { firstThatWorks } from './values.ts';
 import { SystemKeywords } from './generated/system.ts';
 import type { SystemViews } from './generated/system.ts';
 import { systemValues } from './generated/keywords.ts';
 import { THEME, THEME_SOURCE, keyword } from './tokens.ts';
 import type { CheckedTheme, ThemeReference } from './tokens.ts';
 import type { CssInput, CssClass, PropertyName } from './types.ts';
-import { defineVars, createTheme, keyframes } from './resources.ts';
+import { createTheme as createVariableTheme, keyframes as createKeyframes } from './resources.ts';
 import type { VariableOverrides, Keyframes } from './resources.ts';
 import type { VariableGroup, CssAnimation } from './resource-tokens.ts';
 import type { Scalar } from './values.ts';
-import { globalCss } from './global.ts';
+import { globalCss as registerGlobal } from './global.ts';
 import type { GlobalRules, GlobalOptions } from './global.ts';
 
 type ThemeMembers<Group, Key extends PropertyName> = {
@@ -25,15 +24,21 @@ export type KeywordView<T extends SystemKeywords> = {
 export interface Css<T extends SystemKeywords = SystemKeywords> {
   /** 声明或组合样式，统一用于 class；同一选择器/条件/属性后项覆盖，空条件项忽略。 */
   (...inputs: readonly CssInput<T>[]): CssClass;
+}
+/** 批量定义具名样式；结果通过 css() 应用，成员保留 T 的作者约束。 */
+export interface Cx<T extends SystemKeywords = SystemKeywords> {
   /** 批量定义具名样式；成员与 css() 的结果使用相同协议，消费时仍经 css() 组合。 */
-  create<const Name extends string>(
+  <const Name extends string>(
     styles: Record<Name, CssInput<T>>,
   ): { readonly [Key in Name]: CssClass };
-  /** 系统值与 T 继承的主题成员共用视图；主题引用在消费时读取实际来源。 */
+}
+
+/** 同一主题来源的独立作者函数；调用方按需解构，不把方法挂到 css/cx 函数上。 */
+export interface CssContext<T extends SystemKeywords = SystemKeywords> {
+  readonly css: Css<T>;
+  readonly cx: Cx<T>;
+  /** 系统值与 T 继承的主题成员共用视图，成员说明在映射中保留。 */
   readonly keywords: KeywordView<T>;
-  readonly firstThatWorks: typeof firstThatWorks;
-  /** 声明稳定命名空间的变量组；长度默认值应明确写单位。 */
-  readonly defineVars: typeof defineVars;
   /** 覆盖变量组，返回可组合 class；允许状态分组、主题值和 bx。 */
   createTheme<Values extends Record<string, Scalar>>(
     group: VariableGroup<Values>,
@@ -42,7 +47,7 @@ export interface Css<T extends SystemKeywords = SystemKeywords> {
   /** 声明动画资源；使用时才求值和登记，支持 bx 和主题引用。 */
   keyframes(frames: Keyframes<T>): CssAnimation;
   /** 注册显式全局规则，返回清理函数；bx/主题更新保留节点及层叠位置。 */
-  global(
+  globalCss(
     name: string,
     rules: GlobalRules<T> | Ref<GlobalRules<T>>,
     options?: GlobalOptions,
@@ -169,18 +174,18 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
  * 将泛型 T 与真实主题来源绑定。值在消费时读取，Ref 替换会更新使用它的元素。
  * 主题通过正常 TypeScript 类继承扩展；替换整个属性组时仍遵循普通对象覆盖语义。
  */
-export function createCss<T extends SystemKeywords>(source: ThemeSource<T>): Css<T> {
-  const author = (...inputs: readonly CssInput<T>[]) => compose(...inputs);
-  return Object.assign(author, {
-    create,
+export function createCss<T extends SystemKeywords>(source: ThemeSource<T>): CssContext<T> {
+  return Object.freeze({
+    css: (...inputs: readonly CssInput<T>[]) => compose(...inputs),
     keywords: keywordView<T>(source),
-    firstThatWorks,
-    defineVars,
-    createTheme,
-    keyframes,
-    global: globalCss,
-  }) as Css<T>;
+    cx: create,
+    createTheme: createVariableTheme,
+    keyframes: createKeyframes,
+    globalCss: registerGlobal,
+  });
 }
 
 /** 没有业务主题的默认作者仍具备完整系统关键字。 */
-export const css: Css<SystemKeywords> = createCss(new SystemKeywords());
+export const { css, cx, keywords, createTheme, keyframes, globalCss } = createCss(
+  new SystemKeywords(),
+);

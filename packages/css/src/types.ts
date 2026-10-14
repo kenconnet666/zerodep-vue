@@ -1,5 +1,5 @@
 import type * as CSS from 'csstype';
-import type { CssBinding, CssFallback, CssTemplate, Scalar } from './values.ts';
+import type { CssBinding, CssTemplate, Scalar } from './values.ts';
 import type { AllowedSystem, AllowedTheme, SystemKeyword, ThemeReference } from './tokens.ts';
 import type { SystemKeywords } from './generated/system.ts';
 import type { CssProperties } from './generated/properties.ts';
@@ -23,11 +23,7 @@ type InputValue<Key extends PropertyName, T extends SystemKeywords> =
       ? CssAnimation
       : never);
 export type PropertyValue<Key extends PropertyName, T extends SystemKeywords = SystemKeywords> =
-  | InputValue<Key, T>
-  | null
-  | CssBinding<InputValue<Key, T> | null>
-  | CssTemplate
-  | CssFallback<Exclude<InputValue<Key, T>, undefined>>;
+  InputValue<Key, T> | null | CssBinding<InputValue<Key, T> | null> | CssTemplate;
 
 /** 常用伪类保留补全，函数伪类、属性选择器与条件在各作者入口共用。 */
 export type CssCondition =
@@ -64,14 +60,7 @@ export interface Declaration {
   readonly conditions: readonly string[];
   readonly property: string;
   readonly value:
-    | Scalar
-    | CssBinding<unknown>
-    | ThemeReference
-    | CssVariable
-    | CssAnimation
-    | CssTemplate
-    | CssFallback<Scalar | SystemKeyword | ThemeReference | CssVariable>
-    | null;
+    Scalar | CssBinding<unknown> | ThemeReference | CssVariable | CssAnimation | CssTemplate | null;
 }
 export interface StyleSource {
   readonly declarations: readonly Declaration[];

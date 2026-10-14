@@ -2,7 +2,6 @@ import { computed, ReactiveEffect, shallowRef, unref } from 'vue';
 import type { ShallowRef } from 'vue';
 import { CLASS } from './types.ts';
 import { ANIMATION, VARIABLE, VARIABLE_GROUP } from './resource-tokens.ts';
-import { FALLBACK } from './values.ts';
 
 type Environment = Record<string, unknown>;
 type Factory = (environment: Environment, ...args: unknown[]) => any;
@@ -95,7 +94,6 @@ export function registerModule(
       const read = snapshot(site, environment);
       if (kind === 'class') return view(read, CLASS);
       if (kind === 'keyframes') return view(read, ANIMATION);
-      if (kind === 'firstThatWorks') return view(read, FALLBACK);
       if (kind === 'source') return computed(() => unref(read()));
       // 集合成员也使用稳定视图，setup 解构后的单个 class/变量不会固定在旧版本。
       const members = new Map<PropertyKey, object>();

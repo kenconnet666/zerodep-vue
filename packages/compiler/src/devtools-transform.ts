@@ -1,7 +1,7 @@
 import { addNamed } from '@babel/helper-module-imports';
 import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
-import { isCssAuthor, isImported } from './hot-transform.ts';
+import { cssCallKind, isImported } from './hot-transform.ts';
 
 const runtime = '@zerodep-vue/compiler/devtools';
 const sources = new Set([
@@ -9,13 +9,6 @@ const sources = new Set([
   '@zerodep-vue/tsx/runtime',
   '@zerodep-vue/compiler/runtime',
 ]);
-const property = (node: t.MemberExpression) =>
-  !node.computed && t.isIdentifier(node.property)
-    ? node.property.name
-    : t.isStringLiteral(node.property)
-      ? node.property.value
-      : undefined;
-
 /** 只在 Vite 客户端开发转换中调用；位置常量与包装不进入生产及 SSR 输出。 */
 export function instrumentDevtools(program: NodePath<t.Program>, filename: string): void {
   program.scope.crawl();
@@ -71,15 +64,9 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
             }
           return;
         }
-        let kind: string | undefined;
+        let kind = cssCallKind(call.scope, call.node.callee);
         let point: t.Node = call.node;
-        if (isCssAuthor(call.scope, call.node.callee)) kind = 'class';
-        else if (
-          t.isMemberExpression(call.node.callee) &&
-          isCssAuthor(call.scope, call.node.callee.object)
-        )
-          kind = property(call.node.callee);
-        else
+        if (!kind)
           for (const source of sources)
             if (isImported(call.scope, call.node.callee, source, 'binding')) {
               kind = 'binding';
@@ -94,7 +81,6 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
             'createTheme',
             'defineVars',
             'keyframes',
-            'firstThatWorks',
             'binding',
             'global',
           ].includes(kind)

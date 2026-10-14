@@ -66,8 +66,8 @@ export function globalCss<T extends SystemKeywords>(
   const instance = getCurrentInstance();
   const scope = getCurrentScope();
   if (instance && !scope)
-    throw new Error('css.global 应在 setup 或 effectScope 中注册，不能在 render 中重复注册。');
-  if (!instance && !options.host) throw new Error('组件 setup 以外的 css.global 需要显式 host。');
+    throw new Error('globalCss 应在 setup 或 effectScope 中注册，不能在 render 中重复注册。');
+  if (!instance && !options.host) throw new Error('组件 setup 以外的 globalCss 需要显式 host。');
   const origin =
     options.host ?? (instance ? inject<CssHost | undefined>(cssHostKey, undefined) : undefined);
   const ssr = !!instance?.appContext.provides[ssrContextKey as symbol];

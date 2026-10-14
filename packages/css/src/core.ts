@@ -1,6 +1,6 @@
 import { CLASS, isCssClass } from './types.ts';
 import type { ClassPart, CssClass, Declaration } from './types.ts';
-import { isBinding, isFallback, isTemplate } from './values.ts';
+import { isBinding, isTemplate } from './values.ts';
 import { selectors, validateFragment } from './syntax.ts';
 import type { SelectorContext } from './syntax.ts';
 import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
@@ -45,8 +45,7 @@ export function declarations(
         isBinding(style) ||
         isVariable(style) ||
         isAnimation(style) ||
-        isTemplate(style) ||
-        isFallback(style)
+        isTemplate(style)
       )
         throw new Error('CSS 属性值不能作为嵌套声明对象。');
       for (const [property, input] of Object.entries(style)) {
@@ -68,7 +67,6 @@ export function declarations(
             typeof value !== 'number' &&
             !isBinding(value) &&
             !isTemplate(value) &&
-            !isFallback(value) &&
             !isThemeReference(value) &&
             !isAnimation(value) &&
             !isVariable(value)
@@ -116,8 +114,7 @@ export function css(...inputs: readonly unknown[]): CssClass {
       isBinding(input) ||
       isVariable(input) ||
       isAnimation(input) ||
-      isTemplate(input) ||
-      isFallback(input)
+      isTemplate(input)
     )
       throw new Error('css 需要声明对象或 class 值，属性值请放入对应属性。');
     parts.push(Object.freeze({ declarations: declarations(input) }));

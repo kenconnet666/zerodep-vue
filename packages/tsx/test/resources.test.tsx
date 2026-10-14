@@ -4,7 +4,7 @@ import { mount } from '@vue/test-utils';
 import { createSSRApp, nextTick, ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { _component } from '@zerodep-vue/tsx';
-import { bx, css, createCssHost, getCssHost } from '@zerodep-vue/css';
+import { bx, css, createCssHost, getCssHost, keyframes, globalCss } from '@zerodep-vue/css';
 
 test('component global rules use its host and unmount stops all updates', async () => {
   const target = document.createElement('div');
@@ -17,7 +17,7 @@ test('component global rules use its host and unmount stops all updates', async 
     return color.value;
   };
   const App = _component(() => {
-    css.global('document-colors', { ':root': { color: bx(read()) } });
+    globalCss('document-colors', { ':root': { color: bx(read()) } });
     return <div class={css({ opacity: 1 })} />;
   });
   const wrapper = mount(App, { global: { plugins: [host] } });
@@ -41,7 +41,7 @@ test('component global rules use its host and unmount stops all updates', async 
 test('SSR global effects stop after rendering while request-specific styles remain collectible', async () => {
   const color = ref('red');
   const App = _component(() => {
-    css.global('request', { body: { color: bx(color.value) } });
+    globalCss('request', { body: { color: bx(color.value) } });
     return <div class={css({ opacity: 1 })} />;
   });
   const first = {};
@@ -70,7 +70,7 @@ test('keyframes share rule leases, update inline values and release on the last 
   const opacity = ref(0.2);
   const show = ref(true);
   const App = _component(() => {
-    const fade = css.keyframes({ from: { opacity: bx(opacity.value) }, to: { opacity: 1 } });
+    const fade = keyframes({ from: { opacity: bx(opacity.value) }, to: { opacity: 1 } });
     const style = css({ animation: `${fade} 1s linear` });
     return (
       <section>
@@ -104,7 +104,7 @@ test('keyframes share rule leases, update inline values and release on the last 
 
 test('SSR collects animations with request-specific inline values and stable resource names', async () => {
   const Page = _component(({ start }: { start: number }) => {
-    const fade = css.keyframes({ from: { opacity: bx(start) }, to: { opacity: 1 } });
+    const fade = keyframes({ from: { opacity: bx(start) }, to: { opacity: 1 } });
     return <div class={css({ animationName: fade, animationDuration: '1s' })} />;
   });
   const first = {};

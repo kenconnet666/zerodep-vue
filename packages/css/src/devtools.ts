@@ -14,7 +14,7 @@ import { setupDevToolsPlugin } from '@vue/devtools-api';
 import { CLASS, isCssClass } from './types.ts';
 import type { Declaration } from './types.ts';
 import { ANIMATION, isAnimation } from './resource-tokens.ts';
-import { FALLBACK, TEMPLATE, isBinding, isFallback, isTemplate } from './values.ts';
+import { TEMPLATE, isBinding, isTemplate } from './values.ts';
 import { isThemeReference } from './tokens.ts';
 import { setInspectionHooks } from './inspection.ts';
 import type { ResolvedClass } from './resolve.ts';
@@ -94,7 +94,7 @@ function bindingSnapshot(
   reads: ReadonlyMap<object, unknown>,
   active: boolean,
 ): BindingSnapshot[] {
-  const parts = isTemplate(value) ? value[TEMPLATE] : isFallback(value) ? value[FALLBACK] : [value];
+  const parts = isTemplate(value) ? value[TEMPLATE] : [value];
   return parts
     .filter((part) => isBinding(part) || isThemeReference(part))
     .map((part) => {

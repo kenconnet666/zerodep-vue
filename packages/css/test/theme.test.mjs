@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { shallowRef, ref } from 'vue';
-import { css, createCss, SystemKeywords } from '../src/index.ts';
+import { css, cx, createCss, SystemKeywords, keywords } from '../src/index.ts';
 import { resolveClass } from '../src/resolve.ts';
 
 class Theme extends SystemKeywords {
@@ -9,29 +9,41 @@ class Theme extends SystemKeywords {
   padding = { _control: '8px 12px' };
 }
 
+test('css and cx are independent functions and named styles compose through css', () => {
+  const styles = cx({ root: { display: keywords.display.flex }, active: { opacity: 0.5 } });
+  assert.equal(typeof css, 'function');
+  assert.equal(typeof cx, 'function');
+  assert.equal(css.create, undefined);
+  assert.equal(cx.create, undefined);
+  assert.equal(css.keywords, undefined);
+  const result = resolveClass(css(styles.root, styles.active));
+  assert(result.cssText.includes('display:flex'));
+  assert(result.cssText.includes('opacity:0.5'));
+});
+
 test('system keywords stay available beside typed theme members and remain literal values', () => {
-  const themed = createCss(new Theme());
+  const { css: themed, keywords: themedKeywords } = createCss(new Theme());
   const style = resolveClass(
     themed({
-      display: themed.keywords.display.flex,
-      color: themed.keywords.color.currentColor,
-      width: themed.keywords.width.initial,
+      display: themedKeywords.display.flex,
+      color: themedKeywords.color.currentColor,
+      width: themedKeywords.width.initial,
     }),
   );
   assert(style.cssText.includes('display:flex'));
   assert(style.cssText.toLowerCase().includes('color:currentcolor'));
   assert(style.cssText.includes('width:initial'));
   assert.deepEqual(style.variables, {});
-  assert.equal(themed.keywords.color._brand, themed.keywords.color._brand);
-  assert.equal(css.keywords.width.nonexistent, undefined);
+  assert.equal(themedKeywords.color._brand, themedKeywords.color._brand);
+  assert.equal(keywords.width.nonexistent, undefined);
 });
 
 test('theme references read live sources, support Ref replacement and keep instance values separate', () => {
   const source = shallowRef(new Theme());
-  const themed = createCss(source);
+  const { css: themed, keywords: themedKeywords } = createCss(source);
   const style = themed({
-    color: themed.keywords.color._brand,
-    backgroundColor: themed.keywords.color._accent,
+    color: themedKeywords.color._brand,
+    backgroundColor: themedKeywords.color._accent,
   });
   const first = resolveClass(style);
   assert.deepEqual(Object.values(first.variables), ['red', 'orange']);
@@ -42,9 +54,9 @@ test('theme references read live sources, support Ref replacement and keep insta
   const second = resolveClass(style);
   assert.equal(first.ruleName, second.ruleName);
   assert.deepEqual(Object.values(second.variables), ['blue', 'purple']);
-  const other = createCss(new Theme());
+  const { css: other, keywords: otherKeywords } = createCss(new Theme());
   assert.deepEqual(
-    Object.values(resolveClass(other({ color: other.keywords.color._brand })).variables),
+    Object.values(resolveClass(other({ color: otherKeywords.color._brand })).variables),
     ['red'],
   );
 });
@@ -53,11 +65,11 @@ test('normal class inheritance retains members and invalid source definitions ar
   class Extended extends Theme {
     color = { ...new Theme().color, _danger: 'crimson' };
   }
-  const themed = createCss(new Extended());
+  const { css: themed, keywords: themedKeywords } = createCss(new Extended());
   assert.deepEqual(
     Object.values(
       resolveClass(
-        themed({ color: themed.keywords.color._brand, borderColor: themed.keywords.color._danger }),
+        themed({ color: themedKeywords.color._brand, borderColor: themedKeywords.color._danger }),
       ).variables,
     ),
     ['red', 'crimson'],
@@ -68,7 +80,7 @@ test('normal class inheritance retains members and invalid source definitions ar
   }
   assert.throws(() => createCss(new Invalid()), /不能覆盖系统关键字/);
   assert.throws(
-    () => resolveClass(themed({ color: themed.keywords.color._missing })),
+    () => resolveClass(themed({ color: themedKeywords.color._missing })),
     /当前主题缺少/,
   );
 });

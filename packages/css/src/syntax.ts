@@ -49,7 +49,7 @@ export function selectors(parent: SelectorContext, input: string): SelectorConte
     if (!hasNesting) part = /^[:[]/.test(part) ? `&${part}` : `& ${part}`;
     const ast = selectorParser().astSync(part).nodes[0]!;
     if (!ast.nodes.some((node) => node.type === 'nesting'))
-      throw new Error('局部选择器需要直接的 & 作用域；全局规则使用 css.global。');
+      throw new Error('局部选择器需要直接的 & 作用域；全局规则使用 globalCss。');
     const lastCombinator = ast.nodes.findLastIndex((node) => node.type === 'combinator');
     const tail = ast.nodes.slice(lastCombinator + 1);
     const sameTarget =

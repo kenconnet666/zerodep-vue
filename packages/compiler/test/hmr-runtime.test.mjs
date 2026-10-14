@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { computed, effectScope, ref, watchSyncEffect } from 'vue';
-import { css, createCssHost } from '../../css/src/index.ts';
+import { css, createCssHost, cx, keyframes, defineVars, globalCss } from '../../css/src/index.ts';
 import { registerModule, compatible } from '../../css/src/hmr.ts';
 import { resolveClass } from '../../css/src/resolve.ts';
 import { binding } from '../../css/src/values.ts';
@@ -78,9 +78,9 @@ test('hot named styles, variables, animations and globals retain live descriptio
   const host = createCssHost({ target: null });
   const scope = effectScope();
   const factories = (value) => ({
-    group: () => css.create({ root: { color: value } }),
-    vars: () => css.defineVars('hot', { color: value }),
-    animation: () => css.keyframes({ from: { color: value }, to: { color: 'white' } }),
+    group: () => cx({ root: { color: value } }),
+    vars: () => defineVars('hot', { color: value }),
+    animation: () => keyframes({ from: { color: value }, to: { color: 'white' } }),
     global: () => ({ body: { color: value } }),
   });
   const first = registerModule(hot, 'same', factories('red'));
@@ -88,7 +88,7 @@ test('hot named styles, variables, animations and globals retain live descriptio
   const { color } = first.style('vars', {}, 'defineVars');
   const animation = first.style('animation', {}, 'keyframes');
   const source = first.style('global', {}, 'source');
-  first.onceGlobal('global', () => css.global('hot', source, { host }));
+  first.onceGlobal('global', () => globalCss('hot', source, { host }));
   registerModule(hot, 'same', factories('blue')).onceGlobal('global', () => {
     throw new Error('registered twice');
   });

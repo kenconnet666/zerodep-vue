@@ -1,11 +1,10 @@
 /** 值标记与 class 标记分开，普通对象永远不会因键名相似被当作 CSS。 */
 export const BINDING = Symbol.for('@zerodep-vue/css/binding/v1');
 export const TEMPLATE = Symbol.for('@zerodep-vue/css/template/v1');
-export const FALLBACK = Symbol.for('@zerodep-vue/css/fallback/v1');
 import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
-import type { SystemKeyword, ThemeReference } from './tokens.ts';
+import type { ThemeReference } from './tokens.ts';
 import { isAnimation } from './resource-tokens.ts';
-import type { CssAnimation, CssVariable } from './resource-tokens.ts';
+import type { CssAnimation } from './resource-tokens.ts';
 export type Scalar = string | number;
 
 /** 动态属性值。由编译器捕获表达式，读取归实际消费节点所有。 */
@@ -15,20 +14,12 @@ export interface CssBinding<out T> {
 export interface CssTemplate {
   readonly [TEMPLATE]: readonly (string | CssBinding<unknown> | ThemeReference | CssAnimation)[];
 }
-export interface CssFallback<out T> {
-  readonly [FALLBACK]: readonly T[];
-}
 
 export function isBinding(value: unknown): value is CssBinding<unknown> {
   return value !== null && typeof value === 'object' && BINDING in value;
 }
 export function isTemplate(value: unknown): value is CssTemplate {
   return value !== null && typeof value === 'object' && TEMPLATE in value;
-}
-export function isFallback(
-  value: unknown,
-): value is CssFallback<Scalar | SystemKeyword | ThemeReference | CssVariable> {
-  return value !== null && typeof value === 'object' && FALLBACK in value;
 }
 
 /** @internal 编译目标；不在声明时执行 getter，也不在这里建立订阅。 */
@@ -69,14 +60,6 @@ export function template(
       throw new Error('含 bx 的模板需要直接交给 CSS 属性。');
     },
   });
-}
-
-/** 从首选到备选传值，输出时按 CSS 后声明优先的规则反向排列。 */
-export function firstThatWorks<
-  const Values extends readonly (Scalar | SystemKeyword | ThemeReference | CssVariable)[],
->(...values: Values): CssFallback<Values[number]> {
-  if (!values.length) throw new Error('firstThatWorks 至少需要一个候选值。');
-  return Object.freeze({ [FALLBACK]: Object.freeze([...values]) });
 }
 
 /** @internal 普通输入完整保留 JS +；含绑定的字符串拼接保留独立片段。 */

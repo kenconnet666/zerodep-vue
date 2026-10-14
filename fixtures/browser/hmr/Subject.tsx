@@ -1,7 +1,7 @@
 /** @jsxImportSource @zerodep-vue/tsx */
 import { ref } from 'vue';
 import { _component } from '@zerodep-vue/tsx';
-import { bx, css } from '@zerodep-vue/css';
+import { bx, cx, globalCss } from '@zerodep-vue/css';
 import { NSelect } from '@fixture/naive';
 import type {} from '../src/contracts.ts';
 
@@ -11,10 +11,10 @@ export default _component(() => {
   const text = ref('initial');
   const open = ref(false);
   const suffix = ref('!');
-  const { panel } = css.create({
+  const { panel } = cx({
     panel: { color: 'rgb(255, 0, 0)', padding: 16, marginLeft: bx(count.value) },
   });
-  css.global('hot-page', { body: { fontFamily: 'sans-serif' } });
+  globalCss('hot-page', { body: { fontFamily: 'sans-serif' } });
   return (
     <section class={panel}>
       <h2>原始标题</h2>

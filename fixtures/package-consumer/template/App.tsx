@@ -2,7 +2,16 @@
 import { ref, Suspense } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import { _component, For } from '@zerodep-vue/tsx';
-import { bx, css, createCss, SystemKeywords } from '@zerodep-vue/css';
+import {
+  bx,
+  createCss,
+  SystemKeywords,
+  keywords,
+  keyframes,
+  defineVars,
+  createTheme,
+  globalCss,
+} from '@zerodep-vue/css';
 
 export class Palette extends SystemKeywords {
   override readonly color = {
@@ -10,7 +19,7 @@ export class Palette extends SystemKeywords {
     _brand: '#2563eb',
   };
 }
-export const themed = createCss(new Palette());
+export const { css: themed, keywords: themedKeywords } = createCss(new Palette());
 
 export interface InputHandle {
   focus(): void;
@@ -40,15 +49,15 @@ const Async = _component(async () => {
 export const App = _component(() => {
   const text = ref('package-state');
   const gap = ref('12px');
-  const vars = css.defineVars('consumer', { padding: '4px' });
-  const fade = css.keyframes({ from: { opacity: 0.5 }, to: { opacity: 1 } });
-  css.global('consumer-base', { body: { margin: 0 } });
+  const vars = defineVars('consumer', { padding: '4px' });
+  const fade = keyframes({ from: { opacity: 0.5 }, to: { opacity: 1 } });
+  globalCss('consumer-base', { body: { margin: 0 } });
   return (
     <main
-      class={themed(css.createTheme(vars, { padding: bx(gap.value) }), {
+      class={themed(createTheme(vars, { padding: bx(gap.value) }), {
         padding: vars.padding,
-        color: themed.keywords.color._brand,
-        display: css.keywords.display.flex,
+        color: themedKeywords.color._brand,
+        display: keywords.display.flex,
         animationName: fade,
         animationDuration: '1s',
         ':hover': { color: 'purple' },
