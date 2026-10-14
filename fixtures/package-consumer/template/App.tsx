@@ -45,7 +45,7 @@ export const App = _component(() => {
   css.global('consumer-base', { body: { margin: 0 } });
   return (
     <main
-      class={css(css.createTheme(vars, { padding: bx(gap.value) }), {
+      class={themed(css.createTheme(vars, { padding: bx(gap.value) }), {
         padding: vars.padding,
         color: themed.keywords.color._brand,
         display: css.keywords.display.flex,

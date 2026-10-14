@@ -43,8 +43,11 @@ try {
   const text = readFileSync(filename, 'utf8');
   const evidence = {};
   for (const name of ['flex', 'brand']) {
-    let position = text.indexOf(`/*hover:${name}*/`) - 1;
-    while (/\s/.test(text[position])) position--;
+    const marker = text.indexOf(`/*hover:${name}*/`);
+    assert(marker > 0, `Missing probe marker ${name}`);
+    let position = marker - 1;
+    // 格式化器可把尾随注释放到分号之后；查询应落在成员名上。
+    while (/[\s;]/.test(text[position])) position--;
     const quick = service.getQuickInfoAtPosition(filename, position);
     assert(quick);
     const type = ts.displayPartsToString(quick.displayParts);

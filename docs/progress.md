@@ -15,6 +15,8 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前实施
 
+9bb858fd92ee19b21bc7329ff4afc095fec2d4c3 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38495642526) 中，上游、两种作者模式、全部浏览器/稳定性、HMR/DevTools、类型、LSP、打包均成功。Linux/Windows 的仓库外运行时消费也通过，声明检查准确拒绝了样例中两处把业务主题引用交给默认系统 css 的调用；样例已改用对应 themed 入口，并保留该误用为负向类型检查。版本及安装说明整理为 1.0.0 候选，完整声明消费结果仍待候选 CI 确认。
+
 c631f83d30adc3ee26ad0e730b32f591800ab7fe 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38492258325) 中，四组浏览器完成了普通混用、嵌套主题、水合及每组 500 次稳定性循环，HMR/DevTools、上游、CSS、构建、类型和 LSP 均成功。优化作者模式发现提前计算的节点数组被标为编译 slot，Vue 跳过规范化而使 TransitionGroup 丢失离场行为；已仅在增强分支使用普通 slot 规范化和动态更新标记，优化重排/离场与无动态 props 的消费回归通过。
 
 包消费者已走到真实声明检查：语言服务宿主缺少 realpath，pnpm 链接包的传递依赖无法定位；Windows 的短 TEMP 路径又让 ESM/CJS 形成不同的模块路径身份。现已补齐 SDK 路径解析，并在创建消费者之前规范化临时父目录。链接依赖解析和规范路径/所有权清理短测通过；其中 Windows junction 父目录触发的原生 mkdtemp 异常循环已通过先解析父目录消除，本次探针进程及目录已清理。完整包消费仍以修复提交的远程结果为准。

@@ -6,17 +6,17 @@
 
 远程构建任务先执行 `pnpm build`，随后执行 `pnpm packages:pack`。打包前检查每个源文件与 JS map 的内嵌源码一致，防止将陈旧 dist 误标为当前版本；再检查全部导出目标、README、项目和第三方许可是否进入 tarball。`test-results/packages/pack.json` 保存提交与每个包的文件名、字节数、内容清单数量和 SHA-256。
 
-当前通过 CI artifact 提供 tarball，工作流不执行 npm publish。安装时从同一次构建取得三个包；包间依赖需指向这些本地文件。例如当前 0.0.0 包可在消费者的 pnpm-workspace.yaml 中设置：
+当前通过 CI artifact 提供 tarball，工作流不执行 npm publish。安装时从同一次构建取得三个包；包间依赖需指向这些本地文件。例如当前 1.0.0 包可在消费者的 pnpm-workspace.yaml 中设置：
 
 ```yaml
 overrides:
-  '@zerodep-vue/css': file:./artifacts/zerodep-vue-css-0.0.0.tgz
-  '@zerodep-vue/tsx': file:./artifacts/zerodep-vue-tsx-0.0.0.tgz
+  '@zerodep-vue/css': file:./artifacts/zerodep-vue-css-1.0.0.tgz
+  '@zerodep-vue/tsx': file:./artifacts/zerodep-vue-tsx-1.0.0.tgz
 ```
 
 ```sh
-pnpm add ./artifacts/zerodep-vue-css-0.0.0.tgz ./artifacts/zerodep-vue-tsx-0.0.0.tgz vue@3.5.43
-pnpm add -D ./artifacts/zerodep-vue-compiler-0.0.0.tgz @babel/core@8.0.6 vite@8.3.1 typescript@6.0.3
+pnpm add ./artifacts/zerodep-vue-css-1.0.0.tgz ./artifacts/zerodep-vue-tsx-1.0.0.tgz vue@3.5.43
+pnpm add -D ./artifacts/zerodep-vue-compiler-1.0.0.tgz @babel/core@8.0.6 vite@8.3.1 typescript@6.0.3
 ```
 
 版本变化后以 pack.json 的真实文件名为准。现有 Vue 项目将原 JSX 插件换成 `@zerodep-vue/compiler/vite`，TypeScript 保留 JSX 给本插件；自己的 TSX 页面可按文件设置 `@jsxImportSource @zerodep-vue/tsx`。原生 Vue 响应式、路由接入和应用实例继续由项目管理。

@@ -1,6 +1,6 @@
 {
   "name": "@zerodep-vue/compiler",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "Vue JSX v3.0.0 source fork with isolated TSX authoring extensions.",

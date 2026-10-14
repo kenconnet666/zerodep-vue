@@ -23,7 +23,11 @@ themed.keywords.color._missing;
 
 const display = css.keywords.display.flex; /*hover:flex*/
 const brand = themed.keywords.color._brand; /*hover:brand*/
-css({ display, color: brand, ':hover': { color: themed.keywords.color._brand } });
+themed({ display, color: brand, ':hover': { color: themed.keywords.color._brand } });
+// @ts-expect-error 默认作者只声明系统关键字，业务主题值使用对应的泛型作者入口。
+css({ color: brand });
+// 不同作者生成的 class 仍可直接组合。
+css(themed({ color: brand }), { padding: 4 });
 
 export function reusable<T extends Palette>(author: Css<T>) {
   return author({ color: author.keywords.color._brand });
