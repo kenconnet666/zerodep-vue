@@ -24,10 +24,18 @@ test('component macros recognize import aliases and namespace bindings', async (
     'import * as tsx from "@zerodep-vue/core"; export const C=tsx._component(()=> <div/>);',
   );
   assert(namespaced.includes('createComponent as'));
+  const computed = await compile(
+    'import * as tsx from "@zerodep-vue/core"; export const C=tsx["_component"](()=> <div/>);',
+  );
+  assert(computed.includes('createComponent as'));
   const shadowed = await compile(
     'import {_component} from "@zerodep-vue/core"; function user(_component){return _component(()=> <div/>);}',
   );
   assert(!shadowed.includes('createComponent as'));
+  const unrelated = await compile(
+    'import {_component} from "./business"; export const C=_component(()=> <div/>);',
+  );
+  assert(!unrelated.includes('createComponent as'));
 });
 
 test('invalid prop reassignment and ambiguous initialization have located errors', async () => {

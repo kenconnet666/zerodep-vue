@@ -21,7 +21,8 @@ export type { GlobalRules, GlobalOptions } from './css/global.ts';
 export { _component } from './tsx/component.ts';
 export { For } from './tsx/For.ts';
 export type { ForProps } from './tsx/For.ts';
-import type {} from './tsx/jsx.ts';
+// 类型转导会保留在 .d.ts 中；空的 import type 会被发射器移除，丢失 JSX 注册。
+export type {} from './tsx/jsx.ts';
 
 /** @internal 编译器生成代码与正常作者代码共用根入口。 */
 export { binding, piece, template, add } from './css/bindings.ts';

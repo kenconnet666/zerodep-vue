@@ -2,39 +2,11 @@ import { addNamed } from '@babel/helper-module-imports';
 import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
 import type { State } from '../upstream/interface.ts';
+import { coreModule, importedName } from './bindings.ts';
 
 /** 显式开启可处理只导入项目共享样式的普通 Vue 文件；省略时按工具导入自动接入。 */
 export interface CssOptions {
   css?: boolean;
-}
-
-function isBx(path: NodePath<t.CallExpression>): boolean {
-  const callee = path.node.callee;
-  if (t.isIdentifier(callee)) {
-    const binding = path.scope.getBinding(callee.name);
-    if (
-      !binding?.path.isImportSpecifier() ||
-      !binding.path.parentPath.isImportDeclaration() ||
-      binding.path.parentPath.node.source.value !== '@zerodep-vue/core'
-    )
-      return false;
-    const imported = binding.path.node.imported;
-    return (t.isIdentifier(imported) ? imported.name : imported.value) === 'bx';
-  }
-  if (
-    t.isMemberExpression(callee) &&
-    t.isIdentifier(callee.object) &&
-    !callee.computed &&
-    t.isIdentifier(callee.property, { name: 'bx' })
-  ) {
-    const binding = path.scope.getBinding(callee.object.name);
-    return (
-      !!binding?.path.isImportNamespaceSpecifier() &&
-      binding.path.parentPath.isImportDeclaration() &&
-      binding.path.parentPath.node.source.value === '@zerodep-vue/core'
-    );
-  }
-  return false;
 }
 
 /** JSX 之前只捕获表达式和传递元数据，声明组合与 CSS 生成仍全部在运行时完成。 */
@@ -42,11 +14,11 @@ export function transformCss(
   program: NodePath<t.Program>,
   state: State,
   options?: CssOptions,
-): string | undefined {
+): boolean {
   const hasRuntime = program.node.body.some(
-    (node) => t.isImportDeclaration(node) && node.source.value === '@zerodep-vue/core',
+    (node) => t.isImportDeclaration(node) && node.source.value === coreModule,
   );
-  if (options?.css === false || (options?.css !== true && !hasRuntime)) return;
+  if (options?.css === false || (options?.css !== true && !hasRuntime)) return false;
   if (
     state.opts.pragma ||
     state.file.ast.comments?.some((comment) => /@jsx\s+(?!ImportSource\b)/.test(comment.value))
@@ -54,12 +26,11 @@ export function transformCss(
     throw program.buildCodeFrameError(
       '[ZV_CSS_PRAGMA] CSS 接线需要标准 Vue VNode 工厂；普通自定义 pragma 文件可关闭 zerodep.css。',
     );
-  const runtime = '@zerodep-vue/core';
   const helpers = new Map<string, t.Identifier>();
   const helper = (name: string) => {
     let identifier = helpers.get(name);
     if (!identifier) {
-      identifier = addNamed(program, name, runtime);
+      identifier = addNamed(program, name, coreModule);
       helpers.set(name, identifier);
     }
     return t.cloneNode(identifier);
@@ -98,7 +69,7 @@ export function transformCss(
         path.replaceWith(helper('cloneCssVNode'));
     },
     CallExpression(path) {
-      if (!isBx(path)) return;
+      if (importedName(path.scope, path.node.callee, coreModule) !== 'bx') return;
       if (path.findParent((parent) => captures.has(parent.node)))
         throw path.buildCodeFrameError('[ZV_BX_NESTED] 一个 bx 表达式中无需再次调用 bx。');
       const argument = path.node.arguments[0];
@@ -140,15 +111,15 @@ export function transformCss(
       },
     },
   });
-  return runtime;
+  return true;
 }
 
-export function connectCss(program: NodePath<t.Program>, state: State, runtime: string) {
+export function connectCss(program: NodePath<t.Program>, state: State) {
   const helpers = new Map<string, t.Identifier>();
   const helper = (name: string) => {
     let identifier = helpers.get(name);
     if (!identifier) {
-      identifier = addNamed(program, name, runtime);
+      identifier = addNamed(program, name, coreModule);
       helpers.set(name, identifier);
     }
     return t.cloneNode(identifier);

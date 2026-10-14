@@ -1,5 +1,9 @@
 # Naive UI 生产源码对照
 
+这是编译器的兼容性测试夹具，不是我们发布的组件库，也不是 core 的运行依赖。它用于确认普通 Vue TSX 经过本项目编译器后，真实第三方组件仍能编译、运行，并与增强作者 API 混用。
+
+跟踪的文件仅包含来源、生产清单、构建脚本和测试依赖声明。`.cache/upstream/naive-ui` 是可重新取得的源码缓存；`.generated` 是可重新构建或从 CI 下载的产物。浏览器夹具需要其中的 fork 库、声明和对应报告，因此清理时应按同一批产物处理，不能只删报告或声明而留下失配的库。
+
 源码固定在 [8b249214](https://github.com/tusen-ai/naive-ui/tree/8b249214f17328a47eeb57dd5c7b80a47c94d116)，包版本 2.45.3。源码保存在被忽略的 `.cache/upstream/naive-ui`；fixture 的 package.json 仅安装其运行依赖，不安装 naive-ui 的 npm 预编译包，也不执行上游安装或清理脚本。
 
 `source.json` 固定来源，`production-tsx.json` 记录生产 TSX 路径与 LF 归一化后的 SHA-256。清单排除上游 tests、**tests**、demos、spec/test 文件和测试环境；生产源文件不因没有被演示页引用而排除。`inventory.mjs` 每次核对实际来源与完整文件清单，变更基线必须显式重新生成并审阅。

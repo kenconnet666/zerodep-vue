@@ -25,9 +25,9 @@ const plugin = declare<State, CompilerOptions>((api, options, dirname) => {
       Program: {
         enter(path, state) {
           transformComponents(path, state);
-          const runtime = transformCss(path, state, options.zerodep);
+          const cssEnabled = transformCss(path, state, options.zerodep);
           program.enter(path, state);
-          if (runtime) connectCss(path, state, runtime);
+          if (cssEnabled) connectCss(path, state);
         },
       },
     } as Visitor<State>,

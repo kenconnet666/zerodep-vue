@@ -1,9 +1,9 @@
 import { addNamed } from '@babel/helper-module-imports';
 import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
-import { cssCallKind, isImported } from './hmr.ts';
+import { cssCallKind } from './hmr.ts';
+import { coreModule, importedName } from './bindings.ts';
 
-const runtime = '@zerodep-vue/core';
 /** 只在 Vite 客户端开发转换中调用；位置常量与包装不进入生产及 SSR 输出。 */
 export function instrumentDevtools(program: NodePath<t.Program>, filename: string): void {
   program.scope.crawl();
@@ -15,7 +15,7 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
         : name === 'cloneCssVNode'
           ? 'cloneInspectedVNode'
           : name;
-    if (!helpers.has(name)) helpers.set(name, addNamed(program, imported, runtime));
+    if (!helpers.has(name)) helpers.set(name, addNamed(program, imported, coreModule));
     return t.cloneNode(helpers.get(name)!);
   };
   const location = (node: t.Node, kind: string) => {
@@ -29,7 +29,7 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
     return value;
   };
   for (const statement of program.get('body')) {
-    if (!statement.isImportDeclaration() || statement.node.source.value !== runtime) continue;
+    if (!statement.isImportDeclaration() || statement.node.source.value !== coreModule) continue;
     for (const specifier of statement.node.specifiers) {
       if (!t.isImportSpecifier(specifier)) continue;
       const name = t.isIdentifier(specifier.imported)
@@ -46,7 +46,7 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
     CallExpression: {
       exit(call) {
         if (call.node.extra?.zerodepTraced) return;
-        if (isImported(call.scope, call.node.callee, '@zerodep-vue/core', 'createComponent')) {
+        if (importedName(call.scope, call.node.callee, coreModule) === 'createComponent') {
           const options = call.get('arguments')[0];
           if (options?.isObjectExpression())
             for (const prop of options.get('properties')) {
@@ -65,7 +65,7 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
         }
         let kind = cssCallKind(call.scope, call.node.callee);
         let point: t.Node = call.node;
-        if (!kind && isImported(call.scope, call.node.callee, runtime, 'binding')) {
+        if (!kind && importedName(call.scope, call.node.callee, coreModule) === 'binding') {
           kind = 'binding';
           const getter = call.node.arguments[0];
           if (t.isArrowFunctionExpression(getter)) point = getter.body;

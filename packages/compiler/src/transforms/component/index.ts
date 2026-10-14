@@ -5,39 +5,7 @@ import { runtimeProps } from './types.ts';
 import { prepareDefaults } from './defaults.ts';
 import { writableModels } from './writes.ts';
 import type { State } from '../../upstream/interface.ts';
-
-const runtime = '@zerodep-vue/core';
-
-function fromComponentImport(call: NodePath<t.CallExpression>): boolean {
-  const callee = call.node.callee;
-  const identifier = t.isIdentifier(callee)
-    ? callee
-    : t.isMemberExpression(callee) && t.isIdentifier(callee.object)
-      ? callee.object
-      : undefined;
-  if (!identifier) return false;
-  const binding = call.scope.getBinding(identifier.name);
-  if (
-    !binding?.path.parentPath?.isImportDeclaration() ||
-    binding.path.parentPath.node.source.value !== '@zerodep-vue/core'
-  )
-    return false;
-  if (t.isIdentifier(callee) && binding.path.isImportSpecifier()) {
-    const name = binding.path.node.imported;
-    return (t.isIdentifier(name) ? name.name : name.value) === '_component';
-  }
-  return (
-    binding.path.isImportNamespaceSpecifier() &&
-    t.isMemberExpression(callee) &&
-    ((!callee.computed && t.isIdentifier(callee.property, { name: '_component' })) ||
-      t.isStringLiteral(callee.property, { value: '_component' }))
-  );
-}
-
-function propertyName(node: t.ObjectProperty | t.ObjectMethod): string | undefined {
-  if (!node.computed && t.isIdentifier(node.key)) return node.key.name;
-  if (t.isStringLiteral(node.key)) return node.key.value;
-}
+import { coreModule, importedName, propertyName } from '../bindings.ts';
 
 /** 把本函数的第一个返回分支及后续语句放入 render；嵌套函数的 return 不改变边界。 */
 function lowerRender(setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpression>) {
@@ -173,7 +141,7 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
           t.variableDeclaration('const', [
             t.variableDeclarator(
               t.cloneNode(property.argument),
-              t.callExpression(addNamed(call, 'restProps', runtime), [
+              t.callExpression(addNamed(call, 'restProps', coreModule), [
                 t.cloneNode(props),
                 t.cloneNode(context),
                 t.arrayExpression(
@@ -310,7 +278,7 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
     t.variableDeclaration('const', [
       t.variableDeclarator(
         t.cloneNode(props),
-        t.callExpression(addNamed(call, 'resolveProps', runtime), [
+        t.callExpression(addNamed(call, 'resolveProps', coreModule), [
           t.cloneNode(raw),
           t.cloneNode(context),
           t.objectExpression(defaults),
@@ -338,7 +306,7 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
     t.objectProperty(t.identifier('setup'), fn.node),
   );
   call.replaceWith(
-    t.callExpression(addNamed(call, 'createComponent', runtime), [t.objectExpression(options)]),
+    t.callExpression(addNamed(call, 'createComponent', coreModule), [t.objectExpression(options)]),
   );
 }
 
@@ -351,7 +319,8 @@ export function transformComponents(program: NodePath<t.Program>, state: State) 
     return;
   program.traverse({
     CallExpression(call) {
-      if (fromComponentImport(call)) lower(call, state);
+      if (importedName(call.scope, call.node.callee, coreModule) === '_component')
+        lower(call, state);
     },
   });
   program.scope.crawl();

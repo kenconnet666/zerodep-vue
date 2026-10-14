@@ -2,49 +2,16 @@ import { createHash } from 'node:crypto';
 import { addNamed } from '@babel/helper-module-imports';
 import type { NodePath, Scope } from '@babel/core';
 import * as t from '@babel/types';
+import { coreModule, importedName, propertyName } from './bindings.ts';
 
 export interface HotTransform {
   signature: string;
   compatible: string;
   managed: boolean;
 }
-const cssModule = '@zerodep-vue/core';
-const runtimeModule = '@zerodep-vue/core';
-
-function property(
-  node: t.MemberExpression | t.ObjectProperty | t.ObjectMethod,
-): string | undefined {
-  const value = 'property' in node ? node.property : node.key;
-  return !node.computed && t.isIdentifier(value)
-    ? value.name
-    : t.isStringLiteral(value)
-      ? value.value
-      : undefined;
-}
-function imported(scope: Scope, node: t.Node, source: string, name: string): boolean {
-  if (t.isIdentifier(node)) {
-    const binding = scope.getBinding(node.name);
-    return (
-      !!binding?.path.isImportSpecifier() &&
-      binding.path.parentPath.isImportDeclaration() &&
-      binding.path.parentPath.node.source.value === source &&
-      (t.isIdentifier(binding.path.node.imported)
-        ? binding.path.node.imported.name
-        : binding.path.node.imported.value) === name
-    );
-  }
-  if (t.isMemberExpression(node) && t.isIdentifier(node.object) && property(node) === name) {
-    const binding = scope.getBinding(node.object.name);
-    return (
-      !!binding?.path.isImportNamespaceSpecifier() &&
-      binding.path.parentPath.isImportDeclaration() &&
-      binding.path.parentPath.node.source.value === source
-    );
-  }
-  return false;
-}
 function context(scope: Scope, node: t.Node, seen = new Set<t.Node>()): boolean {
-  if (t.isCallExpression(node)) return imported(scope, node.callee, cssModule, 'createTheme');
+  if (t.isCallExpression(node))
+    return importedName(scope, node.callee, coreModule) === 'createTheme';
   if (!t.isIdentifier(node)) return false;
   const binding = scope.getBinding(node.name);
   if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
@@ -54,10 +21,10 @@ function context(scope: Scope, node: t.Node, seen = new Set<t.Node>()): boolean 
   return !!init && t.isIdentifier(binding.path.node.id) && context(binding.path.scope, init, seen);
 }
 
-/** 按真实 binding 追踪默认导入、命名空间、主题上下文与解构别名，局部同名对象不接管。 */
+/** 按真实 binding 追踪独立入口、命名空间、主题上下文与解构别名，局部同名对象不接管。 */
 function entry(scope: Scope, node: t.Node, name: string, seen = new Set<t.Node>()): boolean {
-  if (imported(scope, node, cssModule, name)) return true;
-  if (t.isMemberExpression(node)) return property(node) === name && context(scope, node.object);
+  if (importedName(scope, node, coreModule) === name) return true;
+  if (t.isMemberExpression(node)) return propertyName(node) === name && context(scope, node.object);
   if (!t.isIdentifier(node)) return false;
   const binding = scope.getBinding(node.name);
   if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
@@ -72,7 +39,7 @@ function entry(scope: Scope, node: t.Node, name: string, seen = new Set<t.Node>(
     id.properties.some(
       (item) =>
         t.isObjectProperty(item) &&
-        property(item) === name &&
+        propertyName(item) === name &&
         t.isIdentifier(item.value, { name: node.name }),
     )
   );
@@ -174,12 +141,12 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
   const renders: NodePath<t.ArrowFunctionExpression>[] = [];
   program.traverse({
     CallExpression(call) {
-      if (!imported(call.scope, call.node.callee, runtimeModule, 'createComponent')) return;
+      if (importedName(call.scope, call.node.callee, coreModule) !== 'createComponent') return;
       const options = call.get('arguments')[0];
       if (!options?.isObjectExpression()) return;
       const setup = options
         .get('properties')
-        .find((path) => path.isObjectProperty() && property(path.node) === 'setup');
+        .find((path) => path.isObjectProperty() && propertyName(path.node) === 'setup');
       if (!setup?.isObjectProperty()) return;
       const value = setup.get('value');
       if (!value.isFunctionExpression() && !value.isArrowFunctionExpression()) return;
@@ -346,8 +313,8 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
   const managed = program.node.body.every(
     (node) => !t.isExpressionStatement(node) || globalCalls.has(node.expression),
   );
-  const register = addNamed(program, 'registerModule', '@zerodep-vue/core');
-  const compatible = addNamed(program, 'compatible', '@zerodep-vue/core');
+  const register = addNamed(program, 'registerModule', coreModule);
+  const compatible = addNamed(program, 'compatible', coreModule);
   program.unshiftContainer(
     'body',
     t.variableDeclaration('const', [
@@ -366,5 +333,3 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
   );
   return { signature: stamp, compatible: compatible.name, managed };
 }
-
-export { imported as isImported };

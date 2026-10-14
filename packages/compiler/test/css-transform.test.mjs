@@ -47,3 +47,19 @@ test('CSS lowering does not capture a shadowed bx or rewrite a tagged template',
   assert(!code.includes('binding as'));
   assert(code.includes('tag`a${1}`'));
 });
+
+test('namespace bindings accept static keys while preserving dynamic and shadowed calls', async () => {
+  const code = await compile(`import * as styles from '@zerodep-vue/core';
+    const first=styles.bx(width);
+    const second=styles['bx'](height);
+    const dynamic=styles[key](height);
+    function local(styles){ return styles.bx(width); }
+  `);
+  assert.equal((code.match(/_binding\(\(\) => /g) ?? []).length, 2);
+  assert(code.includes('styles[key](height)'));
+  assert(code.includes('return styles.bx(width)'));
+  const unrelated = await compile(`import { bx } from './business'; const value=bx(width);`, {
+    zerodep: { css: true },
+  });
+  assert(!unrelated.includes('binding as'));
+});

@@ -468,7 +468,7 @@ DOM `ref` 复用 Vue 已有的 Ref 对象和函数 ref，沿用挂载、更新�
 
 ### 5.7 TSX 类型与编辑器体验
 
-普通旧 TSX 保留显式 `jsxImportSource: vue` 或文件 pragma 的 Vue 类型入口。为保持单一包入口，core 的 index 以类型导入载入精确的全局 JSX 声明；使用增强作者能力的工程保留 `jsx: preserve` 并移除 jsxImportSource。声明复用 Vue 类型，只调整 children、结构化 class 和 ManagedProps，不增加任意属性索引。显式 Vue 类型文件继续使用 Vue 命名空间，不再提供自有 jsx-runtime 子入口。
+普通旧 TSX 保留显式 `jsxImportSource: vue` 或文件 pragma 的 Vue 类型入口。为保持单一包入口，core 的 index 以类型转导载入精确的全局 JSX 声明，并保证连接保留在发布的 .d.ts 中；使用增强作者能力的工程保留 `jsx: preserve` 并移除 jsxImportSource。声明复用 Vue 类型，只调整 children、结构化 class 和 ManagedProps，不增加任意属性索引。显式 Vue 类型文件继续使用 Vue 命名空间，不再提供自有 jsx-runtime 子入口。
 
 阶段 2 的类型验收必须同时覆盖：
 

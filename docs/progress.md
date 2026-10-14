@@ -15,6 +15,10 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前 CSS API 修订
 
+e109eef391caeac057e3c7cd4e7de3ffb10a66b2 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38526187196) 中，类型、编译、核心运行时、上游、Naive、浏览器、开发工具、构建和 LSP 均通过；两个系统的安装包声明消费因缺少 JSX.IntrinsicElements 失败。原因是空的 import type 在 .d.ts 发射时被删除。已改为保留类型转导；针对真实根入口的内存声明消费短测先复现 JSX/泛型 children 错误，修复后通过。完整安装验证以本轮新 CI 为准。
+
+本轮继续清理：导入身份与静态属性名识别收敛到 transforms/bindings.ts，删除 CSS、组件、HMR、开发检查和 Vite 中的重复判断及固定参数传递；命名空间静态 bx 写法统一处理，计算属性及同名业务函数保持原样。删除 .gitignore 中未使用的工具模板、三份与发布包完全相同的许可证副本，以及独立消费者中旧分包需要的 overrides；LSP 参考许可证随脚本归档，包管理器版本沿用根配置。Naive 目录保留为有效兼容性夹具，说明了跟踪文件、源码缓存及浏览器所需产物的职责。
+
 f1471f25561ce0a6570d97fe022ac33ef4ca2c05 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38522535347) 已全部成功，compiler/core 双包合并通过完整远程验证。
 
 本轮继续按用户要求收敛为两个根入口：各包 src 根目录仅保留 index.ts，compiler 分为 babel、vite、editor、transforms、upstream，组件转换内部按类型、默认值和写入职责分文件；core 分为 css、tsx、development。删除 runtime 中间转导及所有技术子入口，语言服务迁入 compiler/src/editor，TypeScript 插件加载器与根导出共用 CJS 实现。JSX 声明随 core 根类型导入载入，显式 Vue JSX 文件保留原生类型。

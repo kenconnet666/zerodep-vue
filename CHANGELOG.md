@@ -1,5 +1,14 @@
 # 变更记录
 
+## 当前源码修订
+
+以下调整发生在下方固定验收基线之后，当前状态与对应 CI 见 [实施记录](docs/progress.md)：
+
+- 合并为 compiler/core 两包，各自仅提供根入口，源码按编译、编辑器、CSS、TSX 和开发工具职责组织。
+- 样式按相同选择器、条件和属性逐项覆盖；后面的声明可继续添加其他属性。
+- 作者使用独立的 css、cx、keywords 等入口；主题仅保留继承 SystemKeywords 后调用 createTheme 的模型。
+- 删除 firstThatWorks、defineVars、createCss 及旧技术子入口；语言服务归入 compiler，保留字面量中文说明与跳转。
+
 ## 1.0.0 — 2026-10-14
 
 本版本面向 Vue VDOM 与纯 TSX。源码 de5973b42c181839a9735576a9ef901ab34cca6c 与对应 tarball 已通过完整 CI 的 29 个任务，原始报告、包哈希及验证范围见 [验收矩阵](docs/acceptance.md)。

@@ -16,6 +16,6 @@ DevTools 8.2.1 的声明间接引用 vue-router 类型。开发依赖 vue-router
 
 上游 JSX 五个测试文件、全部快照及 resolve-type 的测试已复制到 compiler 的 test/upstream 与 test/upstream-resolve-type。只调整被测插件的导入位置；断言与快照保持原样。`vitest.upstream.config.ts` 将同一套测试分别交给官方版和 fork 版，运行时 TSX 使用对应插件实际编译。完整回归在远程按编译器和两份 shard 并行执行，本地只选必要短例。
 
-自有 _component 转换位于 compiler/src/transforms/component.ts，在上游 Program.enter 之前处理明确导入的宏。props 元数据复用 Vue compiler-sfc 的类型解析与 parser，实例默认值和 rest/children 位于 core/src/tsx/runtime.ts。For 直接使用 Vue Fragment。compiler/src/transforms/css.ts 捕获 bx 并接入 JSX/cloneVNode；CSS 声明和规则在 core/src/css 内运行时处理。完整实现与证据见 progress.md。
+自有 _component 转换位于 compiler/src/transforms/component，在上游 Program.enter 之前处理明确导入的宏。props 元数据复用 Vue compiler-sfc 的类型解析与 parser，实例默认值和 rest/children 位于 core/src/tsx/runtime.ts。For 直接使用 Vue Fragment。compiler/src/transforms/css.ts 捕获 bx 并接入 JSX/cloneVNode；各转换共用 bindings.ts 的导入身份识别，CSS 声明和规则在 core/src/css 内运行时处理。完整实现与证据见 progress.md。
 
-项目 LSP 桥接参考了相邻 zerodep-css 的已验证实现，保留 TypeScript 分支，移除 Vue 模板和 Svelte 服务。对应 MIT 许可保存在 licenses/zerodep-css.MIT.txt。语言服务启动配置和依赖解析只引用当前仓库。
+项目 LSP 桥接参考了相邻 zerodep-css 的已验证实现，保留 TypeScript 分支，移除 Vue 模板和 Svelte 服务。对应 MIT 许可保存在 scripts/language-services/LICENSE。Vue JSX、Vite 参考实现及 CSS 类型/说明的许可证保存在对应发布包中，根目录不再重复保存副本。语言服务启动配置和依赖解析只引用当前仓库。

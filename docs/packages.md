@@ -21,7 +21,7 @@ pnpm add -D ./artifacts/zerodep-vue-compiler-1.0.0.tgz @babel/core@8.0.6 vite@8.
 
 版本变化后以 pack.json 的真实文件名为准。现有 Vue 项目从 `@zerodep-vue/compiler` 导入 vitePlugin 替换原 JSX 插件。TypeScript 使用 `jsx: 'preserve'` 并移除 jsxImportSource，导入 core 即载入增强 JSX 声明；原生 Vue 类型可按文件用 `/** @jsxImportSource vue */` 选择。原生 Vue 响应式、路由接入和应用实例继续由项目管理。
 
-`pnpm test:packages` 在系统临时目录中建立真正的消费者，使用独立 pnpm 配置及本地 tarball 覆盖。子进程的 cwd、模块解析和语言服务均来自该安装；不链接工作区，不启用源码条件。它验证 Babel/Vite、ESM/CJS、单个 Vue 实例、实际 SSR 与 CSS 资源，以及声明模式中的泛型、负向类型、中文 hover、补全详情和定义跳转。相关模板位于 fixtures/package-consumer。
+`pnpm test:packages` 在系统临时目录中建立真正的消费者，使用独立 pnpm 配置，直接安装两个本地 tarball，不再设置旧分包之间的 overrides。子进程的 cwd、模块解析和语言服务均来自该安装；不链接工作区，不启用源码条件。它验证 Babel/Vite、ESM/CJS、单个 Vue 实例、实际 SSR 与 CSS 资源，以及声明模式中的泛型、负向类型、中文 hover、补全详情和定义跳转。相关模板位于 fixtures/package-consumer。
 
 SSR 收集按 app／请求 context 的弱键共享，支持 runtime 被打入不同 bundle 后由外部 getCssHost 读取。不同请求仍各自拥有收集结果，冻结的 context 也无需被修改。构建 SSR 库时仍推荐 externalize Vue，保持应用使用同一响应式实例。
 

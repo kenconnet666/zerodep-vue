@@ -51,14 +51,11 @@ try {
   );
   await mkdir(join(owned.root, 'artifacts'));
   const dependencies = {};
-  const overrides = [];
   for (const entry of packed.packages) {
     const data = await readFile(join(artifacts, entry.file));
     assert.equal(sha256(data), entry.sha256, `Tarball hash mismatch: ${entry.name}`);
     await writeFile(join(owned.root, 'artifacts', entry.file), data);
-    const specifier = `file:./artifacts/${entry.file}`;
-    dependencies[entry.name] = specifier;
-    overrides.push(`  '${entry.name}': '${specifier}'`);
+    dependencies[entry.name] = `file:./artifacts/${entry.file}`;
   }
   const require = createRequire(join(root, 'package.json'));
   for (const name of [
@@ -78,7 +75,7 @@ try {
         name: 'zerodep-vue-isolated-consumer',
         private: true,
         type: 'module',
-        packageManager: 'pnpm@11.22.0',
+        packageManager: (await readJson(join(root, 'package.json'))).packageManager,
         dependencies,
       },
       null,
@@ -87,7 +84,7 @@ try {
   );
   await writeFile(
     join(owned.root, 'pnpm-workspace.yaml'),
-    `packages: []\nlinkWorkspacePackages: false\nnodeLinker: isolated\nvirtualStoreDir: node_modules/.pnpm\nenableGlobalVirtualStore: false\nautoInstallPeers: false\nstrictPeerDependencies: true\noverrides:\n${overrides.join('\n')}\n`,
+    'packages: []\nlinkWorkspacePackages: false\nnodeLinker: isolated\nvirtualStoreDir: node_modules/.pnpm\nenableGlobalVirtualStore: false\nautoInstallPeers: false\nstrictPeerDependencies: true\n',
   );
   pnpm(['install', '--ignore-scripts', '--no-frozen-lockfile'], owned.root, { env });
   for (const script of ['verify-runtime.mjs', 'verify-types.mjs']) {
