@@ -28,11 +28,21 @@ test('system keywords stay available beside typed theme members and remain liter
       display: themedKeywords.display.flex,
       color: themedKeywords.color.currentColor,
       width: themedKeywords.width.initial,
+      transformStyle: themedKeywords.transformStyle.preserve3d,
     }),
   );
   assert(style.cssText.includes('display:flex'));
   assert(style.cssText.toLowerCase().includes('color:currentcolor'));
   assert(style.cssText.includes('width:initial'));
+  assert(style.cssText.includes('transform-style:preserve-3d'));
+  assert.equal(keywords.transformStyle['preserve-3d'], undefined);
+  assert(
+    resolveClass(
+      css({ WebkitTransformStyle: keywords.WebkitTransformStyle.preserve3d }),
+    ).cssText.includes('-webkit-transform-style:preserve-3d'),
+  );
+  for (const group of Object.values(keywords))
+    for (const member of Object.keys(group)) assert.match(member, /^[A-Za-z_$][\w$]*$/);
   assert.deepEqual(style.variables, {});
   assert.equal(themedKeywords.color._brand, themedKeywords.color._brand);
   assert.equal(keywords.width.nonexistent, undefined);

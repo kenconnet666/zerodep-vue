@@ -56,7 +56,9 @@ class DarkTheme extends AppTheme {
 
 属性、系统关键字和主题成员提供 JSDoc。T 以 SystemKeywords 为基础，KeywordView<T> 合并系统视图与 T 的继承主题成员；`T extends AppTheme` 的共享函数也保留系统关键字、主题成员及成员注释。对象、具名样式、嵌套条件和组件外部 `CssInput<T>` 都使用同一 T，默认系统作者仍拒绝未声明的主题引用。
 
-当前生成器覆盖 857 个属性，按布局、尺寸、间距、排版等 14 类组织类型与 @category 文档；厂商和历史属性独立归入兼容类，作者对象仍然使用标准 camelCase 属性。关键字类型使用 DisplayKeywords 等语义命名，共享 CSS-wide、命名颜色和系统颜色定义。成员使用 inlineFlex、currentColor、revertLayer 等规范化拼写，不重复提供连字符别名；原生 CSS 字符串继续接受原始拼写。72 个单色兼容属性仍由固定类型数据生成。
+当前生成器覆盖 857 个属性，按布局、尺寸、间距、排版等 14 类组织类型与 @category 文档；厂商和历史属性独立归入兼容类，作者对象仍然使用标准 camelCase 属性。分组规则检查重复命中，避免依靠顺序吞掉更具体的分类；anchorName、positionArea、positionTry 等锚点定位属性统一归入布局与定位类，columnGap 归入间距类。关键字类型使用 DisplayKeywords 等语义命名，共享 CSS-wide、命名颜色和系统颜色定义。成员使用 inlineFlex、currentColor、revertLayer、preserve3d 等规范化拼写，不重复提供连字符别名；原生 CSS 字符串继续接受原始拼写。72 个单色兼容属性仍由固定类型数据生成。
+
+命名修订：原来的 `keywords.transformStyle['preserve-3d']` 改为 `keywords.transformStyle.preserve3d`，厂商前缀属性的对应成员同步调整。普通对象仍写 `transformStyle: 'preserve-3d'`。生成器同时检查成员可用于点访问及规范化后的重名冲突。
 
 属性文档提供中文用途、常用值、规范初始值与对象 API 示例。旧链式示例不进入新声明。源码和生成文件由固定依赖复现，说明与许可来源见 CSS 包的 THIRD_PARTY_NOTICES.md。发布声明中的泛型、成员补全详情及定义跳转由独立包消费者在远程验证。
 
@@ -73,5 +75,17 @@ TypeScript 6 的原生服务没有自动为这些字符串候选返回成员注�
   }
 }
 ```
+
+属性值中的括号、`as const`、`satisfies`、非空断言、三元表达式的结果分支和 `bx(...)` 也保留字面量编辑能力。空字符串、尚未写完的字符串同样可以取得属性候选。比如：
+
+```tsx
+css({
+  display: active ? 'inline-flex' : 'none',
+  position: bx(active ? 'relative' : 'static'),
+  boxSizing: 'border-box' as const,
+});
+```
+
+`bx` 按本库声明身份识别，支持导入别名、命名空间访问及 const 函数别名。业务同名函数、仅标注为 `typeof bx` 的包装函数和可重新赋值的别名不会被接管。三元条件本身、字符串拼接片段及其他函数参数也保持原生服务行为。编辑器补充候选不放宽属性类型，错误值仍由 TypeScript 报错；泛型作者继续沿用同一个 T 的主题成员和属性约束。
 
 本仓库已在 tsconfig.base.json 和独立 LSP 启动配置中启用。编辑器首次加载或更新扩展后，需要重新加载 TypeScript 服务；源码与安装包分别验证，不能把 MCP 的 stdio 成功直接当成 IDE 提示已刷新。声明、注释和扩展不由 CSS 的浏览器运行入口导入。

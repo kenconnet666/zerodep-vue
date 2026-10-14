@@ -3,7 +3,7 @@ export const propertyGroups = [
   [
     'Layout',
     '布局与定位',
-    /^(display|position|inset|top$|right$|bottom$|left$|float$|clear$|zIndex|flex|align|justify|place|order$|grid|columns?$|column(?!Rule)|verticalAlign)/,
+    /^(display|position|anchor|inset|top$|right$|bottom$|left$|float$|clear$|zIndex|flex|align|justify|place|order$|grid|columns?$|column(?!Rule|Gap)|verticalAlign)/,
   ],
   ['Sizing', '尺寸与比例', /^(width|height|min|max|inlineSize|blockSize|aspectRatio|boxSizing)/],
   ['Spacing', '内外间距', /^(margin|padding|gap|rowGap|columnGap)/],
@@ -28,12 +28,12 @@ export const propertyGroups = [
   [
     'Interaction',
     '交互与显示控制',
-    /^(cursor|pointerEvents|touchAction|userSelect|resize|appearance|visibility|contentVisibility|caret)/,
+    /^(cursor|pointerEvents|touchAction|userSelect|resize|appearance|visibility|contentVisibility|caret(?!Color))/,
   ],
   [
     'Structure',
     '内容、容器与分页',
-    /^(content|contain|container|counter|listStyle|tableLayout|captionSide|emptyCells|break|page|orphans|widows|anchor|positionArea|positionTry)/,
+    /^(content$|contain|container|counter|listStyle|tableLayout|captionSide|emptyCells|break|page|orphans|widows)/,
   ],
   ['Svg', 'SVG 属性', null],
   ['Compatibility', '厂商与历史兼容属性', null],
@@ -42,11 +42,9 @@ export const propertyGroups = [
 
 export function propertyGroup(name, svg, obsolete) {
   if (/^(Webkit|Moz|ms|O|Khtml)[A-Z]/.test(name) || obsolete.has(name)) return 'Compatibility';
-  // 复合属性先归属它的真实用途，避免 columnGap 被布局前缀规则截走。
-  if (/^(gap|rowGap|columnGap)$/.test(name)) return 'Spacing';
+  const matches = propertyGroups.filter(([, , pattern]) => pattern?.test(name));
+  if (matches.length > 1)
+    throw new Error(`CSS 属性 ${name} 同时命中 ${matches.map(([group]) => group).join('、')}。`);
   // SVG 也复用 color、display 等通用属性；它们仍按通用用途分组。
-  return (
-    propertyGroups.find(([, , pattern]) => pattern?.test(name))?.[0] ??
-    (svg.has(name) ? 'Svg' : 'Other')
-  );
+  return matches[0]?.[0] ?? (svg.has(name) ? 'Svg' : 'Other');
 }

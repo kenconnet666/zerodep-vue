@@ -48,6 +48,12 @@ for (const [name, group] of Object.entries({
   boxSizing: 'Sizing',
   fill: 'Svg',
   WebkitLineClamp: 'Compatibility',
+  caretColor: 'Colors',
+  columnGap: 'Spacing',
+  contentVisibility: 'Interaction',
+  positionArea: 'Layout',
+  positionTryFallbacks: 'Layout',
+  anchorName: 'Layout',
 }))
   assert.equal(propertyGroup(name, svg, obsolete), group, `Unexpected property category: ${name}`);
 const nativeDocs = new Map(
@@ -173,7 +179,7 @@ const commonGroups = [
 const memberName = (value) =>
   value === 'currentcolor'
     ? 'currentColor'
-    : value.replace(/-([a-z])/g, (_match, letter) => letter.toUpperCase());
+    : value.replace(/-([a-z0-9])/g, (_match, letter) => letter.toUpperCase());
 function keywordView(typeName, literalName, values, parents, comment) {
   const stable = values.filter((value) => memberName(value) === value);
   const bases = parents.map((name) => `${name}<Key>`);
@@ -229,6 +235,10 @@ for (const property of properties) {
   const members = {};
   for (const value of values) {
     const member = memberName(value);
+    assert(
+      /^[A-Za-z_$][\w$]*$/.test(member),
+      `Keyword member needs a usable name: ${name}.${member}`,
+    );
     assert(
       !members[member] || members[member].toLowerCase() === value.toLowerCase(),
       `Keyword member collision: ${name}.${member}`,

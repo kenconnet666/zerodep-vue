@@ -58,6 +58,22 @@ export interface LayoutProperties<T extends SystemKeywords = SystemKeywords> {
    */
   readonly alignTracks?: PropertyValue<'alignTracks', T>;
   /**
+   * 为元素声明锚点名称，供锚点定位的元素引用。
+   *
+   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * @category 布局与定位
+   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-name
+   */
+  readonly anchorName?: PropertyValue<'anchorName', T>;
+  /**
+   * 限制锚点名称的可见范围，避免同名锚点跨组件互相影响。
+   *
+   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * @category 布局与定位
+   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-scope
+   */
+  readonly anchorScope?: PropertyValue<'anchorScope', T>;
+  /**
    * 设置定位元素相对于其定位参照的下侧偏移。
    *
    * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
@@ -3587,22 +3603,6 @@ export interface InteractionProperties<T extends SystemKeywords = SystemKeywords
 }
 /** 内容、容器与分页；泛型 T 保留系统与继承主题关键字。 */
 export interface StructureProperties<T extends SystemKeywords = SystemKeywords> {
-  /**
-   * 为元素声明锚点名称，供锚点定位的元素引用。
-   *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
-   * @category 内容、容器与分页
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-name
-   */
-  readonly anchorName?: PropertyValue<'anchorName', T>;
-  /**
-   * 限制锚点名称的可见范围，避免同名锚点跨组件互相影响。
-   *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
-   * @category 内容、容器与分页
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-scope
-   */
-  readonly anchorScope?: PropertyValue<'anchorScope', T>;
   /**
    * 设置元素之后的分页、分栏或区域分片行为。
    *

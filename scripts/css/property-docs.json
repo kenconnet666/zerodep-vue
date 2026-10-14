@@ -870,7 +870,13 @@
     "height": "width",
     "inlineSize": "width",
     "blockSize": "width",
-    "backgroundSize": "maskSize"
+    "backgroundSize": "maskSize",
+    "minHeight": "minWidth",
+    "minInlineSize": "minWidth",
+    "minBlockSize": "minWidth",
+    "maxHeight": "maxWidth",
+    "maxInlineSize": "maxWidth",
+    "maxBlockSize": "maxWidth"
   },
   "keywords": {
     "backgroundImage": {
@@ -889,7 +895,14 @@
       "stretch": "在自动尺寸和最小/最大约束允许时沿行内轴拉伸。"
     },
     "minWidth": {
-      "auto": "自动最小尺寸由布局模式决定；Flex/Grid 项目可能受内容最小宽度限制。"
+      "auto": "自动最小尺寸由布局模式决定；Flex/Grid 项目可能受内容的最小内部尺寸限制。",
+      "min-content": {
+        "summary": "以内容的最小内部尺寸作为尺寸下限；文字会利用允许的软换行机会。",
+        "comparison": "max-content 以不进行软换行的内部尺寸为下限，可能明显撑大容器。",
+        "usage": "约束最小可读尺寸；需要 Flex 项目突破自动内容下限时通常应考虑明确的 0。"
+      },
+      "max-content": "以不进行软换行的最大内部尺寸作为尺寸下限；长文本可能使元素超出容器。",
+      "fit-content": "按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸下限；不同于带显式参数的 fit-content(...)。"
     },
     "fontWeight": {
       "normal": "正常字重，等价于数值 400。",
@@ -987,7 +1000,18 @@
         "notes": "不能靠它保留可聚焦交互；重新显示时需按组件需求管理焦点。",
         "examples": ["css({ display: \"none\" })"]
       },
-      "list-item": "生成带列表标记的主盒子，标记由 list-style 等属性控制。"
+      "list-item": "生成带列表标记的主盒子，标记由 list-style 等属性控制。",
+      "flow": "内部使用普通流布局；是否形成新的块格式化上下文还取决于定位、浮动、溢出等条件。需要明确建立独立块格式化上下文时使用 flow-root。",
+      "table": "创建块级表格盒，内部按表格行列布局；不会为普通元素增加 HTML 表格的语义。",
+      "inline-table": "创建行内级表格盒，可与文字同行；内部仍采用表格布局。",
+      "table-caption": "作为表格标题盒参与布局，位置由 caption-side 控制。",
+      "table-cell": "作为表格单元格参与行列尺寸计算，可使用 vertical-align 控制单元格内容的垂直对齐。",
+      "table-column": "作为表格列参与布局，用于列级尺寸和部分样式；不能把任意内容当成一列直接显示。",
+      "table-column-group": "把多个表格列组织为列组，对应 colgroup 的布局角色。",
+      "table-row": "作为表格的一行，组织其中的单元格。",
+      "table-row-group": "把多行组织成表格主体行组，对应 tbody 的布局角色。",
+      "table-header-group": "作为表头行组参与表格布局，对应 thead 的布局角色。",
+      "table-footer-group": "作为表尾行组参与表格布局，对应 tfoot 的布局角色。"
     },
     "position": {
       "static": "参与普通文档流，top/right/bottom/left 等定位偏移不生效。",
@@ -1110,7 +1134,10 @@
       "start": "按对齐轴的逻辑起始侧对齐。",
       "end": "按对齐轴的逻辑结束侧对齐。",
       "flex-start": "在 Flex 中按交叉轴起始侧对齐；交叉轴方向受换行方式影响。",
-      "flex-end": "在 Flex 中按交叉轴结束侧对齐。"
+      "flex-end": "在 Flex 中按交叉轴结束侧对齐。",
+      "self-start": "按项目自身书写方向的起始侧对齐；项目与容器书写方向不同时，结果可能不同于 start。",
+      "self-end": "按项目自身书写方向的结束侧对齐；不同于总按容器方向计算的 end。",
+      "anchor-center": "对锚点定位的元素，沿块方向与关联锚点的中心对齐；需同时具有有效的锚点定位关系。"
     },
     "justifyContent": {
       "center": "将整体内容放在主轴或行内轴的中间，不改变项目内部文字对齐。",
@@ -1131,7 +1158,12 @@
       },
       "flex-start": "Flex 内容靠主轴起点排列；起点受 flex-direction 影响。",
       "flex-end": "Flex 内容靠主轴终点排列。",
-      "stretch": "在支持的布局中拉伸自动尺寸的内容；Flex 主轴增长通常由 flex-grow 控制。"
+      "stretch": "在支持的布局中拉伸自动尺寸的内容；Flex 主轴增长通常由 flex-grow 控制。",
+      "start": "让整体内容靠对齐容器在该轴上的逻辑起始侧排列；与 flex-start 的 Flex 主轴起点含义不同。",
+      "end": "让整体内容靠对齐容器在该轴上的逻辑结束侧排列。",
+      "left": "沿适用轴靠物理左侧排列，不随文字方向交换；该轴不支持左右方向时按 start 处理。",
+      "right": "沿适用轴靠物理右侧排列，不随文字方向交换；该轴不支持左右方向时按 start 处理。",
+      "normal": "采用布局模式的默认分布：通常按 stretch 处理；Flex 中增长由 flex-grow 控制，因此这里表现为靠起始侧排列。"
     },
     "width": {
       "auto": "让布局算法决定尺寸，不保证等于父元素尺寸。",
@@ -1179,7 +1211,15 @@
         "notes": "后代可以恢复命中；来自后代的事件仍可能经过祖先监听器。",
         "examples": ["css({ pointerEvents: \"none\" })"]
       },
-      "auto": "采用当前元素类型的默认命中规则。"
+      "auto": "采用当前元素类型的默认命中规则。",
+      "visiblePainted": "SVG 命中规则：visibility 为 visible，且指针位于实际启用 fill 或 stroke 的区域；不把它当成通用 HTML 控件规则。",
+      "visibleFill": "SVG 命中规则：visibility 为 visible 且指针位于填充内部；fill 是否为 none 不影响命中。",
+      "visibleStroke": "SVG 命中规则：visibility 为 visible 且指针位于描边区域；stroke 是否为 none 不影响命中。",
+      "visible": "SVG 命中规则：visibility 为 visible 时，填充内部和描边区域都可命中，不要求 fill 或 stroke 实际绘制。",
+      "painted": "SVG 命中规则：实际启用 fill 或 stroke 的区域可命中，不检查 visibility。",
+      "fill": "SVG 命中规则：填充内部可命中，不检查 fill 或 visibility 的值。",
+      "stroke": "SVG 命中规则：描边区域可命中，不检查 stroke 或 visibility 的值。",
+      "all": "SVG 命中规则：填充内部和描边区域都可命中，不检查 fill、stroke 或 visibility；不是禁用状态的反义词。"
     },
     "userSelect": {
       "none": "阻止常规文本选取，不是内容保护或访问控制。",
@@ -1205,7 +1245,12 @@
         "examples": ["css({ whiteSpace: \"pre-wrap\" })"]
       },
       "pre-line": "折叠空格等空白但保留源换行，同时允许软换行。",
-      "break-spaces": "保留空白并允许在保留的空格后换行；行末空格占据空间。"
+      "break-spaces": "保留空白并允许在保留的空格后换行；行末空格占据空间。",
+      "collapse": "折叠连续空白和源换行；单独用于 white-space 时，未指定的换行模式取初始值 wrap。",
+      "preserve": "保留空白和源换行；单独用于 white-space 时仍允许软换行，相当于 preserve wrap（pre-wrap）。",
+      "preserve-breaks": "折叠连续空格但保留源换行；单独用于 white-space 时相当于 preserve-breaks wrap（pre-line）。",
+      "preserve-spaces": "保留空格序列，把制表符和源换行转为空格；单独用于 white-space 时允许软换行。使用前核对目标浏览器对此值的支持。",
+      "wrap": "允许按正常换行机会软换行；单独用于 white-space 时空白折叠取初始值 collapse，相当于 normal。"
     },
     "overflowWrap": {
       "anywhere": {
@@ -1283,7 +1328,13 @@
       "none": "禁用浏览器在该区域处理的平移和缩放手势，可能影响用户缩放可访问性。",
       "manipulation": "允许平移和连续缩放，通常禁用双击缩放等额外手势。",
       "pan-x": "允许浏览器处理水平单指平移。",
-      "pan-y": "允许浏览器处理垂直单指平移。"
+      "pan-y": "允许浏览器处理垂直单指平移。",
+      "auto": "允许浏览器处理平移和缩放手势；最终允许的手势还受相关祖先元素的 touch-action 约束。",
+      "pan-left": "允许以向左滚动开始的单指平移，手指起始移动方向相反；开始后仍可反向滚动。",
+      "pan-right": "允许以向右滚动开始的单指平移，手指起始移动方向相反；开始后仍可反向滚动。",
+      "pan-up": "允许以向上滚动开始的单指平移，即手指最初向下移动；开始后仍可反向滚动。",
+      "pan-down": "允许以向下滚动开始的单指平移，即手指最初向上移动；开始后仍可反向滚动。",
+      "pinch-zoom": "允许浏览器处理多指缩放和平移，可与 pan-x、pan-y 等单指方向规则组合。"
     },
     "strokeLinecap": {
       "butt": "在端点处平直截断描边，不向外延伸。",
@@ -1293,6 +1344,21 @@
     "fillRule": {
       "evenodd": "按射线穿过路径次数的奇偶性判断内部，适合交叠或有孔路径。",
       "nonzero": "按有方向的绕数判断路径内部，子路径方向会影响结果。"
+    },
+    "maxWidth": {
+      "none": "不由该属性设置尺寸上限；其他尺寸、最小尺寸和布局规则仍然生效。",
+      "min-content": "以内容的最小内部尺寸作为尺寸上限；文本按允许的换行机会收缩，但更大的最小尺寸约束仍优先。",
+      "max-content": "以不进行软换行的最大内部尺寸作为尺寸上限；这不是把首选尺寸直接设为该值。",
+      "fit-content": "按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸上限。"
+    },
+    "transformStyle": {
+      "flat": "将子元素的三维位置展平到当前元素的平面；这是初始行为，并非移除子元素自身的 transform。",
+      "preserve-3d": {
+        "summary": "让子元素继续处于三维空间，适合多层三维场景。",
+        "comparison": "flat 会将后代展平到当前元素的平面；preserve-3d 本身不提供透视效果。",
+        "notes": "该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。",
+        "examples": ["css({ transformStyle: \"preserve-3d\" })"]
+      }
     }
   }
 }

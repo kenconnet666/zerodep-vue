@@ -56,6 +56,7 @@ try {
     ['brand', 'themedKeywords.color.', '_brand'],
     ['genericBrand', 'keywords.color.', '_brand'],
     ['genericFlex', 'keywords.display.', 'flex'],
+    ['preserve3d', 'keywords.transformStyle.', 'preserve3d'],
   ]) {
     const marker = text.indexOf(`/*hover:${name}*/`);
     assert(marker > 0, `Missing probe marker ${name}`);
@@ -111,6 +112,10 @@ try {
   for (const [marker, value] of [
     ['font', 'inherit'],
     ['display', 'inline-flex'],
+    ['conditional', 'inline-flex'],
+    ['binding', 'relative'],
+    ['assertion', 'border-box'],
+    ['transform', 'preserve-3d'],
   ]) {
     const end = text.indexOf('// literal:' + marker);
     assert(end > 0);

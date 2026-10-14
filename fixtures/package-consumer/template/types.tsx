@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import { _component, For } from '@zerodep-vue/tsx';
-import { css, keywords } from '@zerodep-vue/css';
+import { css, bx as bind, keywords } from '@zerodep-vue/css';
 import type { CssContext, CssInput, CssObject } from '@zerodep-vue/css';
 import { Field, Palette, themed, themedKeywords } from './App';
 
@@ -27,6 +27,21 @@ export const literalStyles = css({
   font: 'inherit', // literal:font
   ':hover': { display: 'inline-flex' }, // literal:display
 });
+export const transform = keywords.transformStyle.preserve3d; /*hover:preserve3d*/
+// @ts-expect-error 规范化成员只保留点访问拼写；CSS 字符串仍可使用 preserve-3d。
+keywords.transformStyle['preserve-3d'];
+export function expressionLiterals<T extends Palette>(
+  { css, keywords }: CssContext<T>,
+  active: boolean,
+) {
+  return css({
+    display: active ? 'none' : 'inline-flex', // literal:conditional
+    position: bind(active ? 'static' : 'relative'), // literal:binding
+    boxSizing: 'border-box' as const, // literal:assertion
+    transformStyle: 'preserve-3d', // literal:transform
+    color: keywords.color._brand,
+  });
+}
 themed({ display, color: brand, ':hover': { color: themedKeywords.color._brand } });
 // @ts-expect-error 默认作者只声明系统关键字，业务主题值使用对应的泛型作者入口。
 css({ color: brand });

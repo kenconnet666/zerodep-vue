@@ -1082,8 +1082,7 @@ export interface AlignContentValues extends CssWideValues {
 }
 export interface AlignItemsValues extends CssWideValues {
   /**
-   * align-items 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
+   * 对锚点定位的元素，沿块方向与关联锚点的中心对齐；需同时具有有效的锚点定位关系。
    */
   readonly 'anchor-center': 'anchor-center';
   /**
@@ -1118,13 +1117,11 @@ export interface AlignItemsValues extends CssWideValues {
    */
   readonly normal: 'normal';
   /**
-   * align-items 的原生 self-end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
+   * 按项目自身书写方向的结束侧对齐；不同于总按容器方向计算的 end。
    */
   readonly 'self-end': 'self-end';
   /**
-   * align-items 的原生 self-start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
+   * 按项目自身书写方向的起始侧对齐；项目与容器书写方向不同时，结果可能不同于 start。
    */
   readonly 'self-start': 'self-start';
   /**
@@ -5016,8 +5013,7 @@ export interface DisplayValues extends CssWideValues {
    */
   readonly flex: 'flex';
   /**
-   * display 的原生 flow 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 内部使用普通流布局；是否形成新的块格式化上下文还取决于定位、浮动、溢出等条件。需要明确建立独立块格式化上下文时使用 flow-root。
    */
   readonly flow: 'flow';
   /**
@@ -5094,8 +5090,7 @@ export interface DisplayValues extends CssWideValues {
    */
   readonly 'inline-list-item': 'inline-list-item';
   /**
-   * display 的原生 inline-table 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 创建行内级表格盒，可与文字同行；内部仍采用表格布局。
    */
   readonly 'inline-table': 'inline-table';
   /**
@@ -5146,48 +5141,39 @@ export interface DisplayValues extends CssWideValues {
    */
   readonly 'run-in': 'run-in';
   /**
-   * display 的原生 table 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 创建块级表格盒，内部按表格行列布局；不会为普通元素增加 HTML 表格的语义。
    */
   readonly table: 'table';
   /**
-   * display 的原生 table-caption 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表格标题盒参与布局，位置由 caption-side 控制。
    */
   readonly 'table-caption': 'table-caption';
   /**
-   * display 的原生 table-cell 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表格单元格参与行列尺寸计算，可使用 vertical-align 控制单元格内容的垂直对齐。
    */
   readonly 'table-cell': 'table-cell';
   /**
-   * display 的原生 table-column 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表格列参与布局，用于列级尺寸和部分样式；不能把任意内容当成一列直接显示。
    */
   readonly 'table-column': 'table-column';
   /**
-   * display 的原生 table-column-group 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 把多个表格列组织为列组，对应 colgroup 的布局角色。
    */
   readonly 'table-column-group': 'table-column-group';
   /**
-   * display 的原生 table-footer-group 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表尾行组参与表格布局，对应 tfoot 的布局角色。
    */
   readonly 'table-footer-group': 'table-footer-group';
   /**
-   * display 的原生 table-header-group 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表头行组参与表格布局，对应 thead 的布局角色。
    */
   readonly 'table-header-group': 'table-header-group';
   /**
-   * display 的原生 table-row 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表格的一行，组织其中的单元格。
    */
   readonly 'table-row': 'table-row';
   /**
-   * display 的原生 table-row-group 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 把多行组织成表格主体行组，对应 tbody 的布局角色。
    */
   readonly 'table-row-group': 'table-row-group';
 }
@@ -7128,8 +7114,7 @@ export interface JustifyContentValues extends CssWideValues {
    */
   readonly center: 'center';
   /**
-   * justify-content 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content
+   * 让整体内容靠对齐容器在该轴上的逻辑结束侧排列。
    */
   readonly end: 'end';
   /**
@@ -7141,17 +7126,15 @@ export interface JustifyContentValues extends CssWideValues {
    */
   readonly 'flex-start': 'flex-start';
   /**
-   * justify-content 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content
+   * 沿适用轴靠物理左侧排列，不随文字方向交换；该轴不支持左右方向时按 start 处理。
    */
   readonly left: 'left';
   /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
+   * 采用布局模式的默认分布：通常按 stretch 处理；Flex 中增长由 flex-grow 控制，因此这里表现为靠起始侧排列。
    */
   readonly normal: 'normal';
   /**
-   * justify-content 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content
+   * 沿适用轴靠物理右侧排列，不随文字方向交换；该轴不支持左右方向时按 start 处理。
    */
   readonly right: 'right';
   /**
@@ -7181,8 +7164,7 @@ export interface JustifyContentValues extends CssWideValues {
    */
   readonly 'space-evenly': 'space-evenly';
   /**
-   * justify-content 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content
+   * 让整体内容靠对齐容器在该轴上的逻辑起始侧排列；与 flex-start 的 Flex 主轴起点含义不同。
    */
   readonly start: 'start';
   /**
@@ -8231,22 +8213,19 @@ export interface MaxBlockSizeValues extends CssWideValues {
    */
   readonly '-webkit-fill-available': '-webkit-fill-available';
   /**
-   * max-block-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-block-size
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸上限。
    */
   readonly 'fit-content': 'fit-content';
   /**
-   * max-block-size 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-block-size
+   * 以不进行软换行的最大内部尺寸作为尺寸上限；这不是把首选尺寸直接设为该值。
    */
   readonly 'max-content': 'max-content';
   /**
-   * max-block-size 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-block-size
+   * 以内容的最小内部尺寸作为尺寸上限；文本按允许的换行机会收缩，但更大的最小尺寸约束仍优先。
    */
   readonly 'min-content': 'min-content';
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
+   * 不由该属性设置尺寸上限；其他尺寸、最小尺寸和布局规则仍然生效。
    */
   readonly none: 'none';
 }
@@ -8282,8 +8261,7 @@ export interface MaxHeightValues extends CssWideValues {
    */
   readonly '-webkit-min-content': '-webkit-min-content';
   /**
-   * max-height 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸上限。
    */
   readonly 'fit-content': 'fit-content';
   /**
@@ -8292,17 +8270,15 @@ export interface MaxHeightValues extends CssWideValues {
    */
   readonly intrinsic: 'intrinsic';
   /**
-   * max-height 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
+   * 以不进行软换行的最大内部尺寸作为尺寸上限；这不是把首选尺寸直接设为该值。
    */
   readonly 'max-content': 'max-content';
   /**
-   * max-height 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
+   * 以内容的最小内部尺寸作为尺寸上限；文本按允许的换行机会收缩，但更大的最小尺寸约束仍优先。
    */
   readonly 'min-content': 'min-content';
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
+   * 不由该属性设置尺寸上限；其他尺寸、最小尺寸和布局规则仍然生效。
    */
   readonly none: 'none';
 }
@@ -8328,22 +8304,19 @@ export interface MaxInlineSizeValues extends CssWideValues {
    */
   readonly '-webkit-fill-available': '-webkit-fill-available';
   /**
-   * max-inline-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-inline-size
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸上限。
    */
   readonly 'fit-content': 'fit-content';
   /**
-   * max-inline-size 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-inline-size
+   * 以不进行软换行的最大内部尺寸作为尺寸上限；这不是把首选尺寸直接设为该值。
    */
   readonly 'max-content': 'max-content';
   /**
-   * max-inline-size 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-inline-size
+   * 以内容的最小内部尺寸作为尺寸上限；文本按允许的换行机会收缩，但更大的最小尺寸约束仍优先。
    */
   readonly 'min-content': 'min-content';
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
+   * 不由该属性设置尺寸上限；其他尺寸、最小尺寸和布局规则仍然生效。
    */
   readonly none: 'none';
 }
@@ -8385,8 +8358,7 @@ export interface MaxWidthValues extends CssWideValues {
    */
   readonly '-webkit-min-content': '-webkit-min-content';
   /**
-   * max-width 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸上限。
    */
   readonly 'fit-content': 'fit-content';
   /**
@@ -8395,17 +8367,15 @@ export interface MaxWidthValues extends CssWideValues {
    */
   readonly intrinsic: 'intrinsic';
   /**
-   * max-width 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
+   * 以不进行软换行的最大内部尺寸作为尺寸上限；这不是把首选尺寸直接设为该值。
    */
   readonly 'max-content': 'max-content';
   /**
-   * max-width 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
+   * 以内容的最小内部尺寸作为尺寸上限；文本按允许的换行机会收缩，但更大的最小尺寸约束仍优先。
    */
   readonly 'min-content': 'min-content';
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
+   * 不由该属性设置尺寸上限；其他尺寸、最小尺寸和布局规则仍然生效。
    */
   readonly none: 'none';
 }
@@ -8426,22 +8396,23 @@ export interface MinBlockSizeValues extends CssWideValues {
    */
   readonly '-webkit-fill-available': '-webkit-fill-available';
   /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
+   * 自动最小尺寸由布局模式决定；Flex/Grid 项目可能受内容的最小内部尺寸限制。
    */
   readonly auto: 'auto';
   /**
-   * min-block-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-block-size
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸下限；不同于带显式参数的 fit-content(...)。
    */
   readonly 'fit-content': 'fit-content';
   /**
-   * min-block-size 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-block-size
+   * 以不进行软换行的最大内部尺寸作为尺寸下限；长文本可能使元素超出容器。
    */
   readonly 'max-content': 'max-content';
   /**
-   * min-block-size 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-block-size
+   * 以内容的最小内部尺寸作为尺寸下限；文字会利用允许的软换行机会。
+   *
+   * 区别：max-content 以不进行软换行的内部尺寸为下限，可能明显撑大容器。
+   *
+   * 适用场景：约束最小可读尺寸；需要 Flex 项目突破自动内容下限时通常应考虑明确的 0。
    */
   readonly 'min-content': 'min-content';
 }
@@ -8477,12 +8448,11 @@ export interface MinHeightValues extends CssWideValues {
    */
   readonly '-webkit-min-content': '-webkit-min-content';
   /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
+   * 自动最小尺寸由布局模式决定；Flex/Grid 项目可能受内容的最小内部尺寸限制。
    */
   readonly auto: 'auto';
   /**
-   * min-height 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸下限；不同于带显式参数的 fit-content(...)。
    */
   readonly 'fit-content': 'fit-content';
   /**
@@ -8491,13 +8461,15 @@ export interface MinHeightValues extends CssWideValues {
    */
   readonly intrinsic: 'intrinsic';
   /**
-   * min-height 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
+   * 以不进行软换行的最大内部尺寸作为尺寸下限；长文本可能使元素超出容器。
    */
   readonly 'max-content': 'max-content';
   /**
-   * min-height 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
+   * 以内容的最小内部尺寸作为尺寸下限；文字会利用允许的软换行机会。
+   *
+   * 区别：max-content 以不进行软换行的内部尺寸为下限，可能明显撑大容器。
+   *
+   * 适用场景：约束最小可读尺寸；需要 Flex 项目突破自动内容下限时通常应考虑明确的 0。
    */
   readonly 'min-content': 'min-content';
 }
@@ -8523,22 +8495,23 @@ export interface MinInlineSizeValues extends CssWideValues {
    */
   readonly '-webkit-fill-available': '-webkit-fill-available';
   /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
+   * 自动最小尺寸由布局模式决定；Flex/Grid 项目可能受内容的最小内部尺寸限制。
    */
   readonly auto: 'auto';
   /**
-   * min-inline-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-inline-size
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸下限；不同于带显式参数的 fit-content(...)。
    */
   readonly 'fit-content': 'fit-content';
   /**
-   * min-inline-size 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-inline-size
+   * 以不进行软换行的最大内部尺寸作为尺寸下限；长文本可能使元素超出容器。
    */
   readonly 'max-content': 'max-content';
   /**
-   * min-inline-size 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-inline-size
+   * 以内容的最小内部尺寸作为尺寸下限；文字会利用允许的软换行机会。
+   *
+   * 区别：max-content 以不进行软换行的内部尺寸为下限，可能明显撑大容器。
+   *
+   * 适用场景：约束最小可读尺寸；需要 Flex 项目突破自动内容下限时通常应考虑明确的 0。
    */
   readonly 'min-content': 'min-content';
 }
@@ -8574,12 +8547,11 @@ export interface MinWidthValues extends CssWideValues {
    */
   readonly '-webkit-min-content': '-webkit-min-content';
   /**
-   * 自动最小尺寸由布局模式决定；Flex/Grid 项目可能受内容最小宽度限制。
+   * 自动最小尺寸由布局模式决定；Flex/Grid 项目可能受内容的最小内部尺寸限制。
    */
   readonly auto: 'auto';
   /**
-   * min-width 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸下限；不同于带显式参数的 fit-content(...)。
    */
   readonly 'fit-content': 'fit-content';
   /**
@@ -8588,13 +8560,15 @@ export interface MinWidthValues extends CssWideValues {
    */
   readonly intrinsic: 'intrinsic';
   /**
-   * min-width 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
+   * 以不进行软换行的最大内部尺寸作为尺寸下限；长文本可能使元素超出容器。
    */
   readonly 'max-content': 'max-content';
   /**
-   * min-width 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
+   * 以内容的最小内部尺寸作为尺寸下限；文字会利用允许的软换行机会。
+   *
+   * 区别：max-content 以不进行软换行的内部尺寸为下限，可能明显撑大容器。
+   *
+   * 适用场景：约束最小可读尺寸；需要 Flex 项目突破自动内容下限时通常应考虑明确的 0。
    */
   readonly 'min-content': 'min-content';
   /**
@@ -10687,13 +10661,18 @@ export interface MozTransformOriginValues extends CssWideValues {
 }
 export interface MozTransformStyleValues extends CssWideValues {
   /**
-   * -moz-transform-style 的原生 flat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-style
+   * 将子元素的三维位置展平到当前元素的平面；这是初始行为，并非移除子元素自身的 transform。
    */
   readonly flat: 'flat';
   /**
-   * -moz-transform-style 的原生 preserve-3d 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-style
+   * 让子元素继续处于三维空间，适合多层三维场景。
+   *
+   * 区别：flat 会将后代展平到当前元素的平面；preserve-3d 本身不提供透视效果。
+   *
+   * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
+   *
+   * @example
+   * css({ transformStyle: "preserve-3d" })
    */
   readonly 'preserve-3d': 'preserve-3d';
 }
@@ -11625,7 +11604,7 @@ export interface MsTouchActionValues extends CssWideValues {
    */
   readonly '-ms-pinch-zoom': '-ms-pinch-zoom';
   /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
+   * 允许浏览器处理平移和缩放手势；最终允许的手势还受相关祖先元素的 touch-action 约束。
    */
   readonly auto: 'auto';
   /**
@@ -11637,23 +11616,19 @@ export interface MsTouchActionValues extends CssWideValues {
    */
   readonly none: 'none';
   /**
-   * -ms-touch-action 的原生 pan-down 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
+   * 允许以向下滚动开始的单指平移，即手指最初向上移动；开始后仍可反向滚动。
    */
   readonly 'pan-down': 'pan-down';
   /**
-   * -ms-touch-action 的原生 pan-left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
+   * 允许以向左滚动开始的单指平移，手指起始移动方向相反；开始后仍可反向滚动。
    */
   readonly 'pan-left': 'pan-left';
   /**
-   * -ms-touch-action 的原生 pan-right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
+   * 允许以向右滚动开始的单指平移，手指起始移动方向相反；开始后仍可反向滚动。
    */
   readonly 'pan-right': 'pan-right';
   /**
-   * -ms-touch-action 的原生 pan-up 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
+   * 允许以向上滚动开始的单指平移，即手指最初向下移动；开始后仍可反向滚动。
    */
   readonly 'pan-up': 'pan-up';
   /**
@@ -11665,8 +11640,7 @@ export interface MsTouchActionValues extends CssWideValues {
    */
   readonly 'pan-y': 'pan-y';
   /**
-   * -ms-touch-action 的原生 pinch-zoom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
+   * 允许浏览器处理多指缩放和平移，可与 pan-x、pan-y 等单指方向规则组合。
    */
   readonly 'pinch-zoom': 'pinch-zoom';
 }
@@ -13571,8 +13545,7 @@ export interface PlaceSelfValues extends CssWideValues {
 }
 export interface PointerEventsValues extends CssWideValues {
   /**
-   * pointer-events 的原生 all 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
+   * SVG 命中规则：填充内部和描边区域都可命中，不检查 fill、stroke 或 visibility；不是禁用状态的反义词。
    */
   readonly all: 'all';
   /**
@@ -13580,8 +13553,7 @@ export interface PointerEventsValues extends CssWideValues {
    */
   readonly auto: 'auto';
   /**
-   * pointer-events 的原生 fill 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
+   * SVG 命中规则：填充内部可命中，不检查 fill 或 visibility 的值。
    */
   readonly fill: 'fill';
   /**
@@ -13596,33 +13568,27 @@ export interface PointerEventsValues extends CssWideValues {
    */
   readonly none: 'none';
   /**
-   * pointer-events 的原生 painted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
+   * SVG 命中规则：实际启用 fill 或 stroke 的区域可命中，不检查 visibility。
    */
   readonly painted: 'painted';
   /**
-   * pointer-events 的原生 stroke 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
+   * SVG 命中规则：描边区域可命中，不检查 stroke 或 visibility 的值。
    */
   readonly stroke: 'stroke';
   /**
-   * pointer-events 的原生 visible 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
+   * SVG 命中规则：visibility 为 visible 时，填充内部和描边区域都可命中，不要求 fill 或 stroke 实际绘制。
    */
   readonly visible: 'visible';
   /**
-   * pointer-events 的原生 visibleFill 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
+   * SVG 命中规则：visibility 为 visible 且指针位于填充内部；fill 是否为 none 不影响命中。
    */
   readonly visibleFill: 'visibleFill';
   /**
-   * pointer-events 的原生 visiblePainted 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
+   * SVG 命中规则：visibility 为 visible，且指针位于实际启用 fill 或 stroke 的区域；不把它当成通用 HTML 控件规则。
    */
   readonly visiblePainted: 'visiblePainted';
   /**
-   * pointer-events 的原生 visibleStroke 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/pointer-events
+   * SVG 命中规则：visibility 为 visible 且指针位于描边区域；stroke 是否为 none 不影响命中。
    */
   readonly visibleStroke: 'visibleStroke';
 }
@@ -16373,7 +16339,7 @@ export interface TouchActionValues extends CssWideValues {
    */
   readonly '-ms-pinch-zoom': '-ms-pinch-zoom';
   /**
-   * 由当前属性的布局或排版规则自动决定，不等同于数值 0。
+   * 允许浏览器处理平移和缩放手势；最终允许的手势还受相关祖先元素的 touch-action 约束。
    */
   readonly auto: 'auto';
   /**
@@ -16385,23 +16351,19 @@ export interface TouchActionValues extends CssWideValues {
    */
   readonly none: 'none';
   /**
-   * touch-action 的原生 pan-down 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
+   * 允许以向下滚动开始的单指平移，即手指最初向上移动；开始后仍可反向滚动。
    */
   readonly 'pan-down': 'pan-down';
   /**
-   * touch-action 的原生 pan-left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
+   * 允许以向左滚动开始的单指平移，手指起始移动方向相反；开始后仍可反向滚动。
    */
   readonly 'pan-left': 'pan-left';
   /**
-   * touch-action 的原生 pan-right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
+   * 允许以向右滚动开始的单指平移，手指起始移动方向相反；开始后仍可反向滚动。
    */
   readonly 'pan-right': 'pan-right';
   /**
-   * touch-action 的原生 pan-up 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
+   * 允许以向上滚动开始的单指平移，即手指最初向下移动；开始后仍可反向滚动。
    */
   readonly 'pan-up': 'pan-up';
   /**
@@ -16413,8 +16375,7 @@ export interface TouchActionValues extends CssWideValues {
    */
   readonly 'pan-y': 'pan-y';
   /**
-   * touch-action 的原生 pinch-zoom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
+   * 允许浏览器处理多指缩放和平移，可与 pan-x、pan-y 等单指方向规则组合。
    */
   readonly 'pinch-zoom': 'pinch-zoom';
 }
@@ -16480,13 +16441,18 @@ export interface TransformOriginValues extends CssWideValues {
 }
 export interface TransformStyleValues extends CssWideValues {
   /**
-   * transform-style 的原生 flat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-style
+   * 将子元素的三维位置展平到当前元素的平面；这是初始行为，并非移除子元素自身的 transform。
    */
   readonly flat: 'flat';
   /**
-   * transform-style 的原生 preserve-3d 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-style
+   * 让子元素继续处于三维空间，适合多层三维场景。
+   *
+   * 区别：flat 会将后代展平到当前元素的平面；preserve-3d 本身不提供透视效果。
+   *
+   * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
+   *
+   * @example
+   * css({ transformStyle: "preserve-3d" })
    */
   readonly 'preserve-3d': 'preserve-3d';
 }
@@ -16899,8 +16865,7 @@ export interface WebkitAlignContentValues extends CssWideValues {
 }
 export interface WebkitAlignItemsValues extends CssWideValues {
   /**
-   * -webkit-align-items 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
+   * 对锚点定位的元素，沿块方向与关联锚点的中心对齐；需同时具有有效的锚点定位关系。
    */
   readonly 'anchor-center': 'anchor-center';
   /**
@@ -16935,13 +16900,11 @@ export interface WebkitAlignItemsValues extends CssWideValues {
    */
   readonly normal: 'normal';
   /**
-   * -webkit-align-items 的原生 self-end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
+   * 按项目自身书写方向的结束侧对齐；不同于总按容器方向计算的 end。
    */
   readonly 'self-end': 'self-end';
   /**
-   * -webkit-align-items 的原生 self-start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
+   * 按项目自身书写方向的起始侧对齐；项目与容器书写方向不同时，结果可能不同于 start。
    */
   readonly 'self-start': 'self-start';
   /**
@@ -18433,8 +18396,7 @@ export interface WebkitJustifyContentValues extends CssWideValues {
    */
   readonly center: 'center';
   /**
-   * -webkit-justify-content 的原生 end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-justify-content
+   * 让整体内容靠对齐容器在该轴上的逻辑结束侧排列。
    */
   readonly end: 'end';
   /**
@@ -18446,17 +18408,15 @@ export interface WebkitJustifyContentValues extends CssWideValues {
    */
   readonly 'flex-start': 'flex-start';
   /**
-   * -webkit-justify-content 的原生 left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-justify-content
+   * 沿适用轴靠物理左侧排列，不随文字方向交换；该轴不支持左右方向时按 start 处理。
    */
   readonly left: 'left';
   /**
-   * 使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。
+   * 采用布局模式的默认分布：通常按 stretch 处理；Flex 中增长由 flex-grow 控制，因此这里表现为靠起始侧排列。
    */
   readonly normal: 'normal';
   /**
-   * -webkit-justify-content 的原生 right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-justify-content
+   * 沿适用轴靠物理右侧排列，不随文字方向交换；该轴不支持左右方向时按 start 处理。
    */
   readonly right: 'right';
   /**
@@ -18486,8 +18446,7 @@ export interface WebkitJustifyContentValues extends CssWideValues {
    */
   readonly 'space-evenly': 'space-evenly';
   /**
-   * -webkit-justify-content 的原生 start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-justify-content
+   * 让整体内容靠对齐容器在该轴上的逻辑起始侧排列；与 flex-start 的 Flex 主轴起点含义不同。
    */
   readonly start: 'start';
   /**
@@ -19140,22 +19099,19 @@ export interface WebkitMaxInlineSizeValues extends CssWideValues {
    */
   readonly '-webkit-fill-available': '-webkit-fill-available';
   /**
-   * -webkit-max-inline-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-max-inline-size
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸上限。
    */
   readonly 'fit-content': 'fit-content';
   /**
-   * -webkit-max-inline-size 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-max-inline-size
+   * 以不进行软换行的最大内部尺寸作为尺寸上限；这不是把首选尺寸直接设为该值。
    */
   readonly 'max-content': 'max-content';
   /**
-   * -webkit-max-inline-size 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-max-inline-size
+   * 以内容的最小内部尺寸作为尺寸上限；文本按允许的换行机会收缩，但更大的最小尺寸约束仍优先。
    */
   readonly 'min-content': 'min-content';
   /**
-   * 关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。
+   * 不由该属性设置尺寸上限；其他尺寸、最小尺寸和布局规则仍然生效。
    */
   readonly none: 'none';
 }
@@ -19658,13 +19614,18 @@ export interface WebkitTransformOriginValues extends CssWideValues {
 }
 export interface WebkitTransformStyleValues extends CssWideValues {
   /**
-   * -webkit-transform-style 的原生 flat 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-style
+   * 将子元素的三维位置展平到当前元素的平面；这是初始行为，并非移除子元素自身的 transform。
    */
   readonly flat: 'flat';
   /**
-   * -webkit-transform-style 的原生 preserve-3d 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-style
+   * 让子元素继续处于三维空间，适合多层三维场景。
+   *
+   * 区别：flat 会将后代展平到当前元素的平面；preserve-3d 本身不提供透视效果。
+   *
+   * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
+   *
+   * @example
+   * css({ transformStyle: "preserve-3d" })
    */
   readonly 'preserve-3d': 'preserve-3d';
 }
@@ -19846,8 +19807,7 @@ export interface WhiteSpaceValues extends CssWideValues {
    */
   readonly 'break-spaces': 'break-spaces';
   /**
-   * white-space 的原生 collapse 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
+   * 折叠连续空白和源换行；单独用于 white-space 时，未指定的换行模式取初始值 wrap。
    */
   readonly collapse: 'collapse';
   /**
@@ -19885,23 +19845,19 @@ export interface WhiteSpaceValues extends CssWideValues {
    */
   readonly 'pre-wrap': 'pre-wrap';
   /**
-   * white-space 的原生 preserve 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
+   * 保留空白和源换行；单独用于 white-space 时仍允许软换行，相当于 preserve wrap（pre-wrap）。
    */
   readonly preserve: 'preserve';
   /**
-   * white-space 的原生 preserve-breaks 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
+   * 折叠连续空格但保留源换行；单独用于 white-space 时相当于 preserve-breaks wrap（pre-line）。
    */
   readonly 'preserve-breaks': 'preserve-breaks';
   /**
-   * white-space 的原生 preserve-spaces 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
+   * 保留空格序列，把制表符和源换行转为空格；单独用于 white-space 时允许软换行。使用前核对目标浏览器对此值的支持。
    */
   readonly 'preserve-spaces': 'preserve-spaces';
   /**
-   * white-space 的原生 wrap 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
+   * 允许按正常换行机会软换行；单独用于 white-space 时空白折叠取初始值 collapse，相当于 normal。
    */
   readonly wrap: 'wrap';
 }

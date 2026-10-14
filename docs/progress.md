@@ -13,11 +13,15 @@
 
 Naive 三组任务各自编译完整生产清单并构建、导入生成的库；没有安装 naive-ui 预编译包来代替编译。上述结果尚不包含自有 CSS、交互混用或最终浏览器验收。
 
-## 当前 CSS API 修订（待本次远程验收）
+## 当前 CSS API 修订
 
-补充普通 CSS 字面量的编辑支持：按属性生成具名值声明，保持原字符串/数值边界；同名关键词视图复用声明，消除 inherit 的多目标跳转。编辑器专用 TS6 扩展从真实声明补充字符串注释与定义。局部语言服务测试覆盖 css/cx、嵌套、泛型、转义及业务对象隔离，独立 stdio 的补全、hover、导航通过；WebStorm 已实际返回 inherit、inline-flex 和 inlineFlex 的具体声明及中文说明。发布声明与跨平台服务留给本次远程验证；不把前一提交的通过归给本次变更。
+afa88d4e185b14843e4a244ce2795616e3fc8fb2 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38511120787) 已确认 29 个任务全部成功，包括普通字面量的发布声明消费和跨平台语言服务。此前独立入口及消费者配置修订也已通过各自 CI；下面的新修订以新提交结果为准。
 
-入口进一步收敛为独立函数：css 声明/组合，cx 定义具名样式，keywords 独立取值，defineVars/createTheme/keyframes/globalCss 各自导出。createCss 返回携带同一 T 的 CssContext，支持解构和别名；编译器、HMR 与 DevTools 同步追踪绑定身份。已移除降级辅助函数及其类型、运行时和调试分支，兼容条件使用普通 CSS 与 @supports。前一轮 f19426b 的 CI 已全部成功，本轮新入口和删除项仍以新提交结果为准。
+本次继续补齐表达式编辑能力：括号、断言、三元结果分支、真实 bx 及其导入/const 别名取得准确字面量候选、中文说明和唯一导航；业务函数、三元条件本身及拼接保持原生行为。生成器把 preserve-3d 的成员规范化为 preserve3d，并检查点访问拼写、名称冲突和属性分组重复命中。补充 47 个常用值的具体说明及尺寸逻辑属性复用。局部语言服务和系统关键字运行测试通过；两个作者夹具的原生 MCP 诊断零错误，新启动的 stdio 检查通过，WebStorm 实际返回三元 inline-flex、bx 内 relative 和 preserve3d 的声明及中文说明。本次发布声明和跨平台验收待新提交 CI。
+
+普通 CSS 字面量按属性生成具名值声明，保持原字符串/数值边界；同名关键词视图复用声明，消除 inherit 的多目标跳转。编辑器专用 TS6 扩展从真实声明补充字符串注释与定义。此前 WebStorm 已实际返回 inherit、inline-flex 和 inlineFlex 的具体声明及中文说明。
+
+入口进一步收敛为独立函数：css 声明/组合，cx 定义具名样式，keywords 独立取值，defineVars/createTheme/keyframes/globalCss 各自导出。createCss 返回携带同一 T 的 CssContext，支持解构和别名；编译器、HMR 与 DevTools 同步追踪绑定身份。已移除降级辅助函数及其类型、运行时和调试分支，兼容条件使用普通 CSS 与 @supports。
 
 2026-10-14 按作者约定调整 CSS：按选择器、条件路径与属性合并，后项添加或覆盖当前位置，null 只删除当前位置；组件样式统一经过 css()，外部输入使用 CssInput<T>。嵌套条件支持结构化样式复用和条件数组，普通类名给出明确诊断。条件类型在声明和变量覆盖之间统一。
 

@@ -12,22 +12,73 @@ module.exports = function init({ typescript: ts }) {
         proxy[name] = typeof member === 'function' ? member.bind(service) : member;
       }
 
+      const transparent = (node) =>
+        ts.isParenthesizedExpression(node) ||
+        ts.isAsExpression(node) ||
+        ts.isTypeAssertionExpression(node) ||
+        ts.isSatisfiesExpression(node) ||
+        ts.isNonNullExpression(node);
+
+      // 只跟随真实导入和 const 别名；同名函数或声明为 typeof bx 的业务函数不算 bx。
+      function isBindingCall(checker, expression, valuesFile, seen = new Set()) {
+        if (transparent(expression))
+          return isBindingCall(checker, expression.expression, valuesFile, seen);
+        let symbol = checker.getSymbolAtLocation(expression);
+        if (!symbol || seen.has(symbol)) return false;
+        seen.add(symbol);
+        if (symbol.flags & ts.SymbolFlags.Alias) symbol = checker.getAliasedSymbol(symbol);
+        return (symbol.declarations ?? []).some((declaration) => {
+          if (ts.isFunctionDeclaration(declaration))
+            return declaration.name?.text === 'bx' && declaration.getSourceFile() === valuesFile;
+          return (
+            ts.isVariableDeclaration(declaration) &&
+            declaration.initializer &&
+            declaration.parent.flags & ts.NodeFlags.Const &&
+            isBindingCall(checker, declaration.initializer, valuesFile, seen)
+          );
+        });
+      }
+
       function context(fileName, position) {
         const program = service.getProgram();
         const source = program?.getSourceFile(fileName);
         if (!source) return;
         let literal;
         function visit(node) {
-          if (position < node.getStart(source) || position >= node.end) return;
-          if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) literal = node;
+          if (position < node.getStart(source) || position > node.end) return;
+          if (
+            (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) &&
+            (position < node.end || node.isUnterminated)
+          )
+            literal = node;
           ts.forEachChild(node, visit);
         }
         visit(source);
         if (!literal || position <= literal.getStart(source)) return;
-        const assignment = literal.parent;
+        // 包装表达式和条件的结果分支仍属于同一属性；条件本身、任意函数和字符串拼接不属于。
+        let value = literal;
+        const calls = [];
+        while (value.parent) {
+          const parent = value.parent;
+          if (transparent(parent) && parent.expression === value) value = parent;
+          else if (
+            ts.isConditionalExpression(parent) &&
+            (parent.whenTrue === value || parent.whenFalse === value)
+          )
+            value = parent;
+          else if (
+            ts.isCallExpression(parent) &&
+            parent.arguments.length === 1 &&
+            parent.arguments[0] === value
+          ) {
+            calls.push(parent.expression);
+            value = parent;
+          } else break;
+        }
+        const assignment = value.parent;
         if (
           !ts.isPropertyAssignment(assignment) ||
-          assignment.initializer !== literal ||
+          assignment.initializer !== value ||
           !ts.isObjectLiteralExpression(assignment.parent)
         )
           return;
@@ -50,6 +101,11 @@ module.exports = function init({ typescript: ts }) {
             )
               continue;
             const origin = declaration.getSourceFile().fileName.replaceAll('\\', '/');
+            if (!/\/generated\/properties(\.d)?\.ts$/.test(origin)) continue;
+            const bindingFile = program.getSourceFile(
+              origin.replace(/generated\/properties(\.d)?\.ts$/, 'values$1.ts'),
+            );
+            if (calls.some((call) => !isBindingCall(checker, call, bindingFile))) continue;
             const valuesFile = program.getSourceFile(
               origin.replace(/properties(\.d)?\.ts$/, 'literal-values$1.ts'),
             );
@@ -106,6 +162,30 @@ module.exports = function init({ typescript: ts }) {
           },
         };
       }
+
+      proxy.getCompletionsAtPosition = (fileName, position, ...rest) => {
+        const prior = service.getCompletionsAtPosition(fileName, position, ...rest);
+        const ctx = context(fileName, position);
+        if (!ctx) return prior;
+        // bx 的泛型和 as const 等写法可能没有原生候选；仅在确认的 CSS 上下文补齐属性值。
+        const names = new Set(prior?.entries.map((entry) => entry.name));
+        const entries = ctx.checker
+          .getPropertiesOfType(ctx.values)
+          .filter((symbol) => !names.has(symbol.name))
+          .map((symbol) => ({
+            name: symbol.name,
+            kind: ts.ScriptElementKind.string,
+            kindModifiers: '',
+            sortText: '11',
+          }));
+        return {
+          isGlobalCompletion: false,
+          isMemberCompletion: false,
+          isNewIdentifierLocation: false,
+          ...prior,
+          entries: [...(prior?.entries ?? []), ...entries],
+        };
+      };
 
       proxy.getQuickInfoAtPosition = (fileName, position) => {
         const match = keyword(fileName, position);

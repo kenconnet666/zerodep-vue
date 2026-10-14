@@ -196,6 +196,9 @@ try {
   for (const [marker, value] of [
     ['font', 'inherit'],
     ['display', 'inline-flex'],
+    ['conditional', 'inline-flex'],
+    ['binding', 'relative'],
+    ['assertion', 'border-box'],
   ]) {
     const end = literalText.indexOf('// literal:' + marker);
     assert(end > 0);

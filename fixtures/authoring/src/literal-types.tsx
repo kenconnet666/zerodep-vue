@@ -1,4 +1,4 @@
-import { css, cx, keywords } from '@zerodep-vue/css';
+import { css, cx, bx, keywords } from '@zerodep-vue/css';
 import type { CssContext, CssObject, SystemKeywords } from '@zerodep-vue/css';
 
 export const literalStyle = css({
@@ -14,11 +14,24 @@ export const namedKeywords = css({
   font: keywords.font.inherit, // member:inherit
   color: keywords.color.currentColor,
   width: keywords.width.revertLayer,
-  transformStyle: keywords.transformStyle['preserve-3d'],
+  transformStyle: keywords.transformStyle.preserve3d, // member:preserve3d
 });
 
 export function genericLiteral<T extends SystemKeywords>({ css }: CssContext<T>) {
   return css({ font: 'inherit' }); // literal:generic
+}
+
+/** 表达式包装不应丢失属性值的候选、说明和唯一导航。 */
+export function expressionLiterals<T extends SystemKeywords>(
+  { css }: CssContext<T>,
+  active: boolean,
+) {
+  return css({
+    display: active ? 'none' : 'inline-flex', // literal:conditional
+    position: bx(active ? 'static' : 'relative'), // literal:binding
+    font: 'inherit',
+    boxSizing: 'border-box' as const, // literal:assertion
+  });
 }
 
 // @ts-expect-error 封闭属性不能因补全文档而放宽为任意字符串。

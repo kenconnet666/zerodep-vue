@@ -3853,7 +3853,7 @@ const sets = [
     flat: 'flat',
     inherit: 'inherit',
     initial: 'initial',
-    'preserve-3d': 'preserve-3d',
+    preserve3d: 'preserve-3d',
     revert: 'revert',
     revertLayer: 'revert-layer',
     unset: 'unset',

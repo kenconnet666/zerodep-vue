@@ -75,7 +75,7 @@ export class SystemKeywords {
    * 为元素声明锚点名称，供锚点定位的元素引用。
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
-   * @category 内容、容器与分页
+   * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-name
    */
   declare readonly anchorName: {};
@@ -83,7 +83,7 @@ export class SystemKeywords {
    * 限制锚点名称的可见范围，避免同名锚点跨组件互相影响。
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
-   * @category 内容、容器与分页
+   * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-scope
    */
   declare readonly anchorScope: {};

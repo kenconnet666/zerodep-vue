@@ -277,8 +277,7 @@ export interface AlignItemsKeywords<Key extends PropertyName>
       Key
     > {
   /**
-   * align-items 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
+   * 对锚点定位的元素，沿块方向与关联锚点的中心对齐；需同时具有有效的锚点定位关系。
    */
   readonly anchorCenter: SystemKeyword<Key, 'anchor-center'>;
   /**
@@ -290,13 +289,11 @@ export interface AlignItemsKeywords<Key extends PropertyName>
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
   /**
-   * align-items 的原生 self-end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
+   * 按项目自身书写方向的结束侧对齐；不同于总按容器方向计算的 end。
    */
   readonly selfEnd: SystemKeyword<Key, 'self-end'>;
   /**
-   * align-items 的原生 self-start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items
+   * 按项目自身书写方向的起始侧对齐；项目与容器书写方向不同时，结果可能不同于 start。
    */
   readonly selfStart: SystemKeyword<Key, 'self-start'>;
 }
@@ -2282,8 +2279,7 @@ export interface DisplayKeywords<Key extends PropertyName>
    */
   readonly inlineListItem: SystemKeyword<Key, 'inline-list-item'>;
   /**
-   * display 的原生 inline-table 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 创建行内级表格盒，可与文字同行；内部仍采用表格布局。
    */
   readonly inlineTable: SystemKeyword<Key, 'inline-table'>;
   /**
@@ -2316,43 +2312,35 @@ export interface DisplayKeywords<Key extends PropertyName>
    */
   readonly runIn: SystemKeyword<Key, 'run-in'>;
   /**
-   * display 的原生 table-caption 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表格标题盒参与布局，位置由 caption-side 控制。
    */
   readonly tableCaption: SystemKeyword<Key, 'table-caption'>;
   /**
-   * display 的原生 table-cell 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表格单元格参与行列尺寸计算，可使用 vertical-align 控制单元格内容的垂直对齐。
    */
   readonly tableCell: SystemKeyword<Key, 'table-cell'>;
   /**
-   * display 的原生 table-column 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表格列参与布局，用于列级尺寸和部分样式；不能把任意内容当成一列直接显示。
    */
   readonly tableColumn: SystemKeyword<Key, 'table-column'>;
   /**
-   * display 的原生 table-column-group 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 把多个表格列组织为列组，对应 colgroup 的布局角色。
    */
   readonly tableColumnGroup: SystemKeyword<Key, 'table-column-group'>;
   /**
-   * display 的原生 table-footer-group 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表尾行组参与表格布局，对应 tfoot 的布局角色。
    */
   readonly tableFooterGroup: SystemKeyword<Key, 'table-footer-group'>;
   /**
-   * display 的原生 table-header-group 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表头行组参与表格布局，对应 thead 的布局角色。
    */
   readonly tableHeaderGroup: SystemKeyword<Key, 'table-header-group'>;
   /**
-   * display 的原生 table-row 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 作为表格的一行，组织其中的单元格。
    */
   readonly tableRow: SystemKeyword<Key, 'table-row'>;
   /**
-   * display 的原生 table-row-group 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/display
+   * 把多行组织成表格主体行组，对应 tbody 的布局角色。
    */
   readonly tableRowGroup: SystemKeyword<Key, 'table-row-group'>;
 }
@@ -4187,18 +4175,15 @@ export interface MaxBlockSizeKeywords<Key extends PropertyName>
    */
   readonly WebkitFillAvailable: SystemKeyword<Key, '-webkit-fill-available'>;
   /**
-   * max-block-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-block-size
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸上限。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
   /**
-   * max-block-size 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-block-size
+   * 以不进行软换行的最大内部尺寸作为尺寸上限；这不是把首选尺寸直接设为该值。
    */
   readonly maxContent: SystemKeyword<Key, 'max-content'>;
   /**
-   * max-block-size 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-block-size
+   * 以内容的最小内部尺寸作为尺寸上限；文本按允许的换行机会收缩，但更大的最小尺寸约束仍优先。
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
@@ -4237,18 +4222,15 @@ export interface MaxHeightKeywords<Key extends PropertyName>
    */
   readonly WebkitMinContent: SystemKeyword<Key, '-webkit-min-content'>;
   /**
-   * max-height 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸上限。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
   /**
-   * max-height 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
+   * 以不进行软换行的最大内部尺寸作为尺寸上限；这不是把首选尺寸直接设为该值。
    */
   readonly maxContent: SystemKeyword<Key, 'max-content'>;
   /**
-   * max-height 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
+   * 以内容的最小内部尺寸作为尺寸上限；文本按允许的换行机会收缩，但更大的最小尺寸约束仍优先。
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
@@ -4275,18 +4257,15 @@ export interface MaxInlineSizeKeywords<Key extends PropertyName>
    */
   readonly WebkitFillAvailable: SystemKeyword<Key, '-webkit-fill-available'>;
   /**
-   * max-inline-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-inline-size
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸上限。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
   /**
-   * max-inline-size 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-inline-size
+   * 以不进行软换行的最大内部尺寸作为尺寸上限；这不是把首选尺寸直接设为该值。
    */
   readonly maxContent: SystemKeyword<Key, 'max-content'>;
   /**
-   * max-inline-size 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-inline-size
+   * 以内容的最小内部尺寸作为尺寸上限；文本按允许的换行机会收缩，但更大的最小尺寸约束仍优先。
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
@@ -4327,18 +4306,15 @@ export interface MaxWidthKeywords<Key extends PropertyName>
    */
   readonly WebkitMinContent: SystemKeyword<Key, '-webkit-min-content'>;
   /**
-   * max-width 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸上限。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
   /**
-   * max-width 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
+   * 以不进行软换行的最大内部尺寸作为尺寸上限；这不是把首选尺寸直接设为该值。
    */
   readonly maxContent: SystemKeyword<Key, 'max-content'>;
   /**
-   * max-width 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-width
+   * 以内容的最小内部尺寸作为尺寸上限；文本按允许的换行机会收缩，但更大的最小尺寸约束仍优先。
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
@@ -4360,18 +4336,19 @@ export interface MinBlockSizeKeywords<Key extends PropertyName>
    */
   readonly WebkitFillAvailable: SystemKeyword<Key, '-webkit-fill-available'>;
   /**
-   * min-block-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-block-size
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸下限；不同于带显式参数的 fit-content(...)。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
   /**
-   * min-block-size 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-block-size
+   * 以不进行软换行的最大内部尺寸作为尺寸下限；长文本可能使元素超出容器。
    */
   readonly maxContent: SystemKeyword<Key, 'max-content'>;
   /**
-   * min-block-size 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-block-size
+   * 以内容的最小内部尺寸作为尺寸下限；文字会利用允许的软换行机会。
+   *
+   * 区别：max-content 以不进行软换行的内部尺寸为下限，可能明显撑大容器。
+   *
+   * 适用场景：约束最小可读尺寸；需要 Flex 项目突破自动内容下限时通常应考虑明确的 0。
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
@@ -4410,18 +4387,19 @@ export interface MinHeightKeywords<Key extends PropertyName>
    */
   readonly WebkitMinContent: SystemKeyword<Key, '-webkit-min-content'>;
   /**
-   * min-height 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸下限；不同于带显式参数的 fit-content(...)。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
   /**
-   * min-height 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
+   * 以不进行软换行的最大内部尺寸作为尺寸下限；长文本可能使元素超出容器。
    */
   readonly maxContent: SystemKeyword<Key, 'max-content'>;
   /**
-   * min-height 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
+   * 以内容的最小内部尺寸作为尺寸下限；文字会利用允许的软换行机会。
+   *
+   * 区别：max-content 以不进行软换行的内部尺寸为下限，可能明显撑大容器。
+   *
+   * 适用场景：约束最小可读尺寸；需要 Flex 项目突破自动内容下限时通常应考虑明确的 0。
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
@@ -4448,18 +4426,19 @@ export interface MinInlineSizeKeywords<Key extends PropertyName>
    */
   readonly WebkitFillAvailable: SystemKeyword<Key, '-webkit-fill-available'>;
   /**
-   * min-inline-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-inline-size
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸下限；不同于带显式参数的 fit-content(...)。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
   /**
-   * min-inline-size 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-inline-size
+   * 以不进行软换行的最大内部尺寸作为尺寸下限；长文本可能使元素超出容器。
    */
   readonly maxContent: SystemKeyword<Key, 'max-content'>;
   /**
-   * min-inline-size 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-inline-size
+   * 以内容的最小内部尺寸作为尺寸下限；文字会利用允许的软换行机会。
+   *
+   * 区别：max-content 以不进行软换行的内部尺寸为下限，可能明显撑大容器。
+   *
+   * 适用场景：约束最小可读尺寸；需要 Flex 项目突破自动内容下限时通常应考虑明确的 0。
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
@@ -4498,18 +4477,19 @@ export interface MinWidthKeywords<Key extends PropertyName>
    */
   readonly WebkitMinContent: SystemKeyword<Key, '-webkit-min-content'>;
   /**
-   * min-width 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸下限；不同于带显式参数的 fit-content(...)。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
   /**
-   * min-width 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
+   * 以不进行软换行的最大内部尺寸作为尺寸下限；长文本可能使元素超出容器。
    */
   readonly maxContent: SystemKeyword<Key, 'max-content'>;
   /**
-   * min-width 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-width
+   * 以内容的最小内部尺寸作为尺寸下限；文字会利用允许的软换行机会。
+   *
+   * 区别：max-content 以不进行软换行的内部尺寸为下限，可能明显撑大容器。
+   *
+   * 适用场景：约束最小可读尺寸；需要 Flex 项目突破自动内容下限时通常应考虑明确的 0。
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
   /**
@@ -5674,7 +5654,19 @@ export interface MozTransformOriginKeywords<Key extends PropertyName>
 export interface MozTransformStyleKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
-    SystemKeywordView<Pick<Values.MozTransformStyleValues, 'flat' | 'preserve-3d'>, Key> {}
+    SystemKeywordView<Pick<Values.MozTransformStyleValues, 'flat'>, Key> {
+  /**
+   * 让子元素继续处于三维空间，适合多层三维场景。
+   *
+   * 区别：flat 会将后代展平到当前元素的平面；preserve-3d 本身不提供透视效果。
+   *
+   * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
+   *
+   * @example
+   * css({ transformStyle: "preserve-3d" })
+   */
+  readonly preserve3d: SystemKeyword<Key, 'preserve-3d'>;
+}
 export interface MozTransitionKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
@@ -6209,23 +6201,19 @@ export interface MsTouchActionKeywords<Key extends PropertyName>
    */
   readonly MsPinchZoom: SystemKeyword<Key, '-ms-pinch-zoom'>;
   /**
-   * -ms-touch-action 的原生 pan-down 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
+   * 允许以向下滚动开始的单指平移，即手指最初向上移动；开始后仍可反向滚动。
    */
   readonly panDown: SystemKeyword<Key, 'pan-down'>;
   /**
-   * -ms-touch-action 的原生 pan-left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
+   * 允许以向左滚动开始的单指平移，手指起始移动方向相反；开始后仍可反向滚动。
    */
   readonly panLeft: SystemKeyword<Key, 'pan-left'>;
   /**
-   * -ms-touch-action 的原生 pan-right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
+   * 允许以向右滚动开始的单指平移，手指起始移动方向相反；开始后仍可反向滚动。
    */
   readonly panRight: SystemKeyword<Key, 'pan-right'>;
   /**
-   * -ms-touch-action 的原生 pan-up 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
+   * 允许以向上滚动开始的单指平移，即手指最初向下移动；开始后仍可反向滚动。
    */
   readonly panUp: SystemKeyword<Key, 'pan-up'>;
   /**
@@ -6237,8 +6225,7 @@ export interface MsTouchActionKeywords<Key extends PropertyName>
    */
   readonly panY: SystemKeyword<Key, 'pan-y'>;
   /**
-   * -ms-touch-action 的原生 pinch-zoom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-action
+   * 允许浏览器处理多指缩放和平移，可与 pan-x、pan-y 等单指方向规则组合。
    */
   readonly pinchZoom: SystemKeyword<Key, 'pinch-zoom'>;
 }
@@ -8978,23 +8965,19 @@ export interface TouchActionKeywords<Key extends PropertyName>
    */
   readonly MsPinchZoom: SystemKeyword<Key, '-ms-pinch-zoom'>;
   /**
-   * touch-action 的原生 pan-down 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
+   * 允许以向下滚动开始的单指平移，即手指最初向上移动；开始后仍可反向滚动。
    */
   readonly panDown: SystemKeyword<Key, 'pan-down'>;
   /**
-   * touch-action 的原生 pan-left 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
+   * 允许以向左滚动开始的单指平移，手指起始移动方向相反；开始后仍可反向滚动。
    */
   readonly panLeft: SystemKeyword<Key, 'pan-left'>;
   /**
-   * touch-action 的原生 pan-right 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
+   * 允许以向右滚动开始的单指平移，手指起始移动方向相反；开始后仍可反向滚动。
    */
   readonly panRight: SystemKeyword<Key, 'pan-right'>;
   /**
-   * touch-action 的原生 pan-up 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
+   * 允许以向上滚动开始的单指平移，即手指最初向下移动；开始后仍可反向滚动。
    */
   readonly panUp: SystemKeyword<Key, 'pan-up'>;
   /**
@@ -9006,8 +8989,7 @@ export interface TouchActionKeywords<Key extends PropertyName>
    */
   readonly panY: SystemKeyword<Key, 'pan-y'>;
   /**
-   * touch-action 的原生 pinch-zoom 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/touch-action
+   * 允许浏览器处理多指缩放和平移，可与 pan-x、pan-y 等单指方向规则组合。
    */
   readonly pinchZoom: SystemKeyword<Key, 'pinch-zoom'>;
 }
@@ -9048,9 +9030,19 @@ export interface TransformOriginKeywords<Key extends PropertyName>
       Key
     > {}
 export interface TransformStyleKeywords<Key extends PropertyName>
-  extends
-    CssWideKeywords<Key>,
-    SystemKeywordView<Pick<Values.TransformStyleValues, 'flat' | 'preserve-3d'>, Key> {}
+  extends CssWideKeywords<Key>, SystemKeywordView<Pick<Values.TransformStyleValues, 'flat'>, Key> {
+  /**
+   * 让子元素继续处于三维空间，适合多层三维场景。
+   *
+   * 区别：flat 会将后代展平到当前元素的平面；preserve-3d 本身不提供透视效果。
+   *
+   * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
+   *
+   * @example
+   * css({ transformStyle: "preserve-3d" })
+   */
+  readonly preserve3d: SystemKeyword<Key, 'preserve-3d'>;
+}
 export interface TransitionKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
@@ -9316,8 +9308,7 @@ export interface WebkitAlignItemsKeywords<Key extends PropertyName>
       Key
     > {
   /**
-   * -webkit-align-items 的原生 anchor-center 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
+   * 对锚点定位的元素，沿块方向与关联锚点的中心对齐；需同时具有有效的锚点定位关系。
    */
   readonly anchorCenter: SystemKeyword<Key, 'anchor-center'>;
   /**
@@ -9329,13 +9320,11 @@ export interface WebkitAlignItemsKeywords<Key extends PropertyName>
    */
   readonly flexStart: SystemKeyword<Key, 'flex-start'>;
   /**
-   * -webkit-align-items 的原生 self-end 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
+   * 按项目自身书写方向的结束侧对齐；不同于总按容器方向计算的 end。
    */
   readonly selfEnd: SystemKeyword<Key, 'self-end'>;
   /**
-   * -webkit-align-items 的原生 self-start 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-items
+   * 按项目自身书写方向的起始侧对齐；项目与容器书写方向不同时，结果可能不同于 start。
    */
   readonly selfStart: SystemKeyword<Key, 'self-start'>;
 }
@@ -10699,18 +10688,15 @@ export interface WebkitMaxInlineSizeKeywords<Key extends PropertyName>
    */
   readonly WebkitFillAvailable: SystemKeyword<Key, '-webkit-fill-available'>;
   /**
-   * -webkit-max-inline-size 的原生 fit-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-max-inline-size
+   * 按可用空间在 min-content 与 max-content 之间夹取尺寸，并用作尺寸上限。
    */
   readonly fitContent: SystemKeyword<Key, 'fit-content'>;
   /**
-   * -webkit-max-inline-size 的原生 max-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-max-inline-size
+   * 以不进行软换行的最大内部尺寸作为尺寸上限；这不是把首选尺寸直接设为该值。
    */
   readonly maxContent: SystemKeyword<Key, 'max-content'>;
   /**
-   * -webkit-max-inline-size 的原生 min-content 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-max-inline-size
+   * 以内容的最小内部尺寸作为尺寸上限；文本按允许的换行机会收缩，但更大的最小尺寸约束仍优先。
    */
   readonly minContent: SystemKeyword<Key, 'min-content'>;
 }
@@ -10973,7 +10959,19 @@ export interface WebkitTransformOriginKeywords<Key extends PropertyName>
 export interface WebkitTransformStyleKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
-    SystemKeywordView<Pick<Values.WebkitTransformStyleValues, 'flat' | 'preserve-3d'>, Key> {}
+    SystemKeywordView<Pick<Values.WebkitTransformStyleValues, 'flat'>, Key> {
+  /**
+   * 让子元素继续处于三维空间，适合多层三维场景。
+   *
+   * 区别：flat 会将后代展平到当前元素的平面；preserve-3d 本身不提供透视效果。
+   *
+   * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
+   *
+   * @example
+   * css({ transformStyle: "preserve-3d" })
+   */
+  readonly preserve3d: SystemKeyword<Key, 'preserve-3d'>;
+}
 export interface WebkitTransitionKeywords<Key extends PropertyName>
   extends
     CssWideKeywords<Key>,
@@ -11132,13 +11130,11 @@ export interface WhiteSpaceKeywords<Key extends PropertyName>
    */
   readonly preWrap: SystemKeyword<Key, 'pre-wrap'>;
   /**
-   * white-space 的原生 preserve-breaks 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
+   * 折叠连续空格但保留源换行；单独用于 white-space 时相当于 preserve-breaks wrap（pre-line）。
    */
   readonly preserveBreaks: SystemKeyword<Key, 'preserve-breaks'>;
   /**
-   * white-space 的原生 preserve-spaces 值；具体布局或绘制效果见该属性参考。
-   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space
+   * 保留空格序列，把制表符和源换行转为空格；单独用于 white-space 时允许软换行。使用前核对目标浏览器对此值的支持。
    */
   readonly preserveSpaces: SystemKeyword<Key, 'preserve-spaces'>;
 }
@@ -11358,7 +11354,7 @@ export interface SystemViews {
    * 为元素声明锚点名称，供锚点定位的元素引用。
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
-   * @category 内容、容器与分页
+   * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-name
    */
   readonly anchorName: AnchorNameKeywords<'anchorName'>;
@@ -11366,7 +11362,7 @@ export interface SystemViews {
    * 限制锚点名称的可见范围，避免同名锚点跨组件互相影响。
    *
    * CSS 规范初始值：`none`，不同于浏览器默认样式表。
-   * @category 内容、容器与分页
+   * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-scope
    */
   readonly anchorScope: AnchorScopeKeywords<'anchorScope'>;
