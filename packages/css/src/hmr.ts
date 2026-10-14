@@ -1,7 +1,7 @@
 import { computed, ReactiveEffect, shallowRef, unref } from 'vue';
 import type { ShallowRef } from 'vue';
 import { CLASS } from './types.ts';
-import { ANIMATION, VARIABLE, VARIABLE_GROUP } from './resource-tokens.ts';
+import { ANIMATION } from './resource-tokens.ts';
 
 type Environment = Record<string, unknown>;
 type Factory = (environment: Environment, ...args: unknown[]) => any;
@@ -95,13 +95,12 @@ export function registerModule(
       if (kind === 'class') return view(read, CLASS);
       if (kind === 'keyframes') return view(read, ANIMATION);
       if (kind === 'source') return computed(() => unref(read()));
-      // 集合成员也使用稳定视图，setup 解构后的单个 class/变量不会固定在旧版本。
+      // 具名样式成员也使用稳定视图，setup 解构后的单个 class 不会固定在旧版本。
       const members = new Map<PropertyKey, object>();
       return new Proxy(
         {},
         {
           get(_target, key) {
-            if (key === VARIABLE_GROUP) return read()[key];
             if (!Object.hasOwn(read(), key)) return Reflect.get(read(), key);
             if (!members.has(key)) {
               const member = () => {
@@ -110,22 +109,7 @@ export function registerModule(
                   throw new Error(`HMR 样式成员 ${String(key)} 已移除；请同步修改消费位置。`);
                 return item;
               };
-              members.set(
-                key,
-                kind === 'create'
-                  ? view(member, CLASS)
-                  : Object.freeze({
-                      get name() {
-                        return member().name;
-                      },
-                      get [VARIABLE]() {
-                        return member()[VARIABLE];
-                      },
-                      [Symbol.toPrimitive]() {
-                        return String(member());
-                      },
-                    }),
-              );
+              members.set(key, view(member, CLASS));
             }
             return members.get(key);
           },
@@ -137,7 +121,7 @@ export function registerModule(
           },
           getOwnPropertyDescriptor(_target, key) {
             return Object.hasOwn(read(), key)
-              ? { configurable: true, enumerable: key !== VARIABLE_GROUP }
+              ? { configurable: true, enumerable: true }
               : undefined;
           },
         },

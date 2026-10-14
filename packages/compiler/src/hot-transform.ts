@@ -44,7 +44,7 @@ function imported(scope: Scope, node: t.Node, source: string, name: string): boo
   return false;
 }
 function context(scope: Scope, node: t.Node, seen = new Set<t.Node>()): boolean {
-  if (t.isCallExpression(node)) return imported(scope, node.callee, cssModule, 'createCss');
+  if (t.isCallExpression(node)) return imported(scope, node.callee, cssModule, 'createTheme');
   if (!t.isIdentifier(node)) return false;
   const binding = scope.getBinding(node.name);
   if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
@@ -81,8 +81,6 @@ function entry(scope: Scope, node: t.Node, name: string, seen = new Set<t.Node>(
 const cssEntries = new Map([
   ['css', 'class'],
   ['cx', 'create'],
-  ['createTheme', 'createTheme'],
-  ['defineVars', 'defineVars'],
   ['keyframes', 'keyframes'],
   ['globalCss', 'global'],
 ]);
@@ -208,7 +206,6 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
       if (kind) {
         /* 开发来源包装与原 CSS 调用一起热替换。 */
       } else kind = cssCallKind(call.scope, callee);
-      if (kind === 'createTheme') kind = 'class';
       if (!kind) return;
       const target = kind === 'global' ? call.get('arguments')[1] : call;
       if (!target?.isExpression() || !liftable(target)) return;

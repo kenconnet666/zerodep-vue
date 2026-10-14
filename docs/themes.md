@@ -1,10 +1,10 @@
 # 系统关键字、继承主题与泛型
 
-默认 keywords 具有系统关键字，没有业务主题名。createCss 将主题类型与真实实例或 Vue Ref 一起绑定，返回可按需解构的 CssContext<T>。css、cx、keywords 以及需要主题约束的 keyframes、createTheme、globalCss 共享同一个 T；defineVars 不依赖主题来源，直接从包导入。主题成员使用 _ 前缀，避免覆盖系统值。
+主题只有一种：用户继承 SystemKeywords，声明自己的主题关键字，创建多套实例使用。createTheme 接收主题实例或 Vue Ref，返回可按需解构的 CssContext<T>；css、cx、keywords、keyframes、globalCss 共享同一个 T。主题成员使用 _ 前缀，避免覆盖系统值。默认导入的 keywords 只有系统关键字。
 
 ```tsx
 import { shallowRef } from 'vue';
-import { SystemKeywords, createCss } from '@zerodep-vue/css';
+import { SystemKeywords, createTheme } from '@zerodep-vue/css';
 
 class AppTheme extends SystemKeywords {
   override readonly color = {
@@ -15,10 +15,18 @@ class AppTheme extends SystemKeywords {
     /** 常规控件的纵向与横向内边距。 */
     _control: '8px 12px',
   };
+  constructor(brand = '#2563eb') {
+    super();
+    this.color._brand = brand;
+  }
 }
 
-const theme = shallowRef(new AppTheme());
-const { css, cx, keywords } = createCss<AppTheme>(theme);
+const themes = {
+  light: new AppTheme(),
+  dark: new AppTheme('#93c5fd'),
+};
+const currentTheme = shallowRef(themes.light);
+const { css, cx, keywords } = createTheme(currentTheme);
 const styles = cx({
   root: {
     display: keywords.display.flex,
@@ -27,11 +35,15 @@ const styles = cx({
     ':hover': { borderColor: keywords.color._brand },
   },
 });
+
+// 切换现成实例，已定义的 styles 自动读取当前主题。
+currentTheme.value = themes.dark;
+const button = <button class={css(styles.root)}>保存</button>;
 ```
 
-`createCss(new AppTheme())` 可推断 T；显式泛型适用于固定库边界。仅写 `createCss<AppTheme>()` 没有真实来源会被拒绝。Css<T>、Cx<T>、CssContext<T>、CssObject<T> 和嵌套条件保留主题约束，不使用全局 module augmentation。
+`createTheme(new AppTheme())` 可推断 T；显式泛型适用于固定库边界。仅写 `createTheme<AppTheme>()` 没有真实来源会被拒绝。Css<T>、Cx<T>、CssContext<T>、CssObject<T> 和嵌套条件保留主题约束，不使用全局 module augmentation。
 
-系统关键字引用是固定值，在 CSS 中直接发射。主题引用在消费时读取真实来源，并使用元素级变量。替换 theme.value 会更新实际消费元素，定义 styles 时不会冻结初始颜色。普通非响应式主题对象仍遵循 JavaScript；需要自动更新时使用 Vue 的 ref/reactive。成员值也可以使用 Vue Ref。
+系统关键字引用是固定值，在 CSS 中直接发射。主题引用在消费时读取真实来源，并使用元素级变量。替换 currentTheme.value 会更新实际消费元素，定义 styles 时不会冻结初始颜色。多套实例共享同一个 AppTheme 约定，不需要注册名称或重新定义样式。固定主题直接传 `createTheme(themes.light)`；响应式切换传 Vue Ref。普通非响应式对象仍遵循 JavaScript；成员值也可以使用 Vue Ref。
 
 颜色主题建议集中放在 color 组，可在 color、backgroundColor、borderColor 等兼容位置复用。兼容位置由固定属性类型中的颜色取值生成，不把所有字符串型属性混为同一组；例如颜色主题不能用作 padding。系统引用也按目标属性实际允许的关键字集合检查，普通 CSS 字符串输入仍然可用。
 
@@ -50,9 +62,9 @@ class DarkTheme extends AppTheme {
 
 这里不隐式改变类字段覆盖规则。如果基础主题有构造参数或资源，按普通业务代码组织基础值，不为了合并对象重复创建不必要的实例。
 
-主题来源属于每个 createCss 作者；没有全局可变的“当前主题”。多个区域可以使用不同来源，Teleport 中的元素继续消费原来绑定的主题来源。SSR 每次请求分别收集规则，变量值写入相应内容，而不是依赖原 DOM 祖先或写入全局 body。
+主题来源属于每个 createTheme 作者；没有全局可变的“当前主题”。多个区域可以使用不同来源，Teleport 中的元素继续消费原来绑定的主题来源。SSR 每次请求分别收集规则，变量值写入相应内容，而不是依赖原 DOM 祖先或写入全局 body。
 
-嵌套区域可以用 Vue provide/inject 传递实际主题 Ref，再用 computed 选择当前覆盖或父级来源，最后交给 createCss。这样未覆盖区域跟随父主题，覆盖区域保持独立；Teleport 仍使用逻辑组件树中的来源。若 prop 中的 Ref 本身也可能被替换，在 computed 中读取该 prop 的 .value，可同时跟随容器替换和值更新，无需新增主题组件协议。
+嵌套区域可以用 Vue provide/inject 传递实际主题 Ref，再用 computed 选择当前覆盖或父级来源，最后交给 createTheme。这样未覆盖区域跟随父主题，覆盖区域保持独立；Teleport 仍使用逻辑组件树中的来源。若 prop 中的 Ref 本身也可能被替换，在 computed 中读取该 prop 的 .value，可同时跟随容器替换和值更新，无需新增主题组件协议。
 
 属性、系统关键字和主题成员提供 JSDoc。T 以 SystemKeywords 为基础，KeywordView<T> 合并系统视图与 T 的继承主题成员；`T extends AppTheme` 的共享函数也保留系统关键字、主题成员及成员注释。对象、具名样式、嵌套条件和组件外部 `CssInput<T>` 都使用同一 T，默认系统作者仍拒绝未声明的主题引用。
 

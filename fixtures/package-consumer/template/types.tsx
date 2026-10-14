@@ -2,9 +2,20 @@
 import { computed, ref } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import { _component, For } from '@zerodep-vue/tsx';
-import { css, bx as bind, keywords } from '@zerodep-vue/css';
+import { css, bx as bind, keywords, createTheme, SystemKeywords } from '@zerodep-vue/css';
 import type { CssContext, CssInput, CssObject } from '@zerodep-vue/css';
-import { Field, Palette, themed, themedKeywords } from './App';
+import { Field, Palette, palettes, themed, themedKeywords } from './App';
+
+export function selectedTheme() {
+  const current = ref(palettes.light);
+  const context = createTheme(current);
+  current.value = palettes.dark;
+  // @ts-expect-error 切换的实例仍必须具有同一套主题成员。
+  current.value = new SystemKeywords();
+  // @ts-expect-error 主题入口必须接收继承实例或对应 Ref。
+  createTheme({ color: { _brand: 'red' } });
+  return context.css({ color: context.keywords.color._brand });
+}
 
 const value = ref('typed');
 const writable = computed({

@@ -7,10 +7,9 @@ import { systemValues } from './generated/keywords.ts';
 import { THEME, THEME_SOURCE, keyword } from './tokens.ts';
 import type { CheckedTheme, ThemeReference } from './tokens.ts';
 import type { CssInput, CssClass, PropertyName } from './types.ts';
-import { createTheme as createVariableTheme, keyframes as createKeyframes } from './resources.ts';
-import type { VariableOverrides, Keyframes } from './resources.ts';
-import type { VariableGroup, CssAnimation } from './resource-tokens.ts';
-import type { Scalar } from './values.ts';
+import { keyframes as createKeyframes } from './resources.ts';
+import type { Keyframes } from './resources.ts';
+import type { CssAnimation } from './resource-tokens.ts';
 import { globalCss as registerGlobal } from './global.ts';
 import type { GlobalRules, GlobalOptions } from './global.ts';
 
@@ -39,11 +38,6 @@ export interface CssContext<T extends SystemKeywords = SystemKeywords> {
   readonly cx: Cx<T>;
   /** 系统值与 T 继承的主题成员共用视图，成员说明在映射中保留。 */
   readonly keywords: KeywordView<T>;
-  /** 覆盖变量组，返回可组合 class；允许状态分组、主题值和 bx。 */
-  createTheme<Values extends Record<string, Scalar>>(
-    group: VariableGroup<Values>,
-    overrides: VariableOverrides<Values, T>,
-  ): CssClass;
   /** 声明动画资源；使用时才求值和登记，支持 bx 和主题引用。 */
   keyframes(frames: Keyframes<T>): CssAnimation;
   /** 注册显式全局规则，返回清理函数；bx/主题更新保留节点及层叠位置。 */
@@ -76,7 +70,7 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
   const current = (): T => {
     const theme = isRef(source) ? source.value : source;
     if (!theme || typeof theme !== 'object' || Reflect.get(theme, THEME_SOURCE) !== true)
-      throw new Error('createCss 需要继承 SystemKeywords 的真实主题实例或 Vue Ref。');
+      throw new Error('createTheme 需要继承 SystemKeywords 的真实主题实例或 Vue Ref。');
     if (!checked.has(theme)) {
       for (const property of keys(theme)) {
         if (!Object.hasOwn(systemValues, property)) continue;
@@ -171,21 +165,19 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
 }
 
 /**
- * 将泛型 T 与真实主题来源绑定。值在消费时读取，Ref 替换会更新使用它的元素。
+ * 使用继承 SystemKeywords 的主题实例，返回携带同一 T 的样式函数和关键字视图。
+ * 多套主题使用普通实例保存；传入 Vue Ref 后，替换实例会更新实际消费它的元素。
  * 主题通过正常 TypeScript 类继承扩展；替换整个属性组时仍遵循普通对象覆盖语义。
  */
-export function createCss<T extends SystemKeywords>(source: ThemeSource<T>): CssContext<T> {
+export function createTheme<T extends SystemKeywords>(source: ThemeSource<T>): CssContext<T> {
   return Object.freeze({
-    css: (...inputs: readonly CssInput<T>[]) => compose(...inputs),
+    css: compose,
     keywords: keywordView<T>(source),
     cx: create,
-    createTheme: createVariableTheme,
     keyframes: createKeyframes,
     globalCss: registerGlobal,
   });
 }
 
 /** 没有业务主题的默认作者仍具备完整系统关键字。 */
-export const { css, cx, keywords, createTheme, keyframes, globalCss } = createCss(
-  new SystemKeywords(),
-);
+export const { css, cx, keywords, keyframes, globalCss } = createTheme(new SystemKeywords());

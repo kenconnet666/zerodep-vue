@@ -4,7 +4,7 @@ import { isBinding, isTemplate } from './values.ts';
 import { selectors, validateFragment } from './syntax.ts';
 import type { SelectorContext } from './syntax.ts';
 import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
-import { isAnimation, isVariable } from './resource-tokens.ts';
+import { isAnimation } from './resource-tokens.ts';
 
 export function declarations(
   object: object,
@@ -43,7 +43,6 @@ export function declarations(
         isKeyword(style) ||
         isThemeReference(style) ||
         isBinding(style) ||
-        isVariable(style) ||
         isAnimation(style) ||
         isTemplate(style)
       )
@@ -68,8 +67,7 @@ export function declarations(
             !isBinding(value) &&
             !isTemplate(value) &&
             !isThemeReference(value) &&
-            !isAnimation(value) &&
-            !isVariable(value)
+            !isAnimation(value)
           )
             throw new Error(`CSS 属性 ${property} 需要值；嵌套选择器请用 &。`);
           result.push(Object.freeze({ ...context, property, value }));
@@ -112,7 +110,6 @@ export function css(...inputs: readonly unknown[]): CssClass {
       isKeyword(input) ||
       isThemeReference(input) ||
       isBinding(input) ||
-      isVariable(input) ||
       isAnimation(input) ||
       isTemplate(input)
     )

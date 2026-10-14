@@ -9,7 +9,7 @@ import type { CssBinding, Scalar } from './values.ts';
 import { scopedSelector, validateFragment } from './syntax.ts';
 import { KEYWORD, THEME, isKeyword, isThemeReference } from './tokens.ts';
 import type { ThemeReference } from './tokens.ts';
-import { ANIMATION, VARIABLE, isAnimation, isVariable } from './resource-tokens.ts';
+import { ANIMATION, isAnimation } from './resource-tokens.ts';
 import type { CssAnimation } from './resource-tokens.ts';
 import type { CssRule } from './host.ts';
 import { inspectionHooks } from './inspection.ts';
@@ -67,7 +67,6 @@ export function propertyName(property: string): string {
 }
 
 function scalar(value: unknown, property?: string): string {
-  if (isVariable(value)) return `var(${value.name},${scalar(value[VARIABLE].initial)})`;
   if (isKeyword(value)) value = value[KEYWORD].value;
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) throw new Error(`CSS ${property ?? '片段'} 不能使用非有限数字。`);

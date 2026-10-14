@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { computed, effectScope, ref, watchSyncEffect } from 'vue';
-import { css, createCssHost, cx, keyframes, defineVars, globalCss } from '../../css/src/index.ts';
+import { css, createCssHost, cx, keyframes, globalCss } from '../../css/src/index.ts';
 import { registerModule, compatible } from '../../css/src/hmr.ts';
 import { resolveClass } from '../../css/src/resolve.ts';
 import { binding } from '../../css/src/values.ts';
@@ -73,19 +73,17 @@ test('hot factories preserve closure writes and setup CSS snapshot semantics', (
   scope.stop();
 });
 
-test('hot named styles, variables, animations and globals retain live descriptions with bounded ownership', () => {
+test('hot named styles, custom properties, animations and globals retain live descriptions with bounded ownership', () => {
   const hot = context();
   const host = createCssHost({ target: null });
   const scope = effectScope();
   const factories = (value) => ({
-    group: () => cx({ root: { color: value } }),
-    vars: () => defineVars('hot', { color: value }),
+    group: () => cx({ root: { color: value, '--hot-color': value } }),
     animation: () => keyframes({ from: { color: value }, to: { color: 'white' } }),
     global: () => ({ body: { color: value } }),
   });
   const first = registerModule(hot, 'same', factories('red'));
   const { root } = first.style('group', {}, 'create');
-  const { color } = first.style('vars', {}, 'defineVars');
   const animation = first.style('animation', {}, 'keyframes');
   const source = first.style('global', {}, 'source');
   first.onceGlobal('global', () => globalCss('hot', source, { host }));
@@ -93,7 +91,7 @@ test('hot named styles, variables, animations and globals retain live descriptio
     throw new Error('registered twice');
   });
   assert(resolveClass(root).cssText.includes('color:blue'));
-  assert(resolveClass(css({ color })).cssText.includes(',blue)'));
+  assert(resolveClass(root).cssText.includes('--hot-color:blue'));
   assert(
     resolveClass(css({ animationName: animation })).resources[0].cssText.includes('color:blue'),
   );

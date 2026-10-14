@@ -1,5 +1,4 @@
-export { css, cx, keywords, createCss, createTheme, keyframes, globalCss } from './theme.ts';
-export { defineVars } from './resources.ts';
+export { css, cx, keywords, createTheme, keyframes, globalCss } from './theme.ts';
 export { SystemKeywords } from './generated/system.ts';
 export type { Css, Cx, CssContext, KeywordView, ThemeSource } from './theme.ts';
 export { bx } from './values.ts';
@@ -15,6 +14,6 @@ export type {
   CssNestedInput,
 } from './types.ts';
 export type { CssBinding } from './values.ts';
-export type { CssVariable, VariableGroup, CssAnimation } from './resource-tokens.ts';
-export type { VariableOverrides, KeyframeStyle, Keyframes } from './resources.ts';
+export type { CssAnimation } from './resource-tokens.ts';
+export type { KeyframeStyle, Keyframes } from './resources.ts';
 export type { GlobalRules, GlobalOptions } from './global.ts';

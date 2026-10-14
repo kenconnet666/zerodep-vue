@@ -17,6 +17,9 @@ const require = createRequire(import.meta.url);
 assert.equal(typeof require('@zerodep-vue/compiler'), 'function');
 assert.equal(typeof require('@zerodep-vue/compiler/vite'), 'function');
 assert.equal(typeof require('@zerodep-vue/css').css, 'function');
+assert.equal(typeof require('@zerodep-vue/css').createTheme, 'function');
+assert.equal('createCss' in require('@zerodep-vue/css'), false);
+assert.equal('defineVars' in require('@zerodep-vue/css'), false);
 assert.equal(typeof require('@zerodep-vue/tsx')._component, 'function');
 const entries = {};
 for (const name of ['compiler', 'css', 'tsx']) {

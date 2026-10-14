@@ -14,17 +14,7 @@ import {
 } from 'vue';
 import type { InjectionKey, Ref, VNodeChild } from 'vue';
 import { For, _component } from '@zerodep-vue/tsx';
-import {
-  bx,
-  css,
-  createCss,
-  SystemKeywords,
-  keyframes,
-  defineVars,
-  createTheme,
-  globalCss,
-} from '@zerodep-vue/css';
-import type {} from '@zerodep-vue/css';
+import { bx, css, createTheme, SystemKeywords, keyframes, globalCss } from '@zerodep-vue/css';
 import { NButton, NConfigProvider, NDataTable, NInput, NSelect } from '@fixture/naive';
 import type { DataTableColumns } from '@fixture/naive';
 import type { InitialState } from './contracts.ts';
@@ -68,7 +58,7 @@ const regionKey: InjectionKey<Readonly<Ref<RegionTheme>>> = Symbol('region-theme
 const RegionContent = _component(({ name }: { name: string }) => {
   const source = inject(regionKey);
   if (!source) throw new Error('Missing region theme');
-  const { css: themed, keywords: themedKeywords } = createCss(source);
+  const { css: themed, keywords: themedKeywords } = createTheme(source);
   return (
     <div data-testid={`region-${name}`} class={themed({ color: themedKeywords.color._brand })}>
       {name}
@@ -127,7 +117,6 @@ const Content = _component(({ initial }: { initial: InitialState }) => {
     { title: '名称', key: 'name', render: (row) => <Label>{row.name}</Label> },
   ];
   const fade = keyframes({ from: { opacity: 0.5 }, to: { opacity: 1 } });
-  const vars = defineVars('browser-card', { gap: '4px' });
   globalCss('browser-reset', { body: { margin: 0, fontFamily: 'sans-serif' } });
   provide(labelKey, 'user:');
   onMounted(() => {
@@ -220,10 +209,7 @@ const Content = _component(({ initial }: { initial: InitialState }) => {
         >
           切换禁用
         </button>
-        <div
-          data-testid="variables"
-          class={css(createTheme(vars, { gap: bx(width.value) }), { padding: vars.gap })}
-        />
+        <div data-testid="variables" class={css({ padding: bx(width.value) })} />
         {show.value && (
           <div data-testid="animation" class={css({ animation: `${fade} 2s linear infinite` })}>
             动画

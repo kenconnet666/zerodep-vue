@@ -2,7 +2,7 @@
 
 CSS 声明、组合、规则生成与缓存都在运行时执行；编译器捕获 bx 表达式，并在 Vue 归一化 class 之前保留它的元数据。作者只写 class，变量 style 自动接入。
 
-`css(...)` 声明和组合样式，`cx({...})` 批量定义具名样式，`keywords.xx` 独立提供关键字。变量、动画和全局规则分别使用独立函数 `defineVars(...)`、`createTheme(...)`、`keyframes(...)`、`globalCss(...)`。css 和 cx 都是普通函数，不挂载工具方法或关键字成员。
+`css(...)` 声明和组合样式，`cx({...})` 批量定义具名样式，`keywords.xx` 独立提供关键字。继承主题只使用 `createTheme(主题实例或 Ref)`，动画和全局规则分别使用 `keyframes(...)`、`globalCss(...)`。css 和 cx 都是普通函数，不挂载工具方法或关键字成员。
 
 ```tsx
 import { ref } from 'vue';
@@ -79,21 +79,22 @@ const styles = getCssHost(context)?.renderStyles() ?? '';
 
 同一运行环境中的独立 CSS 模块实例，通过以实际 app/context 为弱键的登记表共享宿主。因此 SSR runtime 被打入另一 bundle 后，外部 getCssHost 仍能取得完整请求结果；不同请求和冻结的 context 保持独立，不增加请求历史表。
 
-## 变量组与动画
+## 主题、自定义属性与动画
+
+继承主题的定义、多套实例和切换统一见 [themes.md](themes.md)。颜色、间距等应用主题值通过对应 keywords 成员使用。
+
+需要与普通 CSS 或第三方样式共享自定义属性时，直接使用 CSS 语法：
 
 ```tsx
-import { css, defineVars, createTheme } from '@zerodep-vue/css';
-
-const vars = defineVars('button', { color: '#2563eb', gap: '8px' });
-const dark = createTheme(vars, {
-  color: '#93c5fd',
-  ':hover': { color: 'white' },
+const base = css({
+  '--button-gap': '8px',
+  gap: 'var(--button-gap, 4px)',
+  ':hover': { '--button-gap': '12px' },
 });
-const base = css({ color: vars.color, gap: vars.gap });
-<button class={css(base, dark)}>保存</button>;
+<button class={css(base)}>保存</button>;
 ```
 
-命名空间是组件库或应用中的稳定名称，同一命名空间和成员对应同一 CSS 变量。引用自带默认值，只有覆盖 class 实际被消费时才登记覆盖规则。变量遵循原生 CSS 继承；Teleport 的 DOM 移动不自动继承原 DOM 祖先变量，弹层需要将相同覆盖 class 应用于其容器，或直接使用保留 Vue 逻辑来源的继承主题引用。自定义变量的数字不补 px，长度应写 `'8px'`。
+自定义属性遵循原生 DOM 继承，名称和 fallback 由作者明确书写；数值不自动补 px。动态值仍可使用 bx。Teleport 中跟随逻辑组件来源的应用主题使用继承主题引用。
 
 ```tsx
 import { css, bx, keyframes } from '@zerodep-vue/css';

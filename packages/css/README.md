@@ -13,9 +13,9 @@ export const Panel = _component(() => {
 });
 ```
 
-配合 `@zerodep-vue/compiler` 使用。css 返回可组合的 class 描述；样式、主题和绑定值都在运行时处理。系统关键字有类型提示与中文说明，继承主题通过 `createCss<T>(实际来源)` 绑定。
+配合 `@zerodep-vue/compiler` 使用。css 返回可组合的 class 描述；样式、主题和绑定值都在运行时处理。系统关键字有类型提示与中文说明，继承主题通过 `createTheme<T>(实际来源)` 绑定。
 
-`css(...)` 声明和组合样式，`cx({...})` 定义具名样式，`keyframes(...)`、`defineVars(...)`、`createTheme(...)`、`globalCss(...)` 各自独立导出，关键字使用 `keywords.xx`。主题工厂返回 `CssContext<T>`，按需解构所需入口，保持泛型 T 与实际来源一致；普通值和 `@supports` 足以表达兼容条件。
+`css(...)` 声明和组合样式，`cx({...})` 定义具名样式，`createTheme(...)`、`keyframes(...)`、`globalCss(...)` 各自独立导出，关键字使用 `keywords.xx`。唯一的主题入口 `createTheme` 接收继承 SystemKeywords 的实例或 Vue Ref，返回 `CssContext<T>`，按需解构所需入口，保持泛型 T 与实际来源一致；普通值和 `@supports` 足以表达兼容条件。
 
 完整组合、覆盖、关键字撤销和资源生命周期见 [CSS 文档](https://github.com/kenconnet666/zerodep-vue/blob/master/docs/css.md)，继承和泛型用法见 [主题文档](https://github.com/kenconnet666/zerodep-vue/blob/master/docs/themes.md)。SSR 每个请求独立收集，使用 `getCssHost(context)?.renderStyles()` 输出样式。
 

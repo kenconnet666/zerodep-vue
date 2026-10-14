@@ -15,13 +15,17 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前 CSS API 修订
 
+3e6fe01b372c1d7202b25e265c7643ad28dd60c3 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38515319042) 已成功，表达式字面量编辑支持、关键字命名和分组整理已通过对应远程回归。
+
+本次按用户要求统一主题模型：只有继承 SystemKeywords 的主题实例，通过 createTheme(source) 取得同一 T 的作者入口；多套实例通过 Vue Ref 切换。移除 createCss 和变量组式 defineVars/createTheme，包括变量引用类型、解析分支及 HMR 适配；普通 CSS 自定义属性、bx、动画、全局规则和区域主题继续沿用原有协议。15 个相关 Node 短测试、两个 Teleport/SSR 主题隔离定点用例、字面量语言服务回归及受影响作者夹具的 LSP 诊断通过。原生 MCP 确认泛型主题成员的补全和中文说明，WebStorm 确认新主题入口及泛型签名；发布包和完整回归待本次新提交 CI。
+
 afa88d4e185b14843e4a244ce2795616e3fc8fb2 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38511120787) 已确认 29 个任务全部成功，包括普通字面量的发布声明消费和跨平台语言服务。此前独立入口及消费者配置修订也已通过各自 CI；下面的新修订以新提交结果为准。
 
-本次继续补齐表达式编辑能力：括号、断言、三元结果分支、真实 bx 及其导入/const 别名取得准确字面量候选、中文说明和唯一导航；业务函数、三元条件本身及拼接保持原生行为。生成器把 preserve-3d 的成员规范化为 preserve3d，并检查点访问拼写、名称冲突和属性分组重复命中。补充 47 个常用值的具体说明及尺寸逻辑属性复用。局部语言服务和系统关键字运行测试通过；两个作者夹具的原生 MCP 诊断零错误，新启动的 stdio 检查通过，WebStorm 实际返回三元 inline-flex、bx 内 relative 和 preserve3d 的声明及中文说明。本次发布声明和跨平台验收待新提交 CI。
+上一轮补齐表达式编辑能力：括号、断言、三元结果分支、真实 bx 及其导入/const 别名取得准确字面量候选、中文说明和唯一导航；业务函数、三元条件本身及拼接保持原生行为。生成器把 preserve-3d 的成员规范化为 preserve3d，并检查点访问拼写、名称冲突和属性分组重复命中。补充 47 个常用值的具体说明及尺寸逻辑属性复用。局部语言服务和系统关键字运行测试通过；两个作者夹具的原生 MCP 诊断零错误，新启动的 stdio 检查通过，WebStorm 实际返回三元 inline-flex、bx 内 relative 和 preserve3d 的声明及中文说明。发布声明和跨平台结果见上方 3e6fe01 的 CI。
 
 普通 CSS 字面量按属性生成具名值声明，保持原字符串/数值边界；同名关键词视图复用声明，消除 inherit 的多目标跳转。编辑器专用 TS6 扩展从真实声明补充字符串注释与定义。此前 WebStorm 已实际返回 inherit、inline-flex 和 inlineFlex 的具体声明及中文说明。
 
-入口进一步收敛为独立函数：css 声明/组合，cx 定义具名样式，keywords 独立取值，defineVars/createTheme/keyframes/globalCss 各自导出。createCss 返回携带同一 T 的 CssContext，支持解构和别名；编译器、HMR 与 DevTools 同步追踪绑定身份。已移除降级辅助函数及其类型、运行时和调试分支，兼容条件使用普通 CSS 与 @supports。
+独立函数入口为 css 声明/组合，cx 定义具名样式，keywords 独立取值，createTheme 绑定继承主题来源，keyframes/globalCss 分别负责动画与全局规则。createTheme 返回携带同一 T 的 CssContext，支持解构和别名；编译器、HMR 与 DevTools 同步追踪绑定身份。已移除降级辅助函数及其类型、运行时和调试分支，兼容条件使用普通 CSS 与 @supports。
 
 2026-10-14 按作者约定调整 CSS：按选择器、条件路径与属性合并，后项添加或覆盖当前位置，null 只删除当前位置；组件样式统一经过 css()，外部输入使用 CssInput<T>。嵌套条件支持结构化样式复用和条件数组，普通类名给出明确诊断。条件类型在声明和变量覆盖之间统一。
 

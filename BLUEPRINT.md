@@ -571,18 +571,17 @@ const styles = cx({
 
 同一状态的多个属性按 `:hover`、`:disabled` 分组，支持伪元素、组合选择器及局部条件。常用选择器提供补全，复杂关系写 `&:hover:not(:disabled)` 等正常 CSS 形式。
 
-`css(...)` 返回 class 值，`cx(...)` 返回具名样式集合；作者通过 `class={css(styles.root, external)}` 应用。create 只负责具名组织，使用相同的运行时描述协议。组合与绑定所需的描述由运行时在内部保留，不要求作者接触；创建时不要求 DOM、不立即插入样式。普通声明、条件与组合在运行时完成，不把 CSS API 变成必须静态求值的编译 DSL。
+`css(...)` 返回 class 值，`cx(...)` 返回具名样式集合；作者通过 `class={css(styles.root, external)}` 应用。cx 只负责具名组织，使用相同的运行时描述协议。组合与绑定所需的描述由运行时在内部保留，不要求作者接触；创建时不要求 DOM、不立即插入样式。普通声明、条件与组合在运行时完成，不把 CSS API 变成必须静态求值的编译 DSL。
 
-| API                         | 用途                                                     |
-| --------------------------- | -------------------------------------------------------- |
-| `css(...)`                  | 单处对象声明、有序组合与条件项，返回 class               |
-| `cx({...})`                 | 有类型的具名 class 集合                                  |
-| `createCss<T>(source)`      | 绑定实际主题来源，提供类型明确的运行时 CSS 作者入口      |
-| `keywords`                  | 按属性提供系统/主题关键字视图，保留成员类型和注释        |
-| `bx(expression)`            | 捕获动态值，作者不写 getter                              |
-| `defineVars`、`createTheme` | 类型化变量组与主题覆盖，复用继承主题相同的变量和宿主协议 |
-| `keyframes`                 | 可复用动画资源                                           |
-| `globalCss`                 | 显式全局规则，注册和释放归宿主管理                       |
+| API                      | 用途                                                |
+| ------------------------ | --------------------------------------------------- |
+| `css(...)`               | 单处对象声明、有序组合与条件项，返回 class          |
+| `cx({...})`              | 有类型的具名 class 集合                             |
+| `createTheme<T>(source)` | 绑定实际主题来源，提供类型明确的运行时 CSS 作者入口 |
+| `keywords`               | 按属性提供系统/主题关键字视图，保留成员类型和注释   |
+| `bx(expression)`         | 捕获动态值，作者不写 getter                         |
+| `keyframes`              | 可复用动画资源                                      |
+| `globalCss`              | 显式全局规则，注册和释放归宿主管理                  |
 
 recipes、庞大的变体 DSL、原子 CSS 和字符串选择器解析语言不作为基础前提。用普通 JS 条件、对象索引和数组组合即可表达常见 variants。
 
@@ -619,7 +618,7 @@ class AppTheme extends SystemKeywords {
 }
 
 const theme = shallowRef<AppTheme>(new AppTheme());
-const { css, cx, keywords } = createCss<AppTheme>(theme);
+const { css, cx, keywords } = createTheme<AppTheme>(theme);
 
 const styles = cx({
   root: {
@@ -633,24 +632,24 @@ const styles = cx({
   },
 });
 
-return <button class={styles.root}>确认</button>;
+return <button class={css(styles.root)}>确认</button>;
 ```
 
-`createCss<T>(source)` 返回 `CssContext<T>`，包含同一主题来源的 `css`、`cx`、`keywords` 以及按 T 校验的 `keyframes`、`createTheme`、`globalCss`。`css` 是纯组合函数，工具使用 `cx`、`keyframes` 等，关键字独立使用 `keywords.xx`。`createCss(new AppTheme())` 也应从实参推导 T；显式泛型用于共享工具、库边界和需要固定主题接口的场景。`createCss` 属于 CSS 工具，不加下划线。
+`createTheme<T>(source)` 返回 `CssContext<T>`，包含同一主题来源的 `css`、`cx`、`keywords` 以及按 T 校验的 `keyframes`、`globalCss`。`css` 是纯组合函数，工具使用 `cx`、`keyframes` 等，关键字独立使用 `keywords.xx`。`createTheme(new AppTheme())` 也应从实参推导 T；显式泛型用于共享工具、库边界和需要固定主题接口的场景。`createTheme` 属于 CSS 工具，不加下划线。
 
 `keywords` 是带类型和成员注释的关键字视图。系统值可以直接写字符串；主题成员通过具名引用保留来源、属性约束与说明，其结果是运行时主题引用，不能在定义样式时就冻结成第一次读取的颜色或间距。
 
 泛型与继承必须满足：
 
-- T 只影响类型，不能代替真实运行时数据。自定义 T 必须同时提供对应主题实例或 Vue Ref 来源；仅写 `createCss<AppTheme>()` 而没有主题来源应被拒绝。
+- T 只影响类型，不能代替真实运行时数据。自定义 T 必须同时提供对应主题实例或 Vue Ref 来源；仅写 `createTheme<AppTheme>()` 而没有主题来源应被拒绝。
 - 默认入口的 T 为 `SystemKeywords`；应用主题不通过全局 module augmentation 污染其他组件库的补全。
 - 子主题保留继承的成员与类型，可以增加主题关键字或覆盖已有主题值；系统关键字不能被当作主题 token 重定义。
 - 类型化主题成员按兼容的 CSS 值域约束。颜色 token 应能在 color、backgroundColor、borderColor 等兼容的颜色位置复用，不要求复制同一主题值；不能把它用作 padding 的间距值。对应正反向用例必须验证，不能简单把所有主题值放宽为 string、数字或对象。
 - T 必须传入伪类、伪元素、媒体条件、`cx`、组合函数和可复用 `CssObject<T>`，不能进入嵌套对象后退化成 any。
 - 主题来源可在运行时通过 Vue Ref 替换。值在使用范围解析，嵌套使用及 SSR 请求互相隔离，不建立一个可变的全局“当前主题”。
-- `defineVars` / `createTheme` 与继承主题复用同一变量引用和宿主协议，不维护相互竞争的主题系统。
+- 主题只有继承 SystemKeywords 的实例一种模型。多套实例由普通对象保存，通过 Vue Ref 选择当前实例；不另设变量组主题或全局主题注册表。
 
-变量组用 `defineVars('稳定命名空间', { color: 'red', gap: '8px' })` 声明。显式命名空间保证独立服务端请求、客户端与重复模块加载得到一致名称，不依赖模块执行顺序或编译时值求解。每个引用携带原生 CSS var fallback，`createTheme(vars, { color: value })` 返回普通 class，可按状态分组并使用主题引用或 bx。自定义变量没有隐式单位，长度默认值明确写单位。
+底层 CSS 自定义属性直接用 `css({ "--control-gap": "8px", gap: "var(--control-gap, 4px)" })` 声明和引用，允许条件分组及 bx。名称与 fallback 由作者明确书写，数值不自动补单位。应用主题使用上面的继承模型和唯一 createTheme 入口。
 
 `keyframes({ from: {...}, to: {...} })` 返回动画引用，直接用于 animationName 或编译接线的 animation 模板。关键帧内主题和 bx 在使用动画的元素渲染时读取，各帧和各动画具有独立变量位置。资源随主规则一同收集、采用、取得与释放；覆盖掉的动画不求值，不维护永久全局动画表。
 
@@ -662,7 +661,7 @@ return <button class={styles.root}>确认</button>;
 
 运行时主题来源与实际消费节点保持明确关联。同一应用内的嵌套主题、独立页面及同时展示的不同主题互不串值；使用本库 CSS 的内容经 Vue Teleport 移动后，继续消费原来的主题来源。不能仅依赖原 DOM 祖先上的 CSS 变量，也不能将局部主题写入全局 body 而污染其他弹层。
 
-实现优先复用已有 `createCss<T>(source)`、Vue 组件上下文和样式宿主，不因这个场景新增一套主题组件或样式 props。第三方组件使用自身公开主题入口，不猜测其内部节点。SSR 按请求与消费位置输出对应变量，hydrate 不以延迟补样式掩盖服务端缺失。验收至少包含两个主题区域同时打开 Teleport 内容、运行时切换主题和销毁其中一个区域。
+实现优先复用已有 `createTheme<T>(source)`、Vue 组件上下文和样式宿主，不因这个场景新增一套主题组件或样式 props。第三方组件使用自身公开主题入口，不猜测其内部节点。SSR 按请求与消费位置输出对应变量，hydrate 不以延迟补样式掩盖服务端缺失。验收至少包含两个主题区域同时打开 Teleport 内容、运行时切换主题和销毁其中一个区域。
 
 #### 7.1.4 类型提示与说明注释
 

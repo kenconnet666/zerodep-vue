@@ -15,7 +15,7 @@ import {
 import type { Ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { _component } from '@zerodep-vue/tsx';
-import { bx, css, createCss, createCssHost, getCssHost, SystemKeywords } from '@zerodep-vue/css';
+import { bx, css, createTheme, createCssHost, getCssHost, SystemKeywords } from '@zerodep-vue/css';
 import type { CssInput } from '@zerodep-vue/css';
 
 const mounted: VueWrapper[] = [];
@@ -300,7 +300,7 @@ test('independent runtime themes retain their values through Teleport and one re
   const second = shallowRef(new RegionTheme('blue'));
   const showFirst = ref(true);
   const Region = _component(({ theme, name }: { theme: Ref<RegionTheme>; name: string }) => {
-    const { css: themed, keywords: themedKeywords } = createCss(theme);
+    const { css: themed, keywords: themedKeywords } = createTheme(theme);
     const style = themed({
       color: themedKeywords.color._brand,
       display: themedKeywords.display.block,
@@ -338,7 +338,7 @@ test('independent runtime themes retain their values through Teleport and one re
 
 test('SSR Teleport emits the correct per-request theme variables', async () => {
   const Page = _component(({ color }: { color: string }) => {
-    const { css: themed, keywords: themedKeywords } = createCss(new RegionTheme(color));
+    const { css: themed, keywords: themedKeywords } = createTheme(new RegionTheme(color));
     return (
       <Teleport to="#dialogs">
         <div class={themed({ color: themedKeywords.color._brand })}>theme</div>

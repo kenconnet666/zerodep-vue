@@ -1,25 +1,21 @@
 /** @jsxImportSource @zerodep-vue/tsx */
-import { ref, Suspense } from 'vue';
+import { ref, shallowRef, Suspense } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import { _component, For } from '@zerodep-vue/tsx';
-import {
-  bx,
-  createCss,
-  SystemKeywords,
-  keywords,
-  keyframes,
-  defineVars,
-  createTheme,
-  globalCss,
-} from '@zerodep-vue/css';
+import { bx, createTheme, SystemKeywords, keywords, keyframes, globalCss } from '@zerodep-vue/css';
 
 export class Palette extends SystemKeywords {
   override readonly color = {
     /** 消费应用的强调色，保留到泛型关键字视图。 */
     _brand: '#2563eb',
   };
+  constructor(brand = '#2563eb') {
+    super();
+    this.color._brand = brand;
+  }
 }
-export const { css: themed, keywords: themedKeywords } = createCss(new Palette());
+export const palettes = { light: new Palette(), dark: new Palette('#93c5fd') };
+export const { css: themed, keywords: themedKeywords } = createTheme(palettes.light);
 
 export interface InputHandle {
   focus(): void;
@@ -47,15 +43,16 @@ const Async = _component(async () => {
   return <strong>async-package-ready</strong>;
 });
 export const App = _component(() => {
+  const currentPalette = shallowRef(palettes.light);
+  const { css: themed, keywords: themedKeywords } = createTheme(currentPalette);
   const text = ref('package-state');
   const gap = ref('12px');
-  const vars = defineVars('consumer', { padding: '4px' });
   const fade = keyframes({ from: { opacity: 0.5 }, to: { opacity: 1 } });
   globalCss('consumer-base', { body: { margin: 0 } });
   return (
     <main
-      class={themed(createTheme(vars, { padding: bx(gap.value) }), {
-        padding: vars.padding,
+      class={themed({
+        padding: bx(gap.value),
         color: themedKeywords.color._brand,
         display: keywords.display.flex,
         animationName: fade,

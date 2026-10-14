@@ -1,69 +1,46 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {
-  css,
-  createCss,
-  SystemKeywords,
-  keywords,
-  keyframes,
-  defineVars,
-  createTheme,
-} from '../src/index.ts';
+import { css, createTheme, SystemKeywords, keywords, keyframes } from '../src/index.ts';
 import { binding, template } from '../src/values.ts';
 import { resolveClass } from '../src/resolve.ts';
 
-test('variable groups have stable names, native fallbacks and composable condition overrides', () => {
-  const tokens = defineVars('control', { color: 'red', gap: '8px', opacity: 0.8 });
-  const same = defineVars('control', { color: 'blue' });
-  assert.equal(tokens.color.name, same.color.name);
-  assert.notEqual(defineVars('a:b', { c: '' }).c.name, defineVars('a', { 'b:c': '' })['b:c'].name);
-  const override = createTheme(tokens, { color: 'green', ':hover': { opacity: 1 } });
+test('plain CSS custom properties retain native fallbacks and condition composition', () => {
   const resolved = resolveClass(
-    css(override, { color: tokens.color, gap: tokens.gap, opacity: tokens.opacity }),
-  );
-  assert(resolved.cssText.includes(`${tokens.color.name}:green`));
-  assert(resolved.cssText.includes(`color:var(${tokens.color.name},red)`));
-  assert(resolved.cssText.includes(`gap:var(${tokens.gap.name},8px)`));
-  assert(resolved.cssText.includes(`:hover{${tokens.opacity.name}:1;}`));
-  assert.deepEqual(resolved.variables, {});
-  assert.throws(() => createTheme(tokens, { missing: 'red' }), /变量组中没有/);
-  assert.throws(() => defineVars('', { a: 0 }), /命名空间/);
-  const start = resolveClass(
-    createTheme(tokens, {
-      '@starting-style': { color: 'blue' },
-      ':nth-child(2n)': { gap: '4px' },
-    }),
-  );
-  assert(start.cssText.includes('@starting-style'));
-  assert(start.cssText.includes(':nth-child(2n)'));
-  const fallback = resolveClass(
     css({
-      display: 'flex',
+      '--control-color': 'green',
+      color: 'var(--control-color, red)',
+      gap: 'var(--control-gap, 8px)',
+      ':hover': { '--control-opacity': 1 },
+      '@starting-style': { '--control-color': 'blue' },
+      ':nth-child(2n)': { '--control-gap': '4px' },
       '@supports (display: grid)': { display: keywords.display.grid },
-      gap: tokens.gap,
     }),
   );
-  assert(fallback.cssText.includes('@supports (display: grid)'));
-  assert(fallback.cssText.includes(`gap:var(${tokens.gap.name},8px);`));
+  assert(resolved.cssText.includes('--control-color:green'));
+  assert(resolved.cssText.includes('color:var(--control-color, red)'));
+  assert(resolved.cssText.includes(':hover{--control-opacity:1;}'));
+  assert(resolved.cssText.includes('@starting-style'));
+  assert(resolved.cssText.includes(':nth-child(2n)'));
+  assert(resolved.cssText.includes('@supports (display: grid)'));
+  assert.deepEqual(resolved.variables, {});
 });
 
-test('variable theme overrides share dynamic and inherited theme resolution', () => {
+test('plain custom properties share dynamic and inherited theme resolution', () => {
   class Theme extends SystemKeywords {
     color = { _brand: 'purple' };
   }
-  const { keywords: themedKeywords, createTheme: themedCreateTheme } = createCss(new Theme());
-  const vars = defineVars('card', { accent: 'black', padding: '8px' });
+  const { css: themed, keywords } = createTheme(new Theme());
   let padding = '12px';
-  const style = themedCreateTheme(vars, {
-    accent: themedKeywords.color._brand,
-    padding: binding(() => padding),
+  const style = themed({
+    '--card-accent': keywords.color._brand,
+    '--card-padding': binding(() => padding),
   });
   const first = resolveClass(style);
   assert.deepEqual(Object.values(first.variables), ['purple', '12px']);
   padding = 'initial';
   const next = resolveClass(style);
   assert.deepEqual(Object.values(next.variables), ['purple']);
-  assert(next.cssText.includes(`${vars.padding.name}:initial`));
+  assert(next.cssText.includes('--card-padding:initial'));
 });
 
 test('dynamic keyframes keep per-frame and per-animation variables distinct and stable', () => {

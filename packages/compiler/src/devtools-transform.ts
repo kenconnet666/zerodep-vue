@@ -73,19 +73,7 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
               const getter = call.node.arguments[0];
               if (t.isArrowFunctionExpression(getter)) point = getter.body;
             }
-        if (
-          !kind ||
-          ![
-            'class',
-            'create',
-            'createTheme',
-            'defineVars',
-            'keyframes',
-            'binding',
-            'global',
-          ].includes(kind)
-        )
-          return;
+        if (!kind || !['class', 'create', 'keyframes', 'binding', 'global'].includes(kind)) return;
         call.node.extra = { ...call.node.extra, zerodepTraced: true };
         if (kind === 'global') {
           const value = call.get('arguments')[1];
@@ -104,9 +92,7 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
         ]);
         wrapped.extra = {
           zerodepTraced: true,
-          ...(kind === 'binding'
-            ? {}
-            : { zerodepCssKind: kind === 'createTheme' ? 'class' : kind }),
+          ...(kind === 'binding' ? {} : { zerodepCssKind: kind }),
         };
         call.replaceWith(wrapped);
         call.skip();
