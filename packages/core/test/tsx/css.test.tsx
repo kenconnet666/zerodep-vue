@@ -11,7 +11,7 @@ import {
   shallowRef,
   Teleport,
 } from 'vue';
-import type { Ref } from 'vue';
+import type { HTMLAttributes, Ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import {
   _component,
@@ -62,7 +62,7 @@ test('automatic class override suppresses the unused default binding', () => {
 });
 
 test('optional bound props retain defaults after update and removal', async () => {
-  const Box = _component(({ width }: { width?: number | null }) => (
+  const Box = _component(({ width }: { width?: number | null | undefined }) => (
     <div class={s.width(100).width(bx(width))}>box</div>
   ));
   const host = setupHost();
@@ -168,7 +168,8 @@ test('owned components compose through cx, retain states and transfer bindings w
   const Base = _component(({ class: external }: { class?: CssInput }) => (
     <button class={cx(s.color('red').select(':hover', s.color('blue')), external)}>owned</button>
   ));
-  const Wrapper = _component(() => <Base />);
+  interface WrapperProps extends /* @vue-ignore */ Pick<HTMLAttributes, 'title'> {}
+  const Wrapper = _component((_props: WrapperProps) => <Base />);
   const App = _component(() => (
     <Wrapper class={s.color('black').width(bx(width.value))} title="forwarded" />
   ));
@@ -218,7 +219,7 @@ test('spread and callbacks evaluate once, merge in order, and preserve explicit 
     classes++;
     return s.color('red');
   };
-  const props = () => {
+  const props = (): { class?: ReturnType<typeof makeClass>; onClick: typeof handler } => {
     spreads++;
     return { class: s.color('blue'), onClick: handler };
   };

@@ -108,7 +108,7 @@ describe('_component', () => {
       }: {
         title?: string;
         read?: () => string;
-        first?: number;
+        first?: number | undefined;
         second?: number;
       }) => {
         const outer = 'body';
@@ -258,7 +258,13 @@ describe('_component', () => {
 
   test('preserves false/null and Boolean defaults without coercing them first', async () => {
     const View = _component(
-      ({ enabled = true, text = 'default' }: { enabled?: boolean; text?: string | null }) => (
+      ({
+        enabled = true,
+        text = 'default',
+      }: {
+        enabled?: boolean | undefined;
+        text?: string | null | undefined;
+      }) => (
         <span>
           {String(enabled)}:{String(text)}
         </span>

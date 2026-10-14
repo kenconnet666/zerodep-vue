@@ -13,6 +13,10 @@
 
 Naive 三组任务各自编译完整生产清单并构建、导入生成的库；没有安装 naive-ui 预编译包来代替编译。上述结果尚不包含自有 CSS、交互混用或最终浏览器验收。
 
+## 运行测试类型检查修复（2026-10-14）
+
+29a6a50 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38553410484) 暴露新纳入严格检查的测试目录问题：缺少 Node 类型、显式撤回 optional prop 的夹具没有声明 undefined、确定性 spread 覆盖告警，以及无参数 _component 的 never 索引错误禁止 Vue 公共 class/ref。补齐测试 Node 配置和真实输入类型，包装组件显式声明透传属性；无自定义 props 的默认类型改为空对象，仍拒绝未知业务字段。保留所有运行断言，不跳过严格检查。
+
 ## 组件库基础契约的 fixture 验证（2026-10-14）
 
 用户同意按推荐验证完善，并明确先不做 Button 等正式组件，允许在 fixtures 中测试。本轮保留 compiler/core 两包，只增强私有输入夹具、增加 ThemeRegion 并补充实际契约测试。

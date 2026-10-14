@@ -2,6 +2,11 @@ import { _component, For } from '@zerodep-vue/core';
 import { computed, defineComponent, ref, toRef } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 
+const NoProps = _component(() => <div />);
+export const noPropsClass = <NoProps class="external" style={{ color: 'red' }} ref={ref()} />;
+// @ts-expect-error 无自定义 props 不意味着接受任意业务字段。
+<NoProps unknown="invalid" />;
+
 export const Select = _component(
   <T,>({ items, renderItem }: { items: readonly T[]; renderItem: (item: T) => VNodeChild }) => (
     <div>{items.map(renderItem)}</div>

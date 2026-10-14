@@ -49,7 +49,8 @@ export type ManagedProps<P> = typeof authorProps extends keyof P
  * 参数边界的解构读取保持更新；普通局部计算仍遵循 JavaScript 的快照语义。
  * 默认值用参数的 `=` 写法，Ref 及回调保留原始身份。
  */
-export function _component<Props extends object = Record<string, never>>(
+// 无自定义 props 仍允许 Vue 的 class、style、ref；never 索引会错误地禁止这些公共属性。
+export function _component<Props extends object = {}>(
   setup: (props: Props, context: SetupContext) => VNodeChild | Promise<VNodeChild>,
   options?: Pick<ComponentOptions, 'name' | 'inheritAttrs'>,
 ): DefineSetupFnComponent<Props & AuthorProps> {
