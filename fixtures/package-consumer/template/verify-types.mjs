@@ -131,14 +131,20 @@ try {
     const close = text.lastIndexOf("'", end);
     const position = text.lastIndexOf("'", close - 1) + 2;
     const hover = service.getQuickInfoAtPosition(filename, position);
-    assert(/\p{Script=Han}/u.test(ts.displayPartsToString(hover?.documentation)), marker);
+    assert(
+      /\p{Script=Han}/u.test(ts.displayPartsToString(hover?.documentation)),
+      `Missing Chinese hover documentation for literal ${marker}: ${value}`,
+    );
     const completions = service.getCompletionsAtPosition(filename, position, {});
     assert(
       completions?.entries.some((entry) => entry.name === value),
       marker,
     );
     const details = service.getCompletionEntryDetails(filename, position, value, {});
-    assert(/\p{Script=Han}/u.test(ts.displayPartsToString(details?.documentation)), marker);
+    assert(
+      /\p{Script=Han}/u.test(ts.displayPartsToString(details?.documentation)),
+      `Missing Chinese completion documentation for literal ${marker}: ${value}`,
+    );
     const definitions = service.getDefinitionAtPosition(filename, position);
     assert.equal(definitions?.length, 1);
     assert(realpathSync(definitions[0].fileName).startsWith(realpathSync(root)));

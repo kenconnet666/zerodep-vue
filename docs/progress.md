@@ -13,6 +13,12 @@
 
 Naive 三组任务各自编译完整生产清单并构建、导入生成的库；没有安装 naive-ui 预编译包来代替编译。上述结果尚不包含自有 CSS、交互混用或最终浏览器验收。
 
+## 旧产物清理与组件库准备（2026-10-14）
+
+1cb84e0 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38536952356) 中，25 个任务成功；Linux/Windows 安装消费者均通过运行检查，但在主题字面量中文 hover 检查失败，汇总也失败。复现原因为 TypeScript 擦除 private 字段类型。交付前合并远程 8f2feec，采用其读取公开 Css<T> 的修复并保留 private 边界；补充四份真实 .d.ts 在内存发射及解析的主题说明、补全和导航回归。合并后两个编辑器定点测试通过，字面量类型夹具的原生 MCP 完整诊断零错误。评审已同步 createCssContext/provideTheme 入口及尚未关闭的 WebStorm 导航验收。8f2feec 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38547597118) 在合并时 pending，新提交完整结果另行核对。
+
+按用户要求清除合包后的 css/tsx 残留、旧 compiler dist/增量缓存、de5973b 三包交付副本、旧 Naive fork 产物及配套报告、空目录；删除 3,148 个普通文件和 11 个依赖链接，约 63.4 MiB。保留当前依赖、IDE/MCP 设置和仍在使用的固定上游源码缓存。更新历史验收中的本机产物状态；组件库主题、模型、表单/弹层与首个正式组件的建议见 [准备评审](ui-library-readiness.md)，本轮未建立组件库包或改变已确认的作者 API。
+
 ## 控件准备审查、编辑体验与主题入口整理（2026-10-14）
 
 上一提交 1cb84e0ffb106a0bc44b3f24c54de5ef826f8792 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38536952356) 已完成：类型、运行、上游、浏览器、构建及双平台 LSP 成功，Linux/Windows 安装消费者的主题字面量说明断言失败。插件原先依赖作者私有 theme 字段，发射 .d.ts 后该字段类型被擦除；现在改读公开 Css<T> 参数，并在编辑器短测中使用真实私有字段声明发射结果回归。完整安装包复验交由新提交 CI。
@@ -83,7 +89,7 @@ afa88d4e185b14843e4a244ce2795616e3fc8fb2 的 [完整 CI](https://github.com/kenc
 
 三个工具包 1.0.0 的交付源码为 de5973b42c181839a9735576a9ef901ab34cca6c，[完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38497045742) 的 29 个任务全部成功。已下载 18 个 artifact，复核三个 tarball 和 Naive bundle 的 SHA-256、301 个源码命中、官方/fork 各 108 项原始测试、32 项浏览器用例及两个系统的独立运行/声明/清理报告；逐项证据与范围见 acceptance.md。
 
-交付文件保存在本机 artifacts/1.0.0-de5973b；已验收 dist 同步到工作区后，两个消费样例的原生 MCP 诊断均为 TypeScript 6.0.3、complete=true、errors=0。文档整理只更新接入说明、过时进度与验收记录，不更改该版本的包源码或构建输入。
+验收时交付文件曾保存在本机 artifacts/1.0.0-de5973b；已验收 dist 同步到工作区后，两个消费样例的原生 MCP 诊断均为 TypeScript 6.0.3、complete=true、errors=0。旧三包本机副本现已按用户要求清理，历史结果和哈希保留在 acceptance.md；这些结果不代表当前双包源码已验收。
 
 ## 实施历史（从新到旧）
 

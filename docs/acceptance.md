@@ -29,7 +29,7 @@
 
 ## 交付产物
 
-同一运行的 `packages-de5973b42c181839a9735576a9ef901ab34cca6c` artifact 提供三个包。包与测试报告已下载到本机 `artifacts/1.0.0-de5973b/`，其中 `verification.json` 保存核对摘要，`ci.json` 保存任务结果，`evidence/` 保留 18 个原始 artifact 的内容，消费者锁文件也在其中。安装方式见 [packages.md](packages.md)。
+同一运行的 `packages-de5973b42c181839a9735576a9ef901ab34cca6c` artifact 提供三个包。验收时曾将包与 18 个原始 artifact 下载到本机 `artifacts/1.0.0-de5973b/`，核对摘要、任务结果和消费者锁文件均随之保存。该旧三包副本已在 2026-10-14 按用户要求清理；下面保留当时核对的哈希，远程结果见本页链接。当前双包安装方式见 [packages.md](packages.md)。
 
 | 文件                           |  字节数 | SHA-256                                                          |
 | ------------------------------ | ------: | ---------------------------------------------------------------- |
@@ -37,9 +37,9 @@
 | zerodep-vue-tsx-1.0.0.tgz      |   14497 | 80acbcdb427809ddf8d261ed131f567906d8900dcfa2866cdd337d3b185bbd72 |
 | zerodep-vue-css-1.0.0.tgz      | 1029621 | faa732b1d9cd8451875d025b176af004a02498101d3116f7e8f8aad64c41f93d |
 
-同一次构建的 dist 也已放入当前工作区的三个 packages 目录，替换早期占位构建。没有在本地重跑完整构建；编译输出来自上面已验收的远程产物。两个独立消费样例在当前会话的原生 LSP 中均为 TypeScript 6.0.3、complete=true、errors=0。
+验收时曾将同一次构建的 dist 放入当时的三个 packages 目录，并确认两个消费样例的原生 LSP 为 TypeScript 6.0.3、complete=true、errors=0；没有在本地重跑完整构建。这些旧输出现已清理，不能当作当前双包源码的验证结果。
 
-包保留 private 标记，交付是可安装的 tarball；本次没有向 npm registry 发布。CI artifact 的远程保留期为七天，本机交付目录保留供后续安装及追溯，未作为临时测试垃圾删除。
+包保留 private 标记，交付是可安装的 tarball；该次验收没有向 npm registry 发布。CI artifact 的远程保留期为七天；保留期内可重新下载，过期后需从对应提交重新构建或运行验证。本机旧交付目录已删除，清理范围见 [组件库准备评审](ui-library-readiness.md)。
 
 ## 验证边界
 

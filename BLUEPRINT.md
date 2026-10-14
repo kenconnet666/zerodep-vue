@@ -10,6 +10,8 @@
 
 真实 JSX v3.0.0 源码 fork、Vite 入口、组件作者转换、运行时 CSS、HMR 与开发检查均已实现。Naive UI 的 301 个生产 TSX、浏览器混用、SSR/hydrate、资源稳定性和独立安装消费进入完整 CI。本文定义维护契约；具体版本及逐项交付证据见 [验收矩阵](docs/acceptance.md)，历史实施记录见 [progress.md](docs/progress.md)。
 
+组件库启动前的清理、已确认阻碍及 API 备选方案见 [组件库准备评审](docs/ui-library-readiness.md)。其中建议需在正式组件试点前确定，不替代本蓝图已经确认的工具库契约。
+
 ## 1 已确定的方向与范围
 
 ### 1.1 交付范围

@@ -11,6 +11,89 @@ const init = createRequire(import.meta.url)(
   ts.resolveJSModule('@zerodep-vue/compiler/src/editor/plugin.cjs', root, ts.sys),
 );
 
+test('theme literal documentation survives the emitted author declarations', () => {
+  const configPath = resolve(root, 'fixtures/authoring/tsconfig.json');
+  const config = ts.readConfigFile(configPath, ts.sys.readFile);
+  const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, dirname(configPath));
+  const filename = resolve(root, 'fixtures/package-consumer/template/types.tsx');
+  const host = languageServiceHost(ts, root, [filename], parsed.options);
+  const emitted = new Map();
+  const replacements = new Map();
+  const sources = ['author', 'bindings', 'generated/author', 'generated/literal-values'].map(
+    (name) => resolve(root, `packages/core/src/css/${name}.ts`),
+  );
+  const program = ts.createProgram([...sources, filename], {
+    ...parsed.options,
+    noEmit: false,
+    noEmitOnError: false,
+    declaration: true,
+    emitDeclarationOnly: true,
+  });
+  // 只在内存发射编辑器依赖的四份声明；覆盖 private 类型被擦除的发布边界，不构建全仓。
+  for (const source of sources) {
+    const declaration = source.replace(/\.ts$/, '.d.ts');
+    const input = program.getSourceFile(source);
+    assert(input, source);
+    const result = program.emit(
+      input,
+      (file, text) => {
+        if (file.endsWith('.d.ts')) emitted.set(declaration, text);
+      },
+      undefined,
+      true,
+    );
+    assert.equal(result.emitSkipped, false, source);
+    assert(emitted.has(declaration), source);
+    replacements.set(source, declaration);
+  }
+  const snapshot = host.getScriptSnapshot.bind(host);
+  const read = host.readFile;
+  const exists = host.fileExists;
+  host.fileExists = (file) => emitted.has(resolve(file)) || exists(file);
+  host.readFile = (file) => emitted.get(resolve(file)) ?? read(file);
+  host.getScriptSnapshot = (file) =>
+    emitted.has(resolve(file))
+      ? ts.ScriptSnapshot.fromString(emitted.get(resolve(file)))
+      : snapshot(file);
+  host.resolveModuleNames = (names, containingFile) =>
+    names.map((name) => {
+      const resolved = ts.resolveModuleName(
+        name,
+        containingFile,
+        parsed.options,
+        host,
+      ).resolvedModule;
+      const replacement = resolved && replacements.get(resolve(resolved.resolvedFileName));
+      return replacement
+        ? { ...resolved, resolvedFileName: replacement, extension: ts.Extension.Dts }
+        : resolved;
+    });
+  const service = init({ typescript: ts }).create({
+    languageService: ts.createLanguageService(host),
+  });
+  try {
+    const text = ts.sys.readFile(filename);
+    const position = text.lastIndexOf("'_brand'", text.indexOf('// literal:themeBrand')) + 2;
+    const hover = service.getQuickInfoAtPosition(filename, position);
+    assert.match(ts.displayPartsToString(hover?.documentation), /消费应用的强调色/);
+    const entries = service.getCompletionsAtPosition(filename, position, {}).entries;
+    assert(entries.some((entry) => entry.name === '_brand'));
+    const details = service.getCompletionEntryDetails(filename, position, '_brand', {});
+    assert.match(ts.displayPartsToString(details?.documentation), /消费应用的强调色/);
+    const definitions = service.getDefinitionAtPosition(filename, position);
+    assert.equal(definitions?.length, 1);
+    assert.equal(resolve(definitions[0].fileName), resolve(dirname(filename), 'App.tsx'));
+    assert(
+      service
+        .getProgram()
+        .getSourceFiles()
+        .some((file) => emitted.has(resolve(file.fileName))),
+    );
+  } finally {
+    service.dispose();
+  }
+});
+
 test('CSS literal completion documentation and navigation use real generated declarations', () => {
   assert.equal(ts.version, '6.0.3');
   const configPath = resolve(root, 'fixtures/authoring/tsconfig.json');
