@@ -37,6 +37,7 @@ test('Vite prebundles installed CSS dependencies without making them mandatory f
     );
     created.add(manifest);
     const installed = config('serve').optimizeDeps;
+    assert(installed.include.includes('@zerodep-vue/core > @vue/shared'));
     assert(installed.include.includes('@zerodep-vue/core > @vue/devtools-api'));
     assert(installed.include.every((id) => !id.includes('@zerodep-vue/compiler')));
     assert.equal(config('build').optimizeDeps, undefined);

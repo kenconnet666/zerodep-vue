@@ -7,7 +7,7 @@ export { SystemKeywords } from './css/generated/system.ts';
 export type { CssContext, KeywordView, ThemeSource } from './css/types.ts';
 export { bx } from './css/bindings.ts';
 export { createCssHost, cssHostKey } from './css/host.ts';
-export { getCssHost } from './css/vnode.ts';
+export { getCssHost } from './css/context.ts';
 export type { CssHost, CssHostOptions } from './css/host.ts';
 export type { CssClass, ClassValue, CssInput, CssNestedInput } from './css/style-value.ts';
 export type { CssCondition, PropertyValue, CustomPropertyValue } from './css/types.ts';

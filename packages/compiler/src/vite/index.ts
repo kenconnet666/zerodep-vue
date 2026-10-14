@@ -97,43 +97,31 @@ function componentMetadata(
               if (item.init) t.addComment(item.init, 'leading', '#__PURE__');
             }
           }
+          const addExport = (local: string, exported = local) => {
+            const own = locals.get(local);
+            // false 代表普通 Vue 组件，不能用 truthy 判断把它漏掉。
+            if (own !== undefined) exports.push({ local, exported, own });
+          };
           for (const statement of program.node.body) {
-            if (
-              t.isExportDefaultDeclaration(statement) &&
-              t.isIdentifier(statement.declaration) &&
-              locals.has(statement.declaration.name)
-            ) {
-              exports.push({
-                local: statement.declaration.name,
-                exported: 'default',
-                own: locals.get(statement.declaration.name)!,
-              });
-            } else if (t.isExportNamedDeclaration(statement)) {
-              if (t.isVariableDeclaration(statement.declaration)) {
-                for (const item of statement.declaration.declarations) {
-                  if (t.isIdentifier(item.id) && locals.has(item.id.name))
-                    exports.push({
-                      local: item.id.name,
-                      exported: item.id.name,
-                      own: locals.get(item.id.name)!,
-                    });
+            switch (statement.type) {
+              case 'ExportDefaultDeclaration':
+                if (t.isIdentifier(statement.declaration))
+                  addExport(statement.declaration.name, 'default');
+                break;
+              case 'ExportNamedDeclaration':
+                if (t.isVariableDeclaration(statement.declaration)) {
+                  for (const item of statement.declaration.declarations)
+                    if (t.isIdentifier(item.id)) addExport(item.id.name);
                 }
-              }
-              if (statement.source) continue;
-              for (const specifier of statement.specifiers) {
-                if (
-                  t.isExportSpecifier(specifier) &&
-                  t.isIdentifier(specifier.local) &&
-                  locals.has(specifier.local.name)
-                )
-                  exports.push({
-                    local: specifier.local.name,
-                    exported: t.isIdentifier(specifier.exported)
-                      ? specifier.exported.name
-                      : specifier.exported.value,
-                    own: locals.get(specifier.local.name)!,
-                  });
-              }
+                if (statement.source) break;
+                for (const specifier of statement.specifiers) {
+                  if (!t.isExportSpecifier(specifier) || !t.isIdentifier(specifier.local)) continue;
+                  const name = t.isIdentifier(specifier.exported)
+                    ? specifier.exported.name
+                    : specifier.exported.value;
+                  addExport(specifier.local.name, name);
+                }
+                break;
             }
           }
           if (hot) {
@@ -177,6 +165,7 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
                   'vue',
                   ...(hasRuntime
                     ? [
+                        '@vue/shared',
                         '@emotion/unitless',
                         'postcss-selector-parser',
                         '@csstools/css-tokenizer',

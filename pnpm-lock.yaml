@@ -495,6 +495,9 @@ importers:
       '@vue/devtools-api':
         specifier: 'catalog:'
         version: 8.2.1
+      '@vue/shared':
+        specifier: 'catalog:'
+        version: 3.5.43
       csstype:
         specifier: 'catalog:'
         version: 3.2.3

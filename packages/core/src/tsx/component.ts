@@ -22,16 +22,15 @@ type Same<Left, Right> =
     : false;
 type ComputedBrand = Exclude<keyof ComputedRef<unknown>, keyof Ref<unknown> | 'effect'>;
 type WritableBrand = Exclude<keyof WritableComputedRef<unknown>, keyof ComputedRef<unknown>>;
+/** 普通 Ref 不携带只读 computed 标记；可写 computed 用 Vue 自己的标记放行。 */
+type WritableRefKind =
+  { readonly [Key in ComputedBrand]?: never } | Pick<WritableComputedRef<unknown>, WritableBrand>;
 /** 复用 Vue 的 computed 标记，拒绝 getter-only computed，不创造新的状态容器。 */
 // 先检查原始 value 修饰符；先收窄为 Ref 会把只读成员交叉成可写成员，丢失区别。
 type ModelInput<Value> = Value extends unknown
   ? Same<Pick<Value, 'value' & keyof Value>, { value: Value['value' & keyof Value] }> extends true
     ? Value extends Ref
-      ? Value &
-          (
-            | { readonly [Key in ComputedBrand]?: never }
-            | Pick<WritableComputedRef<unknown>, WritableBrand>
-          )
+      ? Value & WritableRefKind
       : Value
     : Value
   : never;

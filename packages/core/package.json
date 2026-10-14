@@ -27,6 +27,7 @@
     "test": "node --test test/css/*.test.mjs test/development/*.test.mjs"
   },
   "dependencies": {
+    "@vue/shared": "catalog:",
     "csstype": "catalog:",
     "@csstools/css-tokenizer": "catalog:",
     "@emotion/unitless": "catalog:",

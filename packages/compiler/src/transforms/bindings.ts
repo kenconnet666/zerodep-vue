@@ -1,7 +1,21 @@
-import type { Scope } from '@babel/core';
+import type { NodePath, Scope } from '@babel/core';
+import { addNamed } from '@babel/helper-module-imports';
 import * as t from '@babel/types';
 
 export const coreModule = '@zerodep-vue/core';
+
+/** 每次变换维护自己的导入缓存；返回副本，避免多个 AST 位置共用可变节点。 */
+export function runtimeImports(program: NodePath<t.Program>) {
+  const names = new Map<string, t.Identifier>();
+  return (name: string): t.Identifier => {
+    let identifier = names.get(name);
+    if (!identifier) {
+      identifier = addNamed(program, name, coreModule);
+      names.set(name, identifier);
+    }
+    return t.cloneNode(identifier);
+  };
+}
 
 /** 仅接受静态属性名，计算表达式留给正常 JavaScript 语义。 */
 export function propertyName(
@@ -14,12 +28,10 @@ export function propertyName(
 
 /** 按作用域中的真实导入识别别名和命名空间，局部同名变量不会被接管。 */
 export function importedName(scope: Scope, node: t.Node, source: string): string | undefined {
-  const local = t.isIdentifier(node)
-    ? node
-    : t.isMemberExpression(node) && t.isIdentifier(node.object)
-      ? node.object
-      : undefined;
-  if (!local) return;
+  let local: t.Identifier;
+  if (t.isIdentifier(node)) local = node;
+  else if (t.isMemberExpression(node) && t.isIdentifier(node.object)) local = node.object;
+  else return;
   const binding = scope.getBinding(local.name);
   if (
     !binding?.path.parentPath?.isImportDeclaration() ||

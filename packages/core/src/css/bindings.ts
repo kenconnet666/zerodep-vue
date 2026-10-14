@@ -1,18 +1,21 @@
-/** 值标记与 class 标记分开，普通对象永远不会因键名相似被当作 CSS。 */
-export const BINDING = Symbol.for('@zerodep-vue/core/binding/v1');
-export const TEMPLATE = Symbol.for('@zerodep-vue/core/template/v1');
 import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
 import type { ThemeReference } from './tokens.ts';
 import { isAnimation } from './animation-token.ts';
 import type { CssAnimation } from './animation-token.ts';
+
+/** 值标记与 class 标记分开，普通对象永远不会因键名相似被当作 CSS。 */
+export const BINDING = Symbol.for('@zerodep-vue/core/binding/v1');
+export const TEMPLATE = Symbol.for('@zerodep-vue/core/template/v1');
 export type Scalar = string | number;
 
 /** 动态属性值。由编译器捕获表达式，读取归实际消费节点所有。 */
 export interface CssBinding<out T> {
   readonly [BINDING]: () => T;
 }
+type DeferredValue = CssBinding<unknown> | ThemeReference | CssAnimation;
+type TemplateInput = string | DeferredValue | CssTemplate;
 export interface CssTemplate {
-  readonly [TEMPLATE]: readonly (string | CssBinding<unknown> | ThemeReference | CssAnimation)[];
+  readonly [TEMPLATE]: readonly (string | DeferredValue)[];
 }
 
 export function isBinding(value: unknown): value is CssBinding<unknown> {
@@ -20,6 +23,10 @@ export function isBinding(value: unknown): value is CssBinding<unknown> {
 }
 export function isTemplate(value: unknown): value is CssTemplate {
   return value !== null && typeof value === 'object' && TEMPLATE in value;
+}
+
+function isInterpolation(value: unknown): value is DeferredValue | CssTemplate {
+  return isBinding(value) || isTemplate(value) || isThemeReference(value) || isAnimation(value);
 }
 
 /** @internal 编译目标；不在声明时执行 getter，也不在这里建立订阅。 */
@@ -39,19 +46,13 @@ export function bx<const T>(value: T): CssBinding<T> {
 }
 
 /** @internal 按原模板的顺序完成普通片段的字符串转换，绑定仍保持结构化。 */
-export function piece(
-  value: unknown,
-): string | CssBinding<unknown> | CssTemplate | ThemeReference | CssAnimation {
+export function piece(value: unknown): TemplateInput {
   if (isKeyword(value)) return value[KEYWORD].value;
-  return isBinding(value) || isTemplate(value) || isThemeReference(value) || isAnimation(value)
-    ? value
-    : `${value}`;
+  return isInterpolation(value) ? value : `${value}`;
 }
 
 /** @internal 多个 bx 独立捕获，消费时组装完整 CSS 值；不使用全局字符串 token 注册表。 */
-export function template(
-  parts: readonly (string | CssBinding<unknown> | CssTemplate | ThemeReference | CssAnimation)[],
-): string | CssTemplate {
+export function template(parts: readonly TemplateInput[]): string | CssTemplate {
   const flattened = parts.flatMap((part) => (isTemplate(part) ? [...part[TEMPLATE]] : [part]));
   if (flattened.every((part) => typeof part === 'string')) return flattened.join('');
   return Object.freeze({
@@ -64,16 +65,6 @@ export function template(
 
 /** @internal 普通输入完整保留 JS +；含绑定的字符串拼接保留独立片段。 */
 export function add(left: any, right: any): any {
-  if (
-    isBinding(left) ||
-    isTemplate(left) ||
-    isThemeReference(left) ||
-    isAnimation(left) ||
-    isBinding(right) ||
-    isTemplate(right) ||
-    isThemeReference(right) ||
-    isAnimation(right)
-  )
-    return template([piece(left), piece(right)]);
+  if (isInterpolation(left) || isInterpolation(right)) return template([piece(left), piece(right)]);
   return left + right;
 }

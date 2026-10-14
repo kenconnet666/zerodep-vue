@@ -32,6 +32,8 @@ CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提�
 
 UI 工程已按授权建立，配置和依赖决策见 [UI 基础计划](docs/ui-foundation.md)。[组件库准备评审](docs/ui-library-readiness.md) 保留清理、基础契约和正式组件的实施顺序。当前只建立基础，不把目录或依赖安装当作组件实现。
 
+阅读实现时，先看 [CSS 类型与运行时阅读说明](packages/core/src/css/README.md)，再看对应职责模块；不必从生成声明入手。全仓简化的范围、取舍与验证见 [可维护性记录](docs/maintainability.md)。
+
 ## 本地开发与远程验证
 
 ```powershell

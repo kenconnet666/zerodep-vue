@@ -1,9 +1,8 @@
-import { addNamed } from '@babel/helper-module-imports';
 import { createHash } from 'node:crypto';
 import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
 import type { State } from '../upstream/interface.ts';
-import { coreModule, importedName } from './bindings.ts';
+import { coreModule, importedName, runtimeImports } from './bindings.ts';
 
 /** 显式开启可处理只导入项目共享样式的普通 Vue 文件；省略时按工具导入自动接入。 */
 export interface CssOptions {
@@ -11,15 +10,58 @@ export interface CssOptions {
 }
 
 function preventsMemo(node: t.Node): boolean {
-  return (
-    t.isThisExpression(node) ||
-    t.isSuper(node) ||
-    t.isAwaitExpression(node) ||
-    t.isYieldExpression(node) ||
-    t.isAssignmentExpression(node) ||
-    t.isUpdateExpression(node) ||
-    t.isUnaryExpression(node, { operator: 'delete' })
-  );
+  switch (node.type) {
+    case 'ThisExpression':
+    case 'Super':
+    case 'AwaitExpression':
+    case 'YieldExpression':
+    case 'AssignmentExpression':
+    case 'UpdateExpression':
+      return true;
+    case 'UnaryExpression':
+      return node.operator === 'delete';
+    default:
+      return false;
+  }
+}
+
+/** 分析完整表达式，再决定是否缓存；traverse 不访问根节点，不能漏掉根赋值等操作。 */
+function memoInputs(expression: NodePath<t.Expression>): t.Identifier[] | undefined {
+  let calls = expression.isCallExpression() || expression.isOptionalCallExpression();
+  let safe = !preventsMemo(expression.node);
+  const inputs = new Map<object, t.Identifier>();
+  expression.traverse({
+    enter(reference) {
+      // as/satisfies/泛型参数中的名称没有运行时值。
+      if (reference.isTSType()) {
+        reference.skip();
+        return;
+      }
+      if (preventsMemo(reference.node)) safe = false;
+    },
+    CallExpression() {
+      calls = true;
+    },
+    OptionalCallExpression() {
+      calls = true;
+    },
+    ReferencedIdentifier(reference) {
+      if (!t.isIdentifier(reference.node) || reference.node.name === 'arguments') {
+        safe = false;
+        return;
+      }
+      const binding = reference.scope.getBinding(reference.node.name);
+      if (
+        !binding ||
+        binding.path === expression ||
+        binding.path.findParent((parent) => parent === expression)
+      )
+        return;
+      // 回调局部值也参与缓存输入，循环重排或新闭包不能继续使用旧参数。
+      inputs.set(binding, t.cloneNode(reference.node));
+    },
+  });
+  return calls && safe ? [...inputs.values()] : undefined;
 }
 
 /** JSX 之前只捕获表达式和传递元数据，声明组合与 CSS 生成仍全部在运行时完成。 */
@@ -39,15 +81,7 @@ export function transformCss(
     throw program.buildCodeFrameError(
       '[ZV_CSS_PRAGMA] CSS 接线需要标准 Vue VNode 工厂；普通自定义 pragma 文件可关闭 zerodep.css。',
     );
-  const helpers = new Map<string, t.Identifier>();
-  const helper = (name: string) => {
-    let identifier = helpers.get(name);
-    if (!identifier) {
-      identifier = addNamed(program, name, coreModule);
-      helpers.set(name, identifier);
-    }
-    return t.cloneNode(identifier);
-  };
+  const helper = runtimeImports(program);
   const captures = new WeakSet<t.Node>();
   const memoVersion = createHash('sha256').update(state.file.code).digest('hex').slice(0, 16);
   let memoSite = 0;
@@ -77,50 +111,12 @@ export function transformCss(
         if (!container.isJSXExpressionContainer()) return;
         const expression = container.get('expression');
         if (!expression.isExpression()) return;
-        let calls = expression.isCallExpression() || expression.isOptionalCallExpression();
-        // traverse 不访问根节点；整个 class 就是赋值/await 等表达式时也须保留原语义。
-        let safe = !preventsMemo(expression.node);
-        const inputs = new Map<object, t.Identifier>();
-        expression.traverse({
-          enter(reference) {
-            // as/satisfies/泛型参数中的名称没有运行时值，不能提升成缓存输入。
-            if (reference.isTSType()) {
-              reference.skip();
-              return;
-            }
-            if (preventsMemo(reference.node)) safe = false;
-          },
-          CallExpression() {
-            calls = true;
-          },
-          OptionalCallExpression() {
-            calls = true;
-          },
-          ReferencedIdentifier(reference) {
-            if (!t.isIdentifier(reference.node)) {
-              safe = false;
-              return;
-            }
-            if (reference.node.name === 'arguments') {
-              safe = false;
-              return;
-            }
-            const binding = reference.scope.getBinding(reference.node.name);
-            if (
-              !binding ||
-              binding.path === expression ||
-              binding.path.findParent((parent) => parent === expression)
-            )
-              return;
-            // 回调局部值也作为缓存输入，循环重排或新闭包不能继续使用旧参数。
-            inputs.set(binding, t.cloneNode(reference.node));
-          },
-        });
-        if (!calls || !safe) return;
+        const inputs = memoInputs(expression);
+        if (!inputs) return;
         expression.replaceWith(
           t.callExpression(helper('memoClass'), [
             t.stringLiteral(`${memoVersion}:${memoSite++}`),
-            t.arrowFunctionExpression([], t.arrayExpression([...inputs.values()])),
+            t.arrowFunctionExpression([], t.arrayExpression(inputs)),
             t.arrowFunctionExpression([], expression.node),
           ]),
         );
@@ -191,15 +187,7 @@ export function transformCss(
 }
 
 export function connectCss(program: NodePath<t.Program>, state: State) {
-  const helpers = new Map<string, t.Identifier>();
-  const helper = (name: string) => {
-    let identifier = helpers.get(name);
-    if (!identifier) {
-      identifier = addNamed(program, name, coreModule);
-      helpers.set(name, identifier);
-    }
-    return t.cloneNode(identifier);
-  };
+  const helper = runtimeImports(program);
   const ordinary = state.get('createVNode');
   state.set('zerodep:createVNode', (path: NodePath<t.JSXElement>) => {
     const potential = path.node.openingElement.attributes.some((attribute) => {

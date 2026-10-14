@@ -68,7 +68,10 @@ export function globalCss(
   const origin =
     options.host ?? (instance ? inject<CssHost | undefined>(cssHostKey, undefined) : undefined);
   const ssr = !!instance?.appContext.provides[ssrContextKey as symbol];
-  const host = instance ? (ssr ? hostFor(instance) : (origin ?? hostFor(instance))) : options.host!;
+  let host: CssHost;
+  if (!instance) host = options.host!;
+  else if (ssr) host = hostFor(instance);
+  else host = origin ?? hostFor(instance);
   let lease: GlobalLease | undefined;
   // 首次 effect 求值也可能失败；独立作用域保证尚未返回 stop handle 时仍能清理订阅。
   const effect = effectScope(true);

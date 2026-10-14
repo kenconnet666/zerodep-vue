@@ -39,21 +39,29 @@ module.exports = function init({ typescript: ts }) {
         });
       }
 
+      // 两种增强共用命中位置的遍历；各自决定节点边界，避免指令与字面量的定位逐渐分叉。
+      function nodeAt(source, position, matches) {
+        let selected;
+        function visit(node) {
+          if (position < node.getStart(source) || position > node.end) return;
+          if (matches(node)) selected = node;
+          ts.forEachChild(node, visit);
+        }
+        visit(source);
+        return selected;
+      }
+
       function context(fileName, position) {
         const program = service.getProgram();
         const source = program?.getSourceFile(fileName);
         if (!source) return;
-        let literal;
-        function visit(node) {
-          if (position < node.getStart(source) || position > node.end) return;
-          if (
+        const literal = nodeAt(
+          source,
+          position,
+          (node) =>
             (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) &&
-            (position < node.end || node.isUnterminated)
-          )
-            literal = node;
-          ts.forEachChild(node, visit);
-        }
-        visit(source);
+            (position < node.end || node.isUnterminated),
+        );
         if (!literal || position <= literal.getStart(source)) return;
         // 包装表达式和条件的结果分支仍属于同一属性；条件本身、任意函数和字符串拼接不属于。
         let value = literal;
@@ -183,13 +191,11 @@ module.exports = function init({ typescript: ts }) {
         const program = service.getProgram();
         const source = program?.getSourceFile(fileName);
         if (!source) return;
-        let attribute;
-        function visit(node) {
-          if (position < node.getStart(source) || position > node.end) return;
-          if (ts.isJsxAttribute(node) && position <= node.name.end) attribute = node;
-          ts.forEachChild(node, visit);
-        }
-        visit(source);
+        const attribute = nodeAt(
+          source,
+          position,
+          (node) => ts.isJsxAttribute(node) && position <= node.name.end,
+        );
         if (!attribute) return;
         const name = requested ?? attribute.name.getText(source);
         if (!/^v-(?:model(?:s|_|:|$)|show$|html$|text$|slots$)/.test(name)) return;

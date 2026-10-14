@@ -32,6 +32,8 @@
 
 远程 `8f2feec` 已将编辑器改为读取公开 `Css<T>` 的主题参数。合并时采用这一修复，保留 `theme` 的 private 边界，不再让编辑功能依赖私有存储类型。本轮新增定点测试在内存发射四份相关 `.d.ts` 并通过语言服务读取，确认 `_brand` 的中文 hover、补全详情和唯一导航恢复；安装消费者的失败消息补充具体探针名和值。
 
+后续 A 方案整理已移除运行时作者重复保存的 theme 字段，主题泛型保留在作者类型层；编辑器继续读取公开 Css<T>，声明发射与导航回归仍保留。当前实现的阅读顺序见 [CSS 源码说明](../packages/core/src/css/README.md)。
+
 8f2feec 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38547597118) 和 c202fd3 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38548207618) 现已确认成功；后者 28 个任务全部通过，包括 Linux/Windows 安装包声明与本轮前新增的真实 .d.ts 回归。发布声明缺口已经关闭。
 
 后续 fixture、完整 CSS 动态值和延迟创建/class 缓存已包含在 `6157316f14a5450e325d9a32ed191de5da758ed3`，其 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38567686037) 已通过。缓存边界复查发现的根赋值/delete、短路分支 TDZ 和类型引用误采样另行修复并补回归；该轮新改动仍须核对自己的提交 CI，不能沿用 6157316 的成功结论。

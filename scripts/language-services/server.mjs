@@ -8,7 +8,17 @@ const { McpServer } = requireProject('@modelcontextprotocol/sdk/server/mcp.js');
 const { StdioServerTransport } = requireProject('@modelcontextprotocol/sdk/server/stdio.js');
 const { z } = requireProject('zod/v3');
 const root = await realpath(configuredRoot);
-const supported = new Set(['.ts', '.tsx', '.mts', '.cts', '.js', '.jsx', '.mjs', '.cjs']);
+// 扩展名和 LSP languageId 在同一处维护，不能只增加允许读取的后缀而漏掉语言分类。
+const languages = new Map([
+  ['.ts', 'typescript'],
+  ['.tsx', 'typescriptreact'],
+  ['.mts', 'typescript'],
+  ['.cts', 'typescript'],
+  ['.js', 'javascript'],
+  ['.jsx', 'javascriptreact'],
+  ['.mjs', 'javascript'],
+  ['.cjs', 'javascript'],
+]);
 
 async function document(filePath) {
   const absolute = await realpath(resolve(root, filePath));
@@ -16,20 +26,14 @@ async function document(filePath) {
   if (isAbsolute(fromRoot) || fromRoot === '..' || fromRoot.startsWith('..' + sep))
     throw new Error('File is outside the configured workspace.');
   const extension = extname(absolute);
-  if (!supported.has(extension)) throw new Error('Unsupported source file extension: ' + extension);
+  const languageId = languages.get(extension);
+  if (!languageId) throw new Error('Unsupported source file extension: ' + extension);
   return {
     path: absolute,
     relativePath: fromRoot,
     uri: pathToFileURL(absolute).href,
     text: await readFile(absolute, 'utf8'),
-    languageId:
-      extension === '.tsx'
-        ? 'typescriptreact'
-        : extension === '.jsx'
-          ? 'javascriptreact'
-          : ['.js', '.mjs', '.cjs'].includes(extension)
-            ? 'javascript'
-            : 'typescript',
+    languageId,
   };
 }
 

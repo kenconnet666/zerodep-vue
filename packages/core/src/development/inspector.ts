@@ -133,21 +133,20 @@ function installInspectionHooks() {
             const source = locations.get(part);
             return {
               ...(source ? { source } : {}),
-              declarations: part.declarations.map((declaration) => ({
-                property: declaration.property,
-                selector: declaration.selector,
-                conditions: [...declaration.conditions],
-                status:
-                  declaration.value === null
-                    ? '清除标记'
-                    : !active.has(declaration)
-                      ? '被覆盖'
-                      : values.has(declaration)
-                        ? '生效'
-                        : '当前省略',
-                values: values.get(declaration) ?? [],
-                bindings: bindingSnapshot(declaration.value, reads, active.has(declaration)),
-              })),
+              declarations: part.declarations.map((declaration) => {
+                let status: DeclarationSnapshot['status'] = '当前省略';
+                if (declaration.value === null) status = '清除标记';
+                else if (!active.has(declaration)) status = '被覆盖';
+                else if (values.has(declaration)) status = '生效';
+                return {
+                  property: declaration.property,
+                  selector: declaration.selector,
+                  conditions: [...declaration.conditions],
+                  status,
+                  values: values.get(declaration) ?? [],
+                  bindings: bindingSnapshot(declaration.value, reads, active.has(declaration)),
+                };
+              }),
             };
           })
           .reduce<CssSnapshot['sources']>((groups, next) => {

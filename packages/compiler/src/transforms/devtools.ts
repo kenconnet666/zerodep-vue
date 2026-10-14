@@ -1,22 +1,21 @@
-import { addNamed } from '@babel/helper-module-imports';
 import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
 import { cssCallKind } from './hmr.ts';
-import { coreModule, importedName } from './bindings.ts';
+import { coreModule, importedName, runtimeImports } from './bindings.ts';
 
 /** 只在 Vite 客户端开发转换中调用；位置常量与包装不进入生产及 SSR 输出。 */
 export function instrumentDevtools(program: NodePath<t.Program>, filename: string): void {
   program.scope.crawl();
-  const helpers = new Map<string, t.Identifier>();
+  const importRuntime = runtimeImports(program);
   const helper = (name: string) => {
-    const imported =
-      name === 'createCssVNode'
-        ? 'createInspectedVNode'
-        : name === 'cloneCssVNode'
-          ? 'cloneInspectedVNode'
-          : name;
-    if (!helpers.has(name)) helpers.set(name, addNamed(program, imported, coreModule));
-    return t.cloneNode(helpers.get(name)!);
+    switch (name) {
+      case 'createCssVNode':
+        return importRuntime('createInspectedVNode');
+      case 'cloneCssVNode':
+        return importRuntime('cloneInspectedVNode');
+      default:
+        return importRuntime(name);
+    }
   };
   const location = (node: t.Node, kind: string) => {
     const value = t.objectExpression([

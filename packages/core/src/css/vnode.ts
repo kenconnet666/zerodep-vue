@@ -14,6 +14,7 @@ import {
   onDeactivated,
   ssrContextKey,
 } from 'vue';
+import { PatchFlags } from '@vue/shared';
 import type {
   ComponentInternalInstance,
   ComputedRef,
@@ -23,7 +24,6 @@ import type {
 } from 'vue';
 import { cssHostKey } from './host.ts';
 import { hostFor } from './context.ts';
-export { getCssHost } from './context.ts';
 import type { CssHost, CssRule } from './host.ts';
 import { resolveClass } from './resolve.ts';
 import type { ResolvedClass } from './resolve.ts';
@@ -35,6 +35,14 @@ import { CLASS } from './style-value.ts';
 export const CLASS_PROP = '__zerodepVueClass';
 const COMPONENT = Symbol.for('@zerodep-vue/component');
 const DIRECTIVE = Symbol.for('@zerodep-vue/core/directive/v1');
+
+/** 隐式 class/style 与指令要参与更新；0 的完整 diff 和负值的 Vue 特殊标记保持原样。 */
+function stylePatchFlag(type: VNode['type'], flag: number): number {
+  if (flag <= 0) return flag;
+  if (typeof type === 'string')
+    return flag | PatchFlags.CLASS | PatchFlags.STYLE | PatchFlags.NEED_PATCH;
+  return flag | PatchFlags.FULL_PROPS;
+}
 type Props = Record<string, unknown>;
 interface Plan {
   source: Props;
@@ -399,7 +407,14 @@ export function createCssVNode(...args: Parameters<typeof createVNode>): VNode {
       source[CLASS_PROP] = source.class;
       source.class = '';
     }
-    return createVNode(type, source, children, flag >= 0 ? flag | 16 : flag, dynamic, block);
+    return createVNode(
+      type,
+      source,
+      children,
+      flag >= 0 ? flag | PatchFlags.FULL_PROPS : flag,
+      dynamic,
+      block,
+    );
   }
   if (typeof type === 'symbol') return createVNode(...args);
   if (frame) {
@@ -410,8 +425,7 @@ export function createCssVNode(...args: Parameters<typeof createVNode>): VNode {
     return vnode;
   }
   const { props, plan } = materialize(source);
-  // 0 表示完整 diff，不能缩窄为只检查 class/style。组件还要更新隐式新增的 style。
-  const patched = flag > 0 ? (typeof type === 'string' ? flag | 2 | 4 | 512 : flag | 16) : flag;
+  const patched = stylePatchFlag(type, flag);
   const vnode = createVNode(type, props, children, patched, dynamic, block);
   return attach(vnode, plan);
 }
@@ -432,7 +446,7 @@ export function inheritClass(value: VNodeChild, incoming: ClassValue): VNodeChil
   const copy = cloneVNode(value);
   if (ownComponent) {
     copy.props = { ...source, class: '', [CLASS_PROP]: source.class };
-    copy.patchFlag = 16;
+    copy.patchFlag = PatchFlags.FULL_PROPS;
     return copy;
   }
   if (frame) {
@@ -441,12 +455,7 @@ export function inheritClass(value: VNodeChild, incoming: ClassValue): VNodeChil
   }
   const { props, plan } = materialize(source);
   copy.props = props;
-  copy.patchFlag =
-    copy.patchFlag > 0
-      ? typeof copy.type === 'string'
-        ? copy.patchFlag | 2 | 4 | 512
-        : copy.patchFlag | 16
-      : copy.patchFlag;
+  copy.patchFlag = stylePatchFlag(copy.type, copy.patchFlag);
   return attach(copy, plan);
 }
 
@@ -473,7 +482,7 @@ export function renderCss(render: () => VNodeChild): VNodeChild {
     for (const [vnode, source] of current.pending) {
       const { props, plan } = materialize(source);
       vnode.props = props;
-      if (vnode.patchFlag > 0) vnode.patchFlag |= typeof vnode.type === 'string' ? 2 | 4 | 512 : 16;
+      vnode.patchFlag = stylePatchFlag(vnode.type, vnode.patchFlag);
       attach(vnode, plan);
     }
     return value;
@@ -508,13 +517,13 @@ export function cloneCssVNode(...args: Parameters<typeof cloneVNode>): VNode {
   );
   if (isOwnComponent(copy.type)) {
     copy.props = { ...merged, class: '', [CLASS_PROP]: merged.class };
-    copy.patchFlag = 16;
+    copy.patchFlag = PatchFlags.FULL_PROPS;
   } else if (frame) {
     frame.pending.set(copy, merged);
   } else {
     const { props, plan } = materialize(merged);
     copy.props = props;
-    if (copy.patchFlag > 0) copy.patchFlag |= typeof copy.type === 'string' ? 2 | 4 | 512 : 16;
+    copy.patchFlag = stylePatchFlag(copy.type, copy.patchFlag);
     attach(copy, plan);
   }
   return copy;

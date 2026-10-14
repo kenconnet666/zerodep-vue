@@ -34,6 +34,16 @@ assert.equal(
 );
 
 const production = process.env.BROWSER_MODE === 'production';
+// 可访问页面和客户端入口共用一份路由表；生产模式不开放开发检查页面。
+const pages = new Map([
+  ['/', '/src/client.ts'],
+  ['/ssr', '/src/client.ts'],
+  ['/stability', '/src/client.ts'],
+]);
+if (!production) {
+  pages.set('/hmr', '/src/hmr-client.ts');
+  pages.set('/inspector', '/src/inspector-client.ts');
+}
 const configFile = resolve(root, 'vite.config.ts');
 const clientRoot = resolve(root, '.generated/client');
 let vite;
@@ -73,12 +83,8 @@ const handler = async (request, response) => {
       response.end('ready');
       return;
     }
-    if (
-      url.pathname !== '/' &&
-      url.pathname !== '/ssr' &&
-      url.pathname !== '/stability' &&
-      !(['/hmr', '/inspector'].includes(url.pathname) && !production)
-    ) {
+    const entry = pages.get(url.pathname);
+    if (!entry) {
       const path = resolve(clientRoot, '.' + decodeURIComponent(url.pathname));
       if (production && path.startsWith(clientRoot + sep)) {
         try {
@@ -102,12 +108,6 @@ const handler = async (request, response) => {
     const renderer =
       render ?? (hydrate ? (await vite.ssrLoadModule('/src/render.ts')).render : undefined);
     const result = hydrate ? await renderer(initial) : { html: '', styles: '', teleports: '' };
-    const entry =
-      url.pathname === '/hmr'
-        ? '/src/hmr-client.ts'
-        : url.pathname === '/inspector'
-          ? '/src/inspector-client.ts'
-          : '/src/client.ts';
     const source = template.replace('/src/client.ts', entry);
     let html = production ? source : await vite.transformIndexHtml(request.url, source);
     html = html

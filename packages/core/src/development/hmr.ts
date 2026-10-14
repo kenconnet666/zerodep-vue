@@ -110,10 +110,16 @@ export function registerModule(
     },
     style(site: string, environment: Environment, kind: string) {
       const read = snapshot(site, environment);
-      if (kind === 'class') return view(read, CLASS);
-      if (kind === 'keyframes') return view(read, ANIMATION);
-      if (kind === 'source') return computed(() => unref(read()));
-      throw new Error('未知 HMR 样式类型：' + kind);
+      switch (kind) {
+        case 'class':
+          return view(read, CLASS);
+        case 'keyframes':
+          return view(read, ANIMATION);
+        case 'source':
+          return computed(() => unref(read()));
+        default:
+          throw new Error('未知 HMR 样式类型：' + kind);
+      }
     },
     onceGlobal(site: string, register: () => () => void) {
       if (!current.globals.has(site)) current.globals.set(site, register());
