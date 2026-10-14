@@ -1,7 +1,7 @@
 import { defineComponent, getCurrentInstance, isReadonly, shallowReadonly } from 'vue';
 import type { ComponentOptions, SetupContext } from 'vue';
 import { CLASS_PROP, hasIncomingClass, inheritClass, renderCss } from '../css/vnode.ts';
-import type { ClassValue } from '../css/types.ts';
+import type { ClassValue } from '../css/style-value.ts';
 
 /** 编译器与 CSS 边界共享标记，不通过组件名称猜测作者协议。 */
 export const componentMarker = Symbol.for('@zerodep-vue/component');

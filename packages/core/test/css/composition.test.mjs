@@ -3,7 +3,7 @@ import test from 'node:test';
 import { cx } from '../../src/css/composition.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
 import { binding, template } from '../../src/css/bindings.ts';
-import { CLASS } from '../../src/css/types.ts';
+import { CLASS } from '../../src/css/style-value.ts';
 import { createCssContext, SystemKeywords } from '../../src/index.ts';
 const { useCss } = createCssContext(new SystemKeywords());
 

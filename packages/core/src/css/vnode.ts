@@ -27,9 +27,9 @@ export { getCssHost } from './context.ts';
 import type { CssHost, CssRule } from './host.ts';
 import { resolveClass } from './resolve.ts';
 import type { ResolvedClass } from './resolve.ts';
-import { isCssClass } from './types.ts';
-import type { ClassValue } from './types.ts';
-import { CLASS } from './types.ts';
+import { isCssClass } from './style-value.ts';
+import type { ClassValue } from './style-value.ts';
+import { CLASS } from './style-value.ts';
 
 /** 仅由编译器和自有组件消费，不进入作者 JSX 或第三方组件的 props。 */
 export const CLASS_PROP = '__zerodepVueClass';

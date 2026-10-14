@@ -11,8 +11,8 @@ import {
 } from 'vue';
 import type { App, ComponentInternalInstance, VNode } from 'vue';
 import { setupDevToolsPlugin } from '@vue/devtools-api';
-import { CLASS, isCssClass } from '../css/types.ts';
-import type { Declaration } from '../css/types.ts';
+import { CLASS, isCssClass } from '../css/style-value.ts';
+import type { Declaration } from '../css/style-value.ts';
 import { ANIMATION, isAnimation } from '../css/animation-token.ts';
 import { TEMPLATE, isBinding, isTemplate } from '../css/bindings.ts';
 import { isThemeReference } from '../css/tokens.ts';

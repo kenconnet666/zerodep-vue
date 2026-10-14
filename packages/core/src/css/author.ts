@@ -1,17 +1,8 @@
-import { CLASS, markStableParts } from './types.ts';
-import type {
-  ClassPart,
-  CssClass,
-  CssCondition,
-  CssNestedInput,
-  CustomPropertyValue,
-  Declaration,
-} from './types.ts';
-import type { SystemKeywords } from './generated/system.ts';
-import type { KeywordView } from './theme.ts';
-import { colorProperties } from './generated/keywords.ts';
+import { CLASS, markStableParts } from './style-value.ts';
+import type { ClassPart, CssClass, CssNestedInput, Declaration } from './style-value.ts';
+import type { CssCondition, CustomPropertyValue } from './types.ts';
 import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
-import type { ThemeReference, ThemeResolver } from './tokens.ts';
+import type { ThemeResolver } from './tokens.ts';
 import { isBinding, isTemplate } from './bindings.ts';
 import { isAnimation } from './animation-token.ts';
 import { declarations } from './composition.ts';
@@ -22,23 +13,16 @@ interface Link {
   readonly part: ClassPart;
 }
 const snapshots = new WeakMap<object, readonly ClassPart[]>();
-const colors = new Set<string>(colorProperties);
 const root = Object.freeze({ selector: '&', target: '&', conditions: Object.freeze([]) });
 
 /** 链共享不可变前缀；只有消费/组合时才展开，追加属性不复制已有声明。 */
-export class CssAuthor<T extends SystemKeywords> implements CssClass {
-  private readonly theme: KeywordView<T>;
+export class CssAuthor implements CssClass {
   private readonly resolveTheme: ThemeResolver;
   private readonly tail: Link | undefined;
 
-  constructor(keywords: KeywordView<T>) {
-    this.theme = keywords;
-    this.resolveTheme = (property, name): ThemeReference => {
-      const group = Reflect.get(keywords, property);
-      if (group && name in group) return Reflect.get(group, name);
-      if (colors.has(property) && name in keywords.color) return Reflect.get(keywords.color, name);
-      throw new Error(`当前主题的 ${property} 没有关键字 ${name}。`);
-    };
+  constructor(resolveTheme: ThemeResolver) {
+    // T 与属性值的关系已在 Css<T> 方法签名检查；运行时只需要来源明确的解析函数。
+    this.resolveTheme = resolveTheme;
     this.tail = undefined;
     markStableParts(this);
     Object.freeze(this);
@@ -57,20 +41,16 @@ export class CssAuthor<T extends SystemKeywords> implements CssClass {
 
   private append(entries: readonly Declaration[]): this {
     if (!entries.length) return this;
-    return markStableParts(
-      Object.freeze(
-        Object.create(Object.getPrototypeOf(this), {
-          theme: { value: this.theme },
-          resolveTheme: { value: this.resolveTheme },
-          tail: {
-            value: Object.freeze({
-              previous: this.tail,
-              part: Object.freeze({ declarations: entries }),
-            }),
-          },
-        }),
-      ),
-    ) as this;
+    const tail = Object.freeze({
+      previous: this.tail,
+      part: Object.freeze({ declarations: entries }),
+    });
+    // 保留实际子类原型而不重跑构造函数，旧链和来源解析器由新分支共享。
+    const next = Object.create(Object.getPrototypeOf(this), {
+      resolveTheme: { value: this.resolveTheme },
+      tail: { value: tail },
+    }) as this;
+    return markStableParts(Object.freeze(next));
   }
 
   protected write(property: string, input: unknown): this {

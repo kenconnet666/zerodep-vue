@@ -11,8 +11,8 @@ import {
 import type { Ref } from 'vue';
 import selectorParser from 'postcss-selector-parser';
 import { declarations } from './composition.ts';
-import { CLASS } from './types.ts';
-import type { CssNestedInput, Declaration } from './types.ts';
+import { CLASS } from './style-value.ts';
+import type { CssNestedInput, Declaration } from './style-value.ts';
 import { resolveClass } from './resolve.ts';
 import { cssHostKey } from './host.ts';
 import type { CssHost, GlobalLease } from './host.ts';

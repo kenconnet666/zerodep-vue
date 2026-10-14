@@ -385,13 +385,13 @@ const outputs = {
     `export type { SystemViews } from './keyword-views.ts';\n`,
   'keyword-views.ts':
     header +
-    `import type { PropertyName } from '../types.ts';\nimport type { SystemKeywordView, SystemKeyword } from '../tokens.ts';\nimport type * as Values from './literal-values.ts';\n` +
+    `import type { PropertyName, SystemKeywordView } from '../types.ts';\nimport type { SystemKeyword } from '../tokens.ts';\nimport type * as Values from './literal-values.ts';\n` +
     interfaces.join('\n') +
     `\nexport interface SystemViews {\n${viewLines.join('\n')}\n}\n`,
   'author.ts':
     header +
     `import type { PropertyInput } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\nimport { CssAuthor } from '../author.ts';\n` +
-    `/** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */\nexport class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T> {\n${propertyGroups.map(([name]) => groups.get(name).join('\n')).join('\n')}\n}\n`,
+    `/** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */\nexport class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor {\n${propertyGroups.map(([name]) => groups.get(name).join('\n')).join('\n')}\n}\n`,
   'keywords.ts':
     header +
     `import { lazy } from '../lazy.ts';\n` +

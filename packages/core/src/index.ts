@@ -4,20 +4,13 @@ export { keyframes } from './css/animation.ts';
 export { globalCss } from './css/global.ts';
 export type { Css } from './css/generated/author.ts';
 export { SystemKeywords } from './css/generated/system.ts';
-export type { CssContext, KeywordView, ThemeSource } from './css/theme.ts';
+export type { CssContext, KeywordView, ThemeSource } from './css/types.ts';
 export { bx } from './css/bindings.ts';
 export { createCssHost, cssHostKey } from './css/host.ts';
 export { getCssHost } from './css/vnode.ts';
 export type { CssHost, CssHostOptions } from './css/host.ts';
-export type {
-  CssClass,
-  ClassValue,
-  CssInput,
-  CssCondition,
-  CssNestedInput,
-  PropertyValue,
-  CustomPropertyValue,
-} from './css/types.ts';
+export type { CssClass, ClassValue, CssInput, CssNestedInput } from './css/style-value.ts';
+export type { CssCondition, PropertyValue, CustomPropertyValue } from './css/types.ts';
 export type { CssBinding } from './css/bindings.ts';
 export type { CssAnimation } from './css/animation-token.ts';
 export type { Keyframes } from './css/animation.ts';

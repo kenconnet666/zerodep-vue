@@ -1,5 +1,5 @@
 import type { ComponentInternalInstance } from 'vue';
-import type { ClassPart, Declaration } from './types.ts';
+import type { ClassPart, Declaration } from './style-value.ts';
 import type { ResolvedClass } from './resolve.ts';
 import type { CssHost } from './host.ts';
 

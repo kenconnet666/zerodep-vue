@@ -3,7 +3,7 @@ import type { PropertyInput } from '../types.ts';
 import type { SystemKeywords } from './system.ts';
 import { CssAuthor } from '../author.ts';
 /** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */
-export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T> {
+export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor {
   /**
    * 分配布局容器交叉轴或块轴上的剩余空间，控制内容整体的对齐。
    *

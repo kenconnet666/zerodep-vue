@@ -1,5 +1,5 @@
-import { CLASS, hasStableParts, isCssClass, markStableParts } from './types.ts';
-import type { ClassPart, CssClass, CssInput, CssNestedInput, Declaration } from './types.ts';
+import { CLASS, hasStableParts, isCssClass, markStableParts } from './style-value.ts';
+import type { ClassPart, CssClass, CssInput, CssNestedInput, Declaration } from './style-value.ts';
 import { selectors } from './syntax.ts';
 import type { SelectorContext } from './syntax.ts';
 
@@ -11,13 +11,17 @@ export function cx(...inputs: readonly CssInput[]): CssClass {
     if (input == null || input === false || input === 0) return;
     if (typeof input === 'string') {
       if (input) roots.push(input);
-    } else if (isCssClass(input)) roots.push(input);
-    else if (Array.isArray(input)) {
-      if (arrays.has(input)) throw new Error('CSS 组合包含循环数组。');
-      arrays.add(input);
-      for (const item of input) collect(item);
-      arrays.delete(input);
-    } else throw new Error('cx 只接受链式样式、类名或条件数组。');
+      return;
+    }
+    if (isCssClass(input)) {
+      roots.push(input);
+      return;
+    }
+    if (!Array.isArray(input)) throw new Error('cx 只接受链式样式、类名或条件数组。');
+    if (arrays.has(input)) throw new Error('CSS 组合包含循环数组。');
+    arrays.add(input);
+    for (const item of input) collect(item);
+    arrays.delete(input);
   };
   for (const input of inputs) collect(input);
   const stable = roots.every((root) => typeof root === 'string' || hasStableParts(root));

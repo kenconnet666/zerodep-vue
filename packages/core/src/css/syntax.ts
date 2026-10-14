@@ -10,24 +10,29 @@ export function validateFragment(value: string): void {
   const stack: TokenType[] = [];
   for (;;) {
     const type = tokens.nextToken()[0];
-    if (type === TokenType.EOF) {
-      if (stack.length) fail();
-      return;
+    switch (type) {
+      case TokenType.EOF:
+        if (stack.length) fail();
+        return;
+      case TokenType.OpenCurly:
+      case TokenType.CloseCurly:
+        fail();
+        break;
+      case TokenType.Semicolon:
+        if (!stack.length) fail();
+        break;
+      case TokenType.Function:
+      case TokenType.OpenParen:
+        stack.push(TokenType.CloseParen);
+        break;
+      case TokenType.OpenSquare:
+        stack.push(TokenType.CloseSquare);
+        break;
+      case TokenType.CloseParen:
+      case TokenType.CloseSquare:
+        if (stack.pop() !== type) fail();
+        break;
     }
-    if (
-      type === TokenType.OpenCurly ||
-      type === TokenType.CloseCurly ||
-      (type === TokenType.Semicolon && !stack.length)
-    )
-      fail();
-    if (type === TokenType.Function || type === TokenType.OpenParen)
-      stack.push(TokenType.CloseParen);
-    else if (type === TokenType.OpenSquare) stack.push(TokenType.CloseSquare);
-    else if (
-      (type === TokenType.CloseParen || type === TokenType.CloseSquare) &&
-      stack.pop() !== type
-    )
-      fail();
   }
 }
 
@@ -43,13 +48,17 @@ export function declarationValue(text: string): { value: string; important: bool
     const type = token[0];
     if (type === TokenType.EOF) break;
     if (type === TokenType.Whitespace || type === TokenType.Comment) continue;
-    if (
-      type === TokenType.Function ||
-      type === TokenType.OpenParen ||
-      type === TokenType.OpenSquare
-    )
-      depth++;
-    else if (type === TokenType.CloseParen || type === TokenType.CloseSquare) depth--;
+    switch (type) {
+      case TokenType.Function:
+      case TokenType.OpenParen:
+      case TokenType.OpenSquare:
+        depth++;
+        break;
+      case TokenType.CloseParen:
+      case TokenType.CloseSquare:
+        depth--;
+        break;
+    }
     if (depth !== 0) continue;
     count++;
     tail.push(token);

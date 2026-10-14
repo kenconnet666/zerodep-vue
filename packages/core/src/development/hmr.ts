@@ -1,6 +1,6 @@
 import { computed, ReactiveEffect, shallowRef, unref } from 'vue';
 import type { ShallowRef } from 'vue';
-import { CLASS } from '../css/types.ts';
+import { CLASS } from '../css/style-value.ts';
 import { ANIMATION } from '../css/animation-token.ts';
 
 type Environment = Record<string, unknown>;

@@ -1,6 +1,6 @@
 import type { NativeElements, ReservedProps, VNode, VNodeChild } from 'vue';
 import type { ManagedProps } from './component.ts';
-import type { ClassValue } from '../css/types.ts';
+import type { ClassValue } from '../css/style-value.ts';
 import type { ComponentDirectives, ElementDirectives, ModelDirectives } from './directives.ts';
 
 declare const nativeElement: unique symbol;

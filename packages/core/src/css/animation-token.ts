@@ -1,4 +1,4 @@
-import type { CssClass } from './types.ts';
+import type { CssClass } from './style-value.ts';
 export const ANIMATION = Symbol.for('@zerodep-vue/core/animation/v1');
 
 /** 动画描述在实际使用时取得宿主租约，声明本身不插入规则。 */

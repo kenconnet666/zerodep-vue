@@ -1,6 +1,6 @@
 import { cx } from './composition.ts';
-import { CLASS } from './types.ts';
-import type { CssNestedInput } from './types.ts';
+import { CLASS } from './style-value.ts';
+import type { CssNestedInput } from './style-value.ts';
 import { ANIMATION } from './animation-token.ts';
 import type { CssAnimation } from './animation-token.ts';
 

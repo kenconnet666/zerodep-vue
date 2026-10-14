@@ -2,8 +2,8 @@ import unitless from '@emotion/unitless';
 import { TokenType, tokenizer } from '@csstools/css-tokenizer';
 import { normalizeClass } from 'vue';
 import { compose } from './composition.ts';
-import { CLASS, hasStableParts, isCssClass } from './types.ts';
-import type { ClassPart, ClassValue, CssClass, Declaration } from './types.ts';
+import { CLASS, hasStableParts, isCssClass } from './style-value.ts';
+import type { ClassPart, ClassValue, CssClass, Declaration } from './style-value.ts';
 import { BINDING, TEMPLATE, isBinding, isTemplate } from './bindings.ts';
 import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
 import { declarationValue, inheritsVariables, scopedSelector, validateFragment } from './syntax.ts';
@@ -16,13 +16,18 @@ import { inspectionHooks } from './inspection-hooks.ts';
 
 const wide = new Set(['initial', 'inherit', 'unset', 'revert', 'revert-layer']);
 const staticResults = new WeakMap<CssClass, ResolvedClass>();
-type Part = string | { variable: number };
-interface Prepared {
+type PreparedValue = string | { variable: number };
+interface PreparedDeclaration {
   selector: string;
   conditions: readonly string[];
   property: string;
-  parts: Part[];
+  // 完整 CSS 值只占一个位置；保留既有序列化形状，使本轮整理不改变规则哈希。
+  parts: readonly [PreparedValue];
   important?: true;
+}
+interface EvaluatedTemplate {
+  values: unknown[];
+  text?: string;
 }
 
 export interface ResolvedClass {
@@ -54,12 +59,22 @@ function cssWide(value: string): string | undefined {
   let keyword: string | undefined;
   for (;;) {
     const token = tokens.nextToken();
-    if (token[0] === TokenType.EOF) return keyword;
-    if (token[0] === TokenType.Whitespace || token[0] === TokenType.Comment) continue;
-    if (token[0] !== TokenType.Ident || keyword) return;
-    const text = token[4].value.toLowerCase();
-    if (!wide.has(text)) return;
-    keyword = text;
+    switch (token[0]) {
+      case TokenType.EOF:
+        return keyword;
+      case TokenType.Whitespace:
+      case TokenType.Comment:
+        continue;
+      case TokenType.Ident: {
+        if (keyword) return;
+        const text = token[4].value.toLowerCase();
+        if (!wide.has(text)) return;
+        keyword = text;
+        break;
+      }
+      default:
+        return;
+    }
   }
 }
 
@@ -128,7 +143,7 @@ export function resolveClass(
   };
   flatten(value);
   const variables: string[] = [];
-  const prepared: Prepared[] = [];
+  const prepared: PreparedDeclaration[] = [];
   let dynamic = false;
   const resources: CssRule[] = [];
   const resourceVariables: Record<string, string> = {};
@@ -190,7 +205,7 @@ export function resolveClass(
       ? read(declaration.resolveTheme(declaration.property, current))
       : current;
   };
-  const templates = new Map<Declaration, { values: unknown[]; text?: string } | null | undefined>();
+  const templates = new Map<Declaration, EvaluatedTemplate | null | undefined>();
   const templateOf = (input: CssTemplate, declaration: Declaration) => {
     if (templates.has(declaration)) return templates.get(declaration);
     const values: unknown[] = [];
@@ -206,7 +221,7 @@ export function resolveClass(
       templates.set(declaration, null);
       return null;
     }
-    let result: { values: unknown[]; text?: string } = { values };
+    let result: EvaluatedTemplate = { values };
     if (!values.some(isAnimation)) {
       let text = values.map((value) => scalar(value, undefined, false)).join('');
       // 主题名只识别完整属性值；引号或 URL 内的 _ 文本仍然是普通内容。
@@ -246,28 +261,26 @@ export function resolveClass(
     } else if (isTemplate(input)) {
       const evaluated = templateOf(input, declaration);
       if (!evaluated) continue;
-      // 静态模板片段可以是不完整的括号前缀；单个绑定值与最终声明才需要完整语法。
-      const strings =
-        evaluated.text === undefined
-          ? evaluated.values.map((part, index) =>
-              isBinding(input[TEMPLATE][index]) || isThemeReference(input[TEMPLATE][index])
-                ? isAnimation(part)
-                  ? animation(part, property, literal)
-                  : scalar(part, undefined, false)
-                : isAnimation(part)
-                  ? animation(part, property, literal)
-                  : String(part),
-            )
-          : undefined;
       // CSS var 替换的是 token，不是字符串；单位、引号和 URL 必须先组成完整值。
-      text = evaluated.text ?? strings!.join('');
+      text =
+        evaluated.text ??
+        evaluated.values
+          .map((part, index) => {
+            if (isAnimation(part)) return animation(part, property, literal);
+            const original = input[TEMPLATE][index];
+            // 静态片段可以是不完整的括号前缀；完整声明会在拼接后统一检查。
+            if (isBinding(original) || isThemeReference(original))
+              return scalar(part, undefined, false);
+            return String(part);
+          })
+          .join('');
       validateFragment(text);
       bound = input[TEMPLATE].some((part) => isBinding(part) || isThemeReference(part));
     } else text = renderValue(input, property, literal);
     const parsed = declarationValue(text);
     if (options.keyframe && parsed.important) throw new Error('关键帧不能使用 !important。');
     const keyword = cssWide(parsed.value);
-    const parts: Part[] =
+    const parts: readonly [PreparedValue] =
       bound && !literal && !keyword
         ? [{ variable: variables.push(parsed.value) - 1 }]
         : [keyword ?? parsed.value];
@@ -288,10 +301,9 @@ export function resolveClass(
   );
   const blocks: { selector: string; conditions: readonly string[]; text: string }[] = [];
   for (const entry of prepared) {
-    const content =
-      entry.parts
-        .map((part) => (typeof part === 'string' ? part : `var(--${ruleName}-${part.variable})`))
-        .join('') + (entry.important ? ' !important' : '');
+    const [value] = entry.parts;
+    const text = typeof value === 'string' ? value : `var(--${ruleName}-${value.variable})`;
+    const content = text + (entry.important ? ' !important' : '');
     const selector = scopedSelector(entry.selector, ruleName);
     const previous = blocks.at(-1);
     if (

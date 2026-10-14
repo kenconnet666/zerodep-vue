@@ -1,6 +1,6 @@
 // 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
-import type { PropertyName } from '../types.ts';
-import type { SystemKeywordView, SystemKeyword } from '../tokens.ts';
+import type { PropertyName, SystemKeywordView } from '../types.ts';
+import type { SystemKeyword } from '../tokens.ts';
 import type * as Values from './literal-values.ts';
 export interface CssWideKeywords<Key extends PropertyName> extends SystemKeywordView<
   Pick<Values.CssWideValues, 'inherit' | 'initial' | 'revert' | 'unset'>,

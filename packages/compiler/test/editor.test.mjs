@@ -19,9 +19,14 @@ test('theme literal documentation survives the emitted author declarations', () 
   const host = languageServiceHost(ts, root, [filename], parsed.options);
   const emitted = new Map();
   const replacements = new Map();
-  const sources = ['author', 'bindings', 'generated/author', 'generated/literal-values'].map(
-    (name) => resolve(root, `packages/core/src/css/${name}.ts`),
-  );
+  const sources = [
+    'author',
+    'bindings',
+    'types',
+    'style-value',
+    'generated/author',
+    'generated/literal-values',
+  ].map((name) => resolve(root, `packages/core/src/css/${name}.ts`));
   const program = ts.createProgram([...sources, filename], {
     ...parsed.options,
     noEmit: false,
@@ -29,7 +34,7 @@ test('theme literal documentation survives the emitted author declarations', () 
     declaration: true,
     emitDeclarationOnly: true,
   });
-  // 只在内存发射编辑器依赖的四份声明；覆盖 private 类型被擦除的发布边界，不构建全仓。
+  // 只在内存发射相关声明；覆盖 private 类型擦除和类型/运行时拆分后的发布边界。
   for (const source of sources) {
     const declaration = source.replace(/\.ts$/, '.d.ts');
     const input = program.getSourceFile(source);
@@ -169,7 +174,7 @@ s.boxSizing('not-a-box-model' as const);
   const authorDeclaration = ts.transpileDeclaration(ts.sys.readFile(authorFile), {
     fileName: authorFile,
   }).outputText;
-  assert.match(authorDeclaration, /private readonly theme;/);
+  assert.match(authorDeclaration, /private readonly resolveTheme;/);
   let version = 0;
   const scriptVersion = host.getScriptVersion.bind(host);
   host.getScriptVersion = (file) =>

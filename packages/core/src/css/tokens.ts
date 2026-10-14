@@ -1,7 +1,4 @@
-import type { Ref } from 'vue';
-import type { PropertyName, Properties } from './types.ts';
-import type { ColorProperty, SystemValue } from './generated/keywords.ts';
-import type { SystemKeywords } from './generated/system.ts';
+import type { PropertyName } from './types.ts';
 
 export const KEYWORD = Symbol.for('@zerodep-vue/core/keyword/v1');
 export const THEME = Symbol.for('@zerodep-vue/core/theme-reference/v1');
@@ -14,10 +11,6 @@ export interface SystemKeyword<
 > {
   readonly [KEYWORD]: { readonly property: Key; readonly value: Value };
 }
-/** 具名视图投影同一份字面量声明，保留 JSDoc 和导航，避免复制第二份同名成员。 */
-export type SystemKeywordView<Values, Key extends PropertyName> = {
-  readonly [Name in keyof Values]: SystemKeyword<Key, Values[Name] & string>;
-};
 /** 主题引用保留真实来源；同名成员不依赖全局“当前主题”。 */
 export interface ThemeReference<
   out Key extends PropertyName = PropertyName,
@@ -26,24 +19,7 @@ export interface ThemeReference<
   readonly [THEME]: { readonly property: Key; readonly name: Name; readonly read: () => unknown };
 }
 
-export type AllowedSystem<Key extends PropertyName> = SystemKeyword<PropertyName, SystemValue<Key>>;
-// 交集保留泛型上界中已知的成员；Extract 的延迟条件会丢失 T extends AppTheme 的可赋值关系。
-export type ThemeNames<T extends SystemKeywords, Key extends PropertyName> = keyof T[Key] &
-  `_${string}`;
-/** 目标属性自身的主题名优先，颜色属性同时接受共享 color 组。 */
-export type ThemeLiteral<T extends SystemKeywords, Key extends PropertyName> =
-  ThemeNames<T, Key> | (Key extends ColorProperty ? ThemeNames<T, 'color'> : never);
 export type ThemeResolver = (property: string, name: string) => ThemeReference;
-export type AllowedTheme<T extends SystemKeywords, Key extends PropertyName> =
-  | ThemeReference<Key, ThemeNames<T, Key>>
-  | (Key extends ColorProperty ? ThemeReference<'color', ThemeNames<T, 'color'>> : never);
-export type ThemeMemberValue<Key extends PropertyName> =
-  Properties[Key] | AllowedSystem<Key> | null | Ref<Properties[Key] | AllowedSystem<Key> | null>;
-export type CheckedTheme<T extends SystemKeywords> = T & {
-  readonly [Key in PropertyName]: {
-    readonly [Name in keyof T[Key]]: Name extends `_${string}` ? ThemeMemberValue<Key> : never;
-  };
-};
 
 export function isKeyword(value: unknown): value is SystemKeyword {
   return !!value && typeof value === 'object' && KEYWORD in value;
