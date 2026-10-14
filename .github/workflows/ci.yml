@@ -224,33 +224,13 @@ jobs:
           retention-days: 7
 
   build:
-    name: Build and package entry
+    name: Build and package artifacts
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
       - run: pnpm build
-      - name: Verify the built compiler export
-        run: |
-          node --input-type=module <<'NODE'
-          import assert from 'node:assert/strict';
-          import { access } from 'node:fs/promises';
-          import { createRequire } from 'node:module';
-          import { babelPlugin, vitePlugin } from '@zerodep-vue/compiler';
-          import { css, _component, For } from '@zerodep-vue/core';
-          assert.equal(typeof babelPlugin, 'function');
-          assert.equal(vitePlugin().name, 'zerodep-vue:tsx');
-          const cjs = createRequire(import.meta.url)('@zerodep-vue/compiler');
-          assert.equal(cjs.babelPlugin, babelPlugin);
-          assert.equal(cjs.vitePlugin, vitePlugin);
-          for (const entry of [css, _component, For]) assert.equal(typeof entry, 'function');
-          for (const name of ['compiler', 'core']) {
-            await access(`packages/${name}/dist/index.js`);
-            await access(`packages/${name}/dist/index.d.ts`);
-          }
-          console.log('Built package entries and declarations are available.');
-          NODE
       - name: Pack complete artifacts and verify emitted-source provenance
         run: pnpm packages:pack
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

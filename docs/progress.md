@@ -13,6 +13,10 @@
 
 Naive 三组任务各自编译完整生产清单并构建、导入生成的库；没有安装 naive-ui 预编译包来代替编译。上述结果尚不包含自有 CSS、交互混用或最终浏览器验收。
 
+## 验证流程修订与控件场景（2026-10-14）
+
+635b0412c523e4760b7b164634cf29a3b5e22c4c 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38532194039) 中，类型、编译、Core、default/optimized 作者、Naive、四组浏览器、开发工具和双平台 LSP 均通过。Build 的 tsc 已成功，但随后工作流内嵌脚本仍导入已移除的 css，导致打包及安装消费者没有执行。现删除重复导出清单，把 ESM/CJS 身份与新入口检查统一到真实安装包消费脚本；包内容/声明完整性仍由 pack 验证。新提交的完整结论另行核对。
+
 ## 不可变链式 CSS 迁移（2026-10-14）
 
 上一轮 cc4149f094b8b076849b4b3b694fe3f4c3a13fa7 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38527814895) 已通过。本轮按新契约移除对象作者、旧 css 入口和 cx 批量命名：useCss 返回不可变链，cx 只组合样式；动画/全局映射也消费链，业务主题通过独立 useCss/provide 上下文传递。旧记录中的对象 API 只描述历史提交。

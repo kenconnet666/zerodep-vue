@@ -9,13 +9,18 @@ import { build } from 'vite';
 import { createSSRApp, ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { babelPlugin as compiler, vitePlugin as vueTsx } from '@zerodep-vue/compiler';
-import { getCssHost, useCss } from '@zerodep-vue/core';
+import { getCssHost, useCss, cx, createTheme } from '@zerodep-vue/core';
 import { assertRuntimeCode, assertRuntimeChunks } from './runtime-boundary.mjs';
 
 const root = process.cwd();
 const require = createRequire(import.meta.url);
-assert.equal(typeof require('@zerodep-vue/compiler').babelPlugin, 'function');
-assert.equal(typeof require('@zerodep-vue/compiler').vitePlugin, 'function');
+const cjsCompiler = require('@zerodep-vue/compiler');
+const cjsCore = require('@zerodep-vue/core');
+assert.equal(cjsCompiler.babelPlugin, compiler);
+assert.equal(cjsCompiler.vitePlugin, vueTsx);
+assert.equal(cjsCore.useCss, useCss);
+assert.equal(cjsCore.cx, cx);
+assert.equal(cjsCore.createTheme, createTheme);
 for (const entry of ['vite', 'runtime', 'hmr', 'devtools'])
   assert.throws(() => require.resolve(`@zerodep-vue/compiler/${entry}`), {
     code: 'ERR_PACKAGE_PATH_NOT_EXPORTED',
@@ -31,10 +36,11 @@ for (const entry of [
   assert.throws(() => require.resolve(`@zerodep-vue/core/${entry}`), {
     code: 'ERR_PACKAGE_PATH_NOT_EXPORTED',
   });
-assert.equal(typeof require('@zerodep-vue/core').useCss, 'function');
-assert.equal(typeof require('@zerodep-vue/core').createTheme, 'function');
-assert.equal('createCss' in require('@zerodep-vue/core'), false);
-assert.equal('defineVars' in require('@zerodep-vue/core'), false);
+assert.equal(
+  'css' in cjsCore,
+  false,
+  'Removed object author must not remain in the installed package.',
+);
 assert.equal(typeof require('@zerodep-vue/core')._component, 'function');
 const entries = {};
 for (const name of ['compiler', 'core']) {
