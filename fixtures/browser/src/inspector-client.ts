@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import { devtoolsContext, initDevTools, toggleHighPerfMode } from '@vue/devtools-kit';
-import { createCssHost } from '@zerodep-vue/css';
-import { inspectApp } from '@zerodep-vue/css/devtools';
+import { createCssHost } from '@zerodep-vue/core';
+import { inspectApp } from '@zerodep-vue/core/devtools';
 import Inspector from './Inspector.tsx';
 import type {} from './contracts.ts';
 
@@ -17,7 +17,7 @@ window.__fixture = {
   unmount: () => app.unmount(),
   inspectCss: () => inspectApp(app),
   inspectorTree: () =>
-    devtoolsContext.api.getInspectorTree({ inspectorId: 'zerodep-vue-css', filter: '' }),
+    devtoolsContext.api.getInspectorTree({ inspectorId: 'zerodep-vue-core', filter: '' }),
   inspectorState: (nodeId) =>
-    devtoolsContext.api.getInspectorState({ inspectorId: 'zerodep-vue-css', nodeId }),
+    devtoolsContext.api.getInspectorState({ inspectorId: 'zerodep-vue-core', nodeId }),
 };

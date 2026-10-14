@@ -1,7 +1,7 @@
 import { createSSRApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { setup } from '@css-render/vue3-ssr';
-import { getCssHost } from '@zerodep-vue/css';
+import { getCssHost } from '@zerodep-vue/core';
 import { App } from './App.tsx';
 import type { InitialState } from './contracts.ts';
 

@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { computed, effectScope, ref, watchSyncEffect } from 'vue';
-import { css, createCssHost, cx, keyframes, globalCss } from '../../css/src/index.ts';
-import { registerModule, compatible } from '../../css/src/hmr.ts';
-import { resolveClass } from '../../css/src/resolve.ts';
-import { binding } from '../../css/src/values.ts';
+import { css, createCssHost, cx, keyframes, globalCss } from '../../core/src/index.ts';
+import { registerModule, compatible } from '../../core/src/css/hmr.ts';
+import { resolveClass } from '../../core/src/css/resolve.ts';
+import { binding } from '../../core/src/css/values.ts';
 
 const context = () => ({
   data: {},

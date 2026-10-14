@@ -7,9 +7,8 @@
     "check": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@zerodep-vue/tsx": "workspace:*",
-    "vue": "catalog:",
-    "@zerodep-vue/css": "workspace:*"
+    "@zerodep-vue/core": "workspace:*",
+    "vue": "catalog:"
   },
   "devDependencies": {
     "typescript": "catalog:"

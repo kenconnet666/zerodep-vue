@@ -7,11 +7,11 @@ import { createRequire } from 'node:module';
 import { join, relative, resolve } from 'node:path';
 import { createFilter, normalizePath } from 'vite';
 import type { FilterPattern, Plugin } from 'vite';
-import jsx from './index.ts';
-import type { CompilerOptions } from './index.ts';
-import { transformHot } from './hot-transform.ts';
-import type { HotTransform } from './hot-transform.ts';
-import { instrumentDevtools } from './devtools-transform.ts';
+import jsx from './babel.ts';
+import type { CompilerOptions } from './babel.ts';
+import { transformHot } from './transforms/hmr.ts';
+import type { HotTransform } from './transforms/hmr.ts';
+import { instrumentDevtools } from './transforms/devtools.ts';
 
 /** Vue VDOM TSX 的 Vite 入口；与 Babel 入口共享全部 JSX 选项。 */
 export interface ViteOptions extends CompilerOptions {
@@ -65,8 +65,8 @@ function componentMetadata(
             const name = t.isIdentifier(imported) ? imported.name : imported.value;
             return (
               (parent.node.source.value === 'vue' && name === 'defineComponent') ||
-              (parent.node.source.value === '@zerodep-vue/tsx' && name === '_component') ||
-              (parent.node.source.value === '@zerodep-vue/tsx/runtime' &&
+              (parent.node.source.value === '@zerodep-vue/core' && name === '_component') ||
+              (parent.node.source.value === '@zerodep-vue/core/runtime' &&
                 name === 'createComponent')
             );
           };
@@ -168,11 +168,7 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
         application.resolve
           .paths(name)
           ?.some((directory) => existsSync(join(directory, name, 'package.json')));
-      const cssRuntime = installed('@zerodep-vue/css')
-        ? '@zerodep-vue/css'
-        : installed('@zerodep-vue/tsx')
-          ? '@zerodep-vue/tsx > @zerodep-vue/css'
-          : undefined;
+      const hasRuntime = installed('@zerodep-vue/core');
       return {
         oxc: { jsx: 'preserve' },
         resolve: { dedupe: ['vue'] },
@@ -181,16 +177,16 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
               // 保持 CSS render frame 等模块状态唯一；生成代码的依赖提前进入同一优化批次，
               // 防止冷启动后再发现 DevTools/CJS 依赖时短暂混用两个 Vue URL。
               optimizeDeps: {
-                exclude: ['@zerodep-vue/css', '@zerodep-vue/tsx'],
+                exclude: ['@zerodep-vue/core'],
                 include: [
                   'vue',
-                  ...(cssRuntime
+                  ...(hasRuntime
                     ? [
                         '@emotion/unitless',
                         'postcss-selector-parser',
                         '@csstools/css-tokenizer',
                         '@vue/devtools-api',
-                      ].map((name) => `${cssRuntime} > ${name}`)
+                      ].map((name) => `@zerodep-vue/core > ${name}`)
                     : []),
                 ],
               },
@@ -284,5 +280,3 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
     },
   };
 }
-
-export { vueTsx as 'module.exports' };

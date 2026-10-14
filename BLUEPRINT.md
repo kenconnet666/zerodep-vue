@@ -118,9 +118,12 @@ UI 产品库和 docs 站点不在本项目交付范围内。文中的 RefInput�
 
 ```text
 packages/
-  compiler/                 # Babel fork；/vite 接入入口
-  tsx/                      # 作者 API、类型、Vue 桥接
-  css/                      # 运行时样式描述、解析和宿主
+  compiler/                 # index 导出 babelPlugin、vitePlugin
+    src/transforms/         # 组件、CSS、开发检查与 HMR 转换
+    src/upstream/           # 固定官方 JSX fork 与来源记录
+  core/                     # index 统一导出 CSS 与 TSX 作者 API
+    src/css/                # 样式描述、主题、解析和宿主
+    src/tsx/                # 组件作者类型与 Vue 运行时桥接
 fixtures/
   legacy-tsx/               # 普通 Vue TSX，含选项组合
   authoring/                # 我们的新写法
@@ -135,12 +138,12 @@ docs/
 BLUEPRINT.md
 ```
 
-工作区包名为 `@zerodep-vue/compiler`、`@zerodep-vue/tsx` 和 `@zerodep-vue/css`。三个包保留 private 标记，通过 CI tarball 交付；这不代表已发布到 npm。原 mixed-tsx/ssr 预留目录的验证职责由 browser 夹具和包内运行契约承担，没有用空目录作为验收证据。
+工作区仅有 `@zerodep-vue/compiler`、`@zerodep-vue/core` 两个工具包。各自 index 统一导出公开 API；保留 private 标记，通过 CI tarball 交付，不代表已发布到 npm。原 mixed-tsx/ssr 空预留目录已移除，验证职责由 browser 夹具和包内运行契约承担。
 
 - `compiler` 只运行在构建环境，持有 Babel 和必要的类型分析依赖。
-- compiler 仅导出 Babel/Vite 构建入口，生成代码直接引用 TSX/CSS 的运行时入口；不再通过 compiler 转导 CSS runtime、HMR 或 DevTools。独立包消费检查生产外部导入与 bundle 模块，拒绝构建依赖泄漏。
-- `tsx` 使用 Vue 组件机制；按需要引用 `css` 的内部接线入口。
-- `css` 内部区分纯描述/组合、Vue 接线、浏览器宿主和服务端宿主，不反向依赖 `tsx` 或 `compiler`。
+- compiler 根入口命名导出 babelPlugin 与 vitePlugin，生成代码使用 core/runtime；HMR 与 DevTools 只在开发转换中使用 core 的技术入口。独立包消费检查生产外部导入与 bundle 模块，拒绝构建依赖泄漏。
+- core 使用 Vue 组件机制，内部按 CSS 和 TSX 组织实现。组件与样式接线共用 core/runtime，公开作者 API 共用根入口，不维护重复转导。
+- core 内部区分纯描述/组合、Vue 接线、浏览器宿主和服务端宿主，不依赖 compiler、Babel、Vite 或 TypeScript 编译实现。
 - Vue 作为共享 peer dependency，发布构建 externalize。fixture 保证唯一且兼容的 Vue 运行时；不能打包另一份 Vue 后宣称 Ref 可以可靠共享。
 - 不生成无关的自有组件运行时导入。class 来源可静态确认是普通值时保留上游路径；需要判断动态 class 来源时，可以由编译器引入薄 CSS 助手，对普通值走等价的快速旁路，不能要求作者额外手写接线。
 
@@ -216,7 +219,7 @@ HMR 区分样式、渲染和初始化变更。能够独立更新的样式应保�
 
 ```tsx
 import { computed, ref } from 'vue';
-import { _component } from '@zerodep-vue/tsx';
+import { _component } from '@zerodep-vue/core';
 
 export const Counter = _component(() => {
   const count = ref(0);
@@ -478,7 +481,7 @@ DOM `ref` 复用 Vue 已有的 Ref 对象和函数 ref，沿用挂载、更新�
 ```tsx
 import { defineComponent, ref, type Ref } from 'vue';
 import { NButton, NConfigProvider, NInput, NSpace } from 'naive-ui';
-import { _component } from '@zerodep-vue/tsx';
+import { _component } from '@zerodep-vue/core';
 
 const RefInput = _component(({ value }: { value: Ref<string> }) => {
   return <input v-model={value.value} />;

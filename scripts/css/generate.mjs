@@ -10,7 +10,7 @@ import { aliases, summaries } from './compat-docs.mjs';
 import { propertyGroup, propertyGroups } from './property-groups.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const require = createRequire(resolve(root, 'packages/css/package.json'));
+const require = createRequire(resolve(root, 'packages/core/package.json'));
 assert.equal(ts.version, '6.0.3');
 assert.equal(require('csstype/package.json').version, '3.2.3');
 const filename = require.resolve('csstype/index.d.ts');
@@ -324,7 +324,7 @@ const outputs = {
     header +
     `const sets = ${JSON.stringify(runtimeSets)} as const;\nexport const systemValues = {\n${runtimeLines.join('\n')}\n} as const;\nexport type ColorProperty = ${colorNames.map(JSON.stringify).join(' | ')};\nexport type SystemValue<Key extends keyof typeof systemValues> = Extract<(typeof systemValues)[Key][keyof (typeof systemValues)[Key]], string>;\n`,
 };
-const destination = resolve(root, 'packages/css/src/generated');
+const destination = resolve(root, 'packages/core/src/css/generated');
 await mkdir(destination, { recursive: true });
 const config = await prettier.resolveConfig(resolve(root, 'package.json'));
 for (const [name, content] of Object.entries(outputs)) {

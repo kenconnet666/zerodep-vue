@@ -1,4 +1,4 @@
-/** @jsxImportSource @zerodep-vue/tsx */
+/** @jsxImportSource @zerodep-vue/core */
 import {
   computed,
   defineAsyncComponent,
@@ -13,8 +13,17 @@ import {
   Teleport,
 } from 'vue';
 import type { InjectionKey, Ref, VNodeChild } from 'vue';
-import { For, _component } from '@zerodep-vue/tsx';
-import { bx, css, createTheme, SystemKeywords, keyframes, globalCss } from '@zerodep-vue/css';
+import {
+  For,
+  _component,
+  bx,
+  css,
+  createTheme,
+  SystemKeywords,
+  keyframes,
+  globalCss,
+} from '@zerodep-vue/core';
+
 import { NButton, NConfigProvider, NDataTable, NInput, NSelect } from '@fixture/naive';
 import type { DataTableColumns } from '@fixture/naive';
 import type { InitialState } from './contracts.ts';

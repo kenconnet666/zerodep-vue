@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { build, createServer } from 'vite';
 import { createSSRApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
-import vueTsx from '../src/vite.ts';
+import { vitePlugin as vueTsx } from '../src/index.ts';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const entry = resolve(root, 'fixtures/legacy-tsx/src/Counter.tsx');

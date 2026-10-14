@@ -7,7 +7,7 @@ import { transformAsync } from '@babel/core';
 import presetTypeScript from '@babel/preset-typescript';
 import { createSSRApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
-import jsx from '../src/index.ts';
+import { babelPlugin as jsx } from '../src/index.ts';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const filename = resolve(root, 'fixtures/legacy-tsx/src/Counter.tsx');

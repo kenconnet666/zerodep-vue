@@ -1,7 +1,7 @@
-import { css, bx, cx, keywords } from '@zerodep-vue/css';
-import { _component } from '@zerodep-vue/tsx';
+import { css, bx, cx, keywords, _component } from '@zerodep-vue/core';
+
 import { ref } from 'vue';
-import type { CssInput } from '@zerodep-vue/css';
+import type { CssInput } from '@zerodep-vue/core';
 
 const width = ref('120px');
 const styles = cx({

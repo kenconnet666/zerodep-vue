@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { transformAsync } from '@babel/core';
 import presetTypeScript from '@babel/preset-typescript';
-import plugin from '../src/index.ts';
+import { babelPlugin as plugin } from '../src/index.ts';
 
 const compile = async (source, options = {}) =>
   (
@@ -17,7 +17,7 @@ const compile = async (source, options = {}) =>
 
 test('CSS captures aliased bindings before JSX and keeps multiple template pieces', async () => {
   const code = await compile(
-    'import {css,bx as bind} from "@zerodep-vue/css"; const x=1,y=2; export const render=()=> <div class={css({transform:`translate(${bind(x)}px, ${bind(y)}px)`})}/>;',
+    'import {css,bx as bind} from "@zerodep-vue/core"; const x=1,y=2; export const render=()=> <div class={css({transform:`translate(${bind(x)}px, ${bind(y)}px)`})}/>;',
   );
   assert(code.includes('createCssVNode as'));
   assert.equal((code.match(/_binding\(\(\) => /g) ?? []).length, 2);
@@ -30,10 +30,10 @@ test('ordinary Vue can explicitly enable shared-style wiring, and custom pragma 
     'import {styles} from "./styles"; export const render=()=> <div class={styles.root}/>;',
     { zerodep: { css: true } },
   );
-  assert(code.includes('@zerodep-vue/css/runtime'));
+  assert(code.includes('@zerodep-vue/core/runtime'));
   assert(!code.includes('@zerodep-vue/compiler'));
   await assert.rejects(
-    compile('import {css} from "@zerodep-vue/css"; <div class={css({color:"red"})}/>;', {
+    compile('import {css} from "@zerodep-vue/core"; <div class={css({color:"red"})}/>;', {
       pragma: 'custom',
     }),
     /ZV_CSS_PRAGMA/,
@@ -42,7 +42,7 @@ test('ordinary Vue can explicitly enable shared-style wiring, and custom pragma 
 
 test('CSS lowering does not capture a shadowed bx or rewrite a tagged template', async () => {
   const code = await compile(
-    'import {bx,css} from "@zerodep-vue/css"; function use(bx){return bx(1);} const value=tag`a${1}`;',
+    'import {bx,css} from "@zerodep-vue/core"; function use(bx){return bx(1);} const value=tag`a${1}`;',
   );
   assert(!code.includes('binding as'));
   assert(code.includes('tag`a${1}`'));

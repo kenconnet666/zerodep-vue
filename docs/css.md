@@ -6,8 +6,8 @@ CSS 声明、组合、规则生成与缓存都在运行时执行；编译器捕�
 
 ```tsx
 import { ref } from 'vue';
-import { _component } from '@zerodep-vue/tsx';
-import { css, bx } from '@zerodep-vue/css';
+import { _component } from '@zerodep-vue/core';
+import { css, bx } from '@zerodep-vue/core';
 
 export const Position = _component(() => {
   const x = ref(10);
@@ -35,7 +35,7 @@ export const Position = _component(() => {
 ## 声明、组合与覆盖
 
 ```tsx
-import { css, cx } from '@zerodep-vue/css';
+import { css, cx } from '@zerodep-vue/core';
 
 const styles = cx({
   base: { color: 'red', ':hover': { color: 'blue' } },
@@ -97,7 +97,7 @@ const base = css({
 自定义属性遵循原生 DOM 继承，名称和 fallback 由作者明确书写；数值不自动补 px。动态值仍可使用 bx。Teleport 中跟随逻辑组件来源的应用主题使用继承主题引用。
 
 ```tsx
-import { css, bx, keyframes } from '@zerodep-vue/css';
+import { css, bx, keyframes } from '@zerodep-vue/core';
 
 const Fade = _component(() => {
   const start = ref(0.2);
@@ -114,7 +114,7 @@ const Fade = _component(() => {
 ## 全局规则
 
 ```tsx
-import { globalCss, bx } from '@zerodep-vue/css';
+import { globalCss, bx } from '@zerodep-vue/core';
 
 const Page = _component(() => {
   const color = ref('#111827');

@@ -1,5 +1,5 @@
-import { SystemKeywords, createTheme, css, keywords } from '@zerodep-vue/css';
-import type { CssContext, CssInput, CssObject } from '@zerodep-vue/css';
+import { SystemKeywords, createTheme, css, keywords } from '@zerodep-vue/core';
+import type { CssContext, CssInput, CssObject } from '@zerodep-vue/core';
 import { shallowRef } from 'vue';
 
 export class AppTheme extends SystemKeywords {

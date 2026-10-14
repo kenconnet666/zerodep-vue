@@ -70,7 +70,7 @@ try {
     if (name === 'compiler')
       for (const required of ['VITE-LICENSE', 'ZERODEP-VUE-LICENSE', 'upstream.json'])
         assert(contents.has(required));
-    if (name === 'css')
+    if (name === 'core')
       for (const required of ['CSSTYPE-LICENSE', 'ZERODEP-JS-LICENSE', 'THIRD_PARTY_NOTICES.md'])
         assert(contents.has(required));
     const checkExport = (value) => {

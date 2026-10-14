@@ -2,13 +2,13 @@
 
 本页描述组件作者能力；运行时样式见 [CSS 文档](css.md)，现有 Vue 工程接入见 [兼容与迁移](compatibility.md)，准确版本和远程证据见 [验收矩阵](acceptance.md)。
 
-Vite 使用 `@zerodep-vue/compiler/vite`，Babel 使用 `@zerodep-vue/compiler`。TypeScript 保持 `jsx: preserve`；自有作者文件选择 `jsxImportSource: @zerodep-vue/tsx`，也可以用文件顶部的 `/** @jsxImportSource @zerodep-vue/tsx */`。普通 Vue 文件继续选择原来的 Vue JSX 类型入口。
+Vite 使用 `@zerodep-vue/compiler` 的 `vitePlugin`，Babel 使用同一入口的 `babelPlugin`。TypeScript 保持 `jsx: preserve`；自有作者文件选择 `jsxImportSource: @zerodep-vue/core`，也可以用文件顶部的 `/** @jsxImportSource @zerodep-vue/core */`。普通 Vue 文件继续选择原来的 Vue JSX 类型入口。
 
 ## 初始化与更新
 
 ```tsx
 import { ref } from 'vue';
-import { _component } from '@zerodep-vue/tsx';
+import { _component } from '@zerodep-vue/core';
 
 export const Counter = _component(() => {
   const count = ref(0);
@@ -62,7 +62,7 @@ Vue 的 ref、computed、watch、v-model、DOM ref 和 setup context 直接使�
 单根组件保留 Vue 自动 attrs 透传。显式通过参数 rest 或 setup context attrs 转发时，编译器关闭重复的自动透传。需要手工控制时可用 `_component(setup, { inheritAttrs: false })`；name 也沿用 Vue 选项。
 
 ```tsx
-import { For } from '@zerodep-vue/tsx';
+import { For } from '@zerodep-vue/core';
 
 <For each={users.value} getKey={(user) => user.id} fallback={<p>暂无用户</p>}>
   {(user, index) => <UserRow user={user} position={index + 1} />}

@@ -3,7 +3,7 @@ import test from 'node:test';
 import { mkdtempSync, mkdirSync, writeFileSync, unlinkSync, rmdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import vueTsx from '../src/vite.ts';
+import { vitePlugin as vueTsx } from '../src/index.ts';
 
 function configured(command = 'serve') {
   const plugin = vueTsx();
@@ -22,11 +22,9 @@ test('Vite prebundles installed CSS dependencies without making them mandatory f
   const directories = [
     'node_modules',
     'node_modules/@zerodep-vue',
-    'node_modules/@zerodep-vue/css',
-    'node_modules/@zerodep-vue/tsx',
+    'node_modules/@zerodep-vue/core',
   ].map((path) => join(root, path));
   const manifest = join(directories[2], 'package.json');
-  const tsxManifest = join(directories[3], 'package.json');
   const created = new Set();
   try {
     const config = (command) => vueTsx().config({ root }, { command, mode: 'development' });
@@ -35,22 +33,13 @@ test('Vite prebundles installed CSS dependencies without making them mandatory f
     // 不生成 dist；源码工作区也必须能在首次开发启动时完成预优化。
     writeFileSync(
       manifest,
-      JSON.stringify({ name: '@zerodep-vue/css', exports: './dist/index.js' }),
+      JSON.stringify({ name: '@zerodep-vue/core', exports: './dist/index.js' }),
     );
     created.add(manifest);
     const installed = config('serve').optimizeDeps;
-    assert(installed.include.includes('@zerodep-vue/css > @vue/devtools-api'));
+    assert(installed.include.includes('@zerodep-vue/core > @vue/devtools-api'));
     assert(installed.include.every((id) => !id.includes('@zerodep-vue/compiler')));
     assert.equal(config('build').optimizeDeps, undefined);
-    unlinkSync(manifest);
-    created.delete(manifest);
-    writeFileSync(tsxManifest, JSON.stringify({ name: '@zerodep-vue/tsx' }));
-    created.add(tsxManifest);
-    assert(
-      config('serve').optimizeDeps.include.includes(
-        '@zerodep-vue/tsx > @zerodep-vue/css > @vue/devtools-api',
-      ),
-    );
   } finally {
     for (const file of created) unlinkSync(file);
     for (const directory of directories.toReversed()) {

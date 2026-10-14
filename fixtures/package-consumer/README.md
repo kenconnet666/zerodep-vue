@@ -1,6 +1,6 @@
 # 发布包消费验收
 
-仓库外消费者不参与工作区依赖链接。`packages:pack` 在构建完成后检查 JS source map 与当前 src 内容一致，再打包三个包，检查全部条件导出目标、声明、源码映射目标、README 和许可文件。报告记录提交、包清单和 tarball SHA-256。
+仓库外消费者不参与工作区依赖链接。`packages:pack` 在构建完成后检查 JS source map 与当前 src 内容一致，再打包 core、compiler 两个包，检查全部条件导出目标、声明、源码映射目标、README 和许可文件。报告记录提交、包清单和 tarball SHA-256。
 
 `template/tsconfig.json` 只服务于仓库内的编辑器，继承工作区源码条件，使模板在 API 修改后立即获得当前类型，不依赖陈旧 dist。生成独立消费者时，脚本会将 `tsconfig.consumer.json` 复制为消费者的 `tsconfig.json`：它没有 extends、源码条件或路径别名。声明验收仍强制从独立安装的 dist 读取类型；编辑器配置不能替代发布包验收。
 

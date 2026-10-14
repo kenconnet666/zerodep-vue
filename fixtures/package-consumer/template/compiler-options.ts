@@ -1,8 +1,7 @@
 import { transformSync } from '@babel/core';
-import compiler from '@zerodep-vue/compiler';
-import vueTsx from '@zerodep-vue/compiler/vite';
-import type { CompilerOptions } from '@zerodep-vue/compiler';
-import type { ViteOptions } from '@zerodep-vue/compiler/vite';
+import { babelPlugin as compiler, vitePlugin as vueTsx } from '@zerodep-vue/compiler';
+
+import type { CompilerOptions, ViteOptions } from '@zerodep-vue/compiler';
 
 const options: CompilerOptions = { optimize: true, mergeProps: true, zerodep: { css: true } };
 const vite: ViteOptions = { ...options, include: /\.tsx$/, babelPlugins: [] };

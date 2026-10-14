@@ -1,8 +1,8 @@
-/** @jsxImportSource @zerodep-vue/tsx */
+/** @jsxImportSource @zerodep-vue/core */
 import { createApp, KeepAlive, nextTick, onScopeDispose, ref, Transition } from 'vue';
 import type { Ref } from 'vue';
-import { _component } from '@zerodep-vue/tsx';
-import { bx, css, createCssHost, keyframes } from '@zerodep-vue/css';
+import { _component, bx, css, createCssHost, keyframes } from '@zerodep-vue/core';
+
 import type { StabilityReport } from './contracts.ts';
 
 function scene(label: string) {

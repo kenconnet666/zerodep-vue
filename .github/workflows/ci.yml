@@ -33,8 +33,7 @@ jobs:
       matrix:
         package:
           - '@zerodep-vue/compiler'
-          - '@zerodep-vue/css'
-          - '@zerodep-vue/tsx'
+          - '@zerodep-vue/core'
           - '@zerodep-vue/fixture-legacy-tsx'
           - '@zerodep-vue/fixture-authoring'
     steps:
@@ -238,13 +237,15 @@ jobs:
           import assert from 'node:assert/strict';
           import { access } from 'node:fs/promises';
           import { createRequire } from 'node:module';
-          import compiler from '@zerodep-vue/compiler';
-          import vite from '@zerodep-vue/compiler/vite';
-          assert.equal(typeof compiler, 'function');
-          assert.equal(vite().name, 'zerodep-vue:tsx');
-          assert.equal(typeof createRequire(import.meta.url)('@zerodep-vue/compiler'), 'function');
-          assert.equal(typeof createRequire(import.meta.url)('@zerodep-vue/compiler/vite'), 'function');
-          for (const name of ['compiler', 'css', 'tsx']) {
+          import { babelPlugin, vitePlugin } from '@zerodep-vue/compiler';
+          import { css, _component, For } from '@zerodep-vue/core';
+          assert.equal(typeof babelPlugin, 'function');
+          assert.equal(vitePlugin().name, 'zerodep-vue:tsx');
+          const cjs = createRequire(import.meta.url)('@zerodep-vue/compiler');
+          assert.equal(cjs.babelPlugin, babelPlugin);
+          assert.equal(cjs.vitePlugin, vitePlugin);
+          for (const entry of [css, _component, For]) assert.equal(typeof entry, 'function');
+          for (const name of ['compiler', 'core']) {
             await access(`packages/${name}/dist/index.js`);
             await access(`packages/${name}/dist/index.d.ts`);
           }

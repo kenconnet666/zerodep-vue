@@ -1,4 +1,4 @@
-import { _component, For } from '@zerodep-vue/tsx';
+import { _component, For } from '@zerodep-vue/core';
 import { computed, defineComponent, ref, toRef } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 

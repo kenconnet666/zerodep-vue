@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import { SourceMap } from 'node:module';
 import test from 'node:test';
-import vueTsx from '../src/vite.ts';
+import { vitePlugin as vueTsx } from '../src/index.ts';
 
 test('render handler source maps point to author TSX in development, production and SSR', async () => {
-  const source = `import {_component} from '@zerodep-vue/tsx';
-import {css,bx} from '@zerodep-vue/css';
+  const source = `import {_component} from '@zerodep-vue/core';
+import {css,bx} from '@zerodep-vue/core';
 import {ref} from 'vue';
 export default _component(()=>{
   const count=ref(0);

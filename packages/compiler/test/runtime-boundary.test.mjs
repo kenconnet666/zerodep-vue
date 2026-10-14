@@ -7,8 +7,8 @@ import {
 
 test('runtime boundary checks imports, re-exports and dynamic loading without matching ordinary strings', async () => {
   await assertRuntimeCode(
-    `import {css} from '@zerodep-vue/css';
-    export {For} from '@zerodep-vue/tsx';
+    `import {css} from '@zerodep-vue/core';
+    export {For} from '@zerodep-vue/core';
     const label='@zerodep-vue/compiler';
     // node_modules/typescript/lib/typescript.js
   `,
@@ -20,7 +20,7 @@ test('runtime boundary checks imports, re-exports and dynamic loading without ma
     "export {parse} from '@vue/compiler-sfc';",
     "const module = import('typescript');",
     "const module = require('@zerodep-vue/compiler');",
-    "import '@zerodep-vue/css/hmr';",
+    "import '@zerodep-vue/core/hmr';",
   ])
     await assert.rejects(assertRuntimeCode(code, 'rejected'), /dependency in/);
 });
@@ -44,7 +44,8 @@ test('runtime boundary also rejects bundled modules and external imports on eith
     'C:\\consumer\\node_modules\\@babel\\core\\lib\\index.js',
     '/consumer/node_modules/@zerodep-vue/compiler/dist/index.js',
     'C:\\code\\zerodep-vue\\packages\\compiler\\src\\runtime.ts',
-    '/consumer/node_modules/@zerodep-vue/css/dist/devtools.js',
+    '/consumer/node_modules/@zerodep-vue/core/dist/css/devtools.js',
+    'C:\\code\\zerodep-vue\\packages\\core\\src\\css\\hmr.ts',
   ]) {
     await assert.rejects(
       assertRuntimeChunks(build({ modules: { [id]: { renderedLength: 12 } } }), 'client'),

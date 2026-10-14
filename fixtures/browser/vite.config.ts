@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
-import vueTsx from '../../packages/compiler/src/vite.ts';
+import { vitePlugin as vueTsx } from '../../packages/compiler/src/index.ts';
 
 export default defineConfig({
   root: fileURLToPath(new URL('.', import.meta.url)),
@@ -14,14 +14,14 @@ export default defineConfig({
         for (const output of Object.values(bundle)) {
           if (output.type !== 'chunk') continue;
           const debug = Object.keys(output.modules).filter((id) =>
-            /(?:packages\/(?:css|compiler)\/src\/(?:devtools|hmr)\.ts|@vue[+/]devtools)/.test(
+            /(?:packages\/core\/src\/css\/(?:devtools|hmr)\.ts|@vue[+/]devtools)/.test(
               id.replaceAll('\\', '/'),
             ),
           );
           if (
             debug.length ||
             output.code.includes('__zerodepHmr') ||
-            output.code.includes('zerodep-vue-css')
+            output.code.includes('zerodep-vue-core')
           )
             throw new Error(
               `Production output includes development inspection/HMR code: ${debug.join(', ')}`,
@@ -40,7 +40,7 @@ export default defineConfig({
     },
   },
   ssr: {
-    noExternal: ['@zerodep-vue/css', '@zerodep-vue/tsx'],
+    noExternal: ['@zerodep-vue/core'],
     resolve: { conditions: ['zerodep-vue-source', 'module', 'node', 'development|production'] },
   },
   optimizeDeps: { include: ['@vue/devtools-kit'] },

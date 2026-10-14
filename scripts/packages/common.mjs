@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 export const artifacts = resolve(root, 'test-results/packages');
-export const names = ['css', 'tsx', 'compiler'];
+export const names = ['core', 'compiler'];
 export const readJson = async (path) => JSON.parse(await readFile(path, 'utf8'));
 export const sha256 = (data) => createHash('sha256').update(data).digest('hex');
 export async function files(directory, prefix = '') {

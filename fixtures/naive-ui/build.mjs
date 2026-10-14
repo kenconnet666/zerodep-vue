@@ -10,7 +10,7 @@ import officialJsx from '@vue/babel-plugin-jsx';
 import { build, transformWithOxc } from 'vite';
 import { createSSRApp, h } from 'vue';
 import { renderToString } from '@vue/server-renderer';
-import forkJsx from '../../packages/compiler/src/index.ts';
+import { babelPlugin as forkJsx } from '../../packages/compiler/src/index.ts';
 import { fixtureRoot, prepare, root, source, sourceRoot } from './prepare.mjs';
 import { inventory, productionFiles } from './inventory.mjs';
 import { emitDeclarations } from './declarations.mjs';

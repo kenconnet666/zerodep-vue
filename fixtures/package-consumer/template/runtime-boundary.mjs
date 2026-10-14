@@ -7,7 +7,7 @@ const buildDependency = (id) =>
     normalized(id),
   ) || /(?:^|\/)packages\/compiler\/(?:src|dist)\//.test(normalized(id));
 const developmentDependency = (id) =>
-  /(?:^|\/)(?:@zerodep-vue\/css|packages\/css)\/(?:(?:src|dist)\/)?(?:devtools|hmr)(?:\.|\/|$)/.test(
+  /(?:^|\/)(?:@zerodep-vue\/core|packages\/core)\/(?:(?:src|dist)\/css\/)?(?:devtools|hmr)(?:\.|\/|$)/.test(
     normalized(id),
   );
 
@@ -61,7 +61,7 @@ export async function assertRuntimeChunks(result, label) {
     t.traverseFast(ast, (node) => {
       if (t.isStringLiteral(node))
         assert(
-          !['zerodep-vue-css', '__zerodepHmr'].includes(node.value),
+          !['zerodep-vue-core', '__zerodepHmr'].includes(node.value),
           `Development registry in ${location}`,
         );
     });

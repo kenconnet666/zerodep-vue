@@ -5,14 +5,14 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "preserve",
-    "jsxImportSource": "@zerodep-vue/tsx",
+    "jsxImportSource": "@zerodep-vue/core",
     "strict": true,
     "exactOptionalPropertyTypes": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": false,
     "types": ["node"],
     "noEmit": true,
-    "plugins": [{ "name": "@zerodep-vue/css/language-service" }]
+    "plugins": [{ "name": "@zerodep-vue/core/language-service" }]
   },
   "include": ["App.tsx", "types.tsx", "compiler-options.ts"]
 }

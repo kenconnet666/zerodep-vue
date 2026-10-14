@@ -8,8 +8,7 @@
     "test": "playwright test --config playwright.config.ts"
   },
   "dependencies": {
-    "@zerodep-vue/css": "workspace:*",
-    "@zerodep-vue/tsx": "workspace:*",
+    "@zerodep-vue/core": "workspace:*",
     "vue": "catalog:",
     "@vue/server-renderer": "catalog:",
     "@css-render/vue3-ssr": "catalog:naive"

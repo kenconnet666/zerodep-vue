@@ -10,12 +10,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
-    },
-    "./vite": {
-      "zerodep-vue-source": "./src/vite.ts",
-      "types": "./dist/vite.d.ts",
-      "import": "./dist/vite.js",
-      "default": "./dist/vite.js"
     }
   },
   "files": [
@@ -59,14 +53,9 @@
     "@vue/server-renderer": "catalog:",
     "vite": "catalog:",
     "vue": "catalog:",
-    "@zerodep-vue/css": "workspace:*"
+    "@zerodep-vue/core": "workspace:*"
   },
   "license": "MIT",
-  "peerDependenciesMeta": {
-    "vite": {
-      "optional": true
-    }
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/kenconnet666/zerodep-vue.git",

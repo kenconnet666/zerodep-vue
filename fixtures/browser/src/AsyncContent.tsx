@@ -1,5 +1,5 @@
-import { _component } from '@zerodep-vue/tsx';
-import { css } from '@zerodep-vue/css';
+import { _component, css } from '@zerodep-vue/core';
+
 export default _component(() => (
   <p data-testid="async" class={css({ color: 'purple' })}>
     异步组件已加载

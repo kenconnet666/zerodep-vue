@@ -1,4 +1,4 @@
-import { css, bx, keywords, keyframes } from '@zerodep-vue/css';
+import { css, bx, keywords, keyframes } from '@zerodep-vue/core';
 import { themedKeywords, themedKeyframes, themed, themedGlobalCss } from './theme-types.tsx';
 
 themedGlobalCss('page', {

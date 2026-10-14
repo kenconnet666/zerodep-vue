@@ -1,4 +1,4 @@
-import type { CssHost } from '@zerodep-vue/css';
+import type { CssHost } from '@zerodep-vue/core';
 
 export interface InitialState {
   text: string;

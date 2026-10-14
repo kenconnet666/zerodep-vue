@@ -1,5 +1,5 @@
 import { createApp, createSSRApp } from 'vue';
-import { createCssHost } from '@zerodep-vue/css';
+import { createCssHost } from '@zerodep-vue/core';
 import { App } from './App.tsx';
 import type {} from './contracts.ts';
 

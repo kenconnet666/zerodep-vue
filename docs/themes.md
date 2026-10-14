@@ -4,7 +4,7 @@
 
 ```tsx
 import { shallowRef } from 'vue';
-import { SystemKeywords, createTheme } from '@zerodep-vue/css';
+import { SystemKeywords, createTheme } from '@zerodep-vue/core';
 
 class AppTheme extends SystemKeywords {
   override readonly color = {
@@ -83,7 +83,7 @@ TypeScript 6 的原生服务没有自动为这些字符串候选返回成员注�
 ```json
 {
   "compilerOptions": {
-    "plugins": [{ "name": "@zerodep-vue/css/language-service" }]
+    "plugins": [{ "name": "@zerodep-vue/core/language-service" }]
   }
 }
 ```

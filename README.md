@@ -4,9 +4,9 @@ Vue VDOM TSX 编译与运行时 CSS 工具库，基于官方 Vue JSX v3.0.0 的�
 
 CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提供，主题通过继承扩展，并提供贯穿对象样式和关键字视图的泛型 T 入口。属性、关键字与主题成员的类型提示、中文说明及声明消费体验是交付要求；作者仍使用 class，绑定对应的内联 style 由编译器隐式接线。
 
-提供 `_component`、For、props/default/children、class/bx、系统/继承主题、变量组、动画和全局规则，以及兼容实例的 HMR 与 Vue DevTools 样式检查。状态直接使用 Vue Ref 和 computed。作者写法见 [authoring.md](docs/authoring.md)、[CSS 文档](docs/css.md) 和 [主题文档](docs/themes.md)。
+提供 `_component`、For、props/default/children、class/bx、系统/继承主题、动画和全局规则，以及兼容实例的 HMR 与 Vue DevTools 样式检查。状态直接使用 Vue Ref 和 computed。作者写法见 [authoring.md](docs/authoring.md)、[CSS 文档](docs/css.md) 和 [主题文档](docs/themes.md)。
 
-已有 Vue TSX 项目可将 Vite 配置中的 JSX 插件替换为 `@zerodep-vue/compiler/vite` 的默认导出；Babel 直接使用 `@zerodep-vue/compiler`。选项沿用官方 JSX，Vite 入口另提供 include、exclude 和 babelPlugins。不要同时保留另一份 Vue JSX 转换；原有 Vue SFC 插件不受此限制。完整接入示例与混用边界见 [兼容与迁移](docs/compatibility.md)。开发态更新行为见 [HMR](docs/hmr.md)，源码定位、绑定消费值和 Vue DevTools 集成见 [开发检查](docs/devtools.md)。
+已有 Vue TSX 项目可将 Vite 配置中的 JSX 插件替换为 `@zerodep-vue/compiler` 的命名导出 `vitePlugin`；Babel 使用同一入口的 `babelPlugin`。选项沿用官方 JSX，Vite 入口另提供 include、exclude 和 babelPlugins。不要同时保留另一份 Vue JSX 转换；原有 Vue SFC 插件不受此限制。完整接入示例与混用边界见 [兼容与迁移](docs/compatibility.md)。开发态更新行为见 [HMR](docs/hmr.md)，源码定位、绑定消费值和 Vue DevTools 集成见 [开发检查](docs/devtools.md)。
 
 ## 环境
 
@@ -22,8 +22,8 @@ CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提�
 ## 目录
 
 - packages/compiler：官方 JSX 小范围 fork、来源清单与兼容性对照。
-- packages/tsx：组件作者 API、For、Vue 组件接线和局部 JSX 类型入口。
-- packages/css：运行时 CSS、class 组合、绑定解析、Vue 接线与样式宿主。
+- packages/core：组件作者 API、For、Vue 组件接线和局部 JSX 类型入口。
+- packages/core：运行时 CSS、class 组合、绑定解析、Vue 接线与样式宿主。
 - fixtures：普通 Vue TSX、作者类型、Naive 固定生产源码、真实浏览器混用和仓库外包消费。
 - scripts/language-services：仅 TS/TSX 的项目 LSP 与 MCP 桥接。
 - docs/upstream.md：来源与实现边界。

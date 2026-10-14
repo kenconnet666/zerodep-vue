@@ -1,7 +1,7 @@
-/** @jsxImportSource @zerodep-vue/tsx */
+/** @jsxImportSource @zerodep-vue/core */
 import { ref } from 'vue';
-import { _component } from '@zerodep-vue/tsx';
-import { bx, css, globalCss } from '@zerodep-vue/css';
+import { _component, bx, css, globalCss } from '@zerodep-vue/core';
+
 import type {} from './contracts.ts';
 
 export default _component(() => {

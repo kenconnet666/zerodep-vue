@@ -21,7 +21,7 @@
     "naive:inventory": "node fixtures/naive-ui/inventory.mjs",
     "test:naive": "node fixtures/naive-ui/build.mjs",
     "test:authoring": "vitest run --config vitest.authoring.config.ts",
-    "test:css": "node --test packages/css/test/*.test.mjs",
+    "test:css": "node --test packages/core/test/css/*.test.mjs",
     "css:generate": "node scripts/css/generate.mjs",
     "css:generate:check": "node scripts/css/generate.mjs --check",
     "packages:pack": "node scripts/packages/pack.mjs",
@@ -51,7 +51,6 @@
     "jsdom": "catalog:",
     "vitest": "catalog:",
     "vite": "catalog:",
-    "@zerodep-vue/tsx": "workspace:*",
-    "@zerodep-vue/css": "workspace:*"
+    "@zerodep-vue/core": "workspace:*"
   }
 }

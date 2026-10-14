@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { transformAsync } from '@babel/core';
 import presetTypeScript from '@babel/preset-typescript';
-import compiler from '../src/index.ts';
+import { babelPlugin as compiler } from '../src/index.ts';
 
 const compile = async (code) =>
   (
@@ -17,15 +17,15 @@ const compile = async (code) =>
 
 test('component macros recognize import aliases and namespace bindings', async () => {
   const aliased = await compile(
-    'import {_component as make} from "@zerodep-vue/tsx"; export const C=make(()=> <div/>);',
+    'import {_component as make} from "@zerodep-vue/core"; export const C=make(()=> <div/>);',
   );
   assert(aliased.includes('createComponent as'));
   const namespaced = await compile(
-    'import * as tsx from "@zerodep-vue/tsx"; export const C=tsx._component(()=> <div/>);',
+    'import * as tsx from "@zerodep-vue/core"; export const C=tsx._component(()=> <div/>);',
   );
   assert(namespaced.includes('createComponent as'));
   const shadowed = await compile(
-    'import {_component} from "@zerodep-vue/tsx"; function user(_component){return _component(()=> <div/>);}',
+    'import {_component} from "@zerodep-vue/core"; function user(_component){return _component(()=> <div/>);}',
   );
   assert(!shadowed.includes('createComponent as'));
 });
@@ -33,13 +33,13 @@ test('component macros recognize import aliases and namespace bindings', async (
 test('invalid prop reassignment and ambiguous initialization have located errors', async () => {
   await assert.rejects(
     compile(
-      'import {_component} from "@zerodep-vue/tsx"; const C=_component(({value}:{value:string})=>{value="x";return <div/>;});',
+      'import {_component} from "@zerodep-vue/core"; const C=_component(({value}:{value:string})=>{value="x";return <div/>;});',
     ),
     /ZV_READONLY_PROP/,
   );
   await assert.rejects(
     compile(
-      'import {_component} from "@zerodep-vue/tsx"; import {ref} from "vue"; const C=_component(()=>{if(ready)return <div/>;const value=ref(0);return <span>{value.value}</span>;});',
+      'import {_component} from "@zerodep-vue/core"; import {ref} from "vue"; const C=_component(()=>{if(ready)return <div/>;const value=ref(0);return <span>{value.value}</span>;});',
     ),
     /ZV_RENDER_INIT/,
   );
@@ -49,18 +49,18 @@ test('default parameter order has located diagnostics but deferred callbacks can
   for (const code of ['{a=a}', '{a=b,b=1}', '{a=ctx},ctx']) {
     await assert.rejects(
       compile(
-        `import {_component} from '@zerodep-vue/tsx'; const C=_component((${code})=><div>{a}</div>);`,
+        `import {_component} from '@zerodep-vue/core'; const C=_component((${code})=><div>{a}</div>);`,
       ),
       /ZV_DEFAULT_ORDER/,
     );
   }
   const allowed = await compile(
-    `import {_component} from '@zerodep-vue/tsx'; const C=_component(({a=1,b=a,read=()=>later,later=2})=><div>{b}{read()}</div>);`,
+    `import {_component} from '@zerodep-vue/core'; const C=_component(({a=1,b=a,read=()=>later,later=2})=><div>{b}{read()}</div>);`,
   );
   assert(allowed.includes('createComponent'));
   await assert.rejects(
     compile(
-      `import {_component} from '@zerodep-vue/tsx'; const C=_component(function*(){return <div/>;});`,
+      `import {_component} from '@zerodep-vue/core'; const C=_component(function*(){return <div/>;});`,
     ),
     /setup 不能是 generator/,
   );
@@ -68,7 +68,7 @@ test('default parameter order has located diagnostics but deferred callbacks can
 
 test('lexical type scopes preserve local shadows, outer aliases and enclosing generic constraints', async () => {
   const code = await compile(`
-    import {_component} from '@zerodep-vue/tsx';
+    import {_component} from '@zerodep-vue/core';
     interface Model { outer: string }
     type Captured = Model;
     function create<T extends { generic: number }>() {
@@ -87,7 +87,7 @@ test('lexical type scopes preserve local shadows, outer aliases and enclosing ge
 });
 
 test('editable model discovery respects prop aliases and nested shadowing', async () => {
-  const code = await compile(`import {_component} from '@zerodep-vue/tsx';
+  const code = await compile(`import {_component} from '@zerodep-vue/core';
     const Edit=_component(({model:state,other})=>{
       const change=(other)=>other.value++;
       return <><input v-model={state.value}/><span>{other.value}</span></>;

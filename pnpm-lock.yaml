@@ -214,12 +214,9 @@ importers:
       '@zerodep-vue/compiler':
         specifier: workspace:*
         version: link:packages/compiler
-      '@zerodep-vue/css':
+      '@zerodep-vue/core':
         specifier: workspace:*
-        version: link:packages/css
-      '@zerodep-vue/tsx':
-        specifier: workspace:*
-        version: link:packages/tsx
+        version: link:packages/core
       jsdom:
         specifier: 'catalog:'
         version: 29.1.1
@@ -253,12 +250,9 @@ importers:
 
   fixtures/authoring:
     dependencies:
-      '@zerodep-vue/css':
+      '@zerodep-vue/core':
         specifier: workspace:*
-        version: link:../../packages/css
-      '@zerodep-vue/tsx':
-        specifier: workspace:*
-        version: link:../../packages/tsx
+        version: link:../../packages/core
       vue:
         specifier: 'catalog:'
         version: 3.5.43(typescript@6.0.3)
@@ -275,12 +269,9 @@ importers:
       '@vue/server-renderer':
         specifier: 'catalog:'
         version: 3.5.43
-      '@zerodep-vue/css':
+      '@zerodep-vue/core':
         specifier: workspace:*
-        version: link:../../packages/css
-      '@zerodep-vue/tsx':
-        specifier: workspace:*
-        version: link:../../packages/tsx
+        version: link:../../packages/core
       vue:
         specifier: 'catalog:'
         version: 3.5.43(typescript@6.0.3)
@@ -422,9 +413,9 @@ importers:
       '@vue/server-renderer':
         specifier: 'catalog:'
         version: 3.5.43
-      '@zerodep-vue/css':
+      '@zerodep-vue/core':
         specifier: workspace:*
-        version: link:../css
+        version: link:../core
       vite:
         specifier: 'catalog:'
         version: 8.3.1(@types/node@24.13.5)
@@ -432,7 +423,7 @@ importers:
         specifier: 'catalog:'
         version: 3.5.43(typescript@6.0.3)
 
-  packages/css:
+  packages/core:
     dependencies:
       '@csstools/css-tokenizer':
         specifier: 'catalog:'
@@ -459,19 +450,6 @@ importers:
       vue-router:
         specifier: 'catalog:'
         version: 4.6.4(patch_hash=800dfd18701201272aab38271ad3404384a9a9f8576d7ff84b0f1f40e0ede6e6)(vue@3.5.43(typescript@6.0.3))
-
-  packages/tsx:
-    dependencies:
-      '@zerodep-vue/css':
-        specifier: workspace:*
-        version: link:../css
-    devDependencies:
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vue:
-        specifier: 'catalog:'
-        version: 3.5.43(typescript@6.0.3)
 
 packages:
 

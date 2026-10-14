@@ -1,7 +1,7 @@
-/** @jsxImportSource @zerodep-vue/tsx */
+/** @jsxImportSource @zerodep-vue/core */
 import { ref } from 'vue';
-import { _component } from '@zerodep-vue/tsx';
-import { bx, cx, globalCss } from '@zerodep-vue/css';
+import { _component, bx, cx, globalCss } from '@zerodep-vue/core';
+
 import { NSelect } from '@fixture/naive';
 import type {} from '../src/contracts.ts';
 

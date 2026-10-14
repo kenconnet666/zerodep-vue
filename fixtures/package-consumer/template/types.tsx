@@ -1,9 +1,17 @@
-/** @jsxImportSource @zerodep-vue/tsx */
+/** @jsxImportSource @zerodep-vue/core */
 import { computed, ref } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
-import { _component, For } from '@zerodep-vue/tsx';
-import { css, bx as bind, keywords, createTheme, SystemKeywords } from '@zerodep-vue/css';
-import type { CssContext, CssInput, CssObject } from '@zerodep-vue/css';
+import {
+  _component,
+  For,
+  css,
+  bx as bind,
+  keywords,
+  createTheme,
+  SystemKeywords,
+} from '@zerodep-vue/core';
+
+import type { CssContext, CssInput, CssObject } from '@zerodep-vue/core';
 import { Field, Palette, palettes, themed, themedKeywords } from './App';
 
 export function selectedTheme() {

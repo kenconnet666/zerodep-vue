@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
-import type { InspectedNode } from '@zerodep-vue/css/devtools';
+import type { InspectedNode } from '@zerodep-vue/core/devtools';
 import type {} from '../src/contracts.ts';
 
 test('real DevTools inspector reports consumed provenance without executing getters', async ({

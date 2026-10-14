@@ -1,5 +1,5 @@
-import { css, cx, bx, keywords } from '@zerodep-vue/css';
-import type { CssContext, CssObject, SystemKeywords } from '@zerodep-vue/css';
+import { css, cx, bx, keywords } from '@zerodep-vue/core';
+import type { CssContext, CssObject, SystemKeywords } from '@zerodep-vue/core';
 
 export const literalStyle = css({
   font: 'inherit', // literal:font

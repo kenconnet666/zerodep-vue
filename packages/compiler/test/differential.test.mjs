@@ -3,7 +3,7 @@ import test from 'node:test';
 import { transformAsync } from '@babel/core';
 import presetTypeScript from '@babel/preset-typescript';
 import official from '@vue/babel-plugin-jsx';
-import fork from '../src/index.ts';
+import { babelPlugin as fork } from '../src/index.ts';
 
 const cases = {
   'spread order and handlers': '<Button class="base" {...props} onClick={save} class={extra} />',

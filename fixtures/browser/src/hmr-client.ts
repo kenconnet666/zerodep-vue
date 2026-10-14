@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { createCssHost } from '@zerodep-vue/css';
+import { createCssHost } from '@zerodep-vue/core';
 import Subject from '@fixture/hmr';
 import type {} from './contracts.ts';
 

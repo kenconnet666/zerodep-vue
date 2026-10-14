@@ -15,6 +15,10 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前 CSS API 修订
 
+ea1e69a8dca4903668718ba80ffee91fa36f74da 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38518103441) 已成功，编译器运行时转导清理、产物依赖边界检查及根 Vitest 配置修复通过完整回归。
+
+本次按用户确认合并为 compiler/core 两包：core 根入口统一导出原 CSS 与 TSX 作者 API，内部按 css/tsx 组织；组件与样式共用一个 runtime 技术入口。compiler 根入口命名导出 babelPlugin、vitePlugin，移除 /vite 子入口并明确 Vite 为必需构建 peer；转换实现集中到 transforms，上游来源继续独立保留。动画模块改用明确名称，删除合并后的重复转导、旧包目录与陈旧构建缓存。生成器、语言服务、JSX 类型、测试路径、消费者、锁文件和发布检查同步迁移，依赖版本与校验和保持；保留现有 JSX fork 行为。局部转换/运行/语言服务测试、ESM/CJS 源码入口及生成一致性检查通过，受影响入口和消费者 LSP 零错误。旧版本交付记录不改写为新包证据，本次完整产物仍以新提交 CI 为准。
+
 326d072b912d82b5c42a0f08934f064512c95c7b 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38516463478) 已成功，统一继承主题入口的完整回归已通过。
 
 本次保留 compiler/tsx/css 分包，删除 compiler 的 runtime/hmr/devtools 纯转导及其分发 CSS 依赖，生成代码直接使用所属运行时包。独立消费者检查 Babel、客户端和 SSR 的真实导入与 bundle 模块；打包额外拒绝无源码的陈旧输出。根 Vitest 配置归入继承基础选项的 noEmit 项目，修复 TS5097，并加入远程类型/LSP 检查。相关转换与边界短测通过，两个根配置及 Vite 入口 LSP 均零错误；完整产物与浏览器回归待新提交 CI。

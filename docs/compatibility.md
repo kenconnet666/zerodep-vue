@@ -17,26 +17,25 @@ Naive 验收编译全部生产 TSX，再由浏览器实际消费本次生成的�
 
 ## 已有 Vite 工程
 
-按 [打包与安装](packages.md) 安装同次构建的三个 tarball。将原来的 Vue JSX 插件替换为下面的入口：
+按 [打包与安装](packages.md) 安装同次构建的两个 tarball。将原来的 Vue JSX 插件替换为下面的入口：
 
 ```ts
 import { defineConfig } from 'vite';
-import vueTsx from '@zerodep-vue/compiler/vite';
+import { vitePlugin } from '@zerodep-vue/compiler';
 
 export default defineConfig({
-  plugins: [vueTsx()],
+  plugins: [vitePlugin()],
 });
 ```
 
-现有 `@vitejs/plugin-vue` 可保留处理 `.vue` 文件；一个 TSX 文件只执行一次 JSX lowering，不再同时调用旧 JSX 插件。原来的 `optimize`、`mergeProps`、`transformOn`、`enableObjectSlots`、`isCustomElement`、`pragma` 和 `resolveType` 仍可传给 `vueTsx`，默认值不变。
+现有 `@vitejs/plugin-vue` 可保留处理 `.vue` 文件；一个 TSX 文件只执行一次 JSX lowering，不再同时调用旧 JSX 插件。原来的 `optimize`、`mergeProps`、`transformOn`、`enableObjectSlots`、`isCustomElement`、`pragma` 和 `resolveType` 仍可传给 `vitePlugin`，默认值不变。
 
 TypeScript 保持 `jsx: "preserve"`。现有项目的 Vue JSX 类型入口可以保留，只在新页面顶部选择自有类型：
 
 ```tsx
-/** @jsxImportSource @zerodep-vue/tsx */
+/** @jsxImportSource @zerodep-vue/core */
 import { ref } from 'vue';
-import { _component } from '@zerodep-vue/tsx';
-import { bx, css } from '@zerodep-vue/css';
+import { _component, bx, css } from '@zerodep-vue/core';
 
 export default _component(() => {
   const count = ref(0);
@@ -51,9 +50,9 @@ export default _component(() => {
 });
 ```
 
-整个工程都使用自有类型时，可将 `jsxImportSource` 统一设为 `@zerodep-vue/tsx`，其中仍可调用普通 Vue 和 Naive 组件。不设置工作区专用的 `zerodep-vue-source` 条件；正常安装使用包内 dist。
+整个工程都使用自有类型时，可将 `jsxImportSource` 统一设为 `@zerodep-vue/core`，其中仍可调用普通 Vue 和 Naive 组件。不设置工作区专用的 `zerodep-vue-source` 条件；正常安装使用包内 dist。
 
-直接导入 CSS/TSX 工具的文件自动接入 class 协议。只通过项目共享模块取得 class 值的普通文件，可使用 `vueTsx({ zerodep: { css: true } })` 统一接线。普通 class 字符串、条件对象和 style 继续按 Vue 规则处理。
+直接导入 CSS/TSX 工具的文件自动接入 class 协议。只通过项目共享模块取得 class 值的普通文件，可使用 `vitePlugin({ zerodep: { css: true } })` 统一接线。普通 class 字符串、条件对象和 style 继续按 Vue 规则处理。
 
 ## Babel 工程
 

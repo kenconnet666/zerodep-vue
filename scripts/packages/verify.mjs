@@ -2,14 +2,18 @@ import assert from 'node:assert/strict';
 import { cp, mkdir, readFile, writeFile, copyFile, realpath } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
-import { artifacts, command, pnpm, readJson, report, root, sha256 } from './common.mjs';
+import { artifacts, command, pnpm, readJson, report, root, sha256, names } from './common.mjs';
 import { createOwnedDirectory, removeOwnedDirectory } from './owned-directory.mjs';
 import { outsideDirectory } from './path-boundary.mjs';
 
 const packed = await readJson(join(artifacts, 'pack.json'));
 assert(
-  packed.success && packed.packages.length === 3,
-  'Requires three verified tarballs from packages:pack.',
+  packed.success && packed.packages.length === names.length,
+  'Requires the core and compiler tarballs from packages:pack.',
+);
+assert.deepEqual(
+  packed.packages.map((entry) => entry.name).sort(),
+  names.map((name) => `@zerodep-vue/${name}`).sort(),
 );
 if (process.env.GITHUB_SHA)
   assert.equal(packed.commit, process.env.GITHUB_SHA, 'Tarball commit differs from this CI run.');

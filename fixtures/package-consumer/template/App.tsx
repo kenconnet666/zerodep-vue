@@ -1,8 +1,16 @@
-/** @jsxImportSource @zerodep-vue/tsx */
+/** @jsxImportSource @zerodep-vue/core */
 import { ref, shallowRef, Suspense } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
-import { _component, For } from '@zerodep-vue/tsx';
-import { bx, createTheme, SystemKeywords, keywords, keyframes, globalCss } from '@zerodep-vue/css';
+import {
+  _component,
+  For,
+  bx,
+  createTheme,
+  SystemKeywords,
+  keywords,
+  keyframes,
+  globalCss,
+} from '@zerodep-vue/core';
 
 export class Palette extends SystemKeywords {
   override readonly color = {

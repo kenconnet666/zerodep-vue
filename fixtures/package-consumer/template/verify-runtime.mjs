@@ -8,26 +8,25 @@ import presetTypescript from '@babel/preset-typescript';
 import { build } from 'vite';
 import { createSSRApp, ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
-import compiler from '@zerodep-vue/compiler';
-import vueTsx from '@zerodep-vue/compiler/vite';
-import { getCssHost } from '@zerodep-vue/css';
+import { babelPlugin as compiler, vitePlugin as vueTsx } from '@zerodep-vue/compiler';
+import { getCssHost } from '@zerodep-vue/core';
 import { assertRuntimeCode, assertRuntimeChunks } from './runtime-boundary.mjs';
 
 const root = process.cwd();
 const require = createRequire(import.meta.url);
-assert.equal(typeof require('@zerodep-vue/compiler'), 'function');
-assert.equal(typeof require('@zerodep-vue/compiler/vite'), 'function');
-for (const entry of ['runtime', 'hmr', 'devtools'])
+assert.equal(typeof require('@zerodep-vue/compiler').babelPlugin, 'function');
+assert.equal(typeof require('@zerodep-vue/compiler').vitePlugin, 'function');
+for (const entry of ['vite', 'runtime', 'hmr', 'devtools'])
   assert.throws(() => require.resolve(`@zerodep-vue/compiler/${entry}`), {
     code: 'ERR_PACKAGE_PATH_NOT_EXPORTED',
   });
-assert.equal(typeof require('@zerodep-vue/css').css, 'function');
-assert.equal(typeof require('@zerodep-vue/css').createTheme, 'function');
-assert.equal('createCss' in require('@zerodep-vue/css'), false);
-assert.equal('defineVars' in require('@zerodep-vue/css'), false);
-assert.equal(typeof require('@zerodep-vue/tsx')._component, 'function');
+assert.equal(typeof require('@zerodep-vue/core').css, 'function');
+assert.equal(typeof require('@zerodep-vue/core').createTheme, 'function');
+assert.equal('createCss' in require('@zerodep-vue/core'), false);
+assert.equal('defineVars' in require('@zerodep-vue/core'), false);
+assert.equal(typeof require('@zerodep-vue/core')._component, 'function');
 const entries = {};
-for (const name of ['compiler', 'css', 'tsx']) {
+for (const name of ['compiler', 'core']) {
   const entry = await realpath(require.resolve(`@zerodep-vue/${name}`));
   assert(
     entry.startsWith(await realpath(root)) && entry.includes('dist'),
@@ -94,7 +93,7 @@ assert(chunks.some((chunk) => chunk.code.includes('package-state')));
 // 将运行时也打入 SSR bundle，核对外部 getCssHost 仍能读取同一个请求；不依赖模块单例偶合。
 const server = await build({
   ...base,
-  ssr: { noExternal: ['@zerodep-vue/css', '@zerodep-vue/tsx'] },
+  ssr: { noExternal: ['@zerodep-vue/core'] },
   build: {
     ...base.build,
     ssr: resolve('App.tsx'),

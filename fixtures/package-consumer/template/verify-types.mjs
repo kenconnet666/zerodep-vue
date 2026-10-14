@@ -20,7 +20,7 @@ assert(
 );
 assert(!options.customConditions?.includes('zerodep-vue-source'));
 const host = languageServiceHost(ts, root, paths, options);
-const init = createRequire(import.meta.url)('@zerodep-vue/css/language-service');
+const init = createRequire(import.meta.url)('@zerodep-vue/core/language-service');
 const service = init({ typescript: ts }).create({
   languageService: ts.createLanguageService(host),
 });
@@ -131,7 +131,9 @@ try {
     assert.equal(definitions?.length, 1);
     assert(realpathSync(definitions[0].fileName).startsWith(realpathSync(root)));
     assert(
-      definitions[0].fileName.replaceAll('\\', '/').endsWith('/dist/generated/literal-values.d.ts'),
+      definitions[0].fileName
+        .replaceAll('\\', '/')
+        .endsWith('/dist/css/generated/literal-values.d.ts'),
     );
     evidence['literal-' + marker] = {
       docs: ts.displayPartsToString(hover.documentation),

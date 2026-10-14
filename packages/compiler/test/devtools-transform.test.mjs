@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import vueTsx from '../src/vite.ts';
+import { vitePlugin as vueTsx } from '../src/index.ts';
 
-const source = `import {_component} from '@zerodep-vue/tsx';
-import {css,bx} from '@zerodep-vue/css';
+const source = `import {_component} from '@zerodep-vue/core';
+import {css,bx} from '@zerodep-vue/core';
 import {ref} from 'vue';
 export const App = _component(()=>{
   const width=ref('20px');
@@ -24,7 +24,7 @@ async function compile(command, ssr = false) {
 
 test('development traces keep source locations and the browser-only inspector entry', async () => {
   const result = await compile('serve');
-  assert(result.code.includes('@zerodep-vue/css/devtools'));
+  assert(result.code.includes('@zerodep-vue/core/devtools'));
   assert(!result.code.includes('@zerodep-vue/compiler'));
   assert(result.code.includes('enableInspection'));
   const column = source.split('\n')[5].indexOf('width.value') + 1;

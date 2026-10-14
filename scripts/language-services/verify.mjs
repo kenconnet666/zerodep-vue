@@ -4,8 +4,8 @@ import { resolve } from 'node:path';
 import { connect } from './client.mjs';
 import { root, requireProject } from './environment.mjs';
 
-const shared = 'packages/tsx/src/__lsp_shared__.ts';
-const probe = 'packages/tsx/src/__lsp_probe__.tsx';
+const shared = 'packages/core/src/tsx/__lsp_shared__.ts';
+const probe = 'packages/core/src/tsx/__lsp_probe__.tsx';
 const created = new Set();
 const report = { versions: {}, checks: [] };
 for (const name of ['typescript', 'typescript-language-server', 'vue'])
@@ -149,8 +149,7 @@ try {
     'vitest.authoring.config.ts',
     'vitest.upstream.config.ts',
     'packages/compiler/src/index.ts',
-    'packages/tsx/src/index.ts',
-    'packages/css/src/index.ts',
+    'packages/core/src/index.ts',
     'fixtures/legacy-tsx/src/Counter.tsx',
   ]) {
     const result = await connection.call('diagnostics', { filePath });
