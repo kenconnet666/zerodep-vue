@@ -1,12 +1,12 @@
 # zerodep-vue
 
-目标是成熟可用的 Vue VDOM TSX 编译与运行时 CSS 工具库。完整作者协议、兼容范围和 Naive UI 验收条件见 [BLUEPRINT.md](BLUEPRINT.md)。分阶段实施不降低最终交付标准。
+Vue VDOM TSX 编译与运行时 CSS 工具库，基于官方 Vue JSX v3.0.0 的源码 fork。完整作者协议和维护契约见 [BLUEPRINT.md](BLUEPRINT.md)，交付版本及远程证据见 [验收矩阵](docs/acceptance.md)。
 
 CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提供，主题通过继承扩展，并提供贯穿对象样式和关键字视图的泛型 T 入口。属性、关键字与主题成员的类型提示、中文说明及声明消费体验是交付要求；作者仍使用 class，绑定对应的内联 style 由编译器隐式接线。
 
-官方 JSX 源码 fork、Vite 入口、上游双基线和 Naive UI 301 个生产 TSX 的三条编译/构建/SSR 路径已通过远程验证。_component、For、props/default/children、class/bx、系统/继承主题、变量组、动画和全局规则已有实现。开发/生产 × Chromium/Firefox 的实际混用和 SSR/hydrate 已通过；HMR 与开发检查继续独立验收，发布包安装消费和最终审查仍需完成。准确进度见 [实施记录](docs/progress.md)，作者写法见 [authoring.md](docs/authoring.md)、[CSS 文档](docs/css.md) 和 [主题文档](docs/themes.md)。
+提供 `_component`、For、props/default/children、class/bx、系统/继承主题、变量组、动画和全局规则，以及兼容实例的 HMR 与 Vue DevTools 样式检查。状态直接使用 Vue Ref 和 computed。作者写法见 [authoring.md](docs/authoring.md)、[CSS 文档](docs/css.md) 和 [主题文档](docs/themes.md)。
 
-已有 Vue TSX 项目可将 Vite 配置中的 JSX 插件替换为 `@zerodep-vue/compiler/vite` 的默认导出；Babel 直接使用 `@zerodep-vue/compiler`。选项沿用官方 JSX，Vite 入口另提供 include、exclude 和 babelPlugins。不要同时保留另一份 Vue JSX 转换；原有 Vue SFC 插件不受此限制。开发态更新行为见 [HMR](docs/hmr.md)，源码定位、绑定消费值和 Vue DevTools 集成见 [开发检查](docs/devtools.md)。
+已有 Vue TSX 项目可将 Vite 配置中的 JSX 插件替换为 `@zerodep-vue/compiler/vite` 的默认导出；Babel 直接使用 `@zerodep-vue/compiler`。选项沿用官方 JSX，Vite 入口另提供 include、exclude 和 babelPlugins。不要同时保留另一份 Vue JSX 转换；原有 Vue SFC 插件不受此限制。完整接入示例与混用边界见 [兼容与迁移](docs/compatibility.md)。开发态更新行为见 [HMR](docs/hmr.md)，源码定位、绑定消费值和 Vue DevTools 集成见 [开发检查](docs/devtools.md)。
 
 ## 环境
 
@@ -24,7 +24,7 @@ CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提�
 - packages/compiler：官方 JSX 小范围 fork、来源清单与兼容性对照。
 - packages/tsx：组件作者 API、For、Vue 组件接线和局部 JSX 类型入口。
 - packages/css：运行时 CSS、class 组合、绑定解析、Vue 接线与样式宿主。
-- fixtures：普通 Vue TSX、作者类型、Naive 固定生产源码及后续混用验收。
+- fixtures：普通 Vue TSX、作者类型、Naive 固定生产源码、真实浏览器混用和仓库外包消费。
 - scripts/language-services：仅 TS/TSX 的项目 LSP 与 MCP 桥接。
 - docs/upstream.md：来源与实现边界。
 
@@ -39,7 +39,7 @@ pnpm exec prettier --check README.md .github/workflows/ci.yml
 
 上面的文件路径是示例，按本次改动选择对应文件。修改完成后，本地只查相关 LSP 诊断或运行必要的少量短测试；小型、确定性修改通过即可提交。不要将全仓类型检查、完整构建或全量 LSP 验证作为每次本地提交的前置步骤。
 
-完整验证由 [GitHub Actions CI](.github/workflows/ci.yml) 负责：包与夹具类型、编译/SSR、上游分片、运行时 CSS、Naive 三组完整源码构建、四组浏览器、开发工具、包入口及 Linux/Windows LSP 分工运行，最后由 CI result 汇总。每个任务覆盖的行为及准确提交见实施记录，最终交付还要完成蓝图的全部退出条件。
+完整验证由 [GitHub Actions CI](.github/workflows/ci.yml) 负责：包与夹具类型、编译/SSR、上游分片、运行时 CSS、Naive 三组完整源码构建、四组浏览器与稳定性、开发工具、构建打包及 Linux/Windows 独立消费者和 LSP 分工运行，最后由 CI result 汇总。每个任务覆盖的行为及准确提交见验收矩阵。
 
 每个可审阅阶段提交并推送。准备下一次提交时，先按 SHA 检查上一轮 CI，读取失败日志并修复实际问题。推送后继续工作，不等待长测试、不反复轮询；pending、取消与通过分别报告。操作与任务划分见 [远程 CI 工作流](docs/ci.md)。
 
@@ -58,7 +58,7 @@ MCP 名为 zerodep_vue_lsp，提供 diagnostics、hover、definitions、referenc
 
 完成配置后，重新加载或重启以本仓库为工作目录的 Codex 会话。重启前的独立验证与重启后会话实际出现 MCP 工具是两个验收步骤；不要只依据配置存在就宣称客户端已加载。
 
-2026-10-13 已在重启后的项目会话直接验证五个 MCP 工具：TypeScript 6.0.3，普通 TSX 文件完整诊断为 0 错误，类型查看、补全、定义及引用查询正常。CSS 新 API 的类型与注释仍需随实现单独验收。
+2026-10-13 已在重启后的项目会话直接验证五个 MCP 工具：TypeScript 6.0.3，普通 TSX 文件完整诊断为 0 错误，类型查看、补全、定义及引用查询正常。CSS 和主题的源码类型夹具另验证泛型、负向输入、中文 hover 与补全；打包声明由独立消费者验证。
 
 WebStorm 使用本项目 node_modules/typescript 作为 SDK；本机 .idea/compiler.xml 已配置该路径。.vscode/settings.json 同样指向工作区 TypeScript。未修改全局 IDE 设置或老项目配置。
 

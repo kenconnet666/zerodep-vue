@@ -8,7 +8,7 @@
 
 最终验收必须包括：正确编译锁定版本的 Naive UI 生产 TSX 源码，并让编译产物与我们的组件在同一个纯 TSX 应用中共同运行。只成功导入 Naive UI 的 npm 预编译包，或只通过几个自建示例，不算完成兼容性验收。
 
-当前已建立真实 JSX v3.0.0 源码 fork、Vite 入口、组件作者转换、运行时 class/bx 接线与系统/继承主题。Naive UI 的 301 个生产 TSX 已纳入完整三组编译、构建与 SSR 对照；浏览器混用及最终生产验收仍需完成。下面的示例是完整实施契约，具体实现和提交证据见 docs/progress.md，不能将部分能力通过推论为全部完成。
+真实 JSX v3.0.0 源码 fork、Vite 入口、组件作者转换、运行时 CSS、HMR 与开发检查均已实现。Naive UI 的 301 个生产 TSX、浏览器混用、SSR/hydrate、资源稳定性和独立安装消费进入完整 CI。本文定义维护契约；具体版本及逐项交付证据见 [验收矩阵](docs/acceptance.md)，历史实施记录见 [progress.md](docs/progress.md)。
 
 ## 1 已确定的方向与范围
 
@@ -114,7 +114,7 @@ UI 产品库和 docs 站点不在本项目交付范围内。文中的 RefInput�
 
 ## 3 工作区与包边界
 
-采用 pnpm workspace、一份锁文件和精确记录的工具链。基础分包与 fixture 目录已建立，下面列出完整实施结构，尚未实施的文档及夹具内容随阶段补充：
+采用 pnpm workspace、一份锁文件和精确记录的工具链。实现与验证结构如下：
 
 ```text
 packages/
@@ -124,9 +124,9 @@ packages/
 fixtures/
   legacy-tsx/               # 普通 Vue TSX，含选项组合
   authoring/                # 我们的新写法
-  mixed-tsx/                # 普通 TSX 与增强 TSX 双向嵌套
   naive-ui/                 # 锁定源码、构建适配与验收脚本
-  ssr/                      # VDOM SSR、hydrate、样式收集
+  browser/                  # TSX 混用、SSR/hydrate、HMR、开发检查与稳定性
+  package-consumer/         # 仓库外安装、运行及发布声明的消费者模板
 docs/
   authoring.md
   css.md
@@ -135,7 +135,7 @@ docs/
 BLUEPRINT.md
 ```
 
-工作区包名为 `@zerodep-vue/compiler`、`@zerodep-vue/tsx` 和 `@zerodep-vue/css`，当前全部 private，不代表已发布或已取得 npm 名称。普通 TSX fixture 已有源码，其余 fixture 目录先保留位置；不为尚未实现的 API 提供假实现。
+工作区包名为 `@zerodep-vue/compiler`、`@zerodep-vue/tsx` 和 `@zerodep-vue/css`。三个包保留 private 标记，通过 CI tarball 交付；这不代表已发布到 npm。原 mixed-tsx/ssr 预留目录的验证职责由 browser 夹具和包内运行契约承担，没有用空目录作为验收证据。
 
 - `compiler` 只运行在构建环境，持有 Babel 和必要的类型分析依赖。
 - `tsx` 使用 Vue 组件机制；按需要引用 `css` 的内部接线入口。
@@ -153,7 +153,7 @@ BLUEPRINT.md
 
 源码消费中的作者宏、默认值/children、系统/主题关键字和泛型已有类型夹具及 MCP 查询证据。发布声明模式必须另做独立安装后的诊断、hover、补全详情与定义跳转检查，不能用工作区源码结果代替。
 
-2026-10-13 重启后，已在本项目会话直接调用五个 MCP 工具：普通 TSX 诊断返回 TypeScript 6.0.3、complete=true、errors=0，Ref 类型查看、定义跳转、引用和补全均得到实际结果。此记录证明基础 LSP 已加载，不代表尚未实现的 CSS API 已通过类型验收。
+2026-10-13 重启后，已在本项目会话直接调用五个 MCP 工具：普通 TSX 诊断返回 TypeScript 6.0.3、complete=true、errors=0，Ref 类型查看、定义跳转、引用和补全均得到实际结果。源码中的 CSS/主题提示与发布声明消费另有专门用例，不能只用基础 LSP 可连接代替这些验收。
 
 ## 4 编译器如何增加能力而不改变旧 TSX
 
@@ -723,7 +723,7 @@ const Button = _component(({ class: className, style, iconClass, children }: But
 </Button>;
 ```
 
-`ClassValue` 是拟提供的 class 输入类型，覆盖本库返回值与 Vue 的常规 class 组合；`StyleValue` 复用 Vue 类型。根样式最后组合外部 `class`，内部目标通过 `iconClass` 等明确的 class prop 暴露；绑定随该值转发，在对应元素上自动接入。示例中的 style 只用于作者需要显式传入的内联样式，不要求作者转交或拼装 bx 变量表。覆盖规则在同一工具的内部描述层完成；不通过猜测第三方内部 class 名实现任意节点穿透。
+`ClassValue` 是 CSS 包导出的 class 输入类型，覆盖本库返回值与 Vue 的常规 class 组合；`StyleValue` 复用 Vue 类型。根样式最后组合外部 `class`，内部目标通过 `iconClass` 等明确的 class prop 暴露；绑定随该值转发，在对应元素上自动接入。示例中的 style 只用于作者需要显式传入的内联样式，不要求作者转交或拼装 bx 变量表。覆盖规则在同一工具的内部描述层完成；不通过猜测第三方内部 class 名实现任意节点穿透。
 
 组合采用以下确定规则：
 
@@ -915,7 +915,7 @@ return <div class={css({ width: bx(width.value) })} />;
 
 ## 9 分阶段实施与退出条件
 
-阶段 0/1 固定基线、组件作者、class/bx、系统/继承主题、变量、动画与全局规则已有远程回归证据。Naive 301 个生产 TSX 三组编译/构建和开发/生产 × Chromium/Firefox 的实际混用及 SSR/hydrate 已通过。HMR 状态保留正在进入独立浏览器验收，开发检查与发布包最终验收仍需完成。准确版本与记录见 [docs/progress.md](docs/progress.md)，不把较早提交的成功归给新提交。
+下表保留各能力的实施顺序和维护退出条件。现有实现已覆盖全部阶段，交付仍以同一候选提交的完整 CI 与 [验收矩阵](docs/acceptance.md) 为准；历史成功不自动归属于后续提交。
 
 | 阶段                 | 工作                                                                                              | 退出条件                                                                                                       |
 | -------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
@@ -950,7 +950,7 @@ return <div class={css({ width: bx(width.value) })} />;
 - 远程按能力与资源开销分成独立并行任务；需要前置产物的步骤保持顺序。LSP 探针会修改临时源码，不能与同一工作目录的类型检查并行，使用不同 job 的独立 checkout 隔离。
 - 每个可审阅阶段中文提交并推送。准备下一次提交时，按提交 SHA 检查上一轮 CI；失败时先读实际日志、定点修复，再做本地相关短验证和提交。
 - 推送后继续工作，不等待刚启动的长测试，不反复轮询。若上一轮仍排队或运行，记录 pending 和链接；不能将 pending、取消、未运行写成通过，也不空等阻塞无关工作。
-- 当前工作流为 `.github/workflows/ci.yml`：格式、四包类型、编译/SSR、构建入口、Linux/Windows LSP 并行运行，`CI result` 汇总结果。它覆盖已存在的实现；完整上游及 Naive 验收随对应功能加入真实任务，不能用空测试占位。
+- 当前工作流为 `.github/workflows/ci.yml`：格式、五组类型、编译/SSR、上游四分片、两组作者契约、运行时 CSS、Naive 三组构建、四组浏览器与稳定性、两组开发工具、构建打包、Linux/Windows 独立消费及 LSP，最终由 `CI result` 汇总。完整职责及依赖关系见 [docs/ci.md](docs/ci.md)。
 - 阶段验收引用准确的提交、版本和结果。首次基础 CI 已在 `b4c8a7f2ca19ca737c652c32b94f46871cf66d6e` 运行成功，见 [CI 运行记录](https://github.com/kenconnet666/zerodep-vue/actions/runs/38418824193)；后续提交必须分别核对自己的结果。
 - 测试资源只清理本次创建且已确认所有权的文件、fixture 产物与进程。文件清理使用明确范围的脚本或逐文件删除，再移除空目录；保留失败诊断所需证据。
 

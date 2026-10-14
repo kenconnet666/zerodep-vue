@@ -1,6 +1,6 @@
 # Vue TSX 作者入口
 
-本页描述当前已接入的组件作者能力。运行时 CSS 及最终混用验收仍按 BLUEPRINT.md 实施；完整进度和远程证据见 [progress.md](progress.md)。
+本页描述组件作者能力；运行时样式见 [CSS 文档](css.md)，现有 Vue 工程接入见 [兼容与迁移](compatibility.md)，准确版本和远程证据见 [验收矩阵](acceptance.md)。
 
 Vite 使用 `@zerodep-vue/compiler/vite`，Babel 使用 `@zerodep-vue/compiler`。TypeScript 保持 `jsx: preserve`；自有作者文件选择 `jsxImportSource: @zerodep-vue/tsx`，也可以用文件顶部的 `/** @jsxImportSource @zerodep-vue/tsx */`。普通 Vue 文件继续选择原来的 Vue JSX 类型入口。
 

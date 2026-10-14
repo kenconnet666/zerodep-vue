@@ -1,8 +1,8 @@
 # 变更记录
 
-## 1.0.0 交付候选
+## 1.0.0 — 2026-10-14
 
-本版本面向 Vue VDOM 与纯 TSX。候选源码和 tarball 必须经过完整 CI 及 docs/acceptance.md 的逐项核对；版本号本身不代表验收已经通过。
+本版本面向 Vue VDOM 与纯 TSX。源码 de5973b42c181839a9735576a9ef901ab34cca6c 与对应 tarball 已通过完整 CI 的 29 个任务，原始报告、包哈希及验证范围见 [验收矩阵](docs/acceptance.md)。
 
 - 基于 Vue JSX v3.0.0 的真实源码 fork，保留普通 Vue TSX、指令、slots、emits 和既有 props 行为，并提供 Babel 与 Vite 入口。
 - `_component` 提供初始化/渲染边界、参数默认值、实时 props 别名和 rest、普通回调与 JSX 内容。状态直接使用 Vue Ref、computed、toRef 等 API；`For` 使用 Vue keyed Fragment。

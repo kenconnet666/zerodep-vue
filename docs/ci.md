@@ -13,7 +13,7 @@
 | TSX authoring           | 初始化、props/default、Ref、内容、attrs、For | default/optimized 两个 job                 |
 | Naive production TSX    | 301 个生产 TSX 清单、全量发射、库构建与 SSR  | classic/official/fork 三个独立 job         |
 | Runtime CSS             | 生成一致性、组合、绑定、主题及宿主生命周期   | 独立 job                                   |
-| Browser                 | 真实 Naive 产物混用、CSS 计算与 SSR/hydrate  | development/production × Chromium/Firefox  |
+| Browser                 | 真实混用、SSR/hydrate、500 次循环及生命周期  | development/production × Chromium/Firefox  |
 | Development tools       | HMR 状态保留、错误恢复、真实 DevTools 协议   | Chromium/Firefox，依赖 Naive 构建产物      |
 | Build and package entry | 三包构建、入口、来源一致性和 tarball 内容    | 构建后顺序验证与打包                       |
 | Installed packages      | 仓库外安装、ESM/CJS、SSR、声明和中文提示     | Linux/Windows，依赖当前提交的 tarball      |
@@ -24,7 +24,7 @@ LSP 自检会改写自己的临时源码，因此与类型检查隔离在不同 
 
 构建产物及成功生成的 LSP 报告按 SHA/平台上传，保留七天。Actions 固定到已核对的提交 SHA。工作流只申请读取仓库权限，不执行包发布或生产部署；需要发布能力时另行定义目标和权限。
 
-这些任务覆盖当前已经存在的实现。增加编译规则、运行时 CSS、Naive UI、浏览器或稳定性测试后，按职责补入真实 job，再接入 CI result。不能将尚未实现的测试声明为已覆盖，也不能用 continue-on-error 或删除必要断言换取绿色状态。
+完整运行共有 28 个验证任务及一个 CI result 汇总任务。增加能力时，按职责补入真实断言；新增 job 也必须接入 CI result。不能将尚未实现的测试声明为已覆盖，也不能用 continue-on-error 或删除必要断言换取绿色状态。
 
 CSS 单元契约、浏览器行为、开发工具和发布声明分别保留证据，任何一项都不能代替其他层。HMR 自动化采用 100ms 文件轮询，避开 Chokidar 对 50ms 内 change 事件的去重；仍通过真实文件变化和 Vite 更新协议验证，每次修改都要求浏览器显示相应结果。
 
@@ -48,4 +48,4 @@ gh run list --repo kenconnet666/zerodep-vue --workflow CI --branch master --limi
 
 ## 已有远程证据
 
-提交 b4c8a7f2ca19ca737c652c32b94f46871cf66d6e 的 [CI 运行](https://github.com/kenconnet666/zerodep-vue/actions/runs/38418824193) 已完成，十个任务全部成功。这证明基础远程流程已实际跑通；后续提交的状态仍按其自己的 SHA 判断。
+当前交付证据见 [验收矩阵](acceptance.md)，各阶段的准确 SHA、失败原因和修复见 [实施记录](progress.md)。首次基础流程曾由 b4c8a7f2ca19ca737c652c32b94f46871cf66d6e 的 [CI 运行](https://github.com/kenconnet666/zerodep-vue/actions/runs/38418824193) 验证；该历史基础运行不能替代现有完整矩阵。
