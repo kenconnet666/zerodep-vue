@@ -111,8 +111,8 @@ test('multiple bindings share rules across instances without sharing values', ()
   const b = resolveClass(make(30, 40));
   assert.equal(a.ruleName, b.ruleName);
   assert.equal(a.cssText, b.cssText);
-  assert.deepEqual(Object.values(a.variables), ['10', '20']);
-  assert.deepEqual(Object.values(b.variables), ['30', '40']);
+  assert.deepEqual(Object.values(a.variables), ['translate(10px, 20px)']);
+  assert.deepEqual(Object.values(b.variables), ['translate(30px, 40px)']);
 });
 
 test('optional bindings preserve defaults and null clears them without reading overridden getters', () => {
@@ -233,8 +233,62 @@ test('selectors preserve ampersands inside attributes and invalid fragments are 
   const result = resolveClass(s.select('&[data-text="a&b"]', s.content('"safe; value"')));
   assert(result.cssText.includes('data-text="a&b"'));
   assert.throws(() => resolveClass(s.color('red; background:black')), /声明边界/);
-  assert.throws(
-    () => resolveClass(s.transform(template(['translate(', binding(() => 'initial'), 'px)']))),
-    /复合值/,
+  const quoted = resolveClass(s.content(template(['"', binding(() => 'inherit'), '"'])));
+  assert.deepEqual(Object.values(quoted.variables), ['"inherit"']);
+  const punctuation = resolveClass(
+    s.content(template(['"', binding(() => '();[]; inherit !important'), '"'])),
+  );
+  assert.deepEqual(Object.values(punctuation.variables), ['"();[]; inherit !important"']);
+  assert.deepEqual(
+    Object.values(
+      resolveClass(s.content(template(['"', binding(() => '_ordinary_text'), '"']))).variables,
+    ),
+    ['"_ordinary_text"'],
+  );
+});
+
+test('templates bind complete CSS values and priority belongs to the final declaration', () => {
+  let x = 10;
+  let reads = 0;
+  const part = binding(() => {
+    reads++;
+    return x;
+  });
+  const style = s.transform(template(['translate(', part, 'px, ', part, 'px)']));
+  const first = resolveClass(style);
+  assert.equal(reads, 1);
+  assert.deepEqual(Object.values(first.variables), ['translate(10px, 10px)']);
+  assert(!first.cssText.includes(')px'));
+  x = 20;
+  assert.equal(resolveClass(style).ruleName, first.ruleName);
+  const url = resolveClass(
+    s.backgroundImage(template(['url("data:image/svg+xml,', binding(() => '%3Csvg/%3E'), '")'])),
+  );
+  assert.deepEqual(Object.values(url.variables), ['url("data:image/svg+xml,%3Csvg/%3E")']);
+  const content = resolveClass(s.content(template(['"', binding(() => 'a!important'), '"'])));
+  assert.deepEqual(Object.values(content.variables), ['"a!important"']);
+  assert(!content.cssText.includes('!important'));
+  let value = 'red /* value */ ! /* priority */ IMPORTANT';
+  const important = s.color(binding(() => value));
+  const before = resolveClass(important);
+  assert(before.cssText.includes(') !important;'));
+  assert.deepEqual(Object.values(before.variables), ['red /* value */']);
+  value = 'blue';
+  const normal = resolveClass(important);
+  assert(!normal.cssText.includes('important'));
+  assert.notEqual(normal.ruleName, before.ruleName);
+  value = 'inherit !important';
+  assert(resolveClass(important).cssText.includes('color:inherit !important;'));
+  assert.deepEqual(resolveClass(important).variables, {});
+  assert(
+    resolveClass(cx(s.color('red !important'), s.color('blue'))).cssText.includes('color:blue;'),
+  );
+  assert(
+    !resolveClass(cx(s.color('red !important'), s.color('blue'))).cssText.includes('important'),
+  );
+  assert(
+    resolveClass(cx(s.color('red'), s.color('blue !important'))).cssText.includes(
+      'color:blue !important;',
+    ),
   );
 });

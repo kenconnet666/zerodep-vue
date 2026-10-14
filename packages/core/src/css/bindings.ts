@@ -48,7 +48,7 @@ export function piece(
     : `${value}`;
 }
 
-/** @internal 多个 bx 片段保留独立的变量位置，不使用全局字符串 token 注册表。 */
+/** @internal 多个 bx 独立捕获，消费时组装完整 CSS 值；不使用全局字符串 token 注册表。 */
 export function template(
   parts: readonly (string | CssBinding<unknown> | CssTemplate | ThemeReference | CssAnimation)[],
 ): string | CssTemplate {

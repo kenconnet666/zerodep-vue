@@ -99,7 +99,7 @@ test('overridden animation is never evaluated and dynamic animation templates re
   const good = keyframes({ '0%, 50%': s.opacity(0), to: s.opacity(1) });
   const dynamic = resolveClass(s.animation(template([binding(() => good), ' 1s'])));
   assert.equal(dynamic.resources.length, 1);
-  assert.equal(Object.values(dynamic.variables)[0], dynamic.resources[0].name);
+  assert.equal(Object.values(dynamic.variables)[0], dynamic.resources[0].name + ' 1s');
   assert.throws(() => resolveClass(s.color(good)), /只能用于/);
 });
 
@@ -110,6 +110,14 @@ test('invalid keyframe structures and animation controls are diagnosed', () => {
   assert.throws(
     () => resolveClass(s.animationName(keyframes({ from: s.color('red!important') }))),
     /important/,
+  );
+  assert.throws(
+    () =>
+      resolveClass(s.animationName(keyframes({ from: s.color(binding(() => 'red!important')) }))),
+    /important/,
+  );
+  assert(
+    resolveClass(s.animationName(keyframes({ from: s.content('"!important"') }))).resources.length,
   );
   assert.throws(() => cx(keyframes({ from: s.opacity(0) })), /cx 只接受链式样式/);
   assert(keyframes({ 'from, to': s.animationTimingFunction('ease').variable('--step', 1) }));

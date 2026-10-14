@@ -5,7 +5,7 @@ import { renderToString } from '@vue/server-renderer';
 import { cx, createCssContext, SystemKeywords } from '../../src/index.ts';
 import * as api from '../../src/index.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
-import { binding } from '../../src/css/bindings.ts';
+import { binding, template } from '../../src/css/bindings.ts';
 const { keywords, useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
@@ -49,6 +49,16 @@ test('theme literals resolve per property and keep shared binding reads and sour
   assert.throws(() => s.color('_missing'), /没有关键字/);
   assert.equal('keywords' in s, false);
   assert(resolveClass(s.variable('--raw', '_literal')).cssText.includes('--raw:_literal;'));
+});
+
+test('template theme names resolve only when they form the entire property value', () => {
+  const { useCss } = createCssContext(new Theme());
+  const s = useCss();
+  const name = binding(() => '_brand');
+  assert.deepEqual(Object.values(resolveClass(s.color(template([name]))).variables), ['red']);
+  assert.deepEqual(Object.values(resolveClass(s.content(template(['"', name, '"']))).variables), [
+    '"_brand"',
+  ]);
 });
 
 test('typed theme hooks isolate nested providers, independent contexts and SSR requests', async () => {

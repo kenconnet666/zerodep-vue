@@ -31,6 +31,43 @@ export function validateFragment(value: string): void {
   }
 }
 
+/** important 是声明优先级；只识别末尾顶层 token，不误读字符串、函数或注释。 */
+export function declarationValue(text: string): { value: string; important: boolean } {
+  if (!text.includes('!')) return { value: text, important: false };
+  const scanner = tokenizer({ css: text });
+  const tail: ReturnType<typeof scanner.nextToken>[] = [];
+  let depth = 0;
+  let count = 0;
+  for (;;) {
+    const token = scanner.nextToken();
+    const type = token[0];
+    if (type === TokenType.EOF) break;
+    if (type === TokenType.Whitespace || type === TokenType.Comment) continue;
+    if (
+      type === TokenType.Function ||
+      type === TokenType.OpenParen ||
+      type === TokenType.OpenSquare
+    )
+      depth++;
+    else if (type === TokenType.CloseParen || type === TokenType.CloseSquare) depth--;
+    if (depth !== 0) continue;
+    count++;
+    tail.push(token);
+    if (tail.length > 2) tail.shift();
+  }
+  const [bang, name] = tail;
+  if (
+    bang?.[0] !== TokenType.Delim ||
+    bang[4].value !== '!' ||
+    name?.[0] !== TokenType.Ident ||
+    name[4].value.toLowerCase() !== 'important'
+  ) {
+    return { value: text, important: false };
+  }
+  if (count < 3) throw new Error('CSS !important 前需要属性值。');
+  return { value: text.slice(0, bang[2]).trimEnd(), important: true };
+}
+
 export interface SelectorContext {
   selector: string;
   target: string;

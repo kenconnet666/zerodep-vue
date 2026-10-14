@@ -151,11 +151,11 @@ test('multiple bx variables and aliases retain one style declaration across inst
   const b = mount(App, { global: { plugins: [host] } });
   mounted.push(a, b);
   expect(a.element.className).toBe(b.element.className);
-  expect(Object.values(variables(a.element))).toEqual(['10', '20']);
+  expect(Object.values(variables(a.element))).toEqual(['translate(10px, 20px)']);
   x.value = 30;
   await nextTick();
-  expect(Object.values(variables(a.element))).toEqual(['30', '20']);
-  expect(Object.values(variables(b.element))).toEqual(['30', '20']);
+  expect(Object.values(variables(a.element))).toEqual(['translate(30px, 20px)']);
+  expect(Object.values(variables(b.element))).toEqual(['translate(30px, 20px)']);
   expect(host.stats().activeRules).toBe(1);
   a.unmount();
   mounted.splice(mounted.indexOf(a), 1);

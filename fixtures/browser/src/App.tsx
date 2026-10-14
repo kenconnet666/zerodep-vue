@@ -26,6 +26,7 @@ import { NButton, NConfigProvider, NDataTable, NInput, NSelect } from '@fixture/
 import type { DataTableColumns } from '@fixture/naive';
 import type { InitialState } from './contracts.ts';
 import { Controls } from './Controls.tsx';
+import { CssValues } from './CssValues.tsx';
 const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
@@ -130,6 +131,7 @@ const Content = _component(({ initial }: { initial: InitialState }) => {
     <main class={s.padding(24).display('grid').gap(16)}>
       <h1>真实源码编译与混用验收</h1>
       <Controls />
+      <CssValues />
       <NConfigProvider themeOverrides={{ common: { primaryColor: '#a020f0' } }}>
         <section>
           <NInput

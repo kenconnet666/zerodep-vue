@@ -4,7 +4,7 @@ const mode = process.env.BROWSER_MODE ?? 'development';
 const browser = process.env.PW_BROWSER ?? 'local';
 const suite = process.env.PW_SUITE ?? 'mixed';
 const suites: Record<string, string[]> = {
-  mixed: ['**/mixed.spec.ts', '**/controls.spec.ts'],
+  mixed: ['**/mixed.spec.ts', '**/controls.spec.ts', '**/css-values.spec.ts'],
   hmr: ['**/hmr.spec.ts'],
   inspector: ['**/inspector.spec.ts'],
   stability: ['**/stability.spec.ts'],

@@ -40,7 +40,7 @@ Node/组件层检查回调次数、默认属性、加载与禁用恢复、Ref �
 
 `packages/core/test/tsx/tsconfig.json` 为运行测试提供与源码一致的 JSX、源码解析条件和严格选项；避免编辑器把没有归属配置的测试当作默认 React JSX 工程。default 作者任务先执行 `pnpm check:authoring`，不因 Vitest 转换成功就跳过测试代码的类型验收。
 
-mixed 套件显式包含 mixed.spec 和 controls.spec，development/production × Chromium/Firefox 都执行。未知 PW_SUITE 或 BROWSER_MODE 立即报错，不能静默回退到另一套测试。普通套件共享页面错误与 Vue 警告检查；HMR 只在故意制造语法错误的阶段允许预期错误。
+mixed 套件显式包含 mixed.spec、controls.spec 和 css-values.spec，development/production × Chromium/Firefox 都执行。CSS 值用例直接检查 transform、伪元素 content、URL 背景和关键帧的计算结果，以及动态 important 切换和后项描述覆盖；不只检查变量表。未知 PW_SUITE 或 BROWSER_MODE 立即报错，不能静默回退到另一套测试。普通套件共享页面错误与 Vue 警告检查；HMR 只在故意制造语法错误的阶段允许预期错误。
 
 资源验证检查非零的实际消费、缓存上界和释放；不要求缓存恰好填满才能通过。浏览器样式从真实 style 节点/计算样式检查，SSR 收集结果单独验证。完整长测试仍只由 CI 执行。
 

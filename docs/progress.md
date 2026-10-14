@@ -13,6 +13,12 @@
 
 Naive 三组任务各自编译完整生产清单并构建、导入生成的库；没有安装 naive-ui 预编译包来代替编译。上述结果尚不包含自有 CSS、交互混用或最终浏览器验收。
 
+## 完整动态 CSS 值与后项覆盖（2026-10-14）
+
+dff006b8c24987f334c4ad899f891bba00c3e2d9 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38559081284) 已全部成功，运行测试的严格类型检查缺口已关闭。
+
+按用户要求参考 Emotion cx 的可识别样式合并边界，同位置同名属性后项获胜，普通类名原样保留。本轮修复模板按片段替换为 var 所导致的单位、引号、URL 错误，改为独立捕获后组装完整 CSS 值；主题名只识别完整值。important 用 tokenizer 识别末尾顶层 token，静态/动态统一保留声明优先级，关键帧也使用同一检查，避免字符串中的普通文字误报。相关定点 Node 用例和修改文件 LSP 通过；新增浏览器 fixture 直接断言水合后及更新后的实际计算样式，完整四组结果等待本次提交 CI。延迟创建和实例复用计划见 [运行时实施计划](css-runtime-plan.md)，下一阶段继续落实。
+
 ## 运行测试类型检查修复（2026-10-14）
 
 29a6a50 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38553410484) 暴露新纳入严格检查的测试目录问题：缺少 Node 类型、显式撤回 optional prop 的夹具没有声明 undefined、确定性 spread 覆盖告警，以及无参数 _component 的 never 索引错误禁止 Vue 公共 class/ref。补齐测试 Node 配置和真实输入类型，包装组件显式声明透传属性；无自定义 props 的默认类型改为空对象，仍拒绝未知业务字段。保留所有运行断言，不跳过严格检查。

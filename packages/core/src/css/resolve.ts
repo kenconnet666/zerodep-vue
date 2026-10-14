@@ -5,8 +5,8 @@ import { compose } from './composition.ts';
 import { CLASS, isCssClass } from './types.ts';
 import type { ClassPart, ClassValue, Declaration } from './types.ts';
 import { BINDING, TEMPLATE, isBinding, isTemplate } from './bindings.ts';
-import type { CssBinding, Scalar } from './bindings.ts';
-import { inheritsVariables, scopedSelector, validateFragment } from './syntax.ts';
+import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
+import { declarationValue, inheritsVariables, scopedSelector, validateFragment } from './syntax.ts';
 import { KEYWORD, THEME, isKeyword, isThemeReference } from './tokens.ts';
 import type { ThemeReference } from './tokens.ts';
 import { ANIMATION, isAnimation } from './animation-token.ts';
@@ -21,6 +21,7 @@ interface Prepared {
   conditions: readonly string[];
   property: string;
   parts: Part[];
+  important?: true;
 }
 
 export interface ResolvedClass {
@@ -66,7 +67,7 @@ export function propertyName(property: string): string {
   return property.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase()).replace(/^ms-/, '-ms-');
 }
 
-function scalar(value: unknown, property?: string): string {
+function scalar(value: unknown, property?: string, checkSyntax = true): string {
   if (isKeyword(value)) value = value[KEYWORD].value;
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) throw new Error(`CSS ${property ?? '片段'} 不能使用非有限数字。`);
@@ -84,7 +85,7 @@ function scalar(value: unknown, property?: string): string {
   }
   if (typeof value !== 'string')
     throw new Error(`CSS ${property ?? '片段'} 需要字符串或数字；Vue Ref 请读取 .value。`);
-  validateFragment(value);
+  if (checkSyntax) validateFragment(value);
   return value;
 }
 
@@ -92,7 +93,7 @@ function scalar(value: unknown, property?: string): string {
 export function resolveClass(
   value: ClassValue,
   reads = new Map<object, unknown>(),
-  options: { namespace?: string; literal?: boolean } = {},
+  options: { namespace?: string; literal?: boolean; keyframe?: boolean } = {},
 ): ResolvedClass {
   const parts: ClassPart[] = [];
   const observer = inspectionHooks();
@@ -131,6 +132,7 @@ export function resolveClass(
     const body = value[ANIMATION].map((frame) => {
       const frameStyle = resolveClass(frame.style, reads, {
         namespace: `${options.namespace ?? ''}animation:${ordinal}:${frame.at}`,
+        keyframe: true,
         ...(literal ? { literal: true } : {}),
       });
       observedFrames?.push(frameStyle);
@@ -139,7 +141,6 @@ export function resolveClass(
       const content = frameStyle.cssText
         ? frameStyle.cssText.slice(frameStyle.cssText.indexOf('{') + 1, -1)
         : '';
-      if (/!\s*important/i.test(content)) throw new Error('关键帧不能使用 !important。');
       return `${frame.at}{${content}}`;
     }).join('');
     const name = 'zva-' + hash(body);
@@ -166,18 +167,54 @@ export function resolveClass(
     }
     return reads.get(input);
   };
-  const valueOf = (input: unknown, declaration: Declaration): unknown => {
+  const valueOf = (input: unknown, declaration: Declaration, fragment = false): unknown => {
     if (isThemeReference(input)) return read(input);
     if (!isBinding(input)) return input;
     const current = read(input);
-    return typeof current === 'string' && current.startsWith('_') && declaration.resolveTheme
+    return !fragment &&
+      typeof current === 'string' &&
+      current.startsWith('_') &&
+      declaration.resolveTheme
       ? read(declaration.resolveTheme(declaration.property, current))
       : current;
+  };
+  const templates = new Map<Declaration, { values: unknown[]; text?: string } | null | undefined>();
+  const templateOf = (input: CssTemplate, declaration: Declaration) => {
+    if (templates.has(declaration)) return templates.get(declaration);
+    const values: unknown[] = [];
+    for (const part of input[TEMPLATE]) {
+      const value = valueOf(part, declaration, true);
+      if (value === undefined) {
+        templates.set(declaration, undefined);
+        return undefined;
+      }
+      values.push(value);
+    }
+    if (values.some((value) => value === null)) {
+      templates.set(declaration, null);
+      return null;
+    }
+    let result: { values: unknown[]; text?: string } = { values };
+    if (!values.some(isAnimation)) {
+      let text = values.map((value) => scalar(value, undefined, false)).join('');
+      // 主题名只识别完整属性值；引号或 URL 内的 _ 文本仍然是普通内容。
+      if (text.startsWith('_') && declaration.resolveTheme) {
+        const value = read(declaration.resolveTheme(declaration.property, text));
+        if (value == null) {
+          templates.set(declaration, value);
+          return value;
+        }
+        text = scalar(value, declaration.property, false);
+      }
+      result = { values, text };
+    }
+    templates.set(declaration, result);
+    return result;
   };
   const composed = compose(parts, (declaration) => {
     const input = declaration.value;
     return isTemplate(input)
-      ? input[TEMPLATE].some((part) => valueOf(part, declaration) === undefined)
+      ? templateOf(input, declaration) === undefined
       : valueOf(input, declaration) === undefined;
   });
   const inheritance = new Map<string, boolean>();
@@ -187,48 +224,49 @@ export function resolveClass(
       inheritance.set(declaration.target, inheritsVariables(declaration.target));
     const literal = options.literal || !inheritance.get(declaration.target);
     if (input === null) continue;
-    let parts: Part[];
+    let text: string;
+    let bound = false;
     if (isBinding(input) || isThemeReference(input)) {
       const current = valueOf(input, declaration);
       if (current == null) continue;
-      const text = renderValue(current, property, literal);
-      const keyword = cssWide(text);
-      parts = keyword || literal ? [keyword ?? text] : [{ variable: variables.push(text) - 1 }];
+      text = renderValue(current, property, literal);
+      bound = true;
     } else if (isTemplate(input)) {
-      const evaluated = input[TEMPLATE].map((part) => valueOf(part, declaration));
-      if (evaluated.some((part) => part == null)) continue;
+      const evaluated = templateOf(input, declaration);
+      if (!evaluated) continue;
       // 静态模板片段可以是不完整的括号前缀；单个绑定值与最终声明才需要完整语法。
-      const strings = evaluated.map((part, index) =>
-        isBinding(input[TEMPLATE][index]) || isThemeReference(input[TEMPLATE][index])
-          ? isAnimation(part)
-            ? animation(part, property, literal)
-            : renderValue(part)
-          : isAnimation(part)
-            ? animation(part, property, literal)
-            : String(part),
-      );
-      const keyword = cssWide(strings.join(''));
-      if (keyword) parts = [keyword];
-      else {
-        parts = input[TEMPLATE].map((part, index) => {
-          const text = strings[index]!;
-          if (!isBinding(part) && !isThemeReference(part)) return text;
-          if (cssWide(text))
-            throw new Error(`CSS ${property} 的复合值不能把 CSS-wide keyword 当作普通片段。`);
-          return literal ? text : { variable: variables.push(text) - 1 };
-        });
-        validateFragment(strings.join(''));
-      }
-    } else parts = [renderValue(input, property, literal)];
+      const strings =
+        evaluated.text === undefined
+          ? evaluated.values.map((part, index) =>
+              isBinding(input[TEMPLATE][index]) || isThemeReference(input[TEMPLATE][index])
+                ? isAnimation(part)
+                  ? animation(part, property, literal)
+                  : scalar(part, undefined, false)
+                : isAnimation(part)
+                  ? animation(part, property, literal)
+                  : String(part),
+            )
+          : undefined;
+      // CSS var 替换的是 token，不是字符串；单位、引号和 URL 必须先组成完整值。
+      text = evaluated.text ?? strings!.join('');
+      validateFragment(text);
+      bound = input[TEMPLATE].some((part) => isBinding(part) || isThemeReference(part));
+    } else text = renderValue(input, property, literal);
+    const parsed = declarationValue(text);
+    if (options.keyframe && parsed.important) throw new Error('关键帧不能使用 !important。');
+    const keyword = cssWide(parsed.value);
+    const parts: Part[] =
+      bound && !literal && !keyword
+        ? [{ variable: variables.push(parsed.value) - 1 }]
+        : [keyword ?? parsed.value];
     prepared.push({
       selector: declaration.selector,
       conditions: declaration.conditions,
       property: propertyName(property),
       parts,
+      ...(parsed.important ? { important: true } : {}),
     });
-    observedValues?.set(declaration, [
-      parts.map((part) => (typeof part === 'string' ? part : variables[part.variable])).join(''),
-    ]);
+    observedValues?.set(declaration, [text]);
   }
   const ruleName = prepared.length
     ? 'zv-' + hash((options.namespace ?? '') + JSON.stringify(prepared))
@@ -238,9 +276,10 @@ export function resolveClass(
   );
   const blocks: { selector: string; conditions: readonly string[]; text: string }[] = [];
   for (const entry of prepared) {
-    const content = entry.parts
-      .map((part) => (typeof part === 'string' ? part : `var(--${ruleName}-${part.variable})`))
-      .join('');
+    const content =
+      entry.parts
+        .map((part) => (typeof part === 'string' ? part : `var(--${ruleName}-${part.variable})`))
+        .join('') + (entry.important ? ' !important' : '');
     const selector = scopedSelector(entry.selector, ruleName);
     const previous = blocks.at(-1);
     if (
