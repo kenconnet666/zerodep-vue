@@ -12,6 +12,11 @@ const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, root);
 assert.equal(parsed.errors.length, 0);
 const options = parsed.options;
 const paths = parsed.fileNames;
+assert(!config.config.extends, 'Installed consumer must not inherit workspace configuration.');
+assert(
+  !options.paths && !options.baseUrl,
+  'Installed consumer must not use workspace path aliases.',
+);
 assert(!options.customConditions?.includes('zerodep-vue-source'));
 const host = languageServiceHost(ts, root, paths, options);
 const service = ts.createLanguageService(host);

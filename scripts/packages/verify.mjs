@@ -40,6 +40,11 @@ try {
     recursive: true,
     force: false,
   });
+  // 仓库中的模板按源码编辑；真正消费者必须使用独立配置，不能带入源码条件或路径。
+  await copyFile(
+    join(root, 'fixtures/package-consumer/tsconfig.consumer.json'),
+    join(owned.root, 'tsconfig.json'),
+  );
   await mkdir(join(owned.root, 'artifacts'));
   const dependencies = {};
   const overrides = [];
