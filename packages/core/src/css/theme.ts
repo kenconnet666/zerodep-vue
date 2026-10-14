@@ -3,7 +3,7 @@ import type { Ref, InjectionKey } from 'vue';
 import { Css } from './generated/author.ts';
 import type { SystemKeywords, SystemViews } from './generated/system.ts';
 
-import { systemValues } from './generated/keywords.ts';
+import { getSystemValues, hasSystemProperty, systemPropertyNames } from './generated/keywords.ts';
 import { THEME, THEME_SOURCE, keyword } from './tokens.ts';
 import type { CheckedTheme, ThemeReference } from './tokens.ts';
 import type { PropertyName } from './types.ts';
@@ -48,34 +48,33 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
     const theme = isRef(source) ? source.value : source;
     if (!theme || typeof theme !== 'object' || Reflect.get(theme, THEME_SOURCE) !== true)
       throw new Error('createCssContext 需要继承 SystemKeywords 的真实主题实例或 Vue Ref。');
-    if (!checked.has(theme)) {
-      for (const property of keys(theme)) {
-        if (!Object.hasOwn(systemValues, property)) continue;
-        const group = Reflect.get(theme, property);
-        if (!group || typeof group !== 'object')
-          throw new Error(`主题属性组 ${property} 需要对象。`);
-        for (const name of keys(group))
-          if (name !== 'constructor' && !name.startsWith('_'))
-            throw new Error(`主题关键字 ${property}.${name} 必须以 _ 开头，不能覆盖系统关键字。`);
-      }
-      checked.add(theme);
-    }
     return theme;
   };
-  current();
+  const groupFor = (property: PropertyName): object | undefined => {
+    const group: unknown = Reflect.get(current(), property);
+    if (group === undefined) return undefined;
+    if (!group || typeof group !== 'object') throw new Error(`主题属性组 ${property} 需要对象。`);
+    if (!checked.has(group)) {
+      for (const name of keys(group))
+        if (name !== 'constructor' && !name.startsWith('_'))
+          throw new Error(`主题关键字 ${property}.${name} 必须以 _ 开头，不能覆盖系统关键字。`);
+      checked.add(group);
+    }
+    return group;
+  };
   return new Proxy(
     {},
     {
       get(_target, name) {
-        if (typeof name !== 'string' || !Object.hasOwn(systemValues, name)) return undefined;
+        if (typeof name !== 'string' || !hasSystemProperty(name)) return undefined;
         if (groups.has(name)) return groups.get(name);
         const property = name as PropertyName;
-        const systems: Readonly<Record<string, string>> = systemValues[property];
         const members = new Map<string, unknown>();
         const exists = (member: PropertyKey) =>
           typeof member === 'string' &&
-          (Object.hasOwn(systems, member) ||
-            (member.startsWith('_') && member in (current()[property] ?? {})));
+          (member.startsWith('_')
+            ? member in (groupFor(property) ?? {})
+            : Object.hasOwn(getSystemValues(property), member));
         const view = new Proxy(
           {},
           {
@@ -83,14 +82,13 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
               if (typeof member !== 'string') return undefined;
               if (members.has(member)) return members.get(member);
               let value: unknown;
-              if (Object.hasOwn(systems, member)) value = keyword(property, systems[member]!);
-              else if (member.startsWith('_'))
+              if (member.startsWith('_'))
                 value = Object.freeze({
                   [THEME]: Object.freeze({
                     property,
                     name: member,
                     read() {
-                      const group = current()[property] as Record<string, unknown> | undefined;
+                      const group = groupFor(property) as Record<string, unknown> | undefined;
                       if (!group || !(member in group))
                         throw new Error(`当前主题缺少 ${property}.${member}。`);
                       return unref(group[member]);
@@ -102,15 +100,19 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
                     );
                   },
                 });
-              else return undefined;
+              else {
+                const systems = getSystemValues(property);
+                if (!Object.hasOwn(systems, member)) return undefined;
+                value = keyword(property, systems[member]!);
+              }
               members.set(member, value);
               return value;
             },
             ownKeys() {
-              const group = current()[property];
+              const group = groupFor(property);
               return [
                 ...new Set([
-                  ...Object.keys(systems),
+                  ...Object.keys(getSystemValues(property)),
                   ...(group ? keys(group).filter((key) => key.startsWith('_')) : []),
                 ]),
               ];
@@ -127,13 +129,13 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
         return view;
       },
       ownKeys() {
-        return Object.keys(systemValues);
+        return systemPropertyNames();
       },
       has(_target, key) {
-        return typeof key === 'string' && Object.hasOwn(systemValues, key);
+        return typeof key === 'string' && hasSystemProperty(key);
       },
       getOwnPropertyDescriptor(_target, key) {
-        return typeof key === 'string' && Object.hasOwn(systemValues, key)
+        return typeof key === 'string' && hasSystemProperty(key)
           ? { configurable: true, enumerable: true }
           : undefined;
       },
@@ -143,17 +145,42 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
 
 /** 创建有真实来源的主题上下文；T 来自实例，不依靠调用方的类型断言。 */
 export function createCssContext<T extends SystemKeywords>(source: ThemeSource<T>): CssContext<T> {
-  const keywords = keywordView(source);
-  const fallback = new Css<T>(keywords);
+  const checkSource = (value: T | Ref<T>) => {
+    if (
+      !value ||
+      typeof value !== 'object' ||
+      (!isRef(value) && Reflect.get(value, THEME_SOURCE) !== true)
+    )
+      throw new Error('createCssContext 需要继承 SystemKeywords 的真实主题实例或 Vue Ref。');
+  };
+  checkSource(source);
+  const sources = new WeakMap<object, { keywords: KeywordView<T>; author?: Css<T> }>();
+  const record = (value: T | Ref<T>) => {
+    let entry = sources.get(value);
+    if (!entry) {
+      checkSource(value);
+      entry = { keywords: keywordView(value) };
+      sources.set(value, entry);
+    }
+    return entry;
+  };
+  const authorFor = (value: T | Ref<T>) => {
+    const entry = record(value);
+    return (entry.author ??= new Css<T>(entry.keywords));
+  };
+  // inject 的默认工厂仅在无上级提供时调用，覆盖区域不会提前实例化默认作者。
+  const fallback = () => authorFor(source);
   const key: InjectionKey<Css<T>> = Symbol('CSS theme');
   return Object.freeze({
-    keywords,
+    get keywords() {
+      return record(source).keywords;
+    },
     useCss(): Css<T> {
-      return hasInjectionContext() ? inject(key, fallback) : fallback;
+      return hasInjectionContext() ? inject(key, fallback, true) : fallback();
     },
     provideTheme(next: ThemeSource<T>): Css<T> {
       if (!getCurrentInstance()) throw new Error('provideTheme 必须在组件 setup 中调用。');
-      const author = new Css<T>(keywordView(next));
+      const author = authorFor(next);
       provide(key, author);
       return author;
     },

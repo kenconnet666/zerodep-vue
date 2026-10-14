@@ -82,6 +82,15 @@ export type ClassPart = StyleSource | string;
 export interface CssClass {
   readonly [CLASS]: readonly ClassPart[];
 }
+// 仅登记本模块生产的稳定描述；HMR 代理或外部自定义 getter 不可被一次展开缓存遮蔽。
+const stableParts = new WeakSet<object>();
+export function markStableParts<Value extends CssClass>(value: Value): Value {
+  stableParts.add(value);
+  return value;
+}
+export function hasStableParts(value: CssClass): boolean {
+  return stableParts.has(value);
+}
 export type CssInput = CssClass | string | false | 0 | null | undefined | readonly CssInput[];
 /** Vue 兼容边界使用；本库组件的外部样式输入使用 CssInput 并经 cx() 组合。 */
 export type ClassValue =

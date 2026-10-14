@@ -1,5 +1,23 @@
 import { test, expect } from './test.ts';
 
+test('class composition calls follow dependencies while bx updates values without rebuilding the chain', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const node = page.getByTestId('css-memo');
+  await expect(node).toHaveAttribute('data-compositions', '1');
+  await expect(node).toHaveCSS('width', '10px');
+  await page.getByRole('button', { name: '更新无关 CSS 状态' }).click();
+  await expect(page.getByTestId('css-unrelated')).toHaveText('1');
+  await expect(node).toHaveAttribute('data-compositions', '1');
+  await page.getByRole('button', { name: '更新 CSS 验证值' }).click();
+  await expect(node).toHaveCSS('width', '30px');
+  await expect(node).toHaveAttribute('data-compositions', '1');
+  await page.getByRole('button', { name: '更新 CSS 组合依赖' }).click();
+  await expect(node).toHaveCSS('color', 'rgb(128, 0, 128)');
+  await expect(node).toHaveAttribute('data-compositions', '2');
+});
+
 test('complete CSS values retain units, strings, URLs and keyframes after hydration and updates', async ({
   page,
 }) => {

@@ -20,6 +20,13 @@ export const CssValues = _component(() => {
   const label = ref('hello');
   const important = ref(true);
   const url = ref(image);
+  const unrelated = ref(0);
+  const memoColor = ref('black');
+  let compositions = 0;
+  const compose = () => {
+    compositions++;
+    return cx(s.color(memoColor.value), s.width(bx(x.value)));
+  };
   const move = keyframes({
     from: s.transform('translateX(0px)'),
     to: s.transform(`translateX(${bx(x.value)}px)`),
@@ -30,6 +37,24 @@ export const CssValues = _component(() => {
   });
   return (
     <section aria-label="CSS 值验证">
+      <div data-testid="css-memo" class={compose()} data-compositions={compositions}>
+        组合调用验证
+      </div>
+      <output data-testid="css-unrelated">{unrelated.value}</output>
+      <button
+        onClick={() => {
+          unrelated.value++;
+        }}
+      >
+        更新无关 CSS 状态
+      </button>
+      <button
+        onClick={() => {
+          memoColor.value = 'purple';
+        }}
+      >
+        更新 CSS 组合依赖
+      </button>
       <div
         data-testid="css-template-transform"
         class={s.transform(`translate(${bx(x.value)}px, ${bx(y.value)}px)`)}

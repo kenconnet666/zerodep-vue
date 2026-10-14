@@ -39,6 +39,7 @@ export {
   inheritClass,
   hasIncomingClass,
   renderCss,
+  memoClass,
   cloneCssVNode,
   inspectCssVNode,
 } from './css/vnode.ts';

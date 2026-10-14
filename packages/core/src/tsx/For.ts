@@ -1,6 +1,7 @@
 import { Fragment, createVNode } from 'vue';
 import type { SetupContext, VNode, VNodeChild } from 'vue';
 import type { AuthorProps } from './component.ts';
+import { renderCss } from '../css/vnode.ts';
 
 export interface ForProps<T> extends AuthorProps {
   /** 数组或只读数组；空值使用 fallback。 */
@@ -15,21 +16,23 @@ export interface ForProps<T> extends AuthorProps {
 
 /** 用 Vue keyed Fragment 组织列表，不增加 DOM 包装或改变 item 的数据类型。 */
 export function For<T>(props: ForProps<T>, context: SetupContext): VNode {
-  const items = props.each ?? [];
-  const render = props.children ?? context.slots.default;
-  if (!items.length) return createVNode(Fragment, null, [props.fallback]);
-  if (!render) throw new Error('[For] 非空列表需要 children renderer。');
-  const keys = new Set<PropertyKey>();
-  return createVNode(
-    Fragment,
-    null,
-    items.map((item, index) => {
-      const key = props.getKey ? props.getKey(item, index) : index;
-      if (keys.has(key)) throw new Error(`[For] 重复 key：${String(key)}。`);
-      keys.add(key);
-      return createVNode(Fragment, { key }, [render(item, index)]);
-    }),
-  );
+  return renderCss(() => {
+    const items = props.each ?? [];
+    const render = props.children ?? context.slots.default;
+    if (!items.length) return createVNode(Fragment, null, [props.fallback]);
+    if (!render) throw new Error('[For] 非空列表需要 children renderer。');
+    const keys = new Set<PropertyKey>();
+    return createVNode(
+      Fragment,
+      null,
+      items.map((item, index) => {
+        const key = props.getKey ? props.getKey(item, index) : index;
+        if (keys.has(key)) throw new Error(`[For] 重复 key：${String(key)}。`);
+        keys.add(key);
+        return createVNode(Fragment, { key }, [render(item, index)]);
+      }),
+    );
+  }) as VNode;
 }
 
 For.props = ['each', 'getKey', 'children', 'fallback'];

@@ -354,8 +354,24 @@ for (const property of properties) {
     runtimeIndex = runtimeSets.length;
     runtimeSets.push(members);
   }
-  runtimeLines.push(`${JSON.stringify(name)}: sets[${runtimeIndex}],`);
+  runtimeLines.push(`${JSON.stringify(name)}: ${runtimeIndex},`);
 }
+// 只保留属性到共享组的索引；大字典在实际读取该组时创建，并复用公共关键字集合。
+const commonRuntime = commonGroups.map((group) =>
+  Object.fromEntries(group.values.map((value) => [memberName(value), value])),
+);
+const runtimeFactories = runtimeSets.map((members) => {
+  const used = commonRuntime.flatMap((group, index) =>
+    Object.entries(group).every(([name, value]) => members[name] === value) ? [index] : [],
+  );
+  const shared = new Set(used.flatMap((index) => Object.keys(commonRuntime[index])));
+  const own = Object.entries(members).filter(([name]) => !shared.has(name));
+  const fields = [
+    ...used.map((index) => `...common${index}(),`),
+    ...own.map(([name, value]) => `${JSON.stringify(name)}: ${JSON.stringify(value)},`),
+  ];
+  return `lazy(() => Object.freeze({${fields.join('\n')}} as const))`;
+});
 const outputs = {
   'literal-values.ts':
     header +
@@ -378,7 +394,14 @@ const outputs = {
     `/** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */\nexport class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T> {\n${propertyGroups.map(([name]) => groups.get(name).join('\n')).join('\n')}\n}\n`,
   'keywords.ts':
     header +
-    `const sets = ${JSON.stringify(runtimeSets)} as const;\nexport const systemValues = {\n${runtimeLines.join('\n')}\n} as const;\nexport const colorProperties = ${JSON.stringify(colorNames)} as const;\nexport type ColorProperty = (typeof colorProperties)[number];\nexport type SystemValue<Key extends keyof typeof systemValues> = Extract<(typeof systemValues)[Key][keyof (typeof systemValues)[Key]], string>;\n`,
+    `import { lazy } from '../lazy.ts';\n` +
+    commonRuntime
+      .map(
+        (group, index) =>
+          `const common${index} = lazy(() => Object.freeze(${JSON.stringify(group)} as const));`,
+      )
+      .join('\n') +
+    `\nconst sets = [${runtimeFactories.join(',\n')}] as const;\nconst propertySets = {\n${runtimeLines.join('\n')}\n} as const;\ntype Name = keyof typeof propertySets;\ntype Values<Key extends Name> = ReturnType<(typeof sets)[(typeof propertySets)[Key]]>;\nexport type SystemValue<Key extends Name> = Extract<Values<Key>[keyof Values<Key>], string>;\nexport function hasSystemProperty(name: string): name is Name { return Object.hasOwn(propertySets, name); }\nexport function getSystemValues(name: Name): Readonly<Record<string, string>> { return sets[propertySets[name]](); }\nexport const systemPropertyNames = lazy(() => Object.freeze(Object.keys(propertySets) as Name[]));\nexport const colorProperties = ${JSON.stringify(colorNames)} as const;\nexport type ColorProperty = (typeof colorProperties)[number];\n`,
 };
 const destination = resolve(root, 'packages/core/src/css/generated');
 await mkdir(destination, { recursive: true });

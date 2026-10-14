@@ -2,8 +2,8 @@ import unitless from '@emotion/unitless';
 import { TokenType, tokenizer } from '@csstools/css-tokenizer';
 import { normalizeClass } from 'vue';
 import { compose } from './composition.ts';
-import { CLASS, isCssClass } from './types.ts';
-import type { ClassPart, ClassValue, Declaration } from './types.ts';
+import { CLASS, hasStableParts, isCssClass } from './types.ts';
+import type { ClassPart, ClassValue, CssClass, Declaration } from './types.ts';
 import { BINDING, TEMPLATE, isBinding, isTemplate } from './bindings.ts';
 import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
 import { declarationValue, inheritsVariables, scopedSelector, validateFragment } from './syntax.ts';
@@ -15,6 +15,7 @@ import type { CssRule } from './host.ts';
 import { inspectionHooks } from './inspection-hooks.ts';
 
 const wide = new Set(['initial', 'inherit', 'unset', 'revert', 'revert-layer']);
+const staticResults = new WeakMap<CssClass, ResolvedClass>();
 type Part = string | { variable: number };
 interface Prepared {
   selector: string;
@@ -97,6 +98,17 @@ export function resolveClass(
 ): ResolvedClass {
   const parts: ClassPart[] = [];
   const observer = inspectionHooks();
+  const cacheable =
+    !observer &&
+    !options.namespace &&
+    !options.literal &&
+    !options.keyframe &&
+    isCssClass(value) &&
+    hasStableParts(value);
+  if (cacheable) {
+    const cached = staticResults.get(value);
+    if (cached) return cached;
+  }
   const observedValues = observer ? new Map<Declaration, readonly string[]>() : undefined;
   const observedFrames: ResolvedClass[] | undefined = observer ? [] : undefined;
   let hasCss = false;
@@ -312,5 +324,13 @@ export function resolveClass(
     declarations: composed.declarations,
   };
   if (observer) observer.resolved(result, parts, observedValues!, reads, observedFrames!);
+  if (cacheable && !dynamic) {
+    Object.freeze(result.variables);
+    result.resources.forEach(Object.freeze);
+    Object.freeze(result.resources);
+    Object.freeze(result.declarations);
+    Object.freeze(result);
+    staticResults.set(value, result);
+  }
   return result;
 }

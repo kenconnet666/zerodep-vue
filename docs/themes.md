@@ -2,6 +2,10 @@
 
 core 不导出 useCss 或 keywords，也不创建默认上下文。应用在主题模块创建自己的上下文；只需要系统关键字时传入 new SystemKeywords()。业务主题继承 SystemKeywords，再通过 createCssContext(实例或 Vue Ref) 创建带具体类型的上下文。它提供 useCss、provideTheme 和独立的 keywords 视图；cx、keyframes、globalCss 从根入口独立导入。
 
+创建上下文只登记来源，默认作者到首次 useCss 时才建立；已有上级覆盖时不会提前创建默认作者。同一个上下文按来源对象/Ref 的身份弱缓存作者，provideTheme 登记后，子树取得同一实例，不反复构造。不同上下文使用独立注入键及缓存。
+
+系统关键字表按属性组首次访问创建并共享不可变数据；主题组也按首次访问检查，不为未使用的属性 getter 提前求值。无效来源对象立即报错，无效的主题组或成员在首次使用该组时诊断。SystemKeywords 的属性槽仍为纯类型声明，不为每个实例创建 857 个空对象。
+
 ```tsx
 import { shallowRef } from 'vue';
 import { SystemKeywords, createCssContext } from '@zerodep-vue/core';

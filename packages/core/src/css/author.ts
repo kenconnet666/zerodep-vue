@@ -1,4 +1,4 @@
-import { CLASS } from './types.ts';
+import { CLASS, markStableParts } from './types.ts';
 import type {
   ClassPart,
   CssClass,
@@ -40,6 +40,7 @@ export class CssAuthor<T extends SystemKeywords> implements CssClass {
       throw new Error(`当前主题的 ${property} 没有关键字 ${name}。`);
     };
     this.tail = undefined;
+    markStableParts(this);
     Object.freeze(this);
   }
 
@@ -56,17 +57,19 @@ export class CssAuthor<T extends SystemKeywords> implements CssClass {
 
   private append(entries: readonly Declaration[]): this {
     if (!entries.length) return this;
-    return Object.freeze(
-      Object.create(Object.getPrototypeOf(this), {
-        theme: { value: this.theme },
-        resolveTheme: { value: this.resolveTheme },
-        tail: {
-          value: Object.freeze({
-            previous: this.tail,
-            part: Object.freeze({ declarations: entries }),
-          }),
-        },
-      }),
+    return markStableParts(
+      Object.freeze(
+        Object.create(Object.getPrototypeOf(this), {
+          theme: { value: this.theme },
+          resolveTheme: { value: this.resolveTheme },
+          tail: {
+            value: Object.freeze({
+              previous: this.tail,
+              part: Object.freeze({ declarations: entries }),
+            }),
+          },
+        }),
+      ),
     ) as this;
   }
 

@@ -188,6 +188,48 @@ test('normal class inheritance retains members and invalid source definitions ar
   class Invalid extends SystemKeywords {
     color = { initial: 'red' };
   }
-  assert.throws(() => createCssContext(new Invalid()), /不能覆盖系统关键字/);
+  const invalid = createCssContext(new Invalid());
+  assert.throws(() => invalid.useCss().color('_missing'), /不能覆盖系统关键字/);
   assert.throws(() => resolveClass(themed.color(themedKeywords.color._missing)), /当前主题缺少/);
+});
+
+test('contexts defer unused groups and reuse provided source authors without creating the fallback', async () => {
+  let fallbackReads = 0;
+  const fallback = new Theme();
+  Object.defineProperty(fallback, 'color', {
+    get() {
+      fallbackReads++;
+      return { _brand: 'red' };
+    },
+  });
+  let unusedReads = 0;
+  Object.defineProperty(fallback, 'padding', {
+    get() {
+      unusedReads++;
+      throw new Error('unused group');
+    },
+  });
+  const context = createCssContext(fallback);
+  assert.equal(fallbackReads, 0);
+  const source = shallowRef(new Theme());
+  const authors = [];
+  const Leaf = defineComponent(() => {
+    authors.push(context.useCss());
+    return () => h('span', 'leaf');
+  });
+  const Region = defineComponent(() => {
+    authors.push(context.provideTheme(source));
+    return () => h(Leaf);
+  });
+  await renderToString(
+    createSSRApp(defineComponent(() => () => h('main', [h(Region), h(Region)]))),
+  );
+  assert(authors.every((author) => author === authors[0]));
+  assert.equal(fallbackReads, 0);
+  assert.equal(unusedReads, 0);
+  const first = context.useCss();
+  assert.equal(first, context.useCss());
+  assert.equal(fallbackReads, 0);
+  assert.deepEqual(Object.values(resolveClass(first.color('_brand')).variables), ['red']);
+  assert.equal(unusedReads, 0);
 });

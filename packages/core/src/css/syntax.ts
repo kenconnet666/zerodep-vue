@@ -109,6 +109,8 @@ export function selectors(parent: SelectorContext, input: string): SelectorConte
 }
 
 export function scopedSelector(input: string, className: string): string {
+  if (input === '&') return '.' + className;
+  if (!input.includes('&')) return input;
   const ast = selectorParser().astSync(input);
   ast.walkNesting((node) => {
     node.replaceWith(selectorParser.className({ value: className }));

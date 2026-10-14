@@ -12,7 +12,7 @@
 
 组件库启动前的清理、已确认阻碍及 API 备选方案见 [组件库准备评审](docs/ui-library-readiness.md)。其中建议需在正式组件试点前确定，不替代本蓝图已经确认的工具库契约。
 
-2026-10-14 已确认的后项覆盖、完整动态 CSS 值和延迟创建修订见 [CSS 运行时实施计划](docs/css-runtime-plan.md)。本轮仍只做基础工具与 fixtures；修订后的契约和实际验证随实现同步到本蓝图。
+2026-10-14 已确认的后项覆盖、完整动态 CSS 值、延迟创建和 class 依赖缓存见 [CSS 运行时实施计划](docs/css-runtime-plan.md)。本轮仍只做基础工具与 fixtures；具体局部及远程验证状态见 progress.md。
 
 ## 1 已确定的方向与范围
 

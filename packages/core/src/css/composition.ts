@@ -1,17 +1,17 @@
-import { CLASS, isCssClass } from './types.ts';
+import { CLASS, hasStableParts, isCssClass, markStableParts } from './types.ts';
 import type { ClassPart, CssClass, CssInput, CssNestedInput, Declaration } from './types.ts';
 import { selectors } from './syntax.ts';
 import type { SelectorContext } from './syntax.ts';
 
 /** 只组合已声明样式和类名，不猜测普通对象的含义，也不提前读取绑定。 */
 export function cx(...inputs: readonly CssInput[]): CssClass {
-  const parts: ClassPart[] = [];
+  const roots: (CssClass | string)[] = [];
   const arrays = new Set<readonly unknown[]>();
   const collect = (input: unknown): void => {
     if (input == null || input === false || input === 0) return;
     if (typeof input === 'string') {
-      if (input) parts.push(input);
-    } else if (isCssClass(input)) parts.push(...input[CLASS]);
+      if (input) roots.push(input);
+    } else if (isCssClass(input)) roots.push(input);
     else if (Array.isArray(input)) {
       if (arrays.has(input)) throw new Error('CSS 组合包含循环数组。');
       arrays.add(input);
@@ -20,12 +20,22 @@ export function cx(...inputs: readonly CssInput[]): CssClass {
     } else throw new Error('cx 只接受链式样式、类名或条件数组。');
   };
   for (const input of inputs) collect(input);
-  return Object.freeze({
-    [CLASS]: Object.freeze(parts),
+  const stable = roots.every((root) => typeof root === 'string' || hasStableParts(root));
+  let parts: readonly ClassPart[] | undefined;
+  const result = Object.freeze({
+    // 快照组合输入但不展开样式链，未消费的分支不会创建完整声明数组。
+    get [CLASS]() {
+      const expand = () =>
+        Object.freeze(
+          roots.flatMap((root) => (typeof root === 'string' ? [root] : [...root[CLASS]])),
+        );
+      return stable ? (parts ??= expand()) : expand();
+    },
     [Symbol.toPrimitive](): never {
       throw new Error('CSS 样式直接交给 class 或 cx，不能转换成字符串丢弃绑定。');
     },
   });
+  return stable ? markStableParts(result) : result;
 }
 
 /** 把已有声明移入局部或全局选择器；保留清除标记及主题、绑定的延迟求值。 */

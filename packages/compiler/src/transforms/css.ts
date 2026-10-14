@@ -1,4 +1,5 @@
 import { addNamed } from '@babel/helper-module-imports';
+import { createHash } from 'node:crypto';
 import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
 import type { State } from '../upstream/interface.ts';
@@ -36,6 +37,8 @@ export function transformCss(
     return t.cloneNode(identifier);
   };
   const captures = new WeakSet<t.Node>();
+  const memoVersion = createHash('sha256').update(state.file.code).digest('hex').slice(0, 16);
+  let memoSite = 0;
   for (const statement of program.get('body')) {
     if (!statement.isImportDeclaration() || statement.node.source.value !== 'vue') continue;
     for (const specifier of statement.node.specifiers) {
@@ -50,6 +53,76 @@ export function transformCss(
   }
   // 共享模块返回的绑定也能参加模板/拼接；普通输入仍由运行时保留 JS 原有运算。
   program.traverse({
+    JSXAttribute: {
+      exit(path) {
+        if (
+          !t.isJSXIdentifier(path.node.name, { name: 'class' }) ||
+          !t.isJSXExpressionContainer(path.node.value) ||
+          !path.findParent((parent) => parent.node.extra?.zerodepAuthoring === true)
+        )
+          return;
+        const container = path.get('value');
+        if (!container.isJSXExpressionContainer()) return;
+        const expression = container.get('expression');
+        if (!expression.isExpression()) return;
+        let calls = expression.isCallExpression() || expression.isOptionalCallExpression();
+        let safe = true;
+        const inputs = new Map<object, t.Identifier>();
+        expression.traverse({
+          CallExpression() {
+            calls = true;
+          },
+          OptionalCallExpression() {
+            calls = true;
+          },
+          ThisExpression() {
+            safe = false;
+          },
+          Super() {
+            safe = false;
+          },
+          AwaitExpression() {
+            safe = false;
+          },
+          YieldExpression() {
+            safe = false;
+          },
+          AssignmentExpression() {
+            safe = false;
+          },
+          UpdateExpression() {
+            safe = false;
+          },
+          ReferencedIdentifier(reference) {
+            if (!t.isIdentifier(reference.node)) {
+              safe = false;
+              return;
+            }
+            if (reference.node.name === 'arguments') {
+              safe = false;
+              return;
+            }
+            const binding = reference.scope.getBinding(reference.node.name);
+            if (
+              !binding ||
+              binding.path === expression ||
+              binding.path.findParent((parent) => parent === expression)
+            )
+              return;
+            // 回调局部值也作为缓存输入，循环重排或新闭包不能继续使用旧参数。
+            inputs.set(binding, t.cloneNode(reference.node));
+          },
+        });
+        if (!calls || !safe) return;
+        expression.replaceWith(
+          t.callExpression(helper('memoClass'), [
+            t.stringLiteral(`${memoVersion}:${memoSite++}`),
+            t.arrayExpression([...inputs.values()]),
+            t.arrowFunctionExpression([], expression.node),
+          ]),
+        );
+      },
+    },
     MemberExpression(path) {
       const { object, property, computed } = path.node;
       if (

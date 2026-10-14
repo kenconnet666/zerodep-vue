@@ -24,6 +24,7 @@
     "check:authoring": "tsc --noEmit -p packages/core/test/tsx/tsconfig.json",
     "css:generate": "node scripts/css/generate.mjs",
     "css:generate:check": "node scripts/css/generate.mjs --check",
+    "css:bundle": "node scripts/css/bundle-size.mjs",
     "packages:pack": "node scripts/packages/pack.mjs",
     "test:packages": "node scripts/packages/verify.mjs",
     "test:core": "pnpm --filter @zerodep-vue/core test"

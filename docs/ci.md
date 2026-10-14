@@ -24,6 +24,8 @@ LSP 自检会改写自己的临时源码，因此与类型检查隔离在不同 
 
 构建产物及成功生成的 LSP 报告按 SHA/平台上传，保留七天。Actions 固定到已核对的提交 SHA。工作流只申请读取仓库权限，不执行包发布或生产部署；需要发布能力时另行定义目标和权限。
 
+Build 在构建后运行 pnpm css:bundle：从 dist 消费单条 display('flex') 链，Vue external，以 minified/gzip 字节记录固定作者成本，gzip 预算 48,000 字节。报告 test-results/css-bundle.json 随该提交的包 artifact 上传；仓库不干净时不能作为 CI 证据。本地必要的单点测量可使用 --source，只在内存构建并标注 dirty，不写交付产物或代替完整构建。
+
 任务数量由工作流矩阵决定，CI result 汇总全部验证任务。增加能力时，按职责补入真实断言；新增 job 也必须接入 CI result。不能将尚未实现的测试声明为已覆盖，也不能用 continue-on-error 或删除必要断言换取绿色状态。
 
 公开入口由安装包消费者统一验证 ESM/CJS 身份及实际编译、SSR 行为，工作流不再内嵌另一份导出清单。打包步骤检查声明/入口文件存在及源码来源，避免重复维护的旧 API 检查阻断真实消费验证。
@@ -41,6 +43,8 @@ Node/组件层检查回调次数、默认属性、加载与禁用恢复、Ref �
 `packages/core/test/tsx/tsconfig.json` 为运行测试提供与源码一致的 JSX、源码解析条件和严格选项；避免编辑器把没有归属配置的测试当作默认 React JSX 工程。default 作者任务先执行 `pnpm check:authoring`，不因 Vitest 转换成功就跳过测试代码的类型验收。
 
 mixed 套件显式包含 mixed.spec、controls.spec 和 css-values.spec，development/production × Chromium/Firefox 都执行。CSS 值用例直接检查 transform、伪元素 content、URL 背景和关键帧的计算结果，以及动态 important 切换和后项描述覆盖；不只检查变量表。未知 PW_SUITE 或 BROWSER_MODE 立即报错，不能静默回退到另一套测试。普通套件共享页面错误与 Vue 警告检查；HMR 只在故意制造语法错误的阶段允许预期错误。
+
+class 缓存另用实际构造调用次数验证：无关更新及 bx 更新不重建组合，相关依赖变化才调用。组件短测同时覆盖回调局部参数、列表重排/移除、实例隔离和隐藏分支首次使用，浏览器检查调用计数与真实宽度/颜色同时正确。
 
 资源验证检查非零的实际消费、缓存上界和释放；不要求缓存恰好填满才能通过。浏览器样式从真实 style 节点/计算样式检查，SSR 收集结果单独验证。完整长测试仍只由 CI 执行。
 

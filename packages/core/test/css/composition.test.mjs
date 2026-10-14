@@ -3,10 +3,39 @@ import test from 'node:test';
 import { cx } from '../../src/css/composition.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
 import { binding, template } from '../../src/css/bindings.ts';
+import { CLASS } from '../../src/css/types.ts';
 import { createCssContext, SystemKeywords } from '../../src/index.ts';
 const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
+
+test('cx defers flattening, snapshots input arrays and caches only stable static descriptions', () => {
+  let reads = 0;
+  let current = s.color('red');
+  const live = {
+    get [CLASS]() {
+      reads++;
+      return current[CLASS];
+    },
+  };
+  const inputs = [live];
+  const style = cx(cx(inputs), s.padding(4));
+  inputs.length = 0;
+  assert.equal(reads, 0);
+  assert(resolveClass(style).cssText.includes('color:red'));
+  current = s.color('blue');
+  assert(resolveClass(style).cssText.includes('color:blue'));
+  const stable = cx(s.color('red'), s.padding(4));
+  assert.equal(stable[CLASS], stable[CLASS]);
+  assert.equal(resolveClass(stable), resolveClass(stable));
+  let width = 10;
+  const dynamic = cx(s.width(binding(() => width)));
+  const first = resolveClass(dynamic);
+  width = 20;
+  const second = resolveClass(dynamic);
+  assert.notEqual(first, second);
+  assert.deepEqual(Object.values(second.variables), ['20px']);
+});
 
 test('chains branch independently, retain declaration order and reject legacy objects', () => {
   const base = s.padding(8).color('black');

@@ -1,5 +1,6 @@
 import {
   cloneVNode,
+  computed,
   createVNode,
   getCurrentInstance,
   inject,
@@ -13,7 +14,13 @@ import {
   onDeactivated,
   ssrContextKey,
 } from 'vue';
-import type { ComponentInternalInstance, ObjectDirective, VNode, VNodeChild } from 'vue';
+import type {
+  ComponentInternalInstance,
+  ComputedRef,
+  ObjectDirective,
+  VNode,
+  VNodeChild,
+} from 'vue';
 import { cssHostKey } from './host.ts';
 import { hostFor } from './context.ts';
 export { getCssHost } from './context.ts';
@@ -51,12 +58,54 @@ const plans = new WeakMap<VNode, Plan>();
 const leases = new WeakMap<VNode, Lease>();
 const owners = new WeakMap<ComponentInternalInstance, Set<Lease>>();
 const observers = new WeakMap<Node, { leases: Set<Lease>; observer: MutationObserver }>();
+interface ClassMemo {
+  inputs: readonly unknown[];
+  source: { read: () => ClassValue };
+  value: ComputedRef<ClassValue>;
+}
+const classMemos = new WeakMap<ComponentInternalInstance, Map<string, ClassMemo[]>>();
 interface RenderFrame {
   pending: Map<VNode, Props>;
   reads: Map<object, unknown>;
   owner: ComponentInternalInstance | null;
+  memo: { calls?: Map<string, number> };
 }
 let frame: RenderFrame | undefined;
+
+/** @internal 自有 class 表达式按 Vue 依赖缓存；位置和词法输入共同隔离循环及实例。 */
+export function memoClass(
+  site: string,
+  inputs: readonly unknown[],
+  read: () => ClassValue,
+): ClassValue {
+  const owner = frame?.owner;
+  if (!owner || !frame) return read();
+  let sites = classMemos.get(owner);
+  if (!sites) {
+    sites = new Map();
+    classMemos.set(owner, sites);
+    onUnmounted(() => classMemos.delete(owner), owner);
+  }
+  const calls = (frame.memo.calls ??= new Map());
+  const index = calls.get(site) ?? 0;
+  calls.set(site, index + 1);
+  let entries = sites.get(site);
+  if (!entries) {
+    entries = [];
+    sites.set(site, entries);
+  }
+  let entry = entries[index];
+  if (
+    !entry ||
+    inputs.length !== entry.inputs.length ||
+    inputs.some((input, at) => !Object.is(input, entry!.inputs[at]))
+  ) {
+    const source = { read };
+    entry = { inputs: [...inputs], source, value: computed(() => source.read()) };
+    entries[index] = entry;
+  } else entry.source.read = read;
+  return entry.value.value;
+}
 
 export function isOwnComponent(type: unknown): boolean {
   return (
@@ -400,13 +449,15 @@ function nativeClass(value: ClassValue): string {
   return normalizeClass(value);
 }
 
-/** @internal 只延后 CSS 解析；JSX 节点与普通表达式的创建时机保持原样。 */
+/** @internal JSX 节点正常创建；class 构造的依赖缓存与最终 CSS 消费共享本次渲染边界。 */
 export function renderCss(render: () => VNodeChild): VNodeChild {
   const previous = frame;
+  const owner = getCurrentInstance();
   const current: RenderFrame = {
     pending: new Map(),
     reads: new Map(),
-    owner: getCurrentInstance(),
+    owner,
+    memo: previous?.owner === owner ? previous.memo : {},
   };
   frame = current;
   try {
@@ -419,6 +470,13 @@ export function renderCss(render: () => VNodeChild): VNodeChild {
     }
     return value;
   } finally {
+    if (owner && previous?.owner !== owner) {
+      for (const [site, entries] of classMemos.get(owner) ?? []) {
+        const used = current.memo.calls?.get(site) ?? 0;
+        if (used) entries.length = used;
+        else classMemos.get(owner)!.delete(site);
+      }
+    }
     frame = previous;
   }
 }

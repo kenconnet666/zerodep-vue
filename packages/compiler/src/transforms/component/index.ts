@@ -259,6 +259,7 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
 
   // 先划分作者代码，再加入自己的初始化，防止助手被放进 render 重复建立。
   lowerRender(fn);
+  fn.node.extra = { ...fn.node.extra, zerodepAuthoring: true };
   const body = fn.node.body as t.BlockStatement;
   if (contextParam && !t.isIdentifier(contextParam)) {
     if (!t.isObjectPattern(contextParam))
