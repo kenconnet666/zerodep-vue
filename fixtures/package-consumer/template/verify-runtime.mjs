@@ -9,8 +9,10 @@ import { build } from 'vite';
 import { createSSRApp, ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { babelPlugin as compiler, vitePlugin as vueTsx } from '@zerodep-vue/compiler';
-import { getCssHost, useCss, cx, createTheme } from '@zerodep-vue/core';
+import { getCssHost, cx, createCssContext, SystemKeywords } from '@zerodep-vue/core';
 import { assertRuntimeCode, assertRuntimeChunks } from './runtime-boundary.mjs';
+
+const { useCss } = createCssContext(new SystemKeywords());
 
 const root = process.cwd();
 const require = createRequire(import.meta.url);
@@ -18,9 +20,14 @@ const cjsCompiler = require('@zerodep-vue/compiler');
 const cjsCore = require('@zerodep-vue/core');
 assert.equal(cjsCompiler.babelPlugin, compiler);
 assert.equal(cjsCompiler.vitePlugin, vueTsx);
-assert.equal(cjsCore.useCss, useCss);
+assert.equal(
+  'useCss' in cjsCore,
+  false,
+  'Application hooks must not compete with core auto-imports.',
+);
+assert.equal('keywords' in cjsCore, false, 'Keyword views belong to an explicit CSS context.');
 assert.equal(cjsCore.cx, cx);
-assert.equal(cjsCore.createTheme, createTheme);
+assert.equal(cjsCore.createCssContext, createCssContext);
 for (const entry of ['vite', 'runtime', 'hmr', 'devtools'])
   assert.throws(() => require.resolve(`@zerodep-vue/compiler/${entry}`), {
     code: 'ERR_PACKAGE_PATH_NOT_EXPORTED',

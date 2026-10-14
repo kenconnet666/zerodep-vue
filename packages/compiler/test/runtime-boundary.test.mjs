@@ -7,7 +7,10 @@ import {
 
 test('runtime boundary checks imports, re-exports and dynamic loading without matching ordinary strings', async () => {
   await assertRuntimeCode(
-    `import { useCss, cx } from '@zerodep-vue/core';
+    `import { cx } from '@zerodep-vue/core';
+import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
+const { useCss } = createCssContext(new SystemKeywords());
+
     export {For} from '@zerodep-vue/core';
     const label='@zerodep-vue/compiler';
     // node_modules/typescript/lib/typescript.js
@@ -21,8 +24,8 @@ test('runtime boundary checks imports, re-exports and dynamic loading without ma
     "const module = import('typescript');",
     "const module = require('@zerodep-vue/compiler');",
     "import '@zerodep-vue/core/hmr';",
-    "import { registerModule as register, useCss, cx } from '@zerodep-vue/core';",
-    "import { createInspectedVNode, useCss, cx } from '@zerodep-vue/core';",
+    "import { registerModule as register, cx } from '@zerodep-vue/core';\nimport { createCssContext, SystemKeywords } from '@zerodep-vue/core';\nconst { useCss } = createCssContext(new SystemKeywords());\n",
+    "import { createInspectedVNode, cx } from '@zerodep-vue/core';\nimport { createCssContext, SystemKeywords } from '@zerodep-vue/core';\nconst { useCss } = createCssContext(new SystemKeywords());\n",
   ])
     await assert.rejects(assertRuntimeCode(code, 'rejected'), /dependency in/);
 });

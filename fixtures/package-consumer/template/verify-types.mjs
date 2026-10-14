@@ -131,11 +131,14 @@ try {
     const close = text.lastIndexOf("'", end);
     const position = text.lastIndexOf("'", close - 1) + 2;
     const hover = service.getQuickInfoAtPosition(filename, position);
-    assert(/\p{Script=Han}/u.test(ts.displayPartsToString(hover?.documentation)));
+    assert(/\p{Script=Han}/u.test(ts.displayPartsToString(hover?.documentation)), marker);
     const completions = service.getCompletionsAtPosition(filename, position, {});
-    assert(completions?.entries.some((entry) => entry.name === value));
+    assert(
+      completions?.entries.some((entry) => entry.name === value),
+      marker,
+    );
     const details = service.getCompletionEntryDetails(filename, position, value, {});
-    assert(/\p{Script=Han}/u.test(ts.displayPartsToString(details?.documentation)));
+    assert(/\p{Script=Han}/u.test(ts.displayPartsToString(details?.documentation)), marker);
     const definitions = service.getDefinitionAtPosition(filename, position);
     assert.equal(definitions?.length, 1);
     assert(realpathSync(definitions[0].fileName).startsWith(realpathSync(root)));
@@ -148,6 +151,19 @@ try {
       docs: ts.displayPartsToString(hover.documentation),
       definition: definitions[0].fileName.replace(root, '.'),
     };
+  }
+  for (const name of ['v-model_trim', 'v-show', 'v-model:value_number', 'v-slots']) {
+    const position = text.indexOf(name + '=') + 2;
+    assert(position > 1, name);
+    const hover = service.getQuickInfoAtPosition(filename, position);
+    assert(/\p{Script=Han}/u.test(ts.displayPartsToString(hover?.documentation)), name);
+    const definitions = service.getDefinitionAtPosition(filename, position);
+    assert.equal(definitions?.length, 1, name);
+    assert(
+      definitions[0].fileName.replaceAll('\\', '/').endsWith('/dist/tsx/directives.d.ts'),
+      name,
+    );
+    evidence['directive-' + name] = { docs: ts.displayPartsToString(hover.documentation) };
   }
   writeFileSync(
     'types-report.json',

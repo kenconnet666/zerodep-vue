@@ -1,8 +1,18 @@
 import { createApp, KeepAlive, nextTick, onScopeDispose, ref, Transition } from 'vue';
 import type { Ref } from 'vue';
-import { _component, bx, createCssHost, keyframes, useCss } from '@zerodep-vue/core';
+import {
+  _component,
+  bx,
+  createCssHost,
+  keyframes,
+  createCssContext,
+  SystemKeywords,
+} from '@zerodep-vue/core';
 
 import type { StabilityReport } from './contracts.ts';
+
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 function scene(label: string) {

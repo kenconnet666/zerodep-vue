@@ -6,7 +6,7 @@ import { CLASS, isCssClass } from './types.ts';
 import type { ClassPart, ClassValue, Declaration } from './types.ts';
 import { BINDING, TEMPLATE, isBinding, isTemplate } from './bindings.ts';
 import type { CssBinding, Scalar } from './bindings.ts';
-import { scopedSelector, validateFragment } from './syntax.ts';
+import { inheritsVariables, scopedSelector, validateFragment } from './syntax.ts';
 import { KEYWORD, THEME, isKeyword, isThemeReference } from './tokens.ts';
 import type { ThemeReference } from './tokens.ts';
 import { ANIMATION, isAnimation } from './animation-token.ts';
@@ -114,23 +114,24 @@ export function resolveClass(
     if (name) parts.push(name);
   };
   flatten(value);
-  const composed = compose(parts);
   const variables: string[] = [];
   const prepared: Prepared[] = [];
   let dynamic = false;
   const resources: CssRule[] = [];
   const resourceVariables: Record<string, string> = {};
-  const animations = new Map<CssAnimation, string>();
-  const animation = (value: CssAnimation, property: string): string => {
+  const animations = new Map<CssAnimation, { bound?: string; literal?: string }>();
+  let animationIndex = 0;
+  const animation = (value: CssAnimation, property: string, literal: boolean): string => {
     if (!/^(?:-[a-z]+-)?animation(?:-name)?$/.test(propertyName(property)))
       throw new Error('动画引用只能用于 animation 或 animationName。');
-    const existing = animations.get(value);
-    if (existing) return existing;
-    const ordinal = animations.size;
+    const mode = literal ? 'literal' : 'bound';
+    const existing = animations.get(value) ?? {};
+    if (existing[mode]) return existing[mode]!;
+    const ordinal = animationIndex++;
     const body = value[ANIMATION].map((frame) => {
       const frameStyle = resolveClass(frame.style, reads, {
         namespace: `${options.namespace ?? ''}animation:${ordinal}:${frame.at}`,
-        ...(options.literal ? { literal: true } : {}),
+        ...(literal ? { literal: true } : {}),
       });
       observedFrames?.push(frameStyle);
       dynamic ||= frameStyle.dynamic;
@@ -142,12 +143,13 @@ export function resolveClass(
       return `${frame.at}{${content}}`;
     }).join('');
     const name = 'zva-' + hash(body);
-    animations.set(value, name);
+    existing[mode] = name;
+    animations.set(value, existing);
     resources.push({ name, cssText: `@keyframes ${name}{${body}}` });
     return name;
   };
-  const renderValue = (value: unknown, property?: string): string =>
-    isAnimation(value) ? animation(value, property ?? '') : scalar(value, property);
+  const renderValue = (value: unknown, property?: string, literal = false): string =>
+    isAnimation(value) ? animation(value, property ?? '', literal) : scalar(value, property);
   const evaluating = new Set<object>();
   const read = (input: CssBinding<unknown> | ThemeReference): unknown => {
     dynamic = true;
@@ -164,34 +166,45 @@ export function resolveClass(
     }
     return reads.get(input);
   };
+  const valueOf = (input: unknown, declaration: Declaration): unknown => {
+    if (isThemeReference(input)) return read(input);
+    if (!isBinding(input)) return input;
+    const current = read(input);
+    return typeof current === 'string' && current.startsWith('_') && declaration.resolveTheme
+      ? read(declaration.resolveTheme(declaration.property, current))
+      : current;
+  };
+  const composed = compose(parts, (declaration) => {
+    const input = declaration.value;
+    return isTemplate(input)
+      ? input[TEMPLATE].some((part) => valueOf(part, declaration) === undefined)
+      : valueOf(input, declaration) === undefined;
+  });
+  const inheritance = new Map<string, boolean>();
   for (const declaration of composed.declarations) {
     const { value: input, property } = declaration;
-    const themeValue = (value: unknown) =>
-      typeof value === 'string' && value.startsWith('_') && declaration.resolveTheme
-        ? read(declaration.resolveTheme(property, value))
-        : value;
+    if (!inheritance.has(declaration.target))
+      inheritance.set(declaration.target, inheritsVariables(declaration.target));
+    const literal = options.literal || !inheritance.get(declaration.target);
     if (input === null) continue;
     let parts: Part[];
     if (isBinding(input) || isThemeReference(input)) {
-      const current = isBinding(input) ? themeValue(read(input)) : read(input);
+      const current = valueOf(input, declaration);
       if (current == null) continue;
-      const text = renderValue(current, property);
+      const text = renderValue(current, property, literal);
       const keyword = cssWide(text);
-      parts =
-        keyword || options.literal ? [keyword ?? text] : [{ variable: variables.push(text) - 1 }];
+      parts = keyword || literal ? [keyword ?? text] : [{ variable: variables.push(text) - 1 }];
     } else if (isTemplate(input)) {
-      const evaluated = input[TEMPLATE].map((part) =>
-        isBinding(part) ? themeValue(read(part)) : isThemeReference(part) ? read(part) : part,
-      );
+      const evaluated = input[TEMPLATE].map((part) => valueOf(part, declaration));
       if (evaluated.some((part) => part == null)) continue;
       // 静态模板片段可以是不完整的括号前缀；单个绑定值与最终声明才需要完整语法。
       const strings = evaluated.map((part, index) =>
         isBinding(input[TEMPLATE][index]) || isThemeReference(input[TEMPLATE][index])
           ? isAnimation(part)
-            ? animation(part, property)
+            ? animation(part, property, literal)
             : renderValue(part)
           : isAnimation(part)
-            ? animation(part, property)
+            ? animation(part, property, literal)
             : String(part),
       );
       const keyword = cssWide(strings.join(''));
@@ -202,11 +215,11 @@ export function resolveClass(
           if (!isBinding(part) && !isThemeReference(part)) return text;
           if (cssWide(text))
             throw new Error(`CSS ${property} 的复合值不能把 CSS-wide keyword 当作普通片段。`);
-          return options.literal ? text : { variable: variables.push(text) - 1 };
+          return literal ? text : { variable: variables.push(text) - 1 };
         });
         validateFragment(strings.join(''));
       }
-    } else parts = [renderValue(input, property)];
+    } else parts = [renderValue(input, property, literal)];
     prepared.push({
       selector: declaration.selector,
       conditions: declaration.conditions,

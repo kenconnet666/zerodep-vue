@@ -33,10 +33,15 @@ export type PropertyValue<Key extends PropertyName, T extends SystemKeywords = S
   InputValue<Key, T> | null | CssBinding<InputValue<Key, T> | null> | CssTemplate;
 
 /** 自由 CSS 字符串保留，已知的 _ 名称必须属于当前主题，避免被宽泛 string 吞掉。 */
-export type CheckedPropertyValue<Key extends PropertyName, T extends SystemKeywords, Value> =
+type CheckedPropertyValue<Key extends PropertyName, T extends SystemKeywords, Value> =
   Value extends CssBinding<infer Bound>
     ? CssBinding<Exclude<Bound, `_${string}`> | ThemeLiteral<T, Key>>
     : Exclude<Value, `_${string}`> | ThemeLiteral<T, Key>;
+
+/** 属性方法的输入：保留实际值推导，并检查原生值域、主题名称及动态绑定。 */
+export type PropertyInput<Key extends PropertyName, T extends SystemKeywords, Value> = Value &
+  PropertyValue<Key, T> &
+  CheckedPropertyValue<Key, T, Value>;
 
 /** 常用伪类保留补全，函数伪类、属性选择器与条件在各作者入口共用。 */
 export type CssCondition =

@@ -81,16 +81,39 @@ s.display('inline-flex' + business); // literal:concatenation
 s.boxSizing('not-a-box-model' as const);
 `;
   const snapshot = host.getScriptSnapshot.bind(host);
+  // 模拟发布声明：真实作者私有字段的类型会被发射器擦除，不能靠它查主题。
+  const authorFile = resolve(root, 'packages/core/src/css/author.ts');
+  const authorDeclaration = ts.transpileDeclaration(ts.sys.readFile(authorFile), {
+    fileName: authorFile,
+  }).outputText;
+  assert.match(authorDeclaration, /private readonly theme;/);
   let version = 0;
   const scriptVersion = host.getScriptVersion.bind(host);
   host.getScriptVersion = (file) =>
     resolve(file) === filename ? String(version) : scriptVersion(file);
   host.getScriptSnapshot = (file) =>
-    resolve(file) === filename ? ts.ScriptSnapshot.fromString(source) : snapshot(file);
+    resolve(file) === filename
+      ? ts.ScriptSnapshot.fromString(source)
+      : resolve(file) === authorFile
+        ? ts.ScriptSnapshot.fromString(authorDeclaration)
+        : snapshot(file);
   const service = ts.createLanguageService(host);
   const enhanced = init({ typescript: ts }).create({ languageService: service });
   try {
-    assert.deepEqual(enhanced.getSemanticDiagnostics(filename), []);
+    assert.deepEqual(
+      enhanced
+        .getSemanticDiagnostics(filename)
+        .map((item) => ts.flattenDiagnosticMessageText(item.messageText, '\n')),
+      [],
+    );
+    const fontMethod = source.indexOf(".font('inherit')") + 2;
+    const fontInfo = enhanced.getQuickInfoAtPosition(filename, fontMethod);
+    const fontDocs = ts.displayPartsToString(fontInfo.documentation);
+    assert(
+      fontDocs.includes('font-size: medium') && fontDocs.includes('font-family: 由浏览器决定'),
+    );
+    assert(fontDocs.includes('是否继承：是'));
+    assert(!ts.displayPartsToString(fontInfo.displayParts).includes('CheckedPropertyValue'));
     for (const [marker, value] of Object.entries({
       font: 'inherit',
       display: 'inline-flex',

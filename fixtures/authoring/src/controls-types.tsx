@@ -1,9 +1,11 @@
 import { computed, ref } from 'vue';
-import { useCss } from '@zerodep-vue/core';
+
 import { Button } from '../../controls/Button.tsx';
 import { ToggleButton } from '../../controls/ToggleButton.tsx';
 import { TextInput } from '../../controls/TextInput.tsx';
 import { keywords, useCss as useControlCss } from '../../controls/theme.ts';
+import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
+const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 export const explicitThemeStyle = useControlCss().backgroundColor(keywords.color._brand);

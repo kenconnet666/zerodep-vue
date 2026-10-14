@@ -3,8 +3,11 @@ import test from 'node:test';
 import { vitePlugin as vueTsx } from '../src/index.ts';
 
 const source = `import { _component } from '@zerodep-vue/core';
-import { bx, useCss, cx } from '@zerodep-vue/core';
+import { bx, cx } from '@zerodep-vue/core';
 import {ref} from 'vue';
+import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 export const App = _component(()=>{

@@ -1,6 +1,8 @@
 # CSS 元数据与说明来源
 
-CSS 属性名称、属性原始类型、固定关键字集合和初始值来自精确固定的 csstype 3.2.3，MIT 许可见 CSSTYPE-LICENSE。生成器使用 TypeScript 6.0.3 读取公开声明，没有编译或静态提取用户的 CSS。
+CSS 属性名称、属性原始类型和固定关键字集合来自精确固定的 csstype 3.2.3，MIT 许可见 CSSTYPE-LICENSE。生成器使用 TypeScript 6.0.3 读取公开声明，没有编译或静态提取用户的 CSS。
+
+规范初始值、简写属性的子属性初始值和继承标记来自 [mdn-data](https://github.com/mdn/data) 2.27.1 的 css/properties.json（CC0-1.0）；缺项时补取 csstype 注释。规范初始值不同于浏览器默认样式表。元数据只供生成器使用，不增加运行时依赖。
 
 中文说明参考 zerodep-js/scripts/css-author-docs.json，并适配不可变链式属性方法、返回值与示例。该参考项目的 MIT 许可见 ZERODEP-JS-LICENSE。兼容属性的补充说明独立保存在 scripts/css/compat-docs.mjs；完整属性覆盖由生成器断言。
 

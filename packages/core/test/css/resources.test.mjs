@@ -1,9 +1,29 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { keywords, createTheme, SystemKeywords, keyframes, useCss, cx } from '../../src/index.ts';
+import { createCssContext, SystemKeywords, keyframes, cx } from '../../src/index.ts';
 import { binding, template } from '../../src/css/bindings.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
+const { keywords, useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
+
+test('shared animations keep literal sibling frames separate from element-bound frames', () => {
+  let opacity = 0.2;
+  const fade = keyframes({ from: s.opacity(binding(() => opacity)), to: s.opacity(1) });
+  const style = s.animationName(fade).select('& + span', s.animationName(fade));
+  const first = resolveClass(style);
+  assert.equal(first.resources.length, 2);
+  assert(first.resources.some((rule) => rule.cssText.includes('opacity:0.2;')));
+  assert(first.resources.some((rule) => rule.cssText.includes('opacity:var(')));
+  assert.equal(Object.keys(first.variables).length, 1);
+  opacity = 0.7;
+  const next = resolveClass(style);
+  assert(next.resources.some((rule) => rule.cssText.includes('opacity:0.7;')));
+  assert.equal(
+    first.resources.find((rule) => rule.cssText.includes('var(')).name,
+    next.resources.find((rule) => rule.cssText.includes('var(')).name,
+  );
+});
 
 test('plain CSS custom properties retain native fallbacks and condition composition', () => {
   const resolved = resolveClass(
@@ -29,7 +49,7 @@ test('plain custom properties share dynamic and inherited theme resolution', () 
   class Theme extends SystemKeywords {
     color = { _brand: 'purple' };
   }
-  const themedContext = createTheme(new Theme());
+  const themedContext = createCssContext(new Theme());
   const themed = themedContext.useCss();
   const keywords = themedContext.keywords;
   let padding = '12px';

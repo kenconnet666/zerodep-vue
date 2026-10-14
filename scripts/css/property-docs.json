@@ -829,6 +829,12 @@
       "remarks": "建立尺寸查询容器会同时引入必要的隔离语义；容器本身的样式通常由祖先查询容器决定。",
       "usage": "让组件按所在容器尺寸响应，而不是只按视口响应。",
       "examples": ["s.containerType(\"inline-size\")"]
+    },
+    "font": {
+      "remarks": "简写会把未显式指定的字体子属性重置为各自初始值。只改字号或字重时可使用 fontSize、fontWeight；按钮和输入控件跟随正文时可使用 inherit。",
+      "usage": "统一字体配置，或让控件继承父级字体。",
+      "commonValues": ["inherit", "italic 600 16px/1.5 system-ui"],
+      "examples": ["s.font('inherit')", "s.font('600 14px/1.5 system-ui')"]
     }
   },
   "globalKeywords": {

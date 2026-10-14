@@ -13,6 +13,20 @@
 
 Naive 三组任务各自编译完整生产清单并构建、导入生成的库；没有安装 naive-ui 预编译包来代替编译。上述结果尚不包含自有 CSS、交互混用或最终浏览器验收。
 
+## 控件准备审查、编辑体验与主题入口整理（2026-10-14）
+
+上一提交 1cb84e0ffb106a0bc44b3f24c54de5ef826f8792 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38536952356) 已完成：类型、运行、上游、浏览器、构建及双平台 LSP 成功，Linux/Windows 安装消费者的主题字面量说明断言失败。插件原先依赖作者私有 theme 字段，发射 .d.ts 后该字段类型被擦除；现在改读公开 Css<T> 参数，并在编辑器短测中使用真实私有字段声明发射结果回归。完整安装包复验交由新提交 CI。
+
+按用户约定将 createTheme/CssTheme/provide 改为 createCssContext/CssContext/provideTheme；应用主题模块直接解构导出 useCss、provideTheme、keywords。core 不创建默认实例，不导出 useCss/keywords，相关源码、测试字符串、消费者和文档一并迁移。组件依旧使用 const s = useCss() 和属性链，未添加兼容层。
+
+补齐 Vue JSX 实际支持的指令声明、中文说明和编辑支持，原生表单与组件候选分别处理；命名模型依据 onUpdate:prop 提供候选，自定义指令保持原服务。WebStorm 实测 TextInput 的 v-model 说明可见，TypeScript 服务返回真实声明。v-if/v-for/v-once/v-memo 不作为 JSX 指令推荐。
+
+借鉴 zerodep-js 的简短 PropertyInput 入口，将校验收进公共输入别名；生成时展开原生数值/自由字符串边界，保留 857 属性、14 类和 72 个颜色兼容位置。固定 mdn-data 2.27.1 补规范初始值、简写子属性初始值与继承标记；font 增加简写重置边界、控件继承场景和示例。WebStorm 实测方法悬浮已显示短签名和新文档。TypeScript 插件的系统/主题字面量回归返回单一定义；当前 WebStorm 内建引擎对 inherit 的导航尚未取得唯一目标证据，不能标记为已完全解决，也没有擅改 IDE 设置。
+
+控件前置审查修复两项运行边界：bx 返回 undefined 时回退前项且保留原声明位置；选择器指向兄弟等不能继承元素变量的目标时改用动态字面值，动画帧同步处理。增加可选 prop 更新/移除及浏览器兄弟元素颜色切换验证。
+
+本地相关组合/资源 18 项、主题 6 项、HMR 转换 3 项、编辑器/指令 2 项及控件/可选 prop 4 项定点测试通过；主题、字面量、指令类型夹具 LSP 均 complete=true、errors=0。完整包、跨平台和新浏览器断言以新提交 CI 为准。组件库阶段仍需关闭 IDE 导航差异并核对新提交安装包结果；私有 controls 夹具不等同于产品 UI 组件。
+
 ## 验证流程修订与控件场景（2026-10-14）
 
 34b7964 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38533514596) 已通过，包含恢复执行的 Linux/Windows 安装包消费者。当前继续补充共享按钮、切换按钮、输入框、键盘/表单/主题与绑定场景；区域主题夹具改用真实 createTheme.provide/useCss，浏览器统一捕获错误、拒绝未知套件名，并按缓存上界断言。

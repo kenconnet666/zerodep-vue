@@ -16,17 +16,18 @@ import {
   For,
   _component,
   bx,
-  createTheme,
+  createCssContext,
   SystemKeywords,
   keyframes,
   globalCss,
-  useCss,
 } from '@zerodep-vue/core';
 
 import { NButton, NConfigProvider, NDataTable, NInput, NSelect } from '@fixture/naive';
 import type { DataTableColumns } from '@fixture/naive';
 import type { InitialState } from './contracts.ts';
 import { Controls } from './Controls.tsx';
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 const labelKey: InjectionKey<string> = Symbol('label');
@@ -64,7 +65,7 @@ class RegionTheme extends SystemKeywords {
     this.color = { _brand: color };
   }
 }
-const regionTheme = createTheme(new RegionTheme('black'));
+const regionTheme = createCssContext(new RegionTheme('black'));
 const RegionContent = _component(({ name }: { name: string }) => {
   const themed = regionTheme.useCss();
   return (
@@ -84,7 +85,7 @@ const Region = _component(
     children?: VNodeChild;
   }) => {
     // 未指定来源的区域直接继承；覆盖区域用 computed 同时跟随 Ref 容器和值的替换。
-    if (theme) regionTheme.provide(computed(() => theme!.value));
+    if (theme) regionTheme.provideTheme(computed(() => theme!.value));
     return (
       <>
         <Teleport to="#dialogs">

@@ -15,7 +15,10 @@ async function compile(source, command = 'serve', ssr = false) {
   return (await plugin.transform(source, '/project/App.tsx', { ssr })).code;
 }
 const stamp = (code) => code.match(/import\.meta\.hot,\s*"([a-f0-9]{24})"/)?.[1];
-const source = `import { ref } from 'vue'; import { _component } from '@zerodep-vue/core'; import { bx, cx, globalCss, useCss } from '@zerodep-vue/core';
+const source = `import { ref } from 'vue'; import { _component } from '@zerodep-vue/core'; import { bx, cx, globalCss } from '@zerodep-vue/core';
+import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
   export const App = _component(()=> { const count=ref(1); let plain=0;
@@ -46,7 +49,10 @@ test('hot signatures distinguish isolated style/render edits from initialization
 });
 
 test('CSS module hot factories preserve callback receivers, globals and custom properties', async () => {
-  const source = `import { cx, globalCss, useCss } from '@zerodep-vue/core';
+  const source = `import { cx, globalCss } from '@zerodep-vue/core';
+import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
     const invoke=function(){ if(this!==undefined) throw Error('receiver'); return 'red'; };
@@ -59,7 +65,10 @@ const s = useCss();
   assert.match(code, /\(0, _environment\d*\["invoke"\]\)\(\)/);
   assert(code.includes('import.meta.hot.invalidate'));
   const globals = await compile(
-    `import { createCssHost, globalCss, useCss, cx } from '@zerodep-vue/core';
+    `import { createCssHost, globalCss, cx } from '@zerodep-vue/core';
+import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
  const host=createCssHost(); globalCss('reset', {body: s.color('red')}, {host});`,
   );
@@ -69,13 +78,16 @@ const s = useCss();
 
 test('independent CSS entries and destructured theme aliases retain hot factories', async () => {
   const source = `import * as api from '@zerodep-vue/core';
-    import { cx as named, keyframes as animation, useCss, cx } from '@zerodep-vue/core';
+    import { cx as named, keyframes as animation, cx } from '@zerodep-vue/core';
+import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
-    const context=api.createTheme(new api.SystemKeywords());
+    const context=api.createCssContext(new api.SystemKeywords());
     const {useCss: themed}=context;
     const paint=themed();
-    const k=paint.keywords;
+    const k=context.keywords;
     const compose=named;
     export const first=({root: s.color('red')});
     export const second={root:paint.display(k.display.flex)};
@@ -88,15 +100,20 @@ const s = useCss();
   assert(stamp(before));
   assert.equal(stamp(before), stamp(after));
   for (const kind of ['class', 'keyframes']) assert(before.includes(`"${kind}"`), before);
-  const shadow = await compile(`import { cx, useCss } from '@zerodep-vue/core';
+  const shadow = await compile(`import { cx } from '@zerodep-vue/core';
+import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
     export function user(s){return s.color('red');}`);
   assert(!shadow.includes('registerModule'));
   assert(!shadow.includes('traceCss'));
-  // createTheme 建立真实主题上下文，不能再被旧逻辑当作一个 class 包装。
+  // createCssContext 建立真实主题上下文，不能再被旧逻辑当作一个 class 包装。
   const factoryOnly =
-    await compile(`import { createTheme as theme, SystemKeywords, useCss, cx } from '@zerodep-vue/core';
+    await compile(`import { createCssContext as theme, SystemKeywords, cx } from '@zerodep-vue/core';
+const { useCss } = theme(new SystemKeywords());
+
     export const context=theme(new SystemKeywords());`);
   assert(!factoryOnly.includes('registerModule'));
   assert(!factoryOnly.includes('traceCss'));

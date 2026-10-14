@@ -6,7 +6,7 @@
 - packages/compiler 保留官方 Vue JSX v3.0.0 的真实源码 fork 和对照测试；实现状态与远程证据见 docs/progress.md，不能把蓝图中的未完成 API 写成已实现。
 - 状态直接使用 Vue API。CSS 作者入口为 class，编译器负责 bx 的隐式 style 接线，不新增独立 JSX 样式属性。
 - CSS 采用运行时处理加辅助编译：基础层提供系统关键字，主题通过继承增加，泛型 T 贯穿作者入口、链式样式和关键字视图。
-- 组件统一写 `const s = useCss()`；业务 `useCss` 由创建主题的应用模块封装。系统值和主题名优先使用字面量自动补全，例如 `.display('inline-flex').backgroundColor('_brand')`。显式引用使用独立 `keywords.color._brand`，不挂在 s 下；cx 只负责有序组合。
+- 组件统一写 `const s = useCss()`；应用主题模块从 `createCssContext(source)` 直接解构导出 `useCss`、`provideTheme` 和 `keywords`。core 不导出默认 useCss/keywords 或创建默认上下文。系统值和主题名优先使用字面量自动补全，例如 `.display('inline-flex').backgroundColor('_brand')`。显式引用使用独立 `keywords.color._brand`，不挂在 s 下；cx 只负责有序组合。
 - 属性、系统/主题关键字需有准确补全和有用的中文 JSDoc；参考老项目的说明与生成方式，适配不可变链式 API，并验证发布声明不丢失类型或注释。
 - 新源码遵循 TypeScript 和 Vue 的正常语义；中文注释解释边界、所有权和非显然的处理。
 - 修改完成后，本地只运行本次变更相关的 LSP 诊断和必要的少量、短时测试。小型且确定的修改，诊断或少量定点测试通过即可提交，不因改了类型、构建或语言工具就重跑全仓检查。

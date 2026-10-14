@@ -1,28 +1,28 @@
-import { computed, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import {
-  keywords,
   _component,
   For,
   bx as bind,
-  createTheme,
+  createCssContext,
   SystemKeywords,
-  useCss,
   cx,
 } from '@zerodep-vue/core';
 
 import type { Css, CssInput, KeywordView } from '@zerodep-vue/core';
 import { Field, Palette, palettes, themed, themedKeywords } from './App';
+const { keywords, useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 export function selectedTheme() {
   const current = ref(palettes.light);
-  const context = createTheme(current);
+  const context = createCssContext(current);
   current.value = palettes.dark;
   // @ts-expect-error 切换的实例仍必须具有同一套主题成员。
   current.value = new SystemKeywords();
   // @ts-expect-error 主题入口必须接收继承实例或对应 Ref。
-  createTheme({ color: { _brand: 'red' } });
+  createCssContext({ color: { _brand: 'red' } });
   const s = context.useCss();
   return s.color('_brand');
 }
@@ -106,3 +106,15 @@ export const Display = _component(({ model }: { model: Readonly<Ref<string>> }) 
   <span>{model.value}</span>
 ));
 export const readonlyDisplay = <Display model={computed(() => value.value)} />;
+
+const DirectiveField = defineComponent({
+  props: ['value'],
+  emits: ['update:value'],
+  setup: () => () => null,
+});
+export const directiveUsage = (
+  <>
+    <input v-model_trim={value.value} v-show={true} />
+    <DirectiveField v-model:value_number={value.value} v-slots={{ default: () => 'content' }} />
+  </>
+);

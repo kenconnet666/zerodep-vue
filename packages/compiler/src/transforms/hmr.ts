@@ -11,7 +11,7 @@ export interface HotTransform {
 }
 function context(scope: Scope, node: t.Node, seen = new Set<t.Node>()): boolean {
   if (t.isCallExpression(node))
-    return importedName(scope, node.callee, coreModule) === 'createTheme';
+    return importedName(scope, node.callee, coreModule) === 'createCssContext';
   if (!t.isIdentifier(node)) return false;
   const binding = scope.getBinding(node.name);
   if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
@@ -23,7 +23,7 @@ function context(scope: Scope, node: t.Node, seen = new Set<t.Node>()): boolean 
 
 /** 按真实 binding 追踪独立入口、命名空间、主题上下文与解构别名，局部同名对象不接管。 */
 function entry(scope: Scope, node: t.Node, name: string, seen = new Set<t.Node>()): boolean {
-  if (importedName(scope, node, coreModule) === name) return true;
+  if (name !== 'useCss' && importedName(scope, node, coreModule) === name) return true;
   if (t.isMemberExpression(node)) return propertyName(node) === name && context(scope, node.object);
   if (!t.isIdentifier(node)) return false;
   const binding = scope.getBinding(node.name);

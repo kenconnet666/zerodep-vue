@@ -1,5 +1,8 @@
-import { keywords, useCss, bx } from '@zerodep-vue/core';
-import type { Css, SystemKeywords } from '@zerodep-vue/core';
+import { bx, SystemKeywords, createCssContext } from '@zerodep-vue/core';
+import type { Css } from '@zerodep-vue/core';
+
+const { keywords, useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 export const literalStyle = s

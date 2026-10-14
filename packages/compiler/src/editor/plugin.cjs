@@ -79,15 +79,8 @@ module.exports = function init({ typescript: ts }) {
         // 由真实方法声明定位属性，不按变量名 s 或方法文本猜测，普通业务方法不受影响。
         for (const call of calls) {
           const declaration = checker.getResolvedSignature(call.parent)?.declaration;
-          const declared = declaration?.typeParameters?.[0]?.constraint;
-          if (
-            !declared ||
-            !ts.isTypeReferenceNode(declared) ||
-            declared.typeName.getText() !== 'PropertyValue' ||
-            !ts.isLiteralTypeNode(declared.typeArguments?.[0])
-          )
-            continue;
-          const property = declared.typeArguments[0].literal.text;
+          const property = declaration?.name?.text;
+          if (!property) continue;
           const origin = declaration.getSourceFile().fileName.replaceAll('\\', '/');
           if (!/\/generated\/author(\.d)?\.ts$/.test(origin)) continue;
           const bindingFile = program.getSourceFile(
@@ -119,9 +112,9 @@ module.exports = function init({ typescript: ts }) {
           const receiver =
             (ts.isPropertyAccessExpression(call) || ts.isElementAccessExpression(call)) &&
             call.expression;
-          const theme =
-            receiver &&
-            checker.getTypeOfPropertyOfType(checker.getTypeAtLocation(receiver), 'theme');
+          // 私有字段的类型不会进入 .d.ts；直接读取公开 Css<T> 的主题参数。
+          const author = receiver && checker.getApparentType(checker.getTypeAtLocation(receiver));
+          const theme = author && checker.getTypeArguments(author)[0];
           if (theme) {
             const properties = [property];
             if (
@@ -185,8 +178,82 @@ module.exports = function init({ typescript: ts }) {
         };
       }
 
+      // 有限指令使用真实 JSX 声明；命名模型和自定义 modifier 回到同一份说明/定义。
+      function directive(fileName, position, requested) {
+        const program = service.getProgram();
+        const source = program?.getSourceFile(fileName);
+        if (!source) return;
+        let attribute;
+        function visit(node) {
+          if (position < node.getStart(source) || position > node.end) return;
+          if (ts.isJsxAttribute(node) && position <= node.name.end) attribute = node;
+          ts.forEachChild(node, visit);
+        }
+        visit(source);
+        if (!attribute) return;
+        const name = requested ?? attribute.name.getText(source);
+        if (!/^v-(?:model(?:s|_|:|$)|show$|html$|text$|slots$)/.test(name)) return;
+        const checker = program.getTypeChecker();
+        const type = checker.getContextualType(attribute.parent);
+        if (!type) return;
+        const model = name.startsWith('v-model:') || name.startsWith('v-model_');
+        const tag = attribute.parent.parent.tagName;
+        if (name.startsWith('v-model:') && ts.isIdentifier(tag) && /^[a-z]/.test(tag.text)) return;
+        const symbol =
+          checker.getPropertyOfType(type, name) ??
+          (model ? checker.getPropertyOfType(type, 'v-model') : undefined);
+        const declaration = symbol?.declarations?.find(
+          (node) =>
+            ts.isPropertySignature(node) &&
+            /\/tsx\/directives(\.d)?\.ts$/.test(
+              node.getSourceFile().fileName.replaceAll('\\', '/'),
+            ),
+        );
+        if (!symbol || !declaration) return;
+        return {
+          name,
+          type,
+          checker,
+          span: { start: attribute.name.getStart(source), length: attribute.name.getWidth(source) },
+          documentation: symbol.getDocumentationComment(checker),
+          tags: symbol.getJsDocTags(checker),
+          definition: {
+            fileName: declaration.getSourceFile().fileName,
+            textSpan: { start: declaration.name.getStart(), length: declaration.name.getWidth() },
+            kind: ts.ScriptElementKind.memberVariableElement,
+            name: symbol.name,
+            containerKind: ts.ScriptElementKind.interfaceElement,
+            containerName: declaration.parent.name.text,
+          },
+        };
+      }
+
       proxy.getCompletionsAtPosition = (fileName, position, ...rest) => {
         const prior = service.getCompletionsAtPosition(fileName, position, ...rest);
+        const attr = directive(fileName, position);
+        if (attr?.name.startsWith('v-model:')) {
+          const names = new Set(prior?.entries.map((entry) => entry.name));
+          const entries = attr.checker
+            .getPropertiesOfType(attr.type)
+            .filter((symbol) => symbol.name.startsWith('onUpdate:'))
+            .map((symbol) => 'v-model:' + symbol.name.slice('onUpdate:'.length))
+            .filter((name) => !names.has(name))
+            .map((name) => ({
+              name,
+              insertText: name,
+              kind: ts.ScriptElementKind.memberVariableElement,
+              kindModifiers: '',
+              sortText: '11',
+              replacementSpan: attr.span,
+            }));
+          return {
+            isGlobalCompletion: false,
+            isMemberCompletion: false,
+            isNewIdentifierLocation: false,
+            ...prior,
+            entries: [...(prior?.entries ?? []), ...entries],
+          };
+        }
         const ctx = context(fileName, position);
         if (!ctx) return prior;
         // bx 的泛型和 as const 等写法可能没有原生候选；仅在确认的 CSS 上下文补齐属性值。
@@ -212,6 +279,17 @@ module.exports = function init({ typescript: ts }) {
       };
 
       proxy.getQuickInfoAtPosition = (fileName, position) => {
+        const attr = directive(fileName, position);
+        if (attr)
+          return {
+            kind: ts.ScriptElementKind.memberVariableElement,
+            kindModifiers: '',
+            displayParts: [{ text: `(directive) ${attr.name}`, kind: 'text' }],
+            ...service.getQuickInfoAtPosition(fileName, position),
+            textSpan: attr.span,
+            documentation: attr.documentation,
+            tags: attr.tags,
+          };
         const match = keyword(fileName, position);
         return match
           ? {
@@ -226,6 +304,17 @@ module.exports = function init({ typescript: ts }) {
       };
       proxy.getCompletionEntryDetails = (fileName, position, name, ...rest) => {
         const prior = service.getCompletionEntryDetails(fileName, position, name, ...rest);
+        const attr = directive(fileName, position, name);
+        if (attr)
+          return {
+            kind: ts.ScriptElementKind.memberVariableElement,
+            kindModifiers: '',
+            displayParts: [{ text: `(directive) ${name}`, kind: 'text' }],
+            ...prior,
+            name,
+            documentation: attr.documentation,
+            tags: attr.tags,
+          };
         const match = keyword(fileName, position, name);
         return match
           ? {
@@ -240,10 +329,14 @@ module.exports = function init({ typescript: ts }) {
           : prior;
       };
       proxy.getDefinitionAtPosition = (fileName, position) => {
+        const attr = directive(fileName, position);
+        if (attr) return [attr.definition];
         const match = keyword(fileName, position);
         return match ? [match.definition] : service.getDefinitionAtPosition(fileName, position);
       };
       proxy.getDefinitionAndBoundSpan = (fileName, position) => {
+        const attr = directive(fileName, position);
+        if (attr) return { textSpan: attr.span, definitions: [attr.definition] };
         const match = keyword(fileName, position);
         return match
           ? { textSpan: match.span, definitions: [match.definition] }

@@ -28,6 +28,7 @@
     "test:core": "pnpm --filter @zerodep-vue/core test"
   },
   "devDependencies": {
+    "mdn-data": "catalog:",
     "@babel/core": "catalog:",
     "@babel/preset-typescript": "catalog:",
     "@modelcontextprotocol/sdk": "catalog:languageServices",

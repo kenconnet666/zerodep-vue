@@ -1,10 +1,10 @@
-export { useCss, keywords, createTheme } from './css/theme.ts';
+export { createCssContext } from './css/theme.ts';
 export { cx } from './css/composition.ts';
 export { keyframes } from './css/animation.ts';
 export { globalCss } from './css/global.ts';
 export type { Css } from './css/generated/author.ts';
 export { SystemKeywords } from './css/generated/system.ts';
-export type { CssTheme, KeywordView, ThemeSource } from './css/theme.ts';
+export type { CssContext, KeywordView, ThemeSource } from './css/theme.ts';
 export { bx } from './css/bindings.ts';
 export { createCssHost, cssHostKey } from './css/host.ts';
 export { getCssHost } from './css/vnode.ts';

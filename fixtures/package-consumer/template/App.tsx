@@ -1,16 +1,16 @@
 import { ref, shallowRef, Suspense } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import {
-  keywords,
   _component,
   For,
   bx,
-  createTheme,
+  createCssContext,
   SystemKeywords,
   keyframes,
   globalCss,
-  useCss,
 } from '@zerodep-vue/core';
+const { keywords, useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 export class Palette extends SystemKeywords {
@@ -24,7 +24,7 @@ export class Palette extends SystemKeywords {
   }
 }
 export const palettes = { light: new Palette(), dark: new Palette('#93c5fd') };
-export const themedContext = createTheme(palettes.light);
+export const themedContext = createCssContext(palettes.light);
 export const themed = themedContext.useCss();
 export const themedKeywords = themedContext.keywords;
 
@@ -55,7 +55,7 @@ const Async = _component(async () => {
 });
 export const App = _component(() => {
   const currentPalette = shallowRef(palettes.light);
-  const themedContext = createTheme(currentPalette);
+  const themedContext = createCssContext(currentPalette);
   const themed = themedContext.useCss();
   const themedKeywords = themedContext.keywords;
   const text = ref('package-state');

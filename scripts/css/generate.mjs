@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import prettier from 'prettier';
 import docs from './property-docs.json' with { type: 'json' };
+import metadata from 'mdn-data/css/properties.json' with { type: 'json' };
 import { aliases, summaries } from './compat-docs.mjs';
 import { propertyGroup, propertyGroups } from './property-groups.mjs';
 
@@ -13,14 +14,31 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const require = createRequire(resolve(root, 'packages/core/package.json'));
 assert.equal(ts.version, '6.0.3');
 assert.equal(require('csstype/package.json').version, '3.2.3');
+assert.equal(createRequire(import.meta.url)('mdn-data/package.json').version, '2.27.1');
 const filename = require.resolve('csstype/index.d.ts');
-const program = ts.createProgram([filename], {
+const inputFile = resolve(root, 'packages/core/__css-generator-types__.ts');
+const inputSource =
+  "import type * as CSS from 'csstype'; type Input = CSS.Properties<string | number>;";
+const options = {
   target: ts.ScriptTarget.ESNext,
+  moduleResolution: ts.ModuleResolutionKind.Bundler,
+  module: ts.ModuleKind.ESNext,
   noEmit: true,
+  strictNullChecks: true,
   skipLibCheck: true,
-});
+};
+const host = ts.createCompilerHost(options);
+const getSourceFile = host.getSourceFile.bind(host);
+const fileExists = host.fileExists.bind(host);
+host.fileExists = (path) => resolve(path) === inputFile || fileExists(path);
+host.getSourceFile = (path, languageVersion, ...rest) =>
+  resolve(path) === inputFile
+    ? ts.createSourceFile(path, inputSource, languageVersion, true)
+    : getSourceFile(path, languageVersion, ...rest);
+const program = ts.createProgram([filename, inputFile], options, host);
 const checker = program.getTypeChecker();
 const ast = program.getSourceFile(filename);
+const concrete = checker.getTypeAtLocation(program.getSourceFile(inputFile).statements[1]);
 const declaration = ast.statements.find(
   (node) => ts.isInterfaceDeclaration(node) && node.name.text === 'Properties',
 );
@@ -74,6 +92,26 @@ const jsdoc = (text) =>
     .join('\n') +
   '\n */\n';
 
+const initialLabels = {
+  dependsOnUserAgent: '由浏览器决定',
+  seeProse: '见该属性规范的具体规则',
+  noPracticalInitialValue: '无独立的实际初始值',
+  noneButOverriddenInUserAgentCSS: 'none（浏览器默认样式表可能覆盖）',
+  zoomForTheTopLevelNoneForTheRest: '顶层文档为 zoom，其余为 none',
+  startOrNamelessValueIfLTRRightIfRTL: '随书写方向采用起始侧对齐',
+  autoForSmartphoneBrowsersSupportingInflation: '支持文本放大的移动浏览器为 auto',
+};
+function initialValue(value) {
+  if (Array.isArray(value))
+    return value
+      .map((name) => {
+        const initial = metadata[name]?.initial;
+        return `${name}: ${Array.isArray(initial) ? '见其子属性' : (initialLabels[initial] ?? initial ?? '未记录')}`;
+      })
+      .join('；');
+  return initialLabels[value] ?? value;
+}
+
 function description(name) {
   const base = normalize(name);
   const direct = docs.properties[name] ?? summaries[base] ?? docs.properties[base];
@@ -88,7 +126,11 @@ function description(name) {
       ? `兼容属性 ${cssName(name)}；优先参考标准属性${alias ? ' ' + alias : ''}及浏览器支持范围。\n`
       : '';
   const detail = docs.details[name] ?? docs.details[base];
-  const initial = nativeDocs.get(name)?.match(/\*\*Initial value\*\*: `([^`]+)`/)?.[1];
+  const meta =
+    metadata[cssName(name)] ?? metadata[cssName(base)] ?? (alias && metadata[cssName(alias)]);
+  const initial =
+    initialValue(meta?.initial) ??
+    nativeDocs.get(name)?.match(/\*\*Initial value\*\*: `([^`]+)`/)?.[1];
   return (
     compatibility +
     summary +
@@ -99,7 +141,10 @@ function description(name) {
     (detail?.commonValues?.length
       ? '\n\n常用值：' + detail.commonValues.map((value) => `\`${value}\``).join('、') + '。'
       : '') +
-    (initial ? `\n\nCSS 规范初始值：\`${initial}\`，不同于浏览器默认样式表。` : '') +
+    (initial
+      ? `\n\nCSS 规范初始值：${initial}。不同于浏览器默认样式表。`
+      : '\n\n初始值：当前固定数据源未记录，参见该属性规范。') +
+    (meta ? `\n是否继承：${meta.inherited ? '是' : '否'}。` : '') +
     (detail?.examples?.length
       ? '\n' + detail.examples.map((example) => '@example\n' + example).join('\n')
       : '') +
@@ -223,7 +268,9 @@ for (const group of commonGroups) {
 }
 for (const property of properties) {
   const name = property.name;
+  // 字面量取原始泛型，防止 TLength=string 把 auto/颜色等候选折叠掉；数值边界取实际实例化类型。
   const type = checker.getTypeOfSymbolAtLocation(property, property.valueDeclaration);
+  const concreteType = checker.getTypeOfPropertyOfType(concrete, name);
   const values = literalValues(type);
   const color = values.includes('red') && values.includes('blue');
   if (color) colorNames.push(name);
@@ -261,9 +308,26 @@ for (const property of properties) {
         .join('\n')}\n}`,
   );
   // keyof 连接原生字面量声明，同名关键词视图通过同态映射共享这份来源。
+  const scalars = [
+    ...new Set(
+      (concreteType.isUnion() ? concreteType.types : [concreteType])
+        .filter((part) => !checker.isTypeAssignableTo(part, checker.getStringType()))
+        .map((part) => {
+          if (part.flags & ts.TypeFlags.Undefined) return 'undefined';
+          if (part.flags & ts.TypeFlags.NumberLiteral) return String(part.value);
+          assert(
+            checker.isTypeAssignableTo(checker.getNumberType(), part),
+            `Unexpected non-string CSS type: ${name} ${checker.typeToString(part)}`,
+          );
+          return 'number';
+        }),
+    ),
+  ];
+  const known =
+    `readonly ${name}: keyof ${literalName}` + scalars.map((value) => ' | ' + value).join('');
   literalProperties.push(
-    `readonly ${name}: keyof ${literalName} | Exclude<NativeProperties[${JSON.stringify(name)}], string>` +
-      (checker.isTypeAssignableTo(checker.getStringType(), type) ? ' | CssString' : '') +
+    known +
+      (checker.isTypeAssignableTo(checker.getStringType(), concreteType) ? ' | CssString' : '') +
       ';',
   );
   interfaces.push(
@@ -281,7 +345,7 @@ for (const property of properties) {
     .get(propertyGroup(name, svg, obsolete))
     .push(
       comment +
-        `${name}<const Value extends PropertyValue<${JSON.stringify(name)}, T>>(value: Value & CheckedPropertyValue<${JSON.stringify(name)}, T, Value>): this { return this.write(${JSON.stringify(name)}, value); }`,
+        `${name}<const Value>(value: PropertyInput<${JSON.stringify(name)}, T, Value>): this { return this.write(${JSON.stringify(name)}, value); }`,
     );
   viewLines.push(comment + `readonly ${name}: ${typeName}<${JSON.stringify(name)}>;`);
   const runtimeSignature = JSON.stringify(members);
@@ -295,9 +359,9 @@ for (const property of properties) {
 const outputs = {
   'literal-values.ts':
     header +
-    `import type * as CSS from 'csstype';\nimport type { Scalar } from '../bindings.ts';\ntype NativeProperties = CSS.Properties<Scalar>;\n/** 保留字面量候选，同时接收原属性允许的自由 CSS 字符串。 */\ntype CssString = string & {};\n` +
+    `/** 保留字面量候选，同时接收原属性允许的自由 CSS 字符串。 */\ntype CssString = string & {};\n` +
     literalInterfaces.join('\n') +
-    `\n/** 普通字符串作者入口：keyof 与同名关键词视图共享声明、注释和导航来源。 */\nexport interface KeywordValues {\n${literalProperties.join('\n')}\n}\n`,
+    `\n/** 生成时展开非字符串范围，关键词只引用一份说明来源。 */\nexport interface KeywordValues {\n${literalProperties.join('\n')}\n}\n`,
   'system.ts':
     header +
     `import { THEME_SOURCE } from '../tokens.ts';\n` +
@@ -310,7 +374,7 @@ const outputs = {
     `\nexport interface SystemViews {\n${viewLines.join('\n')}\n}\n`,
   'author.ts':
     header +
-    `import type { PropertyValue, CheckedPropertyValue } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\nimport { CssAuthor } from '../author.ts';\n` +
+    `import type { PropertyInput } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\nimport { CssAuthor } from '../author.ts';\n` +
     `/** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */\nexport class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor<T> {\n${propertyGroups.map(([name]) => groups.get(name).join('\n')).join('\n')}\n}\n`,
   'keywords.ts':
     header +

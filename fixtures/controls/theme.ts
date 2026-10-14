@@ -1,8 +1,13 @@
-import { createTheme, SystemKeywords } from '@zerodep-vue/core';
+import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
 
 /** 私有验证主题，覆盖控件共享颜色及区域替换，不作为产品主题 API 发布。 */
 export class ControlTheme extends SystemKeywords {
-  override readonly color: { _brand: string; _hover: string };
+  override readonly color: {
+    /** 控件主色；默认 rgb(37, 99, 235)，用于实心背景和描边。 */
+    _brand: string;
+    /** 悬停背景色；默认 rgb(29, 78, 216)。 */
+    _hover: string;
+  };
 
   constructor(brand = 'rgb(37, 99, 235)', hover = 'rgb(29, 78, 216)') {
     super();
@@ -10,10 +15,5 @@ export class ControlTheme extends SystemKeywords {
   }
 }
 
-export const controlTheme = createTheme(new ControlTheme());
-export const keywords = controlTheme.keywords;
-
-/** 由应用主题模块封装，组件只导入自己的 useCss，不关心底层上下文对象。 */
-export function useCss() {
-  return controlTheme.useCss();
-}
+/** 应用在主题模块直接导出已绑定的入口，组件不依赖底层上下文对象。 */
+export const { useCss, provideTheme, keywords } = createCssContext(new ControlTheme());

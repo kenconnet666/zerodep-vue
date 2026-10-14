@@ -1,7 +1,15 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createSSRApp, ref } from 'vue';
-import { createCssHost, getCssHost, keyframes, globalCss, useCss, cx } from '../../src/index.ts';
+import {
+  createCssHost,
+  getCssHost,
+  keyframes,
+  globalCss,
+  cx,
+  createCssContext,
+  SystemKeywords,
+} from '../../src/index.ts';
 import { renderToString } from '@vue/server-renderer';
 import { binding } from '../../src/css/bindings.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
@@ -12,6 +20,9 @@ import {
   traceGlobal,
 } from '../../src/development/inspector.ts';
 import { inspectionHooks } from '../../src/css/inspection-hooks.ts';
+
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 const source = (line, kind = 'class') => ({ file: '/project/App.tsx', line, column: 3, kind });

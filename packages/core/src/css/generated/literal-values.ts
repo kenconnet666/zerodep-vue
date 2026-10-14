@@ -1,7 +1,4 @@
 // 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
-import type * as CSS from 'csstype';
-import type { Scalar } from '../bindings.ts';
-type NativeProperties = CSS.Properties<Scalar>;
 /** 保留字面量候选，同时接收原属性允许的自由 CSS 字符串。 */
 type CssString = string & {};
 export interface CssWideValues {
@@ -20044,2180 +20041,922 @@ export interface ZoomValues extends CssWideValues {
    */
   readonly reset: 'reset';
 }
-/** 普通字符串作者入口：keyof 与同名关键词视图共享声明、注释和导航来源。 */
+/** 生成时展开非字符串范围，关键词只引用一份说明来源。 */
 export interface KeywordValues {
-  readonly accentColor:
-    keyof AccentColorValues | Exclude<NativeProperties['accentColor'], string> | CssString;
-  readonly alignContent:
-    keyof AlignContentValues | Exclude<NativeProperties['alignContent'], string> | CssString;
-  readonly alignItems:
-    keyof AlignItemsValues | Exclude<NativeProperties['alignItems'], string> | CssString;
-  readonly alignmentBaseline:
-    keyof AlignmentBaselineValues | Exclude<NativeProperties['alignmentBaseline'], string>;
-  readonly alignSelf:
-    keyof AlignSelfValues | Exclude<NativeProperties['alignSelf'], string> | CssString;
-  readonly alignTracks:
-    keyof AlignTracksValues | Exclude<NativeProperties['alignTracks'], string> | CssString;
-  readonly all: keyof AllValues | Exclude<NativeProperties['all'], string>;
-  readonly anchorName:
-    keyof AnchorNameValues | Exclude<NativeProperties['anchorName'], string> | CssString;
-  readonly anchorScope:
-    keyof AnchorScopeValues | Exclude<NativeProperties['anchorScope'], string> | CssString;
-  readonly animation:
-    keyof AnimationValues | Exclude<NativeProperties['animation'], string> | CssString;
-  readonly animationComposition:
-    | keyof AnimationCompositionValues
-    | Exclude<NativeProperties['animationComposition'], string>
-    | CssString;
-  readonly animationDelay:
-    keyof AnimationDelayValues | Exclude<NativeProperties['animationDelay'], string> | CssString;
-  readonly animationDirection:
-    | keyof AnimationDirectionValues
-    | Exclude<NativeProperties['animationDirection'], string>
-    | CssString;
-  readonly animationDuration:
-    | keyof AnimationDurationValues
-    | Exclude<NativeProperties['animationDuration'], string>
-    | CssString;
-  readonly animationFillMode:
-    | keyof AnimationFillModeValues
-    | Exclude<NativeProperties['animationFillMode'], string>
-    | CssString;
+  readonly accentColor: keyof AccentColorValues | undefined | CssString;
+  readonly alignContent: keyof AlignContentValues | undefined | CssString;
+  readonly alignItems: keyof AlignItemsValues | undefined | CssString;
+  readonly alignmentBaseline: keyof AlignmentBaselineValues | undefined;
+  readonly alignSelf: keyof AlignSelfValues | undefined | CssString;
+  readonly alignTracks: keyof AlignTracksValues | undefined | CssString;
+  readonly all: keyof AllValues | undefined;
+  readonly anchorName: keyof AnchorNameValues | undefined | CssString;
+  readonly anchorScope: keyof AnchorScopeValues | undefined | CssString;
+  readonly animation: keyof AnimationValues | undefined | number | CssString;
+  readonly animationComposition: keyof AnimationCompositionValues | undefined | CssString;
+  readonly animationDelay: keyof AnimationDelayValues | undefined | CssString;
+  readonly animationDirection: keyof AnimationDirectionValues | undefined | CssString;
+  readonly animationDuration: keyof AnimationDurationValues | undefined | CssString;
+  readonly animationFillMode: keyof AnimationFillModeValues | undefined | CssString;
   readonly animationIterationCount:
-    | keyof AnimationIterationCountValues
-    | Exclude<NativeProperties['animationIterationCount'], string>
-    | CssString;
-  readonly animationName:
-    keyof AnimationNameValues | Exclude<NativeProperties['animationName'], string> | CssString;
-  readonly animationPlayState:
-    | keyof AnimationPlayStateValues
-    | Exclude<NativeProperties['animationPlayState'], string>
-    | CssString;
-  readonly animationRange:
-    keyof AnimationRangeValues | Exclude<NativeProperties['animationRange'], string> | CssString;
-  readonly animationRangeEnd:
-    | keyof AnimationRangeEndValues
-    | Exclude<NativeProperties['animationRangeEnd'], string>
-    | CssString;
-  readonly animationRangeStart:
-    | keyof AnimationRangeStartValues
-    | Exclude<NativeProperties['animationRangeStart'], string>
-    | CssString;
-  readonly animationTimeline:
-    | keyof AnimationTimelineValues
-    | Exclude<NativeProperties['animationTimeline'], string>
-    | CssString;
-  readonly animationTimingFunction:
-    | keyof AnimationTimingFunctionValues
-    | Exclude<NativeProperties['animationTimingFunction'], string>
-    | CssString;
-  readonly appearance: keyof AppearanceValues | Exclude<NativeProperties['appearance'], string>;
-  readonly aspectRatio:
-    keyof AspectRatioValues | Exclude<NativeProperties['aspectRatio'], string> | CssString;
-  readonly backdropFilter:
-    keyof BackdropFilterValues | Exclude<NativeProperties['backdropFilter'], string> | CssString;
-  readonly backfaceVisibility:
-    keyof BackfaceVisibilityValues | Exclude<NativeProperties['backfaceVisibility'], string>;
-  readonly background:
-    keyof BackgroundValues | Exclude<NativeProperties['background'], string> | CssString;
-  readonly backgroundAttachment:
-    | keyof BackgroundAttachmentValues
-    | Exclude<NativeProperties['backgroundAttachment'], string>
-    | CssString;
-  readonly backgroundBlendMode:
-    | keyof BackgroundBlendModeValues
-    | Exclude<NativeProperties['backgroundBlendMode'], string>
-    | CssString;
-  readonly backgroundClip:
-    keyof BackgroundClipValues | Exclude<NativeProperties['backgroundClip'], string> | CssString;
-  readonly backgroundColor:
-    keyof BackgroundColorValues | Exclude<NativeProperties['backgroundColor'], string> | CssString;
-  readonly backgroundImage:
-    keyof BackgroundImageValues | Exclude<NativeProperties['backgroundImage'], string> | CssString;
-  readonly backgroundOrigin:
-    | keyof BackgroundOriginValues
-    | Exclude<NativeProperties['backgroundOrigin'], string>
-    | CssString;
-  readonly backgroundPosition:
-    | keyof BackgroundPositionValues
-    | Exclude<NativeProperties['backgroundPosition'], string>
-    | CssString;
-  readonly backgroundPositionX:
-    | keyof BackgroundPositionXValues
-    | Exclude<NativeProperties['backgroundPositionX'], string>
-    | CssString;
-  readonly backgroundPositionY:
-    | keyof BackgroundPositionYValues
-    | Exclude<NativeProperties['backgroundPositionY'], string>
-    | CssString;
-  readonly backgroundRepeat:
-    | keyof BackgroundRepeatValues
-    | Exclude<NativeProperties['backgroundRepeat'], string>
-    | CssString;
-  readonly backgroundSize:
-    keyof BackgroundSizeValues | Exclude<NativeProperties['backgroundSize'], string> | CssString;
-  readonly baselineShift:
-    keyof BaselineShiftValues | Exclude<NativeProperties['baselineShift'], string> | CssString;
-  readonly blockSize:
-    keyof BlockSizeValues | Exclude<NativeProperties['blockSize'], string> | CssString;
-  readonly border: keyof BorderValues | Exclude<NativeProperties['border'], string> | CssString;
-  readonly borderBlock:
-    keyof BorderBlockValues | Exclude<NativeProperties['borderBlock'], string> | CssString;
-  readonly borderBlockColor:
-    | keyof BorderBlockColorValues
-    | Exclude<NativeProperties['borderBlockColor'], string>
-    | CssString;
-  readonly borderBlockEnd:
-    keyof BorderBlockEndValues | Exclude<NativeProperties['borderBlockEnd'], string> | CssString;
-  readonly borderBlockEndColor:
-    | keyof BorderBlockEndColorValues
-    | Exclude<NativeProperties['borderBlockEndColor'], string>
-    | CssString;
-  readonly borderBlockEndStyle:
-    keyof BorderBlockEndStyleValues | Exclude<NativeProperties['borderBlockEndStyle'], string>;
-  readonly borderBlockEndWidth:
-    keyof BorderBlockEndWidthValues | Exclude<NativeProperties['borderBlockEndWidth'], string>;
-  readonly borderBlockStart:
-    | keyof BorderBlockStartValues
-    | Exclude<NativeProperties['borderBlockStart'], string>
-    | CssString;
-  readonly borderBlockStartColor:
-    | keyof BorderBlockStartColorValues
-    | Exclude<NativeProperties['borderBlockStartColor'], string>
-    | CssString;
-  readonly borderBlockStartStyle:
-    keyof BorderBlockStartStyleValues | Exclude<NativeProperties['borderBlockStartStyle'], string>;
+    keyof AnimationIterationCountValues | undefined | number | CssString;
+  readonly animationName: keyof AnimationNameValues | undefined | CssString;
+  readonly animationPlayState: keyof AnimationPlayStateValues | undefined | CssString;
+  readonly animationRange: keyof AnimationRangeValues | undefined | number | CssString;
+  readonly animationRangeEnd: keyof AnimationRangeEndValues | undefined | number | CssString;
+  readonly animationRangeStart: keyof AnimationRangeStartValues | undefined | number | CssString;
+  readonly animationTimeline: keyof AnimationTimelineValues | undefined | CssString;
+  readonly animationTimingFunction: keyof AnimationTimingFunctionValues | undefined | CssString;
+  readonly appearance: keyof AppearanceValues | undefined;
+  readonly aspectRatio: keyof AspectRatioValues | undefined | number | CssString;
+  readonly backdropFilter: keyof BackdropFilterValues | undefined | CssString;
+  readonly backfaceVisibility: keyof BackfaceVisibilityValues | undefined;
+  readonly background: keyof BackgroundValues | undefined | number | CssString;
+  readonly backgroundAttachment: keyof BackgroundAttachmentValues | undefined | CssString;
+  readonly backgroundBlendMode: keyof BackgroundBlendModeValues | undefined | CssString;
+  readonly backgroundClip: keyof BackgroundClipValues | undefined | CssString;
+  readonly backgroundColor: keyof BackgroundColorValues | undefined | CssString;
+  readonly backgroundImage: keyof BackgroundImageValues | undefined | CssString;
+  readonly backgroundOrigin: keyof BackgroundOriginValues | undefined | CssString;
+  readonly backgroundPosition: keyof BackgroundPositionValues | undefined | number | CssString;
+  readonly backgroundPositionX: keyof BackgroundPositionXValues | undefined | number | CssString;
+  readonly backgroundPositionY: keyof BackgroundPositionYValues | undefined | number | CssString;
+  readonly backgroundRepeat: keyof BackgroundRepeatValues | undefined | CssString;
+  readonly backgroundSize: keyof BackgroundSizeValues | undefined | number | CssString;
+  readonly baselineShift: keyof BaselineShiftValues | undefined | number | CssString;
+  readonly blockSize: keyof BlockSizeValues | undefined | number | CssString;
+  readonly border: keyof BorderValues | undefined | number | CssString;
+  readonly borderBlock: keyof BorderBlockValues | undefined | number | CssString;
+  readonly borderBlockColor: keyof BorderBlockColorValues | undefined | CssString;
+  readonly borderBlockEnd: keyof BorderBlockEndValues | undefined | number | CssString;
+  readonly borderBlockEndColor: keyof BorderBlockEndColorValues | undefined | CssString;
+  readonly borderBlockEndStyle: keyof BorderBlockEndStyleValues | undefined;
+  readonly borderBlockEndWidth: keyof BorderBlockEndWidthValues | undefined | number | CssString;
+  readonly borderBlockStart: keyof BorderBlockStartValues | undefined | number | CssString;
+  readonly borderBlockStartColor: keyof BorderBlockStartColorValues | undefined | CssString;
+  readonly borderBlockStartStyle: keyof BorderBlockStartStyleValues | undefined;
   readonly borderBlockStartWidth:
-    keyof BorderBlockStartWidthValues | Exclude<NativeProperties['borderBlockStartWidth'], string>;
-  readonly borderBlockStyle:
-    | keyof BorderBlockStyleValues
-    | Exclude<NativeProperties['borderBlockStyle'], string>
-    | CssString;
-  readonly borderBlockWidth:
-    | keyof BorderBlockWidthValues
-    | Exclude<NativeProperties['borderBlockWidth'], string>
-    | CssString;
-  readonly borderBottom:
-    keyof BorderBottomValues | Exclude<NativeProperties['borderBottom'], string> | CssString;
-  readonly borderBottomColor:
-    | keyof BorderBottomColorValues
-    | Exclude<NativeProperties['borderBottomColor'], string>
-    | CssString;
+    keyof BorderBlockStartWidthValues | undefined | number | CssString;
+  readonly borderBlockStyle: keyof BorderBlockStyleValues | undefined | CssString;
+  readonly borderBlockWidth: keyof BorderBlockWidthValues | undefined | number | CssString;
+  readonly borderBottom: keyof BorderBottomValues | undefined | number | CssString;
+  readonly borderBottomColor: keyof BorderBottomColorValues | undefined | CssString;
   readonly borderBottomLeftRadius:
-    | keyof BorderBottomLeftRadiusValues
-    | Exclude<NativeProperties['borderBottomLeftRadius'], string>
-    | CssString;
+    keyof BorderBottomLeftRadiusValues | undefined | number | CssString;
   readonly borderBottomRightRadius:
-    | keyof BorderBottomRightRadiusValues
-    | Exclude<NativeProperties['borderBottomRightRadius'], string>
-    | CssString;
-  readonly borderBottomStyle:
-    keyof BorderBottomStyleValues | Exclude<NativeProperties['borderBottomStyle'], string>;
-  readonly borderBottomWidth:
-    keyof BorderBottomWidthValues | Exclude<NativeProperties['borderBottomWidth'], string>;
-  readonly borderCollapse:
-    keyof BorderCollapseValues | Exclude<NativeProperties['borderCollapse'], string>;
-  readonly borderColor:
-    keyof BorderColorValues | Exclude<NativeProperties['borderColor'], string> | CssString;
-  readonly borderEndEndRadius:
-    | keyof BorderEndEndRadiusValues
-    | Exclude<NativeProperties['borderEndEndRadius'], string>
-    | CssString;
-  readonly borderEndStartRadius:
-    | keyof BorderEndStartRadiusValues
-    | Exclude<NativeProperties['borderEndStartRadius'], string>
-    | CssString;
-  readonly borderImage:
-    keyof BorderImageValues | Exclude<NativeProperties['borderImage'], string> | CssString;
-  readonly borderImageOutset:
-    | keyof BorderImageOutsetValues
-    | Exclude<NativeProperties['borderImageOutset'], string>
-    | CssString;
-  readonly borderImageRepeat:
-    | keyof BorderImageRepeatValues
-    | Exclude<NativeProperties['borderImageRepeat'], string>
-    | CssString;
-  readonly borderImageSlice:
-    | keyof BorderImageSliceValues
-    | Exclude<NativeProperties['borderImageSlice'], string>
-    | CssString;
-  readonly borderImageSource:
-    | keyof BorderImageSourceValues
-    | Exclude<NativeProperties['borderImageSource'], string>
-    | CssString;
-  readonly borderImageWidth:
-    | keyof BorderImageWidthValues
-    | Exclude<NativeProperties['borderImageWidth'], string>
-    | CssString;
-  readonly borderInline:
-    keyof BorderInlineValues | Exclude<NativeProperties['borderInline'], string> | CssString;
-  readonly borderInlineColor:
-    | keyof BorderInlineColorValues
-    | Exclude<NativeProperties['borderInlineColor'], string>
-    | CssString;
-  readonly borderInlineEnd:
-    keyof BorderInlineEndValues | Exclude<NativeProperties['borderInlineEnd'], string> | CssString;
-  readonly borderInlineEndColor:
-    | keyof BorderInlineEndColorValues
-    | Exclude<NativeProperties['borderInlineEndColor'], string>
-    | CssString;
-  readonly borderInlineEndStyle:
-    keyof BorderInlineEndStyleValues | Exclude<NativeProperties['borderInlineEndStyle'], string>;
-  readonly borderInlineEndWidth:
-    keyof BorderInlineEndWidthValues | Exclude<NativeProperties['borderInlineEndWidth'], string>;
-  readonly borderInlineStart:
-    | keyof BorderInlineStartValues
-    | Exclude<NativeProperties['borderInlineStart'], string>
-    | CssString;
-  readonly borderInlineStartColor:
-    | keyof BorderInlineStartColorValues
-    | Exclude<NativeProperties['borderInlineStartColor'], string>
-    | CssString;
-  readonly borderInlineStartStyle:
-    | keyof BorderInlineStartStyleValues
-    | Exclude<NativeProperties['borderInlineStartStyle'], string>;
+    keyof BorderBottomRightRadiusValues | undefined | number | CssString;
+  readonly borderBottomStyle: keyof BorderBottomStyleValues | undefined;
+  readonly borderBottomWidth: keyof BorderBottomWidthValues | undefined | number | CssString;
+  readonly borderCollapse: keyof BorderCollapseValues | undefined;
+  readonly borderColor: keyof BorderColorValues | undefined | CssString;
+  readonly borderEndEndRadius: keyof BorderEndEndRadiusValues | undefined | number | CssString;
+  readonly borderEndStartRadius: keyof BorderEndStartRadiusValues | undefined | number | CssString;
+  readonly borderImage: keyof BorderImageValues | undefined | number | CssString;
+  readonly borderImageOutset: keyof BorderImageOutsetValues | undefined | number | CssString;
+  readonly borderImageRepeat: keyof BorderImageRepeatValues | undefined | CssString;
+  readonly borderImageSlice: keyof BorderImageSliceValues | undefined | number | CssString;
+  readonly borderImageSource: keyof BorderImageSourceValues | undefined | CssString;
+  readonly borderImageWidth: keyof BorderImageWidthValues | undefined | number | CssString;
+  readonly borderInline: keyof BorderInlineValues | undefined | number | CssString;
+  readonly borderInlineColor: keyof BorderInlineColorValues | undefined | CssString;
+  readonly borderInlineEnd: keyof BorderInlineEndValues | undefined | number | CssString;
+  readonly borderInlineEndColor: keyof BorderInlineEndColorValues | undefined | CssString;
+  readonly borderInlineEndStyle: keyof BorderInlineEndStyleValues | undefined;
+  readonly borderInlineEndWidth: keyof BorderInlineEndWidthValues | undefined | number | CssString;
+  readonly borderInlineStart: keyof BorderInlineStartValues | undefined | number | CssString;
+  readonly borderInlineStartColor: keyof BorderInlineStartColorValues | undefined | CssString;
+  readonly borderInlineStartStyle: keyof BorderInlineStartStyleValues | undefined;
   readonly borderInlineStartWidth:
-    | keyof BorderInlineStartWidthValues
-    | Exclude<NativeProperties['borderInlineStartWidth'], string>;
-  readonly borderInlineStyle:
-    | keyof BorderInlineStyleValues
-    | Exclude<NativeProperties['borderInlineStyle'], string>
-    | CssString;
-  readonly borderInlineWidth:
-    | keyof BorderInlineWidthValues
-    | Exclude<NativeProperties['borderInlineWidth'], string>
-    | CssString;
-  readonly borderLeft:
-    keyof BorderLeftValues | Exclude<NativeProperties['borderLeft'], string> | CssString;
-  readonly borderLeftColor:
-    keyof BorderLeftColorValues | Exclude<NativeProperties['borderLeftColor'], string> | CssString;
-  readonly borderLeftStyle:
-    keyof BorderLeftStyleValues | Exclude<NativeProperties['borderLeftStyle'], string>;
-  readonly borderLeftWidth:
-    keyof BorderLeftWidthValues | Exclude<NativeProperties['borderLeftWidth'], string>;
-  readonly borderRadius:
-    keyof BorderRadiusValues | Exclude<NativeProperties['borderRadius'], string> | CssString;
-  readonly borderRight:
-    keyof BorderRightValues | Exclude<NativeProperties['borderRight'], string> | CssString;
-  readonly borderRightColor:
-    | keyof BorderRightColorValues
-    | Exclude<NativeProperties['borderRightColor'], string>
-    | CssString;
-  readonly borderRightStyle:
-    keyof BorderRightStyleValues | Exclude<NativeProperties['borderRightStyle'], string>;
-  readonly borderRightWidth:
-    keyof BorderRightWidthValues | Exclude<NativeProperties['borderRightWidth'], string>;
-  readonly borderSpacing:
-    keyof BorderSpacingValues | Exclude<NativeProperties['borderSpacing'], string> | CssString;
-  readonly borderStartEndRadius:
-    | keyof BorderStartEndRadiusValues
-    | Exclude<NativeProperties['borderStartEndRadius'], string>
-    | CssString;
+    keyof BorderInlineStartWidthValues | undefined | number | CssString;
+  readonly borderInlineStyle: keyof BorderInlineStyleValues | undefined | CssString;
+  readonly borderInlineWidth: keyof BorderInlineWidthValues | undefined | number | CssString;
+  readonly borderLeft: keyof BorderLeftValues | undefined | number | CssString;
+  readonly borderLeftColor: keyof BorderLeftColorValues | undefined | CssString;
+  readonly borderLeftStyle: keyof BorderLeftStyleValues | undefined;
+  readonly borderLeftWidth: keyof BorderLeftWidthValues | undefined | number | CssString;
+  readonly borderRadius: keyof BorderRadiusValues | undefined | number | CssString;
+  readonly borderRight: keyof BorderRightValues | undefined | number | CssString;
+  readonly borderRightColor: keyof BorderRightColorValues | undefined | CssString;
+  readonly borderRightStyle: keyof BorderRightStyleValues | undefined;
+  readonly borderRightWidth: keyof BorderRightWidthValues | undefined | number | CssString;
+  readonly borderSpacing: keyof BorderSpacingValues | undefined | number | CssString;
+  readonly borderStartEndRadius: keyof BorderStartEndRadiusValues | undefined | number | CssString;
   readonly borderStartStartRadius:
-    | keyof BorderStartStartRadiusValues
-    | Exclude<NativeProperties['borderStartStartRadius'], string>
-    | CssString;
-  readonly borderStyle:
-    keyof BorderStyleValues | Exclude<NativeProperties['borderStyle'], string> | CssString;
-  readonly borderTop:
-    keyof BorderTopValues | Exclude<NativeProperties['borderTop'], string> | CssString;
-  readonly borderTopColor:
-    keyof BorderTopColorValues | Exclude<NativeProperties['borderTopColor'], string> | CssString;
-  readonly borderTopLeftRadius:
-    | keyof BorderTopLeftRadiusValues
-    | Exclude<NativeProperties['borderTopLeftRadius'], string>
-    | CssString;
-  readonly borderTopRightRadius:
-    | keyof BorderTopRightRadiusValues
-    | Exclude<NativeProperties['borderTopRightRadius'], string>
-    | CssString;
-  readonly borderTopStyle:
-    keyof BorderTopStyleValues | Exclude<NativeProperties['borderTopStyle'], string>;
-  readonly borderTopWidth:
-    keyof BorderTopWidthValues | Exclude<NativeProperties['borderTopWidth'], string>;
-  readonly borderWidth:
-    keyof BorderWidthValues | Exclude<NativeProperties['borderWidth'], string> | CssString;
-  readonly bottom: keyof BottomValues | Exclude<NativeProperties['bottom'], string> | CssString;
-  readonly boxAlign: keyof BoxAlignValues | Exclude<NativeProperties['boxAlign'], string>;
-  readonly boxDecorationBreak:
-    keyof BoxDecorationBreakValues | Exclude<NativeProperties['boxDecorationBreak'], string>;
-  readonly boxDirection:
-    keyof BoxDirectionValues | Exclude<NativeProperties['boxDirection'], string>;
-  readonly boxFlex: keyof BoxFlexValues | Exclude<NativeProperties['boxFlex'], string> | CssString;
-  readonly boxFlexGroup:
-    keyof BoxFlexGroupValues | Exclude<NativeProperties['boxFlexGroup'], string> | CssString;
-  readonly boxLines: keyof BoxLinesValues | Exclude<NativeProperties['boxLines'], string>;
-  readonly boxOrdinalGroup:
-    keyof BoxOrdinalGroupValues | Exclude<NativeProperties['boxOrdinalGroup'], string> | CssString;
-  readonly boxOrient: keyof BoxOrientValues | Exclude<NativeProperties['boxOrient'], string>;
-  readonly boxPack: keyof BoxPackValues | Exclude<NativeProperties['boxPack'], string>;
-  readonly boxShadow:
-    keyof BoxShadowValues | Exclude<NativeProperties['boxShadow'], string> | CssString;
-  readonly boxSizing: keyof BoxSizingValues | Exclude<NativeProperties['boxSizing'], string>;
-  readonly breakAfter: keyof BreakAfterValues | Exclude<NativeProperties['breakAfter'], string>;
-  readonly breakBefore: keyof BreakBeforeValues | Exclude<NativeProperties['breakBefore'], string>;
-  readonly breakInside: keyof BreakInsideValues | Exclude<NativeProperties['breakInside'], string>;
-  readonly captionSide: keyof CaptionSideValues | Exclude<NativeProperties['captionSide'], string>;
-  readonly caret: keyof CaretValues | Exclude<NativeProperties['caret'], string> | CssString;
-  readonly caretColor:
-    keyof CaretColorValues | Exclude<NativeProperties['caretColor'], string> | CssString;
-  readonly caretShape: keyof CaretShapeValues | Exclude<NativeProperties['caretShape'], string>;
-  readonly clear: keyof ClearValues | Exclude<NativeProperties['clear'], string>;
-  readonly clip: keyof ClipValues | Exclude<NativeProperties['clip'], string> | CssString;
-  readonly clipPath:
-    keyof ClipPathValues | Exclude<NativeProperties['clipPath'], string> | CssString;
-  readonly clipRule: keyof ClipRuleValues | Exclude<NativeProperties['clipRule'], string>;
-  readonly color: keyof ColorValues | Exclude<NativeProperties['color'], string> | CssString;
-  readonly colorAdjust: keyof ColorAdjustValues | Exclude<NativeProperties['colorAdjust'], string>;
-  readonly colorInterpolation:
-    keyof ColorInterpolationValues | Exclude<NativeProperties['colorInterpolation'], string>;
-  readonly colorInterpolationFilters:
-    | keyof ColorInterpolationFiltersValues
-    | Exclude<NativeProperties['colorInterpolationFilters'], string>;
-  readonly colorRendering:
-    keyof ColorRenderingValues | Exclude<NativeProperties['colorRendering'], string>;
-  readonly colorScheme:
-    keyof ColorSchemeValues | Exclude<NativeProperties['colorScheme'], string> | CssString;
-  readonly columnCount:
-    keyof ColumnCountValues | Exclude<NativeProperties['columnCount'], string> | CssString;
-  readonly columnFill: keyof ColumnFillValues | Exclude<NativeProperties['columnFill'], string>;
-  readonly columnGap:
-    keyof ColumnGapValues | Exclude<NativeProperties['columnGap'], string> | CssString;
-  readonly columnRule:
-    keyof ColumnRuleValues | Exclude<NativeProperties['columnRule'], string> | CssString;
-  readonly columnRuleColor:
-    keyof ColumnRuleColorValues | Exclude<NativeProperties['columnRuleColor'], string> | CssString;
-  readonly columnRuleStyle:
-    keyof ColumnRuleStyleValues | Exclude<NativeProperties['columnRuleStyle'], string> | CssString;
-  readonly columnRuleWidth:
-    keyof ColumnRuleWidthValues | Exclude<NativeProperties['columnRuleWidth'], string> | CssString;
-  readonly columns: keyof ColumnsValues | Exclude<NativeProperties['columns'], string> | CssString;
-  readonly columnSpan: keyof ColumnSpanValues | Exclude<NativeProperties['columnSpan'], string>;
-  readonly columnWidth: keyof ColumnWidthValues | Exclude<NativeProperties['columnWidth'], string>;
-  readonly contain: keyof ContainValues | Exclude<NativeProperties['contain'], string> | CssString;
-  readonly container:
-    keyof ContainerValues | Exclude<NativeProperties['container'], string> | CssString;
-  readonly containerName:
-    keyof ContainerNameValues | Exclude<NativeProperties['containerName'], string> | CssString;
-  readonly containerType:
-    keyof ContainerTypeValues | Exclude<NativeProperties['containerType'], string> | CssString;
+    keyof BorderStartStartRadiusValues | undefined | number | CssString;
+  readonly borderStyle: keyof BorderStyleValues | undefined | CssString;
+  readonly borderTop: keyof BorderTopValues | undefined | number | CssString;
+  readonly borderTopColor: keyof BorderTopColorValues | undefined | CssString;
+  readonly borderTopLeftRadius: keyof BorderTopLeftRadiusValues | undefined | number | CssString;
+  readonly borderTopRightRadius: keyof BorderTopRightRadiusValues | undefined | number | CssString;
+  readonly borderTopStyle: keyof BorderTopStyleValues | undefined;
+  readonly borderTopWidth: keyof BorderTopWidthValues | undefined | number | CssString;
+  readonly borderWidth: keyof BorderWidthValues | undefined | number | CssString;
+  readonly bottom: keyof BottomValues | undefined | number | CssString;
+  readonly boxAlign: keyof BoxAlignValues | undefined;
+  readonly boxDecorationBreak: keyof BoxDecorationBreakValues | undefined;
+  readonly boxDirection: keyof BoxDirectionValues | undefined;
+  readonly boxFlex: keyof BoxFlexValues | undefined | number | CssString;
+  readonly boxFlexGroup: keyof BoxFlexGroupValues | undefined | number | CssString;
+  readonly boxLines: keyof BoxLinesValues | undefined;
+  readonly boxOrdinalGroup: keyof BoxOrdinalGroupValues | undefined | number | CssString;
+  readonly boxOrient: keyof BoxOrientValues | undefined;
+  readonly boxPack: keyof BoxPackValues | undefined;
+  readonly boxShadow: keyof BoxShadowValues | undefined | CssString;
+  readonly boxSizing: keyof BoxSizingValues | undefined;
+  readonly breakAfter: keyof BreakAfterValues | undefined;
+  readonly breakBefore: keyof BreakBeforeValues | undefined;
+  readonly breakInside: keyof BreakInsideValues | undefined;
+  readonly captionSide: keyof CaptionSideValues | undefined;
+  readonly caret: keyof CaretValues | undefined | CssString;
+  readonly caretColor: keyof CaretColorValues | undefined | CssString;
+  readonly caretShape: keyof CaretShapeValues | undefined;
+  readonly clear: keyof ClearValues | undefined;
+  readonly clip: keyof ClipValues | undefined | CssString;
+  readonly clipPath: keyof ClipPathValues | undefined | CssString;
+  readonly clipRule: keyof ClipRuleValues | undefined;
+  readonly color: keyof ColorValues | undefined | CssString;
+  readonly colorAdjust: keyof ColorAdjustValues | undefined;
+  readonly colorInterpolation: keyof ColorInterpolationValues | undefined;
+  readonly colorInterpolationFilters: keyof ColorInterpolationFiltersValues | undefined;
+  readonly colorRendering: keyof ColorRenderingValues | undefined;
+  readonly colorScheme: keyof ColorSchemeValues | undefined | CssString;
+  readonly columnCount: keyof ColumnCountValues | undefined | number | CssString;
+  readonly columnFill: keyof ColumnFillValues | undefined;
+  readonly columnGap: keyof ColumnGapValues | undefined | number | CssString;
+  readonly columnRule: keyof ColumnRuleValues | undefined | number | CssString;
+  readonly columnRuleColor: keyof ColumnRuleColorValues | undefined | CssString;
+  readonly columnRuleStyle: keyof ColumnRuleStyleValues | undefined | CssString;
+  readonly columnRuleWidth: keyof ColumnRuleWidthValues | undefined | number | CssString;
+  readonly columns: keyof ColumnsValues | undefined | number | CssString;
+  readonly columnSpan: keyof ColumnSpanValues | undefined;
+  readonly columnWidth: keyof ColumnWidthValues | undefined | number | CssString;
+  readonly contain: keyof ContainValues | undefined | CssString;
+  readonly container: keyof ContainerValues | undefined | CssString;
+  readonly containerName: keyof ContainerNameValues | undefined | CssString;
+  readonly containerType: keyof ContainerTypeValues | undefined | CssString;
   readonly containIntrinsicBlockSize:
-    | keyof ContainIntrinsicBlockSizeValues
-    | Exclude<NativeProperties['containIntrinsicBlockSize'], string>
-    | CssString;
+    keyof ContainIntrinsicBlockSizeValues | undefined | number | CssString;
   readonly containIntrinsicHeight:
-    | keyof ContainIntrinsicHeightValues
-    | Exclude<NativeProperties['containIntrinsicHeight'], string>
-    | CssString;
+    keyof ContainIntrinsicHeightValues | undefined | number | CssString;
   readonly containIntrinsicInlineSize:
-    | keyof ContainIntrinsicInlineSizeValues
-    | Exclude<NativeProperties['containIntrinsicInlineSize'], string>
-    | CssString;
-  readonly containIntrinsicSize:
-    | keyof ContainIntrinsicSizeValues
-    | Exclude<NativeProperties['containIntrinsicSize'], string>
-    | CssString;
+    keyof ContainIntrinsicInlineSizeValues | undefined | number | CssString;
+  readonly containIntrinsicSize: keyof ContainIntrinsicSizeValues | undefined | number | CssString;
   readonly containIntrinsicWidth:
-    | keyof ContainIntrinsicWidthValues
-    | Exclude<NativeProperties['containIntrinsicWidth'], string>
-    | CssString;
-  readonly content: keyof ContentValues | Exclude<NativeProperties['content'], string> | CssString;
-  readonly contentVisibility:
-    keyof ContentVisibilityValues | Exclude<NativeProperties['contentVisibility'], string>;
-  readonly counterIncrement:
-    | keyof CounterIncrementValues
-    | Exclude<NativeProperties['counterIncrement'], string>
-    | CssString;
-  readonly counterReset:
-    keyof CounterResetValues | Exclude<NativeProperties['counterReset'], string> | CssString;
-  readonly counterSet:
-    keyof CounterSetValues | Exclude<NativeProperties['counterSet'], string> | CssString;
-  readonly cursor: keyof CursorValues | Exclude<NativeProperties['cursor'], string> | CssString;
-  readonly cx: keyof CxValues | Exclude<NativeProperties['cx'], string> | CssString;
-  readonly cy: keyof CyValues | Exclude<NativeProperties['cy'], string> | CssString;
-  readonly d: keyof DValues | Exclude<NativeProperties['d'], string> | CssString;
-  readonly direction: keyof DirectionValues | Exclude<NativeProperties['direction'], string>;
-  readonly display: keyof DisplayValues | Exclude<NativeProperties['display'], string> | CssString;
-  readonly dominantBaseline:
-    keyof DominantBaselineValues | Exclude<NativeProperties['dominantBaseline'], string>;
-  readonly emptyCells: keyof EmptyCellsValues | Exclude<NativeProperties['emptyCells'], string>;
-  readonly fieldSizing: keyof FieldSizingValues | Exclude<NativeProperties['fieldSizing'], string>;
-  readonly fill: keyof FillValues | Exclude<NativeProperties['fill'], string> | CssString;
-  readonly fillOpacity:
-    keyof FillOpacityValues | Exclude<NativeProperties['fillOpacity'], string> | CssString;
-  readonly fillRule: keyof FillRuleValues | Exclude<NativeProperties['fillRule'], string>;
-  readonly filter: keyof FilterValues | Exclude<NativeProperties['filter'], string> | CssString;
-  readonly flex: keyof FlexValues | Exclude<NativeProperties['flex'], string> | CssString;
-  readonly flexBasis:
-    keyof FlexBasisValues | Exclude<NativeProperties['flexBasis'], string> | CssString;
-  readonly flexDirection:
-    keyof FlexDirectionValues | Exclude<NativeProperties['flexDirection'], string>;
-  readonly flexFlow:
-    keyof FlexFlowValues | Exclude<NativeProperties['flexFlow'], string> | CssString;
-  readonly flexGrow:
-    keyof FlexGrowValues | Exclude<NativeProperties['flexGrow'], string> | CssString;
-  readonly flexShrink:
-    keyof FlexShrinkValues | Exclude<NativeProperties['flexShrink'], string> | CssString;
-  readonly flexWrap: keyof FlexWrapValues | Exclude<NativeProperties['flexWrap'], string>;
-  readonly float: keyof FloatValues | Exclude<NativeProperties['float'], string>;
-  readonly floodColor:
-    keyof FloodColorValues | Exclude<NativeProperties['floodColor'], string> | CssString;
-  readonly floodOpacity:
-    keyof FloodOpacityValues | Exclude<NativeProperties['floodOpacity'], string> | CssString;
-  readonly font: keyof FontValues | Exclude<NativeProperties['font'], string> | CssString;
-  readonly fontFamily:
-    keyof FontFamilyValues | Exclude<NativeProperties['fontFamily'], string> | CssString;
-  readonly fontFeatureSettings:
-    | keyof FontFeatureSettingsValues
-    | Exclude<NativeProperties['fontFeatureSettings'], string>
-    | CssString;
-  readonly fontKerning: keyof FontKerningValues | Exclude<NativeProperties['fontKerning'], string>;
-  readonly fontLanguageOverride:
-    | keyof FontLanguageOverrideValues
-    | Exclude<NativeProperties['fontLanguageOverride'], string>
-    | CssString;
-  readonly fontOpticalSizing:
-    keyof FontOpticalSizingValues | Exclude<NativeProperties['fontOpticalSizing'], string>;
-  readonly fontPalette:
-    keyof FontPaletteValues | Exclude<NativeProperties['fontPalette'], string> | CssString;
-  readonly fontSize:
-    keyof FontSizeValues | Exclude<NativeProperties['fontSize'], string> | CssString;
-  readonly fontSizeAdjust:
-    keyof FontSizeAdjustValues | Exclude<NativeProperties['fontSizeAdjust'], string> | CssString;
-  readonly fontSmooth: keyof FontSmoothValues | Exclude<NativeProperties['fontSmooth'], string>;
-  readonly fontStretch:
-    keyof FontStretchValues | Exclude<NativeProperties['fontStretch'], string> | CssString;
-  readonly fontStyle:
-    keyof FontStyleValues | Exclude<NativeProperties['fontStyle'], string> | CssString;
-  readonly fontSynthesis:
-    keyof FontSynthesisValues | Exclude<NativeProperties['fontSynthesis'], string> | CssString;
-  readonly fontSynthesisPosition:
-    keyof FontSynthesisPositionValues | Exclude<NativeProperties['fontSynthesisPosition'], string>;
-  readonly fontSynthesisSmallCaps:
-    | keyof FontSynthesisSmallCapsValues
-    | Exclude<NativeProperties['fontSynthesisSmallCaps'], string>;
-  readonly fontSynthesisStyle:
-    keyof FontSynthesisStyleValues | Exclude<NativeProperties['fontSynthesisStyle'], string>;
-  readonly fontSynthesisWeight:
-    keyof FontSynthesisWeightValues | Exclude<NativeProperties['fontSynthesisWeight'], string>;
-  readonly fontVariant:
-    keyof FontVariantValues | Exclude<NativeProperties['fontVariant'], string> | CssString;
-  readonly fontVariantAlternates:
-    | keyof FontVariantAlternatesValues
-    | Exclude<NativeProperties['fontVariantAlternates'], string>
-    | CssString;
-  readonly fontVariantCaps:
-    keyof FontVariantCapsValues | Exclude<NativeProperties['fontVariantCaps'], string>;
-  readonly fontVariantEastAsian:
-    | keyof FontVariantEastAsianValues
-    | Exclude<NativeProperties['fontVariantEastAsian'], string>
-    | CssString;
-  readonly fontVariantEmoji:
-    keyof FontVariantEmojiValues | Exclude<NativeProperties['fontVariantEmoji'], string>;
-  readonly fontVariantLigatures:
-    | keyof FontVariantLigaturesValues
-    | Exclude<NativeProperties['fontVariantLigatures'], string>
-    | CssString;
-  readonly fontVariantNumeric:
-    | keyof FontVariantNumericValues
-    | Exclude<NativeProperties['fontVariantNumeric'], string>
-    | CssString;
-  readonly fontVariantPosition:
-    keyof FontVariantPositionValues | Exclude<NativeProperties['fontVariantPosition'], string>;
-  readonly fontVariationSettings:
-    | keyof FontVariationSettingsValues
-    | Exclude<NativeProperties['fontVariationSettings'], string>
-    | CssString;
-  readonly fontWeight:
-    keyof FontWeightValues | Exclude<NativeProperties['fontWeight'], string> | CssString;
-  readonly fontWidth:
-    keyof FontWidthValues | Exclude<NativeProperties['fontWidth'], string> | CssString;
-  readonly forcedColorAdjust:
-    keyof ForcedColorAdjustValues | Exclude<NativeProperties['forcedColorAdjust'], string>;
-  readonly gap: keyof GapValues | Exclude<NativeProperties['gap'], string> | CssString;
+    keyof ContainIntrinsicWidthValues | undefined | number | CssString;
+  readonly content: keyof ContentValues | undefined | CssString;
+  readonly contentVisibility: keyof ContentVisibilityValues | undefined;
+  readonly counterIncrement: keyof CounterIncrementValues | undefined | CssString;
+  readonly counterReset: keyof CounterResetValues | undefined | CssString;
+  readonly counterSet: keyof CounterSetValues | undefined | CssString;
+  readonly cursor: keyof CursorValues | undefined | CssString;
+  readonly cx: keyof CxValues | undefined | number | CssString;
+  readonly cy: keyof CyValues | undefined | number | CssString;
+  readonly d: keyof DValues | undefined | CssString;
+  readonly direction: keyof DirectionValues | undefined;
+  readonly display: keyof DisplayValues | undefined | CssString;
+  readonly dominantBaseline: keyof DominantBaselineValues | undefined;
+  readonly emptyCells: keyof EmptyCellsValues | undefined;
+  readonly fieldSizing: keyof FieldSizingValues | undefined;
+  readonly fill: keyof FillValues | undefined | CssString;
+  readonly fillOpacity: keyof FillOpacityValues | undefined | number | CssString;
+  readonly fillRule: keyof FillRuleValues | undefined;
+  readonly filter: keyof FilterValues | undefined | CssString;
+  readonly flex: keyof FlexValues | undefined | number | CssString;
+  readonly flexBasis: keyof FlexBasisValues | undefined | number | CssString;
+  readonly flexDirection: keyof FlexDirectionValues | undefined;
+  readonly flexFlow: keyof FlexFlowValues | undefined | CssString;
+  readonly flexGrow: keyof FlexGrowValues | undefined | number | CssString;
+  readonly flexShrink: keyof FlexShrinkValues | undefined | number | CssString;
+  readonly flexWrap: keyof FlexWrapValues | undefined;
+  readonly float: keyof FloatValues | undefined;
+  readonly floodColor: keyof FloodColorValues | undefined | CssString;
+  readonly floodOpacity: keyof FloodOpacityValues | undefined | number | CssString;
+  readonly font: keyof FontValues | undefined | CssString;
+  readonly fontFamily: keyof FontFamilyValues | undefined | CssString;
+  readonly fontFeatureSettings: keyof FontFeatureSettingsValues | undefined | CssString;
+  readonly fontKerning: keyof FontKerningValues | undefined;
+  readonly fontLanguageOverride: keyof FontLanguageOverrideValues | undefined | CssString;
+  readonly fontOpticalSizing: keyof FontOpticalSizingValues | undefined;
+  readonly fontPalette: keyof FontPaletteValues | undefined | CssString;
+  readonly fontSize: keyof FontSizeValues | undefined | number | CssString;
+  readonly fontSizeAdjust: keyof FontSizeAdjustValues | undefined | number | CssString;
+  readonly fontSmooth: keyof FontSmoothValues | undefined | number | CssString;
+  readonly fontStretch: keyof FontStretchValues | undefined | CssString;
+  readonly fontStyle: keyof FontStyleValues | undefined | CssString;
+  readonly fontSynthesis: keyof FontSynthesisValues | undefined | CssString;
+  readonly fontSynthesisPosition: keyof FontSynthesisPositionValues | undefined;
+  readonly fontSynthesisSmallCaps: keyof FontSynthesisSmallCapsValues | undefined;
+  readonly fontSynthesisStyle: keyof FontSynthesisStyleValues | undefined;
+  readonly fontSynthesisWeight: keyof FontSynthesisWeightValues | undefined;
+  readonly fontVariant: keyof FontVariantValues | undefined | CssString;
+  readonly fontVariantAlternates: keyof FontVariantAlternatesValues | undefined | CssString;
+  readonly fontVariantCaps: keyof FontVariantCapsValues | undefined;
+  readonly fontVariantEastAsian: keyof FontVariantEastAsianValues | undefined | CssString;
+  readonly fontVariantEmoji: keyof FontVariantEmojiValues | undefined;
+  readonly fontVariantLigatures: keyof FontVariantLigaturesValues | undefined | CssString;
+  readonly fontVariantNumeric: keyof FontVariantNumericValues | undefined | CssString;
+  readonly fontVariantPosition: keyof FontVariantPositionValues | undefined;
+  readonly fontVariationSettings: keyof FontVariationSettingsValues | undefined | CssString;
+  readonly fontWeight: keyof FontWeightValues | undefined | number | CssString;
+  readonly fontWidth: keyof FontWidthValues | undefined | CssString;
+  readonly forcedColorAdjust: keyof ForcedColorAdjustValues | undefined;
+  readonly gap: keyof GapValues | undefined | number | CssString;
   readonly glyphOrientationVertical:
-    | keyof GlyphOrientationVerticalValues
-    | Exclude<NativeProperties['glyphOrientationVertical'], string>
-    | CssString;
-  readonly grid: keyof GridValues | Exclude<NativeProperties['grid'], string> | CssString;
-  readonly gridArea:
-    keyof GridAreaValues | Exclude<NativeProperties['gridArea'], string> | CssString;
-  readonly gridAutoColumns:
-    keyof GridAutoColumnsValues | Exclude<NativeProperties['gridAutoColumns'], string> | CssString;
-  readonly gridAutoFlow:
-    keyof GridAutoFlowValues | Exclude<NativeProperties['gridAutoFlow'], string> | CssString;
-  readonly gridAutoRows:
-    keyof GridAutoRowsValues | Exclude<NativeProperties['gridAutoRows'], string> | CssString;
-  readonly gridColumn:
-    keyof GridColumnValues | Exclude<NativeProperties['gridColumn'], string> | CssString;
-  readonly gridColumnEnd:
-    keyof GridColumnEndValues | Exclude<NativeProperties['gridColumnEnd'], string> | CssString;
-  readonly gridColumnGap:
-    keyof GridColumnGapValues | Exclude<NativeProperties['gridColumnGap'], string> | CssString;
-  readonly gridColumnStart:
-    keyof GridColumnStartValues | Exclude<NativeProperties['gridColumnStart'], string> | CssString;
-  readonly gridGap: keyof GridGapValues | Exclude<NativeProperties['gridGap'], string> | CssString;
-  readonly gridRow: keyof GridRowValues | Exclude<NativeProperties['gridRow'], string> | CssString;
-  readonly gridRowEnd:
-    keyof GridRowEndValues | Exclude<NativeProperties['gridRowEnd'], string> | CssString;
-  readonly gridRowGap:
-    keyof GridRowGapValues | Exclude<NativeProperties['gridRowGap'], string> | CssString;
-  readonly gridRowStart:
-    keyof GridRowStartValues | Exclude<NativeProperties['gridRowStart'], string> | CssString;
-  readonly gridTemplate:
-    keyof GridTemplateValues | Exclude<NativeProperties['gridTemplate'], string> | CssString;
-  readonly gridTemplateAreas:
-    | keyof GridTemplateAreasValues
-    | Exclude<NativeProperties['gridTemplateAreas'], string>
-    | CssString;
-  readonly gridTemplateColumns:
-    | keyof GridTemplateColumnsValues
-    | Exclude<NativeProperties['gridTemplateColumns'], string>
-    | CssString;
-  readonly gridTemplateRows:
-    | keyof GridTemplateRowsValues
-    | Exclude<NativeProperties['gridTemplateRows'], string>
-    | CssString;
-  readonly hangingPunctuation:
-    | keyof HangingPunctuationValues
-    | Exclude<NativeProperties['hangingPunctuation'], string>
-    | CssString;
-  readonly height: keyof HeightValues | Exclude<NativeProperties['height'], string> | CssString;
-  readonly hyphenateCharacter:
-    | keyof HyphenateCharacterValues
-    | Exclude<NativeProperties['hyphenateCharacter'], string>
-    | CssString;
-  readonly hyphenateLimitChars:
-    | keyof HyphenateLimitCharsValues
-    | Exclude<NativeProperties['hyphenateLimitChars'], string>
-    | CssString;
-  readonly hyphens: keyof HyphensValues | Exclude<NativeProperties['hyphens'], string>;
-  readonly imageOrientation:
-    | keyof ImageOrientationValues
-    | Exclude<NativeProperties['imageOrientation'], string>
-    | CssString;
-  readonly imageRendering:
-    keyof ImageRenderingValues | Exclude<NativeProperties['imageRendering'], string>;
-  readonly imageResolution:
-    keyof ImageResolutionValues | Exclude<NativeProperties['imageResolution'], string> | CssString;
-  readonly imeMode: keyof ImeModeValues | Exclude<NativeProperties['imeMode'], string>;
-  readonly initialLetter:
-    keyof InitialLetterValues | Exclude<NativeProperties['initialLetter'], string> | CssString;
-  readonly initialLetterAlign:
-    keyof InitialLetterAlignValues | Exclude<NativeProperties['initialLetterAlign'], string>;
-  readonly inlineSize:
-    keyof InlineSizeValues | Exclude<NativeProperties['inlineSize'], string> | CssString;
-  readonly inset: keyof InsetValues | Exclude<NativeProperties['inset'], string> | CssString;
-  readonly insetArea:
-    keyof InsetAreaValues | Exclude<NativeProperties['insetArea'], string> | CssString;
-  readonly insetBlock:
-    keyof InsetBlockValues | Exclude<NativeProperties['insetBlock'], string> | CssString;
-  readonly insetBlockEnd:
-    keyof InsetBlockEndValues | Exclude<NativeProperties['insetBlockEnd'], string> | CssString;
-  readonly insetBlockStart:
-    keyof InsetBlockStartValues | Exclude<NativeProperties['insetBlockStart'], string> | CssString;
-  readonly insetInline:
-    keyof InsetInlineValues | Exclude<NativeProperties['insetInline'], string> | CssString;
-  readonly insetInlineEnd:
-    keyof InsetInlineEndValues | Exclude<NativeProperties['insetInlineEnd'], string> | CssString;
-  readonly insetInlineStart:
-    | keyof InsetInlineStartValues
-    | Exclude<NativeProperties['insetInlineStart'], string>
-    | CssString;
-  readonly interpolateSize:
-    keyof InterpolateSizeValues | Exclude<NativeProperties['interpolateSize'], string>;
-  readonly isolation: keyof IsolationValues | Exclude<NativeProperties['isolation'], string>;
-  readonly justifyContent:
-    keyof JustifyContentValues | Exclude<NativeProperties['justifyContent'], string> | CssString;
-  readonly justifyItems:
-    keyof JustifyItemsValues | Exclude<NativeProperties['justifyItems'], string> | CssString;
-  readonly justifySelf:
-    keyof JustifySelfValues | Exclude<NativeProperties['justifySelf'], string> | CssString;
-  readonly justifyTracks:
-    keyof JustifyTracksValues | Exclude<NativeProperties['justifyTracks'], string> | CssString;
-  readonly KhtmlBoxAlign:
-    keyof KhtmlBoxAlignValues | Exclude<NativeProperties['KhtmlBoxAlign'], string>;
-  readonly KhtmlBoxDirection:
-    keyof KhtmlBoxDirectionValues | Exclude<NativeProperties['KhtmlBoxDirection'], string>;
-  readonly KhtmlBoxFlex:
-    keyof KhtmlBoxFlexValues | Exclude<NativeProperties['KhtmlBoxFlex'], string> | CssString;
-  readonly KhtmlBoxFlexGroup:
-    | keyof KhtmlBoxFlexGroupValues
-    | Exclude<NativeProperties['KhtmlBoxFlexGroup'], string>
-    | CssString;
-  readonly KhtmlBoxLines:
-    keyof KhtmlBoxLinesValues | Exclude<NativeProperties['KhtmlBoxLines'], string>;
-  readonly KhtmlBoxOrdinalGroup:
-    | keyof KhtmlBoxOrdinalGroupValues
-    | Exclude<NativeProperties['KhtmlBoxOrdinalGroup'], string>
-    | CssString;
-  readonly KhtmlBoxOrient:
-    keyof KhtmlBoxOrientValues | Exclude<NativeProperties['KhtmlBoxOrient'], string>;
-  readonly KhtmlBoxPack:
-    keyof KhtmlBoxPackValues | Exclude<NativeProperties['KhtmlBoxPack'], string>;
-  readonly KhtmlLineBreak:
-    keyof KhtmlLineBreakValues | Exclude<NativeProperties['KhtmlLineBreak'], string>;
-  readonly KhtmlOpacity:
-    keyof KhtmlOpacityValues | Exclude<NativeProperties['KhtmlOpacity'], string> | CssString;
-  readonly KhtmlUserSelect:
-    keyof KhtmlUserSelectValues | Exclude<NativeProperties['KhtmlUserSelect'], string>;
-  readonly left: keyof LeftValues | Exclude<NativeProperties['left'], string> | CssString;
-  readonly letterSpacing:
-    keyof LetterSpacingValues | Exclude<NativeProperties['letterSpacing'], string>;
-  readonly lightingColor:
-    keyof LightingColorValues | Exclude<NativeProperties['lightingColor'], string> | CssString;
-  readonly lineBreak: keyof LineBreakValues | Exclude<NativeProperties['lineBreak'], string>;
-  readonly lineClamp:
-    keyof LineClampValues | Exclude<NativeProperties['lineClamp'], string> | CssString;
-  readonly lineHeight:
-    keyof LineHeightValues | Exclude<NativeProperties['lineHeight'], string> | CssString;
-  readonly lineHeightStep:
-    keyof LineHeightStepValues | Exclude<NativeProperties['lineHeightStep'], string>;
-  readonly listStyle:
-    keyof ListStyleValues | Exclude<NativeProperties['listStyle'], string> | CssString;
-  readonly listStyleImage:
-    keyof ListStyleImageValues | Exclude<NativeProperties['listStyleImage'], string> | CssString;
-  readonly listStylePosition:
-    keyof ListStylePositionValues | Exclude<NativeProperties['listStylePosition'], string>;
-  readonly listStyleType:
-    keyof ListStyleTypeValues | Exclude<NativeProperties['listStyleType'], string> | CssString;
-  readonly margin: keyof MarginValues | Exclude<NativeProperties['margin'], string> | CssString;
-  readonly marginBlock:
-    keyof MarginBlockValues | Exclude<NativeProperties['marginBlock'], string> | CssString;
-  readonly marginBlockEnd:
-    keyof MarginBlockEndValues | Exclude<NativeProperties['marginBlockEnd'], string> | CssString;
-  readonly marginBlockStart:
-    | keyof MarginBlockStartValues
-    | Exclude<NativeProperties['marginBlockStart'], string>
-    | CssString;
-  readonly marginBottom:
-    keyof MarginBottomValues | Exclude<NativeProperties['marginBottom'], string> | CssString;
-  readonly marginInline:
-    keyof MarginInlineValues | Exclude<NativeProperties['marginInline'], string> | CssString;
-  readonly marginInlineEnd:
-    keyof MarginInlineEndValues | Exclude<NativeProperties['marginInlineEnd'], string> | CssString;
-  readonly marginInlineStart:
-    | keyof MarginInlineStartValues
-    | Exclude<NativeProperties['marginInlineStart'], string>
-    | CssString;
-  readonly marginLeft:
-    keyof MarginLeftValues | Exclude<NativeProperties['marginLeft'], string> | CssString;
-  readonly marginRight:
-    keyof MarginRightValues | Exclude<NativeProperties['marginRight'], string> | CssString;
-  readonly marginTop:
-    keyof MarginTopValues | Exclude<NativeProperties['marginTop'], string> | CssString;
-  readonly marginTrim: keyof MarginTrimValues | Exclude<NativeProperties['marginTrim'], string>;
-  readonly marker: keyof MarkerValues | Exclude<NativeProperties['marker'], string> | CssString;
-  readonly markerEnd:
-    keyof MarkerEndValues | Exclude<NativeProperties['markerEnd'], string> | CssString;
-  readonly markerMid:
-    keyof MarkerMidValues | Exclude<NativeProperties['markerMid'], string> | CssString;
-  readonly markerStart:
-    keyof MarkerStartValues | Exclude<NativeProperties['markerStart'], string> | CssString;
-  readonly mask: keyof MaskValues | Exclude<NativeProperties['mask'], string> | CssString;
-  readonly maskBorder:
-    keyof MaskBorderValues | Exclude<NativeProperties['maskBorder'], string> | CssString;
-  readonly maskBorderMode:
-    keyof MaskBorderModeValues | Exclude<NativeProperties['maskBorderMode'], string>;
-  readonly maskBorderOutset:
-    | keyof MaskBorderOutsetValues
-    | Exclude<NativeProperties['maskBorderOutset'], string>
-    | CssString;
-  readonly maskBorderRepeat:
-    | keyof MaskBorderRepeatValues
-    | Exclude<NativeProperties['maskBorderRepeat'], string>
-    | CssString;
-  readonly maskBorderSlice:
-    keyof MaskBorderSliceValues | Exclude<NativeProperties['maskBorderSlice'], string> | CssString;
-  readonly maskBorderSource:
-    | keyof MaskBorderSourceValues
-    | Exclude<NativeProperties['maskBorderSource'], string>
-    | CssString;
-  readonly maskBorderWidth:
-    keyof MaskBorderWidthValues | Exclude<NativeProperties['maskBorderWidth'], string> | CssString;
-  readonly maskClip:
-    keyof MaskClipValues | Exclude<NativeProperties['maskClip'], string> | CssString;
-  readonly maskComposite:
-    keyof MaskCompositeValues | Exclude<NativeProperties['maskComposite'], string> | CssString;
-  readonly maskImage:
-    keyof MaskImageValues | Exclude<NativeProperties['maskImage'], string> | CssString;
-  readonly maskMode:
-    keyof MaskModeValues | Exclude<NativeProperties['maskMode'], string> | CssString;
-  readonly maskOrigin:
-    keyof MaskOriginValues | Exclude<NativeProperties['maskOrigin'], string> | CssString;
-  readonly maskPosition:
-    keyof MaskPositionValues | Exclude<NativeProperties['maskPosition'], string> | CssString;
-  readonly maskRepeat:
-    keyof MaskRepeatValues | Exclude<NativeProperties['maskRepeat'], string> | CssString;
-  readonly maskSize:
-    keyof MaskSizeValues | Exclude<NativeProperties['maskSize'], string> | CssString;
-  readonly maskType: keyof MaskTypeValues | Exclude<NativeProperties['maskType'], string>;
-  readonly masonryAutoFlow:
-    keyof MasonryAutoFlowValues | Exclude<NativeProperties['masonryAutoFlow'], string> | CssString;
-  readonly mathDepth:
-    keyof MathDepthValues | Exclude<NativeProperties['mathDepth'], string> | CssString;
-  readonly mathShift: keyof MathShiftValues | Exclude<NativeProperties['mathShift'], string>;
-  readonly mathStyle: keyof MathStyleValues | Exclude<NativeProperties['mathStyle'], string>;
-  readonly maxBlockSize:
-    keyof MaxBlockSizeValues | Exclude<NativeProperties['maxBlockSize'], string> | CssString;
-  readonly maxHeight:
-    keyof MaxHeightValues | Exclude<NativeProperties['maxHeight'], string> | CssString;
-  readonly maxInlineSize:
-    keyof MaxInlineSizeValues | Exclude<NativeProperties['maxInlineSize'], string> | CssString;
-  readonly maxLines:
-    keyof MaxLinesValues | Exclude<NativeProperties['maxLines'], string> | CssString;
-  readonly maxWidth:
-    keyof MaxWidthValues | Exclude<NativeProperties['maxWidth'], string> | CssString;
-  readonly minBlockSize:
-    keyof MinBlockSizeValues | Exclude<NativeProperties['minBlockSize'], string> | CssString;
-  readonly minHeight:
-    keyof MinHeightValues | Exclude<NativeProperties['minHeight'], string> | CssString;
-  readonly minInlineSize:
-    keyof MinInlineSizeValues | Exclude<NativeProperties['minInlineSize'], string> | CssString;
-  readonly minWidth:
-    keyof MinWidthValues | Exclude<NativeProperties['minWidth'], string> | CssString;
-  readonly mixBlendMode:
-    keyof MixBlendModeValues | Exclude<NativeProperties['mixBlendMode'], string>;
-  readonly motion: keyof MotionValues | Exclude<NativeProperties['motion'], string> | CssString;
-  readonly motionDistance:
-    keyof MotionDistanceValues | Exclude<NativeProperties['motionDistance'], string> | CssString;
-  readonly motionPath:
-    keyof MotionPathValues | Exclude<NativeProperties['motionPath'], string> | CssString;
-  readonly motionRotation:
-    keyof MotionRotationValues | Exclude<NativeProperties['motionRotation'], string> | CssString;
-  readonly MozAnimation:
-    keyof MozAnimationValues | Exclude<NativeProperties['MozAnimation'], string> | CssString;
-  readonly MozAnimationDelay:
-    | keyof MozAnimationDelayValues
-    | Exclude<NativeProperties['MozAnimationDelay'], string>
-    | CssString;
-  readonly MozAnimationDirection:
-    | keyof MozAnimationDirectionValues
-    | Exclude<NativeProperties['MozAnimationDirection'], string>
-    | CssString;
-  readonly MozAnimationDuration:
-    | keyof MozAnimationDurationValues
-    | Exclude<NativeProperties['MozAnimationDuration'], string>
-    | CssString;
-  readonly MozAnimationFillMode:
-    | keyof MozAnimationFillModeValues
-    | Exclude<NativeProperties['MozAnimationFillMode'], string>
-    | CssString;
+    keyof GlyphOrientationVerticalValues | undefined | number | CssString;
+  readonly grid: keyof GridValues | undefined | CssString;
+  readonly gridArea: keyof GridAreaValues | undefined | number | CssString;
+  readonly gridAutoColumns: keyof GridAutoColumnsValues | undefined | number | CssString;
+  readonly gridAutoFlow: keyof GridAutoFlowValues | undefined | CssString;
+  readonly gridAutoRows: keyof GridAutoRowsValues | undefined | number | CssString;
+  readonly gridColumn: keyof GridColumnValues | undefined | number | CssString;
+  readonly gridColumnEnd: keyof GridColumnEndValues | undefined | number | CssString;
+  readonly gridColumnGap: keyof GridColumnGapValues | undefined | number | CssString;
+  readonly gridColumnStart: keyof GridColumnStartValues | undefined | number | CssString;
+  readonly gridGap: keyof GridGapValues | undefined | number | CssString;
+  readonly gridRow: keyof GridRowValues | undefined | number | CssString;
+  readonly gridRowEnd: keyof GridRowEndValues | undefined | number | CssString;
+  readonly gridRowGap: keyof GridRowGapValues | undefined | number | CssString;
+  readonly gridRowStart: keyof GridRowStartValues | undefined | number | CssString;
+  readonly gridTemplate: keyof GridTemplateValues | undefined | CssString;
+  readonly gridTemplateAreas: keyof GridTemplateAreasValues | undefined | CssString;
+  readonly gridTemplateColumns: keyof GridTemplateColumnsValues | undefined | number | CssString;
+  readonly gridTemplateRows: keyof GridTemplateRowsValues | undefined | number | CssString;
+  readonly hangingPunctuation: keyof HangingPunctuationValues | undefined | CssString;
+  readonly height: keyof HeightValues | undefined | number | CssString;
+  readonly hyphenateCharacter: keyof HyphenateCharacterValues | undefined | CssString;
+  readonly hyphenateLimitChars: keyof HyphenateLimitCharsValues | undefined | number | CssString;
+  readonly hyphens: keyof HyphensValues | undefined;
+  readonly imageOrientation: keyof ImageOrientationValues | undefined | CssString;
+  readonly imageRendering: keyof ImageRenderingValues | undefined;
+  readonly imageResolution: keyof ImageResolutionValues | undefined | CssString;
+  readonly imeMode: keyof ImeModeValues | undefined;
+  readonly initialLetter: keyof InitialLetterValues | undefined | number | CssString;
+  readonly initialLetterAlign: keyof InitialLetterAlignValues | undefined;
+  readonly inlineSize: keyof InlineSizeValues | undefined | number | CssString;
+  readonly inset: keyof InsetValues | undefined | number | CssString;
+  readonly insetArea: keyof InsetAreaValues | undefined | CssString;
+  readonly insetBlock: keyof InsetBlockValues | undefined | number | CssString;
+  readonly insetBlockEnd: keyof InsetBlockEndValues | undefined | number | CssString;
+  readonly insetBlockStart: keyof InsetBlockStartValues | undefined | number | CssString;
+  readonly insetInline: keyof InsetInlineValues | undefined | number | CssString;
+  readonly insetInlineEnd: keyof InsetInlineEndValues | undefined | number | CssString;
+  readonly insetInlineStart: keyof InsetInlineStartValues | undefined | number | CssString;
+  readonly interpolateSize: keyof InterpolateSizeValues | undefined;
+  readonly isolation: keyof IsolationValues | undefined;
+  readonly justifyContent: keyof JustifyContentValues | undefined | CssString;
+  readonly justifyItems: keyof JustifyItemsValues | undefined | CssString;
+  readonly justifySelf: keyof JustifySelfValues | undefined | CssString;
+  readonly justifyTracks: keyof JustifyTracksValues | undefined | CssString;
+  readonly KhtmlBoxAlign: keyof KhtmlBoxAlignValues | undefined;
+  readonly KhtmlBoxDirection: keyof KhtmlBoxDirectionValues | undefined;
+  readonly KhtmlBoxFlex: keyof KhtmlBoxFlexValues | undefined | number | CssString;
+  readonly KhtmlBoxFlexGroup: keyof KhtmlBoxFlexGroupValues | undefined | number | CssString;
+  readonly KhtmlBoxLines: keyof KhtmlBoxLinesValues | undefined;
+  readonly KhtmlBoxOrdinalGroup: keyof KhtmlBoxOrdinalGroupValues | undefined | number | CssString;
+  readonly KhtmlBoxOrient: keyof KhtmlBoxOrientValues | undefined;
+  readonly KhtmlBoxPack: keyof KhtmlBoxPackValues | undefined;
+  readonly KhtmlLineBreak: keyof KhtmlLineBreakValues | undefined;
+  readonly KhtmlOpacity: keyof KhtmlOpacityValues | undefined | number | CssString;
+  readonly KhtmlUserSelect: keyof KhtmlUserSelectValues | undefined;
+  readonly left: keyof LeftValues | undefined | number | CssString;
+  readonly letterSpacing: keyof LetterSpacingValues | undefined | number | CssString;
+  readonly lightingColor: keyof LightingColorValues | undefined | CssString;
+  readonly lineBreak: keyof LineBreakValues | undefined;
+  readonly lineClamp: keyof LineClampValues | undefined | number | CssString;
+  readonly lineHeight: keyof LineHeightValues | undefined | number | CssString;
+  readonly lineHeightStep: keyof LineHeightStepValues | undefined | number | CssString;
+  readonly listStyle: keyof ListStyleValues | undefined | CssString;
+  readonly listStyleImage: keyof ListStyleImageValues | undefined | CssString;
+  readonly listStylePosition: keyof ListStylePositionValues | undefined;
+  readonly listStyleType: keyof ListStyleTypeValues | undefined | CssString;
+  readonly margin: keyof MarginValues | undefined | number | CssString;
+  readonly marginBlock: keyof MarginBlockValues | undefined | number | CssString;
+  readonly marginBlockEnd: keyof MarginBlockEndValues | undefined | number | CssString;
+  readonly marginBlockStart: keyof MarginBlockStartValues | undefined | number | CssString;
+  readonly marginBottom: keyof MarginBottomValues | undefined | number | CssString;
+  readonly marginInline: keyof MarginInlineValues | undefined | number | CssString;
+  readonly marginInlineEnd: keyof MarginInlineEndValues | undefined | number | CssString;
+  readonly marginInlineStart: keyof MarginInlineStartValues | undefined | number | CssString;
+  readonly marginLeft: keyof MarginLeftValues | undefined | number | CssString;
+  readonly marginRight: keyof MarginRightValues | undefined | number | CssString;
+  readonly marginTop: keyof MarginTopValues | undefined | number | CssString;
+  readonly marginTrim: keyof MarginTrimValues | undefined;
+  readonly marker: keyof MarkerValues | undefined | CssString;
+  readonly markerEnd: keyof MarkerEndValues | undefined | CssString;
+  readonly markerMid: keyof MarkerMidValues | undefined | CssString;
+  readonly markerStart: keyof MarkerStartValues | undefined | CssString;
+  readonly mask: keyof MaskValues | undefined | number | CssString;
+  readonly maskBorder: keyof MaskBorderValues | undefined | number | CssString;
+  readonly maskBorderMode: keyof MaskBorderModeValues | undefined;
+  readonly maskBorderOutset: keyof MaskBorderOutsetValues | undefined | number | CssString;
+  readonly maskBorderRepeat: keyof MaskBorderRepeatValues | undefined | CssString;
+  readonly maskBorderSlice: keyof MaskBorderSliceValues | undefined | number | CssString;
+  readonly maskBorderSource: keyof MaskBorderSourceValues | undefined | CssString;
+  readonly maskBorderWidth: keyof MaskBorderWidthValues | undefined | number | CssString;
+  readonly maskClip: keyof MaskClipValues | undefined | CssString;
+  readonly maskComposite: keyof MaskCompositeValues | undefined | CssString;
+  readonly maskImage: keyof MaskImageValues | undefined | CssString;
+  readonly maskMode: keyof MaskModeValues | undefined | CssString;
+  readonly maskOrigin: keyof MaskOriginValues | undefined | CssString;
+  readonly maskPosition: keyof MaskPositionValues | undefined | number | CssString;
+  readonly maskRepeat: keyof MaskRepeatValues | undefined | CssString;
+  readonly maskSize: keyof MaskSizeValues | undefined | number | CssString;
+  readonly maskType: keyof MaskTypeValues | undefined;
+  readonly masonryAutoFlow: keyof MasonryAutoFlowValues | undefined | CssString;
+  readonly mathDepth: keyof MathDepthValues | undefined | number | CssString;
+  readonly mathShift: keyof MathShiftValues | undefined;
+  readonly mathStyle: keyof MathStyleValues | undefined;
+  readonly maxBlockSize: keyof MaxBlockSizeValues | undefined | number | CssString;
+  readonly maxHeight: keyof MaxHeightValues | undefined | number | CssString;
+  readonly maxInlineSize: keyof MaxInlineSizeValues | undefined | number | CssString;
+  readonly maxLines: keyof MaxLinesValues | undefined | number | CssString;
+  readonly maxWidth: keyof MaxWidthValues | undefined | number | CssString;
+  readonly minBlockSize: keyof MinBlockSizeValues | undefined | number | CssString;
+  readonly minHeight: keyof MinHeightValues | undefined | number | CssString;
+  readonly minInlineSize: keyof MinInlineSizeValues | undefined | number | CssString;
+  readonly minWidth: keyof MinWidthValues | undefined | number | CssString;
+  readonly mixBlendMode: keyof MixBlendModeValues | undefined;
+  readonly motion: keyof MotionValues | undefined | number | CssString;
+  readonly motionDistance: keyof MotionDistanceValues | undefined | number | CssString;
+  readonly motionPath: keyof MotionPathValues | undefined | CssString;
+  readonly motionRotation: keyof MotionRotationValues | undefined | CssString;
+  readonly MozAnimation: keyof MozAnimationValues | undefined | number | CssString;
+  readonly MozAnimationDelay: keyof MozAnimationDelayValues | undefined | CssString;
+  readonly MozAnimationDirection: keyof MozAnimationDirectionValues | undefined | CssString;
+  readonly MozAnimationDuration: keyof MozAnimationDurationValues | undefined | CssString;
+  readonly MozAnimationFillMode: keyof MozAnimationFillModeValues | undefined | CssString;
   readonly MozAnimationIterationCount:
-    | keyof MozAnimationIterationCountValues
-    | Exclude<NativeProperties['MozAnimationIterationCount'], string>
-    | CssString;
-  readonly MozAnimationName:
-    | keyof MozAnimationNameValues
-    | Exclude<NativeProperties['MozAnimationName'], string>
-    | CssString;
-  readonly MozAnimationPlayState:
-    | keyof MozAnimationPlayStateValues
-    | Exclude<NativeProperties['MozAnimationPlayState'], string>
-    | CssString;
+    keyof MozAnimationIterationCountValues | undefined | number | CssString;
+  readonly MozAnimationName: keyof MozAnimationNameValues | undefined | CssString;
+  readonly MozAnimationPlayState: keyof MozAnimationPlayStateValues | undefined | CssString;
   readonly MozAnimationTimingFunction:
-    | keyof MozAnimationTimingFunctionValues
-    | Exclude<NativeProperties['MozAnimationTimingFunction'], string>
-    | CssString;
-  readonly MozAppearance:
-    keyof MozAppearanceValues | Exclude<NativeProperties['MozAppearance'], string>;
-  readonly MozBackfaceVisibility:
-    keyof MozBackfaceVisibilityValues | Exclude<NativeProperties['MozBackfaceVisibility'], string>;
-  readonly MozBackgroundClip:
-    | keyof MozBackgroundClipValues
-    | Exclude<NativeProperties['MozBackgroundClip'], string>
-    | CssString;
-  readonly MozBackgroundOrigin:
-    | keyof MozBackgroundOriginValues
-    | Exclude<NativeProperties['MozBackgroundOrigin'], string>
-    | CssString;
-  readonly MozBackgroundSize:
-    | keyof MozBackgroundSizeValues
-    | Exclude<NativeProperties['MozBackgroundSize'], string>
-    | CssString;
-  readonly MozBinding:
-    keyof MozBindingValues | Exclude<NativeProperties['MozBinding'], string> | CssString;
-  readonly MozBorderBottomColors:
-    | keyof MozBorderBottomColorsValues
-    | Exclude<NativeProperties['MozBorderBottomColors'], string>
-    | CssString;
-  readonly MozBorderEndColor:
-    | keyof MozBorderEndColorValues
-    | Exclude<NativeProperties['MozBorderEndColor'], string>
-    | CssString;
-  readonly MozBorderEndStyle:
-    keyof MozBorderEndStyleValues | Exclude<NativeProperties['MozBorderEndStyle'], string>;
-  readonly MozBorderEndWidth:
-    keyof MozBorderEndWidthValues | Exclude<NativeProperties['MozBorderEndWidth'], string>;
-  readonly MozBorderImage:
-    keyof MozBorderImageValues | Exclude<NativeProperties['MozBorderImage'], string> | CssString;
-  readonly MozBorderLeftColors:
-    | keyof MozBorderLeftColorsValues
-    | Exclude<NativeProperties['MozBorderLeftColors'], string>
-    | CssString;
-  readonly MozBorderRadius:
-    keyof MozBorderRadiusValues | Exclude<NativeProperties['MozBorderRadius'], string> | CssString;
+    keyof MozAnimationTimingFunctionValues | undefined | CssString;
+  readonly MozAppearance: keyof MozAppearanceValues | undefined;
+  readonly MozBackfaceVisibility: keyof MozBackfaceVisibilityValues | undefined;
+  readonly MozBackgroundClip: keyof MozBackgroundClipValues | undefined | CssString;
+  readonly MozBackgroundOrigin: keyof MozBackgroundOriginValues | undefined | CssString;
+  readonly MozBackgroundSize: keyof MozBackgroundSizeValues | undefined | number | CssString;
+  readonly MozBinding: keyof MozBindingValues | undefined | CssString;
+  readonly MozBorderBottomColors: keyof MozBorderBottomColorsValues | undefined | CssString;
+  readonly MozBorderEndColor: keyof MozBorderEndColorValues | undefined | CssString;
+  readonly MozBorderEndStyle: keyof MozBorderEndStyleValues | undefined;
+  readonly MozBorderEndWidth: keyof MozBorderEndWidthValues | undefined | number | CssString;
+  readonly MozBorderImage: keyof MozBorderImageValues | undefined | number | CssString;
+  readonly MozBorderLeftColors: keyof MozBorderLeftColorsValues | undefined | CssString;
+  readonly MozBorderRadius: keyof MozBorderRadiusValues | undefined | number | CssString;
   readonly MozBorderRadiusBottomleft:
-    | keyof MozBorderRadiusBottomleftValues
-    | Exclude<NativeProperties['MozBorderRadiusBottomleft'], string>
-    | CssString;
+    keyof MozBorderRadiusBottomleftValues | undefined | number | CssString;
   readonly MozBorderRadiusBottomright:
-    | keyof MozBorderRadiusBottomrightValues
-    | Exclude<NativeProperties['MozBorderRadiusBottomright'], string>
-    | CssString;
+    keyof MozBorderRadiusBottomrightValues | undefined | number | CssString;
   readonly MozBorderRadiusTopleft:
-    | keyof MozBorderRadiusTopleftValues
-    | Exclude<NativeProperties['MozBorderRadiusTopleft'], string>
-    | CssString;
+    keyof MozBorderRadiusTopleftValues | undefined | number | CssString;
   readonly MozBorderRadiusTopright:
-    | keyof MozBorderRadiusToprightValues
-    | Exclude<NativeProperties['MozBorderRadiusTopright'], string>
-    | CssString;
-  readonly MozBorderRightColors:
-    | keyof MozBorderRightColorsValues
-    | Exclude<NativeProperties['MozBorderRightColors'], string>
-    | CssString;
-  readonly MozBorderStartColor:
-    | keyof MozBorderStartColorValues
-    | Exclude<NativeProperties['MozBorderStartColor'], string>
-    | CssString;
-  readonly MozBorderStartStyle:
-    keyof MozBorderStartStyleValues | Exclude<NativeProperties['MozBorderStartStyle'], string>;
-  readonly MozBorderTopColors:
-    | keyof MozBorderTopColorsValues
-    | Exclude<NativeProperties['MozBorderTopColors'], string>
-    | CssString;
-  readonly MozBoxAlign: keyof MozBoxAlignValues | Exclude<NativeProperties['MozBoxAlign'], string>;
-  readonly MozBoxDirection:
-    keyof MozBoxDirectionValues | Exclude<NativeProperties['MozBoxDirection'], string>;
-  readonly MozBoxFlex:
-    keyof MozBoxFlexValues | Exclude<NativeProperties['MozBoxFlex'], string> | CssString;
-  readonly MozBoxOrdinalGroup:
-    | keyof MozBoxOrdinalGroupValues
-    | Exclude<NativeProperties['MozBoxOrdinalGroup'], string>
-    | CssString;
-  readonly MozBoxOrient:
-    keyof MozBoxOrientValues | Exclude<NativeProperties['MozBoxOrient'], string>;
-  readonly MozBoxPack: keyof MozBoxPackValues | Exclude<NativeProperties['MozBoxPack'], string>;
-  readonly MozBoxShadow:
-    keyof MozBoxShadowValues | Exclude<NativeProperties['MozBoxShadow'], string> | CssString;
-  readonly MozBoxSizing:
-    keyof MozBoxSizingValues | Exclude<NativeProperties['MozBoxSizing'], string>;
-  readonly MozColumnCount:
-    keyof MozColumnCountValues | Exclude<NativeProperties['MozColumnCount'], string> | CssString;
-  readonly MozColumnFill:
-    keyof MozColumnFillValues | Exclude<NativeProperties['MozColumnFill'], string>;
-  readonly MozColumnRule:
-    keyof MozColumnRuleValues | Exclude<NativeProperties['MozColumnRule'], string> | CssString;
-  readonly MozColumnRuleColor:
-    | keyof MozColumnRuleColorValues
-    | Exclude<NativeProperties['MozColumnRuleColor'], string>
-    | CssString;
-  readonly MozColumnRuleStyle:
-    | keyof MozColumnRuleStyleValues
-    | Exclude<NativeProperties['MozColumnRuleStyle'], string>
-    | CssString;
-  readonly MozColumnRuleWidth:
-    | keyof MozColumnRuleWidthValues
-    | Exclude<NativeProperties['MozColumnRuleWidth'], string>
-    | CssString;
-  readonly MozColumns:
-    keyof MozColumnsValues | Exclude<NativeProperties['MozColumns'], string> | CssString;
-  readonly MozColumnWidth:
-    keyof MozColumnWidthValues | Exclude<NativeProperties['MozColumnWidth'], string>;
-  readonly MozContextProperties:
-    | keyof MozContextPropertiesValues
-    | Exclude<NativeProperties['MozContextProperties'], string>
-    | CssString;
-  readonly MozFloatEdge:
-    keyof MozFloatEdgeValues | Exclude<NativeProperties['MozFloatEdge'], string>;
-  readonly MozFontFeatureSettings:
-    | keyof MozFontFeatureSettingsValues
-    | Exclude<NativeProperties['MozFontFeatureSettings'], string>
-    | CssString;
-  readonly MozFontLanguageOverride:
-    | keyof MozFontLanguageOverrideValues
-    | Exclude<NativeProperties['MozFontLanguageOverride'], string>
-    | CssString;
+    keyof MozBorderRadiusToprightValues | undefined | number | CssString;
+  readonly MozBorderRightColors: keyof MozBorderRightColorsValues | undefined | CssString;
+  readonly MozBorderStartColor: keyof MozBorderStartColorValues | undefined | CssString;
+  readonly MozBorderStartStyle: keyof MozBorderStartStyleValues | undefined;
+  readonly MozBorderTopColors: keyof MozBorderTopColorsValues | undefined | CssString;
+  readonly MozBoxAlign: keyof MozBoxAlignValues | undefined;
+  readonly MozBoxDirection: keyof MozBoxDirectionValues | undefined;
+  readonly MozBoxFlex: keyof MozBoxFlexValues | undefined | number | CssString;
+  readonly MozBoxOrdinalGroup: keyof MozBoxOrdinalGroupValues | undefined | number | CssString;
+  readonly MozBoxOrient: keyof MozBoxOrientValues | undefined;
+  readonly MozBoxPack: keyof MozBoxPackValues | undefined;
+  readonly MozBoxShadow: keyof MozBoxShadowValues | undefined | CssString;
+  readonly MozBoxSizing: keyof MozBoxSizingValues | undefined;
+  readonly MozColumnCount: keyof MozColumnCountValues | undefined | number | CssString;
+  readonly MozColumnFill: keyof MozColumnFillValues | undefined;
+  readonly MozColumnRule: keyof MozColumnRuleValues | undefined | number | CssString;
+  readonly MozColumnRuleColor: keyof MozColumnRuleColorValues | undefined | CssString;
+  readonly MozColumnRuleStyle: keyof MozColumnRuleStyleValues | undefined | CssString;
+  readonly MozColumnRuleWidth: keyof MozColumnRuleWidthValues | undefined | number | CssString;
+  readonly MozColumns: keyof MozColumnsValues | undefined | number | CssString;
+  readonly MozColumnWidth: keyof MozColumnWidthValues | undefined | number | CssString;
+  readonly MozContextProperties: keyof MozContextPropertiesValues | undefined | CssString;
+  readonly MozFloatEdge: keyof MozFloatEdgeValues | undefined;
+  readonly MozFontFeatureSettings: keyof MozFontFeatureSettingsValues | undefined | CssString;
+  readonly MozFontLanguageOverride: keyof MozFontLanguageOverrideValues | undefined | CssString;
   readonly MozForceBrokenImageIcon:
-    | keyof MozForceBrokenImageIconValues
-    | Exclude<NativeProperties['MozForceBrokenImageIcon'], string>
-    | CssString;
-  readonly MozHyphens: keyof MozHyphensValues | Exclude<NativeProperties['MozHyphens'], string>;
-  readonly MozMarginEnd:
-    keyof MozMarginEndValues | Exclude<NativeProperties['MozMarginEnd'], string> | CssString;
-  readonly MozMarginStart:
-    keyof MozMarginStartValues | Exclude<NativeProperties['MozMarginStart'], string> | CssString;
-  readonly MozOpacity:
-    keyof MozOpacityValues | Exclude<NativeProperties['MozOpacity'], string> | CssString;
-  readonly MozOrient: keyof MozOrientValues | Exclude<NativeProperties['MozOrient'], string>;
-  readonly MozOsxFontSmoothing:
-    keyof MozOsxFontSmoothingValues | Exclude<NativeProperties['MozOsxFontSmoothing'], string>;
-  readonly MozOutline:
-    keyof MozOutlineValues | Exclude<NativeProperties['MozOutline'], string> | CssString;
-  readonly MozOutlineColor:
-    keyof MozOutlineColorValues | Exclude<NativeProperties['MozOutlineColor'], string> | CssString;
-  readonly MozOutlineRadius:
-    | keyof MozOutlineRadiusValues
-    | Exclude<NativeProperties['MozOutlineRadius'], string>
-    | CssString;
+    keyof MozForceBrokenImageIconValues | undefined | 0 | 1 | CssString;
+  readonly MozHyphens: keyof MozHyphensValues | undefined;
+  readonly MozMarginEnd: keyof MozMarginEndValues | undefined | number | CssString;
+  readonly MozMarginStart: keyof MozMarginStartValues | undefined | number | CssString;
+  readonly MozOpacity: keyof MozOpacityValues | undefined | number | CssString;
+  readonly MozOrient: keyof MozOrientValues | undefined;
+  readonly MozOsxFontSmoothing: keyof MozOsxFontSmoothingValues | undefined | number | CssString;
+  readonly MozOutline: keyof MozOutlineValues | undefined | number | CssString;
+  readonly MozOutlineColor: keyof MozOutlineColorValues | undefined | CssString;
+  readonly MozOutlineRadius: keyof MozOutlineRadiusValues | undefined | number | CssString;
   readonly MozOutlineRadiusBottomleft:
-    | keyof MozOutlineRadiusBottomleftValues
-    | Exclude<NativeProperties['MozOutlineRadiusBottomleft'], string>
-    | CssString;
+    keyof MozOutlineRadiusBottomleftValues | undefined | number | CssString;
   readonly MozOutlineRadiusBottomright:
-    | keyof MozOutlineRadiusBottomrightValues
-    | Exclude<NativeProperties['MozOutlineRadiusBottomright'], string>
-    | CssString;
+    keyof MozOutlineRadiusBottomrightValues | undefined | number | CssString;
   readonly MozOutlineRadiusTopleft:
-    | keyof MozOutlineRadiusTopleftValues
-    | Exclude<NativeProperties['MozOutlineRadiusTopleft'], string>
-    | CssString;
+    keyof MozOutlineRadiusTopleftValues | undefined | number | CssString;
   readonly MozOutlineRadiusTopright:
-    | keyof MozOutlineRadiusToprightValues
-    | Exclude<NativeProperties['MozOutlineRadiusTopright'], string>
-    | CssString;
-  readonly MozOutlineStyle:
-    keyof MozOutlineStyleValues | Exclude<NativeProperties['MozOutlineStyle'], string>;
-  readonly MozOutlineWidth:
-    keyof MozOutlineWidthValues | Exclude<NativeProperties['MozOutlineWidth'], string>;
-  readonly MozPaddingEnd:
-    keyof MozPaddingEndValues | Exclude<NativeProperties['MozPaddingEnd'], string> | CssString;
-  readonly MozPaddingStart:
-    keyof MozPaddingStartValues | Exclude<NativeProperties['MozPaddingStart'], string> | CssString;
-  readonly MozPerspective:
-    keyof MozPerspectiveValues | Exclude<NativeProperties['MozPerspective'], string>;
-  readonly MozPerspectiveOrigin:
-    | keyof MozPerspectiveOriginValues
-    | Exclude<NativeProperties['MozPerspectiveOrigin'], string>
-    | CssString;
-  readonly MozStackSizing:
-    keyof MozStackSizingValues | Exclude<NativeProperties['MozStackSizing'], string>;
-  readonly MozTabSize:
-    keyof MozTabSizeValues | Exclude<NativeProperties['MozTabSize'], string> | CssString;
-  readonly MozTextAlignLast:
-    keyof MozTextAlignLastValues | Exclude<NativeProperties['MozTextAlignLast'], string>;
-  readonly MozTextBlink:
-    keyof MozTextBlinkValues | Exclude<NativeProperties['MozTextBlink'], string>;
-  readonly MozTextDecorationColor:
-    | keyof MozTextDecorationColorValues
-    | Exclude<NativeProperties['MozTextDecorationColor'], string>
-    | CssString;
-  readonly MozTextDecorationLine:
-    | keyof MozTextDecorationLineValues
-    | Exclude<NativeProperties['MozTextDecorationLine'], string>
-    | CssString;
-  readonly MozTextDecorationStyle:
-    | keyof MozTextDecorationStyleValues
-    | Exclude<NativeProperties['MozTextDecorationStyle'], string>;
-  readonly MozTextSizeAdjust:
-    | keyof MozTextSizeAdjustValues
-    | Exclude<NativeProperties['MozTextSizeAdjust'], string>
-    | CssString;
-  readonly MozTransform:
-    keyof MozTransformValues | Exclude<NativeProperties['MozTransform'], string> | CssString;
-  readonly MozTransformOrigin:
-    | keyof MozTransformOriginValues
-    | Exclude<NativeProperties['MozTransformOrigin'], string>
-    | CssString;
-  readonly MozTransformStyle:
-    keyof MozTransformStyleValues | Exclude<NativeProperties['MozTransformStyle'], string>;
-  readonly MozTransition:
-    keyof MozTransitionValues | Exclude<NativeProperties['MozTransition'], string> | CssString;
-  readonly MozTransitionDelay:
-    | keyof MozTransitionDelayValues
-    | Exclude<NativeProperties['MozTransitionDelay'], string>
-    | CssString;
-  readonly MozTransitionDuration:
-    | keyof MozTransitionDurationValues
-    | Exclude<NativeProperties['MozTransitionDuration'], string>
-    | CssString;
-  readonly MozTransitionProperty:
-    | keyof MozTransitionPropertyValues
-    | Exclude<NativeProperties['MozTransitionProperty'], string>
-    | CssString;
+    keyof MozOutlineRadiusToprightValues | undefined | number | CssString;
+  readonly MozOutlineStyle: keyof MozOutlineStyleValues | undefined;
+  readonly MozOutlineWidth: keyof MozOutlineWidthValues | undefined | number | CssString;
+  readonly MozPaddingEnd: keyof MozPaddingEndValues | undefined | number | CssString;
+  readonly MozPaddingStart: keyof MozPaddingStartValues | undefined | number | CssString;
+  readonly MozPerspective: keyof MozPerspectiveValues | undefined | number | CssString;
+  readonly MozPerspectiveOrigin: keyof MozPerspectiveOriginValues | undefined | number | CssString;
+  readonly MozStackSizing: keyof MozStackSizingValues | undefined;
+  readonly MozTabSize: keyof MozTabSizeValues | undefined | number | CssString;
+  readonly MozTextAlignLast: keyof MozTextAlignLastValues | undefined;
+  readonly MozTextBlink: keyof MozTextBlinkValues | undefined;
+  readonly MozTextDecorationColor: keyof MozTextDecorationColorValues | undefined | CssString;
+  readonly MozTextDecorationLine: keyof MozTextDecorationLineValues | undefined | CssString;
+  readonly MozTextDecorationStyle: keyof MozTextDecorationStyleValues | undefined;
+  readonly MozTextSizeAdjust: keyof MozTextSizeAdjustValues | undefined | CssString;
+  readonly MozTransform: keyof MozTransformValues | undefined | CssString;
+  readonly MozTransformOrigin: keyof MozTransformOriginValues | undefined | number | CssString;
+  readonly MozTransformStyle: keyof MozTransformStyleValues | undefined;
+  readonly MozTransition: keyof MozTransitionValues | undefined | CssString;
+  readonly MozTransitionDelay: keyof MozTransitionDelayValues | undefined | CssString;
+  readonly MozTransitionDuration: keyof MozTransitionDurationValues | undefined | CssString;
+  readonly MozTransitionProperty: keyof MozTransitionPropertyValues | undefined | CssString;
   readonly MozTransitionTimingFunction:
-    | keyof MozTransitionTimingFunctionValues
-    | Exclude<NativeProperties['MozTransitionTimingFunction'], string>
-    | CssString;
-  readonly MozUserFocus:
-    keyof MozUserFocusValues | Exclude<NativeProperties['MozUserFocus'], string>;
-  readonly MozUserInput:
-    keyof MozUserInputValues | Exclude<NativeProperties['MozUserInput'], string>;
-  readonly MozUserModify:
-    keyof MozUserModifyValues | Exclude<NativeProperties['MozUserModify'], string>;
-  readonly MozUserSelect:
-    keyof MozUserSelectValues | Exclude<NativeProperties['MozUserSelect'], string>;
-  readonly MozWindowDragging:
-    keyof MozWindowDraggingValues | Exclude<NativeProperties['MozWindowDragging'], string>;
-  readonly MozWindowShadow:
-    keyof MozWindowShadowValues | Exclude<NativeProperties['MozWindowShadow'], string>;
-  readonly msAccelerator:
-    keyof MsAcceleratorValues | Exclude<NativeProperties['msAccelerator'], string>;
-  readonly msBlockProgression:
-    keyof MsBlockProgressionValues | Exclude<NativeProperties['msBlockProgression'], string>;
-  readonly msContentZoomChaining:
-    keyof MsContentZoomChainingValues | Exclude<NativeProperties['msContentZoomChaining'], string>;
-  readonly msContentZooming:
-    keyof MsContentZoomingValues | Exclude<NativeProperties['msContentZooming'], string>;
-  readonly msContentZoomLimit:
-    | keyof MsContentZoomLimitValues
-    | Exclude<NativeProperties['msContentZoomLimit'], string>
-    | CssString;
-  readonly msContentZoomLimitMax:
-    | keyof MsContentZoomLimitMaxValues
-    | Exclude<NativeProperties['msContentZoomLimitMax'], string>
-    | CssString;
-  readonly msContentZoomLimitMin:
-    | keyof MsContentZoomLimitMinValues
-    | Exclude<NativeProperties['msContentZoomLimitMin'], string>
-    | CssString;
-  readonly msContentZoomSnap:
-    | keyof MsContentZoomSnapValues
-    | Exclude<NativeProperties['msContentZoomSnap'], string>
-    | CssString;
-  readonly msContentZoomSnapPoints:
-    | keyof MsContentZoomSnapPointsValues
-    | Exclude<NativeProperties['msContentZoomSnapPoints'], string>
-    | CssString;
-  readonly msContentZoomSnapType:
-    keyof MsContentZoomSnapTypeValues | Exclude<NativeProperties['msContentZoomSnapType'], string>;
-  readonly msFilter:
-    keyof MsFilterValues | Exclude<NativeProperties['msFilter'], string> | CssString;
-  readonly msFlex: keyof MsFlexValues | Exclude<NativeProperties['msFlex'], string> | CssString;
-  readonly msFlexDirection:
-    keyof MsFlexDirectionValues | Exclude<NativeProperties['msFlexDirection'], string>;
-  readonly msFlexPositive:
-    keyof MsFlexPositiveValues | Exclude<NativeProperties['msFlexPositive'], string> | CssString;
-  readonly msFlowFrom:
-    keyof MsFlowFromValues | Exclude<NativeProperties['msFlowFrom'], string> | CssString;
-  readonly msFlowInto:
-    keyof MsFlowIntoValues | Exclude<NativeProperties['msFlowInto'], string> | CssString;
-  readonly msGridColumns:
-    keyof MsGridColumnsValues | Exclude<NativeProperties['msGridColumns'], string> | CssString;
-  readonly msGridRows:
-    keyof MsGridRowsValues | Exclude<NativeProperties['msGridRows'], string> | CssString;
-  readonly msHighContrastAdjust:
-    keyof MsHighContrastAdjustValues | Exclude<NativeProperties['msHighContrastAdjust'], string>;
+    keyof MozTransitionTimingFunctionValues | undefined | CssString;
+  readonly MozUserFocus: keyof MozUserFocusValues | undefined;
+  readonly MozUserInput: keyof MozUserInputValues | undefined;
+  readonly MozUserModify: keyof MozUserModifyValues | undefined;
+  readonly MozUserSelect: keyof MozUserSelectValues | undefined;
+  readonly MozWindowDragging: keyof MozWindowDraggingValues | undefined;
+  readonly MozWindowShadow: keyof MozWindowShadowValues | undefined;
+  readonly msAccelerator: keyof MsAcceleratorValues | undefined;
+  readonly msBlockProgression: keyof MsBlockProgressionValues | undefined;
+  readonly msContentZoomChaining: keyof MsContentZoomChainingValues | undefined;
+  readonly msContentZooming: keyof MsContentZoomingValues | undefined;
+  readonly msContentZoomLimit: keyof MsContentZoomLimitValues | undefined | CssString;
+  readonly msContentZoomLimitMax: keyof MsContentZoomLimitMaxValues | undefined | CssString;
+  readonly msContentZoomLimitMin: keyof MsContentZoomLimitMinValues | undefined | CssString;
+  readonly msContentZoomSnap: keyof MsContentZoomSnapValues | undefined | CssString;
+  readonly msContentZoomSnapPoints: keyof MsContentZoomSnapPointsValues | undefined | CssString;
+  readonly msContentZoomSnapType: keyof MsContentZoomSnapTypeValues | undefined;
+  readonly msFilter: keyof MsFilterValues | undefined | CssString;
+  readonly msFlex: keyof MsFlexValues | undefined | number | CssString;
+  readonly msFlexDirection: keyof MsFlexDirectionValues | undefined;
+  readonly msFlexPositive: keyof MsFlexPositiveValues | undefined | number | CssString;
+  readonly msFlowFrom: keyof MsFlowFromValues | undefined | CssString;
+  readonly msFlowInto: keyof MsFlowIntoValues | undefined | CssString;
+  readonly msGridColumns: keyof MsGridColumnsValues | undefined | number | CssString;
+  readonly msGridRows: keyof MsGridRowsValues | undefined | number | CssString;
+  readonly msHighContrastAdjust: keyof MsHighContrastAdjustValues | undefined;
   readonly msHyphenateLimitChars:
-    | keyof MsHyphenateLimitCharsValues
-    | Exclude<NativeProperties['msHyphenateLimitChars'], string>
-    | CssString;
+    keyof MsHyphenateLimitCharsValues | undefined | number | CssString;
   readonly msHyphenateLimitLines:
-    | keyof MsHyphenateLimitLinesValues
-    | Exclude<NativeProperties['msHyphenateLimitLines'], string>
-    | CssString;
-  readonly msHyphenateLimitZone:
-    | keyof MsHyphenateLimitZoneValues
-    | Exclude<NativeProperties['msHyphenateLimitZone'], string>
-    | CssString;
-  readonly msHyphens: keyof MsHyphensValues | Exclude<NativeProperties['msHyphens'], string>;
-  readonly msImeAlign: keyof MsImeAlignValues | Exclude<NativeProperties['msImeAlign'], string>;
-  readonly msImeMode: keyof MsImeModeValues | Exclude<NativeProperties['msImeMode'], string>;
-  readonly msLineBreak: keyof MsLineBreakValues | Exclude<NativeProperties['msLineBreak'], string>;
-  readonly msOrder: keyof MsOrderValues | Exclude<NativeProperties['msOrder'], string> | CssString;
-  readonly msOverflowStyle:
-    keyof MsOverflowStyleValues | Exclude<NativeProperties['msOverflowStyle'], string>;
-  readonly msOverflowX: keyof MsOverflowXValues | Exclude<NativeProperties['msOverflowX'], string>;
-  readonly msOverflowY: keyof MsOverflowYValues | Exclude<NativeProperties['msOverflowY'], string>;
-  readonly msScrollbar3dlightColor:
-    | keyof MsScrollbar3dlightColorValues
-    | Exclude<NativeProperties['msScrollbar3dlightColor'], string>
-    | CssString;
-  readonly msScrollbarArrowColor:
-    | keyof MsScrollbarArrowColorValues
-    | Exclude<NativeProperties['msScrollbarArrowColor'], string>
-    | CssString;
-  readonly msScrollbarBaseColor:
-    | keyof MsScrollbarBaseColorValues
-    | Exclude<NativeProperties['msScrollbarBaseColor'], string>
-    | CssString;
+    keyof MsHyphenateLimitLinesValues | undefined | number | CssString;
+  readonly msHyphenateLimitZone: keyof MsHyphenateLimitZoneValues | undefined | number | CssString;
+  readonly msHyphens: keyof MsHyphensValues | undefined;
+  readonly msImeAlign: keyof MsImeAlignValues | undefined;
+  readonly msImeMode: keyof MsImeModeValues | undefined;
+  readonly msLineBreak: keyof MsLineBreakValues | undefined;
+  readonly msOrder: keyof MsOrderValues | undefined | number | CssString;
+  readonly msOverflowStyle: keyof MsOverflowStyleValues | undefined;
+  readonly msOverflowX: keyof MsOverflowXValues | undefined;
+  readonly msOverflowY: keyof MsOverflowYValues | undefined;
+  readonly msScrollbar3dlightColor: keyof MsScrollbar3dlightColorValues | undefined | CssString;
+  readonly msScrollbarArrowColor: keyof MsScrollbarArrowColorValues | undefined | CssString;
+  readonly msScrollbarBaseColor: keyof MsScrollbarBaseColorValues | undefined | CssString;
   readonly msScrollbarDarkshadowColor:
-    | keyof MsScrollbarDarkshadowColorValues
-    | Exclude<NativeProperties['msScrollbarDarkshadowColor'], string>
-    | CssString;
-  readonly msScrollbarFaceColor:
-    | keyof MsScrollbarFaceColorValues
-    | Exclude<NativeProperties['msScrollbarFaceColor'], string>
-    | CssString;
-  readonly msScrollbarHighlightColor:
-    | keyof MsScrollbarHighlightColorValues
-    | Exclude<NativeProperties['msScrollbarHighlightColor'], string>
-    | CssString;
-  readonly msScrollbarShadowColor:
-    | keyof MsScrollbarShadowColorValues
-    | Exclude<NativeProperties['msScrollbarShadowColor'], string>
-    | CssString;
-  readonly msScrollbarTrackColor:
-    | keyof MsScrollbarTrackColorValues
-    | Exclude<NativeProperties['msScrollbarTrackColor'], string>
-    | CssString;
-  readonly msScrollChaining:
-    keyof MsScrollChainingValues | Exclude<NativeProperties['msScrollChaining'], string>;
-  readonly msScrollLimit:
-    keyof MsScrollLimitValues | Exclude<NativeProperties['msScrollLimit'], string> | CssString;
-  readonly msScrollLimitXMax:
-    keyof MsScrollLimitXMaxValues | Exclude<NativeProperties['msScrollLimitXMax'], string>;
-  readonly msScrollLimitXMin:
-    keyof MsScrollLimitXMinValues | Exclude<NativeProperties['msScrollLimitXMin'], string>;
-  readonly msScrollLimitYMax:
-    keyof MsScrollLimitYMaxValues | Exclude<NativeProperties['msScrollLimitYMax'], string>;
-  readonly msScrollLimitYMin:
-    keyof MsScrollLimitYMinValues | Exclude<NativeProperties['msScrollLimitYMin'], string>;
-  readonly msScrollRails:
-    keyof MsScrollRailsValues | Exclude<NativeProperties['msScrollRails'], string>;
-  readonly msScrollSnapPointsX:
-    | keyof MsScrollSnapPointsXValues
-    | Exclude<NativeProperties['msScrollSnapPointsX'], string>
-    | CssString;
-  readonly msScrollSnapPointsY:
-    | keyof MsScrollSnapPointsYValues
-    | Exclude<NativeProperties['msScrollSnapPointsY'], string>
-    | CssString;
-  readonly msScrollSnapType:
-    keyof MsScrollSnapTypeValues | Exclude<NativeProperties['msScrollSnapType'], string>;
-  readonly msScrollSnapX:
-    keyof MsScrollSnapXValues | Exclude<NativeProperties['msScrollSnapX'], string> | CssString;
-  readonly msScrollSnapY:
-    keyof MsScrollSnapYValues | Exclude<NativeProperties['msScrollSnapY'], string> | CssString;
-  readonly msScrollTranslation:
-    keyof MsScrollTranslationValues | Exclude<NativeProperties['msScrollTranslation'], string>;
-  readonly msTextAutospace:
-    keyof MsTextAutospaceValues | Exclude<NativeProperties['msTextAutospace'], string>;
-  readonly msTextCombineHorizontal:
-    | keyof MsTextCombineHorizontalValues
-    | Exclude<NativeProperties['msTextCombineHorizontal'], string>
-    | CssString;
-  readonly msTextOverflow:
-    keyof MsTextOverflowValues | Exclude<NativeProperties['msTextOverflow'], string> | CssString;
-  readonly msTouchAction:
-    keyof MsTouchActionValues | Exclude<NativeProperties['msTouchAction'], string> | CssString;
-  readonly msTouchSelect:
-    keyof MsTouchSelectValues | Exclude<NativeProperties['msTouchSelect'], string>;
-  readonly msTransform:
-    keyof MsTransformValues | Exclude<NativeProperties['msTransform'], string> | CssString;
-  readonly msTransformOrigin:
-    | keyof MsTransformOriginValues
-    | Exclude<NativeProperties['msTransformOrigin'], string>
-    | CssString;
-  readonly msTransition:
-    keyof MsTransitionValues | Exclude<NativeProperties['msTransition'], string> | CssString;
-  readonly msTransitionDelay:
-    | keyof MsTransitionDelayValues
-    | Exclude<NativeProperties['msTransitionDelay'], string>
-    | CssString;
-  readonly msTransitionDuration:
-    | keyof MsTransitionDurationValues
-    | Exclude<NativeProperties['msTransitionDuration'], string>
-    | CssString;
-  readonly msTransitionProperty:
-    | keyof MsTransitionPropertyValues
-    | Exclude<NativeProperties['msTransitionProperty'], string>
-    | CssString;
+    keyof MsScrollbarDarkshadowColorValues | undefined | CssString;
+  readonly msScrollbarFaceColor: keyof MsScrollbarFaceColorValues | undefined | CssString;
+  readonly msScrollbarHighlightColor: keyof MsScrollbarHighlightColorValues | undefined | CssString;
+  readonly msScrollbarShadowColor: keyof MsScrollbarShadowColorValues | undefined | CssString;
+  readonly msScrollbarTrackColor: keyof MsScrollbarTrackColorValues | undefined | CssString;
+  readonly msScrollChaining: keyof MsScrollChainingValues | undefined;
+  readonly msScrollLimit: keyof MsScrollLimitValues | undefined | CssString;
+  readonly msScrollLimitXMax: keyof MsScrollLimitXMaxValues | undefined | number | CssString;
+  readonly msScrollLimitXMin: keyof MsScrollLimitXMinValues | undefined | number | CssString;
+  readonly msScrollLimitYMax: keyof MsScrollLimitYMaxValues | undefined | number | CssString;
+  readonly msScrollLimitYMin: keyof MsScrollLimitYMinValues | undefined | number | CssString;
+  readonly msScrollRails: keyof MsScrollRailsValues | undefined;
+  readonly msScrollSnapPointsX: keyof MsScrollSnapPointsXValues | undefined | CssString;
+  readonly msScrollSnapPointsY: keyof MsScrollSnapPointsYValues | undefined | CssString;
+  readonly msScrollSnapType: keyof MsScrollSnapTypeValues | undefined;
+  readonly msScrollSnapX: keyof MsScrollSnapXValues | undefined | CssString;
+  readonly msScrollSnapY: keyof MsScrollSnapYValues | undefined | CssString;
+  readonly msScrollTranslation: keyof MsScrollTranslationValues | undefined;
+  readonly msTextAutospace: keyof MsTextAutospaceValues | undefined;
+  readonly msTextCombineHorizontal: keyof MsTextCombineHorizontalValues | undefined | CssString;
+  readonly msTextOverflow: keyof MsTextOverflowValues | undefined | CssString;
+  readonly msTouchAction: keyof MsTouchActionValues | undefined | CssString;
+  readonly msTouchSelect: keyof MsTouchSelectValues | undefined;
+  readonly msTransform: keyof MsTransformValues | undefined | CssString;
+  readonly msTransformOrigin: keyof MsTransformOriginValues | undefined | number | CssString;
+  readonly msTransition: keyof MsTransitionValues | undefined | CssString;
+  readonly msTransitionDelay: keyof MsTransitionDelayValues | undefined | CssString;
+  readonly msTransitionDuration: keyof MsTransitionDurationValues | undefined | CssString;
+  readonly msTransitionProperty: keyof MsTransitionPropertyValues | undefined | CssString;
   readonly msTransitionTimingFunction:
-    | keyof MsTransitionTimingFunctionValues
-    | Exclude<NativeProperties['msTransitionTimingFunction'], string>
-    | CssString;
-  readonly msUserSelect:
-    keyof MsUserSelectValues | Exclude<NativeProperties['msUserSelect'], string>;
-  readonly msWordBreak: keyof MsWordBreakValues | Exclude<NativeProperties['msWordBreak'], string>;
-  readonly msWrapFlow: keyof MsWrapFlowValues | Exclude<NativeProperties['msWrapFlow'], string>;
-  readonly msWrapMargin:
-    keyof MsWrapMarginValues | Exclude<NativeProperties['msWrapMargin'], string>;
-  readonly msWrapThrough:
-    keyof MsWrapThroughValues | Exclude<NativeProperties['msWrapThrough'], string>;
-  readonly msWritingMode:
-    keyof MsWritingModeValues | Exclude<NativeProperties['msWritingMode'], string>;
-  readonly OAnimation:
-    keyof OAnimationValues | Exclude<NativeProperties['OAnimation'], string> | CssString;
-  readonly OAnimationDelay:
-    keyof OAnimationDelayValues | Exclude<NativeProperties['OAnimationDelay'], string> | CssString;
-  readonly OAnimationDirection:
-    | keyof OAnimationDirectionValues
-    | Exclude<NativeProperties['OAnimationDirection'], string>
-    | CssString;
-  readonly OAnimationDuration:
-    | keyof OAnimationDurationValues
-    | Exclude<NativeProperties['OAnimationDuration'], string>
-    | CssString;
-  readonly OAnimationFillMode:
-    | keyof OAnimationFillModeValues
-    | Exclude<NativeProperties['OAnimationFillMode'], string>
-    | CssString;
+    keyof MsTransitionTimingFunctionValues | undefined | CssString;
+  readonly msUserSelect: keyof MsUserSelectValues | undefined;
+  readonly msWordBreak: keyof MsWordBreakValues | undefined;
+  readonly msWrapFlow: keyof MsWrapFlowValues | undefined;
+  readonly msWrapMargin: keyof MsWrapMarginValues | undefined | number | CssString;
+  readonly msWrapThrough: keyof MsWrapThroughValues | undefined;
+  readonly msWritingMode: keyof MsWritingModeValues | undefined;
+  readonly OAnimation: keyof OAnimationValues | undefined | number | CssString;
+  readonly OAnimationDelay: keyof OAnimationDelayValues | undefined | CssString;
+  readonly OAnimationDirection: keyof OAnimationDirectionValues | undefined | CssString;
+  readonly OAnimationDuration: keyof OAnimationDurationValues | undefined | CssString;
+  readonly OAnimationFillMode: keyof OAnimationFillModeValues | undefined | CssString;
   readonly OAnimationIterationCount:
-    | keyof OAnimationIterationCountValues
-    | Exclude<NativeProperties['OAnimationIterationCount'], string>
-    | CssString;
-  readonly OAnimationName:
-    keyof OAnimationNameValues | Exclude<NativeProperties['OAnimationName'], string> | CssString;
-  readonly OAnimationPlayState:
-    | keyof OAnimationPlayStateValues
-    | Exclude<NativeProperties['OAnimationPlayState'], string>
-    | CssString;
-  readonly OAnimationTimingFunction:
-    | keyof OAnimationTimingFunctionValues
-    | Exclude<NativeProperties['OAnimationTimingFunction'], string>
-    | CssString;
-  readonly OBackgroundSize:
-    keyof OBackgroundSizeValues | Exclude<NativeProperties['OBackgroundSize'], string> | CssString;
-  readonly objectFit: keyof ObjectFitValues | Exclude<NativeProperties['objectFit'], string>;
-  readonly objectPosition:
-    keyof ObjectPositionValues | Exclude<NativeProperties['objectPosition'], string> | CssString;
-  readonly objectViewBox:
-    keyof ObjectViewBoxValues | Exclude<NativeProperties['objectViewBox'], string> | CssString;
-  readonly OBorderImage:
-    keyof OBorderImageValues | Exclude<NativeProperties['OBorderImage'], string> | CssString;
-  readonly offset: keyof OffsetValues | Exclude<NativeProperties['offset'], string> | CssString;
-  readonly offsetAnchor:
-    keyof OffsetAnchorValues | Exclude<NativeProperties['offsetAnchor'], string> | CssString;
-  readonly offsetBlock:
-    keyof OffsetBlockValues | Exclude<NativeProperties['offsetBlock'], string> | CssString;
-  readonly offsetBlockEnd:
-    keyof OffsetBlockEndValues | Exclude<NativeProperties['offsetBlockEnd'], string> | CssString;
-  readonly offsetBlockStart:
-    | keyof OffsetBlockStartValues
-    | Exclude<NativeProperties['offsetBlockStart'], string>
-    | CssString;
-  readonly offsetDistance:
-    keyof OffsetDistanceValues | Exclude<NativeProperties['offsetDistance'], string> | CssString;
-  readonly offsetInline:
-    keyof OffsetInlineValues | Exclude<NativeProperties['offsetInline'], string> | CssString;
-  readonly offsetInlineEnd:
-    keyof OffsetInlineEndValues | Exclude<NativeProperties['offsetInlineEnd'], string> | CssString;
-  readonly offsetInlineStart:
-    | keyof OffsetInlineStartValues
-    | Exclude<NativeProperties['offsetInlineStart'], string>
-    | CssString;
-  readonly offsetPath:
-    keyof OffsetPathValues | Exclude<NativeProperties['offsetPath'], string> | CssString;
-  readonly offsetPosition:
-    keyof OffsetPositionValues | Exclude<NativeProperties['offsetPosition'], string> | CssString;
-  readonly offsetRotate:
-    keyof OffsetRotateValues | Exclude<NativeProperties['offsetRotate'], string> | CssString;
-  readonly offsetRotation:
-    keyof OffsetRotationValues | Exclude<NativeProperties['offsetRotation'], string> | CssString;
-  readonly OObjectFit: keyof OObjectFitValues | Exclude<NativeProperties['OObjectFit'], string>;
-  readonly OObjectPosition:
-    keyof OObjectPositionValues | Exclude<NativeProperties['OObjectPosition'], string> | CssString;
-  readonly opacity: keyof OpacityValues | Exclude<NativeProperties['opacity'], string> | CssString;
-  readonly order: keyof OrderValues | Exclude<NativeProperties['order'], string> | CssString;
-  readonly orphans: keyof OrphansValues | Exclude<NativeProperties['orphans'], string> | CssString;
-  readonly OTabSize:
-    keyof OTabSizeValues | Exclude<NativeProperties['OTabSize'], string> | CssString;
-  readonly OTextOverflow:
-    keyof OTextOverflowValues | Exclude<NativeProperties['OTextOverflow'], string> | CssString;
-  readonly OTransform:
-    keyof OTransformValues | Exclude<NativeProperties['OTransform'], string> | CssString;
-  readonly OTransformOrigin:
-    | keyof OTransformOriginValues
-    | Exclude<NativeProperties['OTransformOrigin'], string>
-    | CssString;
-  readonly OTransition:
-    keyof OTransitionValues | Exclude<NativeProperties['OTransition'], string> | CssString;
-  readonly OTransitionDelay:
-    | keyof OTransitionDelayValues
-    | Exclude<NativeProperties['OTransitionDelay'], string>
-    | CssString;
-  readonly OTransitionDuration:
-    | keyof OTransitionDurationValues
-    | Exclude<NativeProperties['OTransitionDuration'], string>
-    | CssString;
-  readonly OTransitionProperty:
-    | keyof OTransitionPropertyValues
-    | Exclude<NativeProperties['OTransitionProperty'], string>
-    | CssString;
-  readonly OTransitionTimingFunction:
-    | keyof OTransitionTimingFunctionValues
-    | Exclude<NativeProperties['OTransitionTimingFunction'], string>
-    | CssString;
-  readonly outline: keyof OutlineValues | Exclude<NativeProperties['outline'], string> | CssString;
-  readonly outlineColor:
-    keyof OutlineColorValues | Exclude<NativeProperties['outlineColor'], string> | CssString;
-  readonly outlineOffset:
-    keyof OutlineOffsetValues | Exclude<NativeProperties['outlineOffset'], string>;
-  readonly outlineStyle:
-    keyof OutlineStyleValues | Exclude<NativeProperties['outlineStyle'], string>;
-  readonly outlineWidth:
-    keyof OutlineWidthValues | Exclude<NativeProperties['outlineWidth'], string>;
-  readonly overflow:
-    keyof OverflowValues | Exclude<NativeProperties['overflow'], string> | CssString;
-  readonly overflowAnchor:
-    keyof OverflowAnchorValues | Exclude<NativeProperties['overflowAnchor'], string>;
-  readonly overflowBlock:
-    keyof OverflowBlockValues | Exclude<NativeProperties['overflowBlock'], string>;
-  readonly overflowClipBox:
-    keyof OverflowClipBoxValues | Exclude<NativeProperties['overflowClipBox'], string>;
-  readonly overflowClipMargin:
-    | keyof OverflowClipMarginValues
-    | Exclude<NativeProperties['overflowClipMargin'], string>
-    | CssString;
-  readonly overflowInline:
-    keyof OverflowInlineValues | Exclude<NativeProperties['overflowInline'], string>;
-  readonly overflowWrap:
-    keyof OverflowWrapValues | Exclude<NativeProperties['overflowWrap'], string>;
-  readonly overflowX: keyof OverflowXValues | Exclude<NativeProperties['overflowX'], string>;
-  readonly overflowY: keyof OverflowYValues | Exclude<NativeProperties['overflowY'], string>;
-  readonly overlay: keyof OverlayValues | Exclude<NativeProperties['overlay'], string>;
-  readonly overscrollBehavior:
-    | keyof OverscrollBehaviorValues
-    | Exclude<NativeProperties['overscrollBehavior'], string>
-    | CssString;
-  readonly overscrollBehaviorBlock:
-    | keyof OverscrollBehaviorBlockValues
-    | Exclude<NativeProperties['overscrollBehaviorBlock'], string>;
-  readonly overscrollBehaviorInline:
-    | keyof OverscrollBehaviorInlineValues
-    | Exclude<NativeProperties['overscrollBehaviorInline'], string>;
-  readonly overscrollBehaviorX:
-    keyof OverscrollBehaviorXValues | Exclude<NativeProperties['overscrollBehaviorX'], string>;
-  readonly overscrollBehaviorY:
-    keyof OverscrollBehaviorYValues | Exclude<NativeProperties['overscrollBehaviorY'], string>;
-  readonly padding: keyof PaddingValues | Exclude<NativeProperties['padding'], string> | CssString;
-  readonly paddingBlock:
-    keyof PaddingBlockValues | Exclude<NativeProperties['paddingBlock'], string> | CssString;
-  readonly paddingBlockEnd:
-    keyof PaddingBlockEndValues | Exclude<NativeProperties['paddingBlockEnd'], string> | CssString;
-  readonly paddingBlockStart:
-    | keyof PaddingBlockStartValues
-    | Exclude<NativeProperties['paddingBlockStart'], string>
-    | CssString;
-  readonly paddingBottom:
-    keyof PaddingBottomValues | Exclude<NativeProperties['paddingBottom'], string> | CssString;
-  readonly paddingInline:
-    keyof PaddingInlineValues | Exclude<NativeProperties['paddingInline'], string> | CssString;
-  readonly paddingInlineEnd:
-    | keyof PaddingInlineEndValues
-    | Exclude<NativeProperties['paddingInlineEnd'], string>
-    | CssString;
-  readonly paddingInlineStart:
-    | keyof PaddingInlineStartValues
-    | Exclude<NativeProperties['paddingInlineStart'], string>
-    | CssString;
-  readonly paddingLeft:
-    keyof PaddingLeftValues | Exclude<NativeProperties['paddingLeft'], string> | CssString;
-  readonly paddingRight:
-    keyof PaddingRightValues | Exclude<NativeProperties['paddingRight'], string> | CssString;
-  readonly paddingTop:
-    keyof PaddingTopValues | Exclude<NativeProperties['paddingTop'], string> | CssString;
-  readonly page: keyof PageValues | Exclude<NativeProperties['page'], string> | CssString;
-  readonly pageBreakAfter:
-    keyof PageBreakAfterValues | Exclude<NativeProperties['pageBreakAfter'], string>;
-  readonly pageBreakBefore:
-    keyof PageBreakBeforeValues | Exclude<NativeProperties['pageBreakBefore'], string>;
-  readonly pageBreakInside:
-    keyof PageBreakInsideValues | Exclude<NativeProperties['pageBreakInside'], string>;
-  readonly paintOrder:
-    keyof PaintOrderValues | Exclude<NativeProperties['paintOrder'], string> | CssString;
-  readonly perspective: keyof PerspectiveValues | Exclude<NativeProperties['perspective'], string>;
-  readonly perspectiveOrigin:
-    | keyof PerspectiveOriginValues
-    | Exclude<NativeProperties['perspectiveOrigin'], string>
-    | CssString;
-  readonly placeContent:
-    keyof PlaceContentValues | Exclude<NativeProperties['placeContent'], string> | CssString;
-  readonly placeItems:
-    keyof PlaceItemsValues | Exclude<NativeProperties['placeItems'], string> | CssString;
-  readonly placeSelf:
-    keyof PlaceSelfValues | Exclude<NativeProperties['placeSelf'], string> | CssString;
-  readonly pointerEvents:
-    keyof PointerEventsValues | Exclude<NativeProperties['pointerEvents'], string>;
-  readonly position: keyof PositionValues | Exclude<NativeProperties['position'], string>;
-  readonly positionAnchor:
-    keyof PositionAnchorValues | Exclude<NativeProperties['positionAnchor'], string> | CssString;
-  readonly positionArea:
-    keyof PositionAreaValues | Exclude<NativeProperties['positionArea'], string> | CssString;
-  readonly positionTry:
-    keyof PositionTryValues | Exclude<NativeProperties['positionTry'], string> | CssString;
-  readonly positionTryFallbacks:
-    | keyof PositionTryFallbacksValues
-    | Exclude<NativeProperties['positionTryFallbacks'], string>
-    | CssString;
-  readonly positionTryOptions:
-    | keyof PositionTryOptionsValues
-    | Exclude<NativeProperties['positionTryOptions'], string>
-    | CssString;
-  readonly positionTryOrder:
-    keyof PositionTryOrderValues | Exclude<NativeProperties['positionTryOrder'], string>;
-  readonly positionVisibility:
-    | keyof PositionVisibilityValues
-    | Exclude<NativeProperties['positionVisibility'], string>
-    | CssString;
-  readonly printColorAdjust:
-    keyof PrintColorAdjustValues | Exclude<NativeProperties['printColorAdjust'], string>;
-  readonly quotes: keyof QuotesValues | Exclude<NativeProperties['quotes'], string> | CssString;
-  readonly r: keyof RValues | Exclude<NativeProperties['r'], string> | CssString;
-  readonly resize: keyof ResizeValues | Exclude<NativeProperties['resize'], string>;
-  readonly right: keyof RightValues | Exclude<NativeProperties['right'], string> | CssString;
-  readonly rotate: keyof RotateValues | Exclude<NativeProperties['rotate'], string> | CssString;
-  readonly rowGap: keyof RowGapValues | Exclude<NativeProperties['rowGap'], string> | CssString;
-  readonly rubyAlign: keyof RubyAlignValues | Exclude<NativeProperties['rubyAlign'], string>;
-  readonly rubyMerge: keyof RubyMergeValues | Exclude<NativeProperties['rubyMerge'], string>;
-  readonly rubyOverhang:
-    keyof RubyOverhangValues | Exclude<NativeProperties['rubyOverhang'], string>;
-  readonly rubyPosition:
-    keyof RubyPositionValues | Exclude<NativeProperties['rubyPosition'], string> | CssString;
-  readonly rx: keyof RxValues | Exclude<NativeProperties['rx'], string> | CssString;
-  readonly ry: keyof RyValues | Exclude<NativeProperties['ry'], string> | CssString;
-  readonly scale: keyof ScaleValues | Exclude<NativeProperties['scale'], string> | CssString;
-  readonly scrollbarColor:
-    keyof ScrollbarColorValues | Exclude<NativeProperties['scrollbarColor'], string> | CssString;
-  readonly scrollbarGutter:
-    keyof ScrollbarGutterValues | Exclude<NativeProperties['scrollbarGutter'], string> | CssString;
-  readonly scrollbarWidth:
-    keyof ScrollbarWidthValues | Exclude<NativeProperties['scrollbarWidth'], string>;
-  readonly scrollBehavior:
-    keyof ScrollBehaviorValues | Exclude<NativeProperties['scrollBehavior'], string>;
-  readonly scrollInitialTarget:
-    keyof ScrollInitialTargetValues | Exclude<NativeProperties['scrollInitialTarget'], string>;
-  readonly scrollMargin:
-    keyof ScrollMarginValues | Exclude<NativeProperties['scrollMargin'], string> | CssString;
-  readonly scrollMarginBlock:
-    | keyof ScrollMarginBlockValues
-    | Exclude<NativeProperties['scrollMarginBlock'], string>
-    | CssString;
-  readonly scrollMarginBlockEnd:
-    keyof ScrollMarginBlockEndValues | Exclude<NativeProperties['scrollMarginBlockEnd'], string>;
+    keyof OAnimationIterationCountValues | undefined | number | CssString;
+  readonly OAnimationName: keyof OAnimationNameValues | undefined | CssString;
+  readonly OAnimationPlayState: keyof OAnimationPlayStateValues | undefined | CssString;
+  readonly OAnimationTimingFunction: keyof OAnimationTimingFunctionValues | undefined | CssString;
+  readonly OBackgroundSize: keyof OBackgroundSizeValues | undefined | number | CssString;
+  readonly objectFit: keyof ObjectFitValues | undefined;
+  readonly objectPosition: keyof ObjectPositionValues | undefined | number | CssString;
+  readonly objectViewBox: keyof ObjectViewBoxValues | undefined | CssString;
+  readonly OBorderImage: keyof OBorderImageValues | undefined | number | CssString;
+  readonly offset: keyof OffsetValues | undefined | number | CssString;
+  readonly offsetAnchor: keyof OffsetAnchorValues | undefined | number | CssString;
+  readonly offsetBlock: keyof OffsetBlockValues | undefined | number | CssString;
+  readonly offsetBlockEnd: keyof OffsetBlockEndValues | undefined | number | CssString;
+  readonly offsetBlockStart: keyof OffsetBlockStartValues | undefined | number | CssString;
+  readonly offsetDistance: keyof OffsetDistanceValues | undefined | number | CssString;
+  readonly offsetInline: keyof OffsetInlineValues | undefined | number | CssString;
+  readonly offsetInlineEnd: keyof OffsetInlineEndValues | undefined | number | CssString;
+  readonly offsetInlineStart: keyof OffsetInlineStartValues | undefined | number | CssString;
+  readonly offsetPath: keyof OffsetPathValues | undefined | CssString;
+  readonly offsetPosition: keyof OffsetPositionValues | undefined | number | CssString;
+  readonly offsetRotate: keyof OffsetRotateValues | undefined | CssString;
+  readonly offsetRotation: keyof OffsetRotationValues | undefined | CssString;
+  readonly OObjectFit: keyof OObjectFitValues | undefined;
+  readonly OObjectPosition: keyof OObjectPositionValues | undefined | number | CssString;
+  readonly opacity: keyof OpacityValues | undefined | number | CssString;
+  readonly order: keyof OrderValues | undefined | number | CssString;
+  readonly orphans: keyof OrphansValues | undefined | number | CssString;
+  readonly OTabSize: keyof OTabSizeValues | undefined | number | CssString;
+  readonly OTextOverflow: keyof OTextOverflowValues | undefined | CssString;
+  readonly OTransform: keyof OTransformValues | undefined | CssString;
+  readonly OTransformOrigin: keyof OTransformOriginValues | undefined | number | CssString;
+  readonly OTransition: keyof OTransitionValues | undefined | CssString;
+  readonly OTransitionDelay: keyof OTransitionDelayValues | undefined | CssString;
+  readonly OTransitionDuration: keyof OTransitionDurationValues | undefined | CssString;
+  readonly OTransitionProperty: keyof OTransitionPropertyValues | undefined | CssString;
+  readonly OTransitionTimingFunction: keyof OTransitionTimingFunctionValues | undefined | CssString;
+  readonly outline: keyof OutlineValues | undefined | number | CssString;
+  readonly outlineColor: keyof OutlineColorValues | undefined | CssString;
+  readonly outlineOffset: keyof OutlineOffsetValues | undefined | number | CssString;
+  readonly outlineStyle: keyof OutlineStyleValues | undefined;
+  readonly outlineWidth: keyof OutlineWidthValues | undefined | number | CssString;
+  readonly overflow: keyof OverflowValues | undefined | CssString;
+  readonly overflowAnchor: keyof OverflowAnchorValues | undefined;
+  readonly overflowBlock: keyof OverflowBlockValues | undefined;
+  readonly overflowClipBox: keyof OverflowClipBoxValues | undefined;
+  readonly overflowClipMargin: keyof OverflowClipMarginValues | undefined | number | CssString;
+  readonly overflowInline: keyof OverflowInlineValues | undefined;
+  readonly overflowWrap: keyof OverflowWrapValues | undefined;
+  readonly overflowX: keyof OverflowXValues | undefined;
+  readonly overflowY: keyof OverflowYValues | undefined;
+  readonly overlay: keyof OverlayValues | undefined;
+  readonly overscrollBehavior: keyof OverscrollBehaviorValues | undefined | CssString;
+  readonly overscrollBehaviorBlock: keyof OverscrollBehaviorBlockValues | undefined;
+  readonly overscrollBehaviorInline: keyof OverscrollBehaviorInlineValues | undefined;
+  readonly overscrollBehaviorX: keyof OverscrollBehaviorXValues | undefined;
+  readonly overscrollBehaviorY: keyof OverscrollBehaviorYValues | undefined;
+  readonly padding: keyof PaddingValues | undefined | number | CssString;
+  readonly paddingBlock: keyof PaddingBlockValues | undefined | number | CssString;
+  readonly paddingBlockEnd: keyof PaddingBlockEndValues | undefined | number | CssString;
+  readonly paddingBlockStart: keyof PaddingBlockStartValues | undefined | number | CssString;
+  readonly paddingBottom: keyof PaddingBottomValues | undefined | number | CssString;
+  readonly paddingInline: keyof PaddingInlineValues | undefined | number | CssString;
+  readonly paddingInlineEnd: keyof PaddingInlineEndValues | undefined | number | CssString;
+  readonly paddingInlineStart: keyof PaddingInlineStartValues | undefined | number | CssString;
+  readonly paddingLeft: keyof PaddingLeftValues | undefined | number | CssString;
+  readonly paddingRight: keyof PaddingRightValues | undefined | number | CssString;
+  readonly paddingTop: keyof PaddingTopValues | undefined | number | CssString;
+  readonly page: keyof PageValues | undefined | CssString;
+  readonly pageBreakAfter: keyof PageBreakAfterValues | undefined;
+  readonly pageBreakBefore: keyof PageBreakBeforeValues | undefined;
+  readonly pageBreakInside: keyof PageBreakInsideValues | undefined;
+  readonly paintOrder: keyof PaintOrderValues | undefined | CssString;
+  readonly perspective: keyof PerspectiveValues | undefined | number | CssString;
+  readonly perspectiveOrigin: keyof PerspectiveOriginValues | undefined | number | CssString;
+  readonly placeContent: keyof PlaceContentValues | undefined | CssString;
+  readonly placeItems: keyof PlaceItemsValues | undefined | CssString;
+  readonly placeSelf: keyof PlaceSelfValues | undefined | CssString;
+  readonly pointerEvents: keyof PointerEventsValues | undefined;
+  readonly position: keyof PositionValues | undefined;
+  readonly positionAnchor: keyof PositionAnchorValues | undefined | CssString;
+  readonly positionArea: keyof PositionAreaValues | undefined | CssString;
+  readonly positionTry: keyof PositionTryValues | undefined | CssString;
+  readonly positionTryFallbacks: keyof PositionTryFallbacksValues | undefined | CssString;
+  readonly positionTryOptions: keyof PositionTryOptionsValues | undefined | CssString;
+  readonly positionTryOrder: keyof PositionTryOrderValues | undefined;
+  readonly positionVisibility: keyof PositionVisibilityValues | undefined | CssString;
+  readonly printColorAdjust: keyof PrintColorAdjustValues | undefined;
+  readonly quotes: keyof QuotesValues | undefined | CssString;
+  readonly r: keyof RValues | undefined | number | CssString;
+  readonly resize: keyof ResizeValues | undefined;
+  readonly right: keyof RightValues | undefined | number | CssString;
+  readonly rotate: keyof RotateValues | undefined | CssString;
+  readonly rowGap: keyof RowGapValues | undefined | number | CssString;
+  readonly rubyAlign: keyof RubyAlignValues | undefined;
+  readonly rubyMerge: keyof RubyMergeValues | undefined;
+  readonly rubyOverhang: keyof RubyOverhangValues | undefined;
+  readonly rubyPosition: keyof RubyPositionValues | undefined | CssString;
+  readonly rx: keyof RxValues | undefined | number | CssString;
+  readonly ry: keyof RyValues | undefined | number | CssString;
+  readonly scale: keyof ScaleValues | undefined | number | CssString;
+  readonly scrollbarColor: keyof ScrollbarColorValues | undefined | CssString;
+  readonly scrollbarGutter: keyof ScrollbarGutterValues | undefined | CssString;
+  readonly scrollbarWidth: keyof ScrollbarWidthValues | undefined;
+  readonly scrollBehavior: keyof ScrollBehaviorValues | undefined;
+  readonly scrollInitialTarget: keyof ScrollInitialTargetValues | undefined;
+  readonly scrollMargin: keyof ScrollMarginValues | undefined | number | CssString;
+  readonly scrollMarginBlock: keyof ScrollMarginBlockValues | undefined | number | CssString;
+  readonly scrollMarginBlockEnd: keyof ScrollMarginBlockEndValues | undefined | number | CssString;
   readonly scrollMarginBlockStart:
-    | keyof ScrollMarginBlockStartValues
-    | Exclude<NativeProperties['scrollMarginBlockStart'], string>;
-  readonly scrollMarginBottom:
-    keyof ScrollMarginBottomValues | Exclude<NativeProperties['scrollMarginBottom'], string>;
-  readonly scrollMarginInline:
-    | keyof ScrollMarginInlineValues
-    | Exclude<NativeProperties['scrollMarginInline'], string>
-    | CssString;
+    keyof ScrollMarginBlockStartValues | undefined | number | CssString;
+  readonly scrollMarginBottom: keyof ScrollMarginBottomValues | undefined | number | CssString;
+  readonly scrollMarginInline: keyof ScrollMarginInlineValues | undefined | number | CssString;
   readonly scrollMarginInlineEnd:
-    keyof ScrollMarginInlineEndValues | Exclude<NativeProperties['scrollMarginInlineEnd'], string>;
+    keyof ScrollMarginInlineEndValues | undefined | number | CssString;
   readonly scrollMarginInlineStart:
-    | keyof ScrollMarginInlineStartValues
-    | Exclude<NativeProperties['scrollMarginInlineStart'], string>;
-  readonly scrollMarginLeft:
-    keyof ScrollMarginLeftValues | Exclude<NativeProperties['scrollMarginLeft'], string>;
-  readonly scrollMarginRight:
-    keyof ScrollMarginRightValues | Exclude<NativeProperties['scrollMarginRight'], string>;
-  readonly scrollMarginTop:
-    keyof ScrollMarginTopValues | Exclude<NativeProperties['scrollMarginTop'], string>;
-  readonly scrollPadding:
-    keyof ScrollPaddingValues | Exclude<NativeProperties['scrollPadding'], string> | CssString;
-  readonly scrollPaddingBlock:
-    | keyof ScrollPaddingBlockValues
-    | Exclude<NativeProperties['scrollPaddingBlock'], string>
-    | CssString;
+    keyof ScrollMarginInlineStartValues | undefined | number | CssString;
+  readonly scrollMarginLeft: keyof ScrollMarginLeftValues | undefined | number | CssString;
+  readonly scrollMarginRight: keyof ScrollMarginRightValues | undefined | number | CssString;
+  readonly scrollMarginTop: keyof ScrollMarginTopValues | undefined | number | CssString;
+  readonly scrollPadding: keyof ScrollPaddingValues | undefined | number | CssString;
+  readonly scrollPaddingBlock: keyof ScrollPaddingBlockValues | undefined | number | CssString;
   readonly scrollPaddingBlockEnd:
-    | keyof ScrollPaddingBlockEndValues
-    | Exclude<NativeProperties['scrollPaddingBlockEnd'], string>
-    | CssString;
+    keyof ScrollPaddingBlockEndValues | undefined | number | CssString;
   readonly scrollPaddingBlockStart:
-    | keyof ScrollPaddingBlockStartValues
-    | Exclude<NativeProperties['scrollPaddingBlockStart'], string>
-    | CssString;
-  readonly scrollPaddingBottom:
-    | keyof ScrollPaddingBottomValues
-    | Exclude<NativeProperties['scrollPaddingBottom'], string>
-    | CssString;
-  readonly scrollPaddingInline:
-    | keyof ScrollPaddingInlineValues
-    | Exclude<NativeProperties['scrollPaddingInline'], string>
-    | CssString;
+    keyof ScrollPaddingBlockStartValues | undefined | number | CssString;
+  readonly scrollPaddingBottom: keyof ScrollPaddingBottomValues | undefined | number | CssString;
+  readonly scrollPaddingInline: keyof ScrollPaddingInlineValues | undefined | number | CssString;
   readonly scrollPaddingInlineEnd:
-    | keyof ScrollPaddingInlineEndValues
-    | Exclude<NativeProperties['scrollPaddingInlineEnd'], string>
-    | CssString;
+    keyof ScrollPaddingInlineEndValues | undefined | number | CssString;
   readonly scrollPaddingInlineStart:
-    | keyof ScrollPaddingInlineStartValues
-    | Exclude<NativeProperties['scrollPaddingInlineStart'], string>
-    | CssString;
-  readonly scrollPaddingLeft:
-    | keyof ScrollPaddingLeftValues
-    | Exclude<NativeProperties['scrollPaddingLeft'], string>
-    | CssString;
-  readonly scrollPaddingRight:
-    | keyof ScrollPaddingRightValues
-    | Exclude<NativeProperties['scrollPaddingRight'], string>
-    | CssString;
-  readonly scrollPaddingTop:
-    | keyof ScrollPaddingTopValues
-    | Exclude<NativeProperties['scrollPaddingTop'], string>
-    | CssString;
-  readonly scrollSnapAlign:
-    keyof ScrollSnapAlignValues | Exclude<NativeProperties['scrollSnapAlign'], string> | CssString;
-  readonly scrollSnapCoordinate:
-    | keyof ScrollSnapCoordinateValues
-    | Exclude<NativeProperties['scrollSnapCoordinate'], string>
-    | CssString;
+    keyof ScrollPaddingInlineStartValues | undefined | number | CssString;
+  readonly scrollPaddingLeft: keyof ScrollPaddingLeftValues | undefined | number | CssString;
+  readonly scrollPaddingRight: keyof ScrollPaddingRightValues | undefined | number | CssString;
+  readonly scrollPaddingTop: keyof ScrollPaddingTopValues | undefined | number | CssString;
+  readonly scrollSnapAlign: keyof ScrollSnapAlignValues | undefined | CssString;
+  readonly scrollSnapCoordinate: keyof ScrollSnapCoordinateValues | undefined | number | CssString;
   readonly scrollSnapDestination:
-    | keyof ScrollSnapDestinationValues
-    | Exclude<NativeProperties['scrollSnapDestination'], string>
-    | CssString;
-  readonly scrollSnapMargin:
-    | keyof ScrollSnapMarginValues
-    | Exclude<NativeProperties['scrollSnapMargin'], string>
-    | CssString;
+    keyof ScrollSnapDestinationValues | undefined | number | CssString;
+  readonly scrollSnapMargin: keyof ScrollSnapMarginValues | undefined | number | CssString;
   readonly scrollSnapMarginBottom:
-    | keyof ScrollSnapMarginBottomValues
-    | Exclude<NativeProperties['scrollSnapMarginBottom'], string>;
-  readonly scrollSnapMarginLeft:
-    keyof ScrollSnapMarginLeftValues | Exclude<NativeProperties['scrollSnapMarginLeft'], string>;
+    keyof ScrollSnapMarginBottomValues | undefined | number | CssString;
+  readonly scrollSnapMarginLeft: keyof ScrollSnapMarginLeftValues | undefined | number | CssString;
   readonly scrollSnapMarginRight:
-    keyof ScrollSnapMarginRightValues | Exclude<NativeProperties['scrollSnapMarginRight'], string>;
-  readonly scrollSnapMarginTop:
-    keyof ScrollSnapMarginTopValues | Exclude<NativeProperties['scrollSnapMarginTop'], string>;
-  readonly scrollSnapPointsX:
-    | keyof ScrollSnapPointsXValues
-    | Exclude<NativeProperties['scrollSnapPointsX'], string>
-    | CssString;
-  readonly scrollSnapPointsY:
-    | keyof ScrollSnapPointsYValues
-    | Exclude<NativeProperties['scrollSnapPointsY'], string>
-    | CssString;
-  readonly scrollSnapStop:
-    keyof ScrollSnapStopValues | Exclude<NativeProperties['scrollSnapStop'], string>;
-  readonly scrollSnapType:
-    keyof ScrollSnapTypeValues | Exclude<NativeProperties['scrollSnapType'], string> | CssString;
-  readonly scrollSnapTypeX:
-    keyof ScrollSnapTypeXValues | Exclude<NativeProperties['scrollSnapTypeX'], string>;
-  readonly scrollSnapTypeY:
-    keyof ScrollSnapTypeYValues | Exclude<NativeProperties['scrollSnapTypeY'], string>;
-  readonly scrollTimeline:
-    keyof ScrollTimelineValues | Exclude<NativeProperties['scrollTimeline'], string> | CssString;
-  readonly scrollTimelineAxis:
-    | keyof ScrollTimelineAxisValues
-    | Exclude<NativeProperties['scrollTimelineAxis'], string>
-    | CssString;
-  readonly scrollTimelineName:
-    | keyof ScrollTimelineNameValues
-    | Exclude<NativeProperties['scrollTimelineName'], string>
-    | CssString;
-  readonly shapeImageThreshold:
-    | keyof ShapeImageThresholdValues
-    | Exclude<NativeProperties['shapeImageThreshold'], string>
-    | CssString;
-  readonly shapeMargin:
-    keyof ShapeMarginValues | Exclude<NativeProperties['shapeMargin'], string> | CssString;
-  readonly shapeOutside:
-    keyof ShapeOutsideValues | Exclude<NativeProperties['shapeOutside'], string> | CssString;
-  readonly shapeRendering:
-    keyof ShapeRenderingValues | Exclude<NativeProperties['shapeRendering'], string>;
-  readonly speakAs: keyof SpeakAsValues | Exclude<NativeProperties['speakAs'], string> | CssString;
-  readonly stopColor:
-    keyof StopColorValues | Exclude<NativeProperties['stopColor'], string> | CssString;
-  readonly stopOpacity:
-    keyof StopOpacityValues | Exclude<NativeProperties['stopOpacity'], string> | CssString;
-  readonly stroke: keyof StrokeValues | Exclude<NativeProperties['stroke'], string> | CssString;
-  readonly strokeColor:
-    keyof StrokeColorValues | Exclude<NativeProperties['strokeColor'], string> | CssString;
-  readonly strokeDasharray:
-    keyof StrokeDasharrayValues | Exclude<NativeProperties['strokeDasharray'], string> | CssString;
-  readonly strokeDashoffset:
-    | keyof StrokeDashoffsetValues
-    | Exclude<NativeProperties['strokeDashoffset'], string>
-    | CssString;
-  readonly strokeLinecap:
-    keyof StrokeLinecapValues | Exclude<NativeProperties['strokeLinecap'], string>;
-  readonly strokeLinejoin:
-    keyof StrokeLinejoinValues | Exclude<NativeProperties['strokeLinejoin'], string>;
-  readonly strokeMiterlimit:
-    | keyof StrokeMiterlimitValues
-    | Exclude<NativeProperties['strokeMiterlimit'], string>
-    | CssString;
-  readonly strokeOpacity:
-    keyof StrokeOpacityValues | Exclude<NativeProperties['strokeOpacity'], string> | CssString;
-  readonly strokeWidth:
-    keyof StrokeWidthValues | Exclude<NativeProperties['strokeWidth'], string> | CssString;
-  readonly tableLayout: keyof TableLayoutValues | Exclude<NativeProperties['tableLayout'], string>;
-  readonly tabSize: keyof TabSizeValues | Exclude<NativeProperties['tabSize'], string> | CssString;
-  readonly textAlign: keyof TextAlignValues | Exclude<NativeProperties['textAlign'], string>;
-  readonly textAlignLast:
-    keyof TextAlignLastValues | Exclude<NativeProperties['textAlignLast'], string>;
-  readonly textAnchor: keyof TextAnchorValues | Exclude<NativeProperties['textAnchor'], string>;
-  readonly textAutospace:
-    keyof TextAutospaceValues | Exclude<NativeProperties['textAutospace'], string> | CssString;
-  readonly textBox: keyof TextBoxValues | Exclude<NativeProperties['textBox'], string> | CssString;
-  readonly textBoxEdge:
-    keyof TextBoxEdgeValues | Exclude<NativeProperties['textBoxEdge'], string> | CssString;
-  readonly textBoxTrim: keyof TextBoxTrimValues | Exclude<NativeProperties['textBoxTrim'], string>;
-  readonly textCombineUpright:
-    | keyof TextCombineUprightValues
-    | Exclude<NativeProperties['textCombineUpright'], string>
-    | CssString;
-  readonly textDecoration:
-    keyof TextDecorationValues | Exclude<NativeProperties['textDecoration'], string> | CssString;
-  readonly textDecorationColor:
-    | keyof TextDecorationColorValues
-    | Exclude<NativeProperties['textDecorationColor'], string>
-    | CssString;
-  readonly textDecorationLine:
-    | keyof TextDecorationLineValues
-    | Exclude<NativeProperties['textDecorationLine'], string>
-    | CssString;
-  readonly textDecorationSkip:
-    | keyof TextDecorationSkipValues
-    | Exclude<NativeProperties['textDecorationSkip'], string>
-    | CssString;
-  readonly textDecorationSkipInk:
-    keyof TextDecorationSkipInkValues | Exclude<NativeProperties['textDecorationSkipInk'], string>;
-  readonly textDecorationStyle:
-    keyof TextDecorationStyleValues | Exclude<NativeProperties['textDecorationStyle'], string>;
+    keyof ScrollSnapMarginRightValues | undefined | number | CssString;
+  readonly scrollSnapMarginTop: keyof ScrollSnapMarginTopValues | undefined | number | CssString;
+  readonly scrollSnapPointsX: keyof ScrollSnapPointsXValues | undefined | CssString;
+  readonly scrollSnapPointsY: keyof ScrollSnapPointsYValues | undefined | CssString;
+  readonly scrollSnapStop: keyof ScrollSnapStopValues | undefined;
+  readonly scrollSnapType: keyof ScrollSnapTypeValues | undefined | CssString;
+  readonly scrollSnapTypeX: keyof ScrollSnapTypeXValues | undefined;
+  readonly scrollSnapTypeY: keyof ScrollSnapTypeYValues | undefined;
+  readonly scrollTimeline: keyof ScrollTimelineValues | undefined | CssString;
+  readonly scrollTimelineAxis: keyof ScrollTimelineAxisValues | undefined | CssString;
+  readonly scrollTimelineName: keyof ScrollTimelineNameValues | undefined | CssString;
+  readonly shapeImageThreshold: keyof ShapeImageThresholdValues | undefined | number | CssString;
+  readonly shapeMargin: keyof ShapeMarginValues | undefined | number | CssString;
+  readonly shapeOutside: keyof ShapeOutsideValues | undefined | CssString;
+  readonly shapeRendering: keyof ShapeRenderingValues | undefined;
+  readonly speakAs: keyof SpeakAsValues | undefined | CssString;
+  readonly stopColor: keyof StopColorValues | undefined | CssString;
+  readonly stopOpacity: keyof StopOpacityValues | undefined | number | CssString;
+  readonly stroke: keyof StrokeValues | undefined | CssString;
+  readonly strokeColor: keyof StrokeColorValues | undefined | CssString;
+  readonly strokeDasharray: keyof StrokeDasharrayValues | undefined | number | CssString;
+  readonly strokeDashoffset: keyof StrokeDashoffsetValues | undefined | number | CssString;
+  readonly strokeLinecap: keyof StrokeLinecapValues | undefined;
+  readonly strokeLinejoin: keyof StrokeLinejoinValues | undefined;
+  readonly strokeMiterlimit: keyof StrokeMiterlimitValues | undefined | number | CssString;
+  readonly strokeOpacity: keyof StrokeOpacityValues | undefined | number | CssString;
+  readonly strokeWidth: keyof StrokeWidthValues | undefined | number | CssString;
+  readonly tableLayout: keyof TableLayoutValues | undefined;
+  readonly tabSize: keyof TabSizeValues | undefined | number | CssString;
+  readonly textAlign: keyof TextAlignValues | undefined;
+  readonly textAlignLast: keyof TextAlignLastValues | undefined;
+  readonly textAnchor: keyof TextAnchorValues | undefined;
+  readonly textAutospace: keyof TextAutospaceValues | undefined | CssString;
+  readonly textBox: keyof TextBoxValues | undefined | CssString;
+  readonly textBoxEdge: keyof TextBoxEdgeValues | undefined | CssString;
+  readonly textBoxTrim: keyof TextBoxTrimValues | undefined;
+  readonly textCombineUpright: keyof TextCombineUprightValues | undefined | CssString;
+  readonly textDecoration: keyof TextDecorationValues | undefined | number | CssString;
+  readonly textDecorationColor: keyof TextDecorationColorValues | undefined | CssString;
+  readonly textDecorationLine: keyof TextDecorationLineValues | undefined | CssString;
+  readonly textDecorationSkip: keyof TextDecorationSkipValues | undefined | CssString;
+  readonly textDecorationSkipInk: keyof TextDecorationSkipInkValues | undefined;
+  readonly textDecorationStyle: keyof TextDecorationStyleValues | undefined;
   readonly textDecorationThickness:
-    | keyof TextDecorationThicknessValues
-    | Exclude<NativeProperties['textDecorationThickness'], string>
-    | CssString;
-  readonly textEmphasis:
-    keyof TextEmphasisValues | Exclude<NativeProperties['textEmphasis'], string> | CssString;
-  readonly textEmphasisColor:
-    | keyof TextEmphasisColorValues
-    | Exclude<NativeProperties['textEmphasisColor'], string>
-    | CssString;
-  readonly textEmphasisPosition:
-    | keyof TextEmphasisPositionValues
-    | Exclude<NativeProperties['textEmphasisPosition'], string>
-    | CssString;
-  readonly textEmphasisStyle:
-    | keyof TextEmphasisStyleValues
-    | Exclude<NativeProperties['textEmphasisStyle'], string>
-    | CssString;
-  readonly textIndent:
-    keyof TextIndentValues | Exclude<NativeProperties['textIndent'], string> | CssString;
-  readonly textJustify: keyof TextJustifyValues | Exclude<NativeProperties['textJustify'], string>;
-  readonly textOrientation:
-    keyof TextOrientationValues | Exclude<NativeProperties['textOrientation'], string>;
-  readonly textOverflow:
-    keyof TextOverflowValues | Exclude<NativeProperties['textOverflow'], string> | CssString;
-  readonly textRendering:
-    keyof TextRenderingValues | Exclude<NativeProperties['textRendering'], string>;
-  readonly textShadow:
-    keyof TextShadowValues | Exclude<NativeProperties['textShadow'], string> | CssString;
-  readonly textSizeAdjust:
-    keyof TextSizeAdjustValues | Exclude<NativeProperties['textSizeAdjust'], string> | CssString;
-  readonly textSpacingTrim:
-    keyof TextSpacingTrimValues | Exclude<NativeProperties['textSpacingTrim'], string>;
-  readonly textTransform:
-    keyof TextTransformValues | Exclude<NativeProperties['textTransform'], string> | CssString;
-  readonly textUnderlineOffset:
-    | keyof TextUnderlineOffsetValues
-    | Exclude<NativeProperties['textUnderlineOffset'], string>
-    | CssString;
-  readonly textUnderlinePosition:
-    | keyof TextUnderlinePositionValues
-    | Exclude<NativeProperties['textUnderlinePosition'], string>
-    | CssString;
-  readonly textWrap:
-    keyof TextWrapValues | Exclude<NativeProperties['textWrap'], string> | CssString;
-  readonly textWrapMode:
-    keyof TextWrapModeValues | Exclude<NativeProperties['textWrapMode'], string>;
-  readonly textWrapStyle:
-    keyof TextWrapStyleValues | Exclude<NativeProperties['textWrapStyle'], string>;
-  readonly timelineScope:
-    keyof TimelineScopeValues | Exclude<NativeProperties['timelineScope'], string> | CssString;
-  readonly top: keyof TopValues | Exclude<NativeProperties['top'], string> | CssString;
-  readonly touchAction:
-    keyof TouchActionValues | Exclude<NativeProperties['touchAction'], string> | CssString;
-  readonly transform:
-    keyof TransformValues | Exclude<NativeProperties['transform'], string> | CssString;
-  readonly transformBox:
-    keyof TransformBoxValues | Exclude<NativeProperties['transformBox'], string>;
-  readonly transformOrigin:
-    keyof TransformOriginValues | Exclude<NativeProperties['transformOrigin'], string> | CssString;
-  readonly transformStyle:
-    keyof TransformStyleValues | Exclude<NativeProperties['transformStyle'], string>;
-  readonly transition:
-    keyof TransitionValues | Exclude<NativeProperties['transition'], string> | CssString;
-  readonly transitionBehavior:
-    | keyof TransitionBehaviorValues
-    | Exclude<NativeProperties['transitionBehavior'], string>
-    | CssString;
-  readonly transitionDelay:
-    keyof TransitionDelayValues | Exclude<NativeProperties['transitionDelay'], string> | CssString;
-  readonly transitionDuration:
-    | keyof TransitionDurationValues
-    | Exclude<NativeProperties['transitionDuration'], string>
-    | CssString;
-  readonly transitionProperty:
-    | keyof TransitionPropertyValues
-    | Exclude<NativeProperties['transitionProperty'], string>
-    | CssString;
-  readonly transitionTimingFunction:
-    | keyof TransitionTimingFunctionValues
-    | Exclude<NativeProperties['transitionTimingFunction'], string>
-    | CssString;
-  readonly translate:
-    keyof TranslateValues | Exclude<NativeProperties['translate'], string> | CssString;
-  readonly unicodeBidi: keyof UnicodeBidiValues | Exclude<NativeProperties['unicodeBidi'], string>;
-  readonly userSelect: keyof UserSelectValues | Exclude<NativeProperties['userSelect'], string>;
-  readonly vectorEffect:
-    keyof VectorEffectValues | Exclude<NativeProperties['vectorEffect'], string>;
-  readonly verticalAlign:
-    keyof VerticalAlignValues | Exclude<NativeProperties['verticalAlign'], string> | CssString;
-  readonly viewTimeline:
-    keyof ViewTimelineValues | Exclude<NativeProperties['viewTimeline'], string> | CssString;
-  readonly viewTimelineAxis:
-    | keyof ViewTimelineAxisValues
-    | Exclude<NativeProperties['viewTimelineAxis'], string>
-    | CssString;
-  readonly viewTimelineInset:
-    | keyof ViewTimelineInsetValues
-    | Exclude<NativeProperties['viewTimelineInset'], string>
-    | CssString;
-  readonly viewTimelineName:
-    | keyof ViewTimelineNameValues
-    | Exclude<NativeProperties['viewTimelineName'], string>
-    | CssString;
-  readonly viewTransitionClass:
-    | keyof ViewTransitionClassValues
-    | Exclude<NativeProperties['viewTransitionClass'], string>
-    | CssString;
-  readonly viewTransitionName:
-    | keyof ViewTransitionNameValues
-    | Exclude<NativeProperties['viewTransitionName'], string>
-    | CssString;
-  readonly visibility: keyof VisibilityValues | Exclude<NativeProperties['visibility'], string>;
-  readonly WebkitAlignContent:
-    | keyof WebkitAlignContentValues
-    | Exclude<NativeProperties['WebkitAlignContent'], string>
-    | CssString;
-  readonly WebkitAlignItems:
-    | keyof WebkitAlignItemsValues
-    | Exclude<NativeProperties['WebkitAlignItems'], string>
-    | CssString;
-  readonly WebkitAlignSelf:
-    keyof WebkitAlignSelfValues | Exclude<NativeProperties['WebkitAlignSelf'], string> | CssString;
-  readonly WebkitAnimation:
-    keyof WebkitAnimationValues | Exclude<NativeProperties['WebkitAnimation'], string> | CssString;
-  readonly WebkitAnimationDelay:
-    | keyof WebkitAnimationDelayValues
-    | Exclude<NativeProperties['WebkitAnimationDelay'], string>
-    | CssString;
-  readonly WebkitAnimationDirection:
-    | keyof WebkitAnimationDirectionValues
-    | Exclude<NativeProperties['WebkitAnimationDirection'], string>
-    | CssString;
-  readonly WebkitAnimationDuration:
-    | keyof WebkitAnimationDurationValues
-    | Exclude<NativeProperties['WebkitAnimationDuration'], string>
-    | CssString;
-  readonly WebkitAnimationFillMode:
-    | keyof WebkitAnimationFillModeValues
-    | Exclude<NativeProperties['WebkitAnimationFillMode'], string>
-    | CssString;
+    keyof TextDecorationThicknessValues | undefined | number | CssString;
+  readonly textEmphasis: keyof TextEmphasisValues | undefined | CssString;
+  readonly textEmphasisColor: keyof TextEmphasisColorValues | undefined | CssString;
+  readonly textEmphasisPosition: keyof TextEmphasisPositionValues | undefined | CssString;
+  readonly textEmphasisStyle: keyof TextEmphasisStyleValues | undefined | CssString;
+  readonly textIndent: keyof TextIndentValues | undefined | number | CssString;
+  readonly textJustify: keyof TextJustifyValues | undefined;
+  readonly textOrientation: keyof TextOrientationValues | undefined;
+  readonly textOverflow: keyof TextOverflowValues | undefined | CssString;
+  readonly textRendering: keyof TextRenderingValues | undefined;
+  readonly textShadow: keyof TextShadowValues | undefined | CssString;
+  readonly textSizeAdjust: keyof TextSizeAdjustValues | undefined | CssString;
+  readonly textSpacingTrim: keyof TextSpacingTrimValues | undefined;
+  readonly textTransform: keyof TextTransformValues | undefined | CssString;
+  readonly textUnderlineOffset: keyof TextUnderlineOffsetValues | undefined | number | CssString;
+  readonly textUnderlinePosition: keyof TextUnderlinePositionValues | undefined | CssString;
+  readonly textWrap: keyof TextWrapValues | undefined | CssString;
+  readonly textWrapMode: keyof TextWrapModeValues | undefined;
+  readonly textWrapStyle: keyof TextWrapStyleValues | undefined;
+  readonly timelineScope: keyof TimelineScopeValues | undefined | CssString;
+  readonly top: keyof TopValues | undefined | number | CssString;
+  readonly touchAction: keyof TouchActionValues | undefined | CssString;
+  readonly transform: keyof TransformValues | undefined | CssString;
+  readonly transformBox: keyof TransformBoxValues | undefined;
+  readonly transformOrigin: keyof TransformOriginValues | undefined | number | CssString;
+  readonly transformStyle: keyof TransformStyleValues | undefined;
+  readonly transition: keyof TransitionValues | undefined | CssString;
+  readonly transitionBehavior: keyof TransitionBehaviorValues | undefined | CssString;
+  readonly transitionDelay: keyof TransitionDelayValues | undefined | CssString;
+  readonly transitionDuration: keyof TransitionDurationValues | undefined | CssString;
+  readonly transitionProperty: keyof TransitionPropertyValues | undefined | CssString;
+  readonly transitionTimingFunction: keyof TransitionTimingFunctionValues | undefined | CssString;
+  readonly translate: keyof TranslateValues | undefined | number | CssString;
+  readonly unicodeBidi: keyof UnicodeBidiValues | undefined;
+  readonly userSelect: keyof UserSelectValues | undefined;
+  readonly vectorEffect: keyof VectorEffectValues | undefined;
+  readonly verticalAlign: keyof VerticalAlignValues | undefined | number | CssString;
+  readonly viewTimeline: keyof ViewTimelineValues | undefined | CssString;
+  readonly viewTimelineAxis: keyof ViewTimelineAxisValues | undefined | CssString;
+  readonly viewTimelineInset: keyof ViewTimelineInsetValues | undefined | number | CssString;
+  readonly viewTimelineName: keyof ViewTimelineNameValues | undefined | CssString;
+  readonly viewTransitionClass: keyof ViewTransitionClassValues | undefined | CssString;
+  readonly viewTransitionName: keyof ViewTransitionNameValues | undefined | CssString;
+  readonly visibility: keyof VisibilityValues | undefined;
+  readonly WebkitAlignContent: keyof WebkitAlignContentValues | undefined | CssString;
+  readonly WebkitAlignItems: keyof WebkitAlignItemsValues | undefined | CssString;
+  readonly WebkitAlignSelf: keyof WebkitAlignSelfValues | undefined | CssString;
+  readonly WebkitAnimation: keyof WebkitAnimationValues | undefined | number | CssString;
+  readonly WebkitAnimationDelay: keyof WebkitAnimationDelayValues | undefined | CssString;
+  readonly WebkitAnimationDirection: keyof WebkitAnimationDirectionValues | undefined | CssString;
+  readonly WebkitAnimationDuration: keyof WebkitAnimationDurationValues | undefined | CssString;
+  readonly WebkitAnimationFillMode: keyof WebkitAnimationFillModeValues | undefined | CssString;
   readonly WebkitAnimationIterationCount:
-    | keyof WebkitAnimationIterationCountValues
-    | Exclude<NativeProperties['WebkitAnimationIterationCount'], string>
-    | CssString;
-  readonly WebkitAnimationName:
-    | keyof WebkitAnimationNameValues
-    | Exclude<NativeProperties['WebkitAnimationName'], string>
-    | CssString;
-  readonly WebkitAnimationPlayState:
-    | keyof WebkitAnimationPlayStateValues
-    | Exclude<NativeProperties['WebkitAnimationPlayState'], string>
-    | CssString;
+    keyof WebkitAnimationIterationCountValues | undefined | number | CssString;
+  readonly WebkitAnimationName: keyof WebkitAnimationNameValues | undefined | CssString;
+  readonly WebkitAnimationPlayState: keyof WebkitAnimationPlayStateValues | undefined | CssString;
   readonly WebkitAnimationTimingFunction:
-    | keyof WebkitAnimationTimingFunctionValues
-    | Exclude<NativeProperties['WebkitAnimationTimingFunction'], string>
-    | CssString;
-  readonly WebkitAppearance:
-    keyof WebkitAppearanceValues | Exclude<NativeProperties['WebkitAppearance'], string>;
-  readonly WebkitBackdropFilter:
-    | keyof WebkitBackdropFilterValues
-    | Exclude<NativeProperties['WebkitBackdropFilter'], string>
-    | CssString;
-  readonly WebkitBackfaceVisibility:
-    | keyof WebkitBackfaceVisibilityValues
-    | Exclude<NativeProperties['WebkitBackfaceVisibility'], string>;
-  readonly WebkitBackgroundClip:
-    | keyof WebkitBackgroundClipValues
-    | Exclude<NativeProperties['WebkitBackgroundClip'], string>
-    | CssString;
-  readonly WebkitBackgroundOrigin:
-    | keyof WebkitBackgroundOriginValues
-    | Exclude<NativeProperties['WebkitBackgroundOrigin'], string>
-    | CssString;
-  readonly WebkitBackgroundSize:
-    | keyof WebkitBackgroundSizeValues
-    | Exclude<NativeProperties['WebkitBackgroundSize'], string>
-    | CssString;
-  readonly WebkitBorderBefore:
-    | keyof WebkitBorderBeforeValues
-    | Exclude<NativeProperties['WebkitBorderBefore'], string>
-    | CssString;
-  readonly WebkitBorderBeforeColor:
-    | keyof WebkitBorderBeforeColorValues
-    | Exclude<NativeProperties['WebkitBorderBeforeColor'], string>
-    | CssString;
-  readonly WebkitBorderBeforeStyle:
-    | keyof WebkitBorderBeforeStyleValues
-    | Exclude<NativeProperties['WebkitBorderBeforeStyle'], string>
-    | CssString;
+    keyof WebkitAnimationTimingFunctionValues | undefined | CssString;
+  readonly WebkitAppearance: keyof WebkitAppearanceValues | undefined;
+  readonly WebkitBackdropFilter: keyof WebkitBackdropFilterValues | undefined | CssString;
+  readonly WebkitBackfaceVisibility: keyof WebkitBackfaceVisibilityValues | undefined;
+  readonly WebkitBackgroundClip: keyof WebkitBackgroundClipValues | undefined | CssString;
+  readonly WebkitBackgroundOrigin: keyof WebkitBackgroundOriginValues | undefined | CssString;
+  readonly WebkitBackgroundSize: keyof WebkitBackgroundSizeValues | undefined | number | CssString;
+  readonly WebkitBorderBefore: keyof WebkitBorderBeforeValues | undefined | number | CssString;
+  readonly WebkitBorderBeforeColor: keyof WebkitBorderBeforeColorValues | undefined | CssString;
+  readonly WebkitBorderBeforeStyle: keyof WebkitBorderBeforeStyleValues | undefined | CssString;
   readonly WebkitBorderBeforeWidth:
-    | keyof WebkitBorderBeforeWidthValues
-    | Exclude<NativeProperties['WebkitBorderBeforeWidth'], string>
-    | CssString;
+    keyof WebkitBorderBeforeWidthValues | undefined | number | CssString;
   readonly WebkitBorderBottomLeftRadius:
-    | keyof WebkitBorderBottomLeftRadiusValues
-    | Exclude<NativeProperties['WebkitBorderBottomLeftRadius'], string>
-    | CssString;
+    keyof WebkitBorderBottomLeftRadiusValues | undefined | number | CssString;
   readonly WebkitBorderBottomRightRadius:
-    | keyof WebkitBorderBottomRightRadiusValues
-    | Exclude<NativeProperties['WebkitBorderBottomRightRadius'], string>
-    | CssString;
-  readonly WebkitBorderImage:
-    | keyof WebkitBorderImageValues
-    | Exclude<NativeProperties['WebkitBorderImage'], string>
-    | CssString;
+    keyof WebkitBorderBottomRightRadiusValues | undefined | number | CssString;
+  readonly WebkitBorderImage: keyof WebkitBorderImageValues | undefined | number | CssString;
   readonly WebkitBorderImageSlice:
-    | keyof WebkitBorderImageSliceValues
-    | Exclude<NativeProperties['WebkitBorderImageSlice'], string>
-    | CssString;
-  readonly WebkitBorderRadius:
-    | keyof WebkitBorderRadiusValues
-    | Exclude<NativeProperties['WebkitBorderRadius'], string>
-    | CssString;
+    keyof WebkitBorderImageSliceValues | undefined | number | CssString;
+  readonly WebkitBorderRadius: keyof WebkitBorderRadiusValues | undefined | number | CssString;
   readonly WebkitBorderTopLeftRadius:
-    | keyof WebkitBorderTopLeftRadiusValues
-    | Exclude<NativeProperties['WebkitBorderTopLeftRadius'], string>
-    | CssString;
+    keyof WebkitBorderTopLeftRadiusValues | undefined | number | CssString;
   readonly WebkitBorderTopRightRadius:
-    | keyof WebkitBorderTopRightRadiusValues
-    | Exclude<NativeProperties['WebkitBorderTopRightRadius'], string>
-    | CssString;
-  readonly WebkitBoxAlign:
-    keyof WebkitBoxAlignValues | Exclude<NativeProperties['WebkitBoxAlign'], string>;
-  readonly WebkitBoxDecorationBreak:
-    | keyof WebkitBoxDecorationBreakValues
-    | Exclude<NativeProperties['WebkitBoxDecorationBreak'], string>;
-  readonly WebkitBoxDirection:
-    keyof WebkitBoxDirectionValues | Exclude<NativeProperties['WebkitBoxDirection'], string>;
-  readonly WebkitBoxFlex:
-    keyof WebkitBoxFlexValues | Exclude<NativeProperties['WebkitBoxFlex'], string> | CssString;
-  readonly WebkitBoxFlexGroup:
-    | keyof WebkitBoxFlexGroupValues
-    | Exclude<NativeProperties['WebkitBoxFlexGroup'], string>
-    | CssString;
-  readonly WebkitBoxLines:
-    keyof WebkitBoxLinesValues | Exclude<NativeProperties['WebkitBoxLines'], string>;
+    keyof WebkitBorderTopRightRadiusValues | undefined | number | CssString;
+  readonly WebkitBoxAlign: keyof WebkitBoxAlignValues | undefined;
+  readonly WebkitBoxDecorationBreak: keyof WebkitBoxDecorationBreakValues | undefined;
+  readonly WebkitBoxDirection: keyof WebkitBoxDirectionValues | undefined;
+  readonly WebkitBoxFlex: keyof WebkitBoxFlexValues | undefined | number | CssString;
+  readonly WebkitBoxFlexGroup: keyof WebkitBoxFlexGroupValues | undefined | number | CssString;
+  readonly WebkitBoxLines: keyof WebkitBoxLinesValues | undefined;
   readonly WebkitBoxOrdinalGroup:
-    | keyof WebkitBoxOrdinalGroupValues
-    | Exclude<NativeProperties['WebkitBoxOrdinalGroup'], string>
-    | CssString;
-  readonly WebkitBoxOrient:
-    keyof WebkitBoxOrientValues | Exclude<NativeProperties['WebkitBoxOrient'], string>;
-  readonly WebkitBoxPack:
-    keyof WebkitBoxPackValues | Exclude<NativeProperties['WebkitBoxPack'], string>;
-  readonly WebkitBoxReflect:
-    | keyof WebkitBoxReflectValues
-    | Exclude<NativeProperties['WebkitBoxReflect'], string>
-    | CssString;
-  readonly WebkitBoxShadow:
-    keyof WebkitBoxShadowValues | Exclude<NativeProperties['WebkitBoxShadow'], string> | CssString;
-  readonly WebkitBoxSizing:
-    keyof WebkitBoxSizingValues | Exclude<NativeProperties['WebkitBoxSizing'], string>;
-  readonly WebkitClipPath:
-    keyof WebkitClipPathValues | Exclude<NativeProperties['WebkitClipPath'], string> | CssString;
-  readonly WebkitColumnCount:
-    | keyof WebkitColumnCountValues
-    | Exclude<NativeProperties['WebkitColumnCount'], string>
-    | CssString;
-  readonly WebkitColumnFill:
-    keyof WebkitColumnFillValues | Exclude<NativeProperties['WebkitColumnFill'], string>;
-  readonly WebkitColumnRule:
-    | keyof WebkitColumnRuleValues
-    | Exclude<NativeProperties['WebkitColumnRule'], string>
-    | CssString;
-  readonly WebkitColumnRuleColor:
-    | keyof WebkitColumnRuleColorValues
-    | Exclude<NativeProperties['WebkitColumnRuleColor'], string>
-    | CssString;
-  readonly WebkitColumnRuleStyle:
-    | keyof WebkitColumnRuleStyleValues
-    | Exclude<NativeProperties['WebkitColumnRuleStyle'], string>
-    | CssString;
+    keyof WebkitBoxOrdinalGroupValues | undefined | number | CssString;
+  readonly WebkitBoxOrient: keyof WebkitBoxOrientValues | undefined;
+  readonly WebkitBoxPack: keyof WebkitBoxPackValues | undefined;
+  readonly WebkitBoxReflect: keyof WebkitBoxReflectValues | undefined | number | CssString;
+  readonly WebkitBoxShadow: keyof WebkitBoxShadowValues | undefined | CssString;
+  readonly WebkitBoxSizing: keyof WebkitBoxSizingValues | undefined;
+  readonly WebkitClipPath: keyof WebkitClipPathValues | undefined | CssString;
+  readonly WebkitColumnCount: keyof WebkitColumnCountValues | undefined | number | CssString;
+  readonly WebkitColumnFill: keyof WebkitColumnFillValues | undefined;
+  readonly WebkitColumnRule: keyof WebkitColumnRuleValues | undefined | number | CssString;
+  readonly WebkitColumnRuleColor: keyof WebkitColumnRuleColorValues | undefined | CssString;
+  readonly WebkitColumnRuleStyle: keyof WebkitColumnRuleStyleValues | undefined | CssString;
   readonly WebkitColumnRuleWidth:
-    | keyof WebkitColumnRuleWidthValues
-    | Exclude<NativeProperties['WebkitColumnRuleWidth'], string>
-    | CssString;
-  readonly WebkitColumns:
-    keyof WebkitColumnsValues | Exclude<NativeProperties['WebkitColumns'], string> | CssString;
-  readonly WebkitColumnSpan:
-    keyof WebkitColumnSpanValues | Exclude<NativeProperties['WebkitColumnSpan'], string>;
-  readonly WebkitColumnWidth:
-    keyof WebkitColumnWidthValues | Exclude<NativeProperties['WebkitColumnWidth'], string>;
-  readonly WebkitFilter:
-    keyof WebkitFilterValues | Exclude<NativeProperties['WebkitFilter'], string> | CssString;
-  readonly WebkitFlex:
-    keyof WebkitFlexValues | Exclude<NativeProperties['WebkitFlex'], string> | CssString;
-  readonly WebkitFlexBasis:
-    keyof WebkitFlexBasisValues | Exclude<NativeProperties['WebkitFlexBasis'], string> | CssString;
-  readonly WebkitFlexDirection:
-    keyof WebkitFlexDirectionValues | Exclude<NativeProperties['WebkitFlexDirection'], string>;
-  readonly WebkitFlexFlow:
-    keyof WebkitFlexFlowValues | Exclude<NativeProperties['WebkitFlexFlow'], string> | CssString;
-  readonly WebkitFlexGrow:
-    keyof WebkitFlexGrowValues | Exclude<NativeProperties['WebkitFlexGrow'], string> | CssString;
-  readonly WebkitFlexShrink:
-    | keyof WebkitFlexShrinkValues
-    | Exclude<NativeProperties['WebkitFlexShrink'], string>
-    | CssString;
-  readonly WebkitFlexWrap:
-    keyof WebkitFlexWrapValues | Exclude<NativeProperties['WebkitFlexWrap'], string>;
-  readonly WebkitFontFeatureSettings:
-    | keyof WebkitFontFeatureSettingsValues
-    | Exclude<NativeProperties['WebkitFontFeatureSettings'], string>
-    | CssString;
-  readonly WebkitFontKerning:
-    keyof WebkitFontKerningValues | Exclude<NativeProperties['WebkitFontKerning'], string>;
-  readonly WebkitFontSmoothing:
-    keyof WebkitFontSmoothingValues | Exclude<NativeProperties['WebkitFontSmoothing'], string>;
+    keyof WebkitColumnRuleWidthValues | undefined | number | CssString;
+  readonly WebkitColumns: keyof WebkitColumnsValues | undefined | number | CssString;
+  readonly WebkitColumnSpan: keyof WebkitColumnSpanValues | undefined;
+  readonly WebkitColumnWidth: keyof WebkitColumnWidthValues | undefined | number | CssString;
+  readonly WebkitFilter: keyof WebkitFilterValues | undefined | CssString;
+  readonly WebkitFlex: keyof WebkitFlexValues | undefined | number | CssString;
+  readonly WebkitFlexBasis: keyof WebkitFlexBasisValues | undefined | number | CssString;
+  readonly WebkitFlexDirection: keyof WebkitFlexDirectionValues | undefined;
+  readonly WebkitFlexFlow: keyof WebkitFlexFlowValues | undefined | CssString;
+  readonly WebkitFlexGrow: keyof WebkitFlexGrowValues | undefined | number | CssString;
+  readonly WebkitFlexShrink: keyof WebkitFlexShrinkValues | undefined | number | CssString;
+  readonly WebkitFlexWrap: keyof WebkitFlexWrapValues | undefined;
+  readonly WebkitFontFeatureSettings: keyof WebkitFontFeatureSettingsValues | undefined | CssString;
+  readonly WebkitFontKerning: keyof WebkitFontKerningValues | undefined;
+  readonly WebkitFontSmoothing: keyof WebkitFontSmoothingValues | undefined | number | CssString;
   readonly WebkitFontVariantLigatures:
-    | keyof WebkitFontVariantLigaturesValues
-    | Exclude<NativeProperties['WebkitFontVariantLigatures'], string>
-    | CssString;
-  readonly WebkitHyphenateCharacter:
-    | keyof WebkitHyphenateCharacterValues
-    | Exclude<NativeProperties['WebkitHyphenateCharacter'], string>
-    | CssString;
-  readonly WebkitHyphens:
-    keyof WebkitHyphensValues | Exclude<NativeProperties['WebkitHyphens'], string>;
-  readonly WebkitInitialLetter:
-    | keyof WebkitInitialLetterValues
-    | Exclude<NativeProperties['WebkitInitialLetter'], string>
-    | CssString;
-  readonly WebkitJustifyContent:
-    | keyof WebkitJustifyContentValues
-    | Exclude<NativeProperties['WebkitJustifyContent'], string>
-    | CssString;
-  readonly WebkitLineBreak:
-    keyof WebkitLineBreakValues | Exclude<NativeProperties['WebkitLineBreak'], string>;
-  readonly WebkitLineClamp:
-    keyof WebkitLineClampValues | Exclude<NativeProperties['WebkitLineClamp'], string> | CssString;
-  readonly WebkitLogicalHeight:
-    | keyof WebkitLogicalHeightValues
-    | Exclude<NativeProperties['WebkitLogicalHeight'], string>
-    | CssString;
-  readonly WebkitLogicalWidth:
-    | keyof WebkitLogicalWidthValues
-    | Exclude<NativeProperties['WebkitLogicalWidth'], string>
-    | CssString;
-  readonly WebkitMarginEnd:
-    keyof WebkitMarginEndValues | Exclude<NativeProperties['WebkitMarginEnd'], string> | CssString;
-  readonly WebkitMarginStart:
-    | keyof WebkitMarginStartValues
-    | Exclude<NativeProperties['WebkitMarginStart'], string>
-    | CssString;
-  readonly WebkitMask:
-    keyof WebkitMaskValues | Exclude<NativeProperties['WebkitMask'], string> | CssString;
-  readonly WebkitMaskAttachment:
-    | keyof WebkitMaskAttachmentValues
-    | Exclude<NativeProperties['WebkitMaskAttachment'], string>
-    | CssString;
-  readonly WebkitMaskBoxImage:
-    | keyof WebkitMaskBoxImageValues
-    | Exclude<NativeProperties['WebkitMaskBoxImage'], string>
-    | CssString;
+    keyof WebkitFontVariantLigaturesValues | undefined | CssString;
+  readonly WebkitHyphenateCharacter: keyof WebkitHyphenateCharacterValues | undefined | CssString;
+  readonly WebkitHyphens: keyof WebkitHyphensValues | undefined;
+  readonly WebkitInitialLetter: keyof WebkitInitialLetterValues | undefined | number | CssString;
+  readonly WebkitJustifyContent: keyof WebkitJustifyContentValues | undefined | CssString;
+  readonly WebkitLineBreak: keyof WebkitLineBreakValues | undefined;
+  readonly WebkitLineClamp: keyof WebkitLineClampValues | undefined | number | CssString;
+  readonly WebkitLogicalHeight: keyof WebkitLogicalHeightValues | undefined | number | CssString;
+  readonly WebkitLogicalWidth: keyof WebkitLogicalWidthValues | undefined | number | CssString;
+  readonly WebkitMarginEnd: keyof WebkitMarginEndValues | undefined | number | CssString;
+  readonly WebkitMarginStart: keyof WebkitMarginStartValues | undefined | number | CssString;
+  readonly WebkitMask: keyof WebkitMaskValues | undefined | number | CssString;
+  readonly WebkitMaskAttachment: keyof WebkitMaskAttachmentValues | undefined | CssString;
+  readonly WebkitMaskBoxImage: keyof WebkitMaskBoxImageValues | undefined | number | CssString;
   readonly WebkitMaskBoxImageOutset:
-    | keyof WebkitMaskBoxImageOutsetValues
-    | Exclude<NativeProperties['WebkitMaskBoxImageOutset'], string>
-    | CssString;
-  readonly WebkitMaskBoxImageRepeat:
-    | keyof WebkitMaskBoxImageRepeatValues
-    | Exclude<NativeProperties['WebkitMaskBoxImageRepeat'], string>
-    | CssString;
+    keyof WebkitMaskBoxImageOutsetValues | undefined | number | CssString;
+  readonly WebkitMaskBoxImageRepeat: keyof WebkitMaskBoxImageRepeatValues | undefined | CssString;
   readonly WebkitMaskBoxImageSlice:
-    | keyof WebkitMaskBoxImageSliceValues
-    | Exclude<NativeProperties['WebkitMaskBoxImageSlice'], string>
-    | CssString;
-  readonly WebkitMaskBoxImageSource:
-    | keyof WebkitMaskBoxImageSourceValues
-    | Exclude<NativeProperties['WebkitMaskBoxImageSource'], string>
-    | CssString;
+    keyof WebkitMaskBoxImageSliceValues | undefined | number | CssString;
+  readonly WebkitMaskBoxImageSource: keyof WebkitMaskBoxImageSourceValues | undefined | CssString;
   readonly WebkitMaskBoxImageWidth:
-    | keyof WebkitMaskBoxImageWidthValues
-    | Exclude<NativeProperties['WebkitMaskBoxImageWidth'], string>
-    | CssString;
-  readonly WebkitMaskClip:
-    keyof WebkitMaskClipValues | Exclude<NativeProperties['WebkitMaskClip'], string> | CssString;
-  readonly WebkitMaskComposite:
-    | keyof WebkitMaskCompositeValues
-    | Exclude<NativeProperties['WebkitMaskComposite'], string>
-    | CssString;
-  readonly WebkitMaskImage:
-    keyof WebkitMaskImageValues | Exclude<NativeProperties['WebkitMaskImage'], string> | CssString;
-  readonly WebkitMaskOrigin:
-    | keyof WebkitMaskOriginValues
-    | Exclude<NativeProperties['WebkitMaskOrigin'], string>
-    | CssString;
-  readonly WebkitMaskPosition:
-    | keyof WebkitMaskPositionValues
-    | Exclude<NativeProperties['WebkitMaskPosition'], string>
-    | CssString;
-  readonly WebkitMaskPositionX:
-    | keyof WebkitMaskPositionXValues
-    | Exclude<NativeProperties['WebkitMaskPositionX'], string>
-    | CssString;
-  readonly WebkitMaskPositionY:
-    | keyof WebkitMaskPositionYValues
-    | Exclude<NativeProperties['WebkitMaskPositionY'], string>
-    | CssString;
-  readonly WebkitMaskRepeat:
-    | keyof WebkitMaskRepeatValues
-    | Exclude<NativeProperties['WebkitMaskRepeat'], string>
-    | CssString;
-  readonly WebkitMaskRepeatX:
-    keyof WebkitMaskRepeatXValues | Exclude<NativeProperties['WebkitMaskRepeatX'], string>;
-  readonly WebkitMaskRepeatY:
-    keyof WebkitMaskRepeatYValues | Exclude<NativeProperties['WebkitMaskRepeatY'], string>;
-  readonly WebkitMaskSize:
-    keyof WebkitMaskSizeValues | Exclude<NativeProperties['WebkitMaskSize'], string> | CssString;
-  readonly WebkitMaxInlineSize:
-    | keyof WebkitMaxInlineSizeValues
-    | Exclude<NativeProperties['WebkitMaxInlineSize'], string>
-    | CssString;
-  readonly WebkitOrder:
-    keyof WebkitOrderValues | Exclude<NativeProperties['WebkitOrder'], string> | CssString;
-  readonly WebkitOverflowScrolling:
-    | keyof WebkitOverflowScrollingValues
-    | Exclude<NativeProperties['WebkitOverflowScrolling'], string>;
-  readonly WebkitPaddingEnd:
-    | keyof WebkitPaddingEndValues
-    | Exclude<NativeProperties['WebkitPaddingEnd'], string>
-    | CssString;
-  readonly WebkitPaddingStart:
-    | keyof WebkitPaddingStartValues
-    | Exclude<NativeProperties['WebkitPaddingStart'], string>
-    | CssString;
-  readonly WebkitPerspective:
-    keyof WebkitPerspectiveValues | Exclude<NativeProperties['WebkitPerspective'], string>;
+    keyof WebkitMaskBoxImageWidthValues | undefined | number | CssString;
+  readonly WebkitMaskClip: keyof WebkitMaskClipValues | undefined | CssString;
+  readonly WebkitMaskComposite: keyof WebkitMaskCompositeValues | undefined | CssString;
+  readonly WebkitMaskImage: keyof WebkitMaskImageValues | undefined | CssString;
+  readonly WebkitMaskOrigin: keyof WebkitMaskOriginValues | undefined | CssString;
+  readonly WebkitMaskPosition: keyof WebkitMaskPositionValues | undefined | number | CssString;
+  readonly WebkitMaskPositionX: keyof WebkitMaskPositionXValues | undefined | number | CssString;
+  readonly WebkitMaskPositionY: keyof WebkitMaskPositionYValues | undefined | number | CssString;
+  readonly WebkitMaskRepeat: keyof WebkitMaskRepeatValues | undefined | CssString;
+  readonly WebkitMaskRepeatX: keyof WebkitMaskRepeatXValues | undefined;
+  readonly WebkitMaskRepeatY: keyof WebkitMaskRepeatYValues | undefined;
+  readonly WebkitMaskSize: keyof WebkitMaskSizeValues | undefined | number | CssString;
+  readonly WebkitMaxInlineSize: keyof WebkitMaxInlineSizeValues | undefined | number | CssString;
+  readonly WebkitOrder: keyof WebkitOrderValues | undefined | number | CssString;
+  readonly WebkitOverflowScrolling: keyof WebkitOverflowScrollingValues | undefined;
+  readonly WebkitPaddingEnd: keyof WebkitPaddingEndValues | undefined | number | CssString;
+  readonly WebkitPaddingStart: keyof WebkitPaddingStartValues | undefined | number | CssString;
+  readonly WebkitPerspective: keyof WebkitPerspectiveValues | undefined | number | CssString;
   readonly WebkitPerspectiveOrigin:
-    | keyof WebkitPerspectiveOriginValues
-    | Exclude<NativeProperties['WebkitPerspectiveOrigin'], string>
-    | CssString;
-  readonly WebkitPrintColorAdjust:
-    | keyof WebkitPrintColorAdjustValues
-    | Exclude<NativeProperties['WebkitPrintColorAdjust'], string>;
-  readonly WebkitRubyPosition:
-    | keyof WebkitRubyPositionValues
-    | Exclude<NativeProperties['WebkitRubyPosition'], string>
-    | CssString;
-  readonly WebkitScrollSnapType:
-    | keyof WebkitScrollSnapTypeValues
-    | Exclude<NativeProperties['WebkitScrollSnapType'], string>
-    | CssString;
-  readonly WebkitShapeMargin:
-    | keyof WebkitShapeMarginValues
-    | Exclude<NativeProperties['WebkitShapeMargin'], string>
-    | CssString;
-  readonly WebkitTapHighlightColor:
-    | keyof WebkitTapHighlightColorValues
-    | Exclude<NativeProperties['WebkitTapHighlightColor'], string>
-    | CssString;
-  readonly WebkitTextCombine:
-    | keyof WebkitTextCombineValues
-    | Exclude<NativeProperties['WebkitTextCombine'], string>
-    | CssString;
-  readonly WebkitTextDecorationColor:
-    | keyof WebkitTextDecorationColorValues
-    | Exclude<NativeProperties['WebkitTextDecorationColor'], string>
-    | CssString;
-  readonly WebkitTextDecorationLine:
-    | keyof WebkitTextDecorationLineValues
-    | Exclude<NativeProperties['WebkitTextDecorationLine'], string>
-    | CssString;
-  readonly WebkitTextDecorationSkip:
-    | keyof WebkitTextDecorationSkipValues
-    | Exclude<NativeProperties['WebkitTextDecorationSkip'], string>
-    | CssString;
-  readonly WebkitTextDecorationStyle:
-    | keyof WebkitTextDecorationStyleValues
-    | Exclude<NativeProperties['WebkitTextDecorationStyle'], string>;
-  readonly WebkitTextEmphasis:
-    | keyof WebkitTextEmphasisValues
-    | Exclude<NativeProperties['WebkitTextEmphasis'], string>
-    | CssString;
-  readonly WebkitTextEmphasisColor:
-    | keyof WebkitTextEmphasisColorValues
-    | Exclude<NativeProperties['WebkitTextEmphasisColor'], string>
-    | CssString;
+    keyof WebkitPerspectiveOriginValues | undefined | number | CssString;
+  readonly WebkitPrintColorAdjust: keyof WebkitPrintColorAdjustValues | undefined;
+  readonly WebkitRubyPosition: keyof WebkitRubyPositionValues | undefined | CssString;
+  readonly WebkitScrollSnapType: keyof WebkitScrollSnapTypeValues | undefined | CssString;
+  readonly WebkitShapeMargin: keyof WebkitShapeMarginValues | undefined | number | CssString;
+  readonly WebkitTapHighlightColor: keyof WebkitTapHighlightColorValues | undefined | CssString;
+  readonly WebkitTextCombine: keyof WebkitTextCombineValues | undefined | CssString;
+  readonly WebkitTextDecorationColor: keyof WebkitTextDecorationColorValues | undefined | CssString;
+  readonly WebkitTextDecorationLine: keyof WebkitTextDecorationLineValues | undefined | CssString;
+  readonly WebkitTextDecorationSkip: keyof WebkitTextDecorationSkipValues | undefined | CssString;
+  readonly WebkitTextDecorationStyle: keyof WebkitTextDecorationStyleValues | undefined;
+  readonly WebkitTextEmphasis: keyof WebkitTextEmphasisValues | undefined | CssString;
+  readonly WebkitTextEmphasisColor: keyof WebkitTextEmphasisColorValues | undefined | CssString;
   readonly WebkitTextEmphasisPosition:
-    | keyof WebkitTextEmphasisPositionValues
-    | Exclude<NativeProperties['WebkitTextEmphasisPosition'], string>
-    | CssString;
-  readonly WebkitTextEmphasisStyle:
-    | keyof WebkitTextEmphasisStyleValues
-    | Exclude<NativeProperties['WebkitTextEmphasisStyle'], string>
-    | CssString;
-  readonly WebkitTextFillColor:
-    | keyof WebkitTextFillColorValues
-    | Exclude<NativeProperties['WebkitTextFillColor'], string>
-    | CssString;
-  readonly WebkitTextOrientation:
-    keyof WebkitTextOrientationValues | Exclude<NativeProperties['WebkitTextOrientation'], string>;
-  readonly WebkitTextSizeAdjust:
-    | keyof WebkitTextSizeAdjustValues
-    | Exclude<NativeProperties['WebkitTextSizeAdjust'], string>
-    | CssString;
-  readonly WebkitTextStroke:
-    | keyof WebkitTextStrokeValues
-    | Exclude<NativeProperties['WebkitTextStroke'], string>
-    | CssString;
-  readonly WebkitTextStrokeColor:
-    | keyof WebkitTextStrokeColorValues
-    | Exclude<NativeProperties['WebkitTextStrokeColor'], string>
-    | CssString;
+    keyof WebkitTextEmphasisPositionValues | undefined | CssString;
+  readonly WebkitTextEmphasisStyle: keyof WebkitTextEmphasisStyleValues | undefined | CssString;
+  readonly WebkitTextFillColor: keyof WebkitTextFillColorValues | undefined | CssString;
+  readonly WebkitTextOrientation: keyof WebkitTextOrientationValues | undefined;
+  readonly WebkitTextSizeAdjust: keyof WebkitTextSizeAdjustValues | undefined | CssString;
+  readonly WebkitTextStroke: keyof WebkitTextStrokeValues | undefined | number | CssString;
+  readonly WebkitTextStrokeColor: keyof WebkitTextStrokeColorValues | undefined | CssString;
   readonly WebkitTextStrokeWidth:
-    keyof WebkitTextStrokeWidthValues | Exclude<NativeProperties['WebkitTextStrokeWidth'], string>;
+    keyof WebkitTextStrokeWidthValues | undefined | number | CssString;
   readonly WebkitTextUnderlinePosition:
-    | keyof WebkitTextUnderlinePositionValues
-    | Exclude<NativeProperties['WebkitTextUnderlinePosition'], string>
-    | CssString;
-  readonly WebkitTouchCallout:
-    keyof WebkitTouchCalloutValues | Exclude<NativeProperties['WebkitTouchCallout'], string>;
-  readonly WebkitTransform:
-    keyof WebkitTransformValues | Exclude<NativeProperties['WebkitTransform'], string> | CssString;
+    keyof WebkitTextUnderlinePositionValues | undefined | CssString;
+  readonly WebkitTouchCallout: keyof WebkitTouchCalloutValues | undefined;
+  readonly WebkitTransform: keyof WebkitTransformValues | undefined | CssString;
   readonly WebkitTransformOrigin:
-    | keyof WebkitTransformOriginValues
-    | Exclude<NativeProperties['WebkitTransformOrigin'], string>
-    | CssString;
-  readonly WebkitTransformStyle:
-    keyof WebkitTransformStyleValues | Exclude<NativeProperties['WebkitTransformStyle'], string>;
-  readonly WebkitTransition:
-    | keyof WebkitTransitionValues
-    | Exclude<NativeProperties['WebkitTransition'], string>
-    | CssString;
-  readonly WebkitTransitionDelay:
-    | keyof WebkitTransitionDelayValues
-    | Exclude<NativeProperties['WebkitTransitionDelay'], string>
-    | CssString;
-  readonly WebkitTransitionDuration:
-    | keyof WebkitTransitionDurationValues
-    | Exclude<NativeProperties['WebkitTransitionDuration'], string>
-    | CssString;
-  readonly WebkitTransitionProperty:
-    | keyof WebkitTransitionPropertyValues
-    | Exclude<NativeProperties['WebkitTransitionProperty'], string>
-    | CssString;
+    keyof WebkitTransformOriginValues | undefined | number | CssString;
+  readonly WebkitTransformStyle: keyof WebkitTransformStyleValues | undefined;
+  readonly WebkitTransition: keyof WebkitTransitionValues | undefined | CssString;
+  readonly WebkitTransitionDelay: keyof WebkitTransitionDelayValues | undefined | CssString;
+  readonly WebkitTransitionDuration: keyof WebkitTransitionDurationValues | undefined | CssString;
+  readonly WebkitTransitionProperty: keyof WebkitTransitionPropertyValues | undefined | CssString;
   readonly WebkitTransitionTimingFunction:
-    | keyof WebkitTransitionTimingFunctionValues
-    | Exclude<NativeProperties['WebkitTransitionTimingFunction'], string>
-    | CssString;
-  readonly WebkitUserModify:
-    keyof WebkitUserModifyValues | Exclude<NativeProperties['WebkitUserModify'], string>;
-  readonly WebkitUserSelect:
-    keyof WebkitUserSelectValues | Exclude<NativeProperties['WebkitUserSelect'], string>;
-  readonly WebkitWritingMode:
-    keyof WebkitWritingModeValues | Exclude<NativeProperties['WebkitWritingMode'], string>;
-  readonly whiteSpace:
-    keyof WhiteSpaceValues | Exclude<NativeProperties['whiteSpace'], string> | CssString;
-  readonly whiteSpaceCollapse:
-    keyof WhiteSpaceCollapseValues | Exclude<NativeProperties['whiteSpaceCollapse'], string>;
-  readonly widows: keyof WidowsValues | Exclude<NativeProperties['widows'], string> | CssString;
-  readonly width: keyof WidthValues | Exclude<NativeProperties['width'], string> | CssString;
-  readonly willChange:
-    keyof WillChangeValues | Exclude<NativeProperties['willChange'], string> | CssString;
-  readonly wordBreak: keyof WordBreakValues | Exclude<NativeProperties['wordBreak'], string>;
-  readonly wordSpacing: keyof WordSpacingValues | Exclude<NativeProperties['wordSpacing'], string>;
-  readonly wordWrap: keyof WordWrapValues | Exclude<NativeProperties['wordWrap'], string>;
-  readonly writingMode: keyof WritingModeValues | Exclude<NativeProperties['writingMode'], string>;
-  readonly x: keyof XValues | Exclude<NativeProperties['x'], string> | CssString;
-  readonly y: keyof YValues | Exclude<NativeProperties['y'], string> | CssString;
-  readonly zIndex: keyof ZIndexValues | Exclude<NativeProperties['zIndex'], string> | CssString;
-  readonly zoom: keyof ZoomValues | Exclude<NativeProperties['zoom'], string> | CssString;
+    keyof WebkitTransitionTimingFunctionValues | undefined | CssString;
+  readonly WebkitUserModify: keyof WebkitUserModifyValues | undefined;
+  readonly WebkitUserSelect: keyof WebkitUserSelectValues | undefined;
+  readonly WebkitWritingMode: keyof WebkitWritingModeValues | undefined;
+  readonly whiteSpace: keyof WhiteSpaceValues | undefined | CssString;
+  readonly whiteSpaceCollapse: keyof WhiteSpaceCollapseValues | undefined;
+  readonly widows: keyof WidowsValues | undefined | number | CssString;
+  readonly width: keyof WidthValues | undefined | number | CssString;
+  readonly willChange: keyof WillChangeValues | undefined | CssString;
+  readonly wordBreak: keyof WordBreakValues | undefined;
+  readonly wordSpacing: keyof WordSpacingValues | undefined | number | CssString;
+  readonly wordWrap: keyof WordWrapValues | undefined;
+  readonly writingMode: keyof WritingModeValues | undefined;
+  readonly x: keyof XValues | undefined | number | CssString;
+  readonly y: keyof YValues | undefined | number | CssString;
+  readonly zIndex: keyof ZIndexValues | undefined | number | CssString;
+  readonly zoom: keyof ZoomValues | undefined | number | CssString;
 }

@@ -1,4 +1,7 @@
-import { _component, useCss } from '@zerodep-vue/core';
+import { _component, createCssContext, SystemKeywords } from '@zerodep-vue/core';
+
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 export default _component(() => (

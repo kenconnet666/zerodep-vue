@@ -1,10 +1,12 @@
-import { useCss } from '../../src/css/theme.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { JSDOM } from 'jsdom';
 import { createCssHost } from '../../src/css/host.ts';
 
 import { resolveClass } from '../../src/css/resolve.ts';
+import { createCssContext, SystemKeywords } from '../../src/index.ts';
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 const rule = (color) => {

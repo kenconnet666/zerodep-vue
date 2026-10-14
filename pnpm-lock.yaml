@@ -78,6 +78,9 @@ catalogs:
     jsdom:
       specifier: 29.1.1
       version: 29.1.1
+    mdn-data:
+      specifier: 2.27.1
+      version: 2.27.1
     postcss-selector-parser:
       specifier: 7.1.6
       version: 7.1.6
@@ -220,6 +223,9 @@ importers:
       jsdom:
         specifier: 'catalog:'
         version: 29.1.1
+      mdn-data:
+        specifier: 'catalog:'
+        version: 2.27.1
       prettier:
         specifier: 'catalog:'
         version: 3.9.9

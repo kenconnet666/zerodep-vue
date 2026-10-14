@@ -1,8 +1,8 @@
 import { isRef, unref, hasInjectionContext, getCurrentInstance, inject, provide } from 'vue';
 import type { Ref, InjectionKey } from 'vue';
 import { Css } from './generated/author.ts';
-import { SystemKeywords } from './generated/system.ts';
-import type { SystemViews } from './generated/system.ts';
+import type { SystemKeywords, SystemViews } from './generated/system.ts';
+
 import { systemValues } from './generated/keywords.ts';
 import { THEME, THEME_SOURCE, keyword } from './tokens.ts';
 import type { CheckedTheme, ThemeReference } from './tokens.ts';
@@ -16,13 +16,13 @@ export type KeywordView<T extends SystemKeywords> = {
   readonly [Key in keyof SystemViews]: SystemViews[Key] & ThemeMembers<T[Key], Key>;
 };
 /** 同一个主题类型拥有独立注入键；覆盖只影响其逻辑子树。 */
-export interface CssTheme<T extends SystemKeywords> {
+export interface CssContext<T extends SystemKeywords> {
   /** 显式引用默认来源的关键字；常规属性链直接使用字面量自动补全。 */
   readonly keywords: KeywordView<T>;
   /** 取得当前区域的不可变作者；组件外使用该主题的默认来源。 */
   useCss(): Css<T>;
   /** 在 setup 中提供区域主题；返回相同作者供当前组件使用。 */
-  provide(source: ThemeSource<T>): Css<T>;
+  provideTheme(source: ThemeSource<T>): Css<T>;
 }
 
 /** 共享工具可沿用此类型接收主题来源，同时保留成员名称和值域校验。 */
@@ -47,7 +47,7 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
   const current = (): T => {
     const theme = isRef(source) ? source.value : source;
     if (!theme || typeof theme !== 'object' || Reflect.get(theme, THEME_SOURCE) !== true)
-      throw new Error('createTheme 需要继承 SystemKeywords 的真实主题实例或 Vue Ref。');
+      throw new Error('createCssContext 需要继承 SystemKeywords 的真实主题实例或 Vue Ref。');
     if (!checked.has(theme)) {
       for (const property of keys(theme)) {
         if (!Object.hasOwn(systemValues, property)) continue;
@@ -142,7 +142,7 @@ function keywordView<T extends SystemKeywords>(source: T | Ref<T>): KeywordView<
 }
 
 /** 创建有真实来源的主题上下文；T 来自实例，不依靠调用方的类型断言。 */
-export function createTheme<T extends SystemKeywords>(source: ThemeSource<T>): CssTheme<T> {
+export function createCssContext<T extends SystemKeywords>(source: ThemeSource<T>): CssContext<T> {
   const keywords = keywordView(source);
   const fallback = new Css<T>(keywords);
   const key: InjectionKey<Css<T>> = Symbol('CSS theme');
@@ -151,14 +151,11 @@ export function createTheme<T extends SystemKeywords>(source: ThemeSource<T>): C
     useCss(): Css<T> {
       return hasInjectionContext() ? inject(key, fallback) : fallback;
     },
-    provide(next: ThemeSource<T>): Css<T> {
-      if (!getCurrentInstance()) throw new Error('主题 provide 必须在组件 setup 中调用。');
+    provideTheme(next: ThemeSource<T>): Css<T> {
+      if (!getCurrentInstance()) throw new Error('provideTheme 必须在组件 setup 中调用。');
       const author = new Css<T>(keywordView(next));
       provide(key, author);
       return author;
     },
   });
 }
-
-/** 默认作者只包含系统关键字；业务主题导出 createTheme 返回的 useCss。 */
-export const { useCss, keywords } = createTheme(new SystemKeywords());

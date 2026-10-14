@@ -1,5 +1,4 @@
 import { test, expect } from './test.ts';
-import type {} from '../src/contracts.ts';
 
 test('native button keyboard activation, form types and replacement models work after hydration', async ({
   page,
@@ -23,6 +22,10 @@ test('native button keyboard activation, form types and replacement models work 
   await toggle.press('Space');
   await expect(toggle).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByTestId('toggle-state')).toHaveText('true');
+  await expect(page.getByTestId('sibling-label')).toHaveCSS('color', 'rgb(37, 99, 235)');
+  expect((await page.getByTestId('sibling-source').getAttribute('style')) ?? '').not.toContain(
+    '--zv-',
+  );
   await page.getByRole('button', { name: '提交控件表单' }).click();
   await expect(page.getByTestId('submit-count')).toHaveText('1');
   await expect(page.getByTestId('submitted-title')).toHaveText('keyboard draft');
@@ -34,6 +37,7 @@ test('native button keyboard activation, form types and replacement models work 
   await expect(toggle).toHaveAttribute('aria-pressed', 'true');
   await toggle.click();
   await expect(page.getByTestId('toggle-state')).toHaveText('false');
+  await expect(page.getByTestId('sibling-label')).toHaveCSS('color', 'rgb(0, 0, 0)');
   await page.getByRole('button', { name: '增加次数', exact: true }).click();
   await expect(page.getByTestId('action-count')).toHaveText('3');
 });

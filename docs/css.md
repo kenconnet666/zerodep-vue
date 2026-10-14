@@ -4,7 +4,8 @@ CSS 使用不可变链式声明和 cx 有序组合。属性调用返回可直接
 
 ```tsx
 import { ref } from 'vue';
-import { _component, useCss, cx, bx } from '@zerodep-vue/core';
+import { _component, cx, bx } from '@zerodep-vue/core';
+import { useCss } from './theme';
 
 export const Position = _component(({ compact = false }) => {
   const s = useCss();
@@ -50,6 +51,8 @@ const base = s.color('red').select(':hover', s.color('blue').opacity(0.8));
 
 组合项 false、0、null、undefined 跳过；属性 undefined 不提供覆盖，属性 null 清除当前位置的前项。中间组合保留清除标记，因此 cx(cx(a, b), c) 与 cx(a, b, c) 等价。外部样式输入使用 CssInput：它只包含已经检查过的样式、普通类名和条件数组，泛型 T 在链式声明时检查。ClassValue 留给 Vue 兼容边界。
 
+动态绑定也遵循这个规则：s.width(100).width(bx(optional.value)) 在 optional 为 undefined 时保留 100px，变成 null 时清除该位置。只有为判断回退而必需的候选会读取，已被有效值覆盖的 getter 不执行。
+
 cx 不接受普通对象。条件类名使用 enabled && 'active'。普通外部类名的规则不会被反向解析，覆盖关系仍由浏览器层叠决定。
 
 ## 选择器、条件与变量
@@ -72,6 +75,8 @@ select 将传入样式相对当前条件展开，支持嵌套 select、伪类、
 setup 中 s.width(width.value) 保存当时的普通值；需要持续读取时使用 s.width(bx(width.value))。在 render 中重新调用普通属性方法仍遵循正常 Vue 追踪。没有另一套 CSS 响应式系统。
 
 bx 由编译器变为 getter，读取属于最终消费元素。模板中的多个 bx 保持独立变量位置；先组合再读取，被覆盖的绑定不执行。完整声明变成 initial/inherit/unset/revert/revert-layer 时输出原生关键字并撤去无用变量，正常值恢复后重新接入变量。同一规则可由多个元素共享，变量值互不共享。
+
+元素变量只能由自身、伪元素和后代继承。选择器指向兄弟或其他外部元素时（如 & + span），动态值及其动画帧改为当前字面值，更新时替换对应规则，避免引用无法继承的元素变量。
 
 显式 style 在自动变量之后合并，因此作者明确提供的值优先。class 可以通过变量、函数返回值、数组和组件传递；不能转成字符串丢失绑定。setup 中预先创建的普通 JSX 仍是 VNode 快照，需要更新的节点放在 render 返回表达式中。
 

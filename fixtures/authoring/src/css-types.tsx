@@ -1,6 +1,9 @@
-import { useCss, bx, cx, _component } from '@zerodep-vue/core';
+import { bx, cx, _component, createCssContext, SystemKeywords } from '@zerodep-vue/core';
 import { ref } from 'vue';
 import type { CssInput } from '@zerodep-vue/core';
+
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 const width = ref('120px');
 const styles = {

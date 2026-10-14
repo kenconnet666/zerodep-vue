@@ -11285,7 +11285,8 @@ export interface SystemViews {
   /**
    * 设置复选框、单选框等原生控件的强调色；具体使用部位由浏览器决定。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/accent-color
    */
@@ -11293,7 +11294,8 @@ export interface SystemViews {
   /**
    * 分配布局容器交叉轴或块轴上的剩余空间，控制内容整体的对齐。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content
    */
@@ -11307,7 +11309,8 @@ export interface SystemViews {
    *
    * 常用值：`stretch`、`center`、`baseline`、`start`、`end`。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.display("flex").alignItems("center")
    * @category 布局与定位
@@ -11317,7 +11320,8 @@ export interface SystemViews {
   /**
    * 选择行内或 SVG 文本参与对齐时使用的基线。
    *
-   * CSS 规范初始值：`baseline`，不同于浏览器默认样式表。
+   * CSS 规范初始值：baseline。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/alignment-baseline
    */
@@ -11329,7 +11333,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`stretch`、`baseline`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.alignSelf("center")
    * @category 布局与定位
@@ -11339,13 +11344,17 @@ export interface SystemViews {
   /**
    * 旧版瀑布流布局提案中沿块轴对齐轨道的属性；使用前核对实现与规范版本。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-tracks
    */
   readonly alignTracks: AlignTracksKeywords<'alignTracks'>;
   /**
    * 批量重置 CSS 属性；不重置 direction、unicode-bidi 和自定义属性。
+   *
+   * CSS 规范初始值：无独立的实际初始值。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/all
    */
@@ -11353,7 +11362,8 @@ export interface SystemViews {
   /**
    * 为元素声明锚点名称，供锚点定位的元素引用。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-name
    */
@@ -11361,13 +11371,17 @@ export interface SystemViews {
   /**
    * 限制锚点名称的可见范围，避免同名锚点跨组件互相影响。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/anchor-scope
    */
   readonly anchorScope: AnchorScopeKeywords<'anchorScope'>;
   /**
    * 集中设置关键帧动画的名称、时长、缓动、延迟、次数及播放行为。
+   *
+   * CSS 规范初始值：animation-name: none；animation-duration: 0s；animation-timing-function: ease；animation-delay: 0s；animation-iteration-count: 1；animation-direction: normal；animation-fill-mode: none；animation-play-state: running；animation-timeline: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation
    */
@@ -11375,7 +11389,8 @@ export interface SystemViews {
   /**
    * 设置动画效果与底层属性值的替换、叠加或累积方式。
    *
-   * CSS 规范初始值：`replace`，不同于浏览器默认样式表。
+   * CSS 规范初始值：replace。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-composition
    */
@@ -11383,7 +11398,8 @@ export interface SystemViews {
   /**
    * 设置动画开始前的延迟；负值表示从动画中途开始播放。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-delay
    */
@@ -11391,7 +11407,8 @@ export interface SystemViews {
   /**
    * 设置动画按正向、反向或交替方向播放。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-direction
    */
@@ -11399,7 +11416,8 @@ export interface SystemViews {
   /**
    * 设置动画完成一次循环的时长。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-duration
    */
@@ -11413,7 +11431,8 @@ export interface SystemViews {
    *
    * 常用值：`none`、`forwards`、`backwards`、`both`。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.animationFillMode("forwards")
    * @category 动画与变换
@@ -11423,7 +11442,8 @@ export interface SystemViews {
   /**
    * 设置动画循环次数，或无限循环。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-iteration-count
    */
@@ -11431,7 +11451,8 @@ export interface SystemViews {
   /**
    * 选择要播放的 @keyframes 动画名称。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-name
    */
@@ -11439,13 +11460,17 @@ export interface SystemViews {
   /**
    * 控制动画运行或暂停，暂停后可从原位置继续。
    *
-   * CSS 规范初始值：`running`，不同于浏览器默认样式表。
+   * CSS 规范初始值：running。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-play-state
    */
   readonly animationPlayState: AnimationPlayStateKeywords<'animationPlayState'>;
   /**
    * 设置动画附着到时间线的起止范围。
+   *
+   * CSS 规范初始值：animation-range-start: normal；animation-range-end: normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range
    */
@@ -11453,7 +11478,8 @@ export interface SystemViews {
   /**
    * 设置动画在时间线上的附着范围终点。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-end
    */
@@ -11461,7 +11487,8 @@ export interface SystemViews {
   /**
    * 设置动画在时间线上的附着范围起点。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-range-start
    */
@@ -11469,7 +11496,8 @@ export interface SystemViews {
   /**
    * 选择驱动动画的时间线，例如文档时间或滚动进度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timeline
    */
@@ -11477,7 +11505,8 @@ export interface SystemViews {
   /**
    * 设置动画每个关键帧区间内进度变化的缓动函数。
    *
-   * CSS 规范初始值：`ease`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ease。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timing-function
    */
@@ -11485,7 +11514,8 @@ export interface SystemViews {
   /**
    * 控制元素是否采用平台原生控件外观。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance
    */
@@ -11497,7 +11527,8 @@ export interface SystemViews {
    *
    * 适用场景：图片占位、视频和卡片封面区域。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.aspectRatio("16 / 9").width("100%")
    * @category 尺寸与比例
@@ -11507,7 +11538,8 @@ export interface SystemViews {
   /**
    * 对元素背后的图像区域应用模糊等滤镜，通常需要透明或半透明背景。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/backdrop-filter
    */
@@ -11515,13 +11547,17 @@ export interface SystemViews {
   /**
    * 控制经过三维变换后背向观察者的元素背面是否可见。
    *
-   * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
+   * CSS 规范初始值：visible。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/backface-visibility
    */
   readonly backfaceVisibility: BackfaceVisibilityKeywords<'backfaceVisibility'>;
   /**
    * 集中设置背景颜色、图像、位置、尺寸、重复及绘制区域。
+   *
+   * CSS 规范初始值：background-image: none；background-position: 0% 0%；background-size: auto auto；background-repeat: repeat；background-origin: padding-box；background-clip: border-box；background-attachment: scroll；background-color: transparent。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background
    */
@@ -11529,7 +11565,8 @@ export interface SystemViews {
   /**
    * 设置背景图像相对于视口、元素或局部滚动内容的固定方式。
    *
-   * CSS 规范初始值：`scroll`，不同于浏览器默认样式表。
+   * CSS 规范初始值：scroll。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-attachment
    */
@@ -11537,7 +11574,8 @@ export interface SystemViews {
   /**
    * 设置背景图层彼此之间以及与背景色之间的混合模式。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-blend-mode
    */
@@ -11545,7 +11583,8 @@ export interface SystemViews {
   /**
    * 设置背景允许绘制到的边界区域。
    *
-   * CSS 规范初始值：`border-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：border-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-clip
    */
@@ -11553,7 +11592,8 @@ export interface SystemViews {
   /**
    * 设置元素背景颜色，位于背景图像下方。
    *
-   * CSS 规范初始值：`transparent`，不同于浏览器默认样式表。
+   * CSS 规范初始值：transparent。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-color
    */
@@ -11561,7 +11601,8 @@ export interface SystemViews {
   /**
    * 设置一个或多个背景图像或渐变图层。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-image
    */
@@ -11569,7 +11610,8 @@ export interface SystemViews {
   /**
    * 设置背景图像定位所依据的盒子区域。
    *
-   * CSS 规范初始值：`padding-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：padding-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-origin
    */
@@ -11577,7 +11619,8 @@ export interface SystemViews {
   /**
    * 设置背景图像在定位区域内的位置。
    *
-   * CSS 规范初始值：`0% 0%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0% 0%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position
    */
@@ -11585,7 +11628,8 @@ export interface SystemViews {
   /**
    * 设置背景图像的水平位置。
    *
-   * CSS 规范初始值：`0%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-x
    */
@@ -11593,7 +11637,8 @@ export interface SystemViews {
   /**
    * 设置背景图像的垂直位置。
    *
-   * CSS 规范初始值：`0%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-position-y
    */
@@ -11601,7 +11646,8 @@ export interface SystemViews {
   /**
    * 设置背景图像在水平和垂直方向上的重复方式。
    *
-   * CSS 规范初始值：`repeat`，不同于浏览器默认样式表。
+   * CSS 规范初始值：repeat。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-repeat
    */
@@ -11615,7 +11661,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`contain`、`cover`。
    *
-   * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.backgroundSize("cover").backgroundPosition("center")
    * @category 颜色与背景
@@ -11625,7 +11672,8 @@ export interface SystemViews {
   /**
    * 使 SVG 文本基线相对于其基准位置偏移。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/baseline-shift
    */
@@ -11637,7 +11685,8 @@ export interface SystemViews {
    *
    * 适用场景：使用逻辑轴表达内容块尺寸。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.blockSize("10rem")
    * @category 尺寸与比例
@@ -11646,12 +11695,18 @@ export interface SystemViews {
   readonly blockSize: BlockSizeKeywords<'blockSize'>;
   /**
    * 同时设置四边边框的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：border-width: 见其子属性；border-style: 见其子属性；border-color: 见其子属性。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border
    */
   readonly border: BorderKeywords<'border'>;
   /**
    * 设置逻辑块轴起始侧和结束侧的边框。
+   *
+   * CSS 规范初始值：border-block-width: medium；border-block-style: none；border-block-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block
    */
@@ -11659,13 +11714,17 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴两侧边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-color
    */
   readonly borderBlockColor: BorderBlockColorKeywords<'borderBlockColor'>;
   /**
    * 设置逻辑块轴结束侧边框的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：border-top-width: medium；border-top-style: none；border-top-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end
    */
@@ -11673,7 +11732,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴结束侧的边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-color
    */
@@ -11681,7 +11741,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴结束侧的边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-style
    */
@@ -11689,13 +11750,17 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴结束侧的边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-end-width
    */
   readonly borderBlockEndWidth: BorderBlockEndWidthKeywords<'borderBlockEndWidth'>;
   /**
    * 设置逻辑块轴起始侧边框的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：border-width: 见其子属性；border-style: 见其子属性；color: canvastext。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start
    */
@@ -11703,7 +11768,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴起始侧的边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-color
    */
@@ -11711,7 +11777,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴起始侧的边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-style
    */
@@ -11719,7 +11786,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴起始侧的边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-start-width
    */
@@ -11727,7 +11795,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴两侧的边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-style
    */
@@ -11735,13 +11804,17 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴两侧的边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-block-width
    */
   readonly borderBlockWidth: BorderBlockWidthKeywords<'borderBlockWidth'>;
   /**
    * 设置下边框的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：border-bottom-width: medium；border-bottom-style: none；border-bottom-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom
    */
@@ -11749,7 +11822,8 @@ export interface SystemViews {
   /**
    * 设置下边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-color
    */
@@ -11757,7 +11831,8 @@ export interface SystemViews {
   /**
    * 设置左下角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-left-radius
    */
@@ -11765,7 +11840,8 @@ export interface SystemViews {
   /**
    * 设置右下角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-right-radius
    */
@@ -11773,7 +11849,8 @@ export interface SystemViews {
   /**
    * 设置下边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-style
    */
@@ -11781,7 +11858,8 @@ export interface SystemViews {
   /**
    * 设置下边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-width
    */
@@ -11789,13 +11867,17 @@ export interface SystemViews {
   /**
    * 设置表格相邻单元格边框合并还是分离。
    *
-   * CSS 规范初始值：`separate`，不同于浏览器默认样式表。
+   * CSS 规范初始值：separate。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-collapse
    */
   readonly borderCollapse: BorderCollapseKeywords<'borderCollapse'>;
   /**
    * 设置四边边框颜色，支持按上、右、下、左顺序简写。
+   *
+   * CSS 规范初始值：border-top-color: currentcolor；border-right-color: currentcolor；border-bottom-color: currentcolor；border-left-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-color
    */
@@ -11803,7 +11885,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴结束侧与行内轴结束侧相交角的圆角。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-end-end-radius
    */
@@ -11811,13 +11894,17 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴结束侧与行内轴起始侧相交角的圆角。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-end-start-radius
    */
   readonly borderEndStartRadius: BorderEndStartRadiusKeywords<'borderEndStartRadius'>;
   /**
    * 设置用作边框的图像及其切片、宽度、外扩和重复方式。
+   *
+   * CSS 规范初始值：border-image-source: none；border-image-slice: 100%；border-image-width: 1；border-image-outset: 0；border-image-repeat: stretch。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image
    */
@@ -11825,7 +11912,8 @@ export interface SystemViews {
   /**
    * 设置边框图像超出边框盒的距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-outset
    */
@@ -11833,7 +11921,8 @@ export interface SystemViews {
   /**
    * 设置边框图像切片沿边框的重复或拉伸方式。
    *
-   * CSS 规范初始值：`stretch`，不同于浏览器默认样式表。
+   * CSS 规范初始值：stretch。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-repeat
    */
@@ -11841,7 +11930,8 @@ export interface SystemViews {
   /**
    * 设置边框图像的切片位置及是否填充中间区域。
    *
-   * CSS 规范初始值：`100%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：100%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-slice
    */
@@ -11849,7 +11939,8 @@ export interface SystemViews {
   /**
    * 指定边框使用的图像或渐变。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-source
    */
@@ -11857,13 +11948,17 @@ export interface SystemViews {
   /**
    * 设置边框图像各边的绘制宽度。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image-width
    */
   readonly borderImageWidth: BorderImageWidthKeywords<'borderImageWidth'>;
   /**
    * 设置逻辑行内轴起始侧和结束侧的边框。
+   *
+   * CSS 规范初始值：border-inline-width: medium；border-inline-style: none；border-inline-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline
    */
@@ -11871,13 +11966,17 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴两侧边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-color
    */
   readonly borderInlineColor: BorderInlineColorKeywords<'borderInlineColor'>;
   /**
    * 设置逻辑行内轴结束侧边框的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：border-width: 见其子属性；border-style: 见其子属性；color: canvastext。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end
    */
@@ -11885,7 +11984,8 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴结束侧边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-color
    */
@@ -11893,7 +11993,8 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴结束侧边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-style
    */
@@ -11901,13 +12002,17 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴结束侧边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-end-width
    */
   readonly borderInlineEndWidth: BorderInlineEndWidthKeywords<'borderInlineEndWidth'>;
   /**
    * 设置逻辑行内轴起始侧边框的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：border-width: 见其子属性；border-style: 见其子属性；color: canvastext。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start
    */
@@ -11915,7 +12020,8 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴起始侧边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-color
    */
@@ -11923,7 +12029,8 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴起始侧边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-style
    */
@@ -11931,7 +12038,8 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴起始侧边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-start-width
    */
@@ -11939,7 +12047,8 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴两侧边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-style
    */
@@ -11947,13 +12056,17 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴两侧边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-inline-width
    */
   readonly borderInlineWidth: BorderInlineWidthKeywords<'borderInlineWidth'>;
   /**
    * 设置左边框的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：border-left-width: medium；border-left-style: none；border-left-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left
    */
@@ -11961,7 +12074,8 @@ export interface SystemViews {
   /**
    * 设置左边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-color
    */
@@ -11969,7 +12083,8 @@ export interface SystemViews {
   /**
    * 设置左边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-style
    */
@@ -11977,7 +12092,8 @@ export interface SystemViews {
   /**
    * 设置左边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-left-width
    */
@@ -11988,6 +12104,9 @@ export interface SystemViews {
    * 1/2/3/4 个半径依次控制四角、两组对角、三组角和逐角。它裁剪自身背景，但不会单独保证裁剪所有后代内容。
    *
    * 适用场景：卡片、按钮、头像的圆角外观。
+   *
+   * CSS 规范初始值：border-top-left-radius: 0；border-top-right-radius: 0；border-bottom-right-radius: 0；border-bottom-left-radius: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.borderRadius("8px")
    * @category 边框与轮廓
@@ -11996,6 +12115,9 @@ export interface SystemViews {
   readonly borderRadius: BorderRadiusKeywords<'borderRadius'>;
   /**
    * 设置右边框的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：border-right-width: medium；border-right-style: none；border-right-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right
    */
@@ -12003,7 +12125,8 @@ export interface SystemViews {
   /**
    * 设置右边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-color
    */
@@ -12011,7 +12134,8 @@ export interface SystemViews {
   /**
    * 设置右边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-style
    */
@@ -12019,7 +12143,8 @@ export interface SystemViews {
   /**
    * 设置右边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-right-width
    */
@@ -12027,7 +12152,8 @@ export interface SystemViews {
   /**
    * 设置分离边框模型下表格单元格之间的水平和垂直间距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-spacing
    */
@@ -12035,7 +12161,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴起始侧与行内轴结束侧相交角的圆角。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-start-end-radius
    */
@@ -12043,19 +12170,26 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴起始侧与行内轴起始侧相交角的圆角。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-start-start-radius
    */
   readonly borderStartStartRadius: BorderStartStartRadiusKeywords<'borderStartStartRadius'>;
   /**
    * 设置四边边框线型。
+   *
+   * CSS 规范初始值：border-top-style: none；border-right-style: none；border-bottom-style: none；border-left-style: none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-style
    */
   readonly borderStyle: BorderStyleKeywords<'borderStyle'>;
   /**
    * 设置上边框的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：border-top-width: medium；border-top-style: none；border-top-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top
    */
@@ -12063,7 +12197,8 @@ export interface SystemViews {
   /**
    * 设置上边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-color
    */
@@ -12071,7 +12206,8 @@ export interface SystemViews {
   /**
    * 设置左上角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-left-radius
    */
@@ -12079,7 +12215,8 @@ export interface SystemViews {
   /**
    * 设置右上角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-right-radius
    */
@@ -12087,7 +12224,8 @@ export interface SystemViews {
   /**
    * 设置上边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-style
    */
@@ -12095,13 +12233,17 @@ export interface SystemViews {
   /**
    * 设置上边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-width
    */
   readonly borderTopWidth: BorderTopWidthKeywords<'borderTopWidth'>;
   /**
    * 设置四边边框宽度；可见边框通常还需要非 none 的线型。
+   *
+   * CSS 规范初始值：border-top-width: medium；border-right-width: medium；border-bottom-width: medium；border-left-width: medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-width
    */
@@ -12109,7 +12251,8 @@ export interface SystemViews {
   /**
    * 设置定位元素相对于其定位参照的下侧偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/bottom
    */
@@ -12117,7 +12260,8 @@ export interface SystemViews {
   /**
    * 控制旧版弹性盒子项在交叉方向上的对齐，常规布局优先使用 align-items。
    *
-   * CSS 规范初始值：`stretch`，不同于浏览器默认样式表。
+   * CSS 规范初始值：stretch。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-align
@@ -12126,7 +12270,8 @@ export interface SystemViews {
   /**
    * 设置盒子被分成多行、多栏或多页时装饰如何绘制。
    *
-   * CSS 规范初始值：`slice`，不同于浏览器默认样式表。
+   * CSS 规范初始值：slice。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-decoration-break
    */
@@ -12134,7 +12279,8 @@ export interface SystemViews {
   /**
    * 指定旧版弹性盒的子项排列方向是否反转。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-direction
@@ -12143,7 +12289,8 @@ export interface SystemViews {
   /**
    * 指定旧版弹性盒子项分配剩余空间的比例。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-flex
@@ -12152,7 +12299,8 @@ export interface SystemViews {
   /**
    * 指定旧版弹性盒子项参与弹性分配的组。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-flex-group
@@ -12161,7 +12309,8 @@ export interface SystemViews {
   /**
    * 控制旧版弹性盒是否允许子项分成多行。
    *
-   * CSS 规范初始值：`single`，不同于浏览器默认样式表。
+   * CSS 规范初始值：single。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-lines
@@ -12170,7 +12319,8 @@ export interface SystemViews {
   /**
    * 设置旧版弹性盒的子项排列组序号，现代布局使用 order。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-ordinal-group
@@ -12179,7 +12329,8 @@ export interface SystemViews {
   /**
    * 指定旧版弹性盒的水平或垂直排列轴，现代布局使用 flex-direction。
    *
-   * CSS 规范初始值：`inline-axis`，不同于浏览器默认样式表。
+   * CSS 规范初始值：inline-axis。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-orient
@@ -12188,7 +12339,8 @@ export interface SystemViews {
   /**
    * 控制旧版弹性盒在主轴方向的空余空间分配，现代布局使用 justify-content。
    *
-   * CSS 规范初始值：`start`，不同于浏览器默认样式表。
+   * CSS 规范初始值：start。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-pack
@@ -12201,7 +12353,8 @@ export interface SystemViews {
    *
    * 适用场景：浮层层次、卡片边缘或内凹效果。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.boxShadow("0 2px 8px rgb(0 0 0 / 0.15)")
    * @category 视觉效果与图像
@@ -12215,7 +12368,8 @@ export interface SystemViews {
    *
    * 常用值：`content-box`、`border-box`。
    *
-   * CSS 规范初始值：`content-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：content-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.boxSizing("border-box").width("20rem").padding("1rem")
    * @category 尺寸与比例
@@ -12225,7 +12379,8 @@ export interface SystemViews {
   /**
    * 设置元素之后的分页、分栏或区域分片行为。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-after
    */
@@ -12233,7 +12388,8 @@ export interface SystemViews {
   /**
    * 设置元素之前的分页、分栏或区域分片行为。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-before
    */
@@ -12241,7 +12397,8 @@ export interface SystemViews {
   /**
    * 设置元素内部是否允许分页、分栏或区域分片。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/break-inside
    */
@@ -12249,13 +12406,17 @@ export interface SystemViews {
   /**
    * 设置表格标题相对于表格的放置侧。
    *
-   * CSS 规范初始值：`top`，不同于浏览器默认样式表。
+   * CSS 规范初始值：top。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caption-side
    */
   readonly captionSide: CaptionSideKeywords<'captionSide'>;
   /**
    * 集中设置文本插入光标的颜色和形状。
+   *
+   * CSS 规范初始值：caret-color: auto；caret-animation: auto；caret-shape: auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret
    */
@@ -12263,7 +12424,8 @@ export interface SystemViews {
   /**
    * 设置可编辑内容中的文本插入光标颜色。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret-color
    */
@@ -12271,7 +12433,8 @@ export interface SystemViews {
   /**
    * 设置文本插入光标的形状。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/caret-shape
    */
@@ -12279,7 +12442,8 @@ export interface SystemViews {
   /**
    * 要求元素避让指定侧的前置浮动元素。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clear
    */
@@ -12287,7 +12451,8 @@ export interface SystemViews {
   /**
    * 使用旧式矩形裁剪绝对定位元素；新代码优先考虑 clip-path。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip
@@ -12296,7 +12461,8 @@ export interface SystemViews {
   /**
    * 通过基本形状、路径或引用裁剪元素的可见区域。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip-path
    */
@@ -12304,7 +12470,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 裁剪路径判断内部区域所用的填充规则。
    *
-   * CSS 规范初始值：`nonzero`，不同于浏览器默认样式表。
+   * CSS 规范初始值：nonzero。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/clip-rule
    */
@@ -12314,7 +12481,8 @@ export interface SystemViews {
    *
    * 改变文字和 currentColor 的来源，不会自动改变背景。颜色函数方法返回完整 color 声明。
    *
-   * CSS 规范初始值：`canvastext`，不同于浏览器默认样式表。
+   * CSS 规范初始值：canvastext。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @example
    * s.color("rgb(255 0 0 / 0.5)")
    * @example
@@ -12326,13 +12494,15 @@ export interface SystemViews {
   /**
    * 控制输出设备对颜色的自动调整；这是 print-color-adjust 的旧名称。
    *
-   * CSS 规范初始值：`economy`，不同于浏览器默认样式表。
+   * CSS 规范初始值：economy。不同于浏览器默认样式表。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-adjust
    */
   readonly colorAdjust: ColorAdjustKeywords<'colorAdjust'>;
   /**
    * 设置 SVG 图形颜色插值所用的色彩空间。
+   *
+   * 初始值：当前固定数据源未记录，参见该属性规范。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-interpolation
    */
@@ -12340,13 +12510,16 @@ export interface SystemViews {
   /**
    * 设置 SVG 滤镜效果进行颜色计算时所用的色彩空间。
    *
-   * CSS 规范初始值：`linearRGB`，不同于浏览器默认样式表。
+   * CSS 规范初始值：linearRGB。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-interpolation-filters
    */
   readonly colorInterpolationFilters: ColorInterpolationFiltersKeywords<'colorInterpolationFilters'>;
   /**
    * 向 SVG 渲染器提供颜色绘制质量与速度之间的偏好。
+   *
+   * 初始值：当前固定数据源未记录，参见该属性规范。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-rendering
    */
@@ -12356,7 +12529,8 @@ export interface SystemViews {
    *
    * 声明支持的方案不等于为应用生成主题颜色；文字、背景和业务 token 仍需自行定义。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/color-scheme
    */
@@ -12364,7 +12538,8 @@ export interface SystemViews {
   /**
    * 设置多栏布局的目标栏数。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-count
    */
@@ -12372,7 +12547,8 @@ export interface SystemViews {
   /**
    * 设置多栏内容顺序填充还是尽量均衡栏高。
    *
-   * CSS 规范初始值：`balance`，不同于浏览器默认样式表。
+   * CSS 规范初始值：balance。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-fill
    */
@@ -12380,13 +12556,17 @@ export interface SystemViews {
   /**
    * 设置布局中相邻列之间的间距。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-gap
    */
   readonly columnGap: ColumnGapKeywords<'columnGap'>;
   /**
    * 设置多栏之间分隔线的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：column-rule-width: medium；column-rule-style: none；column-rule-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule
    */
@@ -12394,7 +12574,8 @@ export interface SystemViews {
   /**
    * 设置多栏分隔线的颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-color
    */
@@ -12402,7 +12583,8 @@ export interface SystemViews {
   /**
    * 设置多栏分隔线的线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-style
    */
@@ -12410,13 +12592,17 @@ export interface SystemViews {
   /**
    * 设置多栏分隔线的宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-rule-width
    */
   readonly columnRuleWidth: ColumnRuleWidthKeywords<'columnRuleWidth'>;
   /**
    * 同时设置多栏布局的首选栏宽和目标栏数。
+   *
+   * CSS 规范初始值：column-width: auto；column-count: auto；column-height: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/columns
    */
@@ -12424,7 +12610,8 @@ export interface SystemViews {
   /**
    * 设置多栏布局中的元素是否跨越所有栏。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-span
    */
@@ -12432,7 +12619,8 @@ export interface SystemViews {
   /**
    * 设置多栏布局的首选栏宽，实际栏宽由容器空间决定。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/column-width
    */
@@ -12446,7 +12634,8 @@ export interface SystemViews {
    *
    * 常用值：`content`、`strict`、`size`、`paint`、`style`。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.contain("content")
    * @category 内容、容器与分页
@@ -12455,6 +12644,9 @@ export interface SystemViews {
   readonly contain: ContainKeywords<'contain'>;
   /**
    * 同时声明查询容器的名称和类型。
+   *
+   * CSS 规范初始值：container-name: none；container-type: normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/container
    */
@@ -12462,7 +12654,8 @@ export interface SystemViews {
   /**
    * 为查询容器命名，供 @container 条件规则选择。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/container-name
    */
@@ -12476,7 +12669,8 @@ export interface SystemViews {
    *
    * 常用值：`normal`、`inline-size`、`size`。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.containerType("inline-size")
    * @category 内容、容器与分页
@@ -12486,7 +12680,8 @@ export interface SystemViews {
   /**
    * 设置块轴尺寸隔离或跳过内容渲染时使用的替代内部尺寸。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-block-size
    */
@@ -12494,7 +12689,8 @@ export interface SystemViews {
   /**
    * 设置高度隔离或跳过内容渲染时使用的替代内部高度。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-height
    */
@@ -12502,13 +12698,17 @@ export interface SystemViews {
   /**
    * 设置行内轴尺寸隔离或跳过内容渲染时使用的替代内部尺寸。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-inline-size
    */
   readonly containIntrinsicInlineSize: ContainIntrinsicInlineSizeKeywords<'containIntrinsicInlineSize'>;
   /**
    * 集中设置尺寸隔离时使用的替代内部宽高。
+   *
+   * CSS 规范初始值：contain-intrinsic-width: none；contain-intrinsic-height: none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-size
    */
@@ -12516,7 +12716,8 @@ export interface SystemViews {
   /**
    * 设置宽度隔离或跳过内容渲染时使用的替代内部宽度。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/contain-intrinsic-width
    */
@@ -12524,7 +12725,8 @@ export interface SystemViews {
   /**
    * 设置生成内容、替换内容或伪元素的内容。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/content
    */
@@ -12538,7 +12740,8 @@ export interface SystemViews {
    *
    * 常用值：`visible`、`auto`、`hidden`。
    *
-   * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
+   * CSS 规范初始值：visible。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.contentVisibility("auto")
    * @category 交互与显示控制
@@ -12548,7 +12751,8 @@ export interface SystemViews {
   /**
    * 增加或减少指定 CSS 计数器的值。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/counter-increment
    */
@@ -12556,7 +12760,8 @@ export interface SystemViews {
   /**
    * 创建或重置 CSS 计数器。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/counter-reset
    */
@@ -12564,7 +12769,8 @@ export interface SystemViews {
   /**
    * 设置已有 CSS 计数器的值，必要时创建计数器。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/counter-set
    */
@@ -12572,7 +12778,8 @@ export interface SystemViews {
   /**
    * 设置指针位于元素上方时显示的光标。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cursor
    */
@@ -12580,7 +12787,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 圆或椭圆中心的横坐标。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cx
    */
@@ -12588,7 +12796,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 圆或椭圆中心的纵坐标。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/cy
    */
@@ -12596,7 +12805,8 @@ export interface SystemViews {
   /**
    * 设置 SVG path 元素的路径数据。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/d
    */
@@ -12604,7 +12814,8 @@ export interface SystemViews {
   /**
    * 设置文本基本方向，参与双向文本及部分布局计算。
    *
-   * CSS 规范初始值：`ltr`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ltr。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/direction
    */
@@ -12618,7 +12829,8 @@ export interface SystemViews {
    *
    * 常用值：`block`、`inline`、`flex`、`inline-flex`、`grid`、`none`。
    *
-   * CSS 规范初始值：`inline`，不同于浏览器默认样式表。
+   * CSS 规范初始值：inline。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.display("flex").alignItems("center").gap("0.5rem")
    * @category 布局与定位
@@ -12628,7 +12840,8 @@ export interface SystemViews {
   /**
    * 选择 SVG 文本布局的主导基线及基线表。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/dominant-baseline
    */
@@ -12636,7 +12849,8 @@ export interface SystemViews {
   /**
    * 控制分离边框表格中空单元格的边框和背景是否绘制。
    *
-   * CSS 规范初始值：`show`，不同于浏览器默认样式表。
+   * CSS 规范初始值：show。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/empty-cells
    */
@@ -12644,7 +12858,8 @@ export interface SystemViews {
   /**
    * 控制表单控件采用固定默认尺寸还是根据内容调整尺寸。
    *
-   * CSS 规范初始值：`fixed`，不同于浏览器默认样式表。
+   * CSS 规范初始值：fixed。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/field-sizing
    */
@@ -12652,7 +12867,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 图形内部的填充绘制方式。
    *
-   * CSS 规范初始值：`black`，不同于浏览器默认样式表。
+   * CSS 规范初始值：black。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/fill
    */
@@ -12660,7 +12876,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 填充的不透明度，不影响描边。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/fill-opacity
    */
@@ -12668,7 +12885,8 @@ export interface SystemViews {
   /**
    * 设置复杂 SVG 路径的内部区域判定规则。
    *
-   * CSS 规范初始值：`nonzero`，不同于浏览器默认样式表。
+   * CSS 规范初始值：nonzero。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/fill-rule
    */
@@ -12676,7 +12894,8 @@ export interface SystemViews {
   /**
    * 对元素的最终图像应用模糊、亮度等滤镜。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/filter
    */
@@ -12689,6 +12908,9 @@ export interface SystemViews {
    * 适用场景：分配弹性布局中的剩余空间，或让项目保持自身尺寸。
    *
    * 常用值：`auto`、`none`。
+   *
+   * CSS 规范初始值：flex-grow: 0；flex-shrink: 1；flex-basis: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.flex("1 1 0%")
    * @example
@@ -12706,7 +12928,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`content`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.flexBasis("16rem")
    * @category 布局与定位
@@ -12720,7 +12943,8 @@ export interface SystemViews {
    *
    * 常用值：`row`、`column`、`row-reverse`、`column-reverse`。
    *
-   * CSS 规范初始值：`row`，不同于浏览器默认样式表。
+   * CSS 规范初始值：row。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.display("flex").flexDirection("column").gap("1rem")
    * @category 布局与定位
@@ -12729,6 +12953,9 @@ export interface SystemViews {
   readonly flexDirection: FlexDirectionKeywords<'flexDirection'>;
   /**
    * 同时设置弹性布局的主轴方向和换行方式。
+   *
+   * CSS 规范初始值：flex-direction: row；flex-wrap: nowrap。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow
    */
@@ -12740,7 +12967,8 @@ export interface SystemViews {
    *
    * 适用场景：让主内容区填充工具栏或行布局的剩余空间。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.flexGrow(1)
    * @category 布局与定位
@@ -12754,7 +12982,8 @@ export interface SystemViews {
    *
    * 适用场景：控制空间不足时是否允许缩小；设置为 0 可避免图标或固定控件收缩。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.flexShrink(0)
    * @category 布局与定位
@@ -12768,7 +12997,8 @@ export interface SystemViews {
    *
    * 常用值：`nowrap`、`wrap`、`wrap-reverse`。
    *
-   * CSS 规范初始值：`nowrap`，不同于浏览器默认样式表。
+   * CSS 规范初始值：nowrap。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.display("flex").flexWrap("wrap").gap("0.5rem")
    * @category 布局与定位
@@ -12778,7 +13008,8 @@ export interface SystemViews {
   /**
    * 将元素浮动到指定侧，使相邻行内内容围绕它排列。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/float
    */
@@ -12786,7 +13017,8 @@ export interface SystemViews {
   /**
    * 设置 SVG feFlood 或相关滤镜的洪泛颜色。
    *
-   * CSS 规范初始值：`black`，不同于浏览器默认样式表。
+   * CSS 规范初始值：black。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flood-color
    */
@@ -12794,19 +13026,36 @@ export interface SystemViews {
   /**
    * 设置 SVG 洪泛滤镜颜色的不透明度。
    *
-   * CSS 规范初始值：`black`，不同于浏览器默认样式表。
+   * CSS 规范初始值：black。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flood-opacity
    */
   readonly floodOpacity: FloodOpacityKeywords<'floodOpacity'>;
   /**
    * 集中设置字体样式、粗细、大小、行高和字体族等信息。
+   *
+   * 简写会把未显式指定的字体子属性重置为各自初始值。只改字号或字重时可使用 fontSize、fontWeight；按钮和输入控件跟随正文时可使用 inherit。
+   *
+   * 适用场景：统一字体配置，或让控件继承父级字体。
+   *
+   * 常用值：`inherit`、`italic 600 16px/1.5 system-ui`。
+   *
+   * CSS 规范初始值：font-style: normal；font-variant: normal；font-weight: normal；font-stretch: normal；font-size: medium；line-height: normal；font-family: 由浏览器决定。不同于浏览器默认样式表。
+   * 是否继承：是。
+   * @example
+   * s.font('inherit')
+   * @example
+   * s.font('600 14px/1.5 system-ui')
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font
    */
   readonly font: FontKeywords<'font'>;
   /**
    * 设置按优先级排列的字体族及通用字体回退。
+   *
+   * CSS 规范初始值：由浏览器决定。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-family
    */
@@ -12814,7 +13063,8 @@ export interface SystemViews {
   /**
    * 通过 OpenType 特性标签控制字体的底层排版功能。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-feature-settings
    */
@@ -12822,7 +13072,8 @@ export interface SystemViews {
   /**
    * 设置是否应用字体提供的字偶间距调整。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-kerning
    */
@@ -12830,7 +13081,8 @@ export interface SystemViews {
   /**
    * 覆盖字体排版使用的语言系统标签，不改变文本实际语言。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-language-override
    */
@@ -12838,7 +13090,8 @@ export interface SystemViews {
   /**
    * 控制支持光学尺寸轴的字体是否按字号优化字形。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-optical-sizing
    */
@@ -12846,7 +13099,8 @@ export interface SystemViews {
   /**
    * 选择或覆盖彩色字体使用的调色板。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-palette
    */
@@ -12858,7 +13112,8 @@ export interface SystemViews {
    *
    * 适用场景：建立文字层级，根字号相对尺寸可用 rem 表达。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @example
    * s.fontSize("1rem").lineHeight(1.5)
    * @category 文字与排版
@@ -12868,7 +13123,8 @@ export interface SystemViews {
   /**
    * 按字体特征尺寸调整字号，减少字体回退造成的视觉变化。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-size-adjust
    */
@@ -12876,7 +13132,8 @@ export interface SystemViews {
   /**
    * 控制字体平滑的非标准属性；使用前核对目标浏览器。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-smooth
    */
@@ -12884,7 +13141,8 @@ export interface SystemViews {
   /**
    * 选择字体的宽窄字面；font-width 是其较新的名称。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-stretch
@@ -12893,7 +13151,8 @@ export interface SystemViews {
   /**
    * 选择正常、斜体或倾斜字体样式。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-style
    */
@@ -12901,7 +13160,8 @@ export interface SystemViews {
   /**
    * 控制缺少真实字体字形时浏览器可否合成粗体、斜体等样式。
    *
-   * CSS 规范初始值：`weight style small-caps position `，不同于浏览器默认样式表。
+   * CSS 规范初始值：weight style small-caps position 。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis
    */
@@ -12909,7 +13169,8 @@ export interface SystemViews {
   /**
    * 控制浏览器是否可以合成上标和下标字形。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-position
    */
@@ -12917,7 +13178,8 @@ export interface SystemViews {
   /**
    * 控制浏览器是否可以合成小型大写字形。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-small-caps
    */
@@ -12925,7 +13187,8 @@ export interface SystemViews {
   /**
    * 控制浏览器是否可以合成倾斜字体。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-style
    */
@@ -12933,7 +13196,8 @@ export interface SystemViews {
   /**
    * 控制浏览器是否可以合成加粗字体。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-synthesis-weight
    */
@@ -12941,7 +13205,8 @@ export interface SystemViews {
   /**
    * 集中设置字体的连字、大小写、数字及其他变体。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant
    */
@@ -12949,7 +13214,8 @@ export interface SystemViews {
   /**
    * 选择字体提供的替代字形。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-alternates
    */
@@ -12957,7 +13223,8 @@ export interface SystemViews {
   /**
    * 设置小型大写等大小写字形变体。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-caps
    */
@@ -12965,7 +13232,8 @@ export interface SystemViews {
   /**
    * 设置东亚文字字形及宽度变体。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-east-asian
    */
@@ -12973,7 +13241,8 @@ export interface SystemViews {
   /**
    * 设置字符优先采用文本字形还是 emoji 字形。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-emoji
    */
@@ -12981,7 +13250,8 @@ export interface SystemViews {
   /**
    * 设置字体连字的启用方式。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-ligatures
    */
@@ -12989,7 +13259,8 @@ export interface SystemViews {
   /**
    * 设置数字的等宽、比例、分数及其他排版变体。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-numeric
    */
@@ -12997,7 +13268,8 @@ export interface SystemViews {
   /**
    * 选择字体提供的上标或下标字形。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variant-position
    */
@@ -13005,7 +13277,8 @@ export interface SystemViews {
   /**
    * 直接设置可变字体各个轴的数值。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-variation-settings
    */
@@ -13019,7 +13292,8 @@ export interface SystemViews {
    *
    * 常用值：`normal`、`bold`、`bolder`、`lighter`。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @example
    * s.fontWeight(600)
    * @category 文字与排版
@@ -13029,7 +13303,8 @@ export interface SystemViews {
   /**
    * 选择字体的宽窄字面，不是通过变换拉伸元素。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/font-width
    */
@@ -13037,7 +13312,8 @@ export interface SystemViews {
   /**
    * 控制元素是否参与系统强制颜色模式的自动替换。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/forced-color-adjust
    */
@@ -13048,6 +13324,9 @@ export interface SystemViews {
    * 两个值依次为 row-gap 和 column-gap；在 Flex 中对应项目还是行间距取决于 flex-direction。它不增加容器外缘的间距。
    *
    * 适用场景：给 Flex/Grid 项目设置统一间隔，避免逐个项目添加 margin。
+   *
+   * CSS 规范初始值：row-gap: normal；column-gap: normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.gap("8px 16px")
    * @category 内外间距
@@ -13056,18 +13335,26 @@ export interface SystemViews {
   readonly gap: GapKeywords<'gap'>;
   /**
    * 设置竖排 SVG 字形方向的旧属性；新代码优先考虑 text-orientation。
+   *
+   * 初始值：当前固定数据源未记录，参见该属性规范。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/glyph-orientation-vertical
    */
   readonly glyphOrientationVertical: GlyphOrientationVerticalKeywords<'glyphOrientationVertical'>;
   /**
    * 集中设置显式和隐式网格的轨道、区域及自动放置方式。
+   *
+   * CSS 规范初始值：grid-template-rows: none；grid-template-columns: none；grid-template-areas: none；grid-auto-rows: auto；grid-auto-columns: auto；grid-auto-flow: row；grid-column-gap: 0；grid-row-gap: 0；column-gap: normal；row-gap: normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid
    */
   readonly grid: GridKeywords<'grid'>;
   /**
    * 设置网格项目的区域名，或行起点、列起点、行终点、列终点。
+   *
+   * CSS 规范初始值：grid-row-start: auto；grid-column-start: auto；grid-row-end: auto；grid-column-end: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-area
    */
@@ -13075,7 +13362,8 @@ export interface SystemViews {
   /**
    * 设置隐式生成的网格列尺寸。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-auto-columns
    */
@@ -13089,7 +13377,8 @@ export interface SystemViews {
    *
    * 常用值：`row`、`column`、`dense`。
    *
-   * CSS 规范初始值：`row`，不同于浏览器默认样式表。
+   * CSS 规范初始值：row。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.display("grid").gridAutoFlow("row")
    * @category 布局与定位
@@ -13099,13 +13388,17 @@ export interface SystemViews {
   /**
    * 设置隐式生成的网格行尺寸。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-auto-rows
    */
   readonly gridAutoRows: GridAutoRowsKeywords<'gridAutoRows'>;
   /**
    * 设置网格项目的列起点和列终点。
+   *
+   * CSS 规范初始值：grid-column-start: auto；grid-column-end: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column
    */
@@ -13113,7 +13406,8 @@ export interface SystemViews {
   /**
    * 设置网格项目的列终止线或跨越范围。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column-end
    */
@@ -13122,7 +13416,8 @@ export interface SystemViews {
    * 兼容属性 grid-column-gap；优先参考标准属性 columnGap及浏览器支持范围。
    * 设置布局中相邻列之间的间距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column-gap
@@ -13131,7 +13426,8 @@ export interface SystemViews {
   /**
    * 设置网格项目的列起始线或跨越范围。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-column-start
    */
@@ -13139,6 +13435,9 @@ export interface SystemViews {
   /**
    * 兼容属性 grid-gap；优先参考标准属性 gap及浏览器支持范围。
    * 设置行与列之间的间距，用于 Grid、Flex 和多栏等布局。
+   *
+   * CSS 规范初始值：grid-row-gap: 0；grid-column-gap: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-gap
@@ -13146,6 +13445,9 @@ export interface SystemViews {
   readonly gridGap: GridGapKeywords<'gridGap'>;
   /**
    * 设置网格项目的行起点和行终点。
+   *
+   * CSS 规范初始值：grid-row-start: auto；grid-row-end: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row
    */
@@ -13153,7 +13455,8 @@ export interface SystemViews {
   /**
    * 设置网格项目的行终止线或跨越范围。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row-end
    */
@@ -13162,7 +13465,8 @@ export interface SystemViews {
    * 兼容属性 grid-row-gap；优先参考标准属性 rowGap及浏览器支持范围。
    * 设置布局中相邻行之间的间距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row-gap
@@ -13171,13 +13475,17 @@ export interface SystemViews {
   /**
    * 设置网格项目的行起始线或跨越范围。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-row-start
    */
   readonly gridRowStart: GridRowStartKeywords<'gridRowStart'>;
   /**
    * 集中设置显式网格的行、列和命名区域。
+   *
+   * CSS 规范初始值：grid-template-columns: none；grid-template-rows: none；grid-template-areas: none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template
    */
@@ -13185,7 +13493,8 @@ export interface SystemViews {
   /**
    * 用区域名称矩阵定义网格布局区域。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/grid-template-areas
    */
@@ -13197,7 +13506,8 @@ export interface SystemViews {
    *
    * 适用场景：响应式卡片、表单标签与输入框的列布局。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.gridTemplateColumns("repeat(3, minmax(0, 1fr))")
    * @category 布局与定位
@@ -13211,7 +13521,8 @@ export interface SystemViews {
    *
    * 适用场景：区分固定工具栏和可伸缩内容区域。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.gridTemplateRows("auto minmax(0, 1fr)")
    * @category 布局与定位
@@ -13221,7 +13532,8 @@ export interface SystemViews {
   /**
    * 控制标点是否可以悬挂在行盒边缘之外。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hanging-punctuation
    */
@@ -13233,7 +13545,8 @@ export interface SystemViews {
    *
    * 适用场景：控制物理高度；滚动面板通常结合 max-height 和 overflow。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.maxHeight("20rem").overflowY("auto")
    * @category 尺寸与比例
@@ -13243,7 +13556,8 @@ export interface SystemViews {
   /**
    * 设置自动断词时插入的断字符号。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hyphenate-character
    */
@@ -13251,7 +13565,8 @@ export interface SystemViews {
   /**
    * 限制可断词的最小单词长度以及断点两侧的最少字符数。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hyphenate-limit-chars
    */
@@ -13259,7 +13574,8 @@ export interface SystemViews {
   /**
    * 设置文字断词和连字符插入的方式；自动断词依赖语言和词典。
    *
-   * CSS 规范初始值：`manual`，不同于浏览器默认样式表。
+   * CSS 规范初始值：manual。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/hyphens
    */
@@ -13267,7 +13583,8 @@ export interface SystemViews {
   /**
    * 设置图像是否按元数据等信息调整方向。
    *
-   * CSS 规范初始值：`from-image`，不同于浏览器默认样式表。
+   * CSS 规范初始值：from-image。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-orientation
    */
@@ -13275,7 +13592,8 @@ export interface SystemViews {
   /**
    * 向浏览器指定图像缩放时的插值与清晰度偏好。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-rendering
    */
@@ -13283,7 +13601,8 @@ export interface SystemViews {
   /**
    * 设置图像的分辨率解释方式；使用前核对目标浏览器支持。
    *
-   * CSS 规范初始值：`1dppx`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1dppx。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/image-resolution
    */
@@ -13291,7 +13610,8 @@ export interface SystemViews {
   /**
    * 旧版输入法状态控制，不应替代 inputmode 或正常输入交互。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ime-mode
@@ -13300,7 +13620,8 @@ export interface SystemViews {
   /**
    * 设置段落首字下沉或抬升时占用的行数与对齐位置。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/initial-letter
    */
@@ -13308,7 +13629,8 @@ export interface SystemViews {
   /**
    * 设置首字下沉时字形与正文使用的对齐基线。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/initial-letter-align
    */
@@ -13320,7 +13642,8 @@ export interface SystemViews {
    *
    * 适用场景：希望布局尺寸跟随书写模式变化的组件。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.inlineSize("20rem")
    * @category 尺寸与比例
@@ -13329,6 +13652,9 @@ export interface SystemViews {
   readonly inlineSize: InlineSizeKeywords<'inlineSize'>;
   /**
    * 同时设置定位元素的上、右、下、左偏移。
+   *
+   * CSS 规范初始值：top: auto；bottom: auto；left: auto；right: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset
    */
@@ -13337,7 +13663,8 @@ export interface SystemViews {
    * 兼容属性 inset-area；优先参考标准属性 positionArea及浏览器支持范围。
    * 选择相对于锚点的定位区域。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-area
@@ -13345,6 +13672,9 @@ export interface SystemViews {
   readonly insetArea: InsetAreaKeywords<'insetArea'>;
   /**
    * 设置定位元素沿逻辑块轴的起始和结束偏移。
+   *
+   * CSS 规范初始值：inset-block-start: auto；inset-block-end: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-block
    */
@@ -13352,7 +13682,8 @@ export interface SystemViews {
   /**
    * 设置定位元素在逻辑块轴结束侧的偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-block-end
    */
@@ -13360,13 +13691,17 @@ export interface SystemViews {
   /**
    * 设置定位元素在逻辑块轴起始侧的偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-block-start
    */
   readonly insetBlockStart: InsetBlockStartKeywords<'insetBlockStart'>;
   /**
    * 设置定位元素沿逻辑行内轴的起始和结束偏移。
+   *
+   * CSS 规范初始值：inset-inline-start: auto；inset-inline-end: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-inline
    */
@@ -13374,7 +13709,8 @@ export interface SystemViews {
   /**
    * 设置定位元素在逻辑行内轴结束侧的偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-inline-end
    */
@@ -13382,7 +13718,8 @@ export interface SystemViews {
   /**
    * 设置定位元素在逻辑行内轴起始侧的偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/inset-inline-start
    */
@@ -13390,7 +13727,8 @@ export interface SystemViews {
   /**
    * 控制动画是否允许在数值尺寸与内部尺寸关键字之间插值。
    *
-   * CSS 规范初始值：`numeric-only`，不同于浏览器默认样式表。
+   * CSS 规范初始值：numeric-only。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/interpolate-size
    */
@@ -13402,7 +13740,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`isolate`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.isolation("isolate")
    * @category 其他标准属性
@@ -13416,7 +13755,8 @@ export interface SystemViews {
    *
    * 常用值：`center`、`space-between`、`space-around`、`space-evenly`。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.display("flex").justifyContent("space-between")
    * @category 布局与定位
@@ -13426,7 +13766,8 @@ export interface SystemViews {
   /**
    * 设置容器内项目在行内轴上的默认对齐方式；不控制 Flex 项目的主轴对齐。
    *
-   * CSS 规范初始值：`legacy`，不同于浏览器默认样式表。
+   * CSS 规范初始值：legacy。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-items
    */
@@ -13434,7 +13775,8 @@ export interface SystemViews {
   /**
    * 单独设置项目在其布局区域内的行内轴对齐方式。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-self
    */
@@ -13442,7 +13784,8 @@ export interface SystemViews {
   /**
    * 旧版瀑布流布局提案中沿行内轴对齐轨道的属性；使用前核对实现与规范版本。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-tracks
    */
@@ -13451,7 +13794,8 @@ export interface SystemViews {
    * 兼容属性 -khtml-box-align；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒子项在交叉方向上的对齐，常规布局优先使用 align-items。
    *
-   * CSS 规范初始值：`stretch`，不同于浏览器默认样式表。
+   * CSS 规范初始值：stretch。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-align
@@ -13461,7 +13805,8 @@ export interface SystemViews {
    * 兼容属性 -khtml-box-direction；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒的子项排列方向是否反转。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-direction
@@ -13471,7 +13816,8 @@ export interface SystemViews {
    * 兼容属性 -khtml-box-flex；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒子项分配剩余空间的比例。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-flex
@@ -13481,7 +13827,8 @@ export interface SystemViews {
    * 兼容属性 -khtml-box-flex-group；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒子项参与弹性分配的组。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-flex-group
@@ -13491,7 +13838,8 @@ export interface SystemViews {
    * 兼容属性 -khtml-box-lines；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒是否允许子项分成多行。
    *
-   * CSS 规范初始值：`single`，不同于浏览器默认样式表。
+   * CSS 规范初始值：single。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-lines
@@ -13501,7 +13849,8 @@ export interface SystemViews {
    * 兼容属性 -khtml-box-ordinal-group；优先参考标准属性及浏览器支持范围。
    * 设置旧版弹性盒的子项排列组序号，现代布局使用 order。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-ordinal-group
@@ -13511,7 +13860,8 @@ export interface SystemViews {
    * 兼容属性 -khtml-box-orient；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒的水平或垂直排列轴，现代布局使用 flex-direction。
    *
-   * CSS 规范初始值：`inline-axis`，不同于浏览器默认样式表。
+   * CSS 规范初始值：inline-axis。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-orient
@@ -13521,7 +13871,8 @@ export interface SystemViews {
    * 兼容属性 -khtml-box-pack；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒在主轴方向的空余空间分配，现代布局使用 justify-content。
    *
-   * CSS 规范初始值：`start`，不同于浏览器默认样式表。
+   * CSS 规范初始值：start。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-box-pack
@@ -13531,7 +13882,8 @@ export interface SystemViews {
    * 兼容属性 -khtml-line-break；优先参考标准属性及浏览器支持范围。
    * 设置东亚文字标点等字符的换行严格程度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-khtml-line-break
@@ -13545,7 +13897,8 @@ export interface SystemViews {
    *
    * 适用场景：统一调整整个元素子树的透明度；只需背景半透明时应使用带 alpha 的背景色。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.opacity(0.5)
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -13561,7 +13914,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`text`、`none`、`all`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.userSelect("all")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -13572,7 +13926,8 @@ export interface SystemViews {
   /**
    * 设置定位元素相对于其定位参照的左侧偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/left
    */
@@ -13580,7 +13935,8 @@ export interface SystemViews {
   /**
    * 设置字符之间额外增加或减少的间距。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/letter-spacing
    */
@@ -13588,7 +13944,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 光照滤镜使用的光源颜色。
    *
-   * CSS 规范初始值：`white`，不同于浏览器默认样式表。
+   * CSS 规范初始值：white。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/lighting-color
    */
@@ -13596,7 +13953,8 @@ export interface SystemViews {
   /**
    * 设置东亚文字标点等字符的换行严格程度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-break
    */
@@ -13604,7 +13962,8 @@ export interface SystemViews {
   /**
    * 限制块容器显示的行数及截断行为；使用前核对所需语法的支持情况。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-clamp
    */
@@ -13616,7 +13975,8 @@ export interface SystemViews {
    *
    * 适用场景：控制正文行间节奏；可继承的字号倍数通常比固定长度更适合嵌套文字。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @example
    * s.lineHeight(1.5)
    * @category 文字与排版
@@ -13626,13 +13986,17 @@ export interface SystemViews {
   /**
    * 设置行盒高度向上取整使用的步长。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/line-height-step
    */
   readonly lineHeightStep: LineHeightStepKeywords<'lineHeightStep'>;
   /**
    * 集中设置列表标记的类型、图像和位置。
+   *
+   * CSS 规范初始值：list-style-type: disc；list-style-position: outside；list-style-image: none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style
    */
@@ -13640,7 +14004,8 @@ export interface SystemViews {
   /**
    * 设置用作列表标记的图像。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style-image
    */
@@ -13648,7 +14013,8 @@ export interface SystemViews {
   /**
    * 设置列表标记位于主块盒内部还是外部。
    *
-   * CSS 规范初始值：`outside`，不同于浏览器默认样式表。
+   * CSS 规范初始值：outside。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style-position
    */
@@ -13656,7 +14022,8 @@ export interface SystemViews {
   /**
    * 设置列表标记或计数器的样式。
    *
-   * CSS 规范初始值：`disc`，不同于浏览器默认样式表。
+   * CSS 规范初始值：disc。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/list-style-type
    */
@@ -13667,6 +14034,9 @@ export interface SystemViews {
    * 1/2/3/4 个值依次表示：四边；上下/左右；上/左右/下；上/右/下/左。块布局中的垂直外边距可能折叠。
    *
    * 适用场景：控制盒子外侧与相邻内容的距离；布局项统一间隔可考虑容器 gap。
+   *
+   * CSS 规范初始值：margin-bottom: 0；margin-left: 0；margin-right: 0；margin-top: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.margin("8px 16px")
    * @example
@@ -13677,6 +14047,9 @@ export interface SystemViews {
   readonly margin: MarginKeywords<'margin'>;
   /**
    * 设置逻辑块轴起始侧和结束侧的外边距。
+   *
+   * CSS 规范初始值：margin-block-start: 0；margin-block-end: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-block
    */
@@ -13684,7 +14057,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴结束侧的外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-block-end
    */
@@ -13692,7 +14066,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴起始侧的外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-block-start
    */
@@ -13700,13 +14075,17 @@ export interface SystemViews {
   /**
    * 设置下外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-bottom
    */
   readonly marginBottom: MarginBottomKeywords<'marginBottom'>;
   /**
    * 设置逻辑行内轴起始侧和结束侧的外边距。
+   *
+   * CSS 规范初始值：margin-inline-start: 0；margin-inline-end: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-inline
    */
@@ -13714,7 +14093,8 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴结束侧的外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-inline-end
    */
@@ -13722,7 +14102,8 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴起始侧的外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-inline-start
    */
@@ -13730,7 +14111,8 @@ export interface SystemViews {
   /**
    * 设置左外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-left
    */
@@ -13738,7 +14120,8 @@ export interface SystemViews {
   /**
    * 设置右外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-right
    */
@@ -13746,7 +14129,8 @@ export interface SystemViews {
   /**
    * 设置上外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-top
    */
@@ -13754,13 +14138,17 @@ export interface SystemViews {
   /**
    * 控制容器边缘处子元素外边距的裁减。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/margin-trim
    */
   readonly marginTrim: MarginTrimKeywords<'marginTrim'>;
   /**
    * 同时设置 SVG 路径起点、中间顶点和终点的标记图形。
+   *
+   * CSS 规范初始值：marker-start: none；marker-mid: none；marker-end: none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker
    */
@@ -13768,7 +14156,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 路径终点的标记图形。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker-end
    */
@@ -13776,7 +14165,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 路径中间顶点的标记图形。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker-mid
    */
@@ -13784,19 +14174,26 @@ export interface SystemViews {
   /**
    * 设置 SVG 路径起点的标记图形。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/marker-start
    */
   readonly markerStart: MarkerStartKeywords<'markerStart'>;
   /**
    * 集中设置遮罩图层的图像、位置、尺寸、重复及合成方式。
+   *
+   * CSS 规范初始值：mask-image: none；mask-mode: match-source；mask-repeat: repeat；mask-position: 0% 0%；mask-clip: border-box；mask-origin: border-box；mask-size: auto；mask-composite: add。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask
    */
   readonly mask: MaskKeywords<'mask'>;
   /**
    * 设置基于九宫格图像切片的边框遮罩。
+   *
+   * CSS 规范初始值：mask-border-mode: alpha；mask-border-outset: 0；mask-border-repeat: stretch；mask-border-slice: 0；mask-border-source: none；mask-border-width: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border
    */
@@ -13804,7 +14201,8 @@ export interface SystemViews {
   /**
    * 设置边框遮罩使用 alpha 还是亮度信息。
    *
-   * CSS 规范初始值：`alpha`，不同于浏览器默认样式表。
+   * CSS 规范初始值：alpha。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-mode
    */
@@ -13812,7 +14210,8 @@ export interface SystemViews {
   /**
    * 设置边框遮罩超出边框盒的距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-outset
    */
@@ -13820,7 +14219,8 @@ export interface SystemViews {
   /**
    * 设置边框遮罩切片的重复或拉伸方式。
    *
-   * CSS 规范初始值：`stretch`，不同于浏览器默认样式表。
+   * CSS 规范初始值：stretch。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-repeat
    */
@@ -13828,7 +14228,8 @@ export interface SystemViews {
   /**
    * 设置边框遮罩图像的切片位置。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-slice
    */
@@ -13836,7 +14237,8 @@ export interface SystemViews {
   /**
    * 设置边框遮罩的源图像。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-source
    */
@@ -13844,7 +14246,8 @@ export interface SystemViews {
   /**
    * 设置边框遮罩各边的宽度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-width
    */
@@ -13852,7 +14255,8 @@ export interface SystemViews {
   /**
    * 设置遮罩效果允许作用的裁剪区域。
    *
-   * CSS 规范初始值：`border-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：border-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-clip
    */
@@ -13860,7 +14264,8 @@ export interface SystemViews {
   /**
    * 设置多个遮罩图层之间的合成运算。
    *
-   * CSS 规范初始值：`add`，不同于浏览器默认样式表。
+   * CSS 规范初始值：add。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-composite
    */
@@ -13868,7 +14273,8 @@ export interface SystemViews {
   /**
    * 设置遮罩使用的图像、渐变或 SVG 遮罩引用。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-image
    */
@@ -13876,7 +14282,8 @@ export interface SystemViews {
   /**
    * 设置遮罩按 alpha、亮度或源类型解释。
    *
-   * CSS 规范初始值：`match-source`，不同于浏览器默认样式表。
+   * CSS 规范初始值：match-source。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-mode
    */
@@ -13884,7 +14291,8 @@ export interface SystemViews {
   /**
    * 设置遮罩图像定位所依据的盒子。
    *
-   * CSS 规范初始值：`border-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：border-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-origin
    */
@@ -13892,7 +14300,8 @@ export interface SystemViews {
   /**
    * 设置遮罩图像在定位区域中的位置。
    *
-   * CSS 规范初始值：`0% 0%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0% 0%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-position
    */
@@ -13900,7 +14309,8 @@ export interface SystemViews {
   /**
    * 设置遮罩图像的重复方式。
    *
-   * CSS 规范初始值：`repeat`，不同于浏览器默认样式表。
+   * CSS 规范初始值：repeat。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-repeat
    */
@@ -13908,7 +14318,8 @@ export interface SystemViews {
   /**
    * 设置遮罩图像的尺寸。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-size
    */
@@ -13916,7 +14327,8 @@ export interface SystemViews {
   /**
    * 设置 SVG mask 元素使用亮度还是 alpha 作为遮罩。
    *
-   * CSS 规范初始值：`luminance`，不同于浏览器默认样式表。
+   * CSS 规范初始值：luminance。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-type
    */
@@ -13924,7 +14336,8 @@ export interface SystemViews {
   /**
    * 旧版瀑布流布局提案中的自动放置策略；使用前核对实现与规范版本。
    *
-   * CSS 规范初始值：`pack`，不同于浏览器默认样式表。
+   * CSS 规范初始值：pack。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/masonry-auto-flow
    */
@@ -13932,7 +14345,8 @@ export interface SystemViews {
   /**
    * 设置数学公式的嵌套深度，用于数学字号等排版计算。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/math-depth
    */
@@ -13940,7 +14354,8 @@ export interface SystemViews {
   /**
    * 控制数学上标采用正常还是压缩的垂直偏移。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/math-shift
    */
@@ -13948,7 +14363,8 @@ export interface SystemViews {
   /**
    * 设置数学公式采用正常还是紧凑排版。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/math-style
    */
@@ -13956,7 +14372,8 @@ export interface SystemViews {
   /**
    * 限制元素逻辑块轴的最大尺寸。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-block-size
    */
@@ -13964,7 +14381,8 @@ export interface SystemViews {
   /**
    * 限制元素的最大物理高度。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-height
    */
@@ -13972,7 +14390,8 @@ export interface SystemViews {
   /**
    * 限制元素逻辑行内轴的最大尺寸。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-inline-size
    */
@@ -13980,7 +14399,8 @@ export interface SystemViews {
   /**
    * 限制分片上下文中的最大行数；属于需核对支持情况的截行能力。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/max-lines
    */
@@ -13992,7 +14412,8 @@ export interface SystemViews {
    *
    * 适用场景：限制正文行长、弹窗宽度或响应式内容区。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.width("100%").maxWidth("48rem")
    * @category 尺寸与比例
@@ -14002,7 +14423,8 @@ export interface SystemViews {
   /**
    * 设置元素逻辑块轴的最小尺寸。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-block-size
    */
@@ -14010,7 +14432,8 @@ export interface SystemViews {
   /**
    * 设置元素的最小物理高度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-height
    */
@@ -14018,7 +14441,8 @@ export interface SystemViews {
   /**
    * 设置元素逻辑行内轴的最小尺寸。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 尺寸与比例
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/min-inline-size
    */
@@ -14030,7 +14454,8 @@ export interface SystemViews {
    *
    * 适用场景：给控件设置最小可用宽度，或用 0 允许 Flex/Grid 子项突破自动内容最小宽度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.minWidth("0px")
    * @category 尺寸与比例
@@ -14040,13 +14465,16 @@ export interface SystemViews {
   /**
    * 设置元素整体与其背后内容的颜色混合方式。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode
    */
   readonly mixBlendMode: MixBlendModeKeywords<'mixBlendMode'>;
   /**
    * 设置运动路径的旧式简写；对应现代 offset 属性族。
+   *
+   * 初始值：当前固定数据源未记录，参见该属性规范。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion
    */
@@ -14054,7 +14482,7 @@ export interface SystemViews {
   /**
    * 设置沿运动路径行进距离的旧属性；对应 offset-distance。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-distance
    */
@@ -14062,7 +14490,7 @@ export interface SystemViews {
   /**
    * 设置运动路径的旧属性；对应 offset-path。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-path
    */
@@ -14070,7 +14498,7 @@ export interface SystemViews {
   /**
    * 设置运动路径旋转方式的旧属性；对应 offset-rotate。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/motion-rotation
    */
@@ -14078,6 +14506,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -moz-animation；优先参考标准属性及浏览器支持范围。
    * 集中设置关键帧动画的名称、时长、缓动、延迟、次数及播放行为。
+   *
+   * CSS 规范初始值：animation-name: none；animation-duration: 0s；animation-timing-function: ease；animation-delay: 0s；animation-iteration-count: 1；animation-direction: normal；animation-fill-mode: none；animation-play-state: running；animation-timeline: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation
    */
@@ -14086,7 +14517,8 @@ export interface SystemViews {
    * 兼容属性 -moz-animation-delay；优先参考标准属性及浏览器支持范围。
    * 设置动画开始前的延迟；负值表示从动画中途开始播放。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-delay
    */
@@ -14095,7 +14527,8 @@ export interface SystemViews {
    * 兼容属性 -moz-animation-direction；优先参考标准属性及浏览器支持范围。
    * 设置动画按正向、反向或交替方向播放。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-direction
    */
@@ -14104,7 +14537,8 @@ export interface SystemViews {
    * 兼容属性 -moz-animation-duration；优先参考标准属性及浏览器支持范围。
    * 设置动画完成一次循环的时长。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-duration
    */
@@ -14119,7 +14553,8 @@ export interface SystemViews {
    *
    * 常用值：`none`、`forwards`、`backwards`、`both`。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.animationFillMode("forwards")
    * @category 厂商与历史兼容属性
@@ -14130,7 +14565,8 @@ export interface SystemViews {
    * 兼容属性 -moz-animation-iteration-count；优先参考标准属性及浏览器支持范围。
    * 设置动画循环次数，或无限循环。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-iteration-count
    */
@@ -14139,7 +14575,8 @@ export interface SystemViews {
    * 兼容属性 -moz-animation-name；优先参考标准属性及浏览器支持范围。
    * 选择要播放的 @keyframes 动画名称。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-name
    */
@@ -14148,7 +14585,8 @@ export interface SystemViews {
    * 兼容属性 -moz-animation-play-state；优先参考标准属性及浏览器支持范围。
    * 控制动画运行或暂停，暂停后可从原位置继续。
    *
-   * CSS 规范初始值：`running`，不同于浏览器默认样式表。
+   * CSS 规范初始值：running。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-play-state
    */
@@ -14157,7 +14595,8 @@ export interface SystemViews {
    * 兼容属性 -moz-animation-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置动画每个关键帧区间内进度变化的缓动函数。
    *
-   * CSS 规范初始值：`ease`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ease。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-animation-timing-function
    */
@@ -14166,7 +14605,8 @@ export interface SystemViews {
    * 兼容属性 -moz-appearance；优先参考标准属性及浏览器支持范围。
    * 控制元素是否采用平台原生控件外观。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none（浏览器默认样式表可能覆盖）。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-appearance
    */
@@ -14175,7 +14615,8 @@ export interface SystemViews {
    * 兼容属性 -moz-backface-visibility；优先参考标准属性及浏览器支持范围。
    * 控制经过三维变换后背向观察者的元素背面是否可见。
    *
-   * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
+   * CSS 规范初始值：visible。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-backface-visibility
    */
@@ -14184,7 +14625,8 @@ export interface SystemViews {
    * 兼容属性 -moz-background-clip；优先参考标准属性及浏览器支持范围。
    * 设置背景允许绘制到的边界区域。
    *
-   * CSS 规范初始值：`border-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：border-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-background-clip
@@ -14194,7 +14636,8 @@ export interface SystemViews {
    * 兼容属性 -moz-background-origin；优先参考标准属性及浏览器支持范围。
    * 设置背景图像定位所依据的盒子区域。
    *
-   * CSS 规范初始值：`padding-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：padding-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-background-origin
@@ -14210,7 +14653,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`contain`、`cover`。
    *
-   * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.backgroundSize("cover").backgroundPosition("center")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -14222,7 +14666,8 @@ export interface SystemViews {
    * 兼容属性 -moz-binding；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的 XBL 绑定入口；仅描述历史兼容行为，不适用于现代组件实现。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-binding
    */
@@ -14231,7 +14676,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-bottom-colors；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的下边框多色列表；现代设计使用普通边框或 border-image。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-bottom-colors
    */
@@ -14240,7 +14686,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-end-color；优先参考标准属性 borderInlineEndColor及浏览器支持范围。
    * 设置逻辑行内轴结束侧边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-color
    */
@@ -14249,7 +14696,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-end-style；优先参考标准属性 borderInlineEndStyle及浏览器支持范围。
    * 设置逻辑行内轴结束侧边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-style
    */
@@ -14258,7 +14706,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-end-width；优先参考标准属性 borderInlineEndWidth及浏览器支持范围。
    * 设置逻辑行内轴结束侧边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-end-width
    */
@@ -14266,6 +14715,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -moz-border-image；优先参考标准属性及浏览器支持范围。
    * 设置用作边框的图像及其切片、宽度、外扩和重复方式。
+   *
+   * CSS 规范初始值：border-image-source: none；border-image-slice: 100%；border-image-width: 1；border-image-outset: 0；border-image-repeat: stretch。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-image
    */
@@ -14274,7 +14726,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-left-colors；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的左边框多色列表；现代设计使用普通边框或 border-image。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-left-colors
    */
@@ -14286,6 +14739,9 @@ export interface SystemViews {
    * 1/2/3/4 个半径依次控制四角、两组对角、三组角和逐角。它裁剪自身背景，但不会单独保证裁剪所有后代内容。
    *
    * 适用场景：卡片、按钮、头像的圆角外观。
+   *
+   * CSS 规范初始值：border-top-left-radius: 0；border-top-right-radius: 0；border-bottom-right-radius: 0；border-bottom-left-radius: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.borderRadius("8px")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -14297,7 +14753,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-radius-bottomleft；优先参考标准属性 borderBottomLeftRadius及浏览器支持范围。
    * 设置左下角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-bottomleft
@@ -14307,7 +14764,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-radius-bottomright；优先参考标准属性 borderBottomRightRadius及浏览器支持范围。
    * 设置右下角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-bottomright
@@ -14317,7 +14775,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-radius-topleft；优先参考标准属性 borderTopLeftRadius及浏览器支持范围。
    * 设置左上角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-topleft
@@ -14327,7 +14786,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-radius-topright；优先参考标准属性 borderTopRightRadius及浏览器支持范围。
    * 设置右上角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-radius-topright
@@ -14337,7 +14797,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-right-colors；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的右边框多色列表；现代设计使用普通边框或 border-image。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-right-colors
    */
@@ -14346,7 +14807,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-start-color；优先参考标准属性 borderInlineStartColor及浏览器支持范围。
    * 设置逻辑行内轴起始侧边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-color
    */
@@ -14355,7 +14817,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-start-style；优先参考标准属性 borderInlineStartStyle及浏览器支持范围。
    * 设置逻辑行内轴起始侧边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-start-style
    */
@@ -14364,7 +14827,8 @@ export interface SystemViews {
    * 兼容属性 -moz-border-top-colors；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的上边框多色列表；现代设计使用普通边框或 border-image。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-border-top-colors
    */
@@ -14373,7 +14837,8 @@ export interface SystemViews {
    * 兼容属性 -moz-box-align；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒子项在交叉方向上的对齐，常规布局优先使用 align-items。
    *
-   * CSS 规范初始值：`stretch`，不同于浏览器默认样式表。
+   * CSS 规范初始值：stretch。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-align
@@ -14383,7 +14848,8 @@ export interface SystemViews {
    * 兼容属性 -moz-box-direction；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒的子项排列方向是否反转。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-direction
@@ -14393,7 +14859,8 @@ export interface SystemViews {
    * 兼容属性 -moz-box-flex；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒子项分配剩余空间的比例。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-flex
@@ -14403,7 +14870,8 @@ export interface SystemViews {
    * 兼容属性 -moz-box-ordinal-group；优先参考标准属性及浏览器支持范围。
    * 设置旧版弹性盒的子项排列组序号，现代布局使用 order。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-ordinal-group
@@ -14413,7 +14881,8 @@ export interface SystemViews {
    * 兼容属性 -moz-box-orient；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒的水平或垂直排列轴，现代布局使用 flex-direction。
    *
-   * CSS 规范初始值：`inline-axis`，不同于浏览器默认样式表。
+   * CSS 规范初始值：inline-axis。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-orient
@@ -14423,7 +14892,8 @@ export interface SystemViews {
    * 兼容属性 -moz-box-pack；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒在主轴方向的空余空间分配，现代布局使用 justify-content。
    *
-   * CSS 规范初始值：`start`，不同于浏览器默认样式表。
+   * CSS 规范初始值：start。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-box-pack
@@ -14437,7 +14907,8 @@ export interface SystemViews {
    *
    * 适用场景：浮层层次、卡片边缘或内凹效果。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.boxShadow("0 2px 8px rgb(0 0 0 / 0.15)")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -14453,7 +14924,8 @@ export interface SystemViews {
    *
    * 常用值：`content-box`、`border-box`。
    *
-   * CSS 规范初始值：`content-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：content-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.boxSizing("border-box").width("20rem").padding("1rem")
    * @category 厂商与历史兼容属性
@@ -14464,7 +14936,8 @@ export interface SystemViews {
    * 兼容属性 -moz-column-count；优先参考标准属性及浏览器支持范围。
    * 设置多栏布局的目标栏数。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-count
@@ -14474,7 +14947,8 @@ export interface SystemViews {
    * 兼容属性 -moz-column-fill；优先参考标准属性及浏览器支持范围。
    * 设置多栏内容顺序填充还是尽量均衡栏高。
    *
-   * CSS 规范初始值：`balance`，不同于浏览器默认样式表。
+   * CSS 规范初始值：balance。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-fill
@@ -14483,6 +14957,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -moz-column-rule；优先参考标准属性及浏览器支持范围。
    * 设置多栏之间分隔线的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：column-rule-width: medium；column-rule-style: none；column-rule-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule
    */
@@ -14491,7 +14968,8 @@ export interface SystemViews {
    * 兼容属性 -moz-column-rule-color；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-color
    */
@@ -14500,7 +14978,8 @@ export interface SystemViews {
    * 兼容属性 -moz-column-rule-style；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-style
    */
@@ -14509,7 +14988,8 @@ export interface SystemViews {
    * 兼容属性 -moz-column-rule-width；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-rule-width
    */
@@ -14517,6 +14997,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -moz-columns；优先参考标准属性及浏览器支持范围。
    * 同时设置多栏布局的首选栏宽和目标栏数。
+   *
+   * CSS 规范初始值：column-width: auto；column-count: auto；column-height: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-columns
    */
@@ -14525,7 +15008,8 @@ export interface SystemViews {
    * 兼容属性 -moz-column-width；优先参考标准属性及浏览器支持范围。
    * 设置多栏布局的首选栏宽，实际栏宽由容器空间决定。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-column-width
    */
@@ -14534,7 +15018,8 @@ export interface SystemViews {
    * 兼容属性 -moz-context-properties；优先参考标准属性及浏览器支持范围。
    * 声明可传递给被引用 SVG 图像的上下文绘制属性，如 fill 和 stroke。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-context-properties
    */
@@ -14543,7 +15028,8 @@ export interface SystemViews {
    * 兼容属性 -moz-float-edge；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 中指定浮动元素边缘计算使用的盒子范围。
    *
-   * CSS 规范初始值：`content-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：content-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-float-edge
@@ -14553,7 +15039,8 @@ export interface SystemViews {
    * 兼容属性 -moz-font-feature-settings；优先参考标准属性及浏览器支持范围。
    * 通过 OpenType 特性标签控制字体的底层排版功能。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-font-feature-settings
    */
@@ -14562,7 +15049,8 @@ export interface SystemViews {
    * 兼容属性 -moz-font-language-override；优先参考标准属性及浏览器支持范围。
    * 覆盖字体排版使用的语言系统标签，不改变文本实际语言。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-font-language-override
    */
@@ -14571,7 +15059,8 @@ export interface SystemViews {
    * 兼容属性 -moz-force-broken-image-icon；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 中控制损坏图像占位图标的显示。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-force-broken-image-icon
@@ -14581,7 +15070,8 @@ export interface SystemViews {
    * 兼容属性 -moz-hyphens；优先参考标准属性及浏览器支持范围。
    * 设置文字断词和连字符插入的方式；自动断词依赖语言和词典。
    *
-   * CSS 规范初始值：`manual`，不同于浏览器默认样式表。
+   * CSS 规范初始值：manual。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-hyphens
    */
@@ -14590,7 +15080,8 @@ export interface SystemViews {
    * 兼容属性 -moz-margin-end；优先参考标准属性 marginInlineEnd及浏览器支持范围。
    * 设置逻辑行内轴结束侧的外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-margin-end
    */
@@ -14599,7 +15090,8 @@ export interface SystemViews {
    * 兼容属性 -moz-margin-start；优先参考标准属性 marginInlineStart及浏览器支持范围。
    * 设置逻辑行内轴起始侧的外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-margin-start
    */
@@ -14612,7 +15104,8 @@ export interface SystemViews {
    *
    * 适用场景：统一调整整个元素子树的透明度；只需背景半透明时应使用带 alpha 的背景色。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.opacity(0.5)
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -14624,7 +15117,8 @@ export interface SystemViews {
    * 兼容属性 -moz-orient；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 中指定特定控件的显示方向，作用依赖控件类型。
    *
-   * CSS 规范初始值：`inline`，不同于浏览器默认样式表。
+   * CSS 规范初始值：inline。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-orient
    */
@@ -14633,7 +15127,7 @@ export interface SystemViews {
    * 兼容属性 -moz-osx-font-smoothing；优先参考标准属性及浏览器支持范围。
    * 指定 macOS 上文字抗锯齿方式；效果依赖平台和字体渲染实现。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-osx-font-smoothing
    */
@@ -14645,6 +15139,9 @@ export interface SystemViews {
    * 不占布局空间，可用 outline-offset 调整距离；键盘焦点指示不应被无替代地移除。
    *
    * 适用场景：控件焦点指示和不影响布局的轮廓。
+   *
+   * CSS 规范初始值：outline-width: medium；outline-style: none；outline-color: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.select(":focus-visible", s.outline("2px solid currentColor").outlineOffset("2px"))
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -14656,7 +15153,8 @@ export interface SystemViews {
    * 兼容属性 -moz-outline-color；优先参考标准属性及浏览器支持范围。
    * 设置轮廓线颜色。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-color
@@ -14665,6 +15163,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -moz-outline-radius；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 的轮廓圆角简写；不同于元素边框本身的圆角。
+   *
+   * CSS 规范初始值：-moz-outline-radius-topleft: 0；-moz-outline-radius-topright: 0；-moz-outline-radius-bottomright: 0；-moz-outline-radius-bottomleft: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius
    */
@@ -14673,7 +15174,8 @@ export interface SystemViews {
    * 兼容属性 -moz-outline-radius-bottomleft；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 轮廓左下角的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-bottomleft
    */
@@ -14682,7 +15184,8 @@ export interface SystemViews {
    * 兼容属性 -moz-outline-radius-bottomright；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 轮廓右下角的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-bottomright
    */
@@ -14691,7 +15194,8 @@ export interface SystemViews {
    * 兼容属性 -moz-outline-radius-topleft；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 轮廓左上角的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-topleft
    */
@@ -14700,7 +15204,8 @@ export interface SystemViews {
    * 兼容属性 -moz-outline-radius-topright；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 轮廓右上角的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-radius-topright
    */
@@ -14709,7 +15214,8 @@ export interface SystemViews {
    * 兼容属性 -moz-outline-style；优先参考标准属性及浏览器支持范围。
    * 设置轮廓线线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-style
@@ -14719,7 +15225,8 @@ export interface SystemViews {
    * 兼容属性 -moz-outline-width；优先参考标准属性及浏览器支持范围。
    * 设置轮廓线宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-outline-width
@@ -14729,7 +15236,8 @@ export interface SystemViews {
    * 兼容属性 -moz-padding-end；优先参考标准属性 paddingInlineEnd及浏览器支持范围。
    * 设置逻辑行内轴结束侧的内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-padding-end
    */
@@ -14738,7 +15246,8 @@ export interface SystemViews {
    * 兼容属性 -moz-padding-start；优先参考标准属性 paddingInlineStart及浏览器支持范围。
    * 设置逻辑行内轴起始侧的内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-padding-start
    */
@@ -14747,7 +15256,8 @@ export interface SystemViews {
    * 兼容属性 -moz-perspective；优先参考标准属性及浏览器支持范围。
    * 设置观察子元素三维变换时的透视距离。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-perspective
    */
@@ -14756,7 +15266,8 @@ export interface SystemViews {
    * 兼容属性 -moz-perspective-origin；优先参考标准属性及浏览器支持范围。
    * 设置三维透视的观察原点。
    *
-   * CSS 规范初始值：`50% 50%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：50% 50%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-perspective-origin
    */
@@ -14765,7 +15276,8 @@ export interface SystemViews {
    * 兼容属性 -moz-stack-sizing；优先参考标准属性及浏览器支持范围。
    * 旧版 Gecko 堆叠布局中决定子项尺寸是否参与堆叠容器的尺寸计算。
    *
-   * CSS 规范初始值：`stretch-to-fit`，不同于浏览器默认样式表。
+   * CSS 规范初始值：stretch-to-fit。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-stack-sizing
    */
@@ -14774,7 +15286,8 @@ export interface SystemViews {
    * 兼容属性 -moz-tab-size；优先参考标准属性及浏览器支持范围。
    * 设置保留制表符时每个制表位的宽度。
    *
-   * CSS 规范初始值：`8`，不同于浏览器默认样式表。
+   * CSS 规范初始值：8。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-tab-size
    */
@@ -14783,7 +15296,8 @@ export interface SystemViews {
    * 兼容属性 -moz-text-align-last；优先参考标准属性及浏览器支持范围。
    * 设置段落最后一行或强制换行前一行的对齐方式。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-align-last
@@ -14793,7 +15307,8 @@ export interface SystemViews {
    * 兼容属性 -moz-text-blink；优先参考标准属性及浏览器支持范围。
    * 旧版文字闪烁效果开关；现代内容不应依赖该兼容属性。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-blink
    */
@@ -14802,7 +15317,8 @@ export interface SystemViews {
    * 兼容属性 -moz-text-decoration-color；优先参考标准属性及浏览器支持范围。
    * 设置文本装饰线颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-color
@@ -14812,7 +15328,8 @@ export interface SystemViews {
    * 兼容属性 -moz-text-decoration-line；优先参考标准属性及浏览器支持范围。
    * 设置下划线、上划线或删除线等装饰线位置。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-line
@@ -14822,7 +15339,8 @@ export interface SystemViews {
    * 兼容属性 -moz-text-decoration-style；优先参考标准属性及浏览器支持范围。
    * 设置文本装饰线的实线、波浪线等线型。
    *
-   * CSS 规范初始值：`solid`，不同于浏览器默认样式表。
+   * CSS 规范初始值：solid。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-decoration-style
@@ -14832,7 +15350,8 @@ export interface SystemViews {
    * 兼容属性 -moz-text-size-adjust；优先参考标准属性及浏览器支持范围。
    * 控制移动浏览器为提升可读性而进行的文字自动放大。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：支持文本放大的移动浏览器为 auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-text-size-adjust
    */
@@ -14845,7 +15364,8 @@ export interface SystemViews {
    *
    * 适用场景：平移、旋转和缩放的视觉效果；需要改变普通流占位时应调整布局属性。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.transform("translateX(8px) scale(1.05)")
    * @category 厂商与历史兼容属性
@@ -14856,7 +15376,8 @@ export interface SystemViews {
    * 兼容属性 -moz-transform-origin；优先参考标准属性及浏览器支持范围。
    * 设置元素变换的原点。
    *
-   * CSS 规范初始值：`50% 50% 0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：50% 50% 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-origin
    */
@@ -14865,7 +15386,8 @@ export interface SystemViews {
    * 兼容属性 -moz-transform-style；优先参考标准属性及浏览器支持范围。
    * 控制子元素的三维位置保留在三维空间还是展平。
    *
-   * CSS 规范初始值：`flat`，不同于浏览器默认样式表。
+   * CSS 规范初始值：flat。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transform-style
    */
@@ -14877,6 +15399,9 @@ export interface SystemViews {
    * 只对属性变化创建过渡；不会自动触发变化。建议明确列出目标属性，避免 all 意外过渡布局变化。
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
+   *
+   * CSS 规范初始值：transition-delay: 0s；transition-duration: 0s；transition-property: all；transition-timing-function: ease；transition-behavior: normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.transition("opacity 160ms ease")
    * @category 厂商与历史兼容属性
@@ -14887,7 +15412,8 @@ export interface SystemViews {
    * 兼容属性 -moz-transition-delay；优先参考标准属性及浏览器支持范围。
    * 设置属性变化后开始过渡的延迟。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-delay
@@ -14897,7 +15423,8 @@ export interface SystemViews {
    * 兼容属性 -moz-transition-duration；优先参考标准属性及浏览器支持范围。
    * 设置过渡从开始到完成的时长。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-duration
@@ -14906,6 +15433,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -moz-transition-property；优先参考标准属性及浏览器支持范围。
    * 指定发生变化时需要过渡的 CSS 属性。
+   *
+   * CSS 规范初始值：all。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-property
@@ -14915,7 +15445,8 @@ export interface SystemViews {
    * 兼容属性 -moz-transition-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置过渡进度变化的缓动函数。
    *
-   * CSS 规范初始值：`ease`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ease。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-transition-timing-function
@@ -14925,7 +15456,8 @@ export interface SystemViews {
    * 兼容属性 -moz-user-focus；优先参考标准属性及浏览器支持范围。
    * 控制旧版 Gecko 元素的用户焦点行为，现代交互优先使用标准焦点机制。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-focus
@@ -14935,7 +15467,8 @@ export interface SystemViews {
    * 兼容属性 -moz-user-input；优先参考标准属性及浏览器支持范围。
    * 控制旧版 Gecko 元素是否接受用户输入，现代控件使用标准 disabled/readonly 等语义。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-input
@@ -14945,7 +15478,8 @@ export interface SystemViews {
    * 兼容属性 -moz-user-modify；优先参考标准属性及浏览器支持范围。
    * 控制内容能否被用户编辑的非标准旧接口；现代页面优先使用 contenteditable。
    *
-   * CSS 规范初始值：`read-only`，不同于浏览器默认样式表。
+   * CSS 规范初始值：read-only。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-user-modify
    */
@@ -14958,7 +15492,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`text`、`none`、`all`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.userSelect("all")
    * @category 厂商与历史兼容属性
@@ -14969,7 +15504,8 @@ export interface SystemViews {
    * 兼容属性 -moz-window-dragging；优先参考标准属性及浏览器支持范围。
    * 控制区域能否作为宿主窗口的拖动区域，作用限于支持它的特定环境。
    *
-   * CSS 规范初始值：`drag`，不同于浏览器默认样式表。
+   * CSS 规范初始值：drag。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-dragging
    */
@@ -14978,7 +15514,8 @@ export interface SystemViews {
    * 兼容属性 -moz-window-shadow；优先参考标准属性及浏览器支持范围。
    * 选择旧版 Gecko 宿主窗口阴影的预设，效果依赖窗口与操作系统。
    *
-   * CSS 规范初始值：`default`，不同于浏览器默认样式表。
+   * CSS 规范初始值：default。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-moz-window-shadow
    */
@@ -14987,7 +15524,8 @@ export interface SystemViews {
    * 兼容属性 -ms-accelerator；优先参考标准属性及浏览器支持范围。
    * 旧版 Microsoft 浏览器中控制快捷键提示字符是否显示。
    *
-   * CSS 规范初始值：`false`，不同于浏览器默认样式表。
+   * CSS 规范初始值：false。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-accelerator
    */
@@ -14996,7 +15534,8 @@ export interface SystemViews {
    * 兼容属性 -ms-block-progression；优先参考标准属性及浏览器支持范围。
    * 旧版块内容的排列方向，现代排版优先使用 writing-mode。
    *
-   * CSS 规范初始值：`tb`，不同于浏览器默认样式表。
+   * CSS 规范初始值：tb。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-block-progression
    */
@@ -15005,7 +15544,8 @@ export interface SystemViews {
    * 兼容属性 -ms-content-zoom-chaining；优先参考标准属性及浏览器支持范围。
    * 控制缩放操作到达边界后是否继续传递给父级缩放区域。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-chaining
    */
@@ -15013,6 +15553,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -ms-content-zooming；优先参考标准属性及浏览器支持范围。
    * 控制旧版 Microsoft 触控内容缩放是否启用。
+   *
+   * CSS 规范初始值：顶层文档为 zoom，其余为 none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zooming
    */
@@ -15020,6 +15563,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -ms-content-zoom-limit；优先参考标准属性及浏览器支持范围。
    * 合并设置旧版触控内容缩放的最小和最大倍率。
+   *
+   * CSS 规范初始值：-ms-content-zoom-limit-max: 400%；-ms-content-zoom-limit-min: 100%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-limit
    */
@@ -15028,7 +15574,8 @@ export interface SystemViews {
    * 兼容属性 -ms-content-zoom-limit-max；优先参考标准属性及浏览器支持范围。
    * 限制旧版触控内容缩放的最大倍率。
    *
-   * CSS 规范初始值：`400%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：400%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-limit-max
    */
@@ -15037,7 +15584,8 @@ export interface SystemViews {
    * 兼容属性 -ms-content-zoom-limit-min；优先参考标准属性及浏览器支持范围。
    * 限制旧版触控内容缩放的最小倍率。
    *
-   * CSS 规范初始值：`100%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：100%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-limit-min
    */
@@ -15045,6 +15593,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -ms-content-zoom-snap；优先参考标准属性及浏览器支持范围。
    * 合并设置旧版内容缩放吸附的方式和位置。
+   *
+   * CSS 规范初始值：-ms-content-zoom-snap-type: none；-ms-content-zoom-snap-points: snapInterval(0%, 100%)。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap
    */
@@ -15053,7 +15604,8 @@ export interface SystemViews {
    * 兼容属性 -ms-content-zoom-snap-points；优先参考标准属性及浏览器支持范围。
    * 指定旧版内容缩放操作可以吸附的倍率位置。
    *
-   * CSS 规范初始值：`snapInterval(0%, 100%)`，不同于浏览器默认样式表。
+   * CSS 规范初始值：snapInterval(0%, 100%)。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap-points
    */
@@ -15062,7 +15614,8 @@ export interface SystemViews {
    * 兼容属性 -ms-content-zoom-snap-type；优先参考标准属性及浏览器支持范围。
    * 指定旧版内容缩放吸附的强制程度。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-content-zoom-snap-type
    */
@@ -15070,6 +15623,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -ms-filter；优先参考标准属性及浏览器支持范围。
    * 对元素的最终图像应用模糊、亮度等滤镜。
+   *
+   * CSS 规范初始值：""。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-filter
    */
@@ -15083,6 +15639,9 @@ export interface SystemViews {
    * 适用场景：分配弹性布局中的剩余空间，或让项目保持自身尺寸。
    *
    * 常用值：`auto`、`none`。
+   *
+   * CSS 规范初始值：flex-grow: 0；flex-shrink: 1；flex-basis: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.flex("1 1 0%")
    * @example
@@ -15099,7 +15658,8 @@ export interface SystemViews {
    *
    * 常用值：`row`、`column`、`row-reverse`、`column-reverse`。
    *
-   * CSS 规范初始值：`row`，不同于浏览器默认样式表。
+   * CSS 规范初始值：row。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.display("flex").flexDirection("column").gap("1rem")
    * @category 厂商与历史兼容属性
@@ -15110,7 +15670,8 @@ export interface SystemViews {
    * 兼容属性 -ms-flex-positive；优先参考标准属性 flexGrow及浏览器支持范围。
    * 设置弹性项目分配正剩余空间时的增长系数。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flex-positive
    */
@@ -15119,7 +15680,8 @@ export interface SystemViews {
    * 兼容属性 -ms-flow-from；优先参考标准属性及浏览器支持范围。
    * 旧版 CSS Regions 中指定接收哪个命名内容流。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flow-from
    */
@@ -15128,7 +15690,8 @@ export interface SystemViews {
    * 兼容属性 -ms-flow-into；优先参考标准属性及浏览器支持范围。
    * 旧版 CSS Regions 中把元素内容放入指定命名流。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-flow-into
    */
@@ -15137,7 +15700,8 @@ export interface SystemViews {
    * 兼容属性 -ms-grid-columns；优先参考标准属性 gridTemplateColumns及浏览器支持范围。
    * 定义显式网格的列轨道尺寸及网格线名称。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-grid-columns
    */
@@ -15146,7 +15710,8 @@ export interface SystemViews {
    * 兼容属性 -ms-grid-rows；优先参考标准属性 gridTemplateRows及浏览器支持范围。
    * 定义显式网格的行轨道尺寸及网格线名称。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-grid-rows
    */
@@ -15155,7 +15720,8 @@ export interface SystemViews {
    * 兼容属性 -ms-high-contrast-adjust；优先参考标准属性及浏览器支持范围。
    * 控制旧版高对比度模式是否调整作者颜色；现代环境优先使用 forced-color-adjust。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-high-contrast-adjust
    */
@@ -15164,7 +15730,8 @@ export interface SystemViews {
    * 兼容属性 -ms-hyphenate-limit-chars；优先参考标准属性及浏览器支持范围。
    * 限制可断词的最小单词长度以及断点两侧的最少字符数。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphenate-limit-chars
    */
@@ -15173,7 +15740,8 @@ export interface SystemViews {
    * 兼容属性 -ms-hyphenate-limit-lines；优先参考标准属性及浏览器支持范围。
    * 限制连续使用断字连字符的文本行数。
    *
-   * CSS 规范初始值：`no-limit`，不同于浏览器默认样式表。
+   * CSS 规范初始值：no-limit。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphenate-limit-lines
    */
@@ -15182,7 +15750,8 @@ export interface SystemViews {
    * 兼容属性 -ms-hyphenate-limit-zone；优先参考标准属性及浏览器支持范围。
    * 指定允许开始断字处理的行末区域。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphenate-limit-zone
    */
@@ -15191,7 +15760,8 @@ export interface SystemViews {
    * 兼容属性 -ms-hyphens；优先参考标准属性及浏览器支持范围。
    * 设置文字断词和连字符插入的方式；自动断词依赖语言和词典。
    *
-   * CSS 规范初始值：`manual`，不同于浏览器默认样式表。
+   * CSS 规范初始值：manual。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-hyphens
    */
@@ -15200,7 +15770,8 @@ export interface SystemViews {
    * 兼容属性 -ms-ime-align；优先参考标准属性及浏览器支持范围。
    * 控制旧版输入法候选窗口相对于编辑区域的对齐位置。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-ime-align
    */
@@ -15209,7 +15780,8 @@ export interface SystemViews {
    * 兼容属性 -ms-ime-mode；优先参考标准属性及浏览器支持范围。
    * 旧版输入法状态控制，不应替代 inputmode 或正常输入交互。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-ime-mode
@@ -15219,7 +15791,8 @@ export interface SystemViews {
    * 兼容属性 -ms-line-break；优先参考标准属性及浏览器支持范围。
    * 设置东亚文字标点等字符的换行严格程度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-line-break
    */
@@ -15230,7 +15803,8 @@ export interface SystemViews {
    *
    * 不改变源代码、朗读及通常的 Tab 顺序，避免用视觉重排破坏阅读顺序。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-order
    */
@@ -15239,7 +15813,8 @@ export interface SystemViews {
    * 兼容属性 -ms-overflow-style；优先参考标准属性及浏览器支持范围。
    * 选择旧版 Microsoft 浏览器滚动条的呈现方式。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-overflow-style
    */
@@ -15254,7 +15829,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`hidden`、`clip`。
    *
-   * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
+   * CSS 规范初始值：visible。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.overflowX("auto")
    * @category 厂商与历史兼容属性
@@ -15271,7 +15847,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`hidden`、`clip`。
    *
-   * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
+   * CSS 规范初始值：visible。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.maxHeight("20rem").overflowY("auto")
    * @category 厂商与历史兼容属性
@@ -15281,6 +15858,8 @@ export interface SystemViews {
   /**
    * 兼容属性 -ms-scrollbar3dlight-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条三维边框的亮边颜色。
+   *
+   * 初始值：当前固定数据源未记录，参见该属性规范。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar3dlight-color
    */
@@ -15289,7 +15868,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scrollbar-arrow-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条箭头颜色。
    *
-   * CSS 规范初始值：`ButtonText`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ButtonText。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-arrow-color
    */
@@ -15297,6 +15877,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -ms-scrollbar-base-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条的基础颜色。
+   *
+   * CSS 规范初始值：由浏览器决定。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-base-color
    */
@@ -15305,7 +15888,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scrollbar-darkshadow-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条三维边框的深阴影颜色。
    *
-   * CSS 规范初始值：`ThreeDDarkShadow`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ThreeDDarkShadow。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-darkshadow-color
    */
@@ -15314,7 +15898,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scrollbar-face-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条滑块表面颜色。
    *
-   * CSS 规范初始值：`ThreeDFace`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ThreeDFace。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-face-color
    */
@@ -15323,7 +15908,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scrollbar-highlight-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条高亮边缘颜色。
    *
-   * CSS 规范初始值：`ThreeDHighlight`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ThreeDHighlight。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-highlight-color
    */
@@ -15332,7 +15918,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scrollbar-shadow-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条阴影边缘颜色。
    *
-   * CSS 规范初始值：`ThreeDDarkShadow`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ThreeDDarkShadow。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-shadow-color
    */
@@ -15341,7 +15928,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scrollbar-track-color；优先参考标准属性及浏览器支持范围。
    * 设置旧版滚动条轨道颜色。
    *
-   * CSS 规范初始值：`Scrollbar`，不同于浏览器默认样式表。
+   * CSS 规范初始值：Scrollbar。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scrollbar-track-color
    */
@@ -15350,7 +15938,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scroll-chaining；优先参考标准属性及浏览器支持范围。
    * 控制滚动到达边界后是否传递给祖先滚动容器。
    *
-   * CSS 规范初始值：`chained`，不同于浏览器默认样式表。
+   * CSS 规范初始值：chained。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-chaining
    */
@@ -15358,6 +15947,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -ms-scroll-limit；优先参考标准属性及浏览器支持范围。
    * 合并设置旧版滚动区域的水平和垂直边界。
+   *
+   * CSS 规范初始值：-ms-scroll-limit-x-min: 0；-ms-scroll-limit-y-min: 0；-ms-scroll-limit-x-max: auto；-ms-scroll-limit-y-max: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit
    */
@@ -15366,7 +15958,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scroll-limit-x-max；优先参考标准属性及浏览器支持范围。
    * 限制旧版滚动区域的最大水平位置。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-x-max
    */
@@ -15375,7 +15968,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scroll-limit-x-min；优先参考标准属性及浏览器支持范围。
    * 限制旧版滚动区域的最小水平位置。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-x-min
    */
@@ -15384,7 +15978,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scroll-limit-y-max；优先参考标准属性及浏览器支持范围。
    * 限制旧版滚动区域的最大垂直位置。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-y-max
    */
@@ -15393,7 +15988,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scroll-limit-y-min；优先参考标准属性及浏览器支持范围。
    * 限制旧版滚动区域的最小垂直位置。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-limit-y-min
    */
@@ -15402,7 +15998,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scroll-rails；优先参考标准属性及浏览器支持范围。
    * 控制旧版触控滚动是否锁定主要滚动轴。
    *
-   * CSS 规范初始值：`railed`，不同于浏览器默认样式表。
+   * CSS 规范初始值：railed。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-rails
    */
@@ -15411,7 +16008,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scroll-snap-points-x；优先参考标准属性及浏览器支持范围。
    * 指定旧版水平滚动吸附位置列表；现代吸附使用容器和子项的吸附属性。
    *
-   * CSS 规范初始值：`snapInterval(0px, 100%)`，不同于浏览器默认样式表。
+   * CSS 规范初始值：snapInterval(0px, 100%)。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-points-x
    */
@@ -15420,7 +16018,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scroll-snap-points-y；优先参考标准属性及浏览器支持范围。
    * 指定旧版垂直滚动吸附位置列表；现代吸附使用容器和子项的吸附属性。
    *
-   * CSS 规范初始值：`snapInterval(0px, 100%)`，不同于浏览器默认样式表。
+   * CSS 规范初始值：snapInterval(0px, 100%)。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-points-y
    */
@@ -15431,7 +16030,8 @@ export interface SystemViews {
    *
    * 轴和吸附强度的组合通过 raw 写入，例如 x mandatory；单独声明轴时省略的强度按 CSS 规则处理。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.scrollSnapType("x mandatory")
    * @category 厂商与历史兼容属性
@@ -15441,6 +16041,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -ms-scroll-snap-x；优先参考标准属性及浏览器支持范围。
    * 合并设置旧版水平滚动吸附方式和位置。
+   *
+   * CSS 规范初始值：-ms-scroll-snap-type: none；-ms-scroll-snap-points-x: snapInterval(0px, 100%)。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-x
    */
@@ -15448,6 +16051,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -ms-scroll-snap-y；优先参考标准属性及浏览器支持范围。
    * 合并设置旧版垂直滚动吸附方式和位置。
+   *
+   * CSS 规范初始值：-ms-scroll-snap-type: none；-ms-scroll-snap-points-y: snapInterval(0px, 100%)。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-snap-y
    */
@@ -15456,7 +16062,8 @@ export interface SystemViews {
    * 兼容属性 -ms-scroll-translation；优先参考标准属性及浏览器支持范围。
    * 控制旧版 Microsoft 环境中的滚动位移呈现方式。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-scroll-translation
    */
@@ -15465,7 +16072,8 @@ export interface SystemViews {
    * 兼容属性 -ms-text-autospace；优先参考标准属性及浏览器支持范围。
    * 设置中西文、数字等不同文字系统之间的自动间距。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-autospace
    */
@@ -15474,7 +16082,8 @@ export interface SystemViews {
    * 兼容属性 -ms-text-combine-horizontal；优先参考标准属性 textCombineUpright及浏览器支持范围。
    * 设置竖排文字中多个字符是否合成为一个横排字形单元。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-text-combine-horizontal
    */
@@ -15489,7 +16098,8 @@ export interface SystemViews {
    *
    * 常用值：`ellipsis`、`clip`。
    *
-   * CSS 规范初始值：`clip`，不同于浏览器默认样式表。
+   * CSS 规范初始值：clip。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.maxWidth("12rem").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    * @category 厂商与历史兼容属性
@@ -15506,7 +16116,8 @@ export interface SystemViews {
    *
    * 常用值：`manipulation`、`pan-x`、`pan-y`、`none`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.touchAction("pan-y")
    * @category 厂商与历史兼容属性
@@ -15517,7 +16128,8 @@ export interface SystemViews {
    * 兼容属性 -ms-touch-select；优先参考标准属性及浏览器支持范围。
    * 控制旧版触控文字选择的交互方式。
    *
-   * CSS 规范初始值：`grippers`，不同于浏览器默认样式表。
+   * CSS 规范初始值：grippers。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-touch-select
    */
@@ -15530,7 +16142,8 @@ export interface SystemViews {
    *
    * 适用场景：平移、旋转和缩放的视觉效果；需要改变普通流占位时应调整布局属性。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.transform("translateX(8px) scale(1.05)")
    * @category 厂商与历史兼容属性
@@ -15541,7 +16154,8 @@ export interface SystemViews {
    * 兼容属性 -ms-transform-origin；优先参考标准属性及浏览器支持范围。
    * 设置元素变换的原点。
    *
-   * CSS 规范初始值：`50% 50% 0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：50% 50% 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transform-origin
    */
@@ -15553,6 +16167,9 @@ export interface SystemViews {
    * 只对属性变化创建过渡；不会自动触发变化。建议明确列出目标属性，避免 all 意外过渡布局变化。
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
+   *
+   * CSS 规范初始值：transition-delay: 0s；transition-duration: 0s；transition-property: all；transition-timing-function: ease；transition-behavior: normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.transition("opacity 160ms ease")
    * @category 厂商与历史兼容属性
@@ -15563,7 +16180,8 @@ export interface SystemViews {
    * 兼容属性 -ms-transition-delay；优先参考标准属性及浏览器支持范围。
    * 设置属性变化后开始过渡的延迟。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-delay
    */
@@ -15572,7 +16190,8 @@ export interface SystemViews {
    * 兼容属性 -ms-transition-duration；优先参考标准属性及浏览器支持范围。
    * 设置过渡从开始到完成的时长。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-duration
    */
@@ -15580,6 +16199,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -ms-transition-property；优先参考标准属性及浏览器支持范围。
    * 指定发生变化时需要过渡的 CSS 属性。
+   *
+   * CSS 规范初始值：all。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-property
    */
@@ -15588,7 +16210,8 @@ export interface SystemViews {
    * 兼容属性 -ms-transition-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置过渡进度变化的缓动函数。
    *
-   * CSS 规范初始值：`ease`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ease。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-transition-timing-function
    */
@@ -15601,7 +16224,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`text`、`none`、`all`。
    *
-   * CSS 规范初始值：`text`，不同于浏览器默认样式表。
+   * CSS 规范初始值：text。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.userSelect("all")
    * @category 厂商与历史兼容属性
@@ -15616,7 +16240,8 @@ export interface SystemViews {
    *
    * 常用值：`normal`、`break-all`、`keep-all`。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @example
    * s.wordBreak("normal")
    * @category 厂商与历史兼容属性
@@ -15627,7 +16252,8 @@ export interface SystemViews {
    * 兼容属性 -ms-wrap-flow；优先参考标准属性及浏览器支持范围。
    * 控制旧版排斥形状周围的内容环绕方向。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-flow
    */
@@ -15636,7 +16262,8 @@ export interface SystemViews {
    * 兼容属性 -ms-wrap-margin；优先参考标准属性及浏览器支持范围。
    * 设置旧版排斥形状与环绕内容之间的距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-margin
    */
@@ -15645,7 +16272,8 @@ export interface SystemViews {
    * 兼容属性 -ms-wrap-through；优先参考标准属性及浏览器支持范围。
    * 控制旧版元素是否参与排斥形状的内容环绕。
    *
-   * CSS 规范初始值：`wrap`，不同于浏览器默认样式表。
+   * CSS 规范初始值：wrap。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-wrap-through
    */
@@ -15654,7 +16282,8 @@ export interface SystemViews {
    * 兼容属性 -ms-writing-mode；优先参考标准属性及浏览器支持范围。
    * 设置水平或竖直书写模式，以及行和块的推进方向。
    *
-   * CSS 规范初始值：`horizontal-tb`，不同于浏览器默认样式表。
+   * CSS 规范初始值：horizontal-tb。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-ms-writing-mode
    */
@@ -15662,6 +16291,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -o-animation；优先参考标准属性及浏览器支持范围。
    * 集中设置关键帧动画的名称、时长、缓动、延迟、次数及播放行为。
+   *
+   * CSS 规范初始值：animation-name: none；animation-duration: 0s；animation-timing-function: ease；animation-delay: 0s；animation-iteration-count: 1；animation-direction: normal；animation-fill-mode: none；animation-play-state: running；animation-timeline: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation
@@ -15671,7 +16303,8 @@ export interface SystemViews {
    * 兼容属性 -o-animation-delay；优先参考标准属性及浏览器支持范围。
    * 设置动画开始前的延迟；负值表示从动画中途开始播放。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-delay
@@ -15681,7 +16314,8 @@ export interface SystemViews {
    * 兼容属性 -o-animation-direction；优先参考标准属性及浏览器支持范围。
    * 设置动画按正向、反向或交替方向播放。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-direction
@@ -15691,7 +16325,8 @@ export interface SystemViews {
    * 兼容属性 -o-animation-duration；优先参考标准属性及浏览器支持范围。
    * 设置动画完成一次循环的时长。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-duration
@@ -15707,7 +16342,8 @@ export interface SystemViews {
    *
    * 常用值：`none`、`forwards`、`backwards`、`both`。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.animationFillMode("forwards")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -15719,7 +16355,8 @@ export interface SystemViews {
    * 兼容属性 -o-animation-iteration-count；优先参考标准属性及浏览器支持范围。
    * 设置动画循环次数，或无限循环。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-iteration-count
@@ -15729,7 +16366,8 @@ export interface SystemViews {
    * 兼容属性 -o-animation-name；优先参考标准属性及浏览器支持范围。
    * 选择要播放的 @keyframes 动画名称。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-name
@@ -15739,7 +16377,8 @@ export interface SystemViews {
    * 兼容属性 -o-animation-play-state；优先参考标准属性及浏览器支持范围。
    * 控制动画运行或暂停，暂停后可从原位置继续。
    *
-   * CSS 规范初始值：`running`，不同于浏览器默认样式表。
+   * CSS 规范初始值：running。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-play-state
@@ -15749,7 +16388,8 @@ export interface SystemViews {
    * 兼容属性 -o-animation-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置动画每个关键帧区间内进度变化的缓动函数。
    *
-   * CSS 规范初始值：`ease`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ease。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-animation-timing-function
@@ -15765,7 +16405,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`contain`、`cover`。
    *
-   * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.backgroundSize("cover").backgroundPosition("center")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -15782,7 +16423,8 @@ export interface SystemViews {
    *
    * 常用值：`fill`、`contain`、`cover`、`none`、`scale-down`。
    *
-   * CSS 规范初始值：`fill`，不同于浏览器默认样式表。
+   * CSS 规范初始值：fill。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.width("80px").height("80px").objectFit("cover")
    * @category 视觉效果与图像
@@ -15792,7 +16434,8 @@ export interface SystemViews {
   /**
    * 设置替换元素内容在内容盒内的对齐位置。
    *
-   * CSS 规范初始值：`50% 50%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：50% 50%。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-position
    */
@@ -15800,7 +16443,8 @@ export interface SystemViews {
   /**
    * 设置替换元素内容的可视区域，控制用于呈现的图像范围。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/object-view-box
    */
@@ -15808,6 +16452,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -o-border-image；优先参考标准属性及浏览器支持范围。
    * 设置用作边框的图像及其切片、宽度、外扩和重复方式。
+   *
+   * CSS 规范初始值：border-image-source: none；border-image-slice: 100%；border-image-width: 1；border-image-outset: 0；border-image-repeat: stretch。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-border-image
@@ -15815,6 +16462,9 @@ export interface SystemViews {
   readonly OBorderImage: OBorderImageKeywords<'OBorderImage'>;
   /**
    * 集中设置运动路径、起始位置、距离、方向和锚点。
+   *
+   * CSS 规范初始值：offset-position: normal；offset-path: none；offset-distance: 0；offset-anchor: auto；offset-rotate: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset
    */
@@ -15822,7 +16472,8 @@ export interface SystemViews {
   /**
    * 设置元素沿运动路径移动时与路径相接的内部锚点。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-anchor
    */
@@ -15830,6 +16481,9 @@ export interface SystemViews {
   /**
    * 兼容属性 offset-block；优先参考标准属性 insetBlock及浏览器支持范围。
    * 设置定位元素沿逻辑块轴的起始和结束偏移。
+   *
+   * CSS 规范初始值：inset-block-start: auto；inset-block-end: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-block
@@ -15839,7 +16493,8 @@ export interface SystemViews {
    * 兼容属性 offset-block-end；优先参考标准属性 insetBlockEnd及浏览器支持范围。
    * 设置定位元素在逻辑块轴结束侧的偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-block-end
@@ -15849,7 +16504,8 @@ export interface SystemViews {
    * 兼容属性 offset-block-start；优先参考标准属性 insetBlockStart及浏览器支持范围。
    * 设置定位元素在逻辑块轴起始侧的偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-block-start
@@ -15858,7 +16514,8 @@ export interface SystemViews {
   /**
    * 设置元素沿运动路径行进的距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-distance
    */
@@ -15866,6 +16523,9 @@ export interface SystemViews {
   /**
    * 兼容属性 offset-inline；优先参考标准属性 insetInline及浏览器支持范围。
    * 设置定位元素沿逻辑行内轴的起始和结束偏移。
+   *
+   * CSS 规范初始值：inset-inline-start: auto；inset-inline-end: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-inline
@@ -15875,7 +16535,8 @@ export interface SystemViews {
    * 兼容属性 offset-inline-end；优先参考标准属性 insetInlineEnd及浏览器支持范围。
    * 设置定位元素在逻辑行内轴结束侧的偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-inline-end
@@ -15885,7 +16546,8 @@ export interface SystemViews {
    * 兼容属性 offset-inline-start；优先参考标准属性 insetInlineStart及浏览器支持范围。
    * 设置定位元素在逻辑行内轴起始侧的偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-inline-start
@@ -15894,7 +16556,8 @@ export interface SystemViews {
   /**
    * 设置元素运动所沿用的路径。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-path
    */
@@ -15902,7 +16565,8 @@ export interface SystemViews {
   /**
    * 设置运动路径的初始位置。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-position
    */
@@ -15910,7 +16574,8 @@ export interface SystemViews {
   /**
    * 设置元素沿运动路径移动时的方向和附加旋转。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-rotate
    */
@@ -15918,7 +16583,7 @@ export interface SystemViews {
   /**
    * 设置路径旋转的旧名称；新代码使用 offset-rotate。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/offset-rotation
    */
@@ -15933,7 +16598,8 @@ export interface SystemViews {
    *
    * 常用值：`fill`、`contain`、`cover`、`none`、`scale-down`。
    *
-   * CSS 规范初始值：`fill`，不同于浏览器默认样式表。
+   * CSS 规范初始值：fill。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.width("80px").height("80px").objectFit("cover")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -15945,7 +16611,8 @@ export interface SystemViews {
    * 兼容属性 -o-object-position；优先参考标准属性及浏览器支持范围。
    * 设置替换元素内容在内容盒内的对齐位置。
    *
-   * CSS 规范初始值：`50% 50%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：50% 50%。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-object-position
@@ -15958,7 +16625,8 @@ export interface SystemViews {
    *
    * 适用场景：统一调整整个元素子树的透明度；只需背景半透明时应使用带 alpha 的背景色。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.opacity(0.5)
    * @category 视觉效果与图像
@@ -15970,7 +16638,8 @@ export interface SystemViews {
    *
    * 不改变源代码、朗读及通常的 Tab 顺序，避免用视觉重排破坏阅读顺序。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/order
    */
@@ -15978,7 +16647,8 @@ export interface SystemViews {
   /**
    * 设置分页或分栏断点前需保留的最少行数。
    *
-   * CSS 规范初始值：`2`，不同于浏览器默认样式表。
+   * CSS 规范初始值：2。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/orphans
    */
@@ -15987,7 +16657,8 @@ export interface SystemViews {
    * 兼容属性 -o-tab-size；优先参考标准属性及浏览器支持范围。
    * 设置保留制表符时每个制表位的宽度。
    *
-   * CSS 规范初始值：`8`，不同于浏览器默认样式表。
+   * CSS 规范初始值：8。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-tab-size
@@ -16003,7 +16674,8 @@ export interface SystemViews {
    *
    * 常用值：`ellipsis`、`clip`。
    *
-   * CSS 规范初始值：`clip`，不同于浏览器默认样式表。
+   * CSS 规范初始值：clip。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.maxWidth("12rem").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -16019,7 +16691,8 @@ export interface SystemViews {
    *
    * 适用场景：平移、旋转和缩放的视觉效果；需要改变普通流占位时应调整布局属性。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.transform("translateX(8px) scale(1.05)")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -16031,7 +16704,8 @@ export interface SystemViews {
    * 兼容属性 -o-transform-origin；优先参考标准属性及浏览器支持范围。
    * 设置元素变换的原点。
    *
-   * CSS 规范初始值：`50% 50% 0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：50% 50% 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transform-origin
@@ -16044,6 +16718,9 @@ export interface SystemViews {
    * 只对属性变化创建过渡；不会自动触发变化。建议明确列出目标属性，避免 all 意外过渡布局变化。
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
+   *
+   * CSS 规范初始值：transition-delay: 0s；transition-duration: 0s；transition-property: all；transition-timing-function: ease；transition-behavior: normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.transition("opacity 160ms ease")
    * @deprecated 历史属性；新代码优先使用标准替代属性。
@@ -16055,7 +16732,8 @@ export interface SystemViews {
    * 兼容属性 -o-transition-delay；优先参考标准属性及浏览器支持范围。
    * 设置属性变化后开始过渡的延迟。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-delay
@@ -16065,7 +16743,8 @@ export interface SystemViews {
    * 兼容属性 -o-transition-duration；优先参考标准属性及浏览器支持范围。
    * 设置过渡从开始到完成的时长。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-duration
@@ -16074,6 +16753,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -o-transition-property；优先参考标准属性及浏览器支持范围。
    * 指定发生变化时需要过渡的 CSS 属性。
+   *
+   * CSS 规范初始值：all。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-property
@@ -16083,7 +16765,8 @@ export interface SystemViews {
    * 兼容属性 -o-transition-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置过渡进度变化的缓动函数。
    *
-   * CSS 规范初始值：`ease`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ease。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-o-transition-timing-function
@@ -16095,6 +16778,9 @@ export interface SystemViews {
    * 不占布局空间，可用 outline-offset 调整距离；键盘焦点指示不应被无替代地移除。
    *
    * 适用场景：控件焦点指示和不影响布局的轮廓。
+   *
+   * CSS 规范初始值：outline-width: medium；outline-style: none；outline-color: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.select(":focus-visible", s.outline("2px solid currentColor").outlineOffset("2px"))
    * @category 边框与轮廓
@@ -16104,7 +16790,8 @@ export interface SystemViews {
   /**
    * 设置轮廓线颜色。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-color
    */
@@ -16112,7 +16799,8 @@ export interface SystemViews {
   /**
    * 设置轮廓线与边框边缘之间的距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-offset
    */
@@ -16120,7 +16808,8 @@ export interface SystemViews {
   /**
    * 设置轮廓线线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-style
    */
@@ -16128,7 +16817,8 @@ export interface SystemViews {
   /**
    * 设置轮廓线宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 边框与轮廓
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/outline-width
    */
@@ -16142,7 +16832,8 @@ export interface SystemViews {
    *
    * 常用值：`visible`、`hidden`、`clip`、`auto`、`scroll`。
    *
-   * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
+   * CSS 规范初始值：visible。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.maxHeight("20rem").overflow("auto")
    * @category 滚动与溢出
@@ -16152,7 +16843,8 @@ export interface SystemViews {
   /**
    * 控制元素是否参与滚动锚定，以减少内容变化造成的视口跳动。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-anchor
    */
@@ -16160,7 +16852,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴上的溢出行为。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-block
    */
@@ -16168,7 +16861,8 @@ export interface SystemViews {
   /**
    * 设置溢出裁剪参照盒的非标准属性；使用前核对目标浏览器。
    *
-   * CSS 规范初始值：`padding-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：padding-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-clip-box
    */
@@ -16176,7 +16870,8 @@ export interface SystemViews {
   /**
    * 设置 overflow:clip 的裁剪边界允许向外扩展的距离。
    *
-   * CSS 规范初始值：`0px`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0px。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-clip-margin
    */
@@ -16184,7 +16879,8 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴上的溢出行为。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-inline
    */
@@ -16196,7 +16892,8 @@ export interface SystemViews {
    *
    * 常用值：`normal`、`anywhere`、`break-word`。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @example
    * s.overflowWrap("anywhere")
    * @category 滚动与溢出
@@ -16212,7 +16909,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`hidden`、`clip`。
    *
-   * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
+   * CSS 规范初始值：visible。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.overflowX("auto")
    * @category 滚动与溢出
@@ -16228,7 +16926,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`hidden`、`clip`。
    *
-   * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
+   * CSS 规范初始值：visible。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.maxHeight("20rem").overflowY("auto")
    * @category 滚动与溢出
@@ -16238,7 +16937,8 @@ export interface SystemViews {
   /**
    * 反映元素是否位于顶层，主要用于顶层退出过渡；通常由浏览器管理。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overlay
    */
@@ -16250,7 +16950,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`contain`、`none`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.overflowY("auto").overscrollBehavior("contain")
    * @category 滚动与溢出
@@ -16260,7 +16961,8 @@ export interface SystemViews {
   /**
    * 控制逻辑块轴上到达滚动边界后的行为。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-block
    */
@@ -16268,7 +16970,8 @@ export interface SystemViews {
   /**
    * 控制逻辑行内轴上到达滚动边界后的行为。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-inline
    */
@@ -16276,7 +16979,8 @@ export interface SystemViews {
   /**
    * 控制水平方向到达滚动边界后的行为。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-x
    */
@@ -16284,7 +16988,8 @@ export interface SystemViews {
   /**
    * 控制垂直方向到达滚动边界后的行为。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overscroll-behavior-y
    */
@@ -16295,6 +17000,9 @@ export interface SystemViews {
    * 1/2/3/4 个值依次表示：四边；上下/左右；上/左右/下；上/右/下/左。不能使用负值或 auto。
    *
    * 适用场景：控制文字或子元素与组件边框之间的留白。
+   *
+   * CSS 规范初始值：padding-bottom: 0；padding-left: 0；padding-right: 0；padding-top: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.padding("0.5rem 1rem")
    * @category 内外间距
@@ -16303,6 +17011,9 @@ export interface SystemViews {
   readonly padding: PaddingKeywords<'padding'>;
   /**
    * 设置逻辑块轴起始侧和结束侧的内边距。
+   *
+   * CSS 规范初始值：padding-block-start: 0；padding-block-end: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-block
    */
@@ -16310,7 +17021,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴结束侧的内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-block-end
    */
@@ -16318,7 +17030,8 @@ export interface SystemViews {
   /**
    * 设置逻辑块轴起始侧的内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-block-start
    */
@@ -16326,13 +17039,17 @@ export interface SystemViews {
   /**
    * 设置下内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-bottom
    */
   readonly paddingBottom: PaddingBottomKeywords<'paddingBottom'>;
   /**
    * 设置逻辑行内轴起始侧和结束侧的内边距。
+   *
+   * CSS 规范初始值：padding-inline-start: 0；padding-inline-end: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-inline
    */
@@ -16340,7 +17057,8 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴结束侧的内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-inline-end
    */
@@ -16348,7 +17066,8 @@ export interface SystemViews {
   /**
    * 设置逻辑行内轴起始侧的内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-inline-start
    */
@@ -16356,7 +17075,8 @@ export interface SystemViews {
   /**
    * 设置左内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-left
    */
@@ -16364,7 +17084,8 @@ export interface SystemViews {
   /**
    * 设置右内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-right
    */
@@ -16372,7 +17093,8 @@ export interface SystemViews {
   /**
    * 设置上内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/padding-top
    */
@@ -16380,7 +17102,8 @@ export interface SystemViews {
   /**
    * 选择分页媒体中使用的命名页面类型。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page
    */
@@ -16389,7 +17112,8 @@ export interface SystemViews {
    * 兼容属性 page-break-after；优先参考标准属性 breakAfter及浏览器支持范围。
    * 设置元素之后的分页、分栏或区域分片行为。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-after
@@ -16399,7 +17123,8 @@ export interface SystemViews {
    * 兼容属性 page-break-before；优先参考标准属性 breakBefore及浏览器支持范围。
    * 设置元素之前的分页、分栏或区域分片行为。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-before
@@ -16409,7 +17134,8 @@ export interface SystemViews {
    * 兼容属性 page-break-inside；优先参考标准属性 breakInside及浏览器支持范围。
    * 设置元素内部是否允许分页、分栏或区域分片。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/page-break-inside
@@ -16418,7 +17144,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 填充、描边和标记的绘制先后顺序。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/paint-order
    */
@@ -16426,7 +17153,8 @@ export interface SystemViews {
   /**
    * 设置观察子元素三维变换时的透视距离。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective
    */
@@ -16434,25 +17162,35 @@ export interface SystemViews {
   /**
    * 设置三维透视的观察原点。
    *
-   * CSS 规范初始值：`50% 50%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：50% 50%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective-origin
    */
   readonly perspectiveOrigin: PerspectiveOriginKeywords<'perspectiveOrigin'>;
   /**
    * 同时设置 align-content 与 justify-content。
+   *
+   * CSS 规范初始值：align-content: normal；justify-content: normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-content
    */
   readonly placeContent: PlaceContentKeywords<'placeContent'>;
   /**
    * 同时设置 align-items 与 justify-items。
+   *
+   * CSS 规范初始值：align-items: normal；justify-items: legacy。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-items
    */
   readonly placeItems: PlaceItemsKeywords<'placeItems'>;
   /**
    * 同时设置 align-self 与 justify-self。
+   *
+   * CSS 规范初始值：align-self: auto；justify-self: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/place-self
    */
@@ -16466,7 +17204,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`none`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @example
    * s.pointerEvents("none")
    * @category 交互与显示控制
@@ -16482,7 +17221,8 @@ export interface SystemViews {
    *
    * 常用值：`static`、`relative`、`absolute`、`fixed`、`sticky`。
    *
-   * CSS 规范初始值：`static`，不同于浏览器默认样式表。
+   * CSS 规范初始值：static。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.position("sticky").top("0px")
    * @category 布局与定位
@@ -16492,7 +17232,8 @@ export interface SystemViews {
   /**
    * 选择绝对定位元素使用的默认锚点。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-anchor
    */
@@ -16500,13 +17241,17 @@ export interface SystemViews {
   /**
    * 选择相对于锚点的定位区域。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-area
    */
   readonly positionArea: PositionAreaKeywords<'positionArea'>;
   /**
    * 同时设置锚点定位的候选回退方式及尝试顺序。
+   *
+   * CSS 规范初始值：position-try-fallbacks: none；position-try-order: normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try
    */
@@ -16514,7 +17259,8 @@ export interface SystemViews {
   /**
    * 设置锚点定位溢出时尝试的替代位置。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-fallbacks
    */
@@ -16523,7 +17269,8 @@ export interface SystemViews {
    * 兼容属性 position-try-options；优先参考标准属性 positionTryFallbacks及浏览器支持范围。
    * 设置锚点定位溢出时尝试的替代位置。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-options
@@ -16532,7 +17279,8 @@ export interface SystemViews {
   /**
    * 设置锚点定位候选方案的尝试顺序。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-try-order
    */
@@ -16540,7 +17288,8 @@ export interface SystemViews {
   /**
    * 设置锚点定位元素根据锚点可见性和溢出情况是否显示。
    *
-   * CSS 规范初始值：`anchors-visible`，不同于浏览器默认样式表。
+   * CSS 规范初始值：anchors-visible。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/position-visibility
    */
@@ -16548,13 +17297,17 @@ export interface SystemViews {
   /**
    * 设置打印时浏览器是否可以为节墨或可读性调整颜色。
    *
-   * CSS 规范初始值：`economy`，不同于浏览器默认样式表。
+   * CSS 规范初始值：economy。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 颜色与背景
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/print-color-adjust
    */
   readonly printColorAdjust: PrintColorAdjustKeywords<'printColorAdjust'>;
   /**
    * 设置生成引号所用的开闭字符对。
+   *
+   * CSS 规范初始值：由浏览器决定。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/quotes
    */
@@ -16562,7 +17315,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 圆的半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/r
    */
@@ -16570,7 +17324,8 @@ export interface SystemViews {
   /**
    * 设置用户是否能调整元素尺寸以及可调整的方向。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 交互与显示控制
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/resize
    */
@@ -16578,7 +17333,8 @@ export interface SystemViews {
   /**
    * 设置定位元素相对于其定位参照的右侧偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/right
    */
@@ -16586,7 +17342,8 @@ export interface SystemViews {
   /**
    * 独立设置元素旋转，不必重写 transform 中的其他变换。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/rotate
    */
@@ -16594,7 +17351,8 @@ export interface SystemViews {
   /**
    * 设置布局中相邻行之间的间距。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内外间距
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/row-gap
    */
@@ -16602,7 +17360,8 @@ export interface SystemViews {
   /**
    * 设置注音文字与基底文字之间剩余空间的分配方式。
    *
-   * CSS 规范初始值：`space-around`，不同于浏览器默认样式表。
+   * CSS 规范初始值：space-around。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-align
    */
@@ -16610,7 +17369,8 @@ export interface SystemViews {
   /**
    * 设置相邻注音容器的合并方式；使用前核对目标浏览器。
    *
-   * CSS 规范初始值：`separate`，不同于浏览器默认样式表。
+   * CSS 规范初始值：separate。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-merge
    */
@@ -16618,7 +17378,8 @@ export interface SystemViews {
   /**
    * 控制注音文字是否可以悬伸到相邻文本上方。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-overhang
    */
@@ -16626,7 +17387,8 @@ export interface SystemViews {
   /**
    * 设置注音文字相对于基底文字的位置。
    *
-   * CSS 规范初始值：`alternate`，不同于浏览器默认样式表。
+   * CSS 规范初始值：alternate。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ruby-position
    */
@@ -16634,7 +17396,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 椭圆的水平半径，或矩形的水平圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/rx
    */
@@ -16642,7 +17405,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 椭圆的垂直半径，或矩形的垂直圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/ry
    */
@@ -16650,7 +17414,8 @@ export interface SystemViews {
   /**
    * 独立设置元素的缩放比例。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scale
    */
@@ -16658,7 +17423,8 @@ export interface SystemViews {
   /**
    * 设置滚动条滑块和轨道的颜色。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scrollbar-color
    */
@@ -16666,7 +17432,8 @@ export interface SystemViews {
   /**
    * 设置是否预留滚动条槽位，以减少滚动条出现时的布局变化。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scrollbar-gutter
    */
@@ -16674,7 +17441,8 @@ export interface SystemViews {
   /**
    * 设置滚动条采用正常、较细或隐藏的外观。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scrollbar-width
    */
@@ -16686,7 +17454,8 @@ export interface SystemViews {
    *
    * 适用场景：锚点跳转或程序化滚动；应同时考虑减少动态效果的用户偏好。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.scrollBehavior("smooth")
    * @category 滚动与溢出
@@ -16696,19 +17465,26 @@ export interface SystemViews {
   /**
    * 将元素声明为祖先滚动容器首次呈现时的候选滚动吸附目标。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-initial-target
    */
   readonly scrollInitialTarget: ScrollInitialTargetKeywords<'scrollInitialTarget'>;
   /**
    * 设置元素滚动目标区域的四边外扩距离，不改变普通布局外边距。
+   *
+   * CSS 规范初始值：scroll-margin-bottom: 0；scroll-margin-left: 0；scroll-margin-right: 0；scroll-margin-top: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin
    */
   readonly scrollMargin: ScrollMarginKeywords<'scrollMargin'>;
   /**
    * 设置滚动目标区域在逻辑块轴两侧的外扩距离。
+   *
+   * CSS 规范初始值：scroll-margin-block-start: 0；scroll-margin-block-end: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-block
    */
@@ -16716,7 +17492,8 @@ export interface SystemViews {
   /**
    * 设置滚动目标区域在逻辑块轴结束侧的外扩距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-block-end
    */
@@ -16724,7 +17501,8 @@ export interface SystemViews {
   /**
    * 设置滚动目标区域在逻辑块轴起始侧的外扩距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-block-start
    */
@@ -16732,13 +17510,17 @@ export interface SystemViews {
   /**
    * 设置滚动目标区域下侧的外扩距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-bottom
    */
   readonly scrollMarginBottom: ScrollMarginBottomKeywords<'scrollMarginBottom'>;
   /**
    * 设置滚动目标区域在逻辑行内轴两侧的外扩距离。
+   *
+   * CSS 规范初始值：scroll-margin-inline-start: 0；scroll-margin-inline-end: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-inline
    */
@@ -16746,7 +17528,8 @@ export interface SystemViews {
   /**
    * 设置滚动目标区域在逻辑行内轴结束侧的外扩距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-inline-end
    */
@@ -16754,7 +17537,8 @@ export interface SystemViews {
   /**
    * 设置滚动目标区域在逻辑行内轴起始侧的外扩距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-inline-start
    */
@@ -16762,7 +17546,8 @@ export interface SystemViews {
   /**
    * 设置滚动目标区域左侧的外扩距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-left
    */
@@ -16770,7 +17555,8 @@ export interface SystemViews {
   /**
    * 设置滚动目标区域右侧的外扩距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-right
    */
@@ -16778,19 +17564,26 @@ export interface SystemViews {
   /**
    * 设置滚动目标区域上侧的外扩距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-margin-top
    */
   readonly scrollMarginTop: ScrollMarginTopKeywords<'scrollMarginTop'>;
   /**
    * 设置滚动容器最佳可视区域的四边内缩距离。
+   *
+   * CSS 规范初始值：scroll-padding-bottom: auto；scroll-padding-left: auto；scroll-padding-right: auto；scroll-padding-top: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding
    */
   readonly scrollPadding: ScrollPaddingKeywords<'scrollPadding'>;
   /**
    * 设置滚动容器最佳可视区域在逻辑块轴两侧的内缩距离。
+   *
+   * CSS 规范初始值：scroll-padding-block-start: auto；scroll-padding-block-end: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-block
    */
@@ -16798,7 +17591,8 @@ export interface SystemViews {
   /**
    * 设置滚动容器最佳可视区域在逻辑块轴结束侧的内缩距离。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-block-end
    */
@@ -16806,7 +17600,8 @@ export interface SystemViews {
   /**
    * 设置滚动容器最佳可视区域在逻辑块轴起始侧的内缩距离。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-block-start
    */
@@ -16814,13 +17609,17 @@ export interface SystemViews {
   /**
    * 设置滚动容器最佳可视区域下侧的内缩距离。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-bottom
    */
   readonly scrollPaddingBottom: ScrollPaddingBottomKeywords<'scrollPaddingBottom'>;
   /**
    * 设置滚动容器最佳可视区域在逻辑行内轴两侧的内缩距离。
+   *
+   * CSS 规范初始值：scroll-padding-inline-start: auto；scroll-padding-inline-end: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-inline
    */
@@ -16828,7 +17627,8 @@ export interface SystemViews {
   /**
    * 设置滚动容器最佳可视区域在逻辑行内轴结束侧的内缩距离。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-inline-end
    */
@@ -16836,7 +17636,8 @@ export interface SystemViews {
   /**
    * 设置滚动容器最佳可视区域在逻辑行内轴起始侧的内缩距离。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-inline-start
    */
@@ -16844,7 +17645,8 @@ export interface SystemViews {
   /**
    * 设置滚动容器最佳可视区域左侧的内缩距离。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-left
    */
@@ -16852,7 +17654,8 @@ export interface SystemViews {
   /**
    * 设置滚动容器最佳可视区域右侧的内缩距离。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-right
    */
@@ -16860,7 +17663,8 @@ export interface SystemViews {
   /**
    * 设置滚动容器最佳可视区域上侧的内缩距离。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-padding-top
    */
@@ -16868,7 +17672,8 @@ export interface SystemViews {
   /**
    * 设置元素作为滚动吸附目标时在块轴和行内轴上的对齐位置。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-align
    */
@@ -16876,7 +17681,8 @@ export interface SystemViews {
   /**
    * 指定旧版滚动子项的吸附坐标，现代布局使用 scroll-snap-align。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-coordinate
@@ -16885,7 +17691,8 @@ export interface SystemViews {
   /**
    * 指定旧版滚动容器中吸附位置对齐的目标坐标。
    *
-   * CSS 规范初始值：`0px 0px`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0px 0px。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-destination
@@ -16893,6 +17700,8 @@ export interface SystemViews {
   readonly scrollSnapDestination: ScrollSnapDestinationKeywords<'scrollSnapDestination'>;
   /**
    * 设置滚动吸附区域外扩的旧名称；新代码使用 scroll-margin。
+   *
+   * 初始值：当前固定数据源未记录，参见该属性规范。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin
    */
@@ -16900,7 +17709,7 @@ export interface SystemViews {
   /**
    * 设置滚动吸附区域下侧外扩的旧名称；新代码使用 scroll-margin-bottom。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-bottom
    */
@@ -16908,7 +17717,7 @@ export interface SystemViews {
   /**
    * 设置滚动吸附区域左侧外扩的旧名称；新代码使用 scroll-margin-left。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-left
    */
@@ -16916,7 +17725,7 @@ export interface SystemViews {
   /**
    * 设置滚动吸附区域右侧外扩的旧名称；新代码使用 scroll-margin-right。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-right
    */
@@ -16924,7 +17733,7 @@ export interface SystemViews {
   /**
    * 设置滚动吸附区域上侧外扩的旧名称；新代码使用 scroll-margin-top。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-margin-top
    */
@@ -16932,7 +17741,8 @@ export interface SystemViews {
   /**
    * 指定旧版水平滚动吸附位置列表；现代吸附使用容器和子项的吸附属性。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-points-x
@@ -16941,7 +17751,8 @@ export interface SystemViews {
   /**
    * 指定旧版垂直滚动吸附位置列表；现代吸附使用容器和子项的吸附属性。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-points-y
@@ -16950,7 +17761,8 @@ export interface SystemViews {
   /**
    * 设置滚动时是否允许越过该元素的吸附位置。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-stop
    */
@@ -16960,7 +17772,8 @@ export interface SystemViews {
    *
    * 轴和吸附强度的组合通过 raw 写入，例如 x mandatory；单独声明轴时省略的强度按 CSS 规则处理。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.scrollSnapType("x mandatory")
    * @category 滚动与溢出
@@ -16970,7 +17783,8 @@ export interface SystemViews {
   /**
    * 控制旧版水平滚动吸附的强制程度。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type-x
@@ -16979,7 +17793,8 @@ export interface SystemViews {
   /**
    * 控制旧版垂直滚动吸附的强制程度。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-snap-type-y
@@ -16987,6 +17802,9 @@ export interface SystemViews {
   readonly scrollSnapTypeY: ScrollSnapTypeYKeywords<'scrollSnapTypeY'>;
   /**
    * 同时声明滚动进度时间线的名称和轴。
+   *
+   * CSS 规范初始值：scroll-timeline-name: none；scroll-timeline-axis: block。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline
    */
@@ -16994,7 +17812,8 @@ export interface SystemViews {
   /**
    * 设置滚动进度时间线所观察的滚动轴。
    *
-   * CSS 规范初始值：`block`，不同于浏览器默认样式表。
+   * CSS 规范初始值：block。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline-axis
    */
@@ -17002,7 +17821,8 @@ export interface SystemViews {
   /**
    * 声明基于当前容器滚动进度的时间线名称。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 滚动与溢出
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/scroll-timeline-name
    */
@@ -17010,7 +17830,8 @@ export interface SystemViews {
   /**
    * 设置从图像 alpha 信息提取环绕形状时的阈值。
    *
-   * CSS 规范初始值：`0.0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0.0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-image-threshold
    */
@@ -17018,7 +17839,8 @@ export interface SystemViews {
   /**
    * 设置文字环绕形状之外的额外间距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-margin
    */
@@ -17026,7 +17848,8 @@ export interface SystemViews {
   /**
    * 设置浮动元素周围行内内容所环绕的形状。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-outside
    */
@@ -17034,7 +17857,8 @@ export interface SystemViews {
   /**
    * 向 SVG 渲染器提供图形绘制精度与速度的偏好。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 视觉效果与图像
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/shape-rendering
    */
@@ -17042,7 +17866,8 @@ export interface SystemViews {
   /**
    * 设置语音呈现时文字、数字和标点的朗读方式；使用前核对语音媒体支持。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/speak-as
    */
@@ -17050,7 +17875,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 渐变 stop 节点的颜色。
    *
-   * CSS 规范初始值：`black`，不同于浏览器默认样式表。
+   * CSS 规范初始值：black。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stop-color
    */
@@ -17058,13 +17884,17 @@ export interface SystemViews {
   /**
    * 设置 SVG 渐变 stop 节点的不透明度。
    *
-   * CSS 规范初始值：`black`，不同于浏览器默认样式表。
+   * CSS 规范初始值：black。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stop-opacity
    */
   readonly stopOpacity: StopOpacityKeywords<'stopOpacity'>;
   /**
    * 设置 SVG 图形轮廓的描边绘制方式。
+   *
+   * CSS 规范初始值：stroke-dasharray: none；stroke-dashoffset: 0；stroke-linecap: butt；stroke-linejoin: miter；stroke-miterlimit: 4；stroke-opacity: 1；stroke-width: 1px。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke
    */
@@ -17072,7 +17902,8 @@ export interface SystemViews {
   /**
    * 设置描边颜色的扩展属性；常规 SVG 优先使用 stroke 并核对支持情况。
    *
-   * CSS 规范初始值：`transparent`，不同于浏览器默认样式表。
+   * CSS 规范初始值：transparent。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-color
    */
@@ -17080,7 +17911,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 描边虚线中线段与空隙的长度序列。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-dasharray
    */
@@ -17088,7 +17920,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 虚线描边相对于路径起点的偏移。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-dashoffset
    */
@@ -17096,7 +17929,8 @@ export interface SystemViews {
   /**
    * 设置开放 SVG 子路径端点的描边形状。
    *
-   * CSS 规范初始值：`butt`，不同于浏览器默认样式表。
+   * CSS 规范初始值：butt。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-linecap
    */
@@ -17104,7 +17938,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 路径转角处描边的连接形状。
    *
-   * CSS 规范初始值：`miter`，不同于浏览器默认样式表。
+   * CSS 规范初始值：miter。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-linejoin
    */
@@ -17112,7 +17947,8 @@ export interface SystemViews {
   /**
    * 限制尖角连接的延伸比例，超过阈值时改变连接形状。
    *
-   * CSS 规范初始值：`4`，不同于浏览器默认样式表。
+   * CSS 规范初始值：4。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-miterlimit
    */
@@ -17120,7 +17956,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 描边的不透明度，不影响填充。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-opacity
    */
@@ -17128,7 +17965,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 描边宽度。
    *
-   * CSS 规范初始值：`1px`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1px。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/stroke-width
    */
@@ -17136,7 +17974,8 @@ export interface SystemViews {
   /**
    * 设置表格列宽采用自动还是固定布局算法。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/table-layout
    */
@@ -17144,7 +17983,8 @@ export interface SystemViews {
   /**
    * 设置保留制表符时每个制表位的宽度。
    *
-   * CSS 规范初始值：`8`，不同于浏览器默认样式表。
+   * CSS 规范初始值：8。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/tab-size
    */
@@ -17158,7 +17998,8 @@ export interface SystemViews {
    *
    * 常用值：`start`、`end`、`center`、`justify`。
    *
-   * CSS 规范初始值：`start`，不同于浏览器默认样式表。
+   * CSS 规范初始值：随书写方向采用起始侧对齐。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @example
    * s.textAlign("start")
    * @category 文字与排版
@@ -17168,7 +18009,8 @@ export interface SystemViews {
   /**
    * 设置段落最后一行或强制换行前一行的对齐方式。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-align-last
    */
@@ -17176,7 +18018,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 文本片段相对于定位点的锚定方式。
    *
-   * CSS 规范初始值：`start`，不同于浏览器默认样式表。
+   * CSS 规范初始值：start。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-anchor
    */
@@ -17184,7 +18027,8 @@ export interface SystemViews {
   /**
    * 设置中西文、数字等不同文字系统之间的自动间距。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-autospace
    */
@@ -17192,7 +18036,8 @@ export interface SystemViews {
   /**
    * 同时设置文本盒边缘参照及首尾空白裁减。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box
    */
@@ -17200,7 +18045,8 @@ export interface SystemViews {
   /**
    * 选择文本盒裁减或对齐使用的字体边缘度量。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-edge
    */
@@ -17208,7 +18054,8 @@ export interface SystemViews {
   /**
    * 裁减文本块开头或结尾的额外行高空白。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-box-trim
    */
@@ -17216,13 +18063,17 @@ export interface SystemViews {
   /**
    * 设置竖排文字中多个字符是否合成为一个横排字形单元。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-combine-upright
    */
   readonly textCombineUpright: TextCombineUprightKeywords<'textCombineUpright'>;
   /**
    * 集中设置文本装饰线的位置、线型、颜色及粗细。
+   *
+   * CSS 规范初始值：text-decoration-color: currentcolor；text-decoration-style: solid；text-decoration-line: none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration
    */
@@ -17230,7 +18081,8 @@ export interface SystemViews {
   /**
    * 设置文本装饰线颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-color
    */
@@ -17238,7 +18090,8 @@ export interface SystemViews {
   /**
    * 设置下划线、上划线或删除线等装饰线位置。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-line
    */
@@ -17246,7 +18099,8 @@ export interface SystemViews {
   /**
    * 设置文本装饰线跳过哪些内容；具体语法需核对支持情况。
    *
-   * CSS 规范初始值：`objects`，不同于浏览器默认样式表。
+   * CSS 规范初始值：objects。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip
    */
@@ -17254,7 +18108,8 @@ export interface SystemViews {
   /**
    * 设置装饰线是否避让字形的笔画。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-skip-ink
    */
@@ -17262,7 +18117,8 @@ export interface SystemViews {
   /**
    * 设置文本装饰线的实线、波浪线等线型。
    *
-   * CSS 规范初始值：`solid`，不同于浏览器默认样式表。
+   * CSS 规范初始值：solid。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-style
    */
@@ -17270,13 +18126,17 @@ export interface SystemViews {
   /**
    * 设置文本装饰线粗细。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-decoration-thickness
    */
   readonly textDecorationThickness: TextDecorationThicknessKeywords<'textDecorationThickness'>;
   /**
    * 同时设置文字着重号的样式和颜色。
+   *
+   * CSS 规范初始值：text-emphasis-style: none；text-emphasis-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis
    */
@@ -17284,7 +18144,8 @@ export interface SystemViews {
   /**
    * 设置文字着重号颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-color
    */
@@ -17292,7 +18153,8 @@ export interface SystemViews {
   /**
    * 设置文字着重号位于文字的哪一侧。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-position
    */
@@ -17300,7 +18162,8 @@ export interface SystemViews {
   /**
    * 设置文字着重号的形状和填充方式。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-emphasis-style
    */
@@ -17308,7 +18171,8 @@ export interface SystemViews {
   /**
    * 设置文本行的缩进距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-indent
    */
@@ -17316,7 +18180,8 @@ export interface SystemViews {
   /**
    * 设置两端对齐时增加间距的算法。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-justify
    */
@@ -17324,7 +18189,8 @@ export interface SystemViews {
   /**
    * 设置竖排模式下字符的方向。
    *
-   * CSS 规范初始值：`mixed`，不同于浏览器默认样式表。
+   * CSS 规范初始值：mixed。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-orientation
    */
@@ -17338,7 +18204,8 @@ export interface SystemViews {
    *
    * 常用值：`ellipsis`、`clip`。
    *
-   * CSS 规范初始值：`clip`，不同于浏览器默认样式表。
+   * CSS 规范初始值：clip。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.maxWidth("12rem").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    * @category 文字与排版
@@ -17348,7 +18215,8 @@ export interface SystemViews {
   /**
    * 向渲染器提供文本速度、可读性或几何精度的偏好。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-rendering
    */
@@ -17356,7 +18224,8 @@ export interface SystemViews {
   /**
    * 设置文字及其装饰的阴影，可叠加多层。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-shadow
    */
@@ -17364,7 +18233,8 @@ export interface SystemViews {
   /**
    * 控制移动浏览器为提升可读性而进行的文字自动放大。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：支持文本放大的移动浏览器为 auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-size-adjust
    */
@@ -17372,7 +18242,8 @@ export interface SystemViews {
   /**
    * 设置东亚文字标点等字符周围空白的裁减。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-spacing-trim
    */
@@ -17380,7 +18251,8 @@ export interface SystemViews {
   /**
    * 设置文字显示时的大小写、全角或其他字形转换。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-transform
    */
@@ -17388,7 +18260,8 @@ export interface SystemViews {
   /**
    * 设置下划线相对于默认位置的偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-underline-offset
    */
@@ -17396,7 +18269,8 @@ export interface SystemViews {
   /**
    * 设置下划线相对于文字基线或竖排文字的放置方式。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-underline-position
    */
@@ -17404,7 +18278,8 @@ export interface SystemViews {
   /**
    * 同时设置文本是否换行及换行策略。
    *
-   * CSS 规范初始值：`wrap`，不同于浏览器默认样式表。
+   * CSS 规范初始值：wrap。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-wrap
    */
@@ -17412,7 +18287,8 @@ export interface SystemViews {
   /**
    * 设置文本是否允许软换行。
    *
-   * CSS 规范初始值：`wrap`，不同于浏览器默认样式表。
+   * CSS 规范初始值：wrap。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-wrap-mode
    */
@@ -17420,7 +18296,8 @@ export interface SystemViews {
   /**
    * 设置文本换行的排版策略，例如平衡各行长度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-wrap-style
    */
@@ -17428,7 +18305,8 @@ export interface SystemViews {
   /**
    * 扩大命名动画时间线的可引用作用域。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/timeline-scope
    */
@@ -17436,7 +18314,8 @@ export interface SystemViews {
   /**
    * 设置定位元素相对于其定位参照的上侧偏移。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/top
    */
@@ -17450,7 +18329,8 @@ export interface SystemViews {
    *
    * 常用值：`manipulation`、`pan-x`、`pan-y`、`none`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.touchAction("pan-y")
    * @category 交互与显示控制
@@ -17464,7 +18344,8 @@ export interface SystemViews {
    *
    * 适用场景：平移、旋转和缩放的视觉效果；需要改变普通流占位时应调整布局属性。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.transform("translateX(8px) scale(1.05)")
    * @category 动画与变换
@@ -17474,7 +18355,8 @@ export interface SystemViews {
   /**
    * 设置变换及其原点所依据的参照盒。
    *
-   * CSS 规范初始值：`view-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：view-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-box
    */
@@ -17482,7 +18364,8 @@ export interface SystemViews {
   /**
    * 设置元素变换的原点。
    *
-   * CSS 规范初始值：`50% 50% 0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：50% 50% 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-origin
    */
@@ -17490,7 +18373,8 @@ export interface SystemViews {
   /**
    * 控制子元素的三维位置保留在三维空间还是展平。
    *
-   * CSS 规范初始值：`flat`，不同于浏览器默认样式表。
+   * CSS 规范初始值：flat。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-style
    */
@@ -17501,6 +18385,9 @@ export interface SystemViews {
    * 只对属性变化创建过渡；不会自动触发变化。建议明确列出目标属性，避免 all 意外过渡布局变化。
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
+   *
+   * CSS 规范初始值：transition-delay: 0s；transition-duration: 0s；transition-property: all；transition-timing-function: ease；transition-behavior: normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.transition("opacity 160ms ease")
    * @category 动画与变换
@@ -17510,7 +18397,8 @@ export interface SystemViews {
   /**
    * 控制离散属性是否可以启动 CSS 过渡。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-behavior
    */
@@ -17518,7 +18406,8 @@ export interface SystemViews {
   /**
    * 设置属性变化后开始过渡的延迟。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-delay
    */
@@ -17526,13 +18415,17 @@ export interface SystemViews {
   /**
    * 设置过渡从开始到完成的时长。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-duration
    */
   readonly transitionDuration: TransitionDurationKeywords<'transitionDuration'>;
   /**
    * 指定发生变化时需要过渡的 CSS 属性。
+   *
+   * CSS 规范初始值：all。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-property
    */
@@ -17540,7 +18433,8 @@ export interface SystemViews {
   /**
    * 设置过渡进度变化的缓动函数。
    *
-   * CSS 规范初始值：`ease`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ease。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-timing-function
    */
@@ -17548,7 +18442,8 @@ export interface SystemViews {
   /**
    * 独立设置元素在二维或三维空间中的平移。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/translate
    */
@@ -17556,7 +18451,8 @@ export interface SystemViews {
   /**
    * 设置元素如何参与 Unicode 双向文本算法，通常与 direction 配合。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/unicode-bidi
    */
@@ -17568,7 +18464,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`text`、`none`、`all`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.userSelect("all")
    * @category 交互与显示控制
@@ -17578,7 +18475,8 @@ export interface SystemViews {
   /**
    * 设置 SVG 图形变换时对描边等矢量效果的处理。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category SVG 属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vector-effect
    */
@@ -17586,13 +18484,17 @@ export interface SystemViews {
   /**
    * 设置行内级盒子或表格单元格的垂直对齐，不用于普通块盒居中。
    *
-   * CSS 规范初始值：`baseline`，不同于浏览器默认样式表。
+   * CSS 规范初始值：baseline。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 布局与定位
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/vertical-align
    */
   readonly verticalAlign: VerticalAlignKeywords<'verticalAlign'>;
   /**
    * 同时声明基于元素可见进度的时间线名称与轴。
+   *
+   * CSS 规范初始值：view-timeline-name: none；view-timeline-axis: block。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline
    */
@@ -17600,7 +18502,8 @@ export interface SystemViews {
   /**
    * 设置可见进度时间线所观察的滚动轴。
    *
-   * CSS 规范初始值：`block`，不同于浏览器默认样式表。
+   * CSS 规范初始值：block。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-axis
    */
@@ -17608,7 +18511,8 @@ export interface SystemViews {
   /**
    * 设置可见进度时间线使用的滚动视口内缩范围。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-inset
    */
@@ -17616,7 +18520,8 @@ export interface SystemViews {
   /**
    * 声明基于元素进入和离开滚动视口的时间线名称。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-timeline-name
    */
@@ -17624,7 +18529,8 @@ export interface SystemViews {
   /**
    * 为视图过渡的快照伪元素分组，以便共用样式。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-transition-class
    */
@@ -17632,7 +18538,8 @@ export interface SystemViews {
   /**
    * 为视图过渡中的元素命名，以匹配前后状态的快照。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 动画与变换
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/view-transition-name
    */
@@ -17644,7 +18551,8 @@ export interface SystemViews {
    *
    * 常用值：`visible`、`hidden`、`collapse`。
    *
-   * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
+   * CSS 规范初始值：visible。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @example
    * s.visibility("hidden")
    * @category 交互与显示控制
@@ -17655,7 +18563,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-align-content；优先参考标准属性及浏览器支持范围。
    * 分配布局容器交叉轴或块轴上的剩余空间，控制内容整体的对齐。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-align-content
    */
@@ -17670,7 +18579,8 @@ export interface SystemViews {
    *
    * 常用值：`stretch`、`center`、`baseline`、`start`、`end`。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.display("flex").alignItems("center")
    * @category 厂商与历史兼容属性
@@ -17685,7 +18595,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`stretch`、`baseline`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.alignSelf("center")
    * @category 厂商与历史兼容属性
@@ -17695,6 +18606,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -webkit-animation；优先参考标准属性及浏览器支持范围。
    * 集中设置关键帧动画的名称、时长、缓动、延迟、次数及播放行为。
+   *
+   * CSS 规范初始值：animation-name: none；animation-duration: 0s；animation-timing-function: ease；animation-delay: 0s；animation-iteration-count: 1；animation-direction: normal；animation-fill-mode: none；animation-play-state: running；animation-timeline: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation
    */
@@ -17703,7 +18617,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-animation-delay；优先参考标准属性及浏览器支持范围。
    * 设置动画开始前的延迟；负值表示从动画中途开始播放。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-delay
    */
@@ -17712,7 +18627,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-animation-direction；优先参考标准属性及浏览器支持范围。
    * 设置动画按正向、反向或交替方向播放。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-direction
    */
@@ -17721,7 +18637,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-animation-duration；优先参考标准属性及浏览器支持范围。
    * 设置动画完成一次循环的时长。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-duration
    */
@@ -17736,7 +18653,8 @@ export interface SystemViews {
    *
    * 常用值：`none`、`forwards`、`backwards`、`both`。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.animationFillMode("forwards")
    * @category 厂商与历史兼容属性
@@ -17747,7 +18665,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-animation-iteration-count；优先参考标准属性及浏览器支持范围。
    * 设置动画循环次数，或无限循环。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-iteration-count
    */
@@ -17756,7 +18675,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-animation-name；优先参考标准属性及浏览器支持范围。
    * 选择要播放的 @keyframes 动画名称。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-name
    */
@@ -17765,7 +18685,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-animation-play-state；优先参考标准属性及浏览器支持范围。
    * 控制动画运行或暂停，暂停后可从原位置继续。
    *
-   * CSS 规范初始值：`running`，不同于浏览器默认样式表。
+   * CSS 规范初始值：running。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-play-state
    */
@@ -17774,7 +18695,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-animation-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置动画每个关键帧区间内进度变化的缓动函数。
    *
-   * CSS 规范初始值：`ease`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ease。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-animation-timing-function
    */
@@ -17783,7 +18705,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-appearance；优先参考标准属性及浏览器支持范围。
    * 控制元素是否采用平台原生控件外观。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none（浏览器默认样式表可能覆盖）。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-appearance
    */
@@ -17792,7 +18715,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-backdrop-filter；优先参考标准属性及浏览器支持范围。
    * 对元素背后的图像区域应用模糊等滤镜，通常需要透明或半透明背景。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-backdrop-filter
    */
@@ -17801,7 +18725,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-backface-visibility；优先参考标准属性及浏览器支持范围。
    * 控制经过三维变换后背向观察者的元素背面是否可见。
    *
-   * CSS 规范初始值：`visible`，不同于浏览器默认样式表。
+   * CSS 规范初始值：visible。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-backface-visibility
    */
@@ -17810,7 +18735,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-background-clip；优先参考标准属性及浏览器支持范围。
    * 设置背景允许绘制到的边界区域。
    *
-   * CSS 规范初始值：`border-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：border-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-background-clip
    */
@@ -17819,7 +18745,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-background-origin；优先参考标准属性及浏览器支持范围。
    * 设置背景图像定位所依据的盒子区域。
    *
-   * CSS 规范初始值：`padding-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：padding-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-background-origin
    */
@@ -17834,7 +18761,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`contain`、`cover`。
    *
-   * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.backgroundSize("cover").backgroundPosition("center")
    * @category 厂商与历史兼容属性
@@ -17844,6 +18772,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -webkit-border-before；优先参考标准属性 borderBlockStart及浏览器支持范围。
    * 设置逻辑块轴起始侧边框的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：border-width: 见其子属性；border-style: 见其子属性；color: canvastext。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before
    */
@@ -17852,7 +18783,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-border-before-color；优先参考标准属性 borderBlockStartColor及浏览器支持范围。
    * 设置逻辑块轴起始侧的边框颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-color
    */
@@ -17861,7 +18793,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-border-before-style；优先参考标准属性 borderBlockStartStyle及浏览器支持范围。
    * 设置逻辑块轴起始侧的边框线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-style
    */
@@ -17870,7 +18803,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-border-before-width；优先参考标准属性 borderBlockStartWidth及浏览器支持范围。
    * 设置逻辑块轴起始侧的边框宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-before-width
    */
@@ -17879,7 +18813,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-border-bottom-left-radius；优先参考标准属性及浏览器支持范围。
    * 设置左下角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-bottom-left-radius
    */
@@ -17888,7 +18823,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-border-bottom-right-radius；优先参考标准属性及浏览器支持范围。
    * 设置右下角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-bottom-right-radius
    */
@@ -17896,6 +18832,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -webkit-border-image；优先参考标准属性及浏览器支持范围。
    * 设置用作边框的图像及其切片、宽度、外扩和重复方式。
+   *
+   * CSS 规范初始值：border-image-source: none；border-image-slice: 100%；border-image-width: 1；border-image-outset: 0；border-image-repeat: stretch。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-image
    */
@@ -17904,7 +18843,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-border-image-slice；优先参考标准属性及浏览器支持范围。
    * 设置边框图像的切片位置及是否填充中间区域。
    *
-   * CSS 规范初始值：`100%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：100%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-image-slice
    */
@@ -17916,6 +18856,9 @@ export interface SystemViews {
    * 1/2/3/4 个半径依次控制四角、两组对角、三组角和逐角。它裁剪自身背景，但不会单独保证裁剪所有后代内容。
    *
    * 适用场景：卡片、按钮、头像的圆角外观。
+   *
+   * CSS 规范初始值：border-top-left-radius: 0；border-top-right-radius: 0；border-bottom-right-radius: 0；border-bottom-left-radius: 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.borderRadius("8px")
    * @category 厂商与历史兼容属性
@@ -17926,7 +18869,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-border-top-left-radius；优先参考标准属性及浏览器支持范围。
    * 设置左上角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-top-left-radius
    */
@@ -17935,7 +18879,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-border-top-right-radius；优先参考标准属性及浏览器支持范围。
    * 设置右上角边框的圆角半径。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-border-top-right-radius
    */
@@ -17944,7 +18889,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-box-align；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒子项在交叉方向上的对齐，常规布局优先使用 align-items。
    *
-   * CSS 规范初始值：`stretch`，不同于浏览器默认样式表。
+   * CSS 规范初始值：stretch。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-align
@@ -17954,7 +18900,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-box-decoration-break；优先参考标准属性及浏览器支持范围。
    * 设置盒子被分成多行、多栏或多页时装饰如何绘制。
    *
-   * CSS 规范初始值：`slice`，不同于浏览器默认样式表。
+   * CSS 规范初始值：slice。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-decoration-break
    */
@@ -17963,7 +18910,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-box-direction；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒的子项排列方向是否反转。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-direction
@@ -17973,7 +18921,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-box-flex；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒子项分配剩余空间的比例。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-flex
@@ -17983,7 +18932,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-box-flex-group；优先参考标准属性及浏览器支持范围。
    * 指定旧版弹性盒子项参与弹性分配的组。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-flex-group
@@ -17993,7 +18943,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-box-lines；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒是否允许子项分成多行。
    *
-   * CSS 规范初始值：`single`，不同于浏览器默认样式表。
+   * CSS 规范初始值：single。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-lines
@@ -18003,7 +18954,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-box-ordinal-group；优先参考标准属性及浏览器支持范围。
    * 设置旧版弹性盒的子项排列组序号，现代布局使用 order。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-ordinal-group
@@ -18012,7 +18964,8 @@ export interface SystemViews {
   /**
    * 指定旧版弹性盒的排列方向；仅为多行截断兼容保留，常规布局请使用 Flex/Grid。
    *
-   * CSS 规范初始值：`inline-axis`，不同于浏览器默认样式表。
+   * CSS 规范初始值：inline-axis。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-orient
@@ -18022,7 +18975,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-box-pack；优先参考标准属性及浏览器支持范围。
    * 控制旧版弹性盒在主轴方向的空余空间分配，现代布局使用 justify-content。
    *
-   * CSS 规范初始值：`start`，不同于浏览器默认样式表。
+   * CSS 规范初始值：start。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-pack
@@ -18032,7 +18986,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-box-reflect；优先参考标准属性及浏览器支持范围。
    * 在指定方向生成元素的镜像，并可设置镜像间距和遮罩。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-reflect
    */
@@ -18045,7 +19000,8 @@ export interface SystemViews {
    *
    * 适用场景：浮层层次、卡片边缘或内凹效果。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.boxShadow("0 2px 8px rgb(0 0 0 / 0.15)")
    * @category 厂商与历史兼容属性
@@ -18060,7 +19016,8 @@ export interface SystemViews {
    *
    * 常用值：`content-box`、`border-box`。
    *
-   * CSS 规范初始值：`content-box`，不同于浏览器默认样式表。
+   * CSS 规范初始值：content-box。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.boxSizing("border-box").width("20rem").padding("1rem")
    * @category 厂商与历史兼容属性
@@ -18071,7 +19028,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-clip-path；优先参考标准属性及浏览器支持范围。
    * 通过基本形状、路径或引用裁剪元素的可见区域。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-clip-path
    */
@@ -18080,7 +19038,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-column-count；优先参考标准属性及浏览器支持范围。
    * 设置多栏布局的目标栏数。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-count
    */
@@ -18089,7 +19048,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-column-fill；优先参考标准属性及浏览器支持范围。
    * 设置多栏内容顺序填充还是尽量均衡栏高。
    *
-   * CSS 规范初始值：`balance`，不同于浏览器默认样式表。
+   * CSS 规范初始值：balance。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-fill
    */
@@ -18097,6 +19057,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -webkit-column-rule；优先参考标准属性及浏览器支持范围。
    * 设置多栏之间分隔线的宽度、线型和颜色。
+   *
+   * CSS 规范初始值：column-rule-width: medium；column-rule-style: none；column-rule-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule
    */
@@ -18105,7 +19068,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-column-rule-color；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-color
    */
@@ -18114,7 +19078,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-column-rule-style；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的线型。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-style
    */
@@ -18123,7 +19088,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-column-rule-width；优先参考标准属性及浏览器支持范围。
    * 设置多栏分隔线的宽度。
    *
-   * CSS 规范初始值：`medium`，不同于浏览器默认样式表。
+   * CSS 规范初始值：medium。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-rule-width
    */
@@ -18131,6 +19097,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -webkit-columns；优先参考标准属性及浏览器支持范围。
    * 同时设置多栏布局的首选栏宽和目标栏数。
+   *
+   * CSS 规范初始值：column-width: auto；column-count: auto；column-height: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-columns
    */
@@ -18139,7 +19108,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-column-span；优先参考标准属性及浏览器支持范围。
    * 设置多栏布局中的元素是否跨越所有栏。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-span
    */
@@ -18148,7 +19118,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-column-width；优先参考标准属性及浏览器支持范围。
    * 设置多栏布局的首选栏宽，实际栏宽由容器空间决定。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-column-width
    */
@@ -18157,7 +19128,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-filter；优先参考标准属性及浏览器支持范围。
    * 对元素的最终图像应用模糊、亮度等滤镜。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-filter
    */
@@ -18171,6 +19143,9 @@ export interface SystemViews {
    * 适用场景：分配弹性布局中的剩余空间，或让项目保持自身尺寸。
    *
    * 常用值：`auto`、`none`。
+   *
+   * CSS 规范初始值：flex-grow: 0；flex-shrink: 1；flex-basis: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.flex("1 1 0%")
    * @example
@@ -18189,7 +19164,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`content`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.flexBasis("16rem")
    * @category 厂商与历史兼容属性
@@ -18204,7 +19180,8 @@ export interface SystemViews {
    *
    * 常用值：`row`、`column`、`row-reverse`、`column-reverse`。
    *
-   * CSS 规范初始值：`row`，不同于浏览器默认样式表。
+   * CSS 规范初始值：row。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.display("flex").flexDirection("column").gap("1rem")
    * @category 厂商与历史兼容属性
@@ -18214,6 +19191,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -webkit-flex-flow；优先参考标准属性及浏览器支持范围。
    * 同时设置弹性布局的主轴方向和换行方式。
+   *
+   * CSS 规范初始值：flex-direction: row；flex-wrap: nowrap。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-flex-flow
    */
@@ -18226,7 +19206,8 @@ export interface SystemViews {
    *
    * 适用场景：让主内容区填充工具栏或行布局的剩余空间。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.flexGrow(1)
    * @category 厂商与历史兼容属性
@@ -18241,7 +19222,8 @@ export interface SystemViews {
    *
    * 适用场景：控制空间不足时是否允许缩小；设置为 0 可避免图标或固定控件收缩。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.flexShrink(0)
    * @category 厂商与历史兼容属性
@@ -18256,7 +19238,8 @@ export interface SystemViews {
    *
    * 常用值：`nowrap`、`wrap`、`wrap-reverse`。
    *
-   * CSS 规范初始值：`nowrap`，不同于浏览器默认样式表。
+   * CSS 规范初始值：nowrap。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.display("flex").flexWrap("wrap").gap("0.5rem")
    * @category 厂商与历史兼容属性
@@ -18267,7 +19250,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-font-feature-settings；优先参考标准属性及浏览器支持范围。
    * 通过 OpenType 特性标签控制字体的底层排版功能。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-feature-settings
    */
@@ -18276,7 +19260,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-font-kerning；优先参考标准属性及浏览器支持范围。
    * 设置是否应用字体提供的字偶间距调整。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-kerning
    */
@@ -18285,7 +19270,7 @@ export interface SystemViews {
    * 兼容属性 -webkit-font-smoothing；优先参考标准属性及浏览器支持范围。
    * 指定 WebKit 平台的字体平滑方式；不是通用的跨浏览器排版开关。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-smoothing
    */
@@ -18294,7 +19279,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-font-variant-ligatures；优先参考标准属性及浏览器支持范围。
    * 设置字体连字的启用方式。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-font-variant-ligatures
    */
@@ -18303,7 +19289,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-hyphenate-character；优先参考标准属性及浏览器支持范围。
    * 设置自动断词时插入的断字符号。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-hyphenate-character
    */
@@ -18312,7 +19299,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-hyphens；优先参考标准属性及浏览器支持范围。
    * 设置文字断词和连字符插入的方式；自动断词依赖语言和词典。
    *
-   * CSS 规范初始值：`manual`，不同于浏览器默认样式表。
+   * CSS 规范初始值：manual。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-hyphens
    */
@@ -18321,7 +19309,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-initial-letter；优先参考标准属性及浏览器支持范围。
    * 设置段落首字下沉或抬升时占用的行数与对齐位置。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-initial-letter
    */
@@ -18334,7 +19323,8 @@ export interface SystemViews {
    *
    * 常用值：`center`、`space-between`、`space-around`、`space-evenly`。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.display("flex").justifyContent("space-between")
    * @category 厂商与历史兼容属性
@@ -18345,7 +19335,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-line-break；优先参考标准属性及浏览器支持范围。
    * 设置东亚文字标点等字符的换行严格程度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-line-break
    */
@@ -18353,7 +19344,8 @@ export interface SystemViews {
   /**
    * 限制多行文本显示的行数；与 display: -webkit-box、WebkitBoxOrient('vertical') 和 overflow: hidden 配合，不删除文本内容。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-line-clamp
    */
@@ -18362,7 +19354,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-logical-height；优先参考标准属性 blockSize及浏览器支持范围。
    * 设置逻辑块轴尺寸；水平书写时通常对应高度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-logical-height
    */
@@ -18371,7 +19364,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-logical-width；优先参考标准属性 inlineSize及浏览器支持范围。
    * 设置逻辑行内轴尺寸；水平书写时通常对应宽度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-logical-width
    */
@@ -18380,7 +19374,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-margin-end；优先参考标准属性 marginInlineEnd及浏览器支持范围。
    * 设置逻辑行内轴结束侧的外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-margin-end
    */
@@ -18389,7 +19384,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-margin-start；优先参考标准属性 marginInlineStart及浏览器支持范围。
    * 设置逻辑行内轴起始侧的外边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-margin-start
    */
@@ -18397,6 +19393,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -webkit-mask；优先参考标准属性及浏览器支持范围。
    * 集中设置遮罩图层的图像、位置、尺寸、重复及合成方式。
+   *
+   * CSS 规范初始值：-webkit-mask-image: none；-webkit-mask-repeat: repeat；-webkit-mask-attachment: scroll；-webkit-mask-position: 0% 0%；-webkit-mask-origin: padding；-webkit-mask-clip: border。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask
    */
@@ -18405,7 +19404,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-attachment；优先参考标准属性及浏览器支持范围。
    * 指定旧版遮罩图像是否随内容滚动。
    *
-   * CSS 规范初始值：`scroll`，不同于浏览器默认样式表。
+   * CSS 规范初始值：scroll。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-attachment
    */
@@ -18413,6 +19413,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -webkit-mask-box-image；优先参考标准属性 maskBorder及浏览器支持范围。
    * 设置基于九宫格图像切片的边框遮罩。
+   *
+   * CSS 规范初始值：mask-border-mode: alpha；mask-border-outset: 0；mask-border-repeat: stretch；mask-border-slice: 0；mask-border-source: none；mask-border-width: auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image
    */
@@ -18421,7 +19424,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-box-image-outset；优先参考标准属性 maskBorderOutset及浏览器支持范围。
    * 设置边框遮罩超出边框盒的距离。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-outset
    */
@@ -18430,7 +19434,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-box-image-repeat；优先参考标准属性 maskBorderRepeat及浏览器支持范围。
    * 设置边框遮罩切片的重复或拉伸方式。
    *
-   * CSS 规范初始值：`stretch`，不同于浏览器默认样式表。
+   * CSS 规范初始值：stretch。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-repeat
    */
@@ -18439,7 +19444,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-box-image-slice；优先参考标准属性 maskBorderSlice及浏览器支持范围。
    * 设置边框遮罩图像的切片位置。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-slice
    */
@@ -18448,7 +19454,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-box-image-source；优先参考标准属性 maskBorderSource及浏览器支持范围。
    * 设置边框遮罩的源图像。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-source
    */
@@ -18457,7 +19464,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-box-image-width；优先参考标准属性 maskBorderWidth及浏览器支持范围。
    * 设置边框遮罩各边的宽度。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image-width
    */
@@ -18466,7 +19474,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-clip；优先参考标准属性及浏览器支持范围。
    * 设置遮罩效果允许作用的裁剪区域。
    *
-   * CSS 规范初始值：`border`，不同于浏览器默认样式表。
+   * CSS 规范初始值：border。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-clip
    */
@@ -18475,7 +19484,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-composite；优先参考标准属性及浏览器支持范围。
    * 设置多个遮罩图层之间的合成运算。
    *
-   * CSS 规范初始值：`source-over`，不同于浏览器默认样式表。
+   * CSS 规范初始值：source-over。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-composite
    */
@@ -18484,7 +19494,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-image；优先参考标准属性及浏览器支持范围。
    * 设置遮罩使用的图像、渐变或 SVG 遮罩引用。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-image
    */
@@ -18493,7 +19504,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-origin；优先参考标准属性及浏览器支持范围。
    * 设置遮罩图像定位所依据的盒子。
    *
-   * CSS 规范初始值：`padding`，不同于浏览器默认样式表。
+   * CSS 规范初始值：padding。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-origin
    */
@@ -18502,7 +19514,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-position；优先参考标准属性及浏览器支持范围。
    * 设置遮罩图像在定位区域中的位置。
    *
-   * CSS 规范初始值：`0% 0%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0% 0%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position
    */
@@ -18511,7 +19524,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-position-x；优先参考标准属性 backgroundPositionX及浏览器支持范围。
    * 设置遮罩图像的水平位置，可使用长度、百分比或位置关键字。
    *
-   * CSS 规范初始值：`0%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-x
    */
@@ -18520,7 +19534,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-position-y；优先参考标准属性 backgroundPositionY及浏览器支持范围。
    * 设置遮罩图像的垂直位置，可使用长度、百分比或位置关键字。
    *
-   * CSS 规范初始值：`0%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-position-y
    */
@@ -18529,7 +19544,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-repeat；优先参考标准属性及浏览器支持范围。
    * 设置遮罩图像的重复方式。
    *
-   * CSS 规范初始值：`repeat`，不同于浏览器默认样式表。
+   * CSS 规范初始值：repeat。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat
    */
@@ -18538,7 +19554,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-repeat-x；优先参考标准属性及浏览器支持范围。
    * 控制旧版遮罩图像在水平方向的重复方式。
    *
-   * CSS 规范初始值：`repeat`，不同于浏览器默认样式表。
+   * CSS 规范初始值：repeat。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-x
    */
@@ -18547,7 +19564,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-repeat-y；优先参考标准属性及浏览器支持范围。
    * 控制旧版遮罩图像在垂直方向的重复方式。
    *
-   * CSS 规范初始值：`repeat`，不同于浏览器默认样式表。
+   * CSS 规范初始值：repeat。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-y
    */
@@ -18556,7 +19574,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-mask-size；优先参考标准属性及浏览器支持范围。
    * 设置遮罩图像的尺寸。
    *
-   * CSS 规范初始值：`auto auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-mask-size
    */
@@ -18565,7 +19584,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-max-inline-size；优先参考标准属性及浏览器支持范围。
    * 限制元素逻辑行内轴的最大尺寸。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-max-inline-size
    */
@@ -18576,7 +19596,8 @@ export interface SystemViews {
    *
    * 不改变源代码、朗读及通常的 Tab 顺序，避免用视觉重排破坏阅读顺序。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-order
    */
@@ -18585,7 +19606,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-overflow-scrolling；优先参考标准属性及浏览器支持范围。
    * 选择特定旧版 WebKit 触控环境的滚动方式，包括惯性滚动。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-overflow-scrolling
    */
@@ -18594,7 +19616,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-padding-end；优先参考标准属性 paddingInlineEnd及浏览器支持范围。
    * 设置逻辑行内轴结束侧的内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-padding-end
    */
@@ -18603,7 +19626,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-padding-start；优先参考标准属性 paddingInlineStart及浏览器支持范围。
    * 设置逻辑行内轴起始侧的内边距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-padding-start
    */
@@ -18612,7 +19636,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-perspective；优先参考标准属性及浏览器支持范围。
    * 设置观察子元素三维变换时的透视距离。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-perspective
    */
@@ -18621,7 +19646,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-perspective-origin；优先参考标准属性及浏览器支持范围。
    * 设置三维透视的观察原点。
    *
-   * CSS 规范初始值：`50% 50%`，不同于浏览器默认样式表。
+   * CSS 规范初始值：50% 50%。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-perspective-origin
    */
@@ -18630,7 +19656,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-print-color-adjust；优先参考标准属性及浏览器支持范围。
    * 设置打印时浏览器是否可以为节墨或可读性调整颜色。
    *
-   * CSS 规范初始值：`economy`，不同于浏览器默认样式表。
+   * CSS 规范初始值：economy。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-print-color-adjust
    */
@@ -18639,7 +19666,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-ruby-position；优先参考标准属性及浏览器支持范围。
    * 设置注音文字相对于基底文字的位置。
    *
-   * CSS 规范初始值：`alternate`，不同于浏览器默认样式表。
+   * CSS 规范初始值：alternate。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-ruby-position
    */
@@ -18650,7 +19678,8 @@ export interface SystemViews {
    *
    * 轴和吸附强度的组合通过 raw 写入，例如 x mandatory；单独声明轴时省略的强度按 CSS 规则处理。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.scrollSnapType("x mandatory")
    * @category 厂商与历史兼容属性
@@ -18661,7 +19690,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-shape-margin；优先参考标准属性及浏览器支持范围。
    * 设置文字环绕形状之外的额外间距。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-shape-margin
    */
@@ -18670,7 +19700,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-tap-highlight-color；优先参考标准属性及浏览器支持范围。
    * 设置 WebKit 触控点击链接或可交互区域时的高亮颜色。
    *
-   * CSS 规范初始值：`black`，不同于浏览器默认样式表。
+   * CSS 规范初始值：black。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-tap-highlight-color
    */
@@ -18679,7 +19710,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-combine；优先参考标准属性 textCombineUpright及浏览器支持范围。
    * 设置竖排文字中多个字符是否合成为一个横排字形单元。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-combine
    */
@@ -18688,7 +19720,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-decoration-color；优先参考标准属性及浏览器支持范围。
    * 设置文本装饰线颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-color
    */
@@ -18697,7 +19730,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-decoration-line；优先参考标准属性及浏览器支持范围。
    * 设置下划线、上划线或删除线等装饰线位置。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-line
    */
@@ -18706,7 +19740,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-decoration-skip；优先参考标准属性及浏览器支持范围。
    * 设置文本装饰线跳过哪些内容；具体语法需核对支持情况。
    *
-   * CSS 规范初始值：`objects`，不同于浏览器默认样式表。
+   * CSS 规范初始值：objects。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-skip
    */
@@ -18715,7 +19750,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-decoration-style；优先参考标准属性及浏览器支持范围。
    * 设置文本装饰线的实线、波浪线等线型。
    *
-   * CSS 规范初始值：`solid`，不同于浏览器默认样式表。
+   * CSS 规范初始值：solid。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-decoration-style
    */
@@ -18723,6 +19759,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -webkit-text-emphasis；优先参考标准属性及浏览器支持范围。
    * 同时设置文字着重号的样式和颜色。
+   *
+   * CSS 规范初始值：text-emphasis-style: none；text-emphasis-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis
    */
@@ -18731,7 +19770,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-emphasis-color；优先参考标准属性及浏览器支持范围。
    * 设置文字着重号颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-color
    */
@@ -18740,7 +19780,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-emphasis-position；优先参考标准属性及浏览器支持范围。
    * 设置文字着重号位于文字的哪一侧。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-position
    */
@@ -18749,7 +19790,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-emphasis-style；优先参考标准属性及浏览器支持范围。
    * 设置文字着重号的形状和填充方式。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-emphasis-style
    */
@@ -18758,7 +19800,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-fill-color；优先参考标准属性及浏览器支持范围。
    * 设置文字字形内部填充色，可独立于文字描边色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-fill-color
    */
@@ -18767,7 +19810,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-orientation；优先参考标准属性及浏览器支持范围。
    * 设置竖排模式下字符的方向。
    *
-   * CSS 规范初始值：`mixed`，不同于浏览器默认样式表。
+   * CSS 规范初始值：mixed。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-orientation
    */
@@ -18776,7 +19820,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-size-adjust；优先参考标准属性及浏览器支持范围。
    * 控制移动浏览器为提升可读性而进行的文字自动放大。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：支持文本放大的移动浏览器为 auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-size-adjust
    */
@@ -18784,6 +19829,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -webkit-text-stroke；优先参考标准属性及浏览器支持范围。
    * 合并设置文字字形描边的宽度和颜色。
+   *
+   * CSS 规范初始值：-webkit-text-stroke-width: 0；-webkit-text-stroke-color: currentcolor。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-stroke
    */
@@ -18792,7 +19840,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-stroke-color；优先参考标准属性及浏览器支持范围。
    * 设置文字字形轮廓的描边颜色。
    *
-   * CSS 规范初始值：`currentcolor`，不同于浏览器默认样式表。
+   * CSS 规范初始值：currentcolor。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-stroke-color
    */
@@ -18801,7 +19850,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-stroke-width；优先参考标准属性及浏览器支持范围。
    * 设置文字字形轮廓的描边宽度。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-stroke-width
    */
@@ -18810,7 +19860,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-text-underline-position；优先参考标准属性及浏览器支持范围。
    * 设置下划线相对于文字基线或竖排文字的放置方式。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-text-underline-position
    */
@@ -18819,7 +19870,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-touch-callout；优先参考标准属性及浏览器支持范围。
    * 控制特定 WebKit 触控环境是否显示长按内容菜单。
    *
-   * CSS 规范初始值：`default`，不同于浏览器默认样式表。
+   * CSS 规范初始值：default。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-touch-callout
    */
@@ -18832,7 +19884,8 @@ export interface SystemViews {
    *
    * 适用场景：平移、旋转和缩放的视觉效果；需要改变普通流占位时应调整布局属性。
    *
-   * CSS 规范初始值：`none`，不同于浏览器默认样式表。
+   * CSS 规范初始值：none。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.transform("translateX(8px) scale(1.05)")
    * @category 厂商与历史兼容属性
@@ -18843,7 +19896,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-transform-origin；优先参考标准属性及浏览器支持范围。
    * 设置元素变换的原点。
    *
-   * CSS 规范初始值：`50% 50% 0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：50% 50% 0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-origin
    */
@@ -18852,7 +19906,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-transform-style；优先参考标准属性及浏览器支持范围。
    * 控制子元素的三维位置保留在三维空间还是展平。
    *
-   * CSS 规范初始值：`flat`，不同于浏览器默认样式表。
+   * CSS 规范初始值：flat。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transform-style
    */
@@ -18864,6 +19919,9 @@ export interface SystemViews {
    * 只对属性变化创建过渡；不会自动触发变化。建议明确列出目标属性，避免 all 意外过渡布局变化。
    *
    * 适用场景：悬停、选中和展开状态之间的平滑变化。
+   *
+   * CSS 规范初始值：transition-delay: 0s；transition-duration: 0s；transition-property: all；transition-timing-function: ease；transition-behavior: normal。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.transition("opacity 160ms ease")
    * @category 厂商与历史兼容属性
@@ -18874,7 +19932,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-transition-delay；优先参考标准属性及浏览器支持范围。
    * 设置属性变化后开始过渡的延迟。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-delay
    */
@@ -18883,7 +19942,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-transition-duration；优先参考标准属性及浏览器支持范围。
    * 设置过渡从开始到完成的时长。
    *
-   * CSS 规范初始值：`0s`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0s。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-duration
    */
@@ -18891,6 +19951,9 @@ export interface SystemViews {
   /**
    * 兼容属性 -webkit-transition-property；优先参考标准属性及浏览器支持范围。
    * 指定发生变化时需要过渡的 CSS 属性。
+   *
+   * CSS 规范初始值：all。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-property
    */
@@ -18899,7 +19962,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-transition-timing-function；优先参考标准属性及浏览器支持范围。
    * 设置过渡进度变化的缓动函数。
    *
-   * CSS 规范初始值：`ease`，不同于浏览器默认样式表。
+   * CSS 规范初始值：ease。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-transition-timing-function
    */
@@ -18908,7 +19972,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-user-modify；优先参考标准属性及浏览器支持范围。
    * 控制内容能否被用户编辑的非标准旧接口；现代页面优先使用 contenteditable。
    *
-   * CSS 规范初始值：`read-only`，不同于浏览器默认样式表。
+   * CSS 规范初始值：read-only。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-user-modify
    */
@@ -18921,7 +19986,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`text`、`none`、`all`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.userSelect("all")
    * @category 厂商与历史兼容属性
@@ -18932,7 +19998,8 @@ export interface SystemViews {
    * 兼容属性 -webkit-writing-mode；优先参考标准属性及浏览器支持范围。
    * 设置水平或竖直书写模式，以及行和块的推进方向。
    *
-   * CSS 规范初始值：`horizontal-tb`，不同于浏览器默认样式表。
+   * CSS 规范初始值：horizontal-tb。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-writing-mode
    */
@@ -18946,7 +20013,8 @@ export interface SystemViews {
    *
    * 常用值：`normal`、`nowrap`、`pre`、`pre-wrap`、`pre-line`、`break-spaces`。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @example
    * s.whiteSpace("pre-wrap")
    * @category 文字与排版
@@ -18956,7 +20024,8 @@ export interface SystemViews {
   /**
    * 设置空格、制表符和换行符如何折叠或保留。
    *
-   * CSS 规范初始值：`collapse`，不同于浏览器默认样式表。
+   * CSS 规范初始值：collapse。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/white-space-collapse
    */
@@ -18964,7 +20033,8 @@ export interface SystemViews {
   /**
    * 设置分页或分栏断点后需保留的最少行数。
    *
-   * CSS 规范初始值：`2`，不同于浏览器默认样式表。
+   * CSS 规范初始值：2。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 内容、容器与分页
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/widows
    */
@@ -18978,7 +20048,8 @@ export interface SystemViews {
    *
    * 常用值：`auto`、`min-content`、`max-content`、`fit-content`。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.width("20rem")
    * @example
@@ -18992,7 +20063,8 @@ export interface SystemViews {
    *
    * 仅对即将发生的变化短期使用；长期或大量声明可能占用额外资源，并提前改变层叠上下文。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/will-change
    */
@@ -19004,7 +20076,8 @@ export interface SystemViews {
    *
    * 常用值：`normal`、`break-all`、`keep-all`。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @example
    * s.wordBreak("normal")
    * @category 文字与排版
@@ -19014,7 +20087,8 @@ export interface SystemViews {
   /**
    * 设置单词或词间分隔符的额外间距。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/word-spacing
    */
@@ -19022,7 +20096,8 @@ export interface SystemViews {
   /**
    * 设置长文本的额外换行行为；是 overflow-wrap 的兼容名称。
    *
-   * CSS 规范初始值：`normal`，不同于浏览器默认样式表。
+   * CSS 规范初始值：normal。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/word-wrap
    */
@@ -19030,7 +20105,8 @@ export interface SystemViews {
   /**
    * 设置水平或竖直书写模式，以及行和块的推进方向。
    *
-   * CSS 规范初始值：`horizontal-tb`，不同于浏览器默认样式表。
+   * CSS 规范初始值：horizontal-tb。不同于浏览器默认样式表。
+   * 是否继承：是。
    * @category 文字与排版
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/writing-mode
    */
@@ -19038,7 +20114,8 @@ export interface SystemViews {
   /**
    * 设置适用 SVG 元素的水平几何坐标。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/x
    */
@@ -19046,7 +20123,8 @@ export interface SystemViews {
   /**
    * 设置适用 SVG 元素的垂直几何坐标。
    *
-   * CSS 规范初始值：`0`，不同于浏览器默认样式表。
+   * CSS 规范初始值：0。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/y
    */
@@ -19058,7 +20136,8 @@ export interface SystemViews {
    *
    * 适用场景：控制同一层叠上下文中的浮层顺序，排查遮挡时先确认祖先层叠上下文。
    *
-   * CSS 规范初始值：`auto`，不同于浏览器默认样式表。
+   * CSS 规范初始值：auto。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @example
    * s.position("relative").zIndex(1)
    * @category 布局与定位
@@ -19068,7 +20147,8 @@ export interface SystemViews {
   /**
    * 设置元素及其布局的缩放比例，与 transform:scale 的布局行为不同。
    *
-   * CSS 规范初始值：`1`，不同于浏览器默认样式表。
+   * CSS 规范初始值：1。不同于浏览器默认样式表。
+   * 是否继承：否。
    * @category 其他标准属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/zoom
    */

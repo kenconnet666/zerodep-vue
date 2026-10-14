@@ -13,7 +13,18 @@ import {
   TransitionGroup,
 } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
-import { _component, bx, createCssHost, keyframes, globalCss, useCss } from '@zerodep-vue/core';
+import {
+  _component,
+  bx,
+  createCssHost,
+  keyframes,
+  globalCss,
+  createCssContext,
+  SystemKeywords,
+} from '@zerodep-vue/core';
+
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 const wrappers: VueWrapper[] = [];

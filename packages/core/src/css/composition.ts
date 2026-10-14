@@ -51,12 +51,16 @@ export function declarations(
 }
 
 /** 只覆盖同一选择器、条件路径与属性；其他状态继续保留，null 只清除当前位置。 */
-export function compose(parts: readonly ClassPart[]): {
+export function compose(
+  parts: readonly ClassPart[],
+  omitted: (entry: Declaration) => boolean,
+): {
   declarations: Declaration[];
   classes: string[];
 } {
-  const entries = new Map<string, Declaration>();
+  const entries = new Map<string, { entry: Declaration; position: number }[]>();
   const classes: string[] = [];
+  let position = 0;
   for (const part of parts) {
     if (typeof part === 'string') {
       classes.push(part);
@@ -64,10 +68,24 @@ export function compose(parts: readonly ClassPart[]): {
     }
     for (const entry of part.declarations) {
       const key = JSON.stringify([entry.selector, entry.conditions, entry.property]);
-      // 覆盖后移到最后，保证简写和长写按最后一次声明的位置参与级联。
+      const candidates = entries.get(key) ?? [];
+      candidates.push({ entry, position: position++ });
+      // 先按最后一次声明的位置处理，避免改变普通有效绑定的求值顺序。
       entries.delete(key);
-      if (entry.value !== null) entries.set(key, entry);
+      entries.set(key, candidates);
     }
   }
-  return { declarations: [...entries.values()], classes };
+  const selected: { entry: Declaration; position: number }[] = [];
+  for (const candidates of entries.values()) {
+    for (let index = candidates.length - 1; index >= 0; index--) {
+      const candidate = candidates[index]!;
+      if (candidate.entry.value === null) break;
+      // 可选绑定为 undefined 时回退到前项，null 仍清除；被确定覆盖的 getter 不读取。
+      if (omitted(candidate.entry)) continue;
+      selected.push(candidate);
+      break;
+    }
+  }
+  selected.sort((left, right) => left.position - right.position);
+  return { declarations: selected.map(({ entry }) => entry), classes };
 }

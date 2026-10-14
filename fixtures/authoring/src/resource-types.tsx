@@ -1,5 +1,8 @@
-import { keywords, bx, keyframes, globalCss, useCss } from '@zerodep-vue/core';
+import { bx, keyframes, globalCss, createCssContext, SystemKeywords } from '@zerodep-vue/core';
 import { themedKeywords, themed } from './theme-types.tsx';
+
+const { keywords, useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 globalCss('page', {

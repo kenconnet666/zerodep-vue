@@ -55,6 +55,10 @@ export const Editor = _component(
 
 Vue 的 ref、computed、watch、v-model、DOM ref 和 setup context 直接使用。需要公开方法时，通过 setup 第二参数的 expose；调用方可用显式接口为自己的组件引用标注类型。
 
+JSX 指令具有真实类型声明和中文说明：原生 input/textarea/select 提供 v-model 及 lazy/trim/number 修饰符，元素提供 v-show、v-html、v-text，组件另有 v-slots、v-models 和 v-model:prop。编辑器插件为命名模型和修饰符补充定义跳转，并依据 onUpdate:prop 提供命名模型候选。v-model 的值域由具体控件决定，可写性由编译接线检查。
+
+v-if、v-for、v-once、v-memo 不进入 JSX 补全；条件与循环使用 JavaScript 或 For。自定义注册指令保持上游行为，插件不把未知指令重定向为内置指令。
+
 编辑输入声明 `Ref<T>`，展示输入可声明 `Readonly<Ref<T>>`。自有 JSX 会排除传给可编辑输入的 getter-only computed，带 get/set 的 computed 继续可用。组件直接写 `.value` 或使用 v-model 时，编译接线还会用 Vue isReadonly 检查实际来源，发现只读 computed、getter toRef 或 readonly 包装时报告 `ZV_READONLY_MODEL`。TypeScript 的结构类型无法证明所有只读容器，任意业务函数内的间接写入也不会被跨函数重新分析；这些路径保留 Vue 自身的只读语义。
 
 ## 属性透传与列表

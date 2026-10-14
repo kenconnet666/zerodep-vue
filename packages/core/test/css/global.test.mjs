@@ -2,8 +2,17 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { JSDOM } from 'jsdom';
 import { effectScope, ref, shallowRef } from 'vue';
-import { createCssHost, keyframes, globalCss, useCss } from '../../src/index.ts';
+import {
+  createCssHost,
+  keyframes,
+  globalCss,
+  createCssContext,
+  SystemKeywords,
+} from '../../src/index.ts';
 import { binding } from '../../src/css/bindings.ts';
+
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 test('global reactive rules keep cascade position and stop when their scope ends', () => {

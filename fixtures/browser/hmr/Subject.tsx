@@ -1,8 +1,10 @@
 import { ref } from 'vue';
-import { _component, bx, globalCss, useCss } from '@zerodep-vue/core';
+import { _component, bx, globalCss, createCssContext, SystemKeywords } from '@zerodep-vue/core';
 
 import { NSelect } from '@fixture/naive';
-import type {} from '../src/contracts.ts';
+
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 export default _component(() => {

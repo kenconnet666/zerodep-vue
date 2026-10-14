@@ -9,8 +9,12 @@ import {
   getCssHost,
   keyframes,
   globalCss,
-  useCss,
+  createCssContext,
+  SystemKeywords,
 } from '@zerodep-vue/core';
+
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 test('component global rules use its host and unmount stops all updates', async () => {

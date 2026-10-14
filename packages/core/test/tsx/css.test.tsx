@@ -16,15 +16,16 @@ import { renderToString } from '@vue/server-renderer';
 import {
   _component,
   bx,
-  createTheme,
+  createCssContext,
   createCssHost,
   getCssHost,
   SystemKeywords,
-  useCss,
   cx,
 } from '@zerodep-vue/core';
 
 import type { CssInput } from '@zerodep-vue/core';
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 const mounted: VueWrapper[] = [];
@@ -58,6 +59,24 @@ test('automatic class override suppresses the unused default binding', () => {
   const wrapper = mount(App, { global: { plugins: [host] } });
   mounted.push(wrapper);
   expect(containers.at(-1)!.textContent).toContain('color:black');
+});
+
+test('optional bound props retain defaults after update and removal', async () => {
+  const Box = _component(({ width }: { width?: number | null }) => (
+    <div class={s.width(100).width(bx(width))}>box</div>
+  ));
+  const host = setupHost();
+  const wrapper = mount(Box, { global: { plugins: [host] } });
+  mounted.push(wrapper);
+  const styleTarget = containers.at(-1)!;
+  expect(styleTarget.textContent).toContain('width:100px;');
+  await wrapper.setProps({ width: 180 });
+  expect(wrapper.attributes('style')).toContain('180px');
+  await wrapper.setProps({ width: undefined });
+  expect(styleTarget.textContent).toContain('width:100px;');
+  expect(wrapper.attributes('style') ?? '').not.toContain('--zv-');
+  await wrapper.setProps({ width: null });
+  expect(wrapper.attributes('class') ?? '').not.toContain('zv-');
 });
 
 test('Vue cloneVNode preserves style descriptions, bindings and ref ownership', async () => {
@@ -307,7 +326,7 @@ test('independent runtime themes retain their values through Teleport and one re
   const second = shallowRef(new RegionTheme('blue'));
   const showFirst = ref(true);
   const Region = _component(({ theme, name }: { theme: Ref<RegionTheme>; name: string }) => {
-    const themedContext = createTheme(theme);
+    const themedContext = createCssContext(theme);
     const themed = themedContext.useCss();
     const themedKeywords = themedContext.keywords;
     const style = themed.color(themedKeywords.color._brand).display(themedKeywords.display.block);
@@ -344,7 +363,7 @@ test('independent runtime themes retain their values through Teleport and one re
 
 test('SSR Teleport emits the correct per-request theme variables', async () => {
   const Page = _component(({ color }: { color: string }) => {
-    const themedContext = createTheme(new RegionTheme(color));
+    const themedContext = createCssContext(new RegionTheme(color));
     const themed = themedContext.useCss();
     const themedKeywords = themedContext.keywords;
     return (

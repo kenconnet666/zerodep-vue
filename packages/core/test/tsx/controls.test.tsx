@@ -2,12 +2,14 @@ import { afterEach, expect, test } from 'vitest';
 import { mount } from '@vue/test-utils';
 import type { VueWrapper } from '@vue/test-utils';
 import { nextTick, ref, shallowReactive, shallowRef } from 'vue';
-import { _component, bx, createCssHost, useCss } from '@zerodep-vue/core';
+import { _component, bx, createCssHost, createCssContext, SystemKeywords } from '@zerodep-vue/core';
 import type { CssHost } from '@zerodep-vue/core';
 import { Button } from '../../../../fixtures/controls/Button.tsx';
 import { ToggleButton } from '../../../../fixtures/controls/ToggleButton.tsx';
 import { TextInput } from '../../../../fixtures/controls/TextInput.tsx';
-import { ControlTheme, controlTheme } from '../../../../fixtures/controls/theme.ts';
+import { ControlTheme, provideTheme } from '../../../../fixtures/controls/theme.ts';
+
+const { useCss } = createCssContext(new SystemKeywords());
 
 const mounted: {
   wrapper: VueWrapper;
@@ -125,7 +127,7 @@ test('shared buttons preserve class forwarding, independent branches and reactiv
   const compact = ref(false);
   const s = useCss();
   const App = _component(() => {
-    controlTheme.provide(palette);
+    provideTheme(palette);
     return (
       <>
         <Button data-test="base">普通</Button>

@@ -24,6 +24,7 @@ catalog:
   '@vue/devtools-kit': 8.2.1
   '@vue/test-utils': 2.4.11
   csstype: 3.2.3
+  mdn-data: 2.27.1
   '@csstools/css-tokenizer': 4.0.2
   '@emotion/unitless': 0.10.0
   postcss-selector-parser: 7.1.6

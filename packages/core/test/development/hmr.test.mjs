@@ -1,10 +1,19 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { effectScope, ref, watchSyncEffect } from 'vue';
-import { createCssHost, keyframes, globalCss, useCss } from '../../src/index.ts';
+import {
+  createCssHost,
+  keyframes,
+  globalCss,
+  createCssContext,
+  SystemKeywords,
+} from '../../src/index.ts';
 import { registerModule, compatible } from '../../src/development/hmr.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
 import { binding } from '../../src/css/bindings.ts';
+
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 const context = () => ({

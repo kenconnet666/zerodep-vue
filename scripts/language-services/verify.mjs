@@ -230,6 +230,26 @@ try {
     );
     report.checks.push({ name: 'literal-keyword', value, hover, definitions, completions });
   }
+  const directiveFile = 'fixtures/controls/TextInput.tsx';
+  const directiveText = await readFile(resolve(root, directiveFile), 'utf8');
+  const directiveOffset = directiveText.indexOf('v-model=') + 2;
+  assert(directiveOffset > 1);
+  const directiveBefore = directiveText.slice(0, directiveOffset);
+  const directiveQuery = {
+    filePath: directiveFile,
+    line: directiveBefore.split('\n').length,
+    column: directiveBefore.length - directiveBefore.lastIndexOf('\n'),
+  };
+  const directiveHover = await connection.call('hover', directiveQuery);
+  const directiveDefinitions = await connection.call('definitions', directiveQuery);
+  assert(/\p{Script=Han}/u.test(JSON.stringify(directiveHover.contents)));
+  assert.equal(directiveDefinitions.items.length, 1);
+  assert(/directives\.ts$/.test(directiveDefinitions.items[0].filePath));
+  report.checks.push({
+    name: 'jsx-directive',
+    hover: directiveHover,
+    definitions: directiveDefinitions,
+  });
   await mkdir(resolve(root, 'test-results/language-services'), { recursive: true });
   await writeFile(
     resolve(root, 'test-results/language-services/verification.json'),

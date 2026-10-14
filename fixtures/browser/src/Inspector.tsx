@@ -1,7 +1,8 @@
 import { ref } from 'vue';
-import { _component, bx, globalCss, useCss, cx } from '@zerodep-vue/core';
+import { _component, bx, globalCss, cx, createCssContext, SystemKeywords } from '@zerodep-vue/core';
 
-import type {} from './contracts.ts';
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 export default _component(() => {

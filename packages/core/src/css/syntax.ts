@@ -78,3 +78,20 @@ export function scopedSelector(input: string, className: string): string {
   });
   return ast.toString();
 }
+
+/** 元素变量只能供自身、伪元素和后代继承；根的兄弟/外部目标需输出当前字面值。 */
+export function inheritsVariables(target: string): boolean {
+  if (target === '&') return true;
+  const nodes = selectorParser().astSync(target).nodes[0]?.nodes;
+  if (!nodes) return false;
+  const anchor = nodes.findLastIndex((node) => node.type === 'nesting');
+  if (anchor < 0) return false;
+  let descendant = false;
+  for (const node of nodes.slice(anchor + 1)) {
+    if (node.type !== 'combinator') continue;
+    const combinator = node.value.trim();
+    if (combinator === '' || combinator === '>') descendant = true;
+    else if (combinator === '||' || !descendant) return false;
+  }
+  return true;
+}

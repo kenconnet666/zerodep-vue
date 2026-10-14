@@ -34,7 +34,8 @@ TypeScript 保持 `jsx: "preserve"` 并移除 jsxImportSource。core 的根入�
 
 ```tsx
 import { ref } from 'vue';
-import { _component, bx, useCss, cx } from '@zerodep-vue/core';
+import { _component, bx, cx } from '@zerodep-vue/core';
+import { useCss } from './theme';
 const s = useCss();
 
 export default _component(() => {

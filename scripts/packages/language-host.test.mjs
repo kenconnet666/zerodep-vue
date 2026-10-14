@@ -24,7 +24,8 @@ test('emitted core root declaration loads JSX elements and generic children', ()
     [canonical(entry), emitted.outputText],
     [
       canonical(consumer),
-      `import {useCss, For} from './__public-entry__.js';
+      `import {createCssContext, SystemKeywords, For} from './__public-entry__.js';
+      const {useCss} = createCssContext(new SystemKeywords());
       export const rows = <For each={[{id: 1}]}>{row =>
         <span class={useCss().color('red')}>{row.id}</span>
       }</For>;

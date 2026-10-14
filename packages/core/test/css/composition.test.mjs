@@ -1,9 +1,11 @@
-import { useCss } from '../../src/css/theme.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { cx } from '../../src/css/composition.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
 import { binding, template } from '../../src/css/bindings.ts';
+import { createCssContext, SystemKeywords } from '../../src/index.ts';
+const { useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 test('chains branch independently, retain declaration order and reject legacy objects', () => {
@@ -113,6 +115,45 @@ test('multiple bindings share rules across instances without sharing values', ()
   assert.deepEqual(Object.values(b.variables), ['30', '40']);
 });
 
+test('optional bindings preserve defaults and null clears them without reading overridden getters', () => {
+  let override;
+  let defaults = 0;
+  let overrides = 0;
+  const fallback = binding(() => {
+    defaults++;
+    return 100;
+  });
+  const optional = binding(() => {
+    overrides++;
+    return override;
+  });
+  const style = cx(s.width(fallback).marginTop(4).margin(0), s.width(optional).marginTop(optional));
+  let result = resolveClass(style);
+  assert.deepEqual(Object.values(result.variables), ['100px']);
+  assert(result.cssText.includes('margin-top:4px;margin:0;'));
+  assert.equal(defaults, 1);
+  assert.equal(overrides, 1);
+  override = 180;
+  result = resolveClass(style);
+  assert.deepEqual(Object.values(result.variables), ['180px', '180px']);
+  assert.equal(defaults, 1);
+  override = null;
+  result = resolveClass(style);
+  assert(!result.cssText.includes('width:'));
+  assert(!result.cssText.includes('margin-top:'));
+  assert.equal(defaults, 1);
+  override = undefined;
+  assert.deepEqual(resolveClass(cx(s.width(100), s.width(null), s.width(optional))).cssText, '');
+  const invalid = binding(() => {
+    throw new Error('overridden');
+  });
+  assert(resolveClass(cx(s.width(invalid), s.width(20))).cssText.includes('width:20px'));
+  const partial = template(['translateX(', optional, 'px)']);
+  assert(
+    resolveClass(cx(s.transform('none'), s.transform(partial))).cssText.includes('transform:none'),
+  );
+});
+
 test('full CSS-wide keywords remove variable output and later values restore it', () => {
   let width = '200px';
   const style = s.width(binding(() => width));
@@ -140,6 +181,31 @@ test('an overridden binding is not read and a shared active binding is read once
   const result = resolveClass(cx(s.width(removed), s.width(shared).height(shared)));
   assert.equal(reads, 1);
   assert.deepEqual(Object.values(result.variables), ['10px', '10px']);
+});
+
+test('sibling targets use literal dynamic values while descendants retain inherited variables', () => {
+  let color = 'red';
+  let reads = 0;
+  const value = binding(() => {
+    reads++;
+    return color;
+  });
+  const style = s
+    .color(value)
+    .select('& + span', s.color(value))
+    .select('& > span + b', s.color(value))
+    .select('& + div > span', s.color(value));
+  const first = resolveClass(style);
+  assert(first.cssText.includes(' + span{color:red;}'));
+  assert(first.cssText.includes(' + div > span{color:red;}'));
+  assert(first.cssText.includes(' > span + b{color:var('));
+  assert.equal(Object.keys(first.variables).length, 2);
+  assert.equal(reads, 1);
+  color = 'blue';
+  const next = resolveClass(style);
+  assert(next.cssText.includes(' + span{color:blue;}'));
+  assert.notEqual(next.ruleName, first.ruleName);
+  assert(!next.cssText.includes('color:red'));
 });
 
 test('native classes, supports conditions and shorthands preserve declaration order', () => {

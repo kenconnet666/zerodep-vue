@@ -6,7 +6,10 @@
 
 - 合并为 compiler/core 两包，各自仅提供根入口，源码按编译、编辑器、CSS、TSX 和开发工具职责组织。
 - 样式按相同选择器、条件和属性逐项覆盖；后面的声明可继续添加其他属性。
-- 作者使用独立的 css、cx、keywords 等入口；主题仅保留继承 SystemKeywords 后调用 createTheme 的模型。
+- 作者使用不可变属性链与 cx 组合；应用主题模块解构导出 createCssContext 返回的 useCss、provideTheme、keywords，core 无默认作者或关键字导出。
+- 属性方法以 PropertyInput 收拢校验类型；生成文档补齐规范初始值、简写子属性初始值和继承说明，发布声明中的主题说明不再依赖私有字段。
+- 补齐 JSX v-model 及修饰符、v-show、v-html、v-text、v-slots、v-models、命名模型的说明与编辑支持。
+- 可选动态样式为 undefined 时保留前项，null 仍清除；兄弟元素动态样式和动画使用可生效的字面值。
 - 删除 firstThatWorks、defineVars、createCss 及旧技术子入口；语言服务归入 compiler，保留字面量中文说明与跳转。
 
 ## 1.0.0 — 2026-10-14

@@ -1,6 +1,8 @@
-import { keywords, SystemKeywords, createTheme, useCss, cx, bx } from '@zerodep-vue/core';
+import { SystemKeywords, createCssContext, cx, bx } from '@zerodep-vue/core';
 import type { Css, CssInput } from '@zerodep-vue/core';
 import { shallowRef } from 'vue';
+const { keywords, useCss } = createCssContext(new SystemKeywords());
+
 const s = useCss();
 
 export class AppTheme extends SystemKeywords {
@@ -25,10 +27,10 @@ export function selectTheme(theme: AppTheme) {
 selectTheme(themes.dark);
 // @ts-expect-error 每套主题必须提供应用约定成员。
 selectTheme(new SystemKeywords());
-export const appTheme = createTheme(source);
+export const appTheme = createCssContext(source);
 export const themed = appTheme.useCss();
 export const themedKeywords = appTheme.keywords;
-export const inferredContext = createTheme(new AppTheme());
+export const inferredContext = createCssContext(new AppTheme());
 export const inferred = inferredContext.useCss();
 export const inferredKeywords = inferredContext.keywords;
 export const styles = themed
@@ -40,11 +42,11 @@ export const styles = themed
   .select(':hover', themed.color(themedKeywords.color._brand));
 cx(styles);
 // @ts-expect-error 泛型不能替代真实来源。
-createTheme<AppTheme>();
+createCssContext<AppTheme>();
 // @ts-expect-error 系统作者不接受虚构的主题泛型。
 useCss<AppTheme>();
 // @ts-expect-error 区域覆盖必须保持相同主题约定。
-appTheme.provide(new SystemKeywords());
+appTheme.provideTheme(new SystemKeywords());
 // @ts-expect-error 系统基类没有业务主题名。
 keywords.color._brand;
 // @ts-expect-error 成员名不能被任意索引吞掉。
@@ -58,11 +60,11 @@ class InvalidTheme extends SystemKeywords {
   override readonly color = { brand: 'red' };
 }
 // @ts-expect-error 主题成员使用 _ 前缀。
-createTheme(new InvalidTheme());
+createCssContext(new InvalidTheme());
 export const child = new (class extends AppTheme {
   override readonly color = { ...new AppTheme().color, _danger: 'red' };
 })();
-export const inheritedContext = createTheme(child);
+export const inheritedContext = createCssContext(child);
 export const inherited = inheritedContext.useCss();
 export const inheritedKeywords = inheritedContext.keywords;
 inherited

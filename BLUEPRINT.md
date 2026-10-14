@@ -571,7 +571,7 @@ const styles = { root: base, compact };
 
 select(condition, style) 追加相对选择器、伪类、伪元素、属性选择器或 media/supports/container/starting-style 条件。样式可为嵌套条件数组，可复用链和值；普通类名不能重新限定到嵌套条件。variable('--name', value) 声明原生自定义属性；名称和 fallback 显式书写，数字不补 px。
 
-默认 useCss() 只提供系统作者。业务主题继承 SystemKeywords，调用 createTheme(真实实例或 Vue Ref)，返回 useCss()/provide(source) 和独立 keywords 视图的 CssTheme<T>。应用在创建主题的模块封装并导出自己的 useCss，组件导入该函数并统一写 const s = useCss()；无来源的泛型 useCss<AppTheme>() 不成立。主题上下文各有独立 Vue 注入键；provide 必须在 setup 调用，返回当前组件可用的作者，子树通过 useCss 取得最近覆盖。组件外使用该上下文的默认来源。
+库不提供默认 useCss/keywords，也不创建默认实例；系统主题同样由应用显式创建上下文。业务主题继承 SystemKeywords，调用 createCssContext(真实实例或 Vue Ref)，返回 useCss()/provideTheme(source) 和独立 keywords 视图的 CssContext<T>。应用在创建主题的模块直接解构并导出自己的 useCss，组件导入该函数并统一写 const s = useCss()；无来源的泛型 useCss<AppTheme>() 不成立。主题上下文各有独立 Vue 注入键；provideTheme 必须在 setup 调用，返回当前组件可用的作者，子树通过 useCss 取得最近覆盖。组件外使用该上下文的默认来源。
 
 系统值和主题名都直接写字面量并按属性补全，例如 s.display('inline-flex').backgroundColor('_brand')。显式具名引用使用独立 keywords.color._brand，不挂在 s 下。主题在消费时读取真实来源，不冻结初始值。颜色主题可复用于 72 个兼容颜色属性，不接受错误跨属性组引用。主题成员用 _ 前缀；继承与覆盖遵循普通类字段规则，替换整组时显式合并要保留的成员，不做隐式合并。
 
@@ -619,7 +619,7 @@ cx 接收结构化样式、普通类名、条件项及嵌套数组，输出 CssC
 作者只传 class，需要自己的内联覆盖时再显式写 style：
 
 ```tsx
-import { useCss } from '@zerodep-vue/core';
+import { useCss } from './theme';
 const s = useCss();
 
 <button
@@ -639,7 +639,7 @@ const s = useCss();
 普通 Vue TSX 和 Naive UI 调用处也保持相同作者写法：
 
 ```tsx
-import { useCss } from '@zerodep-vue/core';
+import { useCss } from './theme';
 const s = useCss();
 
 return () => (
@@ -672,7 +672,7 @@ SSR 使用同样的 class/绑定解析协议，把变量 style 放入 VNode/HTML
 ### 7.5 bx：无作者 getter，多变量与作用域
 
 ```tsx
-import { useCss } from '@zerodep-vue/core';
+import { useCss } from './theme';
 const s = useCss();
 
 const x = ref(0);
@@ -704,7 +704,7 @@ return (
 目标用例：
 
 ```tsx
-import { useCss } from '@zerodep-vue/core';
+import { useCss } from './theme';
 const s = useCss();
 
 const width = ref('240px');

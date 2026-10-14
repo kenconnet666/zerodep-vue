@@ -3,10 +3,10 @@ import { _component, bx, cx } from '@zerodep-vue/core';
 import { Button } from '../../controls/Button.tsx';
 import { ToggleButton } from '../../controls/ToggleButton.tsx';
 import { TextInput } from '../../controls/TextInput.tsx';
-import { ControlTheme, controlTheme, useCss } from '../../controls/theme.ts';
+import { ControlTheme, provideTheme, useCss } from '../../controls/theme.ts';
 
 const IndependentRegion = _component(() => {
-  controlTheme.provide(new ControlTheme());
+  provideTheme(new ControlTheme());
   return <Button data-testid="independent-button">独立区域</Button>;
 });
 
@@ -14,7 +14,7 @@ const IndependentRegion = _component(() => {
 export const Controls = _component(() => {
   const palette = shallowRef(new ControlTheme());
   const s = useCss();
-  controlTheme.provide(palette);
+  provideTheme(palette);
   const state = shallowReactive({ text: ref('draft'), pressed: ref(false) });
   const clicks = ref(0);
   const submissions = ref(0);
@@ -82,6 +82,18 @@ export const Controls = _component(() => {
       </form>
       <output data-testid="action-count">{clicks.value}</output>
       <output data-testid="toggle-state">{String(state.pressed.value)}</output>
+      <div>
+        <span
+          data-testid="sibling-source"
+          class={s.select(
+            '& + span',
+            s.color(bx(state.pressed.value ? 'rgb(37, 99, 235)' : 'black')),
+          )}
+        >
+          状态：
+        </span>
+        <span data-testid="sibling-label">固定项目提示</span>
+      </div>
       <output data-testid="submit-count">{submissions.value}</output>
       <output data-testid="submitted-title">{submitted.value}</output>
       <output data-testid="reset-count">{resets.value}</output>
