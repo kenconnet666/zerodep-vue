@@ -1,6 +1,6 @@
 import { css as compose } from './core.ts';
 import { CLASS } from './types.ts';
-import type { CssClass, CssObject } from './types.ts';
+import type { CssClass, CssObject, CssCondition } from './types.ts';
 import type { CssProperties } from './generated/properties.ts';
 import type { SystemKeywords } from './generated/system.ts';
 import { ANIMATION, VARIABLE, VARIABLE_GROUP } from './resource-tokens.ts';
@@ -12,14 +12,7 @@ import { hash } from './resolve.ts';
 export type VariableOverrides<Values extends Record<string, Scalar>, T extends SystemKeywords> = {
   readonly [Name in keyof Values]?: CssObject<T>[`--${string}`];
 } & {
-  readonly [
-    Condition in
-      | `:${string}`
-      | `&${string}`
-      | `@media ${string}`
-      | `@supports ${string}`
-      | `@container ${string}`
-  ]?: VariableOverrides<Values, T>;
+  readonly [Condition in CssCondition]?: VariableOverrides<Values, T>;
 };
 
 /**
@@ -62,7 +55,7 @@ export function createTheme<Values extends Record<string, Scalar>, T extends Sys
     for (const [key, value] of Object.entries(values)) {
       if (Object.hasOwn(group, key)) output[(group[key] as CssVariable).name] = value;
       else if (
-        /^(?::|&|@(?:media|supports|container)\s)/.test(key) &&
+        /^(?::|&|\[|@(?:media|supports|container)\s)|^@starting-style$/.test(key) &&
         value &&
         typeof value === 'object'
       )

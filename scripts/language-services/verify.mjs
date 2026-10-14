@@ -155,6 +155,40 @@ try {
     assert(result.complete && result.errors === 0, JSON.stringify(result));
     report.checks.push({ name: 'workspace-file', result });
   }
+  // 同一泛型作者视图必须同时保留系统成员和继承主题成员，不能只证明默认 css 可用。
+  const themeFile = 'fixtures/authoring/src/theme-types.tsx';
+  const themeText = await readFile(resolve(root, themeFile), 'utf8');
+  const themeDiagnostics = await connection.call('diagnostics', { filePath: themeFile });
+  assert(
+    themeDiagnostics.complete && themeDiagnostics.errors === 0,
+    JSON.stringify(themeDiagnostics),
+  );
+  for (const [needle, member] of [
+    ['author.keywords.color._brand', '_brand'],
+    ['author.keywords.display.flex', 'flex'],
+  ]) {
+    const index = themeText.indexOf(needle) + needle.lastIndexOf('.') + 1;
+    assert(themeText.includes(needle));
+    const before = themeText.slice(0, index);
+    const query = {
+      filePath: themeFile,
+      line: before.split('\n').length,
+      column: before.length - before.lastIndexOf('\n'),
+    };
+    const hover = await connection.call('hover', query);
+    assert(/\p{Script=Han}/u.test(JSON.stringify(hover.contents)), JSON.stringify(hover));
+    const completions = await connection.call('completions', {
+      ...query,
+      prefix: member,
+      resolveLimit: 1,
+    });
+    assert(
+      completions.items.some((item) => item.label === member),
+      JSON.stringify(completions),
+    );
+    assert(/\p{Script=Han}/u.test(JSON.stringify(completions.items)), JSON.stringify(completions));
+    report.checks.push({ name: 'generic-theme-keyword', member, hover, completions });
+  }
   await mkdir(resolve(root, 'test-results/language-services'), { recursive: true });
   await writeFile(
     resolve(root, 'test-results/language-services/verification.json'),

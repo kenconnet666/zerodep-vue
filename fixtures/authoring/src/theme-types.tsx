@@ -1,5 +1,5 @@
 import { SystemKeywords, createCss, css } from '@zerodep-vue/css';
-import type { Css, CssObject } from '@zerodep-vue/css';
+import type { Css, CssInput, CssObject } from '@zerodep-vue/css';
 import { shallowRef } from 'vue';
 
 export class AppTheme extends SystemKeywords {
@@ -58,3 +58,19 @@ export function reusable<T extends AppTheme>(author: Css<T>) {
     ':hover': { backgroundColor: author.keywords.color._brand },
   });
 }
+
+/** 泛型作者同时保留系统和基类/派生主题成员；外部输入也使用同一个 T。 */
+export function reusableGroup<T extends AppTheme>(author: Css<T>, external?: CssInput<T>) {
+  const named = author.create({
+    base: { display: author.keywords.display.flex, color: author.keywords.color._brand },
+    active: { color: author.firstThatWorks(author.keywords.color._brand, 'red') },
+  });
+  const object: CssObject<T> = {
+    ':hover': [named.active, { padding: author.keywords.padding._control }],
+    '@media (width < 600px)': { color: author.keywords.color._brand },
+  };
+  return author(named.base, object, external);
+}
+reusableGroup(inherited, { ':hover': { color: inherited.keywords.color._danger } });
+// @ts-expect-error 嵌套数组中的对象仍检查泛型 T 的属性兼容性。
+themed({ ':hover': [{ padding: themed.keywords.color._brand }] });

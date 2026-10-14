@@ -23,6 +23,22 @@ test('variable groups have stable names, native fallbacks and composable conditi
   assert.deepEqual(resolved.variables, {});
   assert.throws(() => css.createTheme(tokens, { missing: 'red' }), /变量组中没有/);
   assert.throws(() => css.defineVars('', { a: 0 }), /命名空间/);
+  const start = resolveClass(
+    css.createTheme(tokens, {
+      '@starting-style': { color: 'blue' },
+      ':nth-child(2n)': { gap: '4px' },
+    }),
+  );
+  assert(start.cssText.includes('@starting-style'));
+  assert(start.cssText.includes(':nth-child(2n)'));
+  const fallback = resolveClass(
+    css({
+      display: css.firstThatWorks(css.keywords.display.grid, 'flex'),
+      gap: css.firstThatWorks(tokens.gap, '4px'),
+    }),
+  );
+  assert(fallback.cssText.includes('display:flex;display:grid;'));
+  assert(fallback.cssText.includes(`gap:4px;gap:var(${tokens.gap.name},8px);`));
 });
 
 test('variable theme overrides share dynamic and inherited theme resolution', () => {

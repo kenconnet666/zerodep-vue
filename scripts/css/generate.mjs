@@ -7,6 +7,7 @@ import ts from 'typescript';
 import prettier from 'prettier';
 import docs from './property-docs.json' with { type: 'json' };
 import { aliases, summaries } from './compat-docs.mjs';
+import { propertyGroup, propertyGroups } from './property-groups.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const require = createRequire(resolve(root, 'packages/css/package.json'));
@@ -27,6 +28,28 @@ const properties = checker
   .getPropertiesOfType(checker.getTypeAtLocation(declaration))
   .sort((a, b) => a.name.localeCompare(b.name, 'en'));
 const names = new Set(properties.map((property) => property.name));
+const interfaceNames = (name) =>
+  new Set(
+    checker
+      .getPropertiesOfType(
+        checker.getTypeAtLocation(
+          ast.statements.find((node) => ts.isInterfaceDeclaration(node) && node.name.text === name),
+        ),
+      )
+      .map((property) => property.name),
+  );
+const svg = interfaceNames('SvgProperties');
+const obsolete = interfaceNames('ObsoleteProperties');
+const groups = new Map(propertyGroups.map(([name]) => [name, []]));
+for (const [name, group] of Object.entries({
+  display: 'Layout',
+  color: 'Colors',
+  gap: 'Spacing',
+  boxSizing: 'Sizing',
+  fill: 'Svg',
+  WebkitLineClamp: 'Compatibility',
+}))
+  assert.equal(propertyGroup(name, svg, obsolete), group, `Unexpected property category: ${name}`);
 const nativeDocs = new Map(
   properties.map((property) => [
     property.name,
@@ -72,7 +95,15 @@ function description(name) {
       .filter(Boolean)
       .map((part) => '\n\n' + part)
       .join('') +
+    (detail?.commonValues?.length
+      ? '\n\n常用值：' + detail.commonValues.map((value) => `\`${value}\``).join('、') + '。'
+      : '') +
     (initial ? `\n\nCSS 规范初始值：\`${initial}\`，不同于浏览器默认样式表。` : '') +
+    (detail?.examples?.length
+      ? '\n' + detail.examples.map((example) => '@example\n' + example).join('\n')
+      : '') +
+    (obsolete.has(name) ? '\n@deprecated 历史属性；新代码优先使用标准替代属性。' : '') +
+    `\n@category ${propertyGroups.find(([group]) => group === propertyGroup(name, svg, obsolete))[1]}` +
     `\n@see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/${cssName(name)}`
   );
 }
@@ -95,6 +126,7 @@ function keywordDoc(name, value, color) {
       entry.comparison && '区别：' + entry.comparison,
       entry.usage && '适用场景：' + entry.usage,
       entry.notes,
+      ...(entry.examples ?? []).map((example) => '@example\n' + example),
     ]
       .filter(Boolean)
       .join('\n\n');
@@ -103,57 +135,106 @@ function keywordDoc(name, value, color) {
   if (value === 'none') return '关闭或移除当前属性对应的效果；具体是否影响布局取决于该属性。';
   if (value === 'normal') return '使用当前属性定义的常规行为，不表示所有属性都具有相同的计算值。';
   if (color) return `CSS 颜色关键字 ${value}；系统颜色会随用户环境和配色设置变化。`;
-  return `选择当前属性的原生 ${value} 取值。\n${description(name).split('\n@see')[0]}`;
+  return `${cssName(name)} 的原生 ${value} 值；具体布局或绘制效果见该属性参考。\n@see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/${cssName(name)}`;
 }
 
-const sets = [];
 const runtimeSets = [];
 const interfaces = [];
-const propertyLines = [];
 const slotLines = [];
 const viewLines = [];
 const runtimeLines = [];
 const colorNames = [];
 const header = '// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成。说明只进入类型声明。\n';
+const literalValues = (type) =>
+  [
+    ...new Set(
+      (type.isUnion() ? type.types : [type])
+        .filter((part) => part.flags & ts.TypeFlags.StringLiteral)
+        .map((part) => part.value),
+    ),
+  ].sort();
+const dataTypes = ast.statements.find(
+  (node) => ts.isModuleDeclaration(node) && node.name.text === 'DataType',
+);
+const commonGroups = [
+  ['Globals', 'CssWideKeywords'],
+  ['NamedColor', 'NamedColorKeywords'],
+  ['SystemColor', 'SystemColorKeywords'],
+  ['DeprecatedSystemColor', 'DeprecatedSystemColorKeywords'],
+].map(([source, name]) => {
+  const nodes = source === 'Globals' ? ast.statements : dataTypes.body.statements;
+  const node = nodes.find((item) => ts.isTypeAliasDeclaration(item) && item.name.text === source);
+  assert(node, `Missing csstype value group: ${source}`);
+  return { name, values: literalValues(checker.getTypeAtLocation(node)) };
+});
+// 每个关键字只提供一种成员拼写；CSS 字符串仍使用原生拼写。
+const memberName = (value) =>
+  value === 'currentcolor'
+    ? 'currentColor'
+    : value.replace(/-([a-z])/g, (_match, letter) => letter.toUpperCase());
+const field = (property, value, color) =>
+  jsdoc(keywordDoc(property, value, color)) +
+  `readonly ${JSON.stringify(memberName(value))}: SystemKeyword<Key, ${JSON.stringify(value)}>;`;
+for (const group of commonGroups) {
+  interfaces.push(
+    `export interface ${group.name}<Key extends PropertyName> {\n` +
+      group.values
+        .map((value) => {
+          if (group.name === 'CssWideKeywords') return field('color', value, false);
+          const named = group.name === 'NamedColorKeywords';
+          const description = named
+            ? `CSS 命名颜色 ${value}。`
+            : `CSS 系统颜色 ${value}；实际颜色由浏览器和用户环境决定。`;
+          return (
+            jsdoc(
+              description +
+                (group.name === 'DeprecatedSystemColorKeywords'
+                  ? '\n@deprecated 历史系统颜色；优先使用现代系统颜色。'
+                  : '') +
+                `\n@see https://developer.mozilla.org/docs/Web/CSS/${named ? 'named-color' : 'system-color'}`,
+            ) +
+            `readonly ${JSON.stringify(memberName(value))}: SystemKeyword<Key, ${JSON.stringify(value)}>;`
+          );
+        })
+        .join('\n') +
+      '\n}',
+  );
+}
 for (const property of properties) {
   const name = property.name;
   const type = checker.getTypeOfSymbolAtLocation(property, property.valueDeclaration);
-  const values = [
-    ...new Set(
-      (type.isUnion() ? type.types : [type])
-        .filter((type) => type.flags & ts.TypeFlags.StringLiteral)
-        .map((type) => type.value),
-    ),
-  ].sort();
+  const values = literalValues(type);
   const color = values.includes('red') && values.includes('blue');
   if (color) colorNames.push(name);
   const members = {};
   for (const value of values) {
-    members[value] = value;
-    const alias =
-      value === 'currentcolor'
-        ? 'currentColor'
-        : value.replace(/-([a-z])/g, (_match, letter) => letter.toUpperCase());
-    if (alias !== value && /^\w+$/.test(alias)) members[alias] = value;
+    const member = memberName(value);
+    assert(
+      !members[member] || members[member].toLowerCase() === value.toLowerCase(),
+      `Keyword member collision: ${name}.${member}`,
+    );
+    members[member] = value;
   }
-  const fields = Object.entries(members)
-    .map(
-      ([key, value]) =>
-        jsdoc(keywordDoc(name, value, color)) +
-        `readonly ${JSON.stringify(key)}: SystemKeyword<Key, ${JSON.stringify(value)}>;`,
-    )
+  const common = commonGroups.filter((group) =>
+    group.values.every((value) => values.includes(value)),
+  );
+  const shared = new Set(common.flatMap((group) => group.values));
+  const fields = Object.values(members)
+    .filter((value) => !shared.has(value))
+    .map((value) => field(name, value, color))
     .join('\n');
-  const signature = JSON.stringify(members) + fields;
-  let index = sets.findIndex((set) => set.signature === signature);
-  if (index < 0) {
-    index = sets.length;
-    sets.push({ signature, members });
-    interfaces.push(`interface KeywordSet${index}<Key extends PropertyName> {\n${fields}\n}`);
-  }
+  const typeName = name[0].toUpperCase() + name.slice(1) + 'Keywords';
+  interfaces.push(
+    `export interface ${typeName}<Key extends PropertyName>` +
+      (common.length ? ' extends ' + common.map((group) => `${group.name}<Key>`).join(', ') : '') +
+      ` {\n${fields}\n}`,
+  );
   const comment = jsdoc(description(name));
   slotLines.push(comment + `declare readonly ${name}: {};`);
-  propertyLines.push(comment + `readonly ${name}?: PropertyValue<${JSON.stringify(name)}, T>;`);
-  viewLines.push(comment + `readonly ${name}: KeywordSet${index}<${JSON.stringify(name)}>;`);
+  groups
+    .get(propertyGroup(name, svg, obsolete))
+    .push(comment + `readonly ${name}?: PropertyValue<${JSON.stringify(name)}, T>;`);
+  viewLines.push(comment + `readonly ${name}: ${typeName}<${JSON.stringify(name)}>;`);
   const runtimeSignature = JSON.stringify(members);
   let runtimeIndex = runtimeSets.findIndex((item) => JSON.stringify(item) === runtimeSignature);
   if (runtimeIndex < 0) {
@@ -165,13 +246,24 @@ for (const property of properties) {
 const outputs = {
   'system.ts':
     header +
-    `import type { PropertyName } from '../types.ts';\nimport { THEME_SOURCE, type SystemKeyword } from '../tokens.ts';\n` +
+    `import { THEME_SOURCE } from '../tokens.ts';\n` +
     `/** 系统关键字的主题扩展边界；子类在属性组中增加 _ 开头的主题成员。 */\nexport class SystemKeywords {\nreadonly [THEME_SOURCE] = true as const;\n${slotLines.join('\n')}\n}\n` +
+    `export type { SystemViews } from './keyword-views.ts';\n`,
+  'keyword-views.ts':
+    header +
+    `import type { PropertyName } from '../types.ts';\nimport type { SystemKeyword } from '../tokens.ts';\n` +
     interfaces.join('\n') +
     `\nexport interface SystemViews {\n${viewLines.join('\n')}\n}\n`,
   'properties.ts':
     header +
-    `import type { PropertyValue } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\nexport interface CssProperties<T extends SystemKeywords = SystemKeywords> {\n${propertyLines.join('\n')}\n}\n`,
+    `import type { PropertyValue } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\n` +
+    propertyGroups
+      .map(
+        ([name, label]) =>
+          `/** ${label}；泛型 T 保留系统与继承主题关键字。 */\nexport interface ${name}Properties<T extends SystemKeywords = SystemKeywords> {\n${groups.get(name).join('\n')}\n}`,
+      )
+      .join('\n') +
+    `\nexport interface CssProperties<T extends SystemKeywords = SystemKeywords> extends ${propertyGroups.map(([name]) => `${name}Properties<T>`).join(', ')} {}\n`,
   'keywords.ts':
     header +
     `const sets = ${JSON.stringify(runtimeSets)} as const;\nexport const systemValues = {\n${runtimeLines.join('\n')}\n} as const;\nexport type ColorProperty = ${colorNames.map(JSON.stringify).join(' | ')};\nexport type SystemValue<Key extends keyof typeof systemValues> = Extract<(typeof systemValues)[Key][keyof (typeof systemValues)[Key]], string>;\n`,
@@ -191,5 +283,5 @@ for (const [name, content] of Object.entries(outputs)) {
   else await writeFile(path, formatted);
 }
 console.log(
-  `Generated ${properties.length} documented properties, ${sets.length} keyword views and ${colorNames.length} color-compatible properties.`,
+  `Generated ${properties.length} properties in ${groups.size} categories, named keyword views and ${colorNames.length} color-compatible properties.`,
 );

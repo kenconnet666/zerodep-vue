@@ -42,7 +42,12 @@ try {
   const filename = resolve(root, 'types.tsx');
   const text = readFileSync(filename, 'utf8');
   const evidence = {};
-  for (const name of ['flex', 'brand']) {
+  for (const [name, token, member] of [
+    ['flex', 'css.keywords.display.', 'flex'],
+    ['brand', 'themed.keywords.color.', '_brand'],
+    ['genericBrand', 'author.keywords.color.', '_brand'],
+    ['genericFlex', 'author.keywords.display.', 'flex'],
+  ]) {
     const marker = text.indexOf(`/*hover:${name}*/`);
     assert(marker > 0, `Missing probe marker ${name}`);
     let position = marker - 1;
@@ -64,10 +69,8 @@ try {
       );
       assert(!entry.fileName.includes(process.env.ZV_FORBIDDEN_WORKSPACE));
     }
-    const token = name === 'flex' ? 'css.keywords.display.' : 'themed.keywords.color.';
     const completionPosition = text.lastIndexOf(token, position) + token.length;
     const completions = service.getCompletionsAtPosition(filename, completionPosition, {});
-    const member = name === 'flex' ? 'flex' : '_brand';
     assert(
       completions?.entries.some((entry) => entry.name === member),
       `Missing completion ${member}`,

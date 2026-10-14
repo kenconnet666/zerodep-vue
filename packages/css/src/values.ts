@@ -5,7 +5,7 @@ export const FALLBACK = Symbol.for('@zerodep-vue/css/fallback/v1');
 import { KEYWORD, isKeyword, isThemeReference } from './tokens.ts';
 import type { SystemKeyword, ThemeReference } from './tokens.ts';
 import { isAnimation } from './resource-tokens.ts';
-import type { CssAnimation } from './resource-tokens.ts';
+import type { CssAnimation, CssVariable } from './resource-tokens.ts';
 export type Scalar = string | number;
 
 /** 动态属性值。由编译器捕获表达式，读取归实际消费节点所有。 */
@@ -27,7 +27,7 @@ export function isTemplate(value: unknown): value is CssTemplate {
 }
 export function isFallback(
   value: unknown,
-): value is CssFallback<Scalar | SystemKeyword | ThemeReference> {
+): value is CssFallback<Scalar | SystemKeyword | ThemeReference | CssVariable> {
   return value !== null && typeof value === 'object' && FALLBACK in value;
 }
 
@@ -72,9 +72,9 @@ export function template(
 }
 
 /** 从首选到备选传值，输出时按 CSS 后声明优先的规则反向排列。 */
-export function firstThatWorks<const T extends Scalar | SystemKeyword | ThemeReference>(
-  ...values: readonly T[]
-): CssFallback<T> {
+export function firstThatWorks<
+  const Values extends readonly (Scalar | SystemKeyword | ThemeReference | CssVariable)[],
+>(...values: Values): CssFallback<Values[number]> {
   if (!values.length) throw new Error('firstThatWorks 至少需要一个候选值。');
   return Object.freeze({ [FALLBACK]: Object.freeze([...values]) });
 }

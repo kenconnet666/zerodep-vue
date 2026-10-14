@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import type { Ref, VNodeChild } from 'vue';
 import { _component, For } from '@zerodep-vue/tsx';
 import { css } from '@zerodep-vue/css';
-import type { Css } from '@zerodep-vue/css';
+import type { Css, CssInput, CssObject } from '@zerodep-vue/css';
 import { Field, Palette, themed } from './App';
 
 const value = ref('typed');
@@ -29,8 +29,18 @@ css({ color: brand });
 // 不同作者生成的 class 仍可直接组合。
 css(themed({ color: brand }), { padding: 4 });
 
-export function reusable<T extends Palette>(author: Css<T>) {
-  return author({ color: author.keywords.color._brand });
+export function reusable<T extends Palette>(author: Css<T>, external?: CssInput<T>) {
+  const genericBrand = author.keywords.color._brand; /*hover:genericBrand*/
+  const genericFlex = author.keywords.display.flex; /*hover:genericFlex*/
+  const named = author.create({
+    root: { color: genericBrand, display: genericFlex },
+    active: { color: author.firstThatWorks(genericBrand, 'red') },
+  });
+  const nested: CssObject<T> = {
+    ':hover': [named.active, { color: genericBrand }],
+    '@media (width < 600px)': { display: genericFlex },
+  };
+  return author(named.root, nested, external);
 }
 const List = _component(
   <T,>({ items, renderItem }: { items: readonly T[]; renderItem: (item: T) => VNodeChild }) => (

@@ -9,6 +9,8 @@ themed.global('page', {
 themed.global('invalid', { body: { padding: themed.keywords.color._brand } });
 css.createTheme(vars, { color: themed.keywords.color._brand, ':hover': { gap: bx('12px') } });
 css({ color: vars.color, gap: vars.gap, opacity: vars.opacity });
+css({ gap: css.firstThatWorks(vars.gap, '4px') });
+themed.createTheme(vars, { '@starting-style': { color: themed.keywords.color._brand } });
 // @ts-expect-error 变量成员需要精确名称。
 css.createTheme(vars, { missing: 'red' });
 // @ts-expect-error 嵌套分组也检查变量成员名。

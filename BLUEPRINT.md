@@ -166,7 +166,7 @@ BLUEPRINT.md
 5. 绑定信息随 class 的变量、数组组合和自有组件转发保留；在最终元素边界隐式解析并合并对应的内联 style。经过第三方组件边界时，由编译器先生成它能接收的常规 class/style。
 6. `For` 是有类型的 Vue 工具组件，不靠全局识别名称 `For` 改写任意 JSX。
 
-作者始终使用 `class={css(...)}`、`class={styles.root}` 或 `class={[styles.root, external]}`。`css` 和 `bx` 保留原名，不增加专用 JSX 样式属性，也不要求手写 props 展开适配。编译器的内部承载方式不成为组件使用者需要维护的 API。
+作者统一使用 `class={css(...)}`，具名样式和外部样式通过 `css(styles.root, external)` 组合。`css` 和 `bx` 保留原名，不增加专用 JSX 样式属性，也不要求手写 props 展开适配。编译器的内部承载方式不成为组件使用者需要维护的 API。
 
 直接导入 CSS/TSX 工具的文件自动启用 class 协议。普通 Vue 文件只从项目共享模块取得 class 值时，可在编译/Vite 配置中统一开启 `zerodep.css`；这只选择需要接线的文件，不改变作者 JSX。明确关闭的普通文件继续使用官方路径。增强文件需要保留 class/style 增删所需的完整 props 比较，不能让 optimize 模式漏掉隐式变量更新或分支切换清理。
 
@@ -571,7 +571,7 @@ const styles = css.create({
 
 同一状态的多个属性按 `:hover`、`:disabled` 分组，支持伪元素、组合选择器及局部条件。常用选择器提供补全，复杂关系写 `&:hover:not(:disabled)` 等正常 CSS 形式。
 
-`css(...)` 返回 class 值，`css.create(...)` 返回具名 class 集合，供作者直接写入 JSX 的 class。组合与绑定所需的描述由运行时在内部保留，不要求作者接触；创建时不要求 DOM、不立即插入样式。普通声明、条件与组合在运行时完成，不把 CSS API 变成必须静态求值的编译 DSL。
+`css(...)` 返回 class 值，`css.create(...)` 返回具名样式集合；作者通过 `class={css(styles.root, external)}` 应用。create 只负责具名组织，使用相同的运行时描述协议。组合与绑定所需的描述由运行时在内部保留，不要求作者接触；创建时不要求 DOM、不立即插入样式。普通声明、条件与组合在运行时完成，不把 CSS API 变成必须静态求值的编译 DSL。
 
 | API                                 | 用途                                                     |
 | ----------------------------------- | -------------------------------------------------------- |
@@ -688,25 +688,25 @@ css(base, appearance, disabled && disabledStyle, external);
 css(base, [size, [state, external]]);
 css(base, { padding: '12px' });
 
-<button class={[styles.root, appearance, external]} />;
+<button class={css(styles.root, appearance, external)} />;
 ```
 
-`class` 接收本库返回的 class，也支持与普通类名、条件项和嵌套数组组合。普通 CSS 声明对象通过 `css(...)` 接入；直接写在 class 里的普通对象仍是 Vue 的条件类名对象，例如 `class={{ active: enabled.value }}`。本库 class 中的样式及绑定信息在组合时保留。
+本库通过 `css(...)` 组合声明、具名样式、外部输入、普通类名、条件项和嵌套数组，最后交给 class。普通 Vue 的 class 条件对象继续保持兼容语义，但本库组件使用 `CssInput<T>`，条件类名写成 `enabled.value && 'active'` 后交给 css。本库样式及绑定信息在组合时保留。
 
 自有组件明确暴露可覆盖的目标：
 
 ```tsx
 type ButtonProps = {
-  class?: ClassValue;
+  class?: CssInput;
   style?: StyleValue;
-  iconClass?: ClassValue;
+  iconClass?: CssInput;
   children?: VNodeChild;
 };
 
 const Button = _component(({ class: className, style, iconClass, children }: ButtonProps) => {
   return (
-    <button class={[styles.root, className]} style={style}>
-      <span class={[styles.icon, iconClass]} />
+    <button class={css(styles.root, className)} style={style}>
+      <span class={css(styles.icon, iconClass)} />
       {children}
     </button>
   );
@@ -723,20 +723,20 @@ const Button = _component(({ class: className, style, iconClass, children }: But
 </Button>;
 ```
 
-`ClassValue` 是 CSS 包导出的 class 输入类型，覆盖本库返回值与 Vue 的常规 class 组合；`StyleValue` 复用 Vue 类型。根样式最后组合外部 `class`，内部目标通过 `iconClass` 等明确的 class prop 暴露；绑定随该值转发，在对应元素上自动接入。示例中的 style 只用于作者需要显式传入的内联样式，不要求作者转交或拼装 bx 变量表。覆盖规则在同一工具的内部描述层完成；不通过猜测第三方内部 class 名实现任意节点穿透。
+`CssInput<T>` 是本库组件样式输入类型，覆盖声明、结构化样式、普通类名与条件组合，并保留当前主题 T；`ClassValue` 仅供 Vue 兼容边界使用；`StyleValue` 复用 Vue 类型。根样式最后组合外部 `class`，内部目标通过 `iconClass` 等明确的 class prop 暴露；绑定随该值转发，在对应元素上自动接入。示例中的 style 只用于作者需要显式传入的内联样式，不要求作者转交或拼装 bx 变量表。覆盖规则在同一工具的内部描述层完成；不通过猜测第三方内部 class 名实现任意节点穿透。
 
 组合采用以下确定规则：
 
 - 组合项 `false/null/undefined` 跳过。
-- 属性 `undefined` 表示不提供；属性 `null` 表示清除先前该属性的声明组。
-- 同一目标、同一属性按完整声明组后者覆盖前者；默认值和各条件中的同名属性一起组成该组。
-- 后项只写 hover 颜色，也会替换此前这个目标的完整颜色组；它不是“只修补旧 hover”的隐式操作。
+- 属性 `undefined` 表示不提供；属性 `null` 只清除同一选择器、条件路径与属性的先前声明。
+- 后项添加新声明；只有相同选择器、相同条件路径中的同名属性被后项覆盖。默认值、hover、disabled、媒体条件分别保留。
+- 后项只写 hover 颜色时，默认颜色、其他状态及 hover 内的其他属性继续保留；不提供整组替换模式。
 - 根元素、伪元素和不同后代目标分开合并；根 color 覆盖不自动删掉 before 的 color。
 - 中间结果保留清除标记和顺序，使 `css(css(a, b), c)` 与 `css(a, b, c)` 等价。
 - 简写/长写按应用顺序处理。先覆盖 border 再补 borderColor，与相反顺序可以不同；逻辑属性和物理属性不能靠不完整的手写展开表随意合并。
 - 普通外部 class 内部的规则不可被结构化重排，继续由浏览器层叠。
 
-完整属性组替换可避免组件默认 hover 意外重新盖过使用方颜色。完整属性组替换与局部条件修补必须有不同且清楚的语义，不并列多套含义相近的 merge 函数。
+组合使用一种声明位置语义，不增加 merge/patch 模式。后项根颜色不会删除已有 hover；组件需要覆盖状态时显式提供相同状态。嵌套条件可复用结构化样式及条件数组，普通类名不能重新限定到嵌套选择器。
 
 ### 7.3 class 的隐式内联 style 与第三方边界
 
@@ -744,7 +744,7 @@ const Button = _component(({ class: className, style, iconClass, children }: But
 
 ```tsx
 <button
-  class={[styles.root, override, 'analytics-target', active && 'is-active']}
+  class={css(styles.root, override, 'analytics-target', active && 'is-active')}
   style={{ minWidth: '120px' }}
 />
 ```
@@ -923,7 +923,7 @@ return <div class={css({ width: bx(width.value) })} />;
 | 1 普通 TSX 替换      | 建自己的 Babel/Vite 接入入口；继承选项、指令、slots、class/style；先做 Naive 全生产 TSX 转换      | 无增强的旧工程可替换；Naive 源码转换和产物消费成功；转换命中可核实                                             |
 | 2 组件与类型         | 实现 `_component` setup/render、props 元数据、集中默认值、参数别名/rest、回调与 children 桥接     | 初始化/更新、泛型与回调类型，以及默认触发、Boolean、实例隔离、撤去输入、函数默认值和类型收窄通过；旧基线不退化 |
 | 3 状态与 TSX 混用    | Vue Ref、toRef/toRefs、可写 computed、`For`、v-model/ref/expose；双向嵌套与 Naive 共享状态        | 字段双向读写与根对象替换，以及固定混用清单的 slots、provider、事件和清理通过                                   |
-| 4 CSS 声明与覆盖     | class 返回、系统关键字、基础泛型类型、隐式 style 接线、组合/属性组/删除、伪类条件与规则宿主       | 普通 class 不变；属性和系统关键字补全、元数据转发、style 合并、缓存及生命周期通过                              |
+| 4 CSS 声明与覆盖     | class 返回、系统关键字、基础泛型类型、隐式 style 接线、声明位置组合/删除、伪类条件与规则宿主      | 普通 class 不变；属性和系统关键字补全、元数据转发、style 合并、缓存及生命周期通过                              |
 | 5 bx 与动态恢复      | 捕获、多变量、别名、条件/回调作用域、CSS-wide keyword、变量撤销与恢复                             | 每类作用域和关键字回归通过；没有重复求值、失效订阅或无界规则增长                                               |
 | 6 CSS 完整工具       | 继承主题、泛型 T 与运行时来源、变量、keyframes、降级值、global、类型和中文说明                    | 主题扩展及切换、属性组约束、SSR 隔离、声明消费中的补全/hover 注释与资源释放通过                                |
 | 7 工程与最终兼容验收 | 完成 HMR、SSR/hydrate、source map、生产/开发、打包后消费；全量 Naive 与混用回归                   | 第 8.5 节全部达成，并保存输入版本、日志、文件命中和交互证据                                                    |
@@ -937,7 +937,7 @@ return <div class={css({ width: bx(width.value) })} />;
 2. props 类型提取；默认值的缺省/undefined/null 区分、Boolean、对象/数组/Ref 实例隔离、函数默认值、撤去输入与类型收窄；rest 删除和父级替换 Ref。
 3. children/default slot 的读取时机、具名内容 prop 与旧 slots 混用、单根自动 attrs 与显式转发，以及对象/函数 ref。
 4. CSS class 在变量/数组/spread、自有组件和第三方边界中的元数据保留；隐式 style 合并、单次求值、绑定实例隔离与类型补全。
-5. CSS 属性组覆盖、简写/长写、层叠顺序、系统关键字分支和样式释放。
+5. CSS 声明位置覆盖、条件保留、简写/长写、层叠顺序、系统关键字分支和样式释放。
 6. 主题继承、泛型 T 推断与显式入口、运行时主题来源、嵌套属性补全，以及源码/发布声明中的 JSDoc 和负向类型用例。
 7. Naive 全源码转换命中与消费产物路径，排除预编译依赖造成的假通过。
 

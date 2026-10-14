@@ -54,4 +54,8 @@ class DarkTheme extends AppTheme {
 
 嵌套区域可以用 Vue provide/inject 传递实际主题 Ref，再用 computed 选择当前覆盖或父级来源，最后交给 createCss。这样未覆盖区域跟随父主题，覆盖区域保持独立；Teleport 仍使用逻辑组件树中的来源。若 prop 中的 Ref 本身也可能被替换，在 computed 中读取该 prop 的 .value，可同时跟随容器替换和值更新，无需新增主题组件协议。
 
-属性、系统关键字和主题成员提供 JSDoc。当前数据生成覆盖 857 个属性，包含 72 个可接收单一颜色的属性位置；源码和生成文件由固定依赖复现，说明与许可来源见 CSS 包的 THIRD_PARTY_NOTICES.md。
+属性、系统关键字和主题成员提供 JSDoc。T 以 SystemKeywords 为基础，KeywordView<T> 合并系统视图与 T 的继承主题成员；`T extends AppTheme` 的共享函数也保留系统关键字、主题成员及成员注释。对象、具名样式、嵌套条件和组件外部 `CssInput<T>` 都使用同一 T，默认系统作者仍拒绝未声明的主题引用。
+
+当前生成器覆盖 857 个属性，按布局、尺寸、间距、排版等 14 类组织类型与 @category 文档；厂商和历史属性独立归入兼容类，作者对象仍然使用标准 camelCase 属性。关键字类型使用 DisplayKeywords 等语义命名，共享 CSS-wide、命名颜色和系统颜色定义。成员使用 inlineFlex、currentColor、revertLayer 等规范化拼写，不重复提供连字符别名；原生 CSS 字符串继续接受原始拼写。72 个单色兼容属性仍由固定类型数据生成。
+
+属性文档提供中文用途、常用值、规范初始值与对象 API 示例。旧链式示例不进入新声明。源码和生成文件由固定依赖复现，说明与许可来源见 CSS 包的 THIRD_PARTY_NOTICES.md。发布声明中的泛型、成员补全详情及定义跳转由独立包消费者在远程验证。

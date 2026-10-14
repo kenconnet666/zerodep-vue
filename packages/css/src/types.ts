@@ -29,8 +29,11 @@ export type PropertyValue<Key extends PropertyName, T extends SystemKeywords = S
   | CssTemplate
   | CssFallback<Exclude<InputValue<Key, T>, undefined>>;
 
-type Conditions =
+/** 常用伪类保留补全，函数伪类、属性选择器与条件在各作者入口共用。 */
+export type CssCondition =
   | CSS.Pseudos
+  | `${CSS.AdvancedPseudos}(${string})`
+  | `[${string}]`
   | `&${string}`
   | `@media ${string}`
   | `@supports ${string}`
@@ -38,7 +41,7 @@ type Conditions =
   | '@starting-style';
 /** 按状态组织 CSS；普通属性使用 csstype 的属性类型与编辑器说明。 */
 export type CssObject<T extends SystemKeywords = SystemKeywords> = CssProperties<T> & {
-  readonly [Key in Conditions]?: CssObject<T>;
+  readonly [Key in CssCondition]?: CssNestedInput<T>;
 } & {
   readonly [Key in `--${string}`]?:
     | Scalar
@@ -50,6 +53,10 @@ export type CssObject<T extends SystemKeywords = SystemKeywords> = CssProperties
     | null
     | undefined;
 };
+
+/** 嵌套复用仍携带 T；普通类名不具备可重新限定的声明，不进入嵌套条件。 */
+export type CssNestedInput<T extends SystemKeywords = SystemKeywords> =
+  CssObject<T> | CssClass | false | 0 | null | undefined | readonly CssNestedInput<T>[];
 
 export interface Declaration {
   readonly selector: string;
@@ -63,7 +70,7 @@ export interface Declaration {
     | CssVariable
     | CssAnimation
     | CssTemplate
-    | CssFallback<Scalar | SystemKeyword | ThemeReference>
+    | CssFallback<Scalar | SystemKeyword | ThemeReference | CssVariable>
     | null;
 }
 export interface StyleSource {
@@ -77,7 +84,7 @@ export interface CssClass {
 }
 export type CssInput<T extends SystemKeywords = SystemKeywords> =
   CssObject<T> | CssClass | string | false | 0 | null | undefined | readonly CssInput<T>[];
-/** 与 Vue 的 class 字符串、条件对象及数组组合共用一个 JSX 入口。 */
+/** Vue 兼容边界使用；本库组件的外部样式输入使用 CssInput<T> 并经 css() 组合。 */
 export type ClassValue =
   | CssClass
   | string

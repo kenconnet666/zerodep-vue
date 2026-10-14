@@ -38,10 +38,14 @@ const styles = css.create({
   compact: { padding: '4px 8px' },
 });
 
-<button class={[styles.base, compact.value && styles.compact, css({ color: 'black' })]} />;
+<button class={css(styles.base, compact.value && styles.compact, { color: 'black' })} />;
 ```
 
-同一目标的同名属性作为完整声明组被后项替换，因此这里 color 的默认值和 hover 都被覆盖。伪元素和后代目标独立组合。属性 undefined 不提供声明，null 清除前项的声明组；条件组合中的空值、false、0 跳过。中间组合保留清除信息，嵌套组合与直接组合结果一致。
+按选择器、条件路径与属性识别重复声明：后项添加新声明，只覆盖同一位置的重复属性。因此这里默认 color 变为 black，hover 的 blue 继续保留。后项只写 hover 颜色时，也会保留默认颜色和其他状态。媒体条件、伪元素及后代选择器分别组合。属性 undefined 不提供覆盖，null 只清除当前位置的前项属性；组合中的空值、false、0 跳过。中间组合保留清除信息，嵌套组合与直接组合结果一致。
+
+本库样式统一使用 `class={css(...)}`。`css.create` 批量定义具名样式，它的成员与 css 的结果使用相同协议，不是另一套静态编译模式。组件外部样式声明为 `CssInput<T>`，保持与当前作者相同的泛型 T，再通过 `css(styles.root, external)` 组合；`ClassValue` 只用于 Vue 兼容边界。普通类名可写为 `enabled && 'active'`，条件类名对象不作为 CSS 声明输入。
+
+嵌套条件支持复用结构化样式和条件数组，如 `css({ ':hover': [styles.emphasis, enabled && { opacity: 0.8 }] })`。复用时选择器相对当前条件展开，主题与 bx 保留消费时求值。包含普通类名的样式不能用于嵌套条件，因为库无法重写外部类名的规则；此时给出明确错误。函数伪类、属性选择器与 `@starting-style` 使用相同条件类型。
 
 同一条件中的简写与长写保留声明顺序，具体值解释、逻辑方向和浏览器层叠使用 CSS 本身的规则。普通外部类名不被反向解析。`css.firstThatWorks(首选, 备选)` 按正确的降级声明顺序输出。数值长度补 px，unitless 属性和自定义变量保留数字。
 
@@ -76,7 +80,7 @@ const dark = css.createTheme(vars, {
   ':hover': { color: 'white' },
 });
 const base = css({ color: vars.color, gap: vars.gap });
-<button class={[base, dark]}>保存</button>;
+<button class={css(base, dark)}>保存</button>;
 ```
 
 命名空间是组件库或应用中的稳定名称，同一命名空间和成员对应同一 CSS 变量。引用自带默认值，只有覆盖 class 实际被消费时才登记覆盖规则。变量遵循原生 CSS 继承；Teleport 的 DOM 移动不自动继承原 DOM 祖先变量，弹层需要将相同覆盖 class 应用于其容器，或直接使用保留 Vue 逻辑来源的继承主题引用。自定义变量的数字不补 px，长度应写 `'8px'`。

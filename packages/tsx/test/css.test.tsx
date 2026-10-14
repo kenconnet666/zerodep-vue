@@ -16,7 +16,7 @@ import type { Ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { _component } from '@zerodep-vue/tsx';
 import { bx, css, createCss, createCssHost, getCssHost, SystemKeywords } from '@zerodep-vue/css';
-import type { ClassValue } from '@zerodep-vue/css';
+import type { CssInput } from '@zerodep-vue/css';
 
 const mounted: VueWrapper[] = [];
 const containers: HTMLElement[] = [];
@@ -135,10 +135,10 @@ test('multiple bx variables and aliases retain one style declaration across inst
   expect(containers.at(-1)!.childElementCount).toBe(1);
 });
 
-test('owned components compose class groups and transfer bindings without metadata leaks', async () => {
+test('owned components compose through css, retain states and transfer bindings without metadata leaks', async () => {
   const width = ref('120px');
-  const Base = _component(({ class: external }: { class?: ClassValue }) => (
-    <button class={[css({ color: 'red', ':hover': { color: 'blue' } }), external]}>owned</button>
+  const Base = _component(({ class: external }: { class?: CssInput }) => (
+    <button class={css({ color: 'red', ':hover': { color: 'blue' } }, external)}>owned</button>
   ));
   const Wrapper = _component(() => <Base />);
   const App = _component(() => (
@@ -152,7 +152,7 @@ test('owned components compose class groups and transfer bindings without metada
   expect(wrapper.html()).not.toContain('[object Object]');
   expect(host.stats().ownedReferences).toBe(1);
   expect(containers.at(-1)!.textContent).not.toContain('color:red');
-  expect(containers.at(-1)!.textContent).not.toContain('color:blue');
+  expect(containers.at(-1)!.textContent).toContain('color:blue');
   expect(containers.at(-1)!.textContent).toContain('color:black');
   width.value = '240px';
   await nextTick();

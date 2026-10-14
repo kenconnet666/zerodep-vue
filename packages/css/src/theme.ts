@@ -23,10 +23,13 @@ export type KeywordView<T extends SystemKeywords> = {
   readonly [Key in keyof SystemViews]: SystemViews[Key] & ThemeMembers<T[Key], Key>;
 };
 export interface Css<T extends SystemKeywords = SystemKeywords> {
+  /** 声明或组合样式，统一用于 class；同一选择器/条件/属性后项覆盖，空条件项忽略。 */
   (...inputs: readonly CssInput<T>[]): CssClass;
+  /** 批量定义具名样式；成员与 css() 的结果使用相同协议，消费时仍经 css() 组合。 */
   create<const Name extends string>(
     styles: Record<Name, CssInput<T>>,
   ): { readonly [Key in Name]: CssClass };
+  /** 系统值与 T 继承的主题成员共用视图；主题引用在消费时读取实际来源。 */
   readonly keywords: KeywordView<T>;
   readonly firstThatWorks: typeof firstThatWorks;
   /** 声明稳定命名空间的变量组；长度默认值应明确写单位。 */

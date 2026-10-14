@@ -4,7 +4,7 @@ import { css, create } from '../src/core.ts';
 import { resolveClass } from '../src/resolve.ts';
 import { binding, firstThatWorks, template } from '../src/values.ts';
 
-test('same-property groups replace defaults and conditions while targets stay separate', () => {
+test('later declarations replace only the same selector, condition and property', () => {
   const base = css({
     color: 'red',
     ':hover': { color: 'blue', opacity: 0.8 },
@@ -13,11 +13,56 @@ test('same-property groups replace defaults and conditions while targets stay se
   });
   const result = resolveClass(css(base, { color: 'black' }));
   assert(!result.cssText.includes('color:red'));
-  assert(!result.cssText.includes('color:blue'));
+  assert(result.cssText.includes('color:blue'));
   assert(result.cssText.includes('opacity:0.8'));
   assert(result.cssText.includes('color:green'));
   assert(result.cssText.includes('color:purple'));
   assert(result.cssText.includes('color:black'));
+});
+
+test('partial states and media declarations preserve unrelated values and clear only their own path', () => {
+  const base = css({
+    color: 'red',
+    ':hover': { color: 'blue', opacity: 0.8 },
+    ':disabled': { color: 'gray' },
+    '@media (width < 600px)': { color: 'orange' },
+  });
+  const patched = resolveClass(css(base, { ':hover': { color: 'green' }, margin: 4 }));
+  for (const value of [
+    'color:red',
+    'color:green',
+    'opacity:0.8',
+    'color:gray',
+    'color:orange',
+    'margin:4px',
+  ])
+    assert(patched.cssText.includes(value), patched.cssText);
+  assert(!patched.cssText.includes('color:blue'));
+  const removed = css({ ':hover': { color: null } });
+  const cleared = resolveClass(css(base, removed));
+  assert(!cleared.cssText.includes('color:blue'));
+  assert(cleared.cssText.includes('color:red'));
+  assert.deepEqual(
+    resolveClass(css(css(base, removed), { padding: 2 })),
+    resolveClass(css(base, removed, { padding: 2 })),
+  );
+  const reordered = resolveClass(css({ marginTop: 1, margin: 2 }, { marginTop: 3 }));
+  assert(reordered.cssText.includes('margin:2px;margin-top:3px;'));
+});
+
+test('nested reusable styles rebase selectors and bindings without accepting opaque class names', () => {
+  const styles = create({
+    emphasis: { color: 'red', '& > span': { opacity: binding(() => 0.5) } },
+  });
+  const result = resolveClass(css({ ':hover': [false, styles.emphasis, { color: 'green' }] }));
+  assert(result.cssText.includes(':hover{color:green;}'));
+  assert(result.cssText.includes(':hover > span'));
+  assert.deepEqual(Object.values(result.variables), ['0.5']);
+  const media = resolveClass(css({ '@media (width > 600px)': styles.emphasis }));
+  assert(media.cssText.includes('@media (width > 600px)'));
+  assert.throws(() => css({ ':hover': css('external') }), /普通类名/);
+  assert.throws(() => css({ ':hover': binding(() => 'red') }), /属性值/);
+  assert.throws(() => css(true), /css 需要/);
 });
 
 test('composition retains clear markers, skips undefined and is associative', () => {

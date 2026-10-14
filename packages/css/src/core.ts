@@ -12,10 +12,43 @@ export function declarations(
 ): readonly Declaration[] {
   const result: Declaration[] = [];
   const active = new Set<object>();
-  const visit = (style: object, context: SelectorContext) => {
+  const visit = (style: unknown, context: SelectorContext) => {
+    if (style == null || style === false || style === 0) return;
+    if (typeof style !== 'object')
+      throw new Error('嵌套条件只接受 CSS 声明或结构化样式，不能接收普通类名。');
     if (active.has(style)) throw new Error('CSS 声明包含循环对象。');
     active.add(style);
     try {
+      if (Array.isArray(style)) {
+        for (const item of style) visit(item, context);
+        return;
+      }
+      if (isCssClass(style)) {
+        for (const part of style[CLASS]) {
+          if (typeof part === 'string')
+            throw new Error('嵌套样式不能包含普通类名；其选择器无法重新限定。');
+          for (const entry of part.declarations)
+            for (const selected of selectors(context, entry.selector))
+              result.push(
+                Object.freeze({
+                  ...entry,
+                  ...selected,
+                  conditions: [...context.conditions, ...entry.conditions],
+                }),
+              );
+        }
+        return;
+      }
+      if (
+        isKeyword(style) ||
+        isThemeReference(style) ||
+        isBinding(style) ||
+        isVariable(style) ||
+        isAnimation(style) ||
+        isTemplate(style) ||
+        isFallback(style)
+      )
+        throw new Error('CSS 属性值不能作为嵌套声明对象。');
       for (const [property, input] of Object.entries(style)) {
         const value = isKeyword(input) ? input[KEYWORD].value : input;
         if (value === undefined) continue;
@@ -23,10 +56,8 @@ export function declarations(
           if (!/^@(media|supports|container)\s+\S|^@starting-style$/.test(property))
             throw new Error(`不支持的局部条件：${property}`);
           validateFragment(property);
-          if (!value || typeof value !== 'object') throw new Error(`${property} 需要 CSS 对象。`);
           visit(value, { ...context, conditions: [...context.conditions, property] });
         } else if (property.startsWith(':') || property.includes('&') || property.startsWith('[')) {
-          if (!value || typeof value !== 'object') throw new Error(`${property} 需要 CSS 对象。`);
           for (const selected of selectors(context, property)) visit(value, selected);
         } else {
           if (!/^(?:--[\w-]+|[a-zA-Z][\w-]*)$/.test(property))
@@ -109,34 +140,27 @@ export function create<const Name extends string>(
   ) as { readonly [Key in Name]: CssClass };
 }
 
-/** 后项替换同一目标/属性的完整声明组；保留清除标记的来源，保证组合可结合。 */
+/** 只覆盖同一选择器、条件路径与属性；其他状态继续保留，null 只清除当前位置。 */
 export function compose(parts: readonly ClassPart[]): {
   declarations: Declaration[];
   classes: string[];
 } {
-  const groups = new Map<string, { entry: Declaration; order: number }[]>();
+  const entries = new Map<string, Declaration>();
   const classes: string[] = [];
-  let order = 0;
   for (const part of parts) {
     if (typeof part === 'string') {
       classes.push(part);
       continue;
     }
-    const current = new Map<string, { entry: Declaration; order: number }[]>();
     for (const entry of part.declarations) {
-      const key = JSON.stringify([entry.target, entry.property]);
-      let values = current.get(key);
-      if (!values) current.set(key, (values = []));
-      if (entry.value !== null) values.push({ entry, order });
-      order++;
+      const key = JSON.stringify([entry.selector, entry.conditions, entry.property]);
+      // 覆盖后移到最后，避免旧键的位置让后写长属性被先前的简写重新覆盖。
+      entries.delete(key);
+      if (entry.value !== null) entries.set(key, entry);
     }
-    for (const [key, values] of current) groups.set(key, values);
   }
   return {
-    declarations: [...groups.values()]
-      .flat()
-      .sort((a, b) => a.order - b.order)
-      .map(({ entry }) => entry),
+    declarations: [...entries.values()],
     classes,
   };
 }
