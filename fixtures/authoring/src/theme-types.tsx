@@ -1,6 +1,6 @@
 import { SystemKeywords, createCssContext, cx, bx } from '@zerodep-vue/core';
 import type { Css, CssInput } from '@zerodep-vue/core';
-import { shallowRef } from 'vue';
+import { shallowRef, ref } from 'vue';
 const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
@@ -47,13 +47,22 @@ useCss<AppTheme>();
 // @ts-expect-error 区域覆盖必须保持相同主题约定。
 appTheme.provideTheme(new SystemKeywords());
 // @ts-expect-error 系统基类的映射没有业务主题名。
-createCssContext(new SystemKeywords()).useTheme().value.color._brand;
+createCssContext(new SystemKeywords()).useTheme().color._brand;
 // @ts-expect-error 成员名不能被任意索引吞掉。
-theme.value.color._missing;
+theme.color._missing;
 // @ts-expect-error 封闭属性仍按目标属性的真实值域检查。
 s.boxSizing('flex');
-// @ts-expect-error 映射入口不能替换来源；切换由 source 的拥有者负责。
-theme.value = new AppTheme();
+// @ts-expect-error 已知对象直接访问成员，不再提供 Ref 的 .value 入口。
+theme.value;
+
+class RefTheme extends SystemKeywords {
+  override readonly color = { _brand: ref('red') };
+}
+const reactiveTheme = createCssContext(new RefTheme()).useTheme();
+export const unwrappedBrand: string = reactiveTheme.color._brand;
+reactiveTheme.color._brand = 'blue';
+// @ts-expect-error reactive 已解包对象中的 Ref 成员。
+reactiveTheme.color._brand.value;
 
 class InvalidTheme extends SystemKeywords {
   override readonly color = { brand: 'red' };

@@ -6,8 +6,9 @@
 - packages/compiler 保留官方 Vue JSX v3.0.0 的真实源码 fork 和对照测试；实现状态与远程证据见 docs/progress.md，不能把蓝图中的未完成 API 写成已实现。
 - 状态直接使用 Vue API。CSS 作者入口为 class，编译器负责 bx 的隐式 style 接线，不新增独立 JSX 样式属性。
 - CSS 采用运行时处理加辅助编译：系统值使用原生字面量，主题通过继承增加，泛型 T 贯穿作者入口、链式样式和主题映射。
-- 组件统一写 `const s = useCss()`；应用主题模块从 `createCssContext(source)` 直接解构导出 `useCss`、`provideTheme` 和 `useTheme`。core 不导出默认 hooks 或创建默认上下文。系统值和主题名使用字面量自动补全，例如 `.display('inline-flex').backgroundColor('_brand')`；不提供 keywords 对象视图。`useTheme()` 返回当前区域原始主题的只读 Ref 入口，映射值用于动态样式时显式使用 bx；cx 只负责有序组合。
+- 组件统一写 `const s = useCss()`；应用主题模块从 `createCssContext(source)` 直接解构导出 `useCss`、`provideTheme` 和 `useTheme`。core 不导出默认 hooks 或创建默认上下文。系统值和主题名使用字面量自动补全，例如 `.display('inline-flex').backgroundColor('_brand')`；不提供 keywords 对象视图。`useTheme()` 返回当前区域的 reactive 对象，直接使用 `theme.color._brand`，嵌套 Ref 按 Vue 规则解包；可替换的来源 Ref 继续支持。映射值用于动态样式时显式使用 bx；cx 只负责有序组合。
 - 属性、系统/主题关键字需有准确补全和有用的中文 JSDoc；参考老项目的说明与生成方式，适配不可变链式 API，并验证发布声明不丢失类型或注释。
+- CSS 属性注释使用 `@default:'值'` 表达规范初始值、`@extend:'是/否'` 表达 CSS 继承性，保留“常用值：”及反引号列表，不生成 @example。缺少元数据时说明缺项，不猜初始值或继承标记。
 - 新源码遵循 TypeScript 和 Vue 的正常语义；中文注释解释边界、所有权和非显然的处理。
 - 以人工可读和可维护为重：作者类型与运行时值分清职责；同一判别值的多分支适当使用 switch，类型守卫和二选一保留 if。优先消除重复策略和深层嵌套，不为了拆分增加文件或转发跳转。需要改变公共 API 时先给出具体取舍讨论。
 - UI 子项目位于 packages/ui，组件与交互自行实现；直接使用 Zod 4，不提供其他校验库兼容层。第三方依赖是显式 peer，不从 UI 重导出；图标使用 @lucide/icons 数据，自有组件负责渲染。当前建立基础工程，具体组件仍按后续授权实施。

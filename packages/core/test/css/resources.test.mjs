@@ -56,7 +56,7 @@ test('plain custom properties share dynamic and inherited theme resolution', () 
   const style = themed
     .variable(
       '--card-accent',
-      binding(() => theme.value.color._brand),
+      binding(() => theme.color._brand),
     )
     .variable(
       '--card-padding',

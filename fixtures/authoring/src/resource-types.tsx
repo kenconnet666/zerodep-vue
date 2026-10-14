@@ -13,7 +13,7 @@ globalCss('invalid', { body: themed.padding('_brand') });
 themed.color('_brand').select(':hover', themed.gap(bx('12px')));
 themed.select('@starting-style', themed.color('_brand'));
 s.variable('--control-gap', bx('12px')).gap('var(--control-gap, 8px)');
-themed.variable('--brand', bx(theme.value.color._brand));
+themed.variable('--brand', bx(theme.color._brand));
 const fade = keyframes({
   from: themed.opacity(bx(0)).color('_brand'),
   '50%, to': s.opacity(1),

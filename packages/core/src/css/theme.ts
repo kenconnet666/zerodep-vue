@@ -1,5 +1,13 @@
-import { isRef, unref, toRef, hasInjectionContext, getCurrentInstance, inject, provide } from 'vue';
-import type { Ref, InjectionKey } from 'vue';
+import {
+  isRef,
+  unref,
+  reactive,
+  hasInjectionContext,
+  getCurrentInstance,
+  inject,
+  provide,
+} from 'vue';
+import type { Ref, InjectionKey, UnwrapNestedRefs } from 'vue';
 import { Css } from './generated/author.ts';
 import type { SystemKeywords } from './generated/system.ts';
 import { colorProperties } from './generated/metadata.ts';
@@ -12,10 +20,10 @@ const invalidSource = 'createCssContext 需要继承 SystemKeywords 的真实主
 
 interface ThemeEntry<T extends SystemKeywords> {
   readonly author: Css<T>;
-  readonly theme: Readonly<Ref<T>>;
+  readonly theme: UnwrapNestedRefs<T>;
 }
 
-/** 一个来源共用作者与只读 Ref 入口；两者都在首次使用时创建。 */
+/** 一个来源共用作者与响应式映射；两者都在首次使用时创建。 */
 export function createCssContext<T extends SystemKeywords>(source: ThemeSource<T>): CssContext<T> {
   checkSource(source);
   const sources = new WeakMap<object, ThemeEntry<T>>();
@@ -23,21 +31,21 @@ export function createCssContext<T extends SystemKeywords>(source: ThemeSource<T
     const existing = sources.get(value);
     if (existing) return existing;
     checkSource(value);
-    const readTheme = (): T => {
+    const readTheme = (): UnwrapNestedRefs<T> => {
       const theme = unref(value);
       if (!theme || typeof theme !== 'object' || Reflect.get(theme, THEME_SOURCE) !== true)
         throw new Error(invalidSource);
-      return theme;
+      // 与公开映射共用 Vue 缓存的代理，让通过 theme 修改成员也能更新现有样式。
+      return reactive(theme);
     };
     let author: Css<T> | undefined;
-    let theme: Readonly<Ref<T>> | undefined;
+    let theme: UnwrapNestedRefs<T> | undefined;
     const entry: ThemeEntry<T> = {
       get author() {
         return (author ??= new Css<T>(themeResolver(readTheme)));
       },
       get theme() {
-        // getter Ref 不缓存主题快照，也不递归代理业务对象；只有读取 .value 才读取来源。
-        return (theme ??= toRef(readTheme));
+        return (theme ??= isRef(value) ? liveTheme(readTheme) : readTheme());
       },
     };
     sources.set(value, entry);
@@ -56,6 +64,23 @@ export function createCssContext<T extends SystemKeywords>(source: ThemeSource<T
       const author = entry.author;
       provide(key, entry);
       return author;
+    },
+  });
+}
+
+/** 可替换来源只加一层转发；成员响应性和 Ref 解包全部交给实际主题的 reactive。 */
+function liveTheme<T extends object>(read: () => T): T {
+  return new Proxy({} as T, {
+    get: (_target, key) => Reflect.get(read(), key),
+    set: (_target, key, value) => Reflect.set(read(), key, value),
+    deleteProperty: (_target, key) => Reflect.deleteProperty(read(), key),
+    has: (_target, key) => Reflect.has(read(), key),
+    ownKeys: () => Reflect.ownKeys(read()),
+    getPrototypeOf: () => Reflect.getPrototypeOf(read()),
+    getOwnPropertyDescriptor(_target, key) {
+      const descriptor = Reflect.getOwnPropertyDescriptor(read(), key);
+      // 空转发目标不拥有来源的不可配置字段，描述符必须允许下一次来源替换。
+      return descriptor && { ...descriptor, configurable: true };
     },
   });
 }

@@ -5,7 +5,8 @@ import {
   ref,
   toRef,
   isRef,
-  isReadonly,
+  isReactive,
+  toRaw,
   watchSyncEffect,
   createSSRApp,
   defineComponent,
@@ -36,9 +37,7 @@ test('theme literals resolve per property and keep shared binding reads and sour
   const style = s.color('_brand').backgroundColor('_brand');
   assert.deepEqual(Object.values(resolveClass(style).variables), ['red', 'black']);
   assert.deepEqual(
-    Object.values(
-      resolveClass(s.backgroundColor(binding(() => theme.value.color._brand))).variables,
-    ),
+    Object.values(resolveClass(s.backgroundColor(binding(() => theme.color._brand))).variables),
     ['red'],
   );
   let reads = 0;
@@ -83,8 +82,8 @@ test('typed theme hooks isolate nested providers, independent contexts and SSR r
     const mapping = theme.useTheme();
     const other = independent.useCss();
     const style = s.color('_brand');
-    assert.deepEqual(Object.values(resolveClass(style).variables), [mapping.value.color._brand]);
-    assert.equal(independent.useTheme().value.color._brand, 'red');
+    assert.deepEqual(Object.values(resolveClass(style).variables), [mapping.color._brand]);
+    assert.equal(independent.useTheme().color._brand, 'red');
     return () =>
       h(
         'span',
@@ -189,7 +188,7 @@ test('normal class inheritance retains members and invalid source definitions ar
   assert.throws(() => invalid.useCss().color('_missing'), /不能覆盖系统关键字/);
   assert.throws(() => themed.color('_missing'), /没有关键字/);
   const style = themed.color('_brand');
-  themedContext.useTheme().value.color = { _danger: 'crimson' };
+  themedContext.useTheme().color = { _danger: 'crimson' };
   assert.throws(() => resolveClass(style), /当前主题缺少 color._brand/);
 });
 
@@ -228,7 +227,7 @@ test('contexts defer unused groups and reuse provided source authors without cre
   );
   assert(authors.every((author) => author === authors[0]));
   assert(mappings.every((mapping) => mapping === mappings[0]));
-  assert.equal(mappings[0].value, source.value);
+  assert.equal(toRaw(mappings[0]), source.value);
   assert.equal(fallbackReads, 0);
   assert.equal(unusedReads, 0);
   const first = context.useCss();
@@ -238,36 +237,54 @@ test('contexts defer unused groups and reuse provided source authors without cre
   assert.equal(unusedReads, 0);
 });
 
-test('useTheme exposes the original mapping through a stable readonly Ref and tracks replacement', () => {
+test('useTheme exposes reactive objects, unwraps members and tracks replacement', () => {
   const plain = new Theme();
   const plainContext = createCssContext(plain);
   const plainMapping = plainContext.useTheme();
   assert.equal(plainMapping, plainContext.useTheme());
-  assert.equal(plainMapping.value, plain);
-  assert(isRef(plainMapping));
-  assert(isReadonly(plainMapping));
-  assert.throws(() => {
-    plainMapping.value = new Theme();
-  }, TypeError);
-  plain.color._brand = 'blue';
-  assert.equal(plainMapping.value.color._brand, 'blue');
+  assert.equal(toRaw(plainMapping), plain);
+  assert(!isRef(plainMapping));
+  assert(isReactive(plainMapping));
+  const style = plainContext.useCss().color('_brand');
+  const colors = [];
+  const stopColors = watchSyncEffect(() =>
+    colors.push(Object.values(resolveClass(style).variables)[0]),
+  );
+  try {
+    plainMapping.color._brand = 'blue';
+    assert.deepEqual(colors, ['red', 'blue']);
+    assert.equal(plain.color._brand, 'blue');
+    assert.equal(plainMapping.color._accent, 'orange');
+  } finally {
+    stopColors();
+  }
 
   const first = new Theme();
   const source = shallowRef(first);
   const context = createCssContext(source);
   const mapping = context.useTheme();
   const seen = [];
-  const stop = watchSyncEffect(() => seen.push(mapping.value.color._accent.value));
+  const stop = watchSyncEffect(() => seen.push(mapping.color._accent));
   try {
     first.color._accent.value = 'gold';
     const next = new Theme();
     next.color._accent.value = 'purple';
     source.value = next;
     first.color._accent.value = 'unused';
-    next.color._accent.value = 'green';
+    mapping.color._accent = 'green';
     assert.deepEqual(seen, ['orange', 'gold', 'purple', 'green']);
-    assert.equal(mapping.value, next);
+    assert.equal(next.color._accent.value, 'green');
+    assert.equal(toRaw(mapping), next);
     assert.equal(mapping, context.useTheme());
+    assert(isReactive(mapping));
+    assert(mapping instanceof Theme);
+    assert(Object.keys(mapping).includes('padding'));
+    mapping.padding = { _control: '2px' };
+    assert.equal(next.padding._control, '2px');
+    assert.equal(first.padding._control, '8px 12px');
+    delete mapping.padding;
+    assert(!('padding' in mapping));
+    assert(!Object.keys(mapping).includes('padding'));
   } finally {
     stop();
   }
@@ -284,7 +301,7 @@ test('theme entries defer source reads, retry invalid sources and share only cur
   const s = context.useCss();
   const mapping = context.useTheme();
   assert.equal(sourceReads, 0);
-  assert.throws(() => mapping.value, /真实主题实例/);
+  assert.throws(() => mapping.color, /真实主题实例/);
   sourceValue = new Theme();
   let reads = 0;
   Object.defineProperty(sourceValue.color, '_brand', {
@@ -299,7 +316,7 @@ test('theme entries defer source reads, retry invalid sources and share only cur
   assert.equal(reads, 1);
   resolveClass(style);
   assert.equal(reads, 2);
-  assert.equal(mapping.value, sourceValue);
+  assert.equal(toRaw(mapping), sourceValue);
   sourceValue = { color: { _brand: 'wrong' } };
   assert.throws(() => resolveClass(style), /真实主题实例/);
 });

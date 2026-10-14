@@ -18,6 +18,6 @@ export const Panel = _component(() => {
 
 属性调用返回新样式，原样式不变；可直接用于 class，cx 按顺序组合。具名样式使用普通对象。旧 css 对象作者和 cx 批量命名入口已移除。
 
-业务主题继承 SystemKeywords，由应用创建 createCssContext(实例或 Ref)，并导出带类型的 useCss/provideTheme/useTheme。属性直接写字面量，例如 .backgroundColor('_brand')；useTheme() 通过只读 Ref 入口取得当前区域的原始映射，动态映射值写 bx(theme.value.color._brand)。不再提供 keywords 对象视图。keyframes 的帧映射、globalCss 的选择器映射统一接收链式样式。bx 由 @zerodep-vue/compiler 捕获，运行时消费 class 时隐式接入 style。
+业务主题继承 SystemKeywords，由应用创建 createCssContext(实例或 Ref)，并导出带类型的 useCss/provideTheme/useTheme。属性直接写字面量，例如 .backgroundColor('_brand')；useTheme() 返回当前区域的 reactive 对象，直接读取 theme.color._brand，动态映射值写 bx(theme.color._brand)。不再提供 keywords 对象视图。keyframes 的帧映射、globalCss 的选择器映射统一接收链式样式。bx 由 @zerodep-vue/compiler 捕获，运行时消费 class 时隐式接入 style。
 
 _component 初始化一次，返回区域进入 Vue render；props 解构、默认值和共享 Ref 保持更新语义。列表使用 For 或普通 map。TypeScript 使用 jsx: 'preserve'，不设置 jsxImportSource；导入 core 自动载入增强 JSX 声明。普通 Vue 文件可以用 /** @jsxImportSource vue */ 保留原生类型。生命周期、Ref、expose、Teleport 和 Suspense 使用 Vue API。

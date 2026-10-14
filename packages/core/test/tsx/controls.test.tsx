@@ -198,7 +198,7 @@ test('fixture provider follows replaced objects and Ref containers through neste
         <span data-test="regional" class={s.color('_brand')}>
           区域
         </span>
-        <span data-test="mapping" class={s.color(bx(theme.value.color._brand))}>
+        <span data-test="mapping" class={s.color(bx(theme.color._brand))}>
           区域映射
         </span>
         <Teleport to={portal}>

@@ -64,7 +64,7 @@
 
 组件内部继续 `const s = useCss()`，这个函数来自组件库主题模块。应用 Provider 调用同一个库上下文导出的 `provideTheme`；SSR 请求值通过请求根提供，禁止修改共享模块 Ref。应用可以继承基础主题增加成员，但库内组件只依赖它所声明的基础语义。
 
-区域颜色优先写 `s.backgroundColor('_brand')`。字面量简化已移除 `keywords` 对象视图；需要当前映射时使用 `useTheme()`，动态样式通过 `bx(theme.value.color._brand)` 显式读取。提供者当前组件使用 provideTheme 返回的作者和自己提供的来源，子树 hooks 读取最近祖先的来源。
+区域颜色优先写 `s.backgroundColor('_brand')`。字面量简化已移除 `keywords` 对象视图；需要当前映射时使用 `useTheme()`，动态样式通过 `bx(theme.color._brand)` 显式读取。提供者当前组件使用 provideTheme 返回的作者和自己提供的来源，子树 hooks 读取最近祖先的来源。
 
 ### 2. 明确表单组件的主要消费方式
 

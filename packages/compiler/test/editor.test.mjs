@@ -11,7 +11,15 @@ const init = createRequire(import.meta.url)(
   ts.resolveJSModule('@zerodep-vue/compiler/src/editor/plugin.cjs', root, ts.sys),
 );
 
-test('theme literal documentation survives the emitted author declarations', () => {
+function checkPropertyTags(info, initial, inherited) {
+  const tag = (name) =>
+    ts.displayPartsToString(info?.tags?.find((item) => item.name === name)?.text);
+  assert.match(tag('default'), initial);
+  assert.equal(tag('extend'), `:'${inherited ? '是' : '否'}'`);
+  assert(!info.tags.some((item) => item.name === 'example'));
+}
+
+test('CSS metadata and theme literal documentation survive emitted declarations', () => {
   const configPath = resolve(root, 'fixtures/authoring/tsconfig.json');
   const config = ts.readConfigFile(configPath, ts.sys.readFile);
   const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, dirname(configPath));
@@ -78,6 +86,18 @@ test('theme literal documentation survives the emitted author declarations', () 
   });
   try {
     const text = ts.sys.readFile(filename);
+    const font = service.getQuickInfoAtPosition(filename, text.indexOf(".font('inherit')") + 2);
+    checkPropertyTags(font, /font-size: medium.*font-family: 由浏览器决定/, true);
+    const fill = service.getQuickInfoAtPosition(
+      filename,
+      text.indexOf(".animationFillMode('forwards')") + 2,
+    );
+    checkPropertyTags(fill, /^:'none'$/, false);
+    assert.match(
+      ts.displayPartsToString(fill.documentation),
+      /常用值：`none`、`forwards`、`backwards`、`both`/,
+    );
+    for (const value of emitted.values()) assert(!value.includes('@example'));
     const position = text.lastIndexOf("'_brand'", text.indexOf('// literal:themeBrand')) + 2;
     const hover = service.getQuickInfoAtPosition(filename, position);
     assert.match(ts.displayPartsToString(hover?.documentation), /消费应用的强调色/);
@@ -195,11 +215,8 @@ s.boxSizing('not-a-box-model' as const);
     );
     const fontMethod = source.indexOf(".font('inherit')") + 2;
     const fontInfo = enhanced.getQuickInfoAtPosition(filename, fontMethod);
-    const fontDocs = ts.displayPartsToString(fontInfo.documentation);
-    assert(
-      fontDocs.includes('font-size: medium') && fontDocs.includes('font-family: 由浏览器决定'),
-    );
-    assert(fontDocs.includes('是否继承：是'));
+    checkPropertyTags(fontInfo, /font-size: medium.*font-family: 由浏览器决定/, true);
+    assert(ts.displayPartsToString(fontInfo.documentation).includes('常用值：'));
     assert(!ts.displayPartsToString(fontInfo.displayParts).includes('CheckedPropertyValue'));
     for (const [marker, value] of Object.entries({
       font: 'inherit',

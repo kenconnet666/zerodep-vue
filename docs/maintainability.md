@@ -9,7 +9,7 @@
 - 移除 keyword-views.ts、keywords.ts、仅供旧字典使用的 lazy 工具及对应专属测试，不保留兼容包装。生成器不再生成 camelCase 成员、系统引用或共享字典索引。
 - 原生属性输入汇总命名为 PropertyValues；保留 literal-values.ts 的中文说明、原生值域和编辑器导航。metadata.ts 只保存共享 color 组适用的属性。
 - theme.ts 在同一文件内直接查找主题组，保留目标属性优先、共享颜色回退、按需验证和引用身份复用。useCss/useTheme 共用注入记录；来源 WeakMap 不缓存当前主题值。
-- useTheme 返回原始主题的 Readonly<Ref<T>>，首次读取 .value 才访问来源；不增加深层代理或隐式解包规则。需要持续读取映射值时使用 Vue computed 或 CSS bx。
+- 用户追加确认已知对象使用 reactive：useTheme 返回 UnwrapNestedRefs<T>，直接读取 theme.color._brand；普通实例复用 Vue 代理，Ref 来源仅增加单层转发以保持整体替换。解包和成员更新遵循 Vue 规则，动态样式用 bx 读取。
 - 迁移源码与发布类型夹具、区域/Teleport、HMR 输入和说明；保留 _missing、错误属性组、Ref 推断、泛型上界与只读入口的负例。
 
 上一阶段 f53d88a 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38588018777) 已成功。此阶段本地只做修改文件诊断与主题、编辑器和区域覆盖定点用例；完整矩阵由新提交 CI 验证。

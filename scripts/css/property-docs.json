@@ -508,79 +508,63 @@
   "details": {
     "display": {
       "remarks": "外部显示类型决定元素自身以块级还是行内级方式参与周围布局；内部布局方式决定内容使用普通流、Flex 或 Grid 等布局。此属性不继承；例如 div 通常由浏览器默认样式设置为 block。",
-      "examples": ["s.display(\"flex\").alignItems(\"center\").gap(\"0.5rem\")"],
       "commonValues": ["block", "inline", "flex", "inline-flex", "grid", "none"],
       "usage": "选择容器的布局方式；具体对齐、间距和换行由对应布局属性控制。",
       "see": "https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Properties/display"
     },
     "position": {
       "remarks": "偏移通常通过 top/right/bottom/left 或逻辑 inset 属性设置。fixed 和 absolute 的包含块也可能由 transform 等属性建立。",
-      "examples": ["s.position(\"sticky\").top(\"0px\")"],
       "commonValues": ["static", "relative", "absolute", "fixed", "sticky"],
       "usage": "建立定位参照、覆盖层、固定区域或滚动吸附内容。"
     },
     "margin": {
       "remarks": "1/2/3/4 个值依次表示：四边；上下/左右；上/左右/下；上/右/下/左。块布局中的垂直外边距可能折叠。",
-      "examples": ["s.margin(\"8px 16px\")", "s.margin(\"0 auto\")"],
       "usage": "控制盒子外侧与相邻内容的距离；布局项统一间隔可考虑容器 gap。"
     },
     "padding": {
       "remarks": "1/2/3/4 个值依次表示：四边；上下/左右；上/左右/下；上/右/下/左。不能使用负值或 auto。",
-      "examples": ["s.padding(\"0.5rem 1rem\")"],
       "usage": "控制文字或子元素与组件边框之间的留白。"
     },
     "gap": {
       "remarks": "两个值依次为 row-gap 和 column-gap；在 Flex 中对应项目还是行间距取决于 flex-direction。它不增加容器外缘的间距。",
-      "examples": ["s.gap(\"8px 16px\")"],
       "usage": "给 Flex/Grid 项目设置统一间隔，避免逐个项目添加 margin。"
     },
     "width": {
       "remarks": "百分比依据包含块解析；auto、内部尺寸和最小/最大约束共同决定最终使用尺寸。",
-      "examples": ["s.width(\"20rem\")", "s.width(\"clamp(12rem, 50vw, 40rem)\")"],
       "commonValues": ["auto", "min-content", "max-content", "fit-content"],
       "usage": "控制物理宽度；支持书写模式的布局可优先考虑 inline-size。"
     },
     "height": {
       "remarks": "百分比高度能否解析取决于包含块的尺寸确定方式；设置 100% 不自动等于视口高度。",
-      "usage": "控制物理高度；滚动面板通常结合 max-height 和 overflow。",
-      "examples": ["s.maxHeight(\"20rem\").overflowY(\"auto\")"]
+      "usage": "控制物理高度；滚动面板通常结合 max-height 和 overflow。"
     },
     "color": {
-      "remarks": "改变文字和 currentColor 的来源，不会自动改变背景。颜色函数方法返回完整 color 声明。",
-      "examples": ["s.color(\"rgb(255 0 0 / 0.5)\")", "s.color(\"oklch(0.7 0.15 250)\")"]
+      "remarks": "改变文字和 currentColor 的来源，不会自动改变背景。颜色函数方法返回完整 color 声明。"
     },
     "opacity": {
       "remarks": "0 完全透明，1 完全不透明；作用于整个子树的合成结果。透明元素仍可能接受点击和键盘焦点。",
-      "examples": ["s.opacity(0.5)"],
       "usage": "统一调整整个元素子树的透明度；只需背景半透明时应使用带 alpha 的背景色。"
     },
     "zIndex": {
       "remarks": "数值只在所属层叠上下文内比较；更大的数值不保证盖过其他层叠上下文。Flex/Grid 项目也可以使用 z-index。",
-      "usage": "控制同一层叠上下文中的浮层顺序，排查遮挡时先确认祖先层叠上下文。",
-      "examples": ["s.position(\"relative\").zIndex(1)"]
+      "usage": "控制同一层叠上下文中的浮层顺序，排查遮挡时先确认祖先层叠上下文。"
     },
     "flexShrink": {
       "remarks": "实际收缩还与 flex-basis 成比例；自动最小尺寸可能阻止项目继续缩小。",
-      "usage": "控制空间不足时是否允许缩小；设置为 0 可避免图标或固定控件收缩。",
-      "examples": ["s.flexShrink(0)"]
+      "usage": "控制空间不足时是否允许缩小；设置为 0 可避免图标或固定控件收缩。"
     },
     "minWidth": {
       "remarks": "Flex/Grid 项目的 auto 最小尺寸可能由内容决定。需要允许其收缩时，可以按布局目的设置 min-width:0。",
-      "usage": "给控件设置最小可用宽度，或用 0 允许 Flex/Grid 子项突破自动内容最小宽度。",
-      "examples": ["s.minWidth(\"0px\")"]
+      "usage": "给控件设置最小可用宽度，或用 0 允许 Flex/Grid 子项突破自动内容最小宽度。"
     },
     "lineHeight": {
       "remarks": "无单位数字作为倍数继承；长度值按长度继承。单独设置行高不会自动实现多行文本垂直居中。",
-      "examples": ["s.lineHeight(1.5)"],
       "usage": "控制正文行间节奏；可继承的字号倍数通常比固定长度更适合嵌套文字。"
     },
     "textOverflow": {
       "remarks": "本属性不自行制造溢出。单行省略通常还需要受限宽度、overflow:hidden 和 white-space:nowrap。",
       "commonValues": ["ellipsis", "clip"],
-      "usage": "受限宽度中的单行标题或标签。多行截断需要单独的布局和截行方案。",
-      "examples": [
-        "s.maxWidth(\"12rem\").whiteSpace(\"nowrap\").overflow(\"hidden\").textOverflow(\"ellipsis\")"
-      ]
+      "usage": "受限宽度中的单行标题或标签。多行截断需要单独的布局和截行方案。"
     },
     "order": {
       "remarks": "不改变源代码、朗读及通常的 Tab 顺序，避免用视觉重排破坏阅读顺序。"
@@ -589,252 +573,205 @@
       "remarks": "仅对即将发生的变化短期使用；长期或大量声明可能占用额外资源，并提前改变层叠上下文。"
     },
     "gridTemplateColumns": {
-      "examples": ["s.gridTemplateColumns(\"repeat(3, minmax(0, 1fr))\")"],
       "remarks": "每个轨道值定义一列；fr 分配剩余空间。需要允许长内容所在列缩小时，可使用 minmax(0, 1fr)。",
       "usage": "响应式卡片、表单标签与输入框的列布局。"
     },
     "gridAutoFlow": {
       "remarks": "dense 可能改变视觉顺序，但不改变 DOM 和键盘导航顺序。",
       "commonValues": ["row", "column", "dense"],
-      "usage": "控制未明确指定位置的网格项目如何自动填入轨道。",
-      "examples": ["s.display(\"grid\").gridAutoFlow(\"row\")"]
+      "usage": "控制未明确指定位置的网格项目如何自动填入轨道。"
     },
     "transform": {
       "remarks": "多个变换的顺序会影响结果。变换通常不改变元素在普通文档流中预留的尺寸。",
-      "usage": "平移、旋转和缩放的视觉效果；需要改变普通流占位时应调整布局属性。",
-      "examples": ["s.transform(\"translateX(8px) scale(1.05)\")"]
+      "usage": "平移、旋转和缩放的视觉效果；需要改变普通流占位时应调整布局属性。"
     },
     "colorScheme": {
       "remarks": "声明支持的方案不等于为应用生成主题颜色；文字、背景和业务 token 仍需自行定义。"
     },
     "scrollSnapType": {
-      "remarks": "轴和吸附强度的组合通过 raw 写入，例如 x mandatory；单独声明轴时省略的强度按 CSS 规则处理。",
-      "examples": ["s.scrollSnapType(\"x mandatory\")"]
+      "remarks": "轴和吸附强度的组合通过 raw 写入，例如 x mandatory；单独声明轴时省略的强度按 CSS 规则处理。"
     },
     "boxSizing": {
       "commonValues": ["content-box", "border-box"],
-      "usage": "确定组件声明宽高时是否把 padding 和 border 算在尺寸内。",
-      "examples": ["s.boxSizing(\"border-box\").width(\"20rem\").padding(\"1rem\")"]
+      "usage": "确定组件声明宽高时是否把 padding 和 border 算在尺寸内。"
     },
     "inlineSize": {
       "remarks": "水平书写时通常对应 width，竖直书写时通常对应 height。实际尺寸还受 min-inline-size/max-inline-size 和 box-sizing 约束。",
-      "usage": "希望布局尺寸跟随书写模式变化的组件。",
-      "examples": ["s.inlineSize(\"20rem\")"]
+      "usage": "希望布局尺寸跟随书写模式变化的组件。"
     },
     "blockSize": {
       "remarks": "水平书写时通常对应 height，竖直书写时通常对应 width。",
-      "usage": "使用逻辑轴表达内容块尺寸。",
-      "examples": ["s.blockSize(\"10rem\")"]
+      "usage": "使用逻辑轴表达内容块尺寸。"
     },
     "maxWidth": {
       "remarks": "限制最终宽度，不会单独要求元素达到该宽度。最小尺寸约束可能优先于较小的最大尺寸。",
-      "usage": "限制正文行长、弹窗宽度或响应式内容区。",
-      "examples": ["s.width(\"100%\").maxWidth(\"48rem\")"]
+      "usage": "限制正文行长、弹窗宽度或响应式内容区。"
     },
     "aspectRatio": {
       "remarks": "通常需要至少一个轴为自动尺寸才参与尺寸计算；两个轴都被明确尺寸约束时，不会强行保持比例。",
-      "usage": "图片占位、视频和卡片封面区域。",
-      "examples": ["s.aspectRatio(\"16 / 9\").width(\"100%\")"]
+      "usage": "图片占位、视频和卡片封面区域。"
     },
     "flex": {
       "remarks": "依次对应 flex-grow、flex-shrink、flex-basis。作用于弹性项目，应先由父容器建立 Flex 布局。",
       "commonValues": ["auto", "none"],
-      "usage": "分配弹性布局中的剩余空间，或让项目保持自身尺寸。",
-      "examples": ["s.flex(\"1 1 0%\")", "s.flex(\"none\")"]
+      "usage": "分配弹性布局中的剩余空间，或让项目保持自身尺寸。"
     },
     "flexBasis": {
       "remarks": "在剩余空间分配前确定项目的主轴基础尺寸；设置为 auto 时先参考对应的 width/height。",
       "commonValues": ["auto", "content"],
-      "usage": "为侧栏、内容区或重复项目指定弹性分配的起始尺寸。",
-      "examples": ["s.flexBasis(\"16rem\")"]
+      "usage": "为侧栏、内容区或重复项目指定弹性分配的起始尺寸。"
     },
     "flexGrow": {
       "remarks": "数值是分配正剩余空间的相对权重，不是最终宽度百分比。只有容器存在剩余空间时才发挥作用。",
-      "usage": "让主内容区填充工具栏或行布局的剩余空间。",
-      "examples": ["s.flexGrow(1)"]
+      "usage": "让主内容区填充工具栏或行布局的剩余空间。"
     },
     "flexDirection": {
       "commonValues": ["row", "column", "row-reverse", "column-reverse"],
-      "remarks": "row 沿行内轴，column 沿块轴；不能始终按“水平/垂直”理解。反转只改变视觉排列，不改变 DOM 顺序。",
-      "examples": ["s.display(\"flex\").flexDirection(\"column\").gap(\"1rem\")"]
+      "remarks": "row 沿行内轴，column 沿块轴；不能始终按“水平/垂直”理解。反转只改变视觉排列，不改变 DOM 顺序。"
     },
     "flexWrap": {
       "commonValues": ["nowrap", "wrap", "wrap-reverse"],
-      "usage": "标签、按钮等项目不足一行时允许分行。",
-      "examples": ["s.display(\"flex\").flexWrap(\"wrap\").gap(\"0.5rem\")"]
+      "usage": "标签、按钮等项目不足一行时允许分行。"
     },
     "alignItems": {
       "commonValues": ["stretch", "center", "baseline", "start", "end"],
       "remarks": "Flex 中沿交叉轴对齐；Grid 中通常沿块轴对齐。单个项目可以用 align-self 覆盖。",
-      "usage": "图标与文字居中、表单控件基线对齐或项目拉伸。",
-      "examples": ["s.display(\"flex\").alignItems(\"center\")"]
+      "usage": "图标与文字居中、表单控件基线对齐或项目拉伸。"
     },
     "alignSelf": {
       "commonValues": ["auto", "stretch", "baseline"],
-      "usage": "只改变某一个项目的交叉轴或块轴对齐，不改变同组其他项目。",
-      "examples": ["s.alignSelf(\"center\")"]
+      "usage": "只改变某一个项目的交叉轴或块轴对齐，不改变同组其他项目。"
     },
     "justifyContent": {
       "commonValues": ["center", "space-between", "space-around", "space-evenly"],
-      "remarks": "Flex 中沿主轴分配空间，Grid 中沿行内轴对齐网格整体。没有剩余空间时，空间分配效果可能不明显。",
-      "examples": ["s.display(\"flex\").justifyContent(\"space-between\")"]
+      "remarks": "Flex 中沿主轴分配空间，Grid 中沿行内轴对齐网格整体。没有剩余空间时，空间分配效果可能不明显。"
     },
     "gridTemplateRows": {
       "remarks": "每个轨道值定义一行，未显式定义的行使用 grid-auto-rows。",
-      "usage": "区分固定工具栏和可伸缩内容区域。",
-      "examples": ["s.gridTemplateRows(\"auto minmax(0, 1fr)\")"]
+      "usage": "区分固定工具栏和可伸缩内容区域。"
     },
     "overflow": {
       "commonValues": ["visible", "hidden", "clip", "auto", "scroll"],
       "remarks": "一个值同时设置两轴；两个值依次设置 overflow-x、overflow-y。通常需要尺寸约束才会出现可滚动的溢出。",
-      "usage": "滚动面板、内容裁剪和受限尺寸区域。",
-      "examples": ["s.maxHeight(\"20rem\").overflow(\"auto\")"]
+      "usage": "滚动面板、内容裁剪和受限尺寸区域。"
     },
     "overflowX": {
       "commonValues": ["auto", "hidden", "clip"],
       "remarks": "和 overflow-y 的组合可能改变计算值；例如另一轴是 auto 时，visible 可能按 auto 计算。",
-      "usage": "横向滚动标签、宽表格或水平内容裁剪。",
-      "examples": ["s.overflowX(\"auto\")"]
+      "usage": "横向滚动标签、宽表格或水平内容裁剪。"
     },
     "overflowY": {
       "commonValues": ["auto", "hidden", "clip"],
       "remarks": "通常配合 height/max-height 或可收缩的布局区域使用。",
-      "usage": "纵向列表和弹窗内容区。",
-      "examples": ["s.maxHeight(\"20rem\").overflowY(\"auto\")"]
+      "usage": "纵向列表和弹窗内容区。"
     },
     "overscrollBehavior": {
       "commonValues": ["auto", "contain", "none"],
-      "usage": "阻止弹窗或内部滚动面板到达边界后继续滚动外层页面。",
-      "examples": ["s.overflowY(\"auto\").overscrollBehavior(\"contain\")"]
+      "usage": "阻止弹窗或内部滚动面板到达边界后继续滚动外层页面。"
     },
     "scrollBehavior": {
       "remarks": "主要影响导航和滚动 API 触发的滚动，不会把所有用户滚动强制变成动画。",
-      "usage": "锚点跳转或程序化滚动；应同时考虑减少动态效果的用户偏好。",
-      "examples": ["s.scrollBehavior(\"smooth\")"]
+      "usage": "锚点跳转或程序化滚动；应同时考虑减少动态效果的用户偏好。"
     },
     "whiteSpace": {
       "commonValues": ["normal", "nowrap", "pre", "pre-wrap", "pre-line", "break-spaces"],
       "remarks": "同时影响空白折叠和软换行。它不负责给溢出内容添加省略号。",
-      "usage": "单行标签、保留换行的用户文本和代码片段。",
-      "examples": ["s.whiteSpace(\"pre-wrap\")"]
+      "usage": "单行标签、保留换行的用户文本和代码片段。"
     },
     "overflowWrap": {
       "commonValues": ["normal", "anywhere", "break-word"],
-      "usage": "防止 URL、标识符等长文本撑破容器。",
-      "examples": ["s.overflowWrap(\"anywhere\")"]
+      "usage": "防止 URL、标识符等长文本撑破容器。"
     },
     "wordBreak": {
       "commonValues": ["normal", "break-all", "keep-all"],
-      "remarks": "按字符和语言控制断行。仅需避免超长单词溢出时，通常先考虑 overflow-wrap。",
-      "examples": ["s.wordBreak(\"normal\")"]
+      "remarks": "按字符和语言控制断行。仅需避免超长单词溢出时，通常先考虑 overflow-wrap。"
     },
     "textAlign": {
       "commonValues": ["start", "end", "center", "justify"],
       "remarks": "控制块容器中的行内内容，不是块盒自身的位置，也不是 Flex/Grid 项目的对齐。",
-      "usage": "正文、标题和表格单元格中的文本对齐。",
-      "examples": ["s.textAlign(\"start\")"]
+      "usage": "正文、标题和表格单元格中的文本对齐。"
     },
     "fontSize": {
       "remarks": "改变字形大小，并影响 em 等相对长度；行盒高度还由 line-height 决定。",
-      "usage": "建立文字层级，根字号相对尺寸可用 rem 表达。",
-      "examples": ["s.fontSize(\"1rem\").lineHeight(1.5)"]
+      "usage": "建立文字层级，根字号相对尺寸可用 rem 表达。"
     },
     "fontWeight": {
       "commonValues": ["normal", "bold", "bolder", "lighter"],
       "remarks": "最终字形取决于已加载字体和可用字重；变量字体可支持连续的字重范围。",
-      "usage": "正文、强调文字和标题的视觉层级。",
-      "examples": ["s.fontWeight(600)"]
+      "usage": "正文、强调文字和标题的视觉层级。"
     },
     "objectFit": {
       "commonValues": ["fill", "contain", "cover", "none", "scale-down"],
       "remarks": "控制 img、video 等替换内容在盒子内部的缩放与裁剪；不改变盒子本身的 width/height。",
-      "usage": "封面裁剪、头像和完整图像预览。",
-      "examples": ["s.width(\"80px\").height(\"80px\").objectFit(\"cover\")"]
+      "usage": "封面裁剪、头像和完整图像预览。"
     },
     "backgroundSize": {
       "commonValues": ["auto", "contain", "cover"],
       "remarks": "改变背景图像的尺寸，不改变元素尺寸；位置由 background-position 决定。",
-      "usage": "背景封面或需要完整显示的背景装饰。",
-      "examples": ["s.backgroundSize(\"cover\").backgroundPosition(\"center\")"]
+      "usage": "背景封面或需要完整显示的背景装饰。"
     },
     "borderRadius": {
       "remarks": "1/2/3/4 个半径依次控制四角、两组对角、三组角和逐角。它裁剪自身背景，但不会单独保证裁剪所有后代内容。",
-      "usage": "卡片、按钮、头像的圆角外观。",
-      "examples": ["s.borderRadius(\"8px\")"]
+      "usage": "卡片、按钮、头像的圆角外观。"
     },
     "boxShadow": {
       "remarks": "阴影不占布局空间，可用逗号叠加；与 border/outline 的用途和绘制位置不同。",
-      "usage": "浮层层次、卡片边缘或内凹效果。",
-      "examples": ["s.boxShadow(\"0 2px 8px rgb(0 0 0 / 0.15)\")"]
+      "usage": "浮层层次、卡片边缘或内凹效果。"
     },
     "outline": {
       "remarks": "不占布局空间，可用 outline-offset 调整距离；键盘焦点指示不应被无替代地移除。",
-      "usage": "控件焦点指示和不影响布局的轮廓。",
-      "examples": [
-        "s.select(\":focus-visible\", s.outline(\"2px solid currentColor\").outlineOffset(\"2px\"))"
-      ]
+      "usage": "控件焦点指示和不影响布局的轮廓。"
     },
     "visibility": {
       "commonValues": ["visible", "hidden", "collapse"],
-      "usage": "需要隐藏内容但通常保留其布局占位的场景。",
-      "examples": ["s.visibility(\"hidden\")"]
+      "usage": "需要隐藏内容但通常保留其布局占位的场景。"
     },
     "pointerEvents": {
       "commonValues": ["auto", "none"],
       "remarks": "控制指针命中，不等同于原生 disabled，也不会单独阻止键盘交互。",
-      "usage": "允许指针穿过装饰层；可交互控件的禁用应同时处理行为和语义。",
-      "examples": ["s.pointerEvents(\"none\")"]
+      "usage": "允许指针穿过装饰层；可交互控件的禁用应同时处理行为和语义。"
     },
     "userSelect": {
       "commonValues": ["auto", "text", "none", "all"],
-      "usage": "调整拖拽控件中的文本选取，或让代码片段整段选中。",
-      "examples": ["s.userSelect(\"all\")"]
+      "usage": "调整拖拽控件中的文本选取，或让代码片段整段选中。"
     },
     "touchAction": {
       "commonValues": ["manipulation", "pan-x", "pan-y", "none"],
       "remarks": "描述浏览器可接管的触摸手势，手势开始后再修改通常不会改变当前手势的处理。",
-      "usage": "拖拽控件与页面滚动之间分配触摸方向；保留用户所需的缩放能力。",
-      "examples": ["s.touchAction(\"pan-y\")"]
+      "usage": "拖拽控件与页面滚动之间分配触摸方向；保留用户所需的缩放能力。"
     },
     "isolation": {
       "commonValues": ["auto", "isolate"],
-      "usage": "建立局部层叠边界，或限制混合模式影响范围。",
-      "examples": ["s.isolation(\"isolate\")"]
+      "usage": "建立局部层叠边界，或限制混合模式影响范围。"
     },
     "transition": {
       "remarks": "只对属性变化创建过渡；不会自动触发变化。建议明确列出目标属性，避免 all 意外过渡布局变化。",
-      "usage": "悬停、选中和展开状态之间的平滑变化。",
-      "examples": ["s.transition(\"opacity 160ms ease\")"]
+      "usage": "悬停、选中和展开状态之间的平滑变化。"
     },
     "animationFillMode": {
       "commonValues": ["none", "forwards", "backwards", "both"],
       "remarks": "控制动画有效播放区间之外的样式，不会把最终值写回普通 CSS 声明。",
-      "usage": "控制延迟阶段和播放结束后的动画呈现。",
-      "examples": ["s.animationFillMode(\"forwards\")"]
+      "usage": "控制延迟阶段和播放结束后的动画呈现。"
     },
     "contain": {
       "commonValues": ["content", "strict", "size", "paint", "style"],
       "remarks": "不同隔离类型会改变布局和绘制语义，不能仅当作无副作用的性能开关。",
-      "usage": "边界明确且尺寸、溢出行为经过验证的独立区域。",
-      "examples": ["s.contain(\"content\")"]
+      "usage": "边界明确且尺寸、溢出行为经过验证的独立区域。"
     },
     "contentVisibility": {
       "commonValues": ["visible", "auto", "hidden"],
       "remarks": "允许跳过子树渲染；跳过时的占位尺寸可由 contain-intrinsic-size 提供。",
-      "usage": "页面中较长、暂时位于视口外的独立内容区域。",
-      "examples": ["s.contentVisibility(\"auto\")"]
+      "usage": "页面中较长、暂时位于视口外的独立内容区域。"
     },
     "containerType": {
       "commonValues": ["normal", "inline-size", "size"],
       "remarks": "建立尺寸查询容器会同时引入必要的隔离语义；容器本身的样式通常由祖先查询容器决定。",
-      "usage": "让组件按所在容器尺寸响应，而不是只按视口响应。",
-      "examples": ["s.containerType(\"inline-size\")"]
+      "usage": "让组件按所在容器尺寸响应，而不是只按视口响应。"
     },
     "font": {
       "remarks": "简写会把未显式指定的字体子属性重置为各自初始值。只改字号或字重时可使用 fontSize、fontWeight；按钮和输入控件跟随正文时可使用 inherit。",
       "usage": "统一字体配置，或让控件继承父级字体。",
-      "commonValues": ["inherit", "italic 600 16px/1.5 system-ui"],
-      "examples": ["s.font('inherit')", "s.font('600 14px/1.5 system-ui')"]
+      "commonValues": ["inherit", "italic 600 16px/1.5 system-ui"]
     }
   },
   "globalKeywords": {
@@ -943,63 +880,49 @@
         "summary": "外部参与行内排版，内部建立独立格式化上下文，可设置宽高。",
         "comparison": "与 inline 相比可设置宽高，内部建立独立格式化上下文；与 inline-flex 相比，内部使用普通流而非 Flex。",
         "usage": "需要宽高、内边距且随文本同行排列的小盒子。",
-        "notes": "相邻行内级盒子之间的文本空白仍可能形成间距，vertical-align 会影响它在行内的位置。",
-        "examples": [
-          "s.display(\"inline-block\").width(\"2rem\").height(\"2rem\").verticalAlign(\"middle\")"
-        ]
+        "notes": "相邻行内级盒子之间的文本空白仍可能形成间距，vertical-align 会影响它在行内的位置。"
       },
       "flex": {
         "summary": "生成块级弹性容器，直接子元素参与 Flex 布局。",
         "effect": "容器自身以块级方式参与普通流，直接子元素成为弹性项目；可分配剩余空间、对齐和换行。",
         "comparison": "inline-flex 使用相同的内部布局，但容器对外按行内级盒子排列。",
         "usage": "工具栏、横向导航、纵向堆叠和一维内容排列。",
-        "notes": "默认主轴为 row，默认不换行；主轴方向还受书写方向影响。",
-        "examples": ["s.display(\"flex\").alignItems(\"center\").justifyContent(\"space-between\")"]
+        "notes": "默认主轴为 row，默认不换行；主轴方向还受书写方向影响。"
       },
       "inline-flex": {
         "summary": "创建行内级的 Flex 容器。",
         "effect": "对外：在普通文档流中作为一个整体参与行内排版，可以与文字或其他行内内容位于同一行。\n对内：直接子元素使用 Flex 布局，可通过 alignItems、justifyContent、gap 等控制对齐和间距。",
         "comparison": "与 flex 的区别是容器自身的外部排版方式，内部弹性布局机制相同；inline-flex 对应双关键字写法 inline flex。",
         "usage": "图标与文字组合、标签等需要内部弹性对齐，同时以行内方式排列的内容。",
-        "notes": "子项换行由 flex-wrap 控制。当容器自身是 Flex/Grid 项目时，其外部排版还受父布局控制。",
-        "examples": ["s.display(\"inline-flex\").alignItems(\"center\").gap(\"0.375rem\")"]
+        "notes": "子项换行由 flex-wrap 控制。当容器自身是 Flex/Grid 项目时，其外部排版还受父布局控制。"
       },
       "grid": {
         "summary": "生成块级网格容器，直接子元素参与 Grid 布局。",
         "effect": "直接子元素进入网格，行列轨道和命名区域共同决定项目位置与尺寸。",
         "comparison": "Flex 更侧重单个主轴；Grid 可以同时控制行和列。inline-grid 则改变容器对外的显示类型。",
-        "usage": "卡片网格、表单对齐和二维页面区域布局。",
-        "examples": [
-          "s.display(\"grid\").gridTemplateColumns(\"repeat(3, minmax(0, 1fr))\").gap(\"1rem\")"
-        ]
+        "usage": "卡片网格、表单对齐和二维页面区域布局。"
       },
       "inline-grid": {
         "summary": "生成行内级网格容器，内部仍使用 Grid 布局。",
         "comparison": "与 grid 的内部网格布局相同，但容器在普通流中按行内级盒子排列。",
-        "usage": "需要行列对齐并与周围文字同行的小型内容组。",
-        "examples": [
-          "s.display(\"inline-grid\").gridTemplateColumns(\"repeat(2, auto)\").gap(\"0.25rem\")"
-        ]
+        "usage": "需要行列对齐并与周围文字同行的小型内容组。"
       },
       "flow-root": {
         "summary": "建立独立块格式化上下文，可包住内部浮动并隔离部分外边距折叠。",
         "comparison": "与普通 block 相比，显式建立独立块格式化上下文；无需借助 overflow:hidden，也不会因此裁剪溢出。",
-        "usage": "让容器包住内部浮动，或隔离内外的部分外边距折叠。",
-        "examples": ["s.display(\"flow-root\").padding(\"1rem\")"]
+        "usage": "让容器包住内部浮动，或隔离内外的部分外边距折叠。"
       },
       "contents": {
         "summary": "通常不生成元素自身的主盒子，让子盒子参与外层布局；背景、边框等失去承载盒，应核对可访问性行为。",
         "effect": "普通元素自身不再提供主盒子，子盒子可参与外层 Flex/Grid 等布局。",
         "usage": "保留 DOM 包装节点，同时让内部项目进入外层布局。",
-        "notes": "替换元素等存在特殊规则；应检查语义和可访问性，不要把它当作无条件删除包装盒的替代。",
-        "examples": ["s.display(\"contents\")"]
+        "notes": "替换元素等存在特殊规则；应检查语义和可访问性，不要把它当作无条件删除包装盒的替代。"
       },
       "none": {
         "summary": "不生成元素及其后代的布局盒子，通常也从可访问性树中移除。",
         "comparison": "visibility:hidden 通常保留布局空间；opacity:0 只改变透明度，通常仍能交互。",
         "usage": "从当前布局中隐藏一段内容。",
-        "notes": "不能靠它保留可聚焦交互；重新显示时需按组件需求管理焦点。",
-        "examples": ["s.display(\"none\")"]
+        "notes": "不能靠它保留可聚焦交互；重新显示时需按组件需求管理焦点。"
       },
       "list-item": "生成带列表标记的主盒子，标记由 list-style 等属性控制。",
       "flow": "内部使用普通流布局；是否形成新的块格式化上下文还取决于定位、浮动、溢出等条件。需要明确建立独立块格式化上下文时使用 flow-root。",
@@ -1019,28 +942,24 @@
       "relative": {
         "summary": "保留普通流中的原位置，再按偏移移动绘制位置；不会为偏移后的区域重新排版。",
         "usage": "为绝对定位后代提供定位参照，或做不改变其他元素排布的视觉偏移。",
-        "comparison": "absolute 会脱离普通流；relative 仍保留原占位。",
-        "examples": ["s.position(\"relative\")"]
+        "comparison": "absolute 会脱离普通流；relative 仍保留原占位。"
       },
       "absolute": {
         "summary": "脱离普通文档流，按包含块定位；包含块通常由定位祖先或 transform 等属性建立。",
         "usage": "容器内部的角标、图标覆盖和定位装饰。",
-        "notes": "通常在预期的容器上设置 position:relative；元素不为自己保留普通流占位。",
-        "examples": ["s.position(\"absolute\").top(\"0px\").right(\"0px\")"]
+        "notes": "通常在预期的容器上设置 position:relative；元素不为自己保留普通流占位。"
       },
       "fixed": {
         "summary": "脱离普通流，通常相对视口固定；某些祖先属性会建立不同的包含块。",
         "comparison": "absolute 通常跟随其包含块滚动；fixed 在以视口为包含块时保持视口位置。",
         "usage": "固定工具栏或覆盖层。",
-        "notes": "祖先的 transform 等属性可能改变固定定位的包含块；z-index 仍受层叠上下文约束。",
-        "examples": ["s.position(\"fixed\").inset(\"0px\")"]
+        "notes": "祖先的 transform 等属性可能改变固定定位的包含块；z-index 仍受层叠上下文约束。"
       },
       "sticky": {
         "summary": "保留流内位置，在滚动范围内按 inset 约束吸附。对应轴至少一个 inset 须非 auto，并受滚动祖先和包含块限制。",
         "usage": "滚动列表的分组标题、吸顶工具栏。",
         "comparison": "与 fixed 不同，它保留流内占位，并受自身所在包含块的范围约束。",
-        "notes": "对应轴至少一个 inset 必须非 auto；祖先 overflow 可能改变滚动参照。",
-        "examples": ["s.position(\"sticky\").top(\"0px\")"]
+        "notes": "对应轴至少一个 inset 必须非 auto；祖先 overflow 可能改变滚动参照。"
       }
     },
     "overflow": {
@@ -1049,21 +968,18 @@
         "summary": "裁剪溢出且不显示滚动条，但仍是可通过脚本等方式滚动的滚动容器。",
         "comparison": "clip 不建立滚动容器；hidden 仍可通过脚本或焦点移动滚动。",
         "usage": "需要裁剪且仍保留程序化滚动的容器。",
-        "notes": "可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。",
-        "examples": ["s.$property(\"hidden\")"]
+        "notes": "可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。"
       },
       "clip": {
         "summary": "在裁剪边界截断内容，不建立滚动容器，也不支持程序化滚动。",
         "comparison": "与 hidden 不同，不支持程序化滚动，也不单独建立块格式化上下文。",
         "usage": "只裁剪绘制，不希望该轴成为滚动容器的区域。",
-        "notes": "两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。",
-        "examples": ["s.$property(\"clip\")"]
+        "notes": "两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。"
       },
       "auto": {
         "summary": "按溢出情况提供滚动机制；滚动条外观和是否占空间由环境决定。",
         "usage": "内容超过受限尺寸时可以滚动的面板。",
-        "comparison": "scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。",
-        "examples": ["s.$property(\"auto\")"]
+        "comparison": "scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。"
       },
       "scroll": "建立滚动容器，通常即使未溢出也显示滚动条；具体外观由平台决定。",
       "overlay": "历史兼容值，现代实现通常将其作为 auto 的别名；不保证滚动条覆盖在内容上。"
@@ -1071,15 +987,13 @@
     "boxSizing": {
       "content-box": {
         "summary": "指定尺寸仅计算内容盒，内边距和边框额外增加外部尺寸。",
-        "usage": "希望明确指定纯内容区尺寸时。",
-        "examples": ["s.boxSizing(\"content-box\").width(\"100px\").padding(\"10px\")"]
+        "usage": "希望明确指定纯内容区尺寸时。"
       },
       "border-box": {
         "summary": "指定尺寸包含内容、内边距和边框，但不包含外边距。",
         "comparison": "content-box 在声明宽高之外再加内边距和边框。",
         "usage": "希望组件的指定宽高包含内边距和边框时。",
-        "notes": "仍不包含 margin；最小/最大尺寸和布局约束仍参与计算。",
-        "examples": ["s.boxSizing(\"border-box\").width(\"20rem\").padding(\"1rem\")"]
+        "notes": "仍不包含 margin；最小/最大尺寸和布局约束仍参与计算。"
       }
     },
     "flex": {
@@ -1087,14 +1001,12 @@
         "summary": "等价于 1 1 auto：可增长、可收缩，基础尺寸由主尺寸属性或内容决定。",
         "usage": "让项目以自身尺寸为基础参与剩余空间分配。",
         "comparison": "1 1 0% 以零百分比为基础分配，auto 的基础尺寸通常受内容或主尺寸属性影响。",
-        "notes": "最终比例还受最小/最大尺寸约束，不保证所有项目等宽。",
-        "examples": ["s.flex(\"auto\")"]
+        "notes": "最终比例还受最小/最大尺寸约束，不保证所有项目等宽。"
       },
       "none": {
         "summary": "等价于 0 0 auto：不增长也不收缩，保留自动基础尺寸。",
         "usage": "防止工具栏中的图标或固定控件被压缩。",
-        "comparison": "auto 会增长和收缩；none 两者都不参与。",
-        "examples": ["s.flex(\"none\")"]
+        "comparison": "auto 会增长和收缩；none 两者都不参与。"
       }
     },
     "flexBasis": {
@@ -1112,8 +1024,7 @@
       "wrap": {
         "summary": "空间不足时形成多行，沿交叉轴正常方向排列。",
         "comparison": "nowrap 保持单行；wrap-reverse 反转交叉轴上各行的排列方向。",
-        "notes": "换行不会自动均分每行项目宽度，尺寸仍由各项目的 flex 配置决定。",
-        "examples": ["s.display(\"flex\").flexWrap(\"wrap\")"]
+        "notes": "换行不会自动均分每行项目宽度，尺寸仍由各项目的 flex 配置决定。"
       },
       "wrap-reverse": "允许换行并反转交叉轴上各行的排列方向。"
     },
@@ -1121,14 +1032,12 @@
       "center": {
         "summary": "将各项目在交叉轴或块轴的对齐区域中居中。",
         "comparison": "justify-content 控制 Flex 主轴上的内容分布；align-items 控制交叉轴。",
-        "usage": "横向图标和文字的垂直对齐。",
-        "examples": ["s.display(\"inline-flex\").alignItems(\"center\")"]
+        "usage": "横向图标和文字的垂直对齐。"
       },
       "stretch": {
         "summary": "在自动尺寸及最小/最大约束允许时拉伸项目，不强制覆盖显式尺寸。",
         "notes": "项目在对齐轴有显式尺寸或受最小/最大尺寸约束时，不一定填满可用区域。",
-        "comparison": "center 保持项目尺寸并居中；stretch 尝试扩大自动尺寸。",
-        "examples": ["s.display(\"flex\").alignItems(\"stretch\")"]
+        "comparison": "center 保持项目尺寸并居中；stretch 尝试扩大自动尺寸。"
       },
       "baseline": "按项目的对齐基线对齐，不等同于底边对齐。",
       "normal": "由布局模式决定行为，许多场景类似 stretch，但存在内部尺寸等例外。",
@@ -1146,14 +1055,12 @@
         "summary": "首尾项目贴两端，剩余空间等分到相邻项目之间。",
         "comparison": "space-evenly 在两端也保留等量空间；space-around 的边缘空间只有项目之间的一半。",
         "notes": "只有一个项目时靠起始侧，不会自动居中。",
-        "usage": "工具栏左侧标题和右侧操作分居两端。",
-        "examples": ["s.display(\"flex\").justifyContent(\"space-between\").alignItems(\"center\")"]
+        "usage": "工具栏左侧标题和右侧操作分居两端。"
       },
       "space-around": "每个项目两侧分配相等空间，容器边缘的空间是相邻项目间的一半。",
       "space-evenly": {
         "summary": "容器两端和相邻项目之间分配相等空间。",
-        "usage": "希望容器两端和项目之间空隙一致的导航或操作组。",
-        "examples": ["s.display(\"flex\").justifyContent(\"space-evenly\")"]
+        "usage": "希望容器两端和项目之间空隙一致的导航或操作组。"
       },
       "flex-start": "Flex 内容靠主轴起点排列；起点受 flex-direction 影响。",
       "flex-end": "Flex 内容靠主轴终点排列。",
@@ -1180,15 +1087,13 @@
       "contain": {
         "summary": "保留宽高比并完整放入内容盒，可能留下空白。",
         "usage": "希望完整显示的商品图或图像预览。",
-        "comparison": "cover 优先填满盒子并可能裁剪；contain 优先保留完整内容。",
-        "examples": ["s.width(\"20rem\").height(\"12rem\").objectFit(\"contain\")"]
+        "comparison": "cover 优先填满盒子并可能裁剪；contain 优先保留完整内容。"
       },
       "cover": {
         "summary": "保留宽高比并填满内容盒，可能裁掉部分图像。",
         "comparison": "contain 保证完整图像可见但可能留白；fill 可能改变图像比例。",
         "usage": "固定尺寸头像、卡片封面。",
-        "notes": "裁剪位置由 object-position 控制，盒子尺寸仍需另外设置。",
-        "examples": ["s.width(\"80px\").height(\"80px\").objectFit(\"cover\")"]
+        "notes": "裁剪位置由 object-position 控制，盒子尺寸仍需另外设置。"
       },
       "none": "不按内容盒缩放替换内容。",
       "scale-down": "在 none 和 contain 中选择得到较小内容尺寸的方案。"
@@ -1198,8 +1103,7 @@
       "hidden": {
         "summary": "隐藏绘制但通常保留布局空间；后代可显式恢复 visible。",
         "comparison": "display:none 不保留布局盒；opacity:0 不会以相同方式移除交互和可访问性。",
-        "usage": "暂时隐藏占位内容。",
-        "examples": ["s.visibility(\"hidden\")"]
+        "usage": "暂时隐藏占位内容。"
       },
       "collapse": "对表格行列等特定布局有折叠语义，其他场景通常类似 hidden；应核对具体布局行为。"
     },
@@ -1207,8 +1111,7 @@
       "none": {
         "summary": "元素本身不成为指针命中目标；不等于禁用，仍可能通过 Tab 获焦，后代也可恢复命中。",
         "usage": "覆盖在内容上方但不应拦截点击的装饰层。",
-        "notes": "后代可以恢复命中；来自后代的事件仍可能经过祖先监听器。",
-        "examples": ["s.pointerEvents(\"none\")"]
+        "notes": "后代可以恢复命中；来自后代的事件仍可能经过祖先监听器。"
       },
       "auto": "采用当前元素类型的默认命中规则。",
       "visiblePainted": "SVG 命中规则：visibility 为 visible，且指针位于实际启用 fill 或 stroke 的区域；不把它当成通用 HTML 控件规则。",
@@ -1231,15 +1134,13 @@
       "nowrap": {
         "summary": "折叠空白并禁止软换行；不会自行生成省略号。",
         "comparison": "pre 也不进行普通软换行，但会保留连续空白。",
-        "usage": "单行标签；结合宽度约束、overflow 和 text-overflow 实现省略。",
-        "examples": ["s.whiteSpace(\"nowrap\").overflow(\"hidden\").textOverflow(\"ellipsis\")"]
+        "usage": "单行标签；结合宽度约束、overflow 和 text-overflow 实现省略。"
       },
       "pre": "保留空白和源换行，不进行普通软换行。",
       "pre-wrap": {
         "summary": "保留空白和源换行，同时允许软换行。",
         "comparison": "pre 不进行普通软换行；pre-line 会折叠连续空格。",
-        "usage": "需要保留用户换行和空格，同时允许适应容器宽度的文本。",
-        "examples": ["s.whiteSpace(\"pre-wrap\")"]
+        "usage": "需要保留用户换行和空格，同时允许适应容器宽度的文本。"
       },
       "pre-line": "折叠空格等空白但保留源换行，同时允许软换行。",
       "break-spaces": "保留空白并允许在保留的空格后换行；行末空格占据空间。",
@@ -1253,8 +1154,7 @@
       "anywhere": {
         "summary": "必要时允许在长文本任意位置断行，这些机会参与 min-content 尺寸计算。",
         "comparison": "break-word 的额外断点不按 anywhere 的方式参与最小内容宽度计算；word-break:break-all 更积极地拆分普通单词。",
-        "usage": "展示不可控的长 URL 或无空格文本。",
-        "examples": ["s.$property(\"anywhere\")"]
+        "usage": "展示不可控的长 URL 或无空格文本。"
       },
       "break-word": "必要时允许长文本断行，但新增断点不按 anywhere 的方式参与 min-content 计算。",
       "normal": "只使用正常换行机会，不为长单词额外断行。"
@@ -1275,10 +1175,7 @@
       "ellipsis": {
         "summary": "用省略号提示被裁剪的行内溢出；还需要限制尺寸并配置溢出规则。",
         "usage": "给确实发生行内溢出的单行内容添加省略提示。",
-        "notes": "不会自动限制宽度、禁用换行或实现多行省略。Flex/Grid 子项还可能需要 min-width:0。",
-        "examples": [
-          "s.minWidth(\"0px\").whiteSpace(\"nowrap\").overflow(\"hidden\").textOverflow(\"ellipsis\")"
-        ]
+        "notes": "不会自动限制宽度、禁用换行或实现多行省略。Flex/Grid 子项还可能需要 min-width:0。"
       },
       "clip": "直接裁剪溢出文本，不添加省略标记。"
     },
@@ -1353,8 +1250,7 @@
       "preserve-3d": {
         "summary": "让子元素继续处于三维空间，适合多层三维场景。",
         "comparison": "flat 会将后代展平到当前元素的平面；preserve-3d 本身不提供透视效果。",
-        "notes": "该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。",
-        "examples": ["s.transformStyle(\"preserve-3d\")"]
+        "notes": "该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。"
       }
     }
   }

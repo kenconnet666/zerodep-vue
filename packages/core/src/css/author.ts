@@ -55,8 +55,9 @@ export class CssAuthor implements CssClass {
 
   protected write(property: string, value: unknown): this {
     if (value === undefined) return this;
-    const themed = !property.startsWith('--');
-    if (themed && typeof value === 'string' && value.startsWith('_'))
+    // 自定义属性保留原始 CSS 值；只有普通属性把 _ 开头的完整字符串当作主题名。
+    const allowsThemeName = !property.startsWith('--');
+    if (allowsThemeName && typeof value === 'string' && value.startsWith('_'))
       value = this.resolveTheme(property, value);
     if (
       value !== null &&
@@ -74,7 +75,7 @@ export class CssAuthor implements CssClass {
           ...root,
           property,
           value,
-          ...(themed && (isBinding(value) || isTemplate(value))
+          ...(allowsThemeName && (isBinding(value) || isTemplate(value))
             ? { resolveTheme: this.resolveTheme }
             : {}),
         }),

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { Decimal } from 'decimal.js';
 import { CalendarDate, Time } from '@internationalized/date';
 import { House } from '@lucide/icons';
-import type { Ref, VNodeChild } from 'vue';
+import type { Ref, UnwrapNestedRefs, VNodeChild } from 'vue';
 import {
   _component,
   For,
@@ -65,18 +65,19 @@ export const readonlyInput = <Field model={computed(() => value.value)} />;
 // @ts-expect-error 封闭属性不能接收不兼容的原生值。
 s.boxSizing('flex');
 // @ts-expect-error 业务主题成员不能退化成任意字符串。
-theme.value.color._missing;
-// @ts-expect-error 只读映射入口不能替换主题来源。
-theme.value = new Palette();
+theme.color._missing;
+// @ts-expect-error 对象入口不再需要 .value。
+theme.value;
 
 const display = 'flex';
 const brand = '_brand';
-const mappedBrand = theme.value.color._brand; /*hover:brand*/
-themed.variable('--brand', bind(theme.value.color._brand));
+const mappedBrand = theme.color._brand; /*hover:brand*/
+themed.variable('--brand', bind(theme.color._brand));
 export const literalStyles = s
   .font('inherit')
   // literal:font
   .select(':hover', s.display('inline-flex')); // literal:display
+export const fillMode = s.animationFillMode('forwards'); // literal:fillMode
 export function expressionLiterals<T extends Palette>(s: Css<T>, active: boolean) {
   return (
     s
@@ -97,8 +98,8 @@ s.color(brand);
 // 不同作者生成的 class 仍可直接组合。
 cx(themed.color(brand), s.padding(4));
 
-export function mappedValue<T extends Palette>(theme: Readonly<Ref<T>>) {
-  return theme.value.color._brand; /*hover:genericBrand*/
+export function mappedValue<T extends Palette>(theme: UnwrapNestedRefs<T>) {
+  return theme.color._brand; /*hover:genericBrand*/
 }
 export function reusable<T extends Palette>(s: Css<T>, external?: CssInput) {
   const named = { root: s.color('_brand').display('flex'), active: s.color('_brand') };

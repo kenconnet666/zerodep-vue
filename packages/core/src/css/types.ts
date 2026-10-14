@@ -1,5 +1,5 @@
 import type * as CSS from 'csstype';
-import type { Ref } from 'vue';
+import type { Ref, UnwrapNestedRefs } from 'vue';
 import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
 import type { SystemKeywords } from './generated/system.ts';
 import type { ColorProperty } from './generated/metadata.ts';
@@ -77,8 +77,8 @@ export type ThemeSource<T extends SystemKeywords> = ValueOrRef<T> & ValueOrRef<C
 export interface CssContext<T extends SystemKeywords> {
   /** 取得当前区域的不可变作者；组件外使用默认来源。 */
   useCss(): Css<T>;
-  /** 取得当前区域的原始主题映射；Ref 入口只读，成员仍遵循来源自身的 Vue 语义。 */
-  useTheme(): Readonly<Ref<T>>;
+  /** 取得当前区域的响应式主题对象；成员按 Vue reactive 解包，来源替换后仍读取最新主题。 */
+  useTheme(): UnwrapNestedRefs<T>;
   /** 在 setup 中向下提供主题，返回相同作者供当前组件使用。 */
   provideTheme(source: ThemeSource<T>): Css<T>;
 }

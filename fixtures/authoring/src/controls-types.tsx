@@ -12,7 +12,7 @@ const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 const theme = useTheme();
-export const mappedThemeStyle = useControlCss().backgroundColor(bx(theme.value.color._brand));
+export const mappedThemeStyle = useControlCss().backgroundColor(bx(theme.color._brand));
 export const controls = (
   <>
     <Button

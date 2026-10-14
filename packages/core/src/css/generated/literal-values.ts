@@ -1092,9 +1092,6 @@ export interface AlignItemsValues extends CssWideValues {
    * 区别：justify-content 控制 Flex 主轴上的内容分布；align-items 控制交叉轴。
    *
    * 适用场景：横向图标和文字的垂直对齐。
-   *
-   * @example
-   * s.display("inline-flex").alignItems("center")
    */
   readonly center: 'center';
   /**
@@ -1131,9 +1128,6 @@ export interface AlignItemsValues extends CssWideValues {
    * 区别：center 保持项目尺寸并居中；stretch 尝试扩大自动尺寸。
    *
    * 项目在对齐轴有显式尺寸或受最小/最大尺寸约束时，不一定填满可用区域。
-   *
-   * @example
-   * s.display("flex").alignItems("stretch")
    */
   readonly stretch: 'stretch';
 }
@@ -3929,18 +3923,12 @@ export interface BoxSizingValues extends CssWideValues {
    * 适用场景：希望组件的指定宽高包含内边距和边框时。
    *
    * 仍不包含 margin；最小/最大尺寸和布局约束仍参与计算。
-   *
-   * @example
-   * s.boxSizing("border-box").width("20rem").padding("1rem")
    */
   readonly 'border-box': 'border-box';
   /**
    * 指定尺寸仅计算内容盒，内边距和边框额外增加外部尺寸。
    *
    * 适用场景：希望明确指定纯内容区尺寸时。
-   *
-   * @example
-   * s.boxSizing("content-box").width("100px").padding("10px")
    */
   readonly 'content-box': 'content-box';
 }
@@ -4989,9 +4977,6 @@ export interface DisplayValues extends CssWideValues {
    * 适用场景：保留 DOM 包装节点，同时让内部项目进入外层布局。
    *
    * 替换元素等存在特殊规则；应检查语义和可访问性，不要把它当作无条件删除包装盒的替代。
-   *
-   * @example
-   * s.display("contents")
    */
   readonly contents: 'contents';
   /**
@@ -5004,9 +4989,6 @@ export interface DisplayValues extends CssWideValues {
    * 适用场景：工具栏、横向导航、纵向堆叠和一维内容排列。
    *
    * 默认主轴为 row，默认不换行；主轴方向还受书写方向影响。
-   *
-   * @example
-   * s.display("flex").alignItems("center").justifyContent("space-between")
    */
   readonly flex: 'flex';
   /**
@@ -5019,9 +5001,6 @@ export interface DisplayValues extends CssWideValues {
    * 区别：与普通 block 相比，显式建立独立块格式化上下文；无需借助 overflow:hidden，也不会因此裁剪溢出。
    *
    * 适用场景：让容器包住内部浮动，或隔离内外的部分外边距折叠。
-   *
-   * @example
-   * s.display("flow-root").padding("1rem")
    */
   readonly 'flow-root': 'flow-root';
   /**
@@ -5032,9 +5011,6 @@ export interface DisplayValues extends CssWideValues {
    * 区别：Flex 更侧重单个主轴；Grid 可以同时控制行和列。inline-grid 则改变容器对外的显示类型。
    *
    * 适用场景：卡片网格、表单对齐和二维页面区域布局。
-   *
-   * @example
-   * s.display("grid").gridTemplateColumns("repeat(3, minmax(0, 1fr))").gap("1rem")
    */
   readonly grid: 'grid';
   /**
@@ -5049,9 +5025,6 @@ export interface DisplayValues extends CssWideValues {
    * 适用场景：需要宽高、内边距且随文本同行排列的小盒子。
    *
    * 相邻行内级盒子之间的文本空白仍可能形成间距，vertical-align 会影响它在行内的位置。
-   *
-   * @example
-   * s.display("inline-block").width("2rem").height("2rem").verticalAlign("middle")
    */
   readonly 'inline-block': 'inline-block';
   /**
@@ -5065,9 +5038,6 @@ export interface DisplayValues extends CssWideValues {
    * 适用场景：图标与文字组合、标签等需要内部弹性对齐，同时以行内方式排列的内容。
    *
    * 子项换行由 flex-wrap 控制。当容器自身是 Flex/Grid 项目时，其外部排版还受父布局控制。
-   *
-   * @example
-   * s.display("inline-flex").alignItems("center").gap("0.375rem")
    */
   readonly 'inline-flex': 'inline-flex';
   /**
@@ -5076,9 +5046,6 @@ export interface DisplayValues extends CssWideValues {
    * 区别：与 grid 的内部网格布局相同，但容器在普通流中按行内级盒子排列。
    *
    * 适用场景：需要行列对齐并与周围文字同行的小型内容组。
-   *
-   * @example
-   * s.display("inline-grid").gridTemplateColumns("repeat(2, auto)").gap("0.25rem")
    */
   readonly 'inline-grid': 'inline-grid';
   /**
@@ -5102,9 +5069,6 @@ export interface DisplayValues extends CssWideValues {
    * 适用场景：从当前布局中隐藏一段内容。
    *
    * 不能靠它保留可聚焦交互；重新显示时需按组件需求管理焦点。
-   *
-   * @example
-   * s.display("none")
    */
   readonly none: 'none';
   /**
@@ -5293,9 +5257,6 @@ export interface FlexValues extends CssWideValues {
    * 适用场景：让项目以自身尺寸为基础参与剩余空间分配。
    *
    * 最终比例还受最小/最大尺寸约束，不保证所有项目等宽。
-   *
-   * @example
-   * s.flex("auto")
    */
   readonly auto: 'auto';
   /**
@@ -5324,9 +5285,6 @@ export interface FlexValues extends CssWideValues {
    * 区别：auto 会增长和收缩；none 两者都不参与。
    *
    * 适用场景：防止工具栏中的图标或固定控件被压缩。
-   *
-   * @example
-   * s.flex("none")
    */
   readonly none: 'none';
 }
@@ -5443,9 +5401,6 @@ export interface FlexWrapValues extends CssWideValues {
    * 区别：nowrap 保持单行；wrap-reverse 反转交叉轴上各行的排列方向。
    *
    * 换行不会自动均分每行项目宽度，尺寸仍由各项目的 flex 配置决定。
-   *
-   * @example
-   * s.display("flex").flexWrap("wrap")
    */
   readonly wrap: 'wrap';
   /**
@@ -7146,18 +7101,12 @@ export interface JustifyContentValues extends CssWideValues {
    * 适用场景：工具栏左侧标题和右侧操作分居两端。
    *
    * 只有一个项目时靠起始侧，不会自动居中。
-   *
-   * @example
-   * s.display("flex").justifyContent("space-between").alignItems("center")
    */
   readonly 'space-between': 'space-between';
   /**
    * 容器两端和相邻项目之间分配相等空间。
    *
    * 适用场景：希望容器两端和项目之间空隙一致的导航或操作组。
-   *
-   * @example
-   * s.display("flex").justifyContent("space-evenly")
    */
   readonly 'space-evenly': 'space-evenly';
   /**
@@ -9941,18 +9890,12 @@ export interface MozBoxSizingValues extends CssWideValues {
    * 适用场景：希望组件的指定宽高包含内边距和边框时。
    *
    * 仍不包含 margin；最小/最大尺寸和布局约束仍参与计算。
-   *
-   * @example
-   * s.boxSizing("border-box").width("20rem").padding("1rem")
    */
   readonly 'border-box': 'border-box';
   /**
    * 指定尺寸仅计算内容盒，内边距和边框额外增加外部尺寸。
    *
    * 适用场景：希望明确指定纯内容区尺寸时。
-   *
-   * @example
-   * s.boxSizing("content-box").width("100px").padding("10px")
    */
   readonly 'content-box': 'content-box';
 }
@@ -10667,9 +10610,6 @@ export interface MozTransformStyleValues extends CssWideValues {
    * 区别：flat 会将后代展平到当前元素的平面；preserve-3d 本身不提供透视效果。
    *
    * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
-   *
-   * @example
-   * s.transformStyle("preserve-3d")
    */
   readonly 'preserve-3d': 'preserve-3d';
 }
@@ -11018,9 +10958,6 @@ export interface MsFlexValues extends CssWideValues {
    * 适用场景：让项目以自身尺寸为基础参与剩余空间分配。
    *
    * 最终比例还受最小/最大尺寸约束，不保证所有项目等宽。
-   *
-   * @example
-   * s.flex("auto")
    */
   readonly auto: 'auto';
   /**
@@ -11049,9 +10986,6 @@ export interface MsFlexValues extends CssWideValues {
    * 区别：auto 会增长和收缩；none 两者都不参与。
    *
    * 适用场景：防止工具栏中的图标或固定控件被压缩。
-   *
-   * @example
-   * s.flex("none")
    */
   readonly none: 'none';
 }
@@ -11259,9 +11193,6 @@ export interface MsOverflowXValues extends CssWideValues {
    * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
    *
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -11272,9 +11203,6 @@ export interface MsOverflowXValues extends CssWideValues {
    * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
    *
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -11285,9 +11213,6 @@ export interface MsOverflowXValues extends CssWideValues {
    * 适用场景：需要裁剪且仍保留程序化滚动的容器。
    *
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -11315,9 +11240,6 @@ export interface MsOverflowYValues extends CssWideValues {
    * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
    *
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -11328,9 +11250,6 @@ export interface MsOverflowYValues extends CssWideValues {
    * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
    *
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -11341,9 +11260,6 @@ export interface MsOverflowYValues extends CssWideValues {
    * 适用场景：需要裁剪且仍保留程序化滚动的容器。
    *
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -11568,9 +11484,6 @@ export interface MsTextOverflowValues extends CssWideValues {
    * 适用场景：给确实发生行内溢出的单行内容添加省略提示。
    *
    * 不会自动限制宽度、禁用换行或实现多行省略。Flex/Grid 子项还可能需要 min-width:0。
-   *
-   * @example
-   * s.minWidth("0px").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    */
   readonly ellipsis: 'ellipsis';
 }
@@ -12122,9 +12035,6 @@ export interface ObjectFitValues extends CssWideValues {
    * 区别：cover 优先填满盒子并可能裁剪；contain 优先保留完整内容。
    *
    * 适用场景：希望完整显示的商品图或图像预览。
-   *
-   * @example
-   * s.width("20rem").height("12rem").objectFit("contain")
    */
   readonly contain: 'contain';
   /**
@@ -12135,9 +12045,6 @@ export interface ObjectFitValues extends CssWideValues {
    * 适用场景：固定尺寸头像、卡片封面。
    *
    * 裁剪位置由 object-position 控制，盒子尺寸仍需另外设置。
-   *
-   * @example
-   * s.width("80px").height("80px").objectFit("cover")
    */
   readonly cover: 'cover';
   /**
@@ -12449,9 +12356,6 @@ export interface OObjectFitValues extends CssWideValues {
    * 区别：cover 优先填满盒子并可能裁剪；contain 优先保留完整内容。
    *
    * 适用场景：希望完整显示的商品图或图像预览。
-   *
-   * @example
-   * s.width("20rem").height("12rem").objectFit("contain")
    */
   readonly contain: 'contain';
   /**
@@ -12462,9 +12366,6 @@ export interface OObjectFitValues extends CssWideValues {
    * 适用场景：固定尺寸头像、卡片封面。
    *
    * 裁剪位置由 object-position 控制，盒子尺寸仍需另外设置。
-   *
-   * @example
-   * s.width("80px").height("80px").objectFit("cover")
    */
   readonly cover: 'cover';
   /**
@@ -12522,9 +12423,6 @@ export interface OTextOverflowValues extends CssWideValues {
    * 适用场景：给确实发生行内溢出的单行内容添加省略提示。
    *
    * 不会自动限制宽度、禁用换行或实现多行省略。Flex/Grid 子项还可能需要 min-width:0。
-   *
-   * @example
-   * s.minWidth("0px").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    */
   readonly ellipsis: 'ellipsis';
 }
@@ -12824,9 +12722,6 @@ export interface OverflowValues extends CssWideValues {
    * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
    *
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -12837,9 +12732,6 @@ export interface OverflowValues extends CssWideValues {
    * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
    *
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -12850,9 +12742,6 @@ export interface OverflowValues extends CssWideValues {
    * 适用场景：需要裁剪且仍保留程序化滚动的容器。
    *
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -12885,9 +12774,6 @@ export interface OverflowBlockValues extends CssWideValues {
    * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
    *
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -12898,9 +12784,6 @@ export interface OverflowBlockValues extends CssWideValues {
    * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
    *
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -12911,9 +12794,6 @@ export interface OverflowBlockValues extends CssWideValues {
    * 适用场景：需要裁剪且仍保留程序化滚动的容器。
    *
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -12961,9 +12841,6 @@ export interface OverflowInlineValues extends CssWideValues {
    * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
    *
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -12974,9 +12851,6 @@ export interface OverflowInlineValues extends CssWideValues {
    * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
    *
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -12987,9 +12861,6 @@ export interface OverflowInlineValues extends CssWideValues {
    * 适用场景：需要裁剪且仍保留程序化滚动的容器。
    *
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -13008,9 +12879,6 @@ export interface OverflowWrapValues extends CssWideValues {
    * 区别：break-word 的额外断点不按 anywhere 的方式参与最小内容宽度计算；word-break:break-all 更积极地拆分普通单词。
    *
    * 适用场景：展示不可控的长 URL 或无空格文本。
-   *
-   * @example
-   * s.$property("anywhere")
    */
   readonly anywhere: 'anywhere';
   /**
@@ -13034,9 +12902,6 @@ export interface OverflowXValues extends CssWideValues {
    * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
    *
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -13047,9 +12912,6 @@ export interface OverflowXValues extends CssWideValues {
    * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
    *
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -13060,9 +12922,6 @@ export interface OverflowXValues extends CssWideValues {
    * 适用场景：需要裁剪且仍保留程序化滚动的容器。
    *
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -13090,9 +12949,6 @@ export interface OverflowYValues extends CssWideValues {
    * 区别：scroll 通常始终预留或显示滚动机制；auto 根据溢出情况显示滚动条，外观由平台决定。
    *
    * 适用场景：内容超过受限尺寸时可以滚动的面板。
-   *
-   * @example
-   * s.$property("auto")
    */
   readonly auto: 'auto';
   /**
@@ -13103,9 +12959,6 @@ export interface OverflowYValues extends CssWideValues {
    * 适用场景：只裁剪绘制，不希望该轴成为滚动容器的区域。
    *
    * 两轴设置会影响计算结果；与另一轴 auto/scroll 等组合时，要检查最终溢出行为。
-   *
-   * @example
-   * s.$property("clip")
    */
   readonly clip: 'clip';
   /**
@@ -13116,9 +12969,6 @@ export interface OverflowYValues extends CssWideValues {
    * 适用场景：需要裁剪且仍保留程序化滚动的容器。
    *
    * 可能成为 sticky 后代的滚动参照，不能把它仅理解成视觉裁剪。
-   *
-   * @example
-   * s.$property("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -13559,9 +13409,6 @@ export interface PointerEventsValues extends CssWideValues {
    * 适用场景：覆盖在内容上方但不应拦截点击的装饰层。
    *
    * 后代可以恢复命中；来自后代的事件仍可能经过祖先监听器。
-   *
-   * @example
-   * s.pointerEvents("none")
    */
   readonly none: 'none';
   /**
@@ -13601,9 +13448,6 @@ export interface PositionValues extends CssWideValues {
    * 适用场景：容器内部的角标、图标覆盖和定位装饰。
    *
    * 通常在预期的容器上设置 position:relative；元素不为自己保留普通流占位。
-   *
-   * @example
-   * s.position("absolute").top("0px").right("0px")
    */
   readonly absolute: 'absolute';
   /**
@@ -13614,9 +13458,6 @@ export interface PositionValues extends CssWideValues {
    * 适用场景：固定工具栏或覆盖层。
    *
    * 祖先的 transform 等属性可能改变固定定位的包含块；z-index 仍受层叠上下文约束。
-   *
-   * @example
-   * s.position("fixed").inset("0px")
    */
   readonly fixed: 'fixed';
   /**
@@ -13625,9 +13466,6 @@ export interface PositionValues extends CssWideValues {
    * 区别：absolute 会脱离普通流；relative 仍保留原占位。
    *
    * 适用场景：为绝对定位后代提供定位参照，或做不改变其他元素排布的视觉偏移。
-   *
-   * @example
-   * s.position("relative")
    */
   readonly relative: 'relative';
   /**
@@ -13642,9 +13480,6 @@ export interface PositionValues extends CssWideValues {
    * 适用场景：滚动列表的分组标题、吸顶工具栏。
    *
    * 对应轴至少一个 inset 必须非 auto；祖先 overflow 可能改变滚动参照。
-   *
-   * @example
-   * s.position("sticky").top("0px")
    */
   readonly sticky: 'sticky';
 }
@@ -16111,9 +15946,6 @@ export interface TextOverflowValues extends CssWideValues {
    * 适用场景：给确实发生行内溢出的单行内容添加省略提示。
    *
    * 不会自动限制宽度、禁用换行或实现多行省略。Flex/Grid 子项还可能需要 min-width:0。
-   *
-   * @example
-   * s.minWidth("0px").whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    */
   readonly ellipsis: 'ellipsis';
 }
@@ -16447,9 +16279,6 @@ export interface TransformStyleValues extends CssWideValues {
    * 区别：flat 会将后代展平到当前元素的平面；preserve-3d 本身不提供透视效果。
    *
    * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
-   *
-   * @example
-   * s.transformStyle("preserve-3d")
    */
   readonly 'preserve-3d': 'preserve-3d';
 }
@@ -16794,9 +16623,6 @@ export interface VisibilityValues extends CssWideValues {
    * 区别：display:none 不保留布局盒；opacity:0 不会以相同方式移除交互和可访问性。
    *
    * 适用场景：暂时隐藏占位内容。
-   *
-   * @example
-   * s.visibility("hidden")
    */
   readonly hidden: 'hidden';
   /**
@@ -16875,9 +16701,6 @@ export interface WebkitAlignItemsValues extends CssWideValues {
    * 区别：justify-content 控制 Flex 主轴上的内容分布；align-items 控制交叉轴。
    *
    * 适用场景：横向图标和文字的垂直对齐。
-   *
-   * @example
-   * s.display("inline-flex").alignItems("center")
    */
   readonly center: 'center';
   /**
@@ -16914,9 +16737,6 @@ export interface WebkitAlignItemsValues extends CssWideValues {
    * 区别：center 保持项目尺寸并居中；stretch 尝试扩大自动尺寸。
    *
    * 项目在对齐轴有显式尺寸或受最小/最大尺寸约束时，不一定填满可用区域。
-   *
-   * @example
-   * s.display("flex").alignItems("stretch")
    */
   readonly stretch: 'stretch';
 }
@@ -17821,18 +17641,12 @@ export interface WebkitBoxSizingValues extends CssWideValues {
    * 适用场景：希望组件的指定宽高包含内边距和边框时。
    *
    * 仍不包含 margin；最小/最大尺寸和布局约束仍参与计算。
-   *
-   * @example
-   * s.boxSizing("border-box").width("20rem").padding("1rem")
    */
   readonly 'border-box': 'border-box';
   /**
    * 指定尺寸仅计算内容盒，内边距和边框额外增加外部尺寸。
    *
    * 适用场景：希望明确指定纯内容区尺寸时。
-   *
-   * @example
-   * s.boxSizing("content-box").width("100px").padding("10px")
    */
   readonly 'content-box': 'content-box';
 }
@@ -18074,9 +17888,6 @@ export interface WebkitFlexValues extends CssWideValues {
    * 适用场景：让项目以自身尺寸为基础参与剩余空间分配。
    *
    * 最终比例还受最小/最大尺寸约束，不保证所有项目等宽。
-   *
-   * @example
-   * s.flex("auto")
    */
   readonly auto: 'auto';
   /**
@@ -18105,9 +17916,6 @@ export interface WebkitFlexValues extends CssWideValues {
    * 区别：auto 会增长和收缩；none 两者都不参与。
    *
    * 适用场景：防止工具栏中的图标或固定控件被压缩。
-   *
-   * @example
-   * s.flex("none")
    */
   readonly none: 'none';
 }
@@ -18224,9 +18032,6 @@ export interface WebkitFlexWrapValues extends CssWideValues {
    * 区别：nowrap 保持单行；wrap-reverse 反转交叉轴上各行的排列方向。
    *
    * 换行不会自动均分每行项目宽度，尺寸仍由各项目的 flex 配置决定。
-   *
-   * @example
-   * s.display("flex").flexWrap("wrap")
    */
   readonly wrap: 'wrap';
   /**
@@ -18428,18 +18233,12 @@ export interface WebkitJustifyContentValues extends CssWideValues {
    * 适用场景：工具栏左侧标题和右侧操作分居两端。
    *
    * 只有一个项目时靠起始侧，不会自动居中。
-   *
-   * @example
-   * s.display("flex").justifyContent("space-between").alignItems("center")
    */
   readonly 'space-between': 'space-between';
   /**
    * 容器两端和相邻项目之间分配相等空间。
    *
    * 适用场景：希望容器两端和项目之间空隙一致的导航或操作组。
-   *
-   * @example
-   * s.display("flex").justifyContent("space-evenly")
    */
   readonly 'space-evenly': 'space-evenly';
   /**
@@ -19620,9 +19419,6 @@ export interface WebkitTransformStyleValues extends CssWideValues {
    * 区别：flat 会将后代展平到当前元素的平面；preserve-3d 本身不提供透视效果。
    *
    * 该属性不继承，需要在参与三维层级的中间元素上设置；opacity 小于 1、非 none 的 filter 等分组效果仍可能强制展平。
-   *
-   * @example
-   * s.transformStyle("preserve-3d")
    */
   readonly 'preserve-3d': 'preserve-3d';
 }
@@ -19817,9 +19613,6 @@ export interface WhiteSpaceValues extends CssWideValues {
    * 区别：pre 也不进行普通软换行，但会保留连续空白。
    *
    * 适用场景：单行标签；结合宽度约束、overflow 和 text-overflow 实现省略。
-   *
-   * @example
-   * s.whiteSpace("nowrap").overflow("hidden").textOverflow("ellipsis")
    */
   readonly nowrap: 'nowrap';
   /**
@@ -19836,9 +19629,6 @@ export interface WhiteSpaceValues extends CssWideValues {
    * 区别：pre 不进行普通软换行；pre-line 会折叠连续空格。
    *
    * 适用场景：需要保留用户换行和空格，同时允许适应容器宽度的文本。
-   *
-   * @example
-   * s.whiteSpace("pre-wrap")
    */
   readonly 'pre-wrap': 'pre-wrap';
   /**

@@ -37,7 +37,7 @@ currentTheme.value = themes.dark;
 const button = <button class={styles.root}>保存</button>;
 ```
 
-主题引用在消费时读取来源，不在定义时冻结颜色。系统关键字直接输出原生值。主题引用使用元素变量，多套实例可共享规则而不共享变量。普通非响应式对象保持 JavaScript 语义，主题成员也可用 Vue Ref。
+主题引用在消费时读取来源，不在定义时冻结颜色。系统关键字直接输出原生值。主题引用使用元素变量，多套实例可共享规则而不共享变量。作者与 useTheme 共用 Vue reactive 读取来源；通过响应式映射修改成员可以更新已有样式。绕过代理直接修改原始对象仍遵循 Vue 的普通对象语义，不会触发更新。
 
 ## 区域与请求隔离
 
@@ -49,28 +49,30 @@ const button = <button class={styles.root}>保存</button>;
 
 SSR 的请求专属主题应在请求根 setup 中 provideTheme，或按请求创建上下文；不要让多个请求改写同一个模块级 Ref。Teleport 使用逻辑组件树来源，不依赖原 DOM 祖先，不向全局 body 注入局部主题。嵌套区域可用 computed 选择父级与覆盖来源。
 
-## 字面量与原始主题映射
+## 字面量与响应式主题对象
 
 常规样式使用 s.display('inline-flex').backgroundColor('_brand')。系统字面量保留原生 CSS 值；以 _ 开头的完整属性值是主题名，按目标属性查找，颜色属性同时接受共享 color 组，同名时目标属性自身的成员优先。类型检查会拒绝已知的错误主题字面量；运行时字符串和 bx 的结果也会在消费时校验，不把未知名称静默输出成 CSS。
 
 关键词自动补全、中文说明和定义跳转覆盖普通字面量、bx、条件分支与泛型作者。
 
-需要对应映射时使用 useTheme()。返回值为 Readonly<Ref<T>>：入口不可写回 .value，主题实例、属性组和成员不复制、不递归冻结或代理。它与 useCss 使用同一来源，并跟随来源 Ref 的替换。成员本身是 Ref 时仍按正常 Vue 语义读取；普通非响应式成员不会凭空获得响应性。
+需要对应映射时使用 useTheme()。主题已知是对象，返回 UnwrapNestedRefs<T>，直接读取 theme.color._brand，不需要外层 .value。属性组由 Vue reactive 按需代理，对象中的 Ref 成员按 Vue 规则自动解包；修改映射会写回当前来源，已有样式也能追踪这些修改。
+
+普通实例直接复用 reactive 代理。来源是可整体替换的 Ref 时，仅增加一层稳定转发，使现有 theme 对象始终读取该区域的最新来源；不建立逐属性或逐关键字的包装对象。切换来源后停止追踪旧主题，成员枚举和写入也指向新来源。
 
 ```tsx
 const s = useCss();
 const theme = useTheme();
-const brand = computed(() => theme.value.color._brand);
+const brand = computed(() => theme.color._brand);
 
 // 普通属性推荐主题名；自定义变量不做主题名解析，显式读取映射并用 bx 保持更新。
-const style = s.color('_brand').variable('--brand', bx(theme.value.color._brand));
+const style = s.color('_brand').variable('--brand', bx(theme.color._brand));
 ```
 
-这里的 computed 从 vue 导入，bx 从 core 导入。直接保存 theme.value 或直接把成员值传入样式，遵循普通 JavaScript 当次读取语义；需要跟随替换时在 computed/bx 内读取。自定义 CSS 变量中的普通字符串（包括 '_brand'）保留原值。原 keywords.color._brand 调用迁移到主题名字面量；若需要固定来源或跨属性组的实际值，明确捕获对应来源并通过 bx 读取。
+这里的 computed 从 vue 导入，bx 从 core 导入。直接解构 theme.color 或把成员值保存为普通变量，遵循 JavaScript 当次读取语义；需要跟随来源替换时在 computed/bx 内读取 theme.color._brand。自定义 CSS 变量中的普通字符串（包括 '_brand'）保留原值。原 keywords.color._brand 调用迁移到主题名字面量；若需要固定来源或跨属性组的实际值，明确捕获对应来源并通过 bx 读取。
 
 ## 类型与继承
 
-Css<T> 的属性方法与 useTheme() 的原始映射保留同一主题约束。共享样式工具接收 s: Css<T>，主题 T 可继续 extends AppTheme；需要映射的业务工具可以接收 Readonly<Ref<T>>。组合接收已经检查的 CssClass/CssInput，不重复携带主题泛型，也不依靠全局 module augmentation。
+Css<T> 的属性方法与 useTheme() 的响应式对象保留同一主题约束。共享样式工具接收 s: Css<T>，主题 T 可继续 extends AppTheme；需要映射的业务工具接收 UnwrapNestedRefs<T>。主题来源仍允许 T 或 Ref<T>；来源成员可以是 Ref，读取对象后则使用解包后的值类型。组合接收已经检查的 CssClass/CssInput，不重复携带主题泛型，也不依靠全局 module augmentation。
 
 主题成员使用 _ 前缀，不能覆盖原生 CSS 关键字。颜色主题建议集中放在 color 组，可以用于 color、backgroundColor、borderColor 等 72 个兼容位置，其主题名不能用于 padding。原生值沿用该属性的 csstype 输入边界：封闭属性拒绝错误值，允许自由字符串的属性仍接受字符串；这里没有新增完整 CSS 语法类型检查器。
 
@@ -92,6 +94,21 @@ class DarkTheme extends AppTheme {
 固定生成器覆盖 857 个真实属性方法，按 14 类组织 @category 文档。属性方法说明用途、常用值、规范初始值和易错点，原生字面量与主题成员保留中文 JSDoc。原生值直接使用 'inline-flex'、'currentColor'、'revert-layer'、'preserve-3d' 等 CSS 拼写，不再生成 camelCase 成员映射。
 
 生成器借鉴 zerodep-js 的简短输入别名，属性方法统一使用 PropertyInput；原生数值与自由字符串范围在生成时展开，关键字注释只维护一份，主题名称与 bx 仍参与检查。规范初始值和继承标记取自固定 mdn-data，简写属性展开子属性初始值；数据缺项时明确说明，不混同浏览器默认样式表。
+
+属性注释统一采用下面的格式，不生成 @example：
+
+```ts
+/**
+ * 设置动画在有效播放区间之外是否应用关键帧样式。
+ *
+ * 常用值：`none`、`forwards`、`backwards`、`both`。
+ *
+ * @default:'none'
+ * @extend:'否'
+ */
+```
+
+@default 表示 CSS 规范初始值，不是方法默认参数或浏览器样式表值；@extend 是自定义的 CSS 继承性标记，不参与 TypeScript 类继承。缺少数据时省略对应标签，不用“否”代替未知。常用值是说明用的精选列表，不限制属性的真实类型范围。
 
 TypeScript 6 不自动为普通字符串候选附上对应成员注释。编辑器扩展根据真实生成方法读取字面值词典和公开 Css<T> 的主题参数，补充 hover、补全详情和定义跳转；不会修改诊断、输出或普通业务方法。主题说明不依赖发布声明中被擦除类型的私有字段。
 

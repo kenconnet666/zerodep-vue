@@ -572,13 +572,13 @@ const styles = { root: base, compact };
 
 每次属性调用返回新值，原链和同一个 s 的其他分支不变。裸调用后丢弃结果不产生样式。内部共享不可变前缀，追加时不复制完整声明，消费/组合时才展开。具名集合用普通对象，删除旧 css({...})、cx({...}) 命名入口和对象作者类型，不建设兼容层。
 
-属性方法通过固定 csstype 生成真实方法，T 贯穿 Css<T>、PropertyValue 和 useTheme 的原始主题映射。保留 857 个属性、14 类说明、属性初始值及中文 JSDoc；不以宽泛索引或 any 代替精确提示。
+属性方法通过固定 csstype 生成真实方法，T 贯穿 Css<T>、PropertyValue 和 useTheme 的响应式主题映射。保留 857 个属性、14 类说明、属性初始值及中文 JSDoc；不以宽泛索引或 any 代替精确提示。
 
 select(condition, style) 追加相对选择器、伪类、伪元素、属性选择器或 media/supports/container/starting-style 条件。样式可为嵌套条件数组，可复用链和值；普通类名不能重新限定到嵌套条件。variable('--name', value) 声明原生自定义属性；名称和 fallback 显式书写，数字不补 px。
 
-库不提供默认 useCss/useTheme，也不创建默认实例；系统主题同样由应用显式创建上下文。业务主题继承 SystemKeywords，调用 createCssContext(真实实例或 Vue Ref)，返回含 useCss()/provideTheme(source)/useTheme() 的 CssContext<T>。应用在创建主题的模块直接解构并导出自己的 hooks，组件统一写 const s = useCss()；无来源的泛型 useCss<AppTheme>() 不成立。主题上下文各有独立 Vue 注入键；provideTheme 必须在 setup 调用，返回当前组件可用的作者，子树通过 useCss/useTheme 取得最近覆盖。组件外使用该上下文的默认来源。useTheme 返回 Readonly<Ref<T>>，保留原始实例、成员类型和来源替换，不递归代理或冻结业务对象。
+库不提供默认 useCss/useTheme，也不创建默认实例；系统主题同样由应用显式创建上下文。业务主题继承 SystemKeywords，调用 createCssContext(真实实例或 Vue Ref)，返回含 useCss()/provideTheme(source)/useTheme() 的 CssContext<T>。应用在创建主题的模块直接解构并导出自己的 hooks，组件统一写 const s = useCss()；无来源的泛型 useCss<AppTheme>() 不成立。主题上下文各有独立 Vue 注入键；provideTheme 必须在 setup 调用，返回当前组件可用的作者，子树通过 useCss/useTheme 取得最近覆盖。组件外使用该上下文的默认来源。useTheme 返回 UnwrapNestedRefs<T> 响应式对象，直接读取 theme.color._brand；普通实例复用 Vue reactive，可替换来源只保留一层转发，成员解包和更新仍遵循 Vue 规则。
 
-系统值和主题名都直接写字面量并按属性补全，例如 s.display('inline-flex').backgroundColor('_brand')。不提供 keywords 对象视图、系统关键字包装类型或运行时标准值字典。字面量中文说明保存在生成声明中；运行时仅保留颜色兼容属性元数据。需要映射时使用 useTheme().value，动态样式显式使用 bx(theme.value.color._brand)。主题名字面量内部保留来源明确的延迟读取描述，在消费时读取真实来源，不冻结初始值。颜色主题可复用于 72 个兼容颜色属性，不接受错误跨属性组主题名。主题成员用 _ 前缀；继承与覆盖遵循普通类字段规则，替换整组时显式合并要保留的成员，不做隐式合并。
+系统值和主题名都直接写字面量并按属性补全，例如 s.display('inline-flex').backgroundColor('_brand')。不提供 keywords 对象视图、系统关键字包装类型或运行时标准值字典。字面量中文说明保存在生成声明中；运行时仅保留颜色兼容属性元数据。需要映射时使用 useTheme()，动态样式显式使用 bx(theme.color._brand)。主题名字面量内部保留来源明确的延迟读取描述，在消费时读取真实来源，不冻结初始值。颜色主题可复用于 72 个兼容颜色属性，不接受错误跨属性组主题名。主题成员用 _ 前缀；继承与覆盖遵循普通类字段规则，替换整组时显式合并要保留的成员，不做隐式合并。
 
 主题切换通过 Vue Ref，允许成员本身为 Ref。Teleport 跟随逻辑组件来源；SSR 的请求专属来源在请求根提供，或每个请求创建上下文，不能跨请求修改共享全局 Ref。独立主题区域不串值，不向全局 body 写入区域主题。详见 docs/themes.md。
 

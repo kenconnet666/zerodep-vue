@@ -131,6 +131,11 @@ function description(name) {
   const initial =
     initialValue(meta?.initial) ??
     nativeDocs.get(name)?.match(/\*\*Initial value\*\*: `([^`]+)`/)?.[1];
+  // @extend 是 CSS 继承标记，不参与 TypeScript 的类继承；缺少依据时不猜“否”。
+  const tags = [
+    initial && `@default:'${initial.replaceAll("'", "\\'")}'`,
+    meta && `@extend:'${meta.inherited ? '是' : '否'}'`,
+  ].filter(Boolean);
   return (
     compatibility +
     summary +
@@ -141,13 +146,8 @@ function description(name) {
     (detail?.commonValues?.length
       ? '\n\n常用值：' + detail.commonValues.map((value) => `\`${value}\``).join('、') + '。'
       : '') +
-    (initial
-      ? `\n\nCSS 规范初始值：${initial}。不同于浏览器默认样式表。`
-      : '\n\n初始值：当前固定数据源未记录，参见该属性规范。') +
-    (meta ? `\n是否继承：${meta.inherited ? '是' : '否'}。` : '') +
-    (detail?.examples?.length
-      ? '\n' + detail.examples.map((example) => '@example\n' + example).join('\n')
-      : '') +
+    (initial ? '' : '\n\n初始值：当前固定数据源未记录，参见该属性规范。') +
+    (tags.length ? '\n\n' + tags.join('\n') : '') +
     (obsolete.has(name) ? '\n@deprecated 历史属性；新代码优先使用标准替代属性。' : '') +
     `\n@category ${propertyGroups.find(([group]) => group === propertyGroup(name, svg, obsolete))[1]}` +
     `\n@see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/${cssName(name)}`
@@ -172,7 +172,6 @@ function keywordDoc(name, value, color) {
       entry.comparison && '区别：' + entry.comparison,
       entry.usage && '适用场景：' + entry.usage,
       entry.notes,
-      ...(entry.examples ?? []).map((example) => '@example\n' + example),
     ]
       .filter(Boolean)
       .join('\n\n');

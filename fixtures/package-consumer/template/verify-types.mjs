@@ -60,8 +60,8 @@ try {
   const text = readFileSync(filename, 'utf8');
   const evidence = {};
   for (const [name, token, member] of [
-    ['brand', 'theme.value.color.', '_brand'],
-    ['genericBrand', 'theme.value.color.', '_brand'],
+    ['brand', 'theme.color.', '_brand'],
+    ['genericBrand', 'theme.color.', '_brand'],
   ]) {
     const marker = text.indexOf(`/*hover:${name}*/`);
     assert(marker > 0, `Missing probe marker ${name}`);
@@ -117,6 +117,7 @@ try {
   for (const [marker, value] of [
     ['font', 'inherit'],
     ['display', 'inline-flex'],
+    ['fillMode', 'forwards'],
     ['conditional', 'inline-flex'],
     ['binding', 'relative'],
     ['assertion', 'border-box'],
@@ -154,6 +155,24 @@ try {
       docs: ts.displayPartsToString(hover.documentation),
       definition: definitions[0].fileName.replace(root, '.'),
     };
+  }
+  for (const [method, call, initial, inherited] of [
+    ['font', ".font('inherit')", /font-size: medium.*font-family: 由浏览器决定/, true],
+    ['animationFillMode', ".animationFillMode('forwards')", /^:'none'$/, false],
+  ]) {
+    const info = service.getQuickInfoAtPosition(filename, text.indexOf(call) + 2);
+    const tags = Object.fromEntries(
+      info.tags.map((tag) => [tag.name, ts.displayPartsToString(tag.text)]),
+    );
+    assert.match(tags.default, initial);
+    assert.equal(tags.extend, `:'${inherited ? '是' : '否'}'`);
+    assert(!('example' in tags));
+    if (method === 'animationFillMode')
+      assert.match(
+        ts.displayPartsToString(info.documentation),
+        /常用值：`none`、`forwards`、`backwards`、`both`/,
+      );
+    evidence['property-' + method] = { tags };
   }
   for (const name of ['v-model_trim', 'v-show', 'v-model:value_number', 'v-slots']) {
     const position = text.indexOf(name + '=') + 2;

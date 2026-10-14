@@ -2,7 +2,7 @@
 
 Vue VDOM TSX 编译与运行时 CSS 工具库，基于官方 Vue JSX v3.0.0 的源码 fork。完整作者协议和维护契约见 [BLUEPRINT.md](BLUEPRINT.md)，交付版本及远程证据见 [验收矩阵](docs/acceptance.md)。
 
-CSS 采用运行时处理加辅助编译工具：系统值与主题名使用字面量，主题通过继承扩展，泛型 T 贯穿链式样式与 useTheme 原始映射。属性、关键字与主题成员的类型提示、中文说明及声明消费体验是交付要求；作者仍使用 class，绑定对应的内联 style 由编译器隐式接线。
+CSS 采用运行时处理加辅助编译工具：系统值与主题名使用字面量，主题通过继承扩展，泛型 T 贯穿链式样式与 useTheme 响应式映射。属性、关键字与主题成员的类型提示、中文说明及声明消费体验是交付要求；作者仍使用 class，绑定对应的内联 style 由编译器隐式接线。
 
 提供 `_component`、For、props/default/children、class/bx、系统/继承主题、动画和全局规则，以及兼容实例的 HMR 与 Vue DevTools 样式检查。状态直接使用 Vue Ref 和 computed。作者写法见 [authoring.md](docs/authoring.md)、[CSS 文档](docs/css.md) 和 [主题文档](docs/themes.md)。
 
