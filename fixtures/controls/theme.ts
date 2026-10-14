@@ -11,6 +11,7 @@ export class ControlTheme extends SystemKeywords {
 }
 
 export const controlTheme = createTheme(new ControlTheme());
+export const keywords = controlTheme.keywords;
 
 /** 由应用主题模块封装，组件只导入自己的 useCss，不关心底层上下文对象。 */
 export function useCss() {

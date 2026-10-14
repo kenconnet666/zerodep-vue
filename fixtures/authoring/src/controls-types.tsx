@@ -3,8 +3,10 @@ import { useCss } from '@zerodep-vue/core';
 import { Button } from '../../controls/Button.tsx';
 import { ToggleButton } from '../../controls/ToggleButton.tsx';
 import { TextInput } from '../../controls/TextInput.tsx';
+import { keywords, useCss as useControlCss } from '../../controls/theme.ts';
 
 const s = useCss();
+export const explicitThemeStyle = useControlCss().backgroundColor(keywords.color._brand);
 export const controls = (
   <>
     <Button
