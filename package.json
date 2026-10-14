@@ -21,6 +21,7 @@
     "naive:inventory": "node fixtures/naive-ui/inventory.mjs",
     "test:naive": "node fixtures/naive-ui/build.mjs",
     "test:authoring": "vitest run --config vitest.authoring.config.ts",
+    "check:authoring": "tsc --noEmit -p packages/core/test/tsx/tsconfig.json",
     "css:generate": "node scripts/css/generate.mjs",
     "css:generate:check": "node scripts/css/generate.mjs --check",
     "packages:pack": "node scripts/packages/pack.mjs",

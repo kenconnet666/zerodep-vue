@@ -41,6 +41,8 @@ const button = <button class={styles.root}>保存</button>;
 
 应用在创建主题的模块直接解构并导出自己的 useCss，组件使用 import { useCss } from './theme'，然后只写 const s = useCss()，不在组件里调用主题对象的方法。没有 useCss<AppTheme>() 这种缺少真实来源的类型承诺。createCssContext<AppTheme>() 缺少来源也会被拒绝。
 
+包装主题边界时，普通传参不会自动追踪之后的 prop 替换。若来源 prop 可以从对象切成 Ref，或更换 Ref 容器，在 setup 中写 `provideTheme(computed(() => unref(theme)))`，让 getter 读取最新 prop；只传入初始 `theme` 会保留那次调用的来源。跨模块、嵌套、Teleport 与 SSR 的实际用例见 [私有控件夹具](../fixtures/controls/README.md)，这不引入新的 Provider 产品 API。
+
 SSR 的请求专属主题应在请求根 setup 中 provideTheme，或按请求创建上下文；不要让多个请求改写同一个模块级 Ref。Teleport 使用逻辑组件树来源，不依赖原 DOM 祖先，不向全局 body 注入局部主题。嵌套区域可用 computed 选择父级与覆盖来源。
 
 ## 字面量与独立关键字视图

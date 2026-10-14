@@ -13,6 +13,16 @@
 
 Naive 三组任务各自编译完整生产清单并构建、导入生成的库；没有安装 naive-ui 预编译包来代替编译。上述结果尚不包含自有 CSS、交互混用或最终浏览器验收。
 
+## 组件库基础契约的 fixture 验证（2026-10-14）
+
+用户同意按推荐验证完善，并明确先不做 Button 等正式组件，允许在 fixtures 中测试。本轮保留 compiler/core 两包，只增强私有输入夹具、增加 ThemeRegion 并补充实际契约测试。
+
+c202fd34ce1bc7abbfa3e74231433aebe940f369 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38548207618) 已确认 28 个任务全部成功，包含双平台安装声明、真实 .d.ts、浏览器和 LSP；8f2feec 的对应 CI 也成功。此前主题声明问题已关闭。
+
+fixture 新增主题对象/Ref 容器/Ref 值替换、嵌套区域与 Teleport、并发 SSR 实际样式；输入覆盖原生 attrs、可写 computed、change 通知与父级重置分离、公开 focus、引用清理和 IME 组合事件。7 个组件短测分批通过，6 个受影响 TS/TSX 文件的原生 MCP 完整诊断零错误。运行测试此前没有归属 TS 配置，现增加独立 noEmit tsconfig，并将整个目录的严格类型检查接入远程 default 作者任务。新增浏览器场景交由本次 CI 的四组实际浏览器验证。
+
+编辑器核对发现当前长驻 MCP 会话对 CSS 字符串没有 hover/定义，而新独立 stdio 服务对同位置正常返回中文说明与唯一真实定义；这与旧插件缓存一致。WebStorm 的显式 keywords 成员有正确说明和声明，字符串导航尚未验证；IDE 未安装 Kotlin 脚本引擎，无法用多目标解析探针代替真实导航检查。保留现有 IDE/MCP 配置，待重载服务后再核对。范围及后续步骤见 [准备评审](ui-library-readiness.md)。
+
 ## 旧产物清理与组件库准备（2026-10-14）
 
 1cb84e0 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38536952356) 中，25 个任务成功；Linux/Windows 安装消费者均通过运行检查，但在主题字面量中文 hover 检查失败，汇总也失败。复现原因为 TypeScript 擦除 private 字段类型。交付前合并远程 8f2feec，采用其读取公开 Css<T> 的修复并保留 private 边界；补充四份真实 .d.ts 在内存发射及解析的主题说明、补全和导航回归。合并后两个编辑器定点测试通过，字面量类型夹具的原生 MCP 完整诊断零错误。评审已同步 createCssContext/provideTheme 入口及尚未关闭的 WebStorm 导航验收。8f2feec 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38547597118) 在合并时 pending，新提交完整结果另行核对。

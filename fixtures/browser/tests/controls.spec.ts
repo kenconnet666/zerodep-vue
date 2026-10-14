@@ -125,3 +125,67 @@ test('button variants, external overrides, active state and region themes comput
   await page.evaluate(() => window.__fixture!.unmount());
   expect(await page.evaluate(() => window.__fixture!.host.stats().ownedReferences)).toBe(0);
 });
+
+test('input fixture retains native readonly, accessible associations and explicit commit semantics after hydration', async ({
+  page,
+}) => {
+  await page.goto('/ssr');
+  await page.waitForFunction(() => window.__mounted);
+  const input = page.getByRole('textbox', { name: '控件标题' });
+  const id = await input.getAttribute('id');
+  expect(id).toBeTruthy();
+  await expect(page.getByText('控件标题', { exact: true })).toHaveAttribute('for', id!);
+  await expect(input).toHaveAttribute('maxlength', '32');
+  const help = await input.getAttribute('aria-describedby');
+  expect(help).toBeTruthy();
+  await expect(page.getByText('用于验证原生属性与表单模型。')).toHaveAttribute('id', help!);
+  await page.getByRole('checkbox', { name: '显示输入错误' }).check();
+  await expect(input).toHaveAttribute('aria-invalid', 'true');
+  const error = await page.getByText('标题需要修改。').getAttribute('id');
+  await expect(input).toHaveAttribute('aria-describedby', `${help} ${error}`);
+  await page.getByRole('checkbox', { name: '显示输入错误' }).uncheck();
+  await expect(input).not.toHaveAttribute('aria-invalid');
+  await expect(input).toHaveAttribute('aria-describedby', help!);
+  await page.getByRole('button', { name: '聚焦控件输入' }).click();
+  await expect(input).toBeFocused();
+  await input.fill('native draft');
+  await input.press('Tab');
+  await expect(page.getByTestId('commit-count')).toHaveText('1');
+  await expect(page.getByTestId('committed-title')).toHaveText('native draft');
+  await page.getByRole('button', { name: '重置控件表单' }).click();
+  await expect(input).toHaveValue('draft');
+  await page.getByRole('button', { name: '替换控件 Ref' }).click();
+  await expect(input).toHaveValue('replacement');
+  await expect(page.getByTestId('commit-count')).toHaveText('1');
+  await page.getByRole('checkbox', { name: '只读控件' }).check();
+  await page.getByRole('button', { name: '聚焦控件输入' }).click();
+  await input.press('End');
+  await input.press('A');
+  await expect(input).toHaveValue('replacement');
+  await page.getByRole('checkbox', { name: '只读控件' }).uncheck();
+  await input.fill('committed');
+  await input.press('Tab');
+  await expect(page.getByTestId('commit-count')).toHaveText('2');
+  await expect(page.getByTestId('committed-title')).toHaveText('committed');
+  await expect(input).toHaveAttribute('id', id!);
+});
+
+test('fixture theme boundary follows source object, Ref container and Ref value replacement', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const control = page.getByTestId('replaceable-region');
+  const className = await control.getAttribute('class');
+  await expect(control).toHaveCSS('background-color', 'rgb(37, 99, 235)');
+  await page.getByRole('button', { name: '替换区域对象' }).click();
+  await expect(control).toHaveCSS('background-color', 'rgb(22, 163, 74)');
+  await page.getByRole('button', { name: '替换区域 Ref', exact: true }).click();
+  await expect(control).toHaveCSS('background-color', 'rgb(234, 88, 12)');
+  await page.getByRole('button', { name: '更新区域 Ref' }).click();
+  await expect(control).toHaveCSS('background-color', 'rgb(8, 145, 178)');
+  await expect(control).toHaveAttribute('class', className!);
+  await expect(page.getByTestId('independent-button')).toHaveCSS(
+    'background-color',
+    'rgb(37, 99, 235)',
+  );
+});

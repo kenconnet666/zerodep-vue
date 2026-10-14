@@ -4,21 +4,21 @@
 
 ## 任务划分
 
-| 任务                        | 验证内容                                                | 并行方式                                   |
-| --------------------------- | ------------------------------------------------------- | ------------------------------------------ |
-| Format                      | 全仓已支持格式的文件检查                                | 独立 job                                   |
-| Types                       | 两包及 legacy-tsx、authoring 类型夹具                   | 四个矩阵 job，fail-fast=false              |
-| Compiler and SSR            | 普通 TSX 编译和 Vue SSR 对照                            | 独立 job                                   |
-| Upstream                    | 原始 JSX/resolve-type 断言与快照                        | official/fork × 两个 shard，共四个 job     |
-| TSX authoring               | 初始化、props/default、Ref、内容、attrs、For 与共享控件 | default/optimized 两个 job                 |
-| Naive production TSX        | 301 个生产 TSX 清单、全量发射、库构建与 SSR             | classic/official/fork 三个独立 job         |
-| Core runtime contracts      | 生成一致性、CSS/主题、宿主、HMR 与检查器契约            | 独立 job                                   |
-| Browser                     | 真实混用、按钮/表单、SSR/hydrate、500 次循环及生命周期  | development/production × Chromium/Firefox  |
-| Development tools           | HMR 状态保留、错误恢复、真实 DevTools 协议              | Chromium/Firefox，依赖 Naive 构建产物      |
-| Build and package artifacts | 两包构建、来源一致性和 tarball 内容                     | 构建后顺序验证与打包                       |
-| Installed packages          | 仓库外安装、ESM/CJS、SSR、声明和中文提示                | Linux/Windows，依赖当前提交的 tarball      |
-| LSP                         | 错误修复、依赖刷新、语义查询、补全和隔离                | Linux/Windows 两个矩阵 job                 |
-| CI result                   | 所有验证任务必须成功                                    | 等待依赖完成后汇总，不吞掉失败、取消或跳过 |
+| 任务                        | 验证内容                                                                    | 并行方式                                            |
+| --------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------- |
+| Format                      | 全仓已支持格式的文件检查                                                    | 独立 job                                            |
+| Types                       | 两包及 legacy-tsx、authoring 类型夹具                                       | 四个矩阵 job，fail-fast=false                       |
+| Compiler and SSR            | 普通 TSX 编译和 Vue SSR 对照                                                | 独立 job                                            |
+| Upstream                    | 原始 JSX/resolve-type 断言与快照                                            | official/fork × 两个 shard，共四个 job              |
+| TSX authoring               | 运行测试的类型，以及初始化、props/default、Ref、内容、attrs、For 与共享控件 | default/optimized 两个 job，类型检查仅 default 执行 |
+| Naive production TSX        | 301 个生产 TSX 清单、全量发射、库构建与 SSR                                 | classic/official/fork 三个独立 job                  |
+| Core runtime contracts      | 生成一致性、CSS/主题、宿主、HMR 与检查器契约                                | 独立 job                                            |
+| Browser                     | 真实混用、按钮/表单、SSR/hydrate、500 次循环及生命周期                      | development/production × Chromium/Firefox           |
+| Development tools           | HMR 状态保留、错误恢复、真实 DevTools 协议                                  | Chromium/Firefox，依赖 Naive 构建产物               |
+| Build and package artifacts | 两包构建、来源一致性和 tarball 内容                                         | 构建后顺序验证与打包                                |
+| Installed packages          | 仓库外安装、ESM/CJS、SSR、声明和中文提示                                    | Linux/Windows，依赖当前提交的 tarball               |
+| LSP                         | 错误修复、依赖刷新、语义查询、补全和隔离                                    | Linux/Windows 两个矩阵 job                          |
+| CI result                   | 所有验证任务必须成功                                                        | 等待依赖完成后汇总，不吞掉失败、取消或跳过          |
 
 LSP 自检会改写自己的临时源码，因此与类型检查隔离在不同 runner 中；不要为了并行把它们放进同一个工作目录。浏览器与包消费者分别下载同一提交的 Naive／包产物并核对来源。矩阵设置并发上限，HMR 与 inspector 使用独立服务进程，避免语法错误恢复用例干扰普通页面。
 
@@ -34,7 +34,11 @@ CSS 单元契约、浏览器行为、开发工具和发布声明分别保留证�
 
 fixtures/controls 是私有共享组件夹具：Button、ToggleButton、TextInput 和区域主题，分别进入默认/优化作者测试与浏览器。它们不作为 core 的产品组件导出。原生 HTML 属性通过 Vue attrs 转发并保留类型，控件自己声明 disabled、type、loading、回调和模型等运行时 props；标准 Vue 类型解析无法展开全部 DOM 事件映射，因此基类使用 Vue 的 @vue-ignore，透传行为有真实断言。
 
-Node/组件层检查回调次数、默认属性、加载与禁用恢复、Ref 容器替换、class 转发、规则复用和卸载释放。浏览器负责键盘 Enter/Space、focus-visible/active、真实 disabled/fieldset、表单 submit/reset、变体与外部覆盖、区域主题及 SSR 后交互，不用合成事件冒充浏览器原生行为。
+Node/组件层检查回调次数、默认属性、加载与禁用恢复、Ref 容器替换、class 转发、规则复用和卸载释放。ThemeRegion 补充对象/Ref 来源替换、跨模块嵌套及 Teleport；TextInput 补充原生 attrs、可写 computed、显式公开句柄和 IME 组合事件协议。SSR 检查实际 HTML、样式收集与请求隔离，结束后规则保留但元素租约释放。
+
+浏览器负责键盘 Enter/Space、focus-visible/active、真实 disabled/fieldset/readonly、表单 submit/reset 与 change 通知、label/help/error 关联、变体与外部覆盖、区域来源替换及 SSR 后交互，不用合成事件冒充浏览器原生行为。完整矩阵都消费同一份 [私有夹具](../fixtures/controls/README.md)，不代表已有正式 UI 组件库。
+
+`packages/core/test/tsx/tsconfig.json` 为运行测试提供与源码一致的 JSX、源码解析条件和严格选项；避免编辑器把没有归属配置的测试当作默认 React JSX 工程。default 作者任务先执行 `pnpm check:authoring`，不因 Vitest 转换成功就跳过测试代码的类型验收。
 
 mixed 套件显式包含 mixed.spec 和 controls.spec，development/production × Chromium/Firefox 都执行。未知 PW_SUITE 或 BROWSER_MODE 立即报错，不能静默回退到另一套测试。普通套件共享页面错误与 Vue 警告检查；HMR 只在故意制造语法错误的阶段允许预期错误。
 

@@ -1,8 +1,11 @@
-import { ref, shallowReactive, shallowRef } from 'vue';
+import { ref, shallowReactive, shallowRef, useId } from 'vue';
+import type { Ref } from 'vue';
 import { _component, bx, cx } from '@zerodep-vue/core';
 import { Button } from '../../controls/Button.tsx';
 import { ToggleButton } from '../../controls/ToggleButton.tsx';
 import { TextInput } from '../../controls/TextInput.tsx';
+import type { TextInputHandle } from '../../controls/TextInput.tsx';
+import { ThemeRegion } from '../../controls/ThemeRegion.tsx';
 import { ControlTheme, provideTheme, useCss } from '../../controls/theme.ts';
 
 const IndependentRegion = _component(() => {
@@ -27,6 +30,16 @@ export const Controls = _component(() => {
   const width = ref(120);
   const fieldsetDisabled = ref(false);
   const fieldsetClicks = ref(0);
+  const input = shallowRef<TextInputHandle | null>(null);
+  const fieldId = useId();
+  const readonly = ref(false);
+  const invalid = ref(false);
+  const commits = ref(0);
+  const committed = ref('');
+  const replaceable = shallowRef(new ControlTheme('rgb(234, 88, 12)'));
+  const region = shallowReactive<{ theme: ControlTheme | Ref<ControlTheme> }>({
+    theme: new ControlTheme(),
+  });
   const external = s
     .padding(16)
     .backgroundColor('rgb(120, 30, 90)')
@@ -46,7 +59,24 @@ export const Controls = _component(() => {
           resets.value++;
         }}
       >
-        <TextInput model={state.text} label="控件标题" name="title" />
+        <label for={`${fieldId}-input`}>控件标题</label>
+        <TextInput
+          ref={input}
+          id={`${fieldId}-input`}
+          model={state.text}
+          label="控件标题"
+          name="title"
+          readonly={readonly.value}
+          maxlength={32}
+          aria-invalid={invalid.value || undefined}
+          aria-describedby={invalid.value ? `${fieldId}-help ${fieldId}-error` : `${fieldId}-help`}
+          onCommit={(value) => {
+            commits.value++;
+            committed.value = value;
+          }}
+        />
+        <p id={`${fieldId}-help`}>用于验证原生属性与表单模型。</p>
+        {invalid.value && <p id={`${fieldId}-error`}>标题需要修改。</p>}
         <Button
           data-testid="action-button"
           disabled={disabled.value}
@@ -97,6 +127,17 @@ export const Controls = _component(() => {
       <output data-testid="submit-count">{submissions.value}</output>
       <output data-testid="submitted-title">{submitted.value}</output>
       <output data-testid="reset-count">{resets.value}</output>
+      <output data-testid="commit-count">{commits.value}</output>
+      <output data-testid="committed-title">{committed.value}</output>
+      <button onClick={() => input.value?.focus()}>聚焦控件输入</button>
+      <label>
+        <input type="checkbox" v-model={readonly.value} />
+        只读控件
+      </label>
+      <label>
+        <input type="checkbox" v-model={invalid.value} />
+        显示输入错误
+      </label>
       <label>
         <input type="checkbox" v-model={disabled.value} />
         禁用控件
@@ -139,6 +180,30 @@ export const Controls = _component(() => {
         切换控件主题
       </button>
       <IndependentRegion />
+      <ThemeRegion theme={region.theme}>
+        <Button data-testid="replaceable-region">可替换主题区域</Button>
+      </ThemeRegion>
+      <button
+        onClick={() => {
+          region.theme = new ControlTheme('rgb(22, 163, 74)');
+        }}
+      >
+        替换区域对象
+      </button>
+      <button
+        onClick={() => {
+          region.theme = replaceable;
+        }}
+      >
+        替换区域 Ref
+      </button>
+      <button
+        onClick={() => {
+          replaceable.value = new ControlTheme('rgb(8, 145, 178)');
+        }}
+      >
+        更新区域 Ref
+      </button>
       <label>
         <input type="checkbox" v-model={fieldsetDisabled.value} />
         禁用字段组

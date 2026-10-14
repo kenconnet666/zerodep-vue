@@ -1,8 +1,11 @@
-import { computed, ref } from 'vue';
+import { computed, ref, shallowRef } from 'vue';
 
 import { Button } from '../../controls/Button.tsx';
 import { ToggleButton } from '../../controls/ToggleButton.tsx';
 import { TextInput } from '../../controls/TextInput.tsx';
+import type { TextInputHandle } from '../../controls/TextInput.tsx';
+import { ThemeRegion } from '../../controls/ThemeRegion.tsx';
+import { ControlTheme } from '../../controls/theme.ts';
 import { keywords, useCss as useControlCss } from '../../controls/theme.ts';
 import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = createCssContext(new SystemKeywords());
@@ -33,3 +36,33 @@ export const controls = (
 <ToggleButton pressed={computed(() => false)} />;
 // @ts-expect-error 输入模型必须为字符串。
 <TextInput model={ref(123)} label="标题" />;
+
+const input = shallowRef<TextInputHandle | null>(null);
+export const inputContract = (
+  <TextInput
+    model={ref('')}
+    label="标题"
+    ref={input}
+    required
+    readonly
+    maxlength={12}
+    style={{ minWidth: '8rem' }}
+    onCommit={(value) => value.toUpperCase()}
+  />
+);
+input.value?.focus({ preventScroll: true });
+// @ts-expect-error 公开句柄不冒充内部 input 元素。
+input.value?.select();
+// @ts-expect-error 编辑模型拒绝 getter-only computed。
+<TextInput model={computed(() => 'readonly')} label="标题" />;
+// @ts-expect-error Ref 是唯一数据来源，不另外接收普通 value。
+<TextInput model={ref('')} value="competing" label="标题" />;
+// @ts-expect-error 提交通知保留字符串类型。
+<TextInput model={ref('')} label="标题" onCommit={(value: number) => value.toFixed()} />;
+export const themedControls = (
+  <ThemeRegion theme={computed(() => new ControlTheme())}>
+    <TextInput model={ref('')} label="区域输入" />
+  </ThemeRegion>
+);
+// @ts-expect-error 区域来源须包含控件主题契约。
+<ThemeRegion theme={new SystemKeywords()} />;

@@ -4,7 +4,9 @@
 
 结论：继续沿用现有 Vue VDOM、`_component`、Vue Ref 和不可变链式 CSS。当前没有证据要求重做工具库 API。正式组件库还没有建立，`fixtures/controls` 中的 Button、ToggleButton、TextInput 是验证夹具，不能直接等同于可发布组件。
 
-本页将已经完成的清理/修复和下一阶段建议分开。建议尚未成为已批准的新 API，也不扩大到模板编译或其他 renderer。
+用户已同意按推荐验证和完善，并明确要求先不做 Button 等正式组件。当前只在 fixtures 中验证组件库所需契约，保留 compiler/core 两包；不建立正式 UI 包或产品组件 API，也不扩大到模板编译或其他 renderer。
+
+本轮验证采用同一主题上下文、Ref 编辑模型和显式操作回调：先覆盖主题来源对象/Ref 容器替换、嵌套区域与 SSR，再覆盖原生属性转发、公开方法、输入法组合及表单重置。浏览器和安装包验证继续由 CI 负责；IDE 与当前 MCP 的提示/导航分别核对，不用一个服务的结果代替另一个。
 
 ## 已完成的清理
 
@@ -30,9 +32,18 @@
 
 远程 `8f2feec` 已将编辑器改为读取公开 `Css<T>` 的主题参数。合并时采用这一修复，保留 `theme` 的 private 边界，不再让编辑功能依赖私有存储类型。本轮新增定点测试在内存发射四份相关 `.d.ts` 并通过语言服务读取，确认 `_brand` 的中文 hover、补全详情和唯一导航恢复；安装消费者的失败消息补充具体探针名和值。
 
-合并后两个编辑器定点测试均通过，相关字面量类型夹具的原生 MCP 诊断为 TypeScript 6.0.3、complete=true、零错误。完整发布包和 Linux/Windows 消费结果等待对应提交 CI，不能用本地检查代替。远程前置提交的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38547597118) 在合并时仍 pending。
+8f2feec 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38547597118) 和 c202fd3 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38548207618) 现已确认成功；后者 28 个任务全部通过，包括 Linux/Windows 安装包声明与本轮前新增的真实 .d.ts 回归。发布声明缺口已经关闭，新 fixture 变更仍须核对自己的提交 CI。
 
-另一个未关闭的体验项是 WebStorm 的 `inherit` 单一定义导航：上轮实施记录尚未取得 IDE 实测证据。本轮的 TypeScript 服务回归不替代 WebStorm 本身的导航验收，也没有更改 IDE 设置。
+编辑器需分别看待：当前 MCP 的文件诊断正常，但现有长驻会话对 `font('inherit')` 返回空 hover/零定义；新启动并正常关闭的独立 stdio 服务对同一位置返回中文说明和一个真实定义。这与旧插件缓存一致，当前会话仍需重载后再验收。WebStorm 对 `keywords.font.inherit` 返回正确中文说明和 generated/literal-values.ts 声明；字符串形式没有返回可用结果。IDE 的多目标解析探针因未安装 Kotlin 脚本引擎不可用，不能据此声称 Ctrl+B 已验证。未修改 IDE 设置或安装插件。
+
+## 当前 fixture 验证结果
+
+- 已增加跨模块 ThemeRegion，仅验证现有 createCssContext/provideTheme 的使用方式；覆盖对象、Ref 容器和值的替换、嵌套区域、Teleport、固定 keywords 来源及并发 SSR。
+- TextInput 仍是私有夹具，增加原生属性/style、显式 focus 句柄和 change 通知；验证可写 computed、模型替换、父级 reset、输入法组合事件和卸载引用清理。类型夹具拒绝只读模型、竞争 value 输入、错误回调类型及不存在的公开方法。
+- 发现并补齐运行测试缺少 TypeScript 项目的问题：新增测试目录 tsconfig，相关文件诊断从错误的 React JSX/模块解析恢复为零错误；完整运行测试类型检查已接入 CI。
+- 7 项相关组件短测分批通过，6 个修改 TS/TSX 文件的当前会话 MCP 完整诊断为零错误。新增两项浏览器场景进入既有 development/production × Chromium/Firefox 矩阵，本地不重建旧 Naive 产物来替代新提交 CI。
+
+验证入口和边界见 [fixtures/controls](../fixtures/controls/README.md)。这些用例证明基础协议的已覆盖部分，不把单元组合事件等同于所有系统 IME 实测，也不把 Teleport 主题测试等同于完整弹层焦点系统。
 
 ## 组件库开始前需要明确的设计
 
@@ -77,12 +88,12 @@ Vue 的标准 render/JSX 模型对应 `modelValue` 和 `onUpdate:modelValue`，�
 
 Dialog 的焦点循环、关闭后焦点恢复等应按 [WAI-ARIA Dialog 模式](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)落实；Select/Autocomplete 的键盘导航、选中与展开状态应按 [Combobox 模式](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/)落实。现有 Naive 兼容性测试检验的是编译和混用，不能代替自有组件的这些行为。
 
-## 建议的实施顺序与退出条件
+## 后续正式组件阶段
 
-1. 核对本轮声明修复的完整 CI；确定上面主题所有权和主要模型接口。
+1. 当前先核对 fixture 变更的完整 CI，并完成重载后的 IDE/MCP 验收；暂不建立正式组件库。
 2. 工具库仍在演进时，优先在同仓库新增 `packages/ui`，独立导出和验收；只从 core 根入口使用运行能力，compiler 作为构建工具。不将 UI 业务逻辑放进 core，也不先创建空包或空目录。独立仓库会增加同步发布和版本兼容成本，待边界稳定后再考虑。
 3. 先完成一个正式 Button：语义主题、size/variant、loading/disabled、原生属性、外部样式、焦点、表单 type、中文声明说明和展示文档。沿用夹具用例验证新实现后，让夹具消费正式组件，避免维护两套 Button。审阅这个样板，再批量扩展。
 4. TextInput 与 Field 验证模型、错误/帮助文本和表单生命周期；随后建立弹层基础并用 Dialog、Select 验证。基础稳定后再推进复杂表格、日期选择等组件。
 5. 每阶段做本地文件诊断和相关短测，提交推送；完整类型、打包声明、两种作者模式、浏览器/SSR、资源稳定性由 CI 承担。UI 增加自己的安装消费和交互验证，不能仅继承工具库的通过结论。
 
-本轮交付到清理、已确认缺陷修复和上述评审方案为止；没有创建组件库包，也没有将建议 API 写成已实现能力。
+本轮按用户要求交付到基础契约的 fixture 验证与工具完善；正式 UI 包和产品组件仍未创建。只有用户明确开始正式组件实现后，再执行上述后续步骤。
