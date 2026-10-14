@@ -79,6 +79,7 @@ try {
     if (name === 'core')
       for (const required of ['CSSTYPE-LICENSE', 'ZERODEP-JS-LICENSE', 'THIRD_PARTY_NOTICES.md'])
         assert(contents.has(required));
+    if (name === 'ui') assert(contents.has('THIRD_PARTY_NOTICES.md'));
     const checkExport = (value) => {
       if (typeof value === 'string')
         assert(contents.has(value.replace(/^\.\//, '')), `Unpacked export target: ${value}`);

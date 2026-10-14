@@ -27,7 +27,8 @@
     "css:bundle": "node scripts/css/bundle-size.mjs",
     "packages:pack": "node scripts/packages/pack.mjs",
     "test:packages": "node scripts/packages/verify.mjs",
-    "test:core": "pnpm --filter @zerodep-vue/core test"
+    "test:core": "pnpm --filter @zerodep-vue/core test",
+    "test:ui": "pnpm --filter @zerodep-vue/ui test"
   },
   "devDependencies": {
     "mdn-data": "catalog:",
@@ -44,7 +45,7 @@
     "typescript-language-server": "catalog:languageServices",
     "vscode-jsonrpc": "catalog:languageServices",
     "vue": "catalog:",
-    "zod": "catalog:languageServices",
+    "zod": "catalog:",
     "@babel/plugin-syntax-jsx": "catalog:",
     "@babel/plugin-syntax-typescript": "catalog:",
     "@vue/babel-plugin-jsx": "catalog:",

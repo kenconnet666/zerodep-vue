@@ -1,4 +1,9 @@
 import { computed, defineComponent, ref } from 'vue';
+import * as ui from '@zerodep-vue/ui';
+import { z } from 'zod';
+import { Decimal } from 'decimal.js';
+import { CalendarDate, Time } from '@internationalized/date';
+import { House } from '@lucide/icons';
 import type { Ref, VNodeChild } from 'vue';
 import {
   _component,
@@ -12,6 +17,26 @@ import {
 import type { Css, CssInput, KeywordView } from '@zerodep-vue/core';
 import { Field, Palette, palettes, themed, themedKeywords } from './App';
 const { keywords, useCss } = createCssContext(new SystemKeywords());
+
+// UI 不提供第三方代理入口；显式安装的 peer 声明必须在消费者中独立可用。
+// @ts-expect-error Zod 从 zod 直接导入。
+ui.z;
+// @ts-expect-error Decimal 从 decimal.js 直接导入。
+ui.Decimal;
+// @ts-expect-error 图标数据从 @lucide/icons 直接导入。
+ui.House;
+export const typedUiValues = z
+  .object({
+    amount: z.instanceof(Decimal),
+    date: z.instanceof(CalendarDate),
+    time: z.instanceof(Time),
+  })
+  .parse({
+    amount: new Decimal('0.1'),
+    date: new CalendarDate(2026, 10, 14),
+    time: new Time(9, 30),
+  });
+export const iconResourceName = House.name;
 
 const s = useCss();
 

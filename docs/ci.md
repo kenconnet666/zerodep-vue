@@ -2,12 +2,14 @@
 
 完整验证入口为 [.github/workflows/ci.yml](../.github/workflows/ci.yml)，在分支 push、pull request 和手动触发时运行。各 job 使用独立 checkout；Node 从 .node-version 读取，pnpm 从 packageManager 读取，安装使用 frozen lockfile 和 pnpm store 缓存。
 
+UI foundations 另以 default/optimized 两个独立 job 验证直接依赖的强类型值、TSX 更新、SSR 和生产发射。安装消费者显式安装 UI 的 peer，核对模块路径共享和无第三方重导出；当前不宣称已有正式 UI 浏览器覆盖。
+
 ## 任务划分
 
 | 任务                        | 验证内容                                                                    | 并行方式                                            |
 | --------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------- |
 | Format                      | 全仓已支持格式的文件检查                                                    | 独立 job                                            |
-| Types                       | 两包及 legacy-tsx、authoring 类型夹具                                       | 四个矩阵 job，fail-fast=false                       |
+| Types                       | core/compiler/ui 及 legacy-tsx、authoring 类型夹具                          | 五个矩阵 job，fail-fast=false                       |
 | Compiler and SSR            | 普通 TSX 编译和 Vue SSR 对照                                                | 独立 job                                            |
 | Upstream                    | 原始 JSX/resolve-type 断言与快照                                            | official/fork × 两个 shard，共四个 job              |
 | TSX authoring               | 运行测试的类型，以及初始化、props/default、Ref、内容、attrs、For 与共享控件 | default/optimized 两个 job，类型检查仅 default 执行 |
@@ -15,7 +17,7 @@
 | Core runtime contracts      | 生成一致性、CSS/主题、宿主、HMR 与检查器契约                                | 独立 job                                            |
 | Browser                     | 真实混用、按钮/表单、SSR/hydrate、500 次循环及生命周期                      | development/production × Chromium/Firefox           |
 | Development tools           | HMR 状态保留、错误恢复、真实 DevTools 协议                                  | Chromium/Firefox，依赖 Naive 构建产物               |
-| Build and package artifacts | 两包构建、来源一致性和 tarball 内容                                         | 构建后顺序验证与打包                                |
+| Build and package artifacts | 三包构建、来源一致性和 tarball 内容                                         | 构建后顺序验证与打包                                |
 | Installed packages          | 仓库外安装、ESM/CJS、SSR、声明和中文提示                                    | Linux/Windows，依赖当前提交的 tarball               |
 | LSP                         | 错误修复、依赖刷新、语义查询、补全和隔离                                    | Linux/Windows 两个矩阵 job                          |
 | CI result                   | 所有验证任务必须成功                                                        | 等待依赖完成后汇总，不吞掉失败、取消或跳过          |

@@ -23,13 +23,14 @@ CSS 采用运行时处理加辅助编译工具：系统关键字由基础层提�
 
 - packages/compiler：Babel/Vite 接入、TSX 转换、编辑器扩展和固定官方 JSX fork。
 - packages/core：运行时 CSS、继承主题、组件作者 API、For、JSX 类型与开发工具。
+- packages/ui：自有组件库的基础工程、显式 peer 依赖、TSX 测试与构建；当前尚未导出产品组件。
 - fixtures：普通 Vue TSX、作者类型、Naive 固定生产源码、真实浏览器混用和仓库外包消费。
 - scripts/language-services：仅 TS/TSX 的项目 LSP 与 MCP 桥接。
 - docs/upstream.md：来源与实现边界。
 
-两个包都只提供根入口；src 根目录只保留 index.ts，其余实现按职责放入子目录。运行时代码只导入 core，编译和编辑器能力由 compiler 提供。
+三个包都只提供根入口；src 根目录只保留 index.ts，其余实现按职责放入子目录。UI 从 core 使用运行能力，编译和编辑器能力由 compiler 提供；Zod、Decimal、日期、定位与 Lucide 数据由应用显式安装并从原包导入，UI 不重新导出。
 
-开始自有组件库前，参见 [组件库准备评审](docs/ui-library-readiness.md)：已完成的旧产物清理、发布声明问题、主题/模型接口取舍，以及正式组件的实施顺序与验收边界。
+UI 工程已按授权建立，配置和依赖决策见 [UI 基础计划](docs/ui-foundation.md)。[组件库准备评审](docs/ui-library-readiness.md) 保留清理、基础契约和正式组件的实施顺序。当前只建立基础，不把目录或依赖安装当作组件实现。
 
 ## 本地开发与远程验证
 

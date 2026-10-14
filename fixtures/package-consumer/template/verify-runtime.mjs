@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { transformAsync } from '@babel/core';
 import presetTypescript from '@babel/preset-typescript';
@@ -10,6 +10,7 @@ import { createSSRApp, ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { babelPlugin as compiler, vitePlugin as vueTsx } from '@zerodep-vue/compiler';
 import { getCssHost, cx, createCssContext, SystemKeywords } from '@zerodep-vue/core';
+import * as ui from '@zerodep-vue/ui';
 import { assertRuntimeCode, assertRuntimeChunks } from './runtime-boundary.mjs';
 
 const { useCss } = createCssContext(new SystemKeywords());
@@ -50,7 +51,7 @@ assert.equal(
 );
 assert.equal(typeof require('@zerodep-vue/core')._component, 'function');
 const entries = {};
-for (const name of ['compiler', 'core']) {
+for (const name of ['compiler', 'core', 'ui']) {
   const entry = await realpath(require.resolve(`@zerodep-vue/${name}`));
   assert(
     entry.startsWith(await realpath(root)) && entry.includes('dist'),
@@ -61,6 +62,18 @@ for (const name of ['compiler', 'core']) {
   const peer = createRequire(entry)('vue');
   assert.equal(peer.ref, ref, `${name} loaded a different Vue instance.`);
 }
+const uiEntry = require.resolve('@zerodep-vue/ui');
+const uiRequire = createRequire(uiEntry);
+const uiManifest = JSON.parse(await readFile(resolve(dirname(uiEntry), '../package.json'), 'utf8'));
+const uiPeers = Object.keys(uiManifest.peerDependencies);
+for (const peer of uiPeers)
+  assert.equal(
+    await realpath(uiRequire.resolve(peer)),
+    await realpath(require.resolve(peer)),
+    `UI must share the explicitly installed peer: ${peer}`,
+  );
+for (const name of ['z', 'Decimal', 'CalendarDate', 'Time', 'House', 'computePosition', 'tabbable'])
+  assert.equal(name in ui, false, `UI must not re-export ${name}`);
 assert.equal(require('typescript/package.json').version, '6.0.3');
 await mkdir('.output', { recursive: true });
 const source = await readFile('App.tsx', 'utf8');
@@ -140,6 +153,7 @@ await writeFile(
       commonjs: true,
       esm: true,
       singleVue: true,
+      ui: { explicitPeers: uiPeers, sharedPeers: true, thirdPartyReexports: false },
       runtimeBoundary: {
         babel: true,
         clientChunks: chunks.length,

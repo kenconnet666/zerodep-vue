@@ -12,7 +12,7 @@
 
 组件库启动前的清理、已确认阻碍及 API 备选方案见 [组件库准备评审](docs/ui-library-readiness.md)。其中建议需在正式组件试点前确定，不替代本蓝图已经确认的工具库契约。
 
-2026-10-14 已确认的后项覆盖、完整动态 CSS 值、延迟创建和 class 依赖缓存见 [CSS 运行时实施计划](docs/css-runtime-plan.md)。本轮仍只做基础工具与 fixtures；具体局部及远程验证状态见 progress.md。
+2026-10-14 已确认的后项覆盖、完整动态 CSS 值、延迟创建和 class 依赖缓存见 [CSS 运行时实施计划](docs/css-runtime-plan.md)。随后用户授权建立 packages/ui 基础工程，直接使用 Zod 4、显式安装 peer、不重导出第三方、使用 Lucide 原始资源自行实现图标；确定边界见 [UI 基础计划](docs/ui-foundation.md)。当前不实现具体产品组件，验证状态见 progress.md。
 
 ## 1 已确定的方向与范围
 
@@ -25,6 +25,7 @@
 | TSX 工具包         | `_component`、`For`、类型和少量 Vue 组件桥接                                         |
 | 运行时 CSS 工具包  | 声明与组合、系统关键字、继承扩展的主题关键字、泛型作者入口、动画、动态变量和样式宿主 |
 | 文档与私有验证工程 | 说明语义，验证旧项目替换、Naive UI 源码编译及 TSX 混用                               |
+| UI 子项目基础      | packages/ui 的工程、显式依赖和构建测试边界；具体组件在后续阶段自行实现               |
 
 UI 产品库和 docs 站点不在本项目交付范围内。文中的 RefInput、Panel、Select 等自有组件是验证夹具，不代表同时立项一套完整组件库。
 
@@ -154,7 +155,7 @@ BLUEPRINT.md
 
 - `compiler` 只运行在构建环境，持有 Babel 和必要的类型分析依赖。
 - compiler 根入口命名导出 babelPlugin、vitePlugin 与 languageServicePlugin；生成代码统一从 core 根入口导入助手。独立包消费检查生产外部导入与 bundle 模块，拒绝构建依赖泄漏。
-- 两个包的 exports 均只保留根入口，src 根目录只有 index.ts。core 使用 Vue 组件机制，内部按 css、tsx、development 组织；编译助手标记 @internal，开发检查仅在实际调用时安装，未使用的模块由生产打包移除。
+- 两个工具包及 UI 包的 exports 均只保留根入口，src 根目录只有 index.ts。core 使用 Vue 组件机制，内部按 css、tsx、development 组织；编译助手标记 @internal，开发检查仅在实际调用时安装，未使用的模块由生产打包移除。
 - core 内部区分纯描述/组合、Vue 接线、浏览器宿主和服务端宿主，不依赖 compiler、Babel、Vite 或 TypeScript 编译实现。
 - Vue 作为共享 peer dependency，发布构建 externalize。fixture 保证唯一且兼容的 Vue 运行时；不能打包另一份 Vue 后宣称 Ref 可以可靠共享。
 - 不生成无关的自有组件运行时导入。class 来源可静态确认是普通值时保留上游路径；需要判断动态 class 来源时，可以由编译器引入薄 CSS 助手，对普通值走等价的快速旁路，不能要求作者额外手写接线。
@@ -841,7 +842,7 @@ return <div class={s.width(bx(width.value))} />;
 - 远程按能力与资源开销分成独立并行任务；需要前置产物的步骤保持顺序。LSP 探针会修改临时源码，不能与同一工作目录的类型检查并行，使用不同 job 的独立 checkout 隔离。
 - 每个可审阅阶段中文提交并推送。准备下一次提交时，按提交 SHA 检查上一轮 CI；失败时先读实际日志、定点修复，再做本地相关短验证和提交。
 - 推送后继续工作，不等待刚启动的长测试，不反复轮询。若上一轮仍排队或运行，记录 pending 和链接；不能将 pending、取消、未运行写成通过，也不空等阻塞无关工作。
-- 当前工作流为 `.github/workflows/ci.yml`：格式、五组类型、编译/SSR、上游四分片、两组作者契约、运行时 CSS、Naive 三组构建、四组浏览器与稳定性、两组开发工具、构建打包、Linux/Windows 独立消费及 LSP，最终由 `CI result` 汇总。完整职责及依赖关系见 [docs/ci.md](docs/ci.md)。
+- 当前工作流为 `.github/workflows/ci.yml`：格式、包与夹具类型、编译/SSR、上游四分片、两组作者契约、两组 UI 基础、运行时 CSS、Naive 三组构建、四组浏览器与稳定性、两组开发工具、构建打包、Linux/Windows 独立消费及 LSP，最终由 `CI result` 汇总。完整职责及依赖关系见 [docs/ci.md](docs/ci.md)。
 - 阶段验收引用准确的提交、版本和结果。首次基础 CI 已在 `b4c8a7f2ca19ca737c652c32b94f46871cf66d6e` 运行成功，见 [CI 运行记录](https://github.com/kenconnet666/zerodep-vue/actions/runs/38418824193)；后续提交必须分别核对自己的结果。
 - 测试资源只清理本次创建且已确认所有权的文件、fixture 产物与进程。文件清理使用明确范围的脚本或逐文件删除，再移除空目录；保留失败诊断所需证据。
 

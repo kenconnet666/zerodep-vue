@@ -1,0 +1,71 @@
+{
+  "name": "@zerodep-vue/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Vue TSX UI library foundations with explicit peer dependencies.",
+  "exports": {
+    ".": {
+      "zerodep-vue-source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "check": "tsc --noEmit -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json && node scripts/build.mjs",
+    "test": "vitest run --config vitest.config.ts",
+    "test:watch": "vitest --config vitest.config.ts"
+  },
+  "peerDependencies": {
+    "@floating-ui/dom": "catalog:ui",
+    "@internationalized/date": "catalog:ui",
+    "@lucide/icons": "catalog:ui",
+    "@zerodep-vue/core": "workspace:^",
+    "decimal.js": "catalog:ui",
+    "tabbable": "catalog:ui",
+    "vue": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@babel/core": "catalog:",
+    "@babel/preset-typescript": "catalog:",
+    "@axe-core/playwright": "catalog:ui",
+    "@floating-ui/dom": "catalog:ui",
+    "@internationalized/date": "catalog:ui",
+    "@lucide/icons": "catalog:ui",
+    "@playwright/test": "catalog:",
+    "@types/node": "catalog:",
+    "@vue/server-renderer": "catalog:",
+    "@vue/test-utils": "catalog:",
+    "@zerodep-vue/compiler": "workspace:*",
+    "@zerodep-vue/core": "workspace:*",
+    "decimal.js": "catalog:ui",
+    "jsdom": "catalog:",
+    "playwright-core": "catalog:",
+    "tabbable": "catalog:ui",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:",
+    "vue": "catalog:",
+    "zod": "catalog:"
+  },
+  "engines": {
+    "node": ">=24.11 <25"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kenconnet666/zerodep-vue.git",
+    "directory": "packages/ui"
+  }
+}

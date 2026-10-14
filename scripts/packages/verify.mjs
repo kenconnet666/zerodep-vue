@@ -9,7 +9,7 @@ import { outsideDirectory } from './path-boundary.mjs';
 const packed = await readJson(join(artifacts, 'pack.json'));
 assert(
   packed.success && packed.packages.length === names.length,
-  'Requires the core and compiler tarballs from packages:pack.',
+  'Requires the core, compiler and ui tarballs from packages:pack.',
 );
 assert.deepEqual(
   packed.packages.map((entry) => entry.name).sort(),
@@ -56,6 +56,14 @@ try {
     assert.equal(sha256(data), entry.sha256, `Tarball hash mismatch: ${entry.name}`);
     await writeFile(join(owned.root, 'artifacts', entry.file), data);
     dependencies[entry.name] = `file:./artifacts/${entry.file}`;
+  }
+  // 使用真实 tarball 中已展开的 peer 版本；不能依赖工作区链接或安装器自动补齐。
+  for (const entry of packed.packages) {
+    const manifest = JSON.parse(
+      command('tar', ['-xOf', join(artifacts, entry.file), 'package/package.json'], root),
+    );
+    for (const [name, version] of Object.entries(manifest.peerDependencies ?? {}))
+      dependencies[name] ??= version;
   }
   const require = createRequire(join(root, 'package.json'));
   for (const name of [

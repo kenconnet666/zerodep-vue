@@ -13,6 +13,16 @@
 
 Naive 三组任务各自编译完整生产清单并构建、导入生成的库；没有安装 naive-ui 预编译包来代替编译。上述结果尚不包含自有 CSS、交互混用或最终浏览器验收。
 
+## UI 子项目基础、显式依赖与 Lucide 资源（2026-10-14）
+
+上一提交 `dec799f51cffa6fa4d3e89b669bc99eb899bf2bd` 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38572736185) 已全部成功，class 缓存边界修复已获得该提交的完整远程验证。
+
+用户明确授权新建 UI 子项目并安装基础依赖，随后确认直接使用 Zod 4、禁止其他校验库兼容实现、第三方不重导出且由应用显式安装、Lucide 只提供资源且图标组件自行实现。packages/ui 现为 private 的 @zerodep-vue/ui 0.1.0，已建立职责目录、严格 TS 配置、两模式 Vitest、声明发射和真实 TSX 逐模块编译。第三方全部作为运行时 peer 和开发期精确 catalog 依赖，构建保持外部 import；根入口没有未实现组件或第三方代理导出。
+
+安装 Floating UI DOM、Internationalized Date、Lucide 原始节点数据、Decimal、tabbable 与 Zod 4；axe/Playwright 只在开发期。Zod 共用默认 catalog 的 4.6.7。Lucide 使用满足发布时间策略的 1.56.0，没有保留安装器对 1.57.0 自动添加的例外。唯一锁文件已更新。
+
+新增三个短测验证实际 peer 值身份与响应更新、SSR/CSS 收集、无第三方重导出、生产 TSX/相对导入发射和原始源映射；本地通过。修改 TS/TSX 文件的完整 LSP、构建脚本语法和 actionlint 定点检查通过。CI 新增 UI 类型与两模式任务；三包构建、tarball 来源校验及 Linux/Windows 独立显式 peer 消费由本轮提交的 CI 验证，本地不重复完整构建。当前尚无产品组件，axe 也不冒充已建立 UI 无障碍覆盖。范围和下一步见 [UI 基础计划](ui-foundation.md)。
+
 ## class 缓存的 JavaScript 与类型边界复查（2026-10-14）
 
 `6157316f14a5450e325d9a32ed191de5da758ed3` 的 [完整 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38567686037) 已成功：类型、作者两模式、运行时 CSS、上游、Naive、浏览器及稳定性、开发工具、分发构建/体积预算、双平台安装消费和 LSP 均通过。上一轮缓存与延迟创建的远程验收已关闭。

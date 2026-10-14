@@ -1,0 +1,18 @@
+{
+  "name": "@zerodep-vue/fixture-package-consumer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@floating-ui/dom": "catalog:ui",
+    "@internationalized/date": "catalog:ui",
+    "@lucide/icons": "catalog:ui",
+    "@zerodep-vue/compiler": "workspace:*",
+    "@zerodep-vue/core": "workspace:*",
+    "@zerodep-vue/ui": "workspace:*",
+    "decimal.js": "catalog:ui",
+    "tabbable": "catalog:ui",
+    "vue": "catalog:",
+    "zod": "catalog:"
+  }
+}

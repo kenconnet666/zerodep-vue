@@ -13,6 +13,7 @@ catalog:
   '@babel/types': 8.0.6
   '@types/node': 24.13.5
   '@playwright/test': 1.64.0
+  playwright-core: 1.64.0
   '@types/convert-source-map': 2.0.3
   '@vue/babel-plugin-jsx': 3.0.0
   '@vue/babel-plugin-resolve-type': 3.0.0
@@ -34,10 +35,18 @@ catalog:
   vite: 8.3.1
   vitest: 4.1.9
   vue: 3.5.43
+  zod: 4.6.7
   # DevTools 上游声明引用路由类型，仅供工具库自身的开发期类型检查。
   vue-router: 4.6.4
 
 catalogs:
+  ui:
+    '@floating-ui/dom': 1.8.0
+    '@internationalized/date': 3.12.4
+    '@lucide/icons': 1.56.0
+    decimal.js: 10.6.0
+    tabbable: 6.5.0
+    '@axe-core/playwright': 4.13.0
   naive:
     '@css-render/plugin-bem': 0.15.14
     '@css-render/vue3-ssr': 0.15.14
@@ -61,7 +70,6 @@ catalogs:
     smol-toml: 1.9.0
     typescript-language-server: 6.0.0
     vscode-jsonrpc: 8.2.1
-    zod: 4.6.5
 
 catalogMode: strict
 saveExact: true

@@ -1,15 +1,15 @@
 # 发布包消费验收
 
-仓库外消费者不参与工作区依赖链接。`packages:pack` 在构建完成后检查 JS source map 与当前 src 内容一致，再打包 core、compiler 两个包，检查全部条件导出目标、声明、源码映射目标、README 和许可文件。报告记录提交、包清单和 tarball SHA-256。
+仓库外消费者不参与工作区依赖链接。`packages:pack` 在构建完成后检查 JS source map 与当前 src 内容一致，再打包 core、compiler、ui 三个包，检查全部条件导出目标、声明、源码映射目标、README 和许可文件。报告记录提交、包清单和 tarball SHA-256。
 
-`template/tsconfig.json` 只服务于仓库内的编辑器，继承工作区源码条件，使模板在 API 修改后立即获得当前类型，不依赖陈旧 dist。生成独立消费者时，脚本会将 `tsconfig.consumer.json` 复制为消费者的 `tsconfig.json`：它没有 extends、源码条件或路径别名。声明验收仍强制从独立安装的 dist 读取类型；编辑器配置不能替代发布包验收。
+本目录的 package.json 只为仓库内模板提供显式 UI/peer 开发依赖，不会复制到独立消费者。`template/tsconfig.json` 只服务于仓库内的编辑器，继承工作区源码条件，使模板在 API 修改后立即获得当前类型，不依赖陈旧 dist。生成独立消费者时，脚本会将 `tsconfig.consumer.json` 复制为消费者的 `tsconfig.json`：它没有 extends、源码条件或路径别名。声明验收仍强制从独立安装的 dist 读取类型；编辑器配置不能替代发布包验收。
 
 `test:packages` 在系统临时目录创建有独立所有权标记的消费者，复制 tarball 并核对哈希，再通过 pnpm 的 file 覆盖安装包间依赖。消费者没有工作区 path alias 或源码条件，也不通过 link 指回 checkout；CLI 子进程从这个目录执行，检查模块真实路径位于独立安装内。
 
 验证包含：
 
 - Node 24 的 Babel/Vite、CSS、TSX ESM/CommonJS 入口。
-- 每个包解析到同一个 Vue 实例。
+- 每个包解析到同一个 Vue 实例，UI 与应用解析到同一份显式 peer；UI 不重导出 Zod、Decimal、日期或 Lucide 数据。
 - Babel 直接转换与 Vite 客户端/SSR 构建，以及默认值、Ref、For、内容、异步组件和 CSS 资源消费。
 - SSR bundle 内外使用不同 CSS 模块实例时，外部收集入口仍取得完整请求样式。
 - TypeScript 6.0.3 从 dist 声明检查普通与泛型 TSX、可写/只读输入和负向用例。
