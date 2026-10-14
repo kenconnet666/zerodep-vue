@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { join, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { transformAsync } from '@babel/core';
+import { parseAsync, transformAsync, types as t } from '@babel/core';
 import presetTypescript from '@babel/preset-typescript';
 import { build } from 'vite';
 import { createSSRApp, ref } from 'vue';
@@ -84,11 +84,34 @@ const chunks = (Array.isArray(client) ? client : [client])
   .flatMap((output) => output.output)
   .filter((output) => output.type === 'chunk');
 assert(chunks.length && chunks.some((chunk) => chunk.code.includes('package-state')));
-assert(
-  chunks.every(
-    (chunk) => !chunk.code.includes('zerodep-vue-css') && !chunk.code.includes('__zerodepHmr'),
-  ),
-);
+for (const chunk of chunks) {
+  const debugModules = Object.entries(chunk.modules).filter(
+    ([id, info]) =>
+      info.renderedLength > 0 &&
+      /\/@zerodep-vue\/(?:css|compiler)\/(?:dist|src)\/(?:devtools|hmr)\.(?:js|ts)$/.test(
+        id.replaceAll('\\', '/'),
+      ),
+  );
+  assert.equal(
+    debugModules.length,
+    0,
+    `Development modules in production: ${debugModules.map(([id]) => id).join(', ')}`,
+  );
+  // 非压缩库包含 tarball 路径注释，包名也会出现 zerodep-vue-css；检查实际字符串值。
+  const ast = await parseAsync(chunk.code, {
+    sourceType: 'module',
+    babelrc: false,
+    configFile: false,
+  });
+  assert(ast, `No parsed production chunk: ${chunk.fileName}`);
+  t.traverseFast(ast, (node) => {
+    if (t.isStringLiteral(node))
+      assert(
+        !['zerodep-vue-css', '__zerodepHmr'].includes(node.value),
+        `Development registry in ${chunk.fileName}`,
+      );
+  });
+}
 // 将运行时也打入 SSR bundle，核对外部 getCssHost 仍能读取同一个请求；不依赖模块单例偶合。
 await build({
   ...base,

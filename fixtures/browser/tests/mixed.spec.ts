@@ -104,11 +104,20 @@ test('theme sources stay independent through Teleport, replacement and condition
   await page.goto('/');
   await expect(page.getByTestId('region-a')).toHaveCSS('color', 'rgb(255, 0, 0)');
   await expect(page.getByTestId('region-b')).toHaveCSS('color', 'rgb(0, 0, 255)');
+  await expect(page.getByTestId('region-inherited')).toHaveCSS('color', 'rgb(255, 0, 0)');
+  await expect(page.getByTestId('region-nested')).toHaveCSS('color', 'rgb(255, 165, 0)');
   await page.getByRole('button', { name: '更换主题' }).click();
   await expect(page.getByTestId('region-a')).toHaveCSS('color', 'rgb(0, 128, 0)');
+  await expect(page.getByTestId('region-inherited')).toHaveCSS('color', 'rgb(0, 128, 0)');
+  await expect(page.getByTestId('region-nested')).toHaveCSS('color', 'rgb(255, 165, 0)');
+  await page.getByRole('button', { name: '更换嵌套主题' }).click();
+  await expect(page.getByTestId('region-nested')).toHaveCSS('color', 'rgb(0, 0, 0)');
+  await expect(page.getByTestId('region-inherited')).toHaveCSS('color', 'rgb(0, 128, 0)');
   await expect(page.getByTestId('region-b')).toHaveCSS('color', 'rgb(0, 0, 255)');
   await page.getByRole('button', { name: '切换区域' }).click();
   await expect(page.getByTestId('region-a')).toHaveCount(0);
+  await expect(page.getByTestId('region-inherited')).toHaveCount(0);
+  await expect(page.getByTestId('region-nested')).toHaveCount(0);
   await expect(page.getByTestId('region-b')).toHaveCSS('color', 'rgb(0, 0, 255)');
   await expect(page.getByTestId('animation')).toHaveCount(0);
 });
@@ -130,6 +139,8 @@ test('SSR isolates requests and hydration adopts CSS and Teleport nodes before i
   await page.waitForFunction(() => window.__mounted);
   await expect(page.getByRole('textbox', { name: '自有输入' })).toHaveValue('hydrated');
   await expect(page.getByTestId('region-a')).toHaveCSS('color', 'rgb(128, 0, 128)');
+  await expect(page.getByTestId('region-inherited')).toHaveCSS('color', 'rgb(128, 0, 128)');
+  await expect(page.getByTestId('region-nested')).toHaveCSS('color', 'rgb(255, 165, 0)');
   const adopted = await page.evaluate(() => ({
     before: window.__beforeHydrate!.length,
     retained: window.__beforeHydrate!.every((node) => node.isConnected),

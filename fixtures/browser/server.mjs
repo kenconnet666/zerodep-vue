@@ -76,6 +76,7 @@ const handler = async (request, response) => {
     if (
       url.pathname !== '/' &&
       url.pathname !== '/ssr' &&
+      url.pathname !== '/stability' &&
       !(['/hmr', '/inspector'].includes(url.pathname) && !production)
     ) {
       const path = resolve(clientRoot, '.' + decodeURIComponent(url.pathname));

@@ -52,4 +52,6 @@ class DarkTheme extends AppTheme {
 
 主题来源属于每个 createCss 作者；没有全局可变的“当前主题”。多个区域可以使用不同来源，Teleport 中的元素继续消费原来绑定的主题来源。SSR 每次请求分别收集规则，变量值写入相应内容，而不是依赖原 DOM 祖先或写入全局 body。
 
+嵌套区域可以用 Vue provide/inject 传递实际主题 Ref，再用 computed 选择当前覆盖或父级来源，最后交给 createCss。这样未覆盖区域跟随父主题，覆盖区域保持独立；Teleport 仍使用逻辑组件树中的来源。若 prop 中的 Ref 本身也可能被替换，在 computed 中读取该 prop 的 .value，可同时跟随容器替换和值更新，无需新增主题组件协议。
+
 属性、系统关键字和主题成员提供 JSDoc。当前数据生成覆盖 857 个属性，包含 72 个可接收单一颜色的属性位置；源码和生成文件由固定依赖复现，说明与许可来源见 CSS 包的 THIRD_PARTY_NOTICES.md。

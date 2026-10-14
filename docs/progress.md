@@ -15,6 +15,10 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前实施
 
+365d849cb40ccfdd0db6dc9a00d2b3a75e90302d 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38486667515) 中，上游、作者、CSS、四组普通浏览器、两组 HMR/DevTools、类型、LSP 和真实 tarball 构建均成功。独立消费者停在两个检查问题：Windows 跨盘符 relative 返回绝对路径，原边界判断误拒绝；Linux 的生产标记检查会命中 tarball 路径注释。现已按路径语义、发射模块和 AST 字符串值检查，继续要求仓库外消费及生产无调试实现。Babel 公开类型依赖的 convert-source-map 声明也移入 compiler 分发依赖。
+
+生命周期验收新增 KeepAlive、Transition/TransitionGroup、async setup/expose、等待中取消及原生模板基础挂载。定点测试复现并修复离场 DOM 仍存在时样式被提前释放，以及 ShadowRoot 重建后缓存样式节点没有恢复的问题。6 个相关运行用例分批通过，真实浏览器的离场/缓存与嵌套主题短例通过；500 次反复挂载、共享宿主保护、隐藏后不再读绑定、ShadowRoot 复用交给远程四组浏览器。最终条件逐项整理在 acceptance.md。
+
 4e3d189ae9df8e6b9d431083073edcf5f56872ff 的 [远程 CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38479626139) 中，旧基线和四组普通浏览器继续通过。类型/构建被路由开发依赖的 exactOptionalPropertyTypes 声明错误阻断；HMR 连续写入被 Chokidar 50ms 去重吞掉了文件事件；Chromium 检查页冷启动再优化时，trace 记录到两个 Vue URL，导致一次 setup 的响应式作用域错配。已增加最小声明补丁、为自动化启用真实文件轮询，并让插件预先优化生成代码的第三方依赖，保留原有断言及运行时 scope 检查。补丁的定点类型检查与 HMR/inspector 单例浏览器验证通过。
 
 包分发链已建立，待本次远程首次完整执行：打包检查源/发射对应关系、导出目标、声明映射、源码、README 和许可；Linux/Windows 在 checkout 外安装同一提交的 tarball，核对默认 dist 解析、Vue 身份、ESM/CJS、Babel/Vite/异步 SSR，以及公开声明的泛型、中文 hover、补全详情和定义跳转。成功后使用所有权标记逐文件清理临时消费者，失败保留复现目录与报告。

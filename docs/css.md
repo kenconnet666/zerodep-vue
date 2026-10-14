@@ -53,6 +53,8 @@ const styles = css.create({
 
 浏览器默认按应用取得宿主并共享目标容器中的相同规则。挂载、更新、卸载控制租约，已无消费者的规则使用有上限的缓存；需要独立样式容器时可 `app.use(createCssHost({ target }))`。一个显式宿主可由多个应用共同使用，卸载其中一个不清除其他应用的活动样式。
 
+Transition 的逻辑卸载可能早于 DOM 离场结束，样式及动画规则因此保留到实际节点移除。KeepAlive 缓存项仍拥有租约，激活/停用时更新 DOM 根观察位置，淘汰后释放。ShadowRoot 等容器重建内容后，再次消费缓存规则会恢复被清空的 style 节点。
+
 SSR 使用本次 renderToString context 收集样式：
 
 ```ts

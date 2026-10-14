@@ -9,6 +9,8 @@ import {
   normalizeStyle,
   onUnmounted,
   onUpdated,
+  onActivated,
+  onDeactivated,
   ssrContextKey,
 } from 'vue';
 import type { ComponentInternalInstance, ObjectDirective, VNode, VNodeChild } from 'vue';
@@ -41,6 +43,7 @@ interface Lease {
   vnode: VNode;
   observerRoot?: Node;
   stopObserving?: () => void;
+  pendingRemoval: boolean;
   release(): void;
   present(): boolean;
 }
@@ -66,18 +69,18 @@ export function hasIncomingClass(instance: ComponentInternalInstance): boolean {
   return Object.prototype.hasOwnProperty.call(instance.vnode.props ?? {}, CLASS_PROP);
 }
 
-function containsRule(vnode: VNode, name: string): boolean {
-  if (vnode.component)
-    return !vnode.component.isUnmounted && containsRule(vnode.component.subTree, name);
+function containsRule(vnode: VNode, name: string, root?: Node): boolean {
+  if (vnode.component) return containsRule(vnode.component.subTree, name, root);
   const element = vnode.el as Element | null;
   if (
     element?.nodeType === 1 &&
+    (!root || root.contains(element)) &&
     (element.classList.contains(name) || element.querySelector('.' + name))
   )
     return true;
   return (
     Array.isArray(vnode.children) &&
-    vnode.children.some((child) => isVNode(child) && containsRule(child, name))
+    vnode.children.some((child) => isVNode(child) && containsRule(child, name, root))
   );
 }
 
@@ -104,7 +107,10 @@ function observeLease(vnode: VNode) {
         )
       )
         return;
-      for (const item of [...tracked]) if (!item.present()) item.release();
+      for (const item of [...tracked]) {
+        if (!item.present()) item.release();
+        else if (!item.pendingRemoval) observeLease(item.vnode);
+      }
     });
     observer.observe(root, {
       subtree: true,
@@ -136,24 +142,29 @@ function ownerLeases(owner: ComponentInternalInstance): Set<Lease> {
     owned = new Set();
     owners.set(owner, owned);
     const cleanup = () => {
-      for (const lease of owned!)
+      for (const lease of [...owned!])
         if (!lease.present()) {
           lease.release();
-          owned!.delete(lease);
-        }
+        } else if (!lease.pendingRemoval) observeLease(lease.vnode);
     };
     onUpdated(cleanup, owner);
+    onActivated(cleanup, owner);
+    onDeactivated(cleanup, owner);
     onUnmounted(() => {
-      for (const lease of owned!) lease.release();
-      owned!.clear();
+      for (const lease of [...owned!]) release(lease.vnode, true);
     }, owner);
   }
   return owned;
 }
 
-function release(vnode: VNode) {
-  leases.get(vnode)?.release();
-  leases.delete(vnode);
+function release(vnode: VNode, leaving = false) {
+  const lease = leases.get(vnode);
+  // Vue 的 unmounted 早于 Transition 的实际 DOM 移除；保留最后一次规则，不保留订阅。
+  if (leaving && lease?.observerRoot && containsRule(vnode, lease.name, lease.observerRoot)) {
+    lease.pendingRemoval = true;
+    return;
+  }
+  lease?.release();
 }
 function rulesOf(resolved: ResolvedClass): CssRule[] {
   return [...resolved.resources, { name: resolved.ruleName, cssText: resolved.cssText }];
@@ -200,15 +211,20 @@ function consume(plan: Plan, vnode: VNode, previous?: VNode | null) {
     name: plan.resolved.ruleName,
     text,
     vnode,
+    pendingRemoval: false,
     release() {
       if (released) return;
       released = true;
       lease.stopObserving?.();
+      if (leases.get(lease.vnode) === lease) leases.delete(lease.vnode);
       for (const done of releases) done();
       owned.delete(lease);
     },
     present() {
-      return !released && containsRule(lease.vnode, lease.name);
+      return (
+        !released &&
+        containsRule(lease.vnode, lease.name, lease.pendingRemoval ? lease.observerRoot : undefined)
+      );
     },
   };
   leases.set(vnode, lease);
@@ -230,7 +246,7 @@ const styleDirective: ObjectDirective<Element, Plan> & { [DIRECTIVE]: true } = {
     observeLease(vnode);
   },
   unmounted(_element, _binding, vnode) {
-    release(vnode);
+    release(vnode, true);
   },
   getSSRProps(binding) {
     collect(binding.value);
@@ -308,7 +324,7 @@ function attach(vnode: VNode, plan: Plan): VNode {
     chain('onVnodeMounted', (node: VNode) => observeLease(node));
     chain('onVnodeBeforeUpdate', (node: VNode, old: VNode) => consume(plan, node, old));
     chain('onVnodeUpdated', (node: VNode) => observeLease(node));
-    chain('onVnodeUnmounted', (node: VNode) => release(node));
+    chain('onVnodeUnmounted', (node: VNode) => release(node, true));
     // SSR 组件不会运行客户端 VNode hook，收集属于当前请求的规则即可。
     if (plan.owner?.appContext.provides[ssrContextKey as symbol] && plan.resolved.cssText)
       collect(plan);

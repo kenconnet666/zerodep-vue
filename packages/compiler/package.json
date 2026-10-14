@@ -59,6 +59,7 @@
     "@babel/plugin-syntax-jsx": "catalog:",
     "@babel/template": "catalog:",
     "@babel/types": "catalog:",
+    "@types/convert-source-map": "catalog:",
     "@vue/babel-helper-vue-transform-on": "catalog:",
     "@vue/babel-plugin-resolve-type": "catalog:",
     "@vue/shared": "catalog:",
@@ -73,7 +74,6 @@
   },
   "devDependencies": {
     "@babel/core": "catalog:",
-    "@types/convert-source-map": "catalog:",
     "@types/node": "catalog:",
     "@vue/server-renderer": "catalog:",
     "vite": "catalog:",

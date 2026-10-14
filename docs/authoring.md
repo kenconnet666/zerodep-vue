@@ -70,3 +70,11 @@ import { For } from '@zerodep-vue/tsx';
 ```
 
 For 使用 Vue Fragment，不增加 DOM。稳定 key 保留重排后的行身份；省略 getKey 时按位置更新。回调参数是普通数据，持久状态放在行组件中。空列表或空值显示直接传入的 fallback。普通 map、if、三元和短路表达式仍遵循 JavaScript。
+
+## 缓存、离场和异步初始化
+
+KeepAlive、Transition、TransitionGroup、Suspense 和 defineAsyncComponent 直接使用 Vue。缓存中的实例保留状态和样式租约，缓存淘汰时释放；离场节点的 class/动画规则保留到实际 DOM 移除，而 Vue 的订阅与组件作用域仍按正常卸载流程结束。
+
+异步初始化使用 async setup 和 Suspense。生命周期及需要组件作用域的副作用在 await 前注册，遵循普通 Vue setup 的上下文规则；初始化完成后公开方法、DOM ref 和 Ref 模型按 Vue 行为使用。等待期间被取消的组件不会在 Promise 完成后重新挂载，之前建立的作用域资源会释放。
+
+普通 Vue 模板可以通过原生机制挂载编译后的组件，传值 props/回调、提供默认 slot 和调用 expose 方法。模板对 Ref 的自动解包没有被改变，也没有增加模板内 bx 等新语义。

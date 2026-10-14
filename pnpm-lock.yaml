@@ -394,6 +394,9 @@ importers:
       '@babel/types':
         specifier: 'catalog:'
         version: 8.0.6
+      '@types/convert-source-map':
+        specifier: 'catalog:'
+        version: 2.0.3
       '@vue/babel-helper-vue-transform-on':
         specifier: 'catalog:'
         version: 3.0.0
@@ -416,9 +419,6 @@ importers:
       '@babel/core':
         specifier: 'catalog:'
         version: 8.0.6
-      '@types/convert-source-map':
-        specifier: 'catalog:'
-        version: 2.0.3
       '@types/node':
         specifier: 'catalog:'
         version: 24.13.5

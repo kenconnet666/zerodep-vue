@@ -15,6 +15,7 @@ import {
 import type { InjectionKey, Ref, VNodeChild } from 'vue';
 import { For, _component } from '@zerodep-vue/tsx';
 import { bx, css, createCss, SystemKeywords } from '@zerodep-vue/css';
+import type { Css } from '@zerodep-vue/css';
 import { NButton, NConfigProvider, NDataTable, NInput, NSelect } from '@fixture/naive';
 import type { DataTableColumns } from '@fixture/naive';
 import type { InitialState } from './contracts.ts';
@@ -54,16 +55,44 @@ class RegionTheme extends SystemKeywords {
     this.color = { _brand: color };
   }
 }
-const Region = _component(({ theme, name }: { theme: Ref<RegionTheme>; name: string }) => {
-  const themed = createCss(theme);
+const regionKey: InjectionKey<Readonly<Ref<RegionTheme>>> = Symbol('region-theme');
+const RegionContent = _component(({ name }: { name: string }) => {
+  const source = inject(regionKey);
+  if (!source) throw new Error('Missing region theme');
+  const themed: Css<RegionTheme> = createCss(source);
   return (
-    <Teleport to="#dialogs">
-      <div data-testid={`region-${name}`} class={themed({ color: themed.keywords.color._brand })}>
-        {name}
-      </div>
-    </Teleport>
+    <div data-testid={`region-${name}`} class={themed({ color: themed.keywords.color._brand })}>
+      {name}
+    </div>
   );
 });
+const Region = _component(
+  ({
+    theme,
+    name,
+    children,
+  }: {
+    theme?: Readonly<Ref<RegionTheme>>;
+    name: string;
+    children?: VNodeChild;
+  }) => {
+    const inherited = inject(regionKey, undefined);
+    const source = computed(() => {
+      const current = theme?.value ?? inherited?.value;
+      if (!current) throw new Error('Missing region theme source');
+      return current;
+    });
+    provide(regionKey, source);
+    return (
+      <>
+        <Teleport to="#dialogs">
+          <RegionContent name={name} />
+        </Teleport>
+        {children}
+      </>
+    );
+  },
+);
 
 interface Row {
   id: number;
@@ -78,6 +107,7 @@ const Content = _component(({ initial }: { initial: InitialState }) => {
   const asyncVisible = ref(false);
   const theme = shallowRef(new RegionTheme(initial.color));
   const otherTheme = shallowRef(new RegionTheme('blue'));
+  const nestedTheme = shallowRef(new RegionTheme('orange'));
   const rows = ref<Row[]>([
     { id: 1, name: 'Alice' },
     { id: 2, name: 'Bob' },
@@ -197,7 +227,12 @@ const Content = _component(({ initial }: { initial: InitialState }) => {
         >
           切换区域
         </button>
-        {show.value && <Region theme={theme} name="a" />}
+        {show.value && (
+          <Region theme={theme} name="a">
+            <Region name="inherited" />
+            <Region theme={nestedTheme} name="nested" />
+          </Region>
+        )}
         <Region theme={otherTheme} name="b" />
         <button
           onClick={() => {
@@ -205,6 +240,13 @@ const Content = _component(({ initial }: { initial: InitialState }) => {
           }}
         >
           更换主题
+        </button>
+        <button
+          onClick={() => {
+            nestedTheme.value = new RegionTheme('black');
+          }}
+        >
+          更换嵌套主题
         </button>
       </section>
       <section>

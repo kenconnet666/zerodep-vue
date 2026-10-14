@@ -178,6 +178,8 @@ export class CssHost {
       store.names.set(rule.name, { text: rule.cssText, entries: (named?.entries ?? 0) + 1 });
     }
     store.unused.delete(key);
+    // 复用的 ShadowRoot 等容器可能已重建内容；缓存命中仍须保证样式节点存在。
+    if (!target.contains(entry.node)) target.appendChild(entry.node);
     entry.references++;
     let released = false;
     const release = () => {
@@ -237,6 +239,7 @@ export class CssHost {
       entries.set(key, entry);
       if (!store) this.collectionOrder.set(`global:${key}`, 'global');
     }
+    if (target && entry.node && !target.contains(entry.node)) target.appendChild(entry.node);
     entry.references++;
     let released = false;
     const release = () => {
@@ -253,6 +256,7 @@ export class CssHost {
     return {
       update: (cssText) => {
         if (released) throw new Error(`全局规则已释放：${name}`);
+        if (target && entry.node && !target.contains(entry.node)) target.appendChild(entry.node);
         const text = origin.text({ name, cssText });
         if (entry.text === text) return;
         if (entry.references > 1)

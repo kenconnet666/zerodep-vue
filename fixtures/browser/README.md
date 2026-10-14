@@ -10,4 +10,6 @@ Naive 声明从同一上游生产源码用 TypeScript 6.0.3 发射，供夹具�
 
 配置依据：[Playwright 服务生命周期](https://playwright.dev/docs/test-webserver)、[浏览器项目](https://playwright.dev/docs/test-projects)。
 
+`PW_SUITE=stability` 使用真实浏览器执行 500 次挂载、响应式更新和卸载，逐次检查 DOM ref、隐藏后绑定读取、活动租约、缓存上限和其他应用的样式；同时验证 ShadowRoot 重建后的缓存复用。生命周期用例另检查离场期间的计算样式、KeepAlive 的状态保留及淘汰。完整循环由远程 development/production × Chromium/Firefox 四组执行。
+
 HMR 使用 `PW_SUITE=hmr` 选择独立用例；服务将 `hmr/Subject.tsx` 复制到 `.generated/hmr` 后才启动，测试修改副本并在 finally 恢复。CI 分开运行 Chromium/Firefox，防止故意制造的语法错误影响普通混用验收。需要本地定点验证时可通过 `PW_CHANNEL=msedge` 使用已安装的 Edge，仅作用于 Chromium 项目；远程继续使用锁定的 Playwright 浏览器。

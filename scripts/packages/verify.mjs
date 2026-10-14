@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 import { cp, mkdir, readFile, writeFile, copyFile, realpath } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { join, relative, resolve } from 'node:path';
+import { join } from 'node:path';
 import { artifacts, command, pnpm, readJson, report, root, sha256 } from './common.mjs';
 import { createOwnedDirectory, removeOwnedDirectory } from './owned-directory.mjs';
+import { outsideDirectory } from './path-boundary.mjs';
 
 const packed = await readJson(join(artifacts, 'pack.json'));
 assert(
@@ -13,12 +14,11 @@ assert(
 if (process.env.GITHUB_SHA)
   assert.equal(packed.commit, process.env.GITHUB_SHA, 'Tarball commit differs from this CI run.');
 const owned = await createOwnedDirectory();
-assert(relative(root, owned.root).startsWith('..'), 'Consumer must be outside the workspace.');
 const result = {
   commit: packed.commit,
   platform: process.platform,
   node: process.version,
-  outsideWorkspace: true,
+  outsideWorkspace: false,
   success: false,
 };
 const env = { ...process.env, NODE_OPTIONS: '', ZV_FORBIDDEN_WORKSPACE: await realpath(root) };
@@ -31,6 +31,11 @@ for (const key of [
 ])
   delete env[key];
 try {
+  assert(
+    outsideDirectory(await realpath(root), await realpath(owned.root)),
+    'Consumer must be outside the workspace.',
+  );
+  result.outsideWorkspace = true;
   await cp(join(root, 'fixtures/package-consumer/template'), owned.root, {
     recursive: true,
     force: false,

@@ -10,7 +10,9 @@ export default defineConfig({
       ? '**/hmr.spec.ts'
       : suite === 'inspector'
         ? '**/inspector.spec.ts'
-        : '**/mixed.spec.ts',
+        : suite === 'stability'
+          ? '**/stability.spec.ts'
+          : '**/mixed.spec.ts',
   fullyParallel: suite !== 'hmr',
   workers: suite === 'hmr' ? 1 : 2,
   forbidOnly: !!process.env.CI,

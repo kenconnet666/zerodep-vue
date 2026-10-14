@@ -64,3 +64,22 @@ test('SSR collectors isolate requests and browser acquisition adopts identical s
     dom.window.close();
   }
 });
+
+test('cached rules are restored after a reused ShadowRoot container is cleared', () => {
+  const dom = new JSDOM('<!doctype html><html><body><div id="host"></div></body></html>');
+  const shadow = dom.window.document.getElementById('host').attachShadow({ mode: 'open' });
+  const host = createCssHost({ target: shadow, maxUnusedRules: 2 });
+  try {
+    const release = host.acquire(rule('red'));
+    const original = shadow.firstElementChild;
+    release();
+    shadow.textContent = '';
+    const again = host.acquire(rule('red'));
+    assert.equal(shadow.firstElementChild, original);
+    assert(shadow.textContent.includes('color:red'));
+    again();
+  } finally {
+    host.dispose();
+    dom.window.close();
+  }
+});
