@@ -2,9 +2,13 @@
 
 三个包分别承担编译、TSX 作者接口和运行时 CSS。构建后的默认入口均指向 dist；compiler 的 Babel/Vite 入口及 CSS/TSX 入口可在 Node 24 通过 ESM import 或 CommonJS require 加载。
 
+compiler 只有根 Babel 入口和 /vite 入口，不提供 /runtime、/hmr、/devtools 转导。应用运行时引用 TSX/CSS 包；普通 JSX 工程可只使用 compiler 与 Vue。启用增强能力时，应用安装相应运行时包，开发预优化也从实际安装位置解析依赖。
+
 包包含 JS、声明、source map、declaration map 及对应 src，源码用于导航和排查。正常消费者不设置 `zerodep-vue-source` 条件：验收明确检查运行入口和类型解析均使用 dist，避免工作区源文件掩盖发射缺口。
 
 远程构建任务先执行 `pnpm build`，随后执行 `pnpm packages:pack`。打包前检查每个源文件与 JS map 的内嵌源码一致，防止将陈旧 dist 误标为当前版本；再检查全部导出目标、README、项目和第三方许可是否进入 tarball。`test-results/packages/pack.json` 保存提交与每个包的文件名、字节数、内容清单数量和 SHA-256。
+
+没有对应源码的旧 JS、声明及映射也会被拒绝，避免源码删除后遗留的 dist 文件进入 tarball。独立消费者同时检查 Babel 输出、Vite 客户端与 SSR 产物：外部导入和实际打入 bundle 的模块均不得依赖 compiler、Babel、TypeScript 等构建模块，生产产物不得带入开发检查与 HMR 实现。检查依赖语法和模块清单，不把注释或普通字符串中的包名当成运行时导入。
 
 当前通过 CI artifact 提供 tarball，工作流不执行 npm publish。安装时从同一次构建取得三个包；包间依赖需指向这些本地文件。例如当前 1.0.0 包可在消费者的 pnpm-workspace.yaml 中设置：
 

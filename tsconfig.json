@@ -1,17 +1,9 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./packages/compiler"
-    },
-    {
-      "path": "./packages/tsx"
-    },
-    {
-      "path": "./packages/css"
-    },
-    {
-      "path": "./fixtures/legacy-tsx"
-    }
-  ]
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"]
+  },
+  "include": ["vitest.*.config.ts"]
 }

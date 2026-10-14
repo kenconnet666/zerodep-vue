@@ -20,8 +20,18 @@ try {
   for (const name of names) {
     const directory = join(root, 'packages', name);
     const manifest = await readJson(join(directory, 'package.json'));
+    const sources = new Set(await files(join(directory, 'src')));
+    // 删除源码后 tsc 不会自动删旧输出；拒绝把已移除的桥接入口打进新包。
+    for (const emitted of await files(join(directory, 'dist'))) {
+      const stem = emitted.replace(/(?:\.d\.ts|\.js)(?:\.map)?$/, '');
+      if (stem === emitted) continue;
+      assert(
+        sources.has(stem + '.ts') || sources.has(stem + '.tsx'),
+        `Orphan emit ${name}/dist/${emitted}; remove stale output before packing.`,
+      );
+    }
     // 验证发射物对应当前源码，避免本地误把旧 dist 标成新提交的包。
-    for (const source of await files(join(directory, 'src'))) {
+    for (const source of sources) {
       if (!/\.(?:ts|tsx)$/.test(source) || source.endsWith('.d.ts')) continue;
       const map = await readJson(join(directory, 'dist', source.replace(/\.tsx?$/, '.js.map')));
       const text = (await readFile(join(directory, 'src', source), 'utf8')).replaceAll(

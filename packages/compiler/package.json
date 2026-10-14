@@ -16,24 +16,6 @@
       "types": "./dist/vite.d.ts",
       "import": "./dist/vite.js",
       "default": "./dist/vite.js"
-    },
-    "./devtools": {
-      "zerodep-vue-source": "./src/devtools.ts",
-      "types": "./dist/devtools.d.ts",
-      "import": "./dist/devtools.js",
-      "default": "./dist/devtools.js"
-    },
-    "./hmr": {
-      "zerodep-vue-source": "./src/hmr.ts",
-      "types": "./dist/hmr.d.ts",
-      "import": "./dist/hmr.js",
-      "default": "./dist/hmr.js"
-    },
-    "./runtime": {
-      "zerodep-vue-source": "./src/runtime.ts",
-      "types": "./dist/runtime.d.ts",
-      "import": "./dist/runtime.js",
-      "default": "./dist/runtime.js"
     }
   },
   "files": [
@@ -65,8 +47,7 @@
     "@vue/shared": "catalog:",
     "@babel/preset-typescript": "catalog:",
     "@vue/compiler-sfc": "catalog:",
-    "typescript": "catalog:",
-    "@zerodep-vue/css": "workspace:*"
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0",
@@ -77,7 +58,8 @@
     "@types/node": "catalog:",
     "@vue/server-renderer": "catalog:",
     "vite": "catalog:",
-    "vue": "catalog:"
+    "vue": "catalog:",
+    "@zerodep-vue/css": "workspace:*"
   },
   "license": "MIT",
   "peerDependenciesMeta": {

@@ -30,7 +30,8 @@ test('ordinary Vue can explicitly enable shared-style wiring, and custom pragma 
     'import {styles} from "./styles"; export const render=()=> <div class={styles.root}/>;',
     { zerodep: { css: true } },
   );
-  assert(code.includes('@zerodep-vue/compiler/runtime'));
+  assert(code.includes('@zerodep-vue/css/runtime'));
+  assert(!code.includes('@zerodep-vue/compiler'));
   await assert.rejects(
     compile('import {css} from "@zerodep-vue/css"; <div class={css({color:"red"})}/>;', {
       pragma: 'custom',

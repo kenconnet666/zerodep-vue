@@ -24,7 +24,8 @@ async function compile(command, ssr = false) {
 
 test('development traces keep source locations and the browser-only inspector entry', async () => {
   const result = await compile('serve');
-  assert(result.code.includes('@zerodep-vue/compiler/devtools'));
+  assert(result.code.includes('@zerodep-vue/css/devtools'));
+  assert(!result.code.includes('@zerodep-vue/compiler'));
   assert(result.code.includes('enableInspection'));
   const column = source.split('\n')[5].indexOf('width.value') + 1;
   assert.match(result.code, new RegExp(`line: 6,\\s*column: ${column},\\s*kind: "binding"`));

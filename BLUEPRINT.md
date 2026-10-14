@@ -138,6 +138,7 @@ BLUEPRINT.md
 工作区包名为 `@zerodep-vue/compiler`、`@zerodep-vue/tsx` 和 `@zerodep-vue/css`。三个包保留 private 标记，通过 CI tarball 交付；这不代表已发布到 npm。原 mixed-tsx/ssr 预留目录的验证职责由 browser 夹具和包内运行契约承担，没有用空目录作为验收证据。
 
 - `compiler` 只运行在构建环境，持有 Babel 和必要的类型分析依赖。
+- compiler 仅导出 Babel/Vite 构建入口，生成代码直接引用 TSX/CSS 的运行时入口；不再通过 compiler 转导 CSS runtime、HMR 或 DevTools。独立包消费检查生产外部导入与 bundle 模块，拒绝构建依赖泄漏。
 - `tsx` 使用 Vue 组件机制；按需要引用 `css` 的内部接线入口。
 - `css` 内部区分纯描述/组合、Vue 接线、浏览器宿主和服务端宿主，不反向依赖 `tsx` 或 `compiler`。
 - Vue 作为共享 peer dependency，发布构建 externalize。fixture 保证唯一且兼容的 Vue 运行时；不能打包另一份 Vue 后宣称 Ref 可以可靠共享。
@@ -150,6 +151,8 @@ BLUEPRINT.md
 `zerodep_vue_lsp` 通过本仓库 TypeScript 6.0.3 和 typescript-language-server 提供 TS/TSX 诊断、hover、definitions、references 与 completions。语言服务桥接不依赖相邻仓库，不加载 SFC 或 Svelte 服务。
 
 运行 `pnpm lsp:setup` 从 `.codex/config.example.toml` 生成被忽略的本机配置；`pnpm lsp:verify` 验证错误→修复、依赖刷新、语义工具和工作区隔离。WebStorm 与工作区编辑器配置使用本地 TypeScript SDK。重启前的独立检查不能代替重启后本会话原生 MCP 调用的确认。
+
+根 tsconfig.json 继承统一基础配置并以 noEmit 检查根目录 Vitest 配置，允许这些工具直接导入 .ts 源码。各包继续使用自己的 tsconfig，构建和检查由现有 workspace 脚本执行。根工具配置同时纳入远程类型检查和 LSP 验收，避免落入编辑器的默认推断项目。
 
 源码消费中的作者宏、默认值/children、系统/主题关键字和泛型已有类型夹具及 MCP 查询证据。发布声明模式必须另做独立安装后的诊断、hover、补全详情与定义跳转检查，不能用工作区源码结果代替。
 

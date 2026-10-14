@@ -15,6 +15,10 @@ Naive 三组任务各自编译完整生产清单并构建、导入生成的库�
 
 ## 当前 CSS API 修订
 
+326d072b912d82b5c42a0f08934f064512c95c7b 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38516463478) 已成功，统一继承主题入口的完整回归已通过。
+
+本次保留 compiler/tsx/css 分包，删除 compiler 的 runtime/hmr/devtools 纯转导及其分发 CSS 依赖，生成代码直接使用所属运行时包。独立消费者检查 Babel、客户端和 SSR 的真实导入与 bundle 模块；打包额外拒绝无源码的陈旧输出。根 Vitest 配置归入继承基础选项的 noEmit 项目，修复 TS5097，并加入远程类型/LSP 检查。相关转换与边界短测通过，两个根配置及 Vite 入口 LSP 均零错误；完整产物与浏览器回归待新提交 CI。
+
 3e6fe01b372c1d7202b25e265c7643ad28dd60c3 的 [CI](https://github.com/kenconnet666/zerodep-vue/actions/runs/38515319042) 已成功，表达式字面量编辑支持、关键字命名和分组整理已通过对应远程回归。
 
 本次按用户要求统一主题模型：只有继承 SystemKeywords 的主题实例，通过 createTheme(source) 取得同一 T 的作者入口；多套实例通过 Vue Ref 切换。移除 createCss 和变量组式 defineVars/createTheme，包括变量引用类型、解析分支及 HMR 适配；普通 CSS 自定义属性、bx、动画、全局规则和区域主题继续沿用原有协议。15 个相关 Node 短测试、两个 Teleport/SSR 主题隔离定点用例、字面量语言服务回归及受影响作者夹具的 LSP 诊断通过。原生 MCP 确认泛型主题成员的补全和中文说明，WebStorm 确认新主题入口及泛型签名；发布包和完整回归待本次新提交 CI。

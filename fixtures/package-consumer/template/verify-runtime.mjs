@@ -3,7 +3,7 @@ import { mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { parseAsync, transformAsync, types as t } from '@babel/core';
+import { transformAsync } from '@babel/core';
 import presetTypescript from '@babel/preset-typescript';
 import { build } from 'vite';
 import { createSSRApp, ref } from 'vue';
@@ -11,11 +11,16 @@ import { renderToString } from '@vue/server-renderer';
 import compiler from '@zerodep-vue/compiler';
 import vueTsx from '@zerodep-vue/compiler/vite';
 import { getCssHost } from '@zerodep-vue/css';
+import { assertRuntimeCode, assertRuntimeChunks } from './runtime-boundary.mjs';
 
 const root = process.cwd();
 const require = createRequire(import.meta.url);
 assert.equal(typeof require('@zerodep-vue/compiler'), 'function');
 assert.equal(typeof require('@zerodep-vue/compiler/vite'), 'function');
+for (const entry of ['runtime', 'hmr', 'devtools'])
+  assert.throws(() => require.resolve(`@zerodep-vue/compiler/${entry}`), {
+    code: 'ERR_PACKAGE_PATH_NOT_EXPORTED',
+  });
 assert.equal(typeof require('@zerodep-vue/css').css, 'function');
 assert.equal(typeof require('@zerodep-vue/css').createTheme, 'function');
 assert.equal('createCss' in require('@zerodep-vue/css'), false);
@@ -45,6 +50,7 @@ const transformed = await transformAsync(source, {
   sourceMaps: true,
 });
 assert(transformed?.code && transformed.map);
+await assertRuntimeCode(transformed.code, 'Babel ESM');
 await writeFile('.output/babel.mjs', transformed.code);
 const artifacts = [];
 const check = async (module, label) => {
@@ -83,40 +89,10 @@ const client = await build({
     rolldownOptions: { external: ['vue'] },
   },
 });
-const chunks = (Array.isArray(client) ? client : [client])
-  .flatMap((output) => output.output)
-  .filter((output) => output.type === 'chunk');
-assert(chunks.length && chunks.some((chunk) => chunk.code.includes('package-state')));
-for (const chunk of chunks) {
-  const debugModules = Object.entries(chunk.modules).filter(
-    ([id, info]) =>
-      info.renderedLength > 0 &&
-      /\/@zerodep-vue\/(?:css|compiler)\/(?:dist|src)\/(?:devtools|hmr)\.(?:js|ts)$/.test(
-        id.replaceAll('\\', '/'),
-      ),
-  );
-  assert.equal(
-    debugModules.length,
-    0,
-    `Development modules in production: ${debugModules.map(([id]) => id).join(', ')}`,
-  );
-  // 非压缩库包含 tarball 路径注释，包名也会出现 zerodep-vue-css；检查实际字符串值。
-  const ast = await parseAsync(chunk.code, {
-    sourceType: 'module',
-    babelrc: false,
-    configFile: false,
-  });
-  assert(ast, `No parsed production chunk: ${chunk.fileName}`);
-  t.traverseFast(ast, (node) => {
-    if (t.isStringLiteral(node))
-      assert(
-        !['zerodep-vue-css', '__zerodepHmr'].includes(node.value),
-        `Development registry in ${chunk.fileName}`,
-      );
-  });
-}
+const chunks = await assertRuntimeChunks(client, 'Vite client');
+assert(chunks.some((chunk) => chunk.code.includes('package-state')));
 // 将运行时也打入 SSR bundle，核对外部 getCssHost 仍能读取同一个请求；不依赖模块单例偶合。
-await build({
+const server = await build({
   ...base,
   ssr: { noExternal: ['@zerodep-vue/css', '@zerodep-vue/tsx'] },
   build: {
@@ -126,6 +102,7 @@ await build({
     rolldownOptions: { output: { entryFileNames: 'consumer.mjs' } },
   },
 });
+const serverChunks = await assertRuntimeChunks(server, 'Vite SSR');
 await check(
   await import(pathToFileURL(resolve('.output/server/consumer.mjs')).href),
   'Vite SSR bundled runtime',
@@ -140,6 +117,11 @@ await writeFile(
       commonjs: true,
       esm: true,
       singleVue: true,
+      runtimeBoundary: {
+        babel: true,
+        clientChunks: chunks.length,
+        serverChunks: serverChunks.length,
+      },
       artifacts,
       clientChunks: chunks.map((chunk) => ({ file: chunk.fileName, bytes: chunk.code.length })),
     },

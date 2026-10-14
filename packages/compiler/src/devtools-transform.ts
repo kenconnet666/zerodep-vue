@@ -3,12 +3,8 @@ import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
 import { cssCallKind, isImported } from './hot-transform.ts';
 
-const runtime = '@zerodep-vue/compiler/devtools';
-const sources = new Set([
-  '@zerodep-vue/css/runtime',
-  '@zerodep-vue/tsx/runtime',
-  '@zerodep-vue/compiler/runtime',
-]);
+const runtime = '@zerodep-vue/css/devtools';
+const sources = new Set(['@zerodep-vue/css/runtime', '@zerodep-vue/tsx/runtime']);
 /** 只在 Vite 客户端开发转换中调用；位置常量与包装不进入生产及 SSR 输出。 */
 export function instrumentDevtools(program: NodePath<t.Program>, filename: string): void {
   program.scope.crawl();

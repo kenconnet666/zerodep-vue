@@ -346,8 +346,8 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
   const managed = program.node.body.every(
     (node) => !t.isExpressionStatement(node) || globalCalls.has(node.expression),
   );
-  const register = addNamed(program, 'registerModule', '@zerodep-vue/compiler/hmr');
-  const compatible = addNamed(program, 'compatible', '@zerodep-vue/compiler/hmr');
+  const register = addNamed(program, 'registerModule', '@zerodep-vue/css/hmr');
+  const compatible = addNamed(program, 'compatible', '@zerodep-vue/css/hmr');
   program.unshiftContainer(
     'body',
     t.variableDeclaration('const', [

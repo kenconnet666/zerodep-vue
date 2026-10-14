@@ -34,11 +34,13 @@ test('hot signatures distinguish isolated style/render edits from initialization
   assert.notEqual(stamp(original), stamp(setup));
   assert(original.includes('.render('));
   assert(original.includes('.style('));
+  assert(original.includes('@zerodep-vue/css/hmr'));
+  assert(!original.includes('@zerodep-vue/compiler'));
   assert(original.includes('set ["plain"]'));
   assert.match(original, /_environment\d*\["plain"\]\+\+/);
   await parseAsync(original, { sourceType: 'module' });
-  assert(!(await compile(source, 'build')).includes('@zerodep-vue/compiler/hmr'));
-  assert(!(await compile(source, 'serve', true)).includes('@zerodep-vue/compiler/hmr'));
+  assert(!(await compile(source, 'build')).includes('@zerodep-vue/css/hmr'));
+  assert(!(await compile(source, 'serve', true)).includes('@zerodep-vue/css/hmr'));
 });
 
 test('CSS module hot factories preserve callback receivers, globals and custom properties', async () => {

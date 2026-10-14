@@ -2,7 +2,9 @@ import { transformAsync, types as t } from '@babel/core';
 import type { PluginItem, PluginObject } from '@babel/core';
 import presetTypeScript from '@babel/preset-typescript';
 import { createHash } from 'node:crypto';
-import { relative } from 'node:path';
+import { existsSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import { join, relative, resolve } from 'node:path';
 import { createFilter, normalizePath } from 'vite';
 import type { FilterPattern, Plugin } from 'vite';
 import jsx from './index.ts';
@@ -160,6 +162,17 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
     name: 'zerodep-vue:tsx',
     enforce: 'pre',
     config(config, environment) {
+      // 普通 Vue JSX 工程无需 CSS 包。只检查安装位置，源码工作区不必先生成 dist。
+      const application = createRequire(resolve(config.root ?? process.cwd(), 'package.json'));
+      const installed = (name: string) =>
+        application.resolve
+          .paths(name)
+          ?.some((directory) => existsSync(join(directory, name, 'package.json')));
+      const cssRuntime = installed('@zerodep-vue/css')
+        ? '@zerodep-vue/css'
+        : installed('@zerodep-vue/tsx')
+          ? '@zerodep-vue/tsx > @zerodep-vue/css'
+          : undefined;
       return {
         oxc: { jsx: 'preserve' },
         resolve: { dedupe: ['vue'] },
@@ -168,15 +181,17 @@ export default function vueTsx(options: ViteOptions = {}): Plugin {
               // 保持 CSS render frame 等模块状态唯一；生成代码的依赖提前进入同一优化批次，
               // 防止冷启动后再发现 DevTools/CJS 依赖时短暂混用两个 Vue URL。
               optimizeDeps: {
-                exclude: ['@zerodep-vue/compiler', '@zerodep-vue/css', '@zerodep-vue/tsx'],
+                exclude: ['@zerodep-vue/css', '@zerodep-vue/tsx'],
                 include: [
                   'vue',
-                  ...[
-                    '@emotion/unitless',
-                    'postcss-selector-parser',
-                    '@csstools/css-tokenizer',
-                    '@vue/devtools-api',
-                  ].map((name) => `@zerodep-vue/compiler > @zerodep-vue/css > ${name}`),
+                  ...(cssRuntime
+                    ? [
+                        '@emotion/unitless',
+                        'postcss-selector-parser',
+                        '@csstools/css-tokenizer',
+                        '@vue/devtools-api',
+                      ].map((name) => `${cssRuntime} > ${name}`)
+                    : []),
                 ],
               },
             }

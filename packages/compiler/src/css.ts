@@ -56,11 +56,7 @@ export function transformCss(
     throw program.buildCodeFrameError(
       '[ZV_CSS_PRAGMA] CSS 接线需要标准 Vue VNode 工厂；普通自定义 pragma 文件可关闭 zerodep.css。',
     );
-  const runtime = hasTsx
-    ? '@zerodep-vue/tsx/runtime'
-    : hasCss
-      ? '@zerodep-vue/css/runtime'
-      : '@zerodep-vue/compiler/runtime';
+  const runtime = hasTsx ? '@zerodep-vue/tsx/runtime' : '@zerodep-vue/css/runtime';
   const helpers = new Map<string, t.Identifier>();
   const helper = (name: string) => {
     let identifier = helpers.get(name);

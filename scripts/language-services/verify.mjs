@@ -146,6 +146,8 @@ try {
   assert(outside.isError && outside.content[0].text.includes('outside the configured workspace'));
   report.checks.push({ name: 'workspace-isolation', passed: true });
   for (const filePath of [
+    'vitest.authoring.config.ts',
+    'vitest.upstream.config.ts',
     'packages/compiler/src/index.ts',
     'packages/tsx/src/index.ts',
     'packages/css/src/index.ts',
