@@ -10,6 +10,18 @@ export interface CssOptions {
   css?: boolean;
 }
 
+function preventsMemo(node: t.Node): boolean {
+  return (
+    t.isThisExpression(node) ||
+    t.isSuper(node) ||
+    t.isAwaitExpression(node) ||
+    t.isYieldExpression(node) ||
+    t.isAssignmentExpression(node) ||
+    t.isUpdateExpression(node) ||
+    t.isUnaryExpression(node, { operator: 'delete' })
+  );
+}
+
 /** JSX 之前只捕获表达式和传递元数据，声明组合与 CSS 生成仍全部在运行时完成。 */
 export function transformCss(
   program: NodePath<t.Program>,
@@ -66,32 +78,23 @@ export function transformCss(
         const expression = container.get('expression');
         if (!expression.isExpression()) return;
         let calls = expression.isCallExpression() || expression.isOptionalCallExpression();
-        let safe = true;
+        // traverse 不访问根节点；整个 class 就是赋值/await 等表达式时也须保留原语义。
+        let safe = !preventsMemo(expression.node);
         const inputs = new Map<object, t.Identifier>();
         expression.traverse({
+          enter(reference) {
+            // as/satisfies/泛型参数中的名称没有运行时值，不能提升成缓存输入。
+            if (reference.isTSType()) {
+              reference.skip();
+              return;
+            }
+            if (preventsMemo(reference.node)) safe = false;
+          },
           CallExpression() {
             calls = true;
           },
           OptionalCallExpression() {
             calls = true;
-          },
-          ThisExpression() {
-            safe = false;
-          },
-          Super() {
-            safe = false;
-          },
-          AwaitExpression() {
-            safe = false;
-          },
-          YieldExpression() {
-            safe = false;
-          },
-          AssignmentExpression() {
-            safe = false;
-          },
-          UpdateExpression() {
-            safe = false;
           },
           ReferencedIdentifier(reference) {
             if (!t.isIdentifier(reference.node)) {
@@ -117,7 +120,7 @@ export function transformCss(
         expression.replaceWith(
           t.callExpression(helper('memoClass'), [
             t.stringLiteral(`${memoVersion}:${memoSite++}`),
-            t.arrayExpression([...inputs.values()]),
+            t.arrowFunctionExpression([], t.arrayExpression([...inputs.values()])),
             t.arrowFunctionExpression([], expression.node),
           ]),
         );

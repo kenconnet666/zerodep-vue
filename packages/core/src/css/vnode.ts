@@ -75,11 +75,19 @@ let frame: RenderFrame | undefined;
 /** @internal 自有 class 表达式按 Vue 依赖缓存；位置和词法输入共同隔离循环及实例。 */
 export function memoClass(
   site: string,
-  inputs: readonly unknown[],
+  readInputs: () => readonly unknown[],
   read: () => ClassValue,
 ): ClassValue {
   const owner = frame?.owner;
   if (!owner || !frame) return read();
+  let inputs: readonly unknown[];
+  try {
+    inputs = readInputs();
+  } catch {
+    // 编译器只采样词法绑定；短路分支可能引用尚未初始化的绑定（含循环导入）。
+    // 此时放弃本次缓存，让原表达式决定是否读取它；原表达式自身的错误继续抛出。
+    return read();
+  }
   let sites = classMemos.get(owner);
   if (!sites) {
     sites = new Map();

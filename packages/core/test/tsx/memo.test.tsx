@@ -12,7 +12,7 @@ import {
   For,
   SystemKeywords,
 } from '@zerodep-vue/core';
-import type { CssHost } from '@zerodep-vue/core';
+import type { CssHost, CssInput } from '@zerodep-vue/core';
 
 const { useCss } = createCssContext(new SystemKeywords());
 const mounted: { wrapper: VueWrapper; host: CssHost; target: HTMLElement }[] = [];
@@ -165,4 +165,84 @@ test('class memos are lazy per branch and isolated per component instance', asyn
   expect(calls).toEqual(['red', 'blue', 'green']);
   expect(target.textContent).toContain('color:blue;');
   expect(target.textContent).toContain('color:green;');
+});
+
+test('explicit assignment and deletion in class retain normal render side effects', async () => {
+  const unrelated = ref(0);
+  let saved = '';
+  let calls = 0;
+  const state: { value?: number } = { value: 1 };
+  const build = () => {
+    calls++;
+    return 'ready';
+  };
+  const App = _component(() => (
+    <section>
+      {unrelated.value}
+      <div data-test="assignment" class={(saved = build())} />
+      <div data-test="deletion" class={delete state.value && build()} />
+    </section>
+  ));
+  const { wrapper } = render(App);
+  expect(saved).toBe('ready');
+  expect(state).not.toHaveProperty('value');
+  expect(calls).toBe(2);
+  saved = '';
+  state.value = 2;
+  unrelated.value++;
+  await nextTick();
+  expect(saved).toBe('ready');
+  expect(state).not.toHaveProperty('value');
+  expect(calls).toBe(4);
+  expect(wrapper.get('[data-test=assignment]').classes()).toContain('ready');
+  expect(wrapper.get('[data-test=deletion]').classes()).toContain('ready');
+});
+
+test('inactive class branches do not eagerly read a later lexical binding', async () => {
+  const enabled = ref(false);
+  const unrelated = ref(0);
+  let calls = 0;
+  const build = (value: string) => {
+    calls++;
+    return cx(value);
+  };
+  const App = _component(() => (
+    <section>
+      {unrelated.value}
+      <div data-test="guarded" class={enabled.value && build(later)} />
+    </section>
+  ));
+  // 首次渲染在 later 初始化之前，原表达式的短路分支合法且不应读到它。
+  const { wrapper } = render(App);
+  const later = 'ready';
+  expect(calls).toBe(0);
+  expect(wrapper.get('[data-test=guarded]').classes()).toEqual([]);
+  enabled.value = true;
+  await nextTick();
+  expect(calls).toBe(1);
+  expect(wrapper.get('[data-test=guarded]').classes()).toContain('ready');
+  unrelated.value++;
+  await nextTick();
+  expect(calls).toBe(1);
+});
+
+test('erased type references do not disable class caching', async () => {
+  const unrelated = ref(0);
+  let calls = 0;
+  const build = <Value extends CssInput>(value: Value) => {
+    calls++;
+    return cx(value);
+  };
+  const App = _component(() => (
+    <section>
+      {unrelated.value}
+      <div class={build<CssInput>('ready' satisfies CssInput)} />
+    </section>
+  ));
+  const { wrapper } = render(App);
+  expect(calls).toBe(1);
+  unrelated.value++;
+  await nextTick();
+  expect(calls).toBe(1);
+  expect(wrapper.get('div').classes()).toContain('ready');
 });
