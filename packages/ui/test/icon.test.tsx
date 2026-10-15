@@ -117,6 +117,30 @@ test('CSS props resolve tokens, follow nested Provider changes and keep zero/nul
   expect(svg.getAttribute('stroke-width')).toBe('2');
 });
 
+test('filtered undefined SVG attributes retain defaults after updates', async () => {
+  const attrs = ref<{
+    stroke?: string | undefined;
+    viewBox?: string | undefined;
+    focusable?: string | undefined;
+  }>({
+    stroke: undefined,
+    viewBox: undefined,
+    focusable: undefined,
+  });
+  const { wrapper } = render(_component(() => <Icon icon={Search} {...attrs.value} />));
+  for (const next of [
+    { stroke: 'red', viewBox: '0 0 32 32', focusable: 'true' },
+    { stroke: undefined, viewBox: undefined, focusable: undefined },
+  ]) {
+    attrs.value = next;
+    await nextTick();
+    const svg = wrapper.get('svg');
+    expect(svg.attributes('stroke')).toBe(next.stroke ?? 'currentColor');
+    expect(svg.attributes('viewBox')).toBe(next.viewBox ?? '0 0 24 24');
+    expect(svg.attributes('focusable')).toBe(String(next.focusable ?? false));
+  }
+});
+
 test('external CSS overrides convenience props without leaking component options to the SVG', () => {
   const { wrapper, css } = render(
     _component(() => {

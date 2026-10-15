@@ -1,5 +1,5 @@
 import { defineComponent, getCurrentInstance, isReadonly, shallowReadonly } from 'vue';
-import type { ComponentOptions, SetupContext } from 'vue';
+import type { ComponentInternalInstance, ComponentOptions, SetupContext } from 'vue';
 import { CLASS_PROP, hasIncomingClass, inheritClass, renderCss } from '../css/vnode.ts';
 import type { ClassValue } from '../css/style-value.ts';
 
@@ -43,6 +43,8 @@ export function createComponent(options: ComponentOptions) {
         if (typeof value !== 'function') return value;
         return (...args: unknown[]) =>
           renderCss(() => {
+            // children 可能已被 computed 缓存，仍须在每次渲染前检查宿主新加入的冲突。
+            hasExplicitChildren(instance, wrapped);
             const result = value(...args);
             return options.inheritAttrs !== false && !declaresClass && hasIncomingClass(instance)
               ? inheritClass(result, (raw as Props)[CLASS_PROP] as ClassValue)
@@ -62,6 +64,13 @@ export function createComponent(options: ComponentOptions) {
 type Props = Readonly<Record<string, unknown>>;
 type Defaults = Record<string, () => unknown>;
 const own = (value: object, key: PropertyKey) => Object.prototype.hasOwnProperty.call(value, key);
+
+function hasExplicitChildren(instance: ComponentInternalInstance | null, context: SetupContext) {
+  const supplied = own(instance?.vnode.props ?? {}, 'children');
+  if (supplied && context.slots.default)
+    throw new TypeError('组件不能同时接收显式 children prop 和嵌套 children。');
+  return supplied;
+}
 
 /**
  * @internal 默认值缓存属于本次 setup，父级更换/撤去输入不会创建共享 Ref。
@@ -84,23 +93,26 @@ export function resolveProps(
       );
     return value;
   };
-  if (own(instance?.vnode.props ?? {}, 'children') && context.slots.default) {
-    throw new TypeError('组件不能同时接收显式 children prop 和嵌套 children。');
-  }
+  hasExplicitChildren(instance, context);
+  const attrs = () => {
+    const value = context.attrs;
+    // Vue attrs 仅在 get 时登记依赖；枚举和存在性查询也要跟随父级新增、删除属性。
+    void value[CLASS_PROP];
+    return value;
+  };
   return new Proxy(raw, {
     get(target, key) {
       if (key === CLASS_PROP) return undefined;
-      if (
-        key === 'children' &&
-        !own(instance?.vnode.props ?? {}, 'children') &&
-        context.slots.default
-      ) {
-        return context.slots.default();
-      }
       const value =
         key === 'class' && instance && hasIncomingClass(instance)
           ? raw[CLASS_PROP]
-          : Reflect.get(target, key);
+          : own(target, key) || !own(attrs(), key)
+            ? Reflect.get(target, key)
+            : Reflect.get(attrs(), key);
+      // 先读取实际输入，确保 computed 消费 children 时仍追踪 prop 的更新。
+      if (key === 'children' && !hasExplicitChildren(instance, context) && context.slots.default) {
+        return context.slots.default();
+      }
       if (value !== undefined || !own(defaults, key)) return checked(key, value);
       if (!fallback.has(key)) {
         if (evaluating.has(key)) throw new TypeError(`组件默认值存在循环依赖：${String(key)}。`);
@@ -120,19 +132,29 @@ export function resolveProps(
       throw new TypeError('组件 props 只读，不能删除。');
     },
     ownKeys(target) {
-      return Reflect.ownKeys(target).filter((key) => key !== CLASS_PROP);
+      return [...new Set([...Reflect.ownKeys(target), ...Reflect.ownKeys(attrs())])].filter(
+        (key) => key !== CLASS_PROP,
+      );
     },
     has(target, key) {
-      return key !== CLASS_PROP && Reflect.has(target, key);
+      return key !== CLASS_PROP && (Reflect.has(target, key) || own(attrs(), key));
     },
     getOwnPropertyDescriptor(target, key) {
-      return key === CLASS_PROP ? undefined : Reflect.getOwnPropertyDescriptor(target, key);
+      if (key === CLASS_PROP) return;
+      return (
+        Reflect.getOwnPropertyDescriptor(target, key) ??
+        Reflect.getOwnPropertyDescriptor(attrs(), key)
+      );
     },
   });
 }
 
-/** @internal rest 每次枚举当前 props/attrs，保留新增、删除和属性读取的 Vue 语义。 */
-export function restProps(props: Props, context: SetupContext, excluded: readonly string[]): Props {
+/** @internal rest 仅过滤统一的 props 视图；context 参数保留已有编译产物的调用兼容。 */
+export function restProps(
+  props: Props,
+  _context: SetupContext,
+  excluded: readonly string[],
+): Props {
   const omitted = new Set(excluded);
   omitted.add(CLASS_PROP);
   // Vue 对公开的只读代理会在构造 VNode 时复制 props。否则两个 VNode 共用实时对象，
@@ -141,24 +163,17 @@ export function restProps(props: Props, context: SetupContext, excluded: readonl
     new Proxy(Object.create(null) as Record<string, unknown>, {
       get(_target, key) {
         if (typeof key === 'string' && omitted.has(key)) return undefined;
-        return own(props, key) ? Reflect.get(props, key) : Reflect.get(context.attrs, key);
+        // 只转发实际输入，不能带出 props 的 __v_raw 等标记并绕过 rest 自己的只读代理。
+        return own(props, key) ? Reflect.get(props, key) : undefined;
       },
       has(_target, key) {
-        return (
-          !(typeof key === 'string' && omitted.has(key)) &&
-          (own(props, key) || own(context.attrs, key))
-        );
+        return !(typeof key === 'string' && omitted.has(key)) && Reflect.has(props, key);
       },
       ownKeys() {
-        return [...new Set([...Reflect.ownKeys(props), ...Reflect.ownKeys(context.attrs)])].filter(
-          (key) => typeof key !== 'string' || !omitted.has(key),
-        );
+        return Reflect.ownKeys(props).filter((key) => typeof key !== 'string' || !omitted.has(key));
       },
       getOwnPropertyDescriptor(_target, key) {
-        if (
-          (typeof key !== 'string' || !omitted.has(key)) &&
-          (own(props, key) || own(context.attrs, key))
-        )
+        if ((typeof key !== 'string' || !omitted.has(key)) && own(props, key))
           return { configurable: true, enumerable: true };
       },
       set() {

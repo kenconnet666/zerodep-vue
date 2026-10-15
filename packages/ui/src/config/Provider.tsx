@@ -1,8 +1,10 @@
 import { _component, createCssContext } from '@zerodep-vue/core';
+import type { CssInput } from '@zerodep-vue/core';
 import { hasInjectionContext, inject, provide, reactive, readonly, unref, watchEffect } from 'vue';
 import type {
   ComputedRef,
   DeepReadonly,
+  HTMLAttributes,
   InjectionKey,
   Ref,
   UnwrapNestedRefs,
@@ -13,7 +15,7 @@ import type { UiLanguage, UiLanguageInput } from './lang/types.ts';
 import { LightTheme } from './theme/LightTheme.ts';
 import type { UiTheme, UiThemeInput } from './theme/types.ts';
 
-export interface ProviderProps {
+export interface ProviderProps extends /* @vue-ignore */ Omit<HTMLAttributes, 'class' | 'lang'> {
   /** 完整主题或局部分组，支持 Ref/computed；只覆盖写出的字段，undefined 恢复继承。 */
   theme?:
     | UiThemeInput
@@ -26,7 +28,9 @@ export interface ProviderProps {
     | Ref<UiLanguageInput | undefined>
     | ComputedRef<UiLanguageInput | undefined>
     | undefined;
-  /** 当前配置覆盖范围内的内容，不增加额外 DOM 容器。 */
+  /** Provider 根 div 的样式，支持普通类名和链式 CSS。 */
+  class?: CssInput;
+  /** Provider 根 div 内的内容，继承本层主题和语言。 */
   children?: VNodeChild;
 }
 
@@ -50,7 +54,7 @@ export function useLang(): UiLanguage {
 
 /** 通过 Vue 组件树向下提供配置；同级区域和不同应用之间互不修改配置。 */
 export const Provider = _component(
-  (props: ProviderProps) => {
+  ({ theme: themeSource, lang: langSource, children, ...rest }: ProviderProps) => {
     // 先读取父级，再提供本层对象；每个 Provider 拥有自己的分组，不修改父级或调用方来源。
     const parentTheme = useTheme();
     const parentLang = useLang();
@@ -59,8 +63,8 @@ export const Provider = _component(
     const lang = reactive({ ...parentLang });
     watchEffect(
       () => {
-        const ownTheme = reactive<UiThemeInput>(unref(props.theme) ?? {});
-        const ownLang = reactive<UiLanguageInput>(unref(props.lang) ?? {});
+        const ownTheme = reactive<UiThemeInput>(unref(themeSource) ?? {});
+        const ownLang = reactive<UiLanguageInput>(unref(langSource) ?? {});
         // 主题仅有“CSS 属性组 → 主题名”两层，按已声明的完整结构逐字段继承。
         for (const group of Object.keys(theme) as (keyof UiThemeInput)[]) {
           const target: Record<string, string | number> = theme[group];
@@ -82,7 +86,6 @@ export const Provider = _component(
     );
     themeContext.provideTheme(readonly(theme));
     provide(languageKey, readonly(lang));
-    return props.children;
+    return <div {...rest}>{children}</div>;
   },
-  { name: 'Provider', inheritAttrs: false },
 );

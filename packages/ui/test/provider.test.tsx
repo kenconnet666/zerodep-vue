@@ -25,7 +25,7 @@ import {
   useTheme,
   zhCN,
 } from '../src/index.ts';
-import type { UiLanguageInput, UiTheme, UiThemeInput } from '../src/index.ts';
+import type { ProviderProps, UiLanguageInput, UiTheme, UiThemeInput } from '../src/index.ts';
 
 const views = new Map<
   string,
@@ -84,7 +84,88 @@ afterEach(() => {
   }
 });
 
-test('defaults are available without Provider, and Provider adds no DOM container', () => {
+test('Provider forwards rest to its div for explicit children and default slots', async () => {
+  const click = vi.fn();
+  const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  const attrs = { class: 'provider', title: 'region', onClick: click };
+  const App = _component(() => (
+    <>
+      <Provider
+        id="explicit"
+        {...attrs}
+        theme={new DarkTheme()}
+        lang={enUS}
+        children={<button>explicit</button>}
+      />
+      <Provider id="nested" {...attrs}>
+        <button>nested</button>
+      </Provider>
+    </>
+  ));
+  const { wrapper } = render(App);
+  expect(wrapper.findAll('div.provider')).toHaveLength(2);
+  for (const div of wrapper.findAll('div.provider')) {
+    expect(div.attributes('title')).toBe('region');
+    expect(div.attributes('theme')).toBeUndefined();
+    expect(div.attributes('lang')).toBeUndefined();
+    expect(div.element.firstElementChild?.tagName).toBe('BUTTON');
+  }
+  for (const button of wrapper.findAll('button')) {
+    expect(button.attributes('id')).toBeUndefined();
+    expect(button.attributes('class')).toBeUndefined();
+    await button.trigger('click');
+  }
+  expect(click).toHaveBeenCalledTimes(2);
+  const html = await renderToString(createSSRApp(App));
+  const markup = document.createElement('template');
+  markup.innerHTML = html;
+  expect(markup.content.querySelector('div#explicit.provider > button')?.textContent).toBe(
+    'explicit',
+  );
+  expect(markup.content.querySelector('div#nested.provider > button')?.textContent).toBe('nested');
+  expect(html).not.toContain('theme=');
+  expect(html).not.toContain('lang=');
+  expect(warn).not.toHaveBeenCalled();
+});
+
+test('Provider div updates and removes native props, CSS input and event listeners', async () => {
+  const click = vi.fn();
+  const attrs = shallowRef<Pick<ProviderProps, 'id' | 'style' | 'onClick'>>({
+    id: 'first',
+    style: { padding: '2px' },
+    onClick: click,
+  });
+  const styled = ref(true);
+  const App = _component(() => {
+    const s = useCss();
+    return (
+      <Provider {...attrs.value} class={styled.value ? s.color('red') : undefined}>
+        <button>action</button>
+      </Provider>
+    );
+  });
+  const { wrapper, host } = render(App);
+  expect(wrapper.element.tagName).toBe('DIV');
+  expect(wrapper.attributes('id')).toBe('first');
+  expect(wrapper.attributes('style')).toContain('padding: 2px');
+  expect(wrapper.classes().some((name) => name.startsWith('zv-'))).toBe(true);
+  expect(document.head.textContent).toContain('color:red');
+  expect(host.stats().ownedReferences).toBe(1);
+  expect(wrapper.get('button').attributes('class')).toBeUndefined();
+  await wrapper.get('button').trigger('click');
+  expect(click).toHaveBeenCalledTimes(1);
+  attrs.value = {};
+  styled.value = false;
+  await nextTick();
+  expect(wrapper.attributes('id')).toBeUndefined();
+  expect(wrapper.attributes('style') ?? '').toBe('');
+  expect(wrapper.attributes('class') ?? '').toBe('');
+  expect(host.stats().ownedReferences).toBe(0);
+  await wrapper.get('button').trigger('click');
+  expect(click).toHaveBeenCalledTimes(1);
+});
+
+test('defaults are available without Provider, and Provider renders one div', () => {
   const { wrapper } = render(
     _component(() => (
       <>
@@ -95,7 +176,11 @@ test('defaults are available without Provider, and Provider adds no DOM containe
       </>
     )),
   );
-  expect(wrapper.findAll('*').map((node) => node.element.tagName)).toEqual(['OUTPUT', 'OUTPUT']);
+  expect(wrapper.findAll('*').map((node) => node.element.tagName)).toEqual([
+    'OUTPUT',
+    'DIV',
+    'OUTPUT',
+  ]);
   for (const id of ['outside', 'inside']) {
     const { lang, theme } = views.get(id)!;
     expect({ ...lang }).toEqual(zhCN);
@@ -335,6 +420,7 @@ test('shared theme scales resolve in CSS with the correct units and remain owned
     const s = useCss();
     return (
       <div
+        data-theme-scales=""
         class={s
           .backgroundColor('_surface')
           .color('_textPrimary')
@@ -367,7 +453,7 @@ test('shared theme scales resolve in CSS with the correct units and remain owned
       </Provider>
     )),
   );
-  const element = wrapper.get('div').element as HTMLElement;
+  const element = wrapper.get('[data-theme-scales]').element as HTMLElement;
   const values = Array.from(element.style).map((key) => element.style.getPropertyValue(key));
   expect(values).toEqual(
     expect.arrayContaining([
@@ -569,6 +655,7 @@ test('SSR requests isolate configuration and hydrate the same resolved language 
       expect(getCssHost(request.context)?.renderStyles()).toContain('color:var(--zv-');
       const markup = document.createElement('template');
       markup.innerHTML = html[index]!;
+      expect(markup.content.querySelector('div > div > output')).not.toBeNull();
       expect(markup.content.querySelector('output')?.getAttribute('style')).toContain(
         request.color,
       );
@@ -579,11 +666,13 @@ test('SSR requests isolate configuration and hydrate the same resolved language 
     const container = document.createElement('div');
     container.innerHTML = html[0]!;
     const original = container.querySelector('output');
+    const originalProvider = container.firstElementChild;
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const error = vi.spyOn(console, 'error').mockImplementation(() => {});
     const app = createSSRApp(request.component);
     try {
       app.mount(container);
+      expect(container.firstElementChild).toBe(originalProvider);
       expect(container.querySelector('output')).toBe(original);
       expect(container.textContent).toBe(zhCN.confirm);
       expect(warn).not.toHaveBeenCalled();

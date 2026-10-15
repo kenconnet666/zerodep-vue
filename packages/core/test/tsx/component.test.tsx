@@ -1,17 +1,22 @@
 import { afterEach, describe, expect, test } from 'vitest';
 import { mount } from '@vue/test-utils';
+import { renderToString } from '@vue/server-renderer';
 import type { VueWrapper } from '@vue/test-utils';
 import {
   computed,
   createApp,
+  createSSRApp,
   defineComponent,
+  h,
+  isReadonly,
   nextTick,
   readonly,
   ref,
   shallowReactive,
   toRef,
+  toRaw,
 } from 'vue';
-import type { Ref, VNodeChild } from 'vue';
+import type { HTMLAttributes, Ref, VNodeChild } from 'vue';
 import { _component, For } from '@zerodep-vue/core';
 import type { Choices, SharedProps } from './props.ts';
 
@@ -21,6 +26,211 @@ afterEach(() => {
 });
 
 describe('_component', () => {
+  test('unforwarded attributes never reach single or fragment roots, including SSR', async () => {
+    let calls = 0;
+    const Single = _component(() => <button>single</button>);
+    const Multiple = _component(() => (
+      <>
+        <button>first</button>
+        <span>second</span>
+      </>
+    ));
+    const attrs = { id: 'outer', class: 'outer', style: { color: 'red' }, onClick: () => calls++ };
+    for (const Component of [Single, Multiple]) {
+      const wrapper = mount(Component, { attrs });
+      mounted.push(wrapper);
+      const button = wrapper.get('button');
+      expect(button.attributes('id')).toBeUndefined();
+      expect(button.attributes('class')).toBeUndefined();
+      expect(button.attributes('style')).toBeUndefined();
+      await button.trigger('click');
+      const html = await renderToString(createSSRApp(Component, attrs));
+      expect(html).not.toContain('outer');
+      expect(html).not.toContain('color:');
+    }
+    expect(calls).toBe(0);
+  });
+
+  test('filtered rest forwards only selected attributes to the chosen descendant', async () => {
+    let calls = 0;
+    const attrs = ref<Record<string, unknown>>({
+      id: 'first',
+      title: 'discarded',
+      onClick: () => calls++,
+    });
+    const Button = _component(({ ...rest }) => (
+      <section>
+        <button {...Object.fromEntries(Object.entries(rest).filter(([key]) => key !== 'title'))}>
+          action
+        </button>
+      </section>
+    ));
+    const App = _component(() => <Button {...attrs.value} />);
+    const wrapper = mount(App);
+    mounted.push(wrapper);
+    const button = wrapper.get('button');
+    expect(wrapper.attributes('id')).toBeUndefined();
+    expect(wrapper.attributes('title')).toBeUndefined();
+    expect(button.attributes('id')).toBe('first');
+    expect(button.attributes('title')).toBeUndefined();
+    await button.trigger('click');
+    expect(calls).toBe(1);
+    attrs.value = {};
+    await nextTick();
+    expect(button.attributes('id')).toBeUndefined();
+    await button.trigger('click');
+    expect(calls).toBe(1);
+  });
+
+  test('ordinary props and rest expose the same native attributes and reflect removal', async () => {
+    interface NativeProps extends /* @vue-ignore */ HTMLAttributes {
+      label?: string;
+    }
+    let calls = 0;
+    const attrs = ref<Record<string, unknown>>({
+      id: 'first',
+      title: 'title',
+      onClick: () => calls++,
+    });
+    const Plain = _component((props: NativeProps) => (
+      <button
+        {...props}
+        data-has-id={'id' in props}
+        data-keys={Object.keys(props).sort().join(',')}
+      >
+        {props.id}
+      </button>
+    ));
+    const Rest = _component(({ ...rest }: NativeProps) => (
+      <button {...rest} data-has-id={'id' in rest} data-keys={Object.keys(rest).sort().join(',')}>
+        {rest.id}
+      </button>
+    ));
+    const App = _component(() => (
+      <>
+        <Plain {...attrs.value} />
+        <Rest {...attrs.value} />
+      </>
+    ));
+    const wrapper = mount(App);
+    mounted.push(wrapper);
+    const buttons = wrapper.findAll('button');
+    expect(buttons[0]!.html()).toBe(buttons[1]!.html());
+    expect(buttons[0]!.text()).toBe('first');
+    expect(buttons[0]!.attributes('data-has-id')).toBe('true');
+    await buttons[0]!.trigger('click');
+    expect(calls).toBe(1);
+    attrs.value = {};
+    await nextTick();
+    expect(buttons[0]!.html()).toBe(buttons[1]!.html());
+    expect(buttons[0]!.attributes('id')).toBeUndefined();
+    expect(buttons[0]!.attributes('data-has-id')).toBe('false');
+    expect(buttons[0]!.text()).toBe('');
+    await buttons[0]!.trigger('click');
+    expect(calls).toBe(1);
+  });
+
+  test('computed native prop keys and presence update for both props and rest', async () => {
+    interface NativeProps extends /* @vue-ignore */ HTMLAttributes {}
+    const attrs = ref<Record<string, unknown>>({});
+    const Plain = _component((props: NativeProps) => {
+      const keys = computed(() => Object.keys(props).join(','));
+      const hasId = computed(() => 'id' in props);
+      const id = computed(() => Object.getOwnPropertyDescriptor(props, 'id')?.value);
+      return (
+        <output data-keys={keys.value} data-present={hasId.value}>
+          {id.value}
+        </output>
+      );
+    });
+    const Rest = _component(({ ...rest }: NativeProps) => {
+      const keys = computed(() => Object.keys(rest).join(','));
+      const hasId = computed(() => 'id' in rest);
+      return (
+        <output data-keys={keys.value} data-present={hasId.value}>
+          {rest.id}
+        </output>
+      );
+    });
+    const App = _component(() => (
+      <>
+        <Plain {...attrs.value} />
+        <Rest {...attrs.value} />
+      </>
+    ));
+    const wrapper = mount(App);
+    mounted.push(wrapper);
+    const outputs = wrapper.findAll('output');
+    for (const next of [{ id: 'added' }, {}]) {
+      attrs.value = next;
+      await nextTick();
+      for (const output of outputs) {
+        expect(output.attributes('data-keys')).toBe('id' in next ? 'id' : '');
+        expect(output.attributes('data-present')).toBe(String('id' in next));
+        expect(output.text()).toBe('id' in next ? 'added' : '');
+      }
+    }
+  });
+
+  test('children and default slot conflicts are rejected after updates and can recover', async () => {
+    const explicit = ref(false);
+    const errors: unknown[] = [];
+    const Child = _component(({ children }: { children?: VNodeChild }) => <p>{children}</p>);
+    const Host = defineComponent(
+      () => () =>
+        h(Child, explicit.value ? { children: 'explicit' } : {}, { default: () => 'nested' }),
+    );
+    const wrapper = mount(Host, {
+      global: { config: { errorHandler: (error) => errors.push(error) } },
+    });
+    mounted.push(wrapper);
+    expect(wrapper.text()).toBe('nested');
+    explicit.value = true;
+    await nextTick();
+    expect(errors).toHaveLength(1);
+    expect(String(errors[0])).toContain('不能同时接收显式 children prop 和嵌套 children');
+    explicit.value = false;
+    await nextTick();
+    expect(wrapper.text()).toBe('nested');
+  });
+
+  test('rest keeps its own readonly proxy without exposing excluded inputs or internal class metadata', () => {
+    const Button = _component(({ label, ...rest }: { label: string }) => {
+      expect(isReadonly(rest)).toBe(true);
+      expect(Object.keys(toRaw(rest))).toEqual(['id']);
+      expect(Reflect.get(toRaw(rest), 'label')).toBeUndefined();
+      expect(Reflect.get(toRaw(rest), '__zerodepVueClass')).toBeUndefined();
+      return <button {...rest}>{label}</button>;
+    });
+    const wrapper = mount(Button, { props: { label: 'consumed' }, attrs: { id: 'forwarded' } });
+    mounted.push(wrapper);
+    expect(wrapper.attributes('id')).toBe('forwarded');
+  });
+
+  test('cached children still reject conflicts added by the Vue host, including explicit undefined', async () => {
+    const added = ref(false);
+    const errors: unknown[] = [];
+    const Child = _component((props: { children?: VNodeChild }) => {
+      const children = computed(() => props.children);
+      return <p>{children.value}</p>;
+    });
+    const Host = defineComponent(
+      () => () => h(Child, added.value ? { children: undefined } : {}, { default: () => 'nested' }),
+    );
+    const wrapper = mount(Host, {
+      global: { config: { errorHandler: (error) => errors.push(error) } },
+    });
+    mounted.push(wrapper);
+    expect(wrapper.text()).toBe('nested');
+    added.value = true;
+    await nextTick();
+    expect(errors).toHaveLength(1);
+    expect(String(errors[0])).toContain('不能同时接收显式 children prop 和嵌套 children');
+    added.value = false;
+    await nextTick();
+    expect(wrapper.text()).toBe('nested');
+  });
+
   test('parent-evaluated children update a plain consumer without dynamic props', async () => {
     const rows = ref(['first']);
     let calls = 0;

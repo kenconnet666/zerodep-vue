@@ -53,11 +53,13 @@ function variables(element: Element) {
   );
 }
 
-test('automatic class override suppresses the unused default binding', () => {
+test('explicitly enabled automatic class override suppresses the unused default binding', () => {
   const unused = () => {
     throw new Error('overridden binding was evaluated');
   };
-  const Button = _component(() => <button class={s.color(bx(unused()))}>button</button>);
+  const Button = _component(() => <button class={s.color(bx(unused()))}>button</button>, {
+    inheritAttrs: true,
+  });
   const App = _component(() => <Button class={s.color('black')} />);
   const host = setupHost();
   const wrapper = mount(App, { global: { plugins: [host] } });
@@ -169,11 +171,16 @@ test('multiple bx variables and aliases retain one style declaration across inst
 
 test('owned components compose through cx, retain states and transfer bindings without metadata leaks', async () => {
   const width = ref('120px');
-  const Base = _component(({ class: external }: { class?: CssInput }) => (
-    <button class={cx(s.color('red').select(':hover', s.color('blue')), external)}>owned</button>
+  interface BaseProps extends /* @vue-ignore */ Pick<HTMLAttributes, 'title'> {
+    class?: CssInput;
+  }
+  const Base = _component(({ class: external, ...rest }: BaseProps) => (
+    <button {...rest} class={cx(s.color('red').select(':hover', s.color('blue')), external)}>
+      owned
+    </button>
   ));
   interface WrapperProps extends /* @vue-ignore */ Pick<HTMLAttributes, 'title'> {}
-  const Wrapper = _component((_props: WrapperProps) => <Base />);
+  const Wrapper = _component(({ ...rest }: WrapperProps) => <Base {...rest} />);
   const App = _component(() => (
     <Wrapper class={s.color('black').width(bx(width.value))} title="forwarded" />
   ));

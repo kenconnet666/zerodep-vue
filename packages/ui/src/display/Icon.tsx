@@ -7,7 +7,7 @@ import { useCss } from '../config/Provider.tsx';
 import type { UiTheme } from '../config/theme/types.ts';
 
 /** 常用样式直接采用 CSS 属性值类型；其余 SVG 属性和事件透传。 */
-// 原生 SVG 属性走 attrs；只将下方自有字段声明为 Vue props。
+// Vue 仅解析自有字段的运行时声明；原生 SVG 属性统一通过 rest 显式转发。
 export interface IconProps extends /* @vue-ignore */ Omit<
   SVGAttributes,
   'class' | 'color' | 'width' | 'height' | 'opacity' | 'rotate'
@@ -57,9 +57,6 @@ export const Icon = _component(
     spin = false,
     nonScalingStroke = false,
     class: className,
-    children: _children,
-    innerHTML: _innerHTML,
-    textContent: _textContent,
     ...attrs
   }: IconProps) => {
     const s = useCss();
@@ -122,7 +119,14 @@ export const Icon = _component(
         stroke-linecap="round"
         stroke-linejoin="round"
         focusable="false"
-        {...Object.fromEntries(Object.entries(attrs).filter(([, value]) => value !== undefined))}
+        {...Object.fromEntries(
+          Object.keys(attrs).flatMap((key) => {
+            // 先排除图标子树的替换入口，再读取值，避免调用被忽略的 children slot。
+            if (key === 'children' || key === 'innerHTML' || key === 'textContent') return [];
+            const value = Reflect.get(attrs, key);
+            return value === undefined ? [] : [[key, value]];
+          }),
+        )}
         role={
           attrs.role ??
           (attrs['aria-label']?.trim() || attrs['aria-labelledby']?.trim() ? 'img' : undefined)
@@ -137,5 +141,4 @@ export const Icon = _component(
       </svg>
     );
   },
-  { name: 'Icon', inheritAttrs: false },
 );

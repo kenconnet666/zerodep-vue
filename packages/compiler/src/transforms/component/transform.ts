@@ -119,7 +119,6 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
   const defaults: t.ObjectProperty[] = [];
   const defaultProperties: { key: string; assignment: t.AssignmentPattern }[] = [];
   const consumed: string[] = [];
-  let explicitForward = false;
 
   if (first && !t.isIdentifier(first) && !t.isObjectPattern(first))
     throw fn.buildCodeFrameError('[ZV_PROPS] props 参数使用具名对象或顶层对象解构。');
@@ -128,10 +127,6 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
       if (t.isRestElement(property)) {
         if (!t.isIdentifier(property.argument))
           throw fn.buildCodeFrameError('[ZV_REST] rest 需要具名变量。');
-        const binding = fn.scope.getBinding(property.argument.name);
-        explicitForward ||= !!binding?.referencePaths.some((path) =>
-          path.parentPath.isJSXSpreadAttribute(),
-        );
         initializers.push(
           t.variableDeclaration('const', [
             t.variableDeclarator(
@@ -205,30 +200,6 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
       ),
     );
 
-  fn.traverse({
-    JSXSpreadAttribute(path) {
-      const argument = path.get('argument');
-      if (
-        t.isIdentifier(contextParam) &&
-        argument.isMemberExpression() &&
-        t.isIdentifier(argument.node.object, { name: contextParam.name }) &&
-        argument.scope.getBinding(contextParam.name) === fn.scope.getBinding(contextParam.name) &&
-        t.isIdentifier(argument.node.property, { name: 'attrs' })
-      )
-        explicitForward = true;
-      if (t.isObjectPattern(contextParam) && argument.isIdentifier()) {
-        explicitForward ||= contextParam.properties.some(
-          (property) =>
-            t.isObjectProperty(property) &&
-            propertyName(property) === 'attrs' &&
-            t.isIdentifier(property.value, { name: argument.node.name }) &&
-            argument.scope.getBinding(argument.node.name) ===
-              fn.scope.getBinding(argument.node.name),
-        );
-      }
-    },
-  });
-
   // metadata 只控制 Vue 的 props/attrs 分流与 Boolean 转换；实例默认值在 setup 内惰性求值。
   for (const key of consumed) {
     if (
@@ -293,8 +264,8 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
   const options: (t.ObjectProperty | t.SpreadElement)[] = [];
   if (declaredName)
     options.push(t.objectProperty(t.identifier('name'), t.stringLiteral(declaredName)));
-  if (explicitForward)
-    options.push(t.objectProperty(t.identifier('inheritAttrs'), t.booleanLiteral(false)));
+  // 作者通过 props/rest 决定转发位置；不因根节点或 spread 的写法恢复隐式透传。
+  options.push(t.objectProperty(t.identifier('inheritAttrs'), t.booleanLiteral(false)));
   const extra = call.node.arguments[1];
   if (extra && t.isExpression(extra)) options.push(t.spreadElement(extra));
   options.push(
