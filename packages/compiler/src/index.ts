@@ -3,4 +3,4 @@ export { default as babelPlugin } from './plugins/babel.ts';
 export { default as vitePlugin } from './plugins/vite.ts';
 export type { CompilerOptions, VueJSXPluginOptions } from './plugins/babel.ts';
 export type { ViteOptions } from './plugins/vite.ts';
-export { languageServicePlugin } from './editor/index.ts';
+export { languageServicePlugin } from './editor/language-service.ts';

@@ -6,7 +6,7 @@
   "files": [
     {
       "source": "packages/babel-plugin-jsx/src/index.ts",
-      "target": "packages/compiler/src/upstream/index.ts",
+      "target": "packages/compiler/src/upstream/plugin.ts",
       "sha256": "88af625894920b535914fc7900204e824f901622dac170aedabc7a5a3a4ccd80"
     },
     {
@@ -56,7 +56,7 @@
     },
     {
       "source": "packages/babel-plugin-jsx/test/index.test.tsx",
-      "target": "packages/compiler/test/upstream/index.test.tsx",
+      "target": "packages/compiler/test/upstream/jsx.test.tsx",
       "sha256": "a93aba653cd0bd3f84a65f9601df15db2b077da143233dbb3061c4c85fb5ea21"
     },
     {

@@ -11,14 +11,18 @@ import {
   shallowRef,
   Teleport,
 } from 'vue';
-import type { HTMLAttributes, Ref } from 'vue';
+import type { HTMLAttributes, Ref, VNode } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import {
   _component,
+  binding,
   bx,
+  cloneCssVNode,
   createCssContext,
   createCssHost,
+  createCssVNode,
   getCssHost,
+  renderCss,
   SystemKeywords,
   cx,
 } from '@zerodep-vue/core';
@@ -236,6 +240,54 @@ test('spread and callbacks evaluate once, merge in order, and preserve explicit 
   expect((wrapper.element as HTMLElement).style.color).toBe('green');
   expect(containers.at(-1)!.textContent).toContain('color:blue');
   expect(containers.at(-1)!.textContent).not.toContain('color:red');
+});
+
+test('nested render frames isolate reads and leave discarded nodes without DOM leases', async () => {
+  const host = setupHost();
+  const width = ref(12);
+  let reads = 0;
+  const bound = binding(() => {
+    reads++;
+    return width.value;
+  });
+  const leasesDuringRender: number[] = [];
+  const App = defineComponent({
+    setup() {
+      return () => {
+        const result = renderCss(() => {
+          expect(() =>
+            renderCss(() => {
+              createCssVNode('i', { class: s.color('orange') });
+              throw new Error('discard this frame');
+            }),
+          ).toThrow('discard this frame');
+          const nested = renderCss(() =>
+            createCssVNode('span', { class: s.width(bound) }),
+          ) as VNode;
+          return createCssVNode('section', null, [
+            cloneCssVNode(nested),
+            createCssVNode('span', { class: s.width(bound) }),
+          ]);
+        });
+        leasesDuringRender.push(host.stats().ownedReferences);
+        return result;
+      };
+    },
+  });
+  const wrapper = mount(App, { global: { plugins: [host] } });
+  mounted.push(wrapper);
+  expect(leasesDuringRender[0]).toBe(0);
+  expect(reads).toBe(2);
+  expect(host.stats().ownedReferences).toBe(2);
+  expect(containers.at(-1)!.textContent).not.toContain('orange');
+  for (const node of wrapper.findAll('span'))
+    expect(Object.values(variables(node.element))).toEqual(['12px']);
+  width.value = 24;
+  await nextTick();
+  expect(reads).toBe(4);
+  expect(host.stats().ownedReferences).toBe(2);
+  for (const node of wrapper.findAll('span'))
+    expect(Object.values(variables(node.element))).toEqual(['24px']);
 });
 
 test('SSR collects rules and emits the same variable protocol per request', async () => {

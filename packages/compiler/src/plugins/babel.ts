@@ -2,9 +2,9 @@
 import { declare } from '@babel/helper-plugin-utils';
 import type { NodePath, Visitor } from '@babel/core';
 import type * as t from '@babel/types';
-import upstream from '../upstream/index.ts';
+import upstream from '../upstream/plugin.ts';
 import type { State, VueJSXPluginOptions } from '../upstream/interface.ts';
-import { transformComponents } from '../transforms/component/index.ts';
+import { transformComponents } from '../transforms/component/transform.ts';
 import { connectCss, transformCss } from '../transforms/css.ts';
 import type { CssOptions } from '../transforms/css.ts';
 
