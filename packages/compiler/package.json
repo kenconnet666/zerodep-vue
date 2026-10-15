@@ -14,20 +14,14 @@
   },
   "files": [
     "dist",
-    "LICENSE",
-    "VITE-LICENSE",
     "upstream.json",
-    "src",
-    "README.md",
-    "ZERODEP-VUE-LICENSE"
+    "src"
   ],
-  "engines": {
-    "node": ">=24.11 <25"
-  },
   "scripts": {
     "check": "tsc --noEmit -p tsconfig.json",
     "build": "tsc -p tsconfig.build.json",
-    "test": "node --test test/*.test.mjs"
+    "test": "node --test test/*.test.mjs",
+    "test:upstream": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
     "@babel/helper-module-imports": "catalog:",
@@ -49,9 +43,14 @@
   },
   "devDependencies": {
     "@babel/core": "catalog:",
+    "@babel/plugin-syntax-typescript": "catalog:",
     "@types/node": "catalog:",
+    "@vue/babel-plugin-jsx": "catalog:",
     "@vue/server-renderer": "catalog:",
+    "@vue/test-utils": "catalog:",
+    "jsdom": "catalog:",
     "vite": "catalog:",
+    "vitest": "catalog:",
     "vue": "catalog:",
     "@zerodep-vue/core": "workspace:*"
   },

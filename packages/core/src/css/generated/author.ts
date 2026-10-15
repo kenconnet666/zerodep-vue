@@ -1,4 +1,4 @@
-// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
+// 由 packages/core/scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
 import type { PropertyInput } from '../types.ts';
 import type { SystemKeywords } from './system.ts';
 import { CssAuthor } from '../author.ts';

@@ -1,4 +1,4 @@
-// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
+// 由 packages/core/scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
 /** 可回退到共享 color 主题组的属性；原生值本身无需运行时字典。 */
 export const colorProperties = [
   'accentColor',

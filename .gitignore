@@ -11,7 +11,6 @@ coverage/
 test-results/
 artifacts/
 .tmp/
-fixtures/*/.generated/
 
 # 本机编辑器、语言服务与环境设置
 .idea/

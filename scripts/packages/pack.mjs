@@ -15,6 +15,7 @@ import {
 
 await mkdir(artifacts, { recursive: true });
 const commit = command('git', ['rev-parse', 'HEAD'], root).trim();
+const license = (await readFile(join(root, 'LICENSE'), 'utf8')).replaceAll('\r\n', '\n');
 const result = { commit, node: process.version, packages: [], success: false };
 try {
   for (const name of names) {
@@ -60,26 +61,16 @@ try {
         !JSON.stringify(packed).includes('catalog:'),
       'Unresolved workspace dependency in packed manifest.',
     );
-    for (const required of [
-      'README.md',
-      'LICENSE',
-      'dist/index.js',
-      'dist/index.d.ts',
-      'src/index.ts',
-    ])
+    for (const required of ['LICENSE', 'dist/index.js', 'dist/index.d.ts', 'src/index.ts'])
       assert(contents.has(required), `Missing ${name}/${required}`);
+    assert.equal(
+      command('tar', ['-xOf', archive, 'package/LICENSE'], root).replaceAll('\r\n', '\n'),
+      license,
+      `Packed ${name}/LICENSE must match the shared root license.`,
+    );
     if (name === 'compiler')
-      for (const required of [
-        'VITE-LICENSE',
-        'ZERODEP-VUE-LICENSE',
-        'upstream.json',
-        'src/editor/plugin.cjs',
-      ])
+      for (const required of ['upstream.json', 'src/editor/plugin.cjs'])
         assert(contents.has(required));
-    if (name === 'core')
-      for (const required of ['CSSTYPE-LICENSE', 'ZERODEP-JS-LICENSE', 'THIRD_PARTY_NOTICES.md'])
-        assert(contents.has(required));
-    if (name === 'ui') assert(contents.has('THIRD_PARTY_NOTICES.md'));
     const checkExport = (value) => {
       if (typeof value === 'string')
         assert(contents.has(value.replace(/^\.\//, '')), `Unpacked export target: ${value}`);

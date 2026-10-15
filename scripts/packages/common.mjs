@@ -38,7 +38,7 @@ export function pnpm(args, cwd, options) {
   const entry = process.env.npm_execpath;
   assert(
     entry && /pnpm\.(?:c?js|mjs)$/.test(entry),
-    'Run this workflow through pnpm packages:pack or pnpm test:packages.',
+    'Run this workflow through pnpm packages:pack.',
   );
   return command(process.execPath, [entry, ...args], cwd, options);
 }

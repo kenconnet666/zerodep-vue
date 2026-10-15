@@ -14,17 +14,16 @@
   },
   "files": [
     "dist",
-    "CSSTYPE-LICENSE",
-    "ZERODEP-JS-LICENSE",
-    "THIRD_PARTY_NOTICES.md",
-    "src",
-    "README.md",
-    "LICENSE"
+    "src"
   ],
   "scripts": {
     "check": "tsc --noEmit -p tsconfig.json",
     "build": "tsc -p tsconfig.build.json",
-    "test": "node --test test/css/*.test.mjs test/development/*.test.mjs"
+    "test": "node --test test/css/*.test.mjs test/development/*.test.mjs",
+    "test:authoring": "vitest run --config vitest.config.ts",
+    "css:generate": "node scripts/css/generate.mjs",
+    "css:generate:check": "node scripts/css/generate.mjs --check",
+    "css:bundle": "node scripts/css/bundle-size.mjs"
   },
   "dependencies": {
     "@vue/shared": "catalog:",
@@ -38,14 +37,18 @@
     "vue": "^3.5.43"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
+    "@vue/server-renderer": "catalog:",
+    "@vue/test-utils": "catalog:",
+    "jsdom": "catalog:",
+    "mdn-data": "catalog:",
+    "prettier": "catalog:",
     "typescript": "catalog:",
-    "vue-router": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:",
     "vue": "catalog:"
   },
   "license": "MIT",
-  "engines": {
-    "node": ">=24.11 <25"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/kenconnet666/zerodep-vue.git",

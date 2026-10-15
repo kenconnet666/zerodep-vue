@@ -1,6 +1,5 @@
 packages:
   - packages/*
-  - fixtures/*
 
 catalog:
   '@babel/core': 8.0.6
@@ -11,65 +10,37 @@ catalog:
   '@babel/preset-typescript': 8.0.1
   '@babel/template': 8.0.0
   '@babel/types': 8.0.6
-  '@types/node': 24.13.5
-  '@playwright/test': 1.64.0
-  playwright-core: 1.64.0
-  '@types/convert-source-map': 2.0.3
-  '@vue/babel-plugin-jsx': 3.0.0
-  '@vue/babel-plugin-resolve-type': 3.0.0
-  '@vue/babel-helper-vue-transform-on': 3.0.0
-  '@vue/compiler-sfc': 3.5.43
-  '@vue/server-renderer': 3.5.43
-  '@vue/shared': 3.5.43
-  '@vue/devtools-api': 8.2.1
-  '@vue/devtools-kit': 8.2.1
-  '@vue/test-utils': 2.4.11
-  csstype: 3.2.3
-  mdn-data: 2.27.1
   '@csstools/css-tokenizer': 4.0.2
   '@emotion/unitless': 0.10.0
-  postcss-selector-parser: 7.1.6
+  '@floating-ui/dom': 1.8.0
+  '@internationalized/date': 3.12.4
+  '@lucide/icons': 1.56.0
+  '@modelcontextprotocol/sdk': 1.30.0
+  '@types/convert-source-map': 2.0.3
+  '@types/node': 24.13.5
+  '@vue/babel-helper-vue-transform-on': 3.0.0
+  '@vue/babel-plugin-jsx': 3.0.0
+  '@vue/babel-plugin-resolve-type': 3.0.0
+  '@vue/compiler-sfc': 3.5.43
+  '@vue/devtools-api': 8.2.1
+  '@vue/server-renderer': 3.5.43
+  '@vue/shared': 3.5.43
+  '@vue/test-utils': 2.4.11
+  csstype: 3.2.3
+  decimal.js: 10.6.0
   jsdom: 29.1.1
+  mdn-data: 2.27.1
+  postcss-selector-parser: 7.1.6
   prettier: 3.9.9
+  smol-toml: 1.9.0
+  tabbable: 6.5.0
+  typescript-language-server: 6.0.0
   typescript: 6.0.3
   vite: 8.3.1
   vitest: 4.1.9
+  vscode-jsonrpc: 8.2.1
   vue: 3.5.43
   zod: 4.6.7
-  # DevTools 上游声明引用路由类型，仅供工具库自身的开发期类型检查。
-  vue-router: 4.6.4
-
-catalogs:
-  ui:
-    '@floating-ui/dom': 1.8.0
-    '@internationalized/date': 3.12.4
-    '@lucide/icons': 1.56.0
-    decimal.js: 10.6.0
-    tabbable: 6.5.0
-    '@axe-core/playwright': 4.13.0
-  naive:
-    '@css-render/plugin-bem': 0.15.14
-    '@css-render/vue3-ssr': 0.15.14
-    '@types/lodash': 4.17.20
-    '@types/lodash-es': 4.17.12
-    'async-validator': 4.2.5
-    'css-render': 0.15.14
-    'date-fns': 4.1.0
-    'date-fns-tz': 3.2.0
-    'evtd': 0.2.4
-    'highlight.js': 11.8.0
-    'lodash': 4.17.21
-    'lodash-es': 4.17.21
-    'seemly': 0.3.10
-    'treemate': 0.3.11
-    'vdirs': 0.1.8
-    'vooks': 0.2.12
-    'vueuc': 0.4.66
-  languageServices:
-    '@modelcontextprotocol/sdk': 1.30.0
-    smol-toml: 1.9.0
-    typescript-language-server: 6.0.0
-    vscode-jsonrpc: 8.2.1
 
 catalogMode: strict
 saveExact: true
@@ -82,10 +53,6 @@ autoInstallPeers: false
 # 保持所有包和工具使用用户指定的 TypeScript 版本。
 overrides:
   typescript: 6.0.3
-
-# DevTools 的类型依赖：Group 明确允许 undefined，基类须兼容 exactOptionalPropertyTypes。
-patchedDependencies:
-  vue-router@4.6.4: patches/vue-router@4.6.4.patch
 
 allowBuilds:
   esbuild: true

@@ -1,4 +1,4 @@
-// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
+// 由 packages/core/scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。
 /** 保留字面量候选，同时接收原属性允许的自由 CSS 字符串。 */
 type CssString = string & {};
 export interface CssWideValues {

@@ -152,13 +152,11 @@ async function start() {
     });
     await connection.sendNotification('initialized', {});
     installWatcher('');
-    for (const parent of ['packages', 'fixtures']) {
-      for (const entry of await readdir(resolve(root, parent), { withFileTypes: true })) {
-        if (!entry.isDirectory()) continue;
-        const directory = parent + '/' + entry.name;
-        installWatcher(directory);
-        for (const leaf of ['src', 'test', 'dist']) installWatcher(directory + '/' + leaf, true);
-      }
+    for (const entry of await readdir(resolve(root, 'packages'), { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const directory = 'packages/' + entry.name;
+      installWatcher(directory);
+      for (const leaf of ['src', 'test', 'dist']) installWatcher(directory + '/' + leaf, true);
     }
     installWatcher('scripts', true);
     let queue = Promise.resolve();

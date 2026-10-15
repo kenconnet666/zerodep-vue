@@ -3,19 +3,20 @@ import presetTypeScript from '@babel/preset-typescript';
 import officialJsx from '@vue/babel-plugin-jsx';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
-import { babelPlugin as forkJsx } from './packages/compiler/src/index.ts';
+import { babelPlugin as forkJsx } from './src/index.ts';
 
 // 两组任务使用同一批上游断言与快照；仅切换编译器，避免把基线缺陷归因于 fork。
 export default defineConfig(({ mode }) => {
   const official = mode === 'official';
   const jsx = official ? officialJsx : forkJsx;
   return {
+    root: fileURLToPath(new URL('.', import.meta.url)),
     oxc: { jsx: 'preserve' },
     resolve: {
       alias: {
         '@zerodep-vue/compiler-under-test': official
           ? fileURLToPath(import.meta.resolve('@vue/babel-plugin-jsx'))
-          : fileURLToPath(new URL('./packages/compiler/src/babel/index.ts', import.meta.url)),
+          : fileURLToPath(new URL('./src/babel/index.ts', import.meta.url)),
       },
     },
     plugins: [
@@ -41,7 +42,7 @@ export default defineConfig(({ mode }) => {
     test: {
       globals: true,
       environment: 'jsdom',
-      include: ['packages/compiler/test/upstream*/**/*.test.{ts,tsx}'],
+      include: ['test/upstream*/**/*.test.{ts,tsx}'],
       maxWorkers: 2,
     },
   };

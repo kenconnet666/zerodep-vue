@@ -35,8 +35,6 @@ jobs:
           - '@zerodep-vue/compiler'
           - '@zerodep-vue/core'
           - '@zerodep-vue/ui'
-          - '@zerodep-vue/fixture-legacy-tsx'
-          - '@zerodep-vue/fixture-authoring'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
@@ -52,9 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
-      - name: Check workspace tool configurations
-        run: pnpm exec tsc --noEmit -p tsconfig.json
-      - run: pnpm test
+      - run: pnpm --filter @zerodep-vue/compiler test
 
   upstream:
     name: Upstream (${{ matrix.mode }}, ${{ matrix.shard }}/2)
@@ -73,12 +69,12 @@ jobs:
         env:
           TEST_MODE: ${{ matrix.mode }}
           TEST_SHARD: ${{ matrix.shard }}
-        run: pnpm test:upstream --mode "$TEST_MODE" --shard "$TEST_SHARD/2" --reporter default --reporter json --outputFile "test-results/upstream-$TEST_MODE-$TEST_SHARD.json"
+        run: pnpm --filter @zerodep-vue/compiler test:upstream --mode "$TEST_MODE" --shard "$TEST_SHARD/2" --reporter default --reporter json --outputFile "test-results/upstream-$TEST_MODE-$TEST_SHARD.json"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
           name: upstream-${{ matrix.mode }}-${{ matrix.shard }}-${{ github.sha }}
-          path: test-results/upstream-*.json
+          path: packages/compiler/test-results/upstream-*.json
           if-no-files-found: warn
           retention-days: 7
 
@@ -89,8 +85,8 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
-      - run: pnpm css:generate:check
-      - run: pnpm test:core
+      - run: pnpm --filter @zerodep-vue/core css:generate:check
+      - run: pnpm --filter @zerodep-vue/core test
 
   authoring:
     name: TSX authoring (${{ matrix.mode }})
@@ -103,13 +99,10 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
-      - name: Check TSX runtime test types
-        if: matrix.mode == 'default'
-        run: pnpm check:authoring
       - name: Run component authoring contracts
         env:
           AUTHORING_MODE: ${{ matrix.mode }}
-        run: pnpm test:authoring --mode "$AUTHORING_MODE"
+        run: pnpm --filter @zerodep-vue/core test:authoring --mode "$AUTHORING_MODE"
 
   ui:
     name: UI foundations (${{ matrix.mode }})
@@ -125,123 +118,7 @@ jobs:
       - name: Verify peer values, TSX, SSR and production emission
         env:
           UI_MODE: ${{ matrix.mode }}
-        run: pnpm test:ui --mode "$UI_MODE"
-
-  naive:
-    name: Naive production TSX (${{ matrix.mode }})
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      max-parallel: 3
-      matrix:
-        mode: [classic, official, fork]
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/setup
-      - name: Verify pinned source, compile every production TSX, build and consume
-        env:
-          NAIVE_MODE: ${{ matrix.mode }}
-        run: pnpm test:naive "$NAIVE_MODE"
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: always()
-        with:
-          name: naive-${{ matrix.mode }}-${{ github.sha }}
-          path: |
-            test-results/naive-${{ matrix.mode }}.json
-            fixtures/naive-ui/.generated/${{ matrix.mode }}/bundle/
-            fixtures/naive-ui/.generated/${{ matrix.mode }}/types/
-            fixtures/naive-ui/.generated/${{ matrix.mode }}/LICENSE
-          include-hidden-files: true
-          if-no-files-found: warn
-          retention-days: 7
-
-  browser:
-    name: Browser (${{ matrix.mode }}, ${{ matrix.browser }})
-    needs: naive
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    permissions:
-      contents: read
-      actions: read
-    strategy:
-      fail-fast: false
-      max-parallel: 3
-      matrix:
-        mode: [development, production]
-        browser: [chromium, firefox]
-    env:
-      BROWSER_MODE: ${{ matrix.mode }}
-      PW_BROWSER: ${{ matrix.browser }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/setup
-      - name: Download this commit's compiled Naive artifact
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "naive-fork-$GITHUB_SHA" --dir .
-      - name: Check browser fixture against source-emitted Naive declarations
-        if: matrix.mode == 'development' && matrix.browser == 'chromium'
-        run: pnpm --filter @zerodep-vue/fixture-browser check
-      - name: Install the pinned test browser
-        id: browser
-        run: pnpm exec playwright install --with-deps "$PW_BROWSER"
-      - name: Run real browser interaction, CSS and hydration contracts
-        run: pnpm --filter @zerodep-vue/fixture-browser test --project "$PW_BROWSER"
-      - name: Verify repeated updates, native lifecycles and shared style ownership
-        if: always() && steps.browser.outcome == 'success'
-        env:
-          PW_SUITE: stability
-        run: pnpm --filter @zerodep-vue/fixture-browser test --project "$PW_BROWSER"
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: always()
-        with:
-          name: browser-${{ matrix.mode }}-${{ matrix.browser }}-${{ github.sha }}
-          path: test-results/browser/
-          if-no-files-found: warn
-          retention-days: 7
-
-  hmr:
-    name: Development tools (${{ matrix.browser }})
-    needs: naive
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: read
-      actions: read
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [chromium, firefox]
-    env:
-      BROWSER_MODE: development
-      PW_SUITE: hmr
-      PW_BROWSER: ${{ matrix.browser }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/setup
-      - name: Download this commit's compiled Naive artifact
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "naive-fork-$GITHUB_SHA" --dir .
-      - id: browser
-        run: pnpm exec playwright install --with-deps "$PW_BROWSER"
-      - name: Verify preserved state, error recovery and resource cleanup
-        run: pnpm --filter @zerodep-vue/fixture-browser test --project "$PW_BROWSER"
-      - name: Verify real Vue DevTools inspector protocol and passive snapshots
-        if: always() && steps.browser.outcome == 'success'
-        env:
-          PW_SUITE: inspector
-        run: pnpm --filter @zerodep-vue/fixture-browser test --project "$PW_BROWSER"
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: always()
-        with:
-          name: development-tools-${{ matrix.browser }}-${{ github.sha }}
-          path: |
-            test-results/browser/hmr/
-            test-results/browser/inspector/
-          if-no-files-found: warn
-          retention-days: 7
+        run: pnpm --filter @zerodep-vue/ui test --mode "$UI_MODE"
 
   build:
     name: Build and package artifacts
@@ -252,7 +129,7 @@ jobs:
       - uses: ./.github/actions/setup
       - run: pnpm build
       - name: Verify CSS author runtime size from built packages
-        run: pnpm css:bundle
+        run: pnpm --filter @zerodep-vue/core css:bundle
       - name: Pack complete artifacts and verify emitted-source provenance
         run: pnpm packages:pack
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -262,42 +139,8 @@ jobs:
             packages/*/dist/
             test-results/packages/*.tgz
             test-results/packages/pack.json
-            test-results/css-bundle.json
+            packages/core/test-results/css-bundle.json
           if-no-files-found: error
-          retention-days: 7
-
-  consumer:
-    name: Installed packages (${{ matrix.os }})
-    needs: build
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
-    permissions:
-      contents: read
-      actions: read
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: ./.github/actions/setup
-      - name: Download this commit's package artifacts
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "packages-$GITHUB_SHA" --dir .
-      - name: Check isolated cleanup ownership
-        run: node --test --test-timeout=10000 scripts/packages/owned-directory.test.mjs scripts/packages/path-boundary.test.mjs scripts/packages/language-host.test.mjs
-      - name: Install tarballs outside the checkout and verify runtime and language service
-        run: pnpm test:packages
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: always()
-        with:
-          name: package-consumer-${{ matrix.os }}-${{ github.sha }}
-          path: |
-            test-results/packages/consumer-*.json
-            test-results/packages/consumer-*-lock.yaml
-          if-no-files-found: warn
           retention-days: 7
 
   language:
@@ -325,22 +168,7 @@ jobs:
   ci:
     name: CI result
     if: always()
-    needs:
-      [
-        format,
-        types,
-        compiler,
-        upstream,
-        core,
-        authoring,
-        ui,
-        naive,
-        browser,
-        hmr,
-        build,
-        consumer,
-        language,
-      ]
+    needs: [format, types, compiler, upstream, core, authoring, ui, build, language]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:

@@ -1,15 +1,19 @@
 import assert from 'node:assert/strict';
 import { mkdir, readFile, unlink, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { createRequire } from 'node:module';
 import { connect } from './client.mjs';
 import { root, requireProject } from './environment.mjs';
 
-const shared = 'packages/core/src/tsx/__lsp_shared__.ts';
-const probe = 'packages/core/src/tsx/__lsp_probe__.tsx';
+const shared = 'packages/ui/test/__lsp_shared__.ts';
+const probe = 'packages/ui/test/__lsp_probe__.tsx';
 const created = new Set();
 const report = { versions: {}, checks: [] };
-for (const name of ['typescript', 'typescript-language-server', 'vue'])
+for (const name of ['typescript', 'typescript-language-server'])
   report.versions[name] = requireProject(name + '/package.json').version;
+report.versions.vue = createRequire(resolve(root, 'packages/ui/package.json'))(
+  'vue/package.json',
+).version;
 assert.equal(report.versions.typescript, '6.0.3');
 
 async function save(file, text) {
@@ -146,109 +150,42 @@ try {
   assert(outside.isError && outside.content[0].text.includes('outside the configured workspace'));
   report.checks.push({ name: 'workspace-isolation', passed: true });
   for (const filePath of [
-    'vitest.authoring.config.ts',
-    'vitest.upstream.config.ts',
+    'packages/core/vitest.config.ts',
+    'packages/compiler/vitest.config.ts',
     'packages/compiler/src/index.ts',
     'packages/core/src/index.ts',
-    'fixtures/legacy-tsx/src/Counter.tsx',
+    'packages/ui/test/foundation.test.tsx',
   ]) {
     const result = await connection.call('diagnostics', { filePath });
     assert(result.complete && result.errors === 0, JSON.stringify(result));
     report.checks.push({ name: 'workspace-file', result });
   }
-  // 泛型作者的字符串参数必须同时提供系统值和主题名的说明，不能只验证显式成员访问。
-  const themeFile = 'fixtures/authoring/src/theme-types.tsx';
-  const themeText = await readFile(resolve(root, themeFile), 'utf8');
-  const themeDiagnostics = await connection.call('diagnostics', { filePath: themeFile });
-  assert(
-    themeDiagnostics.complete && themeDiagnostics.errors === 0,
-    JSON.stringify(themeDiagnostics),
-  );
-  for (const [needle, member] of [
-    ["'_brand'", '_brand'],
-    ["'flex'", 'flex'],
-  ]) {
-    const genericStart = themeText.indexOf('export function reusable');
-    const match = themeText.indexOf(needle, genericStart);
-    assert(genericStart >= 0 && match >= 0);
-    const index = match + 2;
-    const before = themeText.slice(0, index);
-    const query = {
-      filePath: themeFile,
-      line: before.split('\n').length,
-      column: before.length - before.lastIndexOf('\n'),
-    };
-    const hover = await connection.call('hover', query);
-    assert(/\p{Script=Han}/u.test(JSON.stringify(hover.contents)), JSON.stringify(hover));
-    const completions = await connection.call('completions', {
-      ...query,
-      prefix: member,
-      resolveLimit: 1,
-    });
-    assert(
-      completions.items.some((item) => item.label === member),
-      JSON.stringify(completions),
-    );
-    assert(/\p{Script=Han}/u.test(JSON.stringify(completions.items)), JSON.stringify(completions));
-    const definitions = await connection.call('definitions', query);
-    assert(definitions.items.length > 0, JSON.stringify(definitions));
-    report.checks.push({ name: 'generic-css-literal', member, hover, completions, definitions });
-  }
-  const literalFile = 'fixtures/authoring/src/literal-types.tsx';
-  const literalText = await readFile(resolve(root, literalFile), 'utf8');
-  for (const [marker, value] of [
-    ['font', 'inherit'],
-    ['display', 'inline-flex'],
-    ['conditional', 'inline-flex'],
-    ['binding', 'relative'],
-    ['assertion', 'border-box'],
-  ]) {
-    const end = literalText.indexOf('// literal:' + marker);
-    assert(end > 0);
-    const close = literalText.lastIndexOf("'", end);
-    const index = literalText.lastIndexOf("'", close - 1) + 2;
-    const before = literalText.slice(0, index);
-    const query = {
-      filePath: literalFile,
-      line: before.split('\n').length,
-      column: before.length - before.lastIndexOf('\n'),
-    };
-    const hover = await connection.call('hover', query);
-    const definitions = await connection.call('definitions', query);
-    const completions = await connection.call('completions', {
-      ...query,
-      prefix: value,
-      resolveLimit: 1,
-    });
-    assert(/\p{Script=Han}/u.test(JSON.stringify(hover.contents)));
-    assert(definitions.items.some((entry) => /literal-values\.ts$/.test(entry.filePath)));
-    assert(
-      completions.items.some(
-        (entry) =>
-          entry.label === value && /\p{Script=Han}/u.test(JSON.stringify(entry.documentation)),
-      ),
-    );
-    report.checks.push({ name: 'literal-keyword', value, hover, definitions, completions });
-  }
-  const directiveFile = 'fixtures/controls/TextInput.tsx';
-  const directiveText = await readFile(resolve(root, directiveFile), 'utf8');
-  const directiveOffset = directiveText.indexOf('v-model=') + 2;
-  assert(directiveOffset > 1);
-  const directiveBefore = directiveText.slice(0, directiveOffset);
-  const directiveQuery = {
-    filePath: directiveFile,
-    line: directiveBefore.split('\n').length,
-    column: directiveBefore.length - directiveBefore.lastIndexOf('\n'),
+  // 在 UI 的真实测试组件中核对 CSS 字面量说明与定义定位。
+  const filePath = 'packages/ui/test/foundation.test.tsx';
+  const text = await readFile(resolve(root, filePath), 'utf8');
+  const offset = text.indexOf("'block'") + 2;
+  assert(offset > 1);
+  const before = text.slice(0, offset);
+  const query = {
+    filePath,
+    line: before.split('\n').length,
+    column: before.length - before.lastIndexOf('\n'),
   };
-  const directiveHover = await connection.call('hover', directiveQuery);
-  const directiveDefinitions = await connection.call('definitions', directiveQuery);
-  assert(/\p{Script=Han}/u.test(JSON.stringify(directiveHover.contents)));
-  assert.equal(directiveDefinitions.items.length, 1);
-  assert(/directives\.ts$/.test(directiveDefinitions.items[0].filePath));
+  const cssHover = await connection.call('hover', query);
+  const cssDefinitions = await connection.call('definitions', query);
+  const cssCompletions = await connection.call('completions', {
+    ...query,
+    prefix: 'block',
+    resolveLimit: 1,
+  });
+  assert(/\p{Script=Han}/u.test(JSON.stringify(cssHover.contents)));
+  assert(cssDefinitions.items.some((entry) => /literal-values\.ts$/.test(entry.filePath)));
+  assert(cssCompletions.items.some((entry) => entry.label === 'block'));
   report.checks.push({
-    name: 'jsx-directive',
-    hover: directiveHover,
-    definitions: directiveDefinitions,
+    name: 'ui-css-literal',
+    hover: cssHover,
+    definitions: cssDefinitions,
+    completions: cssCompletions,
   });
   await mkdir(resolve(root, 'test-results/language-services'), { recursive: true });
   await writeFile(

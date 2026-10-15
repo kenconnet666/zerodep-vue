@@ -11,12 +11,12 @@ import { aliases, summaries } from './compat-docs.mjs';
 import { propertyGroup, propertyGroups } from './property-groups.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const require = createRequire(resolve(root, 'packages/core/package.json'));
+const require = createRequire(import.meta.url);
 assert.equal(ts.version, '6.0.3');
 assert.equal(require('csstype/package.json').version, '3.2.3');
 assert.equal(createRequire(import.meta.url)('mdn-data/package.json').version, '2.27.1');
 const filename = require.resolve('csstype/index.d.ts');
-const inputFile = resolve(root, 'packages/core/__css-generator-types__.ts');
+const inputFile = resolve(root, '__css-generator-types__.ts');
 const inputSource =
   "import type * as CSS from 'csstype'; type Input = CSS.Properties<string | number>;";
 const options = {
@@ -187,7 +187,8 @@ const literalInterfaces = [];
 const literalProperties = [];
 const slotLines = [];
 const colorNames = [];
-const header = '// 由 scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。\n';
+const header =
+  '// 由 packages/core/scripts/css/generate.mjs 从固定 csstype@3.2.3 生成；请勿手改。\n';
 const literalValues = (type) =>
   [
     ...new Set(
@@ -308,7 +309,7 @@ const outputs = {
     header +
     `/** 可回退到共享 color 主题组的属性；原生值本身无需运行时字典。 */\nexport const colorProperties = ${JSON.stringify(colorNames)} as const;\nexport type ColorProperty = (typeof colorProperties)[number];\n`,
 };
-const destination = resolve(root, 'packages/core/src/css/generated');
+const destination = resolve(root, 'src/css/generated');
 await mkdir(destination, { recursive: true });
 const config = await prettier.resolveConfig(resolve(root, 'package.json'));
 for (const [name, content] of Object.entries(outputs)) {

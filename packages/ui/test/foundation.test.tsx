@@ -1,13 +1,39 @@
 import { expect, test } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { createSSRApp, nextTick, shallowRef } from 'vue';
+import type { Ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
-import { createCssHost, getCssHost } from '@zerodep-vue/core';
+import {
+  _component,
+  createCssContext,
+  createCssHost,
+  getCssHost,
+  SystemKeywords,
+} from '@zerodep-vue/core';
 import { CalendarDate, Time } from '@internationalized/date';
 import { Decimal } from 'decimal.js';
 import { House } from '@lucide/icons';
+import { z } from 'zod';
 import * as ui from '../src/index.ts';
-import { PeerProbe, valueSchema } from './fixtures/PeerProbe.tsx';
+
+const { useCss } = createCssContext(new SystemKeywords());
+const valueSchema = z.object({
+  amount: z.instanceof(Decimal),
+  date: z.instanceof(CalendarDate),
+  time: z.instanceof(Time),
+});
+
+/** 验证 UI 工具链和 peer 值传递的测试组件。 */
+const PeerProbe = _component(
+  ({ amount, date, time }: { amount: Ref<Decimal>; date: Ref<CalendarDate>; time: Ref<Time> }) => {
+    const s = useCss();
+    return (
+      <output class={s.display('block')} data-icon={House.name}>
+        {amount.value.toFixed(2)} / {date.value.toString()} / {time.value.toString()}
+      </output>
+    );
+  },
+);
 
 const values = () => ({
   amount: shallowRef(new Decimal('0.1').plus('0.2')),

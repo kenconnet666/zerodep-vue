@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { build } from 'vite';
-import { command, root } from '../packages/common.mjs';
+import { command } from '../../../../scripts/packages/common.mjs';
+
+const root = fileURLToPath(new URL('../../', import.meta.url));
 
 // 本地 --source 只跑内存探针；CI 默认检查已经构建的实际分发入口。
 const source = process.argv.includes('--source');

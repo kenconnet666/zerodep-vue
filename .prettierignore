@@ -1,6 +1,4 @@
 node_modules/
-dist/
-coverage/
 test-results/
 .idea/
 .codex/config.toml
@@ -10,4 +8,3 @@ packages/compiler/src/upstream/
 packages/compiler/test/upstream/
 packages/compiler/test/upstream-resolve-type/
 .cache/
-fixtures/*/.generated/
