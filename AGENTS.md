@@ -18,7 +18,8 @@
 - 同一判别值的多分支适当使用 switch，类型守卫和二选一保留 if。消除重复策略与深层嵌套，不为拆分增加文件或转发跳转；公共 API 取舍先讨论。
 - UI 位于 packages/ui，组件 DOM、交互和公开 API 自行实现，不引入 headless 组件、表单或表格底座。UI 业务不进入 core/compiler，未实现能力不导出占位 API。
 - UI Provider 的 theme 按完整主题替换；lang 是包含文案、locale 和 timeZone 的扁平对象，内置语言预设带齐所有字段。局部 lang 的 undefined 字段继承父级，通过 useLang 统一读取；对象来源使用 Vue reactive，后代视图只读。
-- UI 的语言配置及类型放在 src/config/lang，主题实现及上下文放在 src/config/theme；这两个目录按多语言、多主题职责保留，不因当前实现数量少而展平。
+- Provider.tsx 集中管理上下文注入与 useCss/useTheme/useLang，默认使用白色 LightTheme、简体中文 zhCN 和 Asia/Shanghai。Provider 只负责配置继承，不承担格式化校验。
+- UI 的语言配置及类型放在 src/config/lang；主题统一接口 UiTheme、公共实现 BaseTheme 与显式实现接口的 LightTheme/DarkTheme 放在 src/config/theme。这两个目录按多语言、多主题职责保留，不因当前实现数量少而展平。
 - UI 直接使用 Zod 4，不接入其他校验兼容层或自建校验 DSL。第三方运行时依赖作为显式 peer，开发版本由 catalog 固定，不从 UI 重新导出。
 - 图标使用 @lucide/icons 原始数据，由自有组件渲染，不安装现成 Lucide Vue 组件或注册全量图标。业务值使用 Decimal、CalendarDate/Time 等明确类型；输入草稿与业务值分离，不修改 Decimal 全局配置。
 - 文档仅保留根 AGENTS.md 和 README.md；许可证文件只保留根 LICENSE，汇总必要版权和来源，并验证打包时携带。不要维护独立 docs、fixtures 或分散的计划和进度文档。

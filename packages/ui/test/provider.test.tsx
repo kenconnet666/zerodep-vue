@@ -3,9 +3,7 @@ import { mount } from '@vue/test-utils';
 import { renderToString } from '@vue/server-renderer';
 import {
   computed,
-  createApp,
   createSSRApp,
-  h,
   isReactive,
   isReadonly,
   isRef,
@@ -17,8 +15,17 @@ import {
 } from 'vue';
 import type { Component } from 'vue';
 import { _component, createCssHost, getCssHost } from '@zerodep-vue/core';
-import { enUS, Provider, UiTheme, useCss, useLang, useTheme, zhCN } from '../src/index.ts';
-import type { UiLanguageInput } from '../src/index.ts';
+import {
+  DarkTheme,
+  enUS,
+  LightTheme,
+  Provider,
+  useCss,
+  useLang,
+  useTheme,
+  zhCN,
+} from '../src/index.ts';
+import type { UiLanguageInput, UiTheme } from '../src/index.ts';
 
 const views = new Map<
   string,
@@ -60,6 +67,15 @@ function render(component: Component) {
   return { wrapper, host };
 }
 
+function luminance(hex: string): number {
+  const weights = [0.2126, 0.7152, 0.0722];
+  return weights.reduce((sum, weight, index) => {
+    const channel = Number.parseInt(hex.slice(1 + index * 2, 3 + index * 2), 16) / 255;
+    const linear = channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+    return sum + linear * weight;
+  }, 0);
+}
+
 afterEach(() => {
   try {
     while (cleanup.length) cleanup.pop()!();
@@ -83,7 +99,11 @@ test('defaults are available without Provider, and Provider adds no DOM containe
   for (const id of ['outside', 'inside']) {
     const { lang, theme } = views.get(id)!;
     expect({ ...lang }).toEqual(zhCN);
+    expect(lang.confirm).toBe('确认');
+    expect(lang.locale).toBe('zh-CN');
+    expect(lang.timeZone).toBe('Asia/Shanghai');
     expect(theme.color._brand).toBe('#2563eb');
+    expect(theme.color._surface).toBe('#ffffff');
     for (const view of [lang, theme]) {
       expect(isRef(view)).toBe(false);
       expect(isReactive(view)).toBe(true);
@@ -116,6 +136,8 @@ test('reactive language fields inherit, override and resume independently in a s
     locale: 'fr-FR',
     timeZone: 'Europe/Paris',
   });
+  expect(inner.locale).toBe('fr-FR');
+  expect(inner.timeZone).toBe('UTC');
   await nextTick();
   expect(wrapper.get('[data-id="inner"]').attributes()).toMatchObject({
     'data-confirm': 'Save',
@@ -133,7 +155,7 @@ test('reactive language fields inherit, override and resume independently in a s
   await nextTick();
   expect({ ...inner }).toEqual(parent);
 
-  state.lang = { ...zhCN, timeZone: 'Asia/Shanghai' };
+  state.lang = zhCN;
   await nextTick();
   expect(inner.locale).toBe('zh-CN');
   expect(inner.timeZone).toBe('Asia/Shanghai');
@@ -149,10 +171,10 @@ test('reactive language fields inherit, override and resume independently in a s
 });
 
 test('themes replace as a whole and follow reactive fields, nested refs and source replacement', async () => {
-  class BrandTheme extends UiTheme {
-    override readonly color = { ...new UiTheme().color, _brand: ref('#7c3aed') };
+  class BrandTheme extends LightTheme {
+    override readonly color = { ...new LightTheme().color, _brand: ref('#7c3aed') };
   }
-  const parent = reactive(new UiTheme());
+  const parent = reactive(new LightTheme());
   parent.color._text = '#ffffff';
   const brand = new BrandTheme();
   const selected = shallowRef<UiTheme>(brand);
@@ -184,23 +206,145 @@ test('themes replace as a whole and follow reactive fields, nested refs and sour
   expect(wrapper.get('[data-id="inner"]').attributes('data-brand')).toBe('#e11d48');
   expect(wrapper.get('[data-id="inner"]').attributes('style')).toContain('#e11d48');
 
-  selected.value = new UiTheme();
+  selected.value = new DarkTheme();
   await nextTick();
-  expect(theme.color._brand).toBe('#2563eb');
-  expect(views.get('ref')!.theme.color._brand).toBe('#2563eb');
+  expect(theme.color._brand).toBe('#60a5fa');
+  expect(theme.color._surface).toBe('#0f172a');
+  expect(theme.fontFamily._ui).toBe(parent.fontFamily._ui);
+  expect(theme.fontSize._body).toBe(parent.fontSize._body);
+  expect(theme.borderRadius._control).toBe(parent.borderRadius._control);
+  expect(views.get('ref')!.theme.color._brand).toBe('#60a5fa');
   state.override = false;
   await nextTick();
   expect(theme.color._text).toBe('#ffffff');
   parent.color._brand = '#059669';
   await nextTick();
   expect(wrapper.get('[data-id="inner"]').attributes('data-brand')).toBe('#059669');
-  expect(views.get('ref')!.theme.color._brand).toBe('#2563eb');
+  expect(views.get('ref')!.theme.color._brand).toBe('#60a5fa');
   expect(views.get('inner')!.theme).toBe(theme);
 });
 
+test('shared theme scales resolve in CSS with the correct units and remain owned by each instance', async () => {
+  const selected = shallowRef<UiTheme>(new LightTheme());
+  const Styled = _component(() => {
+    const s = useCss();
+    return (
+      <div
+        class={s
+          .backgroundColor('_surface')
+          .color('_text')
+          .height('_control')
+          .padding('_md')
+          .margin('_sm')
+          .gap('_xs')
+          .fontSize('_body')
+          .fontWeight('_medium')
+          .lineHeight('_body')
+          .borderRadius('_control')
+          .borderWidth('_thin')
+          .boxShadow('_md')
+          .opacity('_disabled')
+          .transitionDuration('_normal')
+          .transitionTimingFunction('_standard')
+          .zIndex('_dropdown')}
+      >
+        Theme
+      </div>
+    );
+  });
+  const { wrapper } = render(
+    _component(() => (
+      <Provider theme={selected}>
+        <Styled />
+      </Provider>
+    )),
+  );
+  const element = wrapper.get('div').element as HTMLElement;
+  const values = Array.from(element.style).map((key) => element.style.getPropertyValue(key));
+  expect(values).toEqual(
+    expect.arrayContaining([
+      '#ffffff',
+      '#0f172a',
+      '32px',
+      '12px',
+      '8px',
+      '4px',
+      '14px',
+      '500',
+      '1.5',
+      '6px',
+      '1px',
+      '0 4px 12px rgba(15, 23, 42, 0.14)',
+      '0.5',
+      '180ms',
+      'cubic-bezier(0.4, 0, 0.2, 1)',
+      '1000',
+    ]),
+  );
+  const className = element.className;
+  selected.value = new DarkTheme();
+  await nextTick();
+  expect(element.className).toBe(className);
+  expect(element.getAttribute('style')).toContain('rgba(0, 0, 0, 0.4)');
+
+  const customized = new LightTheme();
+  customized.padding._md = 24;
+  customized.fontSize._body = 16;
+  expect(new LightTheme().padding._md).toBe(12);
+  expect(new LightTheme().fontSize._body).toBe(14);
+  expect(customized.gap._md).toBe(12);
+  expect(selected.value.fontSize._body).toBe(14);
+});
+
+test.each([
+  ['light', LightTheme],
+  ['dark', DarkTheme],
+] as const)(
+  '%s theme keeps readable text on its paired surfaces and semantic fills',
+  (_name, Theme) => {
+    const color = reactive(new Theme()).color;
+    const pairs: [string, string][] = [
+      [color._text, color._surface],
+      [color._textSecondary, color._surface],
+      [color._textMuted, color._surface],
+      [color._textPlaceholder, color._surface],
+      [color._textInverse, color._surfaceInverse],
+    ];
+    for (const [base, hover, active, soft, foreground] of [
+      [color._brand, color._brandHover, color._brandActive, color._brandSoft, color._onBrand],
+      [color._info, color._infoHover, color._infoActive, color._infoSoft, color._onInfo],
+      [
+        color._success,
+        color._successHover,
+        color._successActive,
+        color._successSoft,
+        color._onSuccess,
+      ],
+      [
+        color._warning,
+        color._warningHover,
+        color._warningActive,
+        color._warningSoft,
+        color._onWarning,
+      ],
+      [color._danger, color._dangerHover, color._dangerActive, color._dangerSoft, color._onDanger],
+    ] as const) {
+      pairs.push([foreground, base], [foreground, hover], [foreground, active], [base, soft]);
+    }
+    for (const [foreground, background] of pairs) {
+      const lighter = Math.max(luminance(foreground), luminance(background));
+      const darker = Math.min(luminance(foreground), luminance(background));
+      expect(
+        (lighter + 0.05) / (darker + 0.05),
+        `${foreground} on ${background}`,
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  },
+);
+
 test('descendant views reject writes while caller-owned reactive sources remain editable', async () => {
   const lang = reactive({ ...enUS });
-  const theme = reactive(new UiTheme());
+  const theme = reactive(new LightTheme());
   render(
     _component(() => (
       <Provider lang={lang} theme={theme}>
@@ -218,9 +362,9 @@ test('descendant views reject writes while caller-owned reactive sources remain 
 
   lang.confirm = 'Changed by owner';
   theme.color._brand = '#f97316';
-  await nextTick();
   expect(view.lang.confirm).toBe('Changed by owner');
   expect(view.theme.color._brand).toBe('#f97316');
+  await nextTick();
 
   if (false) {
     // @ts-expect-error 后代只能读取语言配置。
@@ -255,10 +399,10 @@ test('teleported children keep the logical Provider context', async () => {
 
 test('SSR requests isolate configuration and hydrate the same resolved language and theme', async () => {
   const requests = [
-    { id: 'zh', lang: { ...zhCN, timeZone: 'Asia/Shanghai' }, color: '#7c3aed' },
+    { id: 'zh', lang: zhCN, color: '#7c3aed' },
     { id: 'en', lang: enUS, color: '#059669' },
   ].map(({ id, lang, color }) => {
-    const theme = new UiTheme();
+    const theme = new LightTheme();
     theme.color._brand = color;
     return {
       id,
@@ -310,7 +454,7 @@ test('SSR requests isolate configuration and hydrate the same resolved language 
   }
 });
 
-test('locale canonicalization preserves the explicit time-zone identifier', () => {
+test('language formatting settings pass through without normalization', () => {
   render(
     _component(() => (
       <Provider lang={{ locale: 'en-us', timeZone: 'Etc/UTC' }}>
@@ -318,30 +462,6 @@ test('locale canonicalization preserves the explicit time-zone identifier', () =
       </Provider>
     )),
   );
-  expect(views.get('value')!.lang.locale).toBe('en-US');
+  expect(views.get('value')!.lang.locale).toBe('en-us');
   expect(views.get('value')!.lang.timeZone).toBe('Etc/UTC');
 });
-
-test.each([
-  [null, 'Provider.lang 需要配置对象'],
-  [{ confirm: 42 }, 'Provider.lang.confirm 需要字符串'],
-  [{ locale: '' }, 'Provider.lang.locale 无效'],
-  [{ locale: 'not_a_locale' }, 'Provider.lang.locale 无效'],
-  [{ timeZone: 'Mars/Olympus' }, 'Provider.lang.timeZone 无效'],
-])(
-  'invalid language input %j reports the field instead of silently inheriting',
-  (lang, message) => {
-    const errors: unknown[] = [];
-    const app = createApp({
-      render: () => h(Provider, { lang: lang as UiLanguageInput }, { default: () => h(Probe) }),
-    });
-    app.config.errorHandler = (error) => errors.push(error);
-    try {
-      app.mount(document.createElement('div'));
-      expect(errors).toHaveLength(1);
-      expect((errors[0] as Error).message).toContain(message);
-    } finally {
-      app.unmount();
-    }
-  },
-);

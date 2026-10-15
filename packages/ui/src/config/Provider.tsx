@@ -1,23 +1,48 @@
-import { _component } from '@zerodep-vue/core';
-import type { ThemeSource } from '@zerodep-vue/core';
-import { computed, hasInjectionContext, inject, provide, reactive, readonly, unref } from 'vue';
-import type { ComputedRef, InjectionKey, VNodeChild } from 'vue';
+import { _component, createCssContext } from '@zerodep-vue/core';
+import {
+  computed,
+  hasInjectionContext,
+  inject,
+  provide,
+  reactive,
+  readonly,
+  unref,
+  watchEffect,
+} from 'vue';
+import type {
+  ComputedRef,
+  DeepReadonly,
+  InjectionKey,
+  Ref,
+  UnwrapNestedRefs,
+  VNodeChild,
+} from 'vue';
 import { zhCN } from './lang/zhCN.ts';
 import type { UiLanguage, UiLanguageInput } from './lang/types.ts';
-import { provideTheme, useTheme } from './theme/context.ts';
-import type { UiTheme } from './theme/UiTheme.ts';
+import { LightTheme } from './theme/LightTheme.ts';
+import type { UiTheme } from './theme/types.ts';
 
 export interface ProviderProps {
   /** 完整主题实例、Ref 或 computed；省略/undefined 继承父级，不合并主题属性。 */
-  theme?: ThemeSource<UiTheme> | ComputedRef<UiTheme> | undefined;
+  theme?: UiTheme | Ref<UiTheme> | ComputedRef<UiTheme> | undefined;
   /** 文案、locale 和 timeZone 逐字段覆盖，未设置的字段继续响应父级更新。 */
   lang?: UiLanguageInput | undefined;
   /** 当前配置覆盖范围内的内容，不增加额外 DOM 容器。 */
   children?: VNodeChild;
 }
 
-const languageKey: InjectionKey<UiLanguage> = Symbol('UI language');
+// 默认配置只读共享；各 Provider 的覆盖和响应式同步由各自的组件实例持有。
+const themeContext = createCssContext<UiTheme>(readonly(reactive(new LightTheme())));
 const defaultLanguage: UiLanguage = readonly(reactive({ ...zhCN }));
+const languageKey: InjectionKey<UiLanguage> = Symbol('UI language');
+
+/** 取得当前区域的样式作者，在后代 setup 中使用 const s = useCss()。 */
+export const useCss = themeContext.useCss;
+
+/** 读取当前区域的只读主题对象，例如 theme.color._brand；整套替换时视图保持稳定。 */
+export function useTheme(): DeepReadonly<UnwrapNestedRefs<UiTheme>> {
+  return readonly(themeContext.useTheme());
+}
 
 /** 读取当前区域的稳定只读视图：lang.confirm、lang.locale、lang.timeZone。 */
 export function useLang(): UiLanguage {
@@ -25,77 +50,29 @@ export function useLang(): UiLanguage {
 }
 
 /** 通过 Vue 组件树向下提供配置；同级区域和不同应用之间互不修改配置。 */
-export const Provider = _component(
+export const Provider: ReturnType<typeof _component<ProviderProps>> = _component(
   (props: ProviderProps) => {
-    // 先读取父级，再提供自己的记录。保存视图而非字段快照，才能在撤销覆盖后继续跟随父级。
+    // 先读取父级，再注入本层配置；computed 只负责跟随整套主题来源的替换。
     const parentTheme = useTheme();
-    const parentLanguage = useLang();
-    provideTheme(
-      computed(() => {
-        if (props.theme === undefined) return parentTheme;
-        // ThemeSource 含属性校验交叉类型；明确来源类型，避免 unref 推断成宽泛的 CSS 值域。
-        const theme = unref<UiTheme>(props.theme);
-        if (!theme || typeof theme !== 'object')
-          throw new TypeError('Provider.theme 需要完整主题实例或主题 Ref。');
-        // 只限制后代的写入；调用方仍可更新自己的 Ref 或 reactive 主题。
-        return readonly(reactive(theme));
-      }),
+    const parentLang = useLang();
+    themeContext.provideTheme(
+      computed(() =>
+        props.theme === undefined ? parentTheme : readonly(reactive(unref(props.theme))),
+      ),
     );
 
-    // 每个字段分别选择当前覆盖或父级值，读取时建立 Vue 依赖，避免把继承关系变成快照。
-    const readLanguage = (key: keyof UiLanguage): string => {
-      const input = props.lang;
-      if (input !== undefined && (!input || typeof input !== 'object'))
-        throw new TypeError('Provider.lang 需要配置对象；恢复继承请使用 undefined。');
-      const value = input?.[key];
-      // 父级已完成校验；这里只校验本层显式值，避免嵌套 Provider 重复创建 Intl 格式化器。
-      if (value === undefined) return parentLanguage[key];
-      if (typeof value !== 'string') throw new TypeError(`Provider.lang.${key} 需要字符串。`);
-      try {
-        switch (key) {
-          case 'locale': {
-            const canonical = Intl.getCanonicalLocales(value)[0];
-            if (!canonical) throw new RangeError('Provider.lang.locale 不能为空。');
-            return canonical;
-          }
-          case 'timeZone':
-            // 验证由宿主 Intl 支持的时区；保留原标识，避免不同 ICU 版本的别名转换造成首屏差异。
-            new Intl.DateTimeFormat('en', { timeZone: value });
-            return value;
-          default:
-            return value;
+    const lang = reactive({ ...parentLang });
+    // 同步更新同一个对象，后代直接读 lang.xx；undefined 恢复继承，空文案仍是有效覆盖。
+    watchEffect(
+      () => {
+        for (const key of Object.keys(lang) as (keyof UiLanguage)[]) {
+          const value = props.lang?.[key];
+          lang[key] = value === undefined ? parentLang[key] : value;
         }
-      } catch (cause) {
-        throw new RangeError(`Provider.lang.${key} 无效：${value}`, { cause });
-      }
-    };
-    const locale = computed(() => readLanguage('locale'));
-    const timeZone = computed(() => readLanguage('timeZone'));
-
-    // 对象身份固定，后代直接读取 lang.confirm 等字段；只读包装不影响调用方更新自己的来源。
-    const language: UiLanguage = readonly(
-      reactive({
-        get confirm() {
-          return readLanguage('confirm');
-        },
-        get cancel() {
-          return readLanguage('cancel');
-        },
-        get clear() {
-          return readLanguage('clear');
-        },
-        get loading() {
-          return readLanguage('loading');
-        },
-        get locale() {
-          return locale.value;
-        },
-        get timeZone() {
-          return timeZone.value;
-        },
-      }),
+      },
+      { flush: 'sync' },
     );
-    provide(languageKey, language);
+    provide(languageKey, readonly(lang));
     return props.children;
   },
   { name: 'Provider', inheritAttrs: false },

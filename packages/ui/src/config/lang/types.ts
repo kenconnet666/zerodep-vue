@@ -10,7 +10,7 @@ export interface UiLanguage {
   readonly loading: string;
   /** 日期和数字的格式化区域，使用 BCP 47 标识，例如 zh-CN、en-GB。 */
   readonly locale: string;
-  /** 日期展示和转换的时区，例如 Asia/Shanghai、Europe/London；默认 UTC。 */
+  /** 日期展示和转换的时区，例如 Asia/Shanghai、Europe/London；默认 Asia/Shanghai。 */
   readonly timeZone: string;
 }
 
