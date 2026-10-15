@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Vue TSX UI library foundations with explicit peer dependencies.",
+  "description": "Vue TSX UI components with scoped theme and language configuration.",
   "exports": {
     ".": {
       "zerodep-vue-source": "./src/index.ts",
