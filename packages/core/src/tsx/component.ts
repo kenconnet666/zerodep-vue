@@ -47,7 +47,7 @@ export type ManagedProps<P> = typeof authorProps extends keyof P
  * 声明初始化一次的 Vue TSX 组件，直接返回的 JSX 由编译插件放入 render。
  * 参数边界的解构读取保持更新；普通局部计算仍遵循 JavaScript 的快照语义。
  * 默认值用参数的 `=` 写法，Ref 及回调保留原始身份。
- * 默认不隐式透传属性；props/attr 显式传给目标节点。组件名称从声明变量名推导。
+ * 默认不隐式透传属性；props/rest 显式传给目标节点。组件名称从声明变量名推导。
  * async setup 的 await 在返回分支之前完成；渲染保持同步，嵌套 async 事件回调不受影响。
  */
 // 无自定义 props 仍允许 Vue 的 class、style、ref；never 索引会错误地禁止这些公共属性。

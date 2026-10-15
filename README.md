@@ -32,7 +32,7 @@ export default defineConfig({ plugins: [vitePlugin()] });
 
 状态直接使用 Vue API。应用主题模块从 `createCssContext(source)` 解构导出 `useCss`、`provideTheme`、`useTheme`；组件内统一写 `const s = useCss()`，样式通过 `class` 传入。
 
-`_component` 从声明变量名自动生成组件名，默认关闭 Vue 的隐式属性透传。组件通过普通 Props 声明输入，参数解构后的剩余 Props 统一命名 `attr`，通过 `{...attr}` 或逐项赋值决定传给哪个节点；原生属性也包含在同一个 Props 只读视图中。rest 是 `...attr` 使用的 JavaScript 剩余属性语法，Vue 的 `context.attrs` 则是其原生接口字段，保留原名。无需重复写 `{ name: 'Provider', inheritAttrs: false }`。Vue 的 `key`、`ref` 和 VNode 生命周期属性仍按 Vue 保留语义处理。已有第二参数选项保留，只有明确需要 Vue 自动透传时才显式设为 `inheritAttrs: true`。
+`_component` 从声明变量名自动生成组件名，默认关闭 Vue 的隐式属性透传。组件通过普通 Props 声明输入，参数解构后的剩余 Props 统一命名 `rest`，通过 `{...rest}` 或逐项赋值决定传给哪个节点；原生属性也包含在同一个 Props 只读视图中。Vue 的 `context.attrs` 保留官方字段名。无需重复写 `{ name: 'Provider', inheritAttrs: false }`。Vue 的 `key`、`ref` 和 VNode 生命周期属性仍按 Vue 保留语义处理。已有第二参数选项保留，只有明确需要 Vue 自动透传时才显式设为 `inheritAttrs: true`。
 
 ```tsx
 import { _component, createCssContext, SystemKeywords } from '@zerodep-vue/core';
@@ -51,7 +51,7 @@ export const Example = _component(() => {
 
 ## UI Provider
 
-`Provider` 渲染一个 `div`，通过 Vue 组件树向下传递 `theme` 和 `lang`。消费配置与 `children` 后，其余 Props 通过 `...attr` 显式转发到根 div，包括原生属性、事件、`style` 和支持链式 CSS 的 `class`。`lang` 是 UI 语言配置，不作为 HTML 的 lang 属性透传；嵌套 Provider 会产生嵌套 div。默认使用白色主题 `LightTheme`、简体中文 `zhCN` 和上海时区 `Asia/Shanghai`。后代在 setup 中调用 UI 包的 `useCss()`、`useTheme()` 和 `useLang()`；主题和语言都是稳定的只读 reactive 对象，直接读取字段，无需 `.value`。
+`Provider` 渲染一个 `div`，通过 Vue 组件树向下传递 `theme` 和 `lang`。消费配置与 `children` 后，其余 Props 通过 `...rest` 显式转发到根 div，包括原生属性、事件、`style` 和支持链式 CSS 的 `class`。`lang` 是 UI 语言配置，不作为 HTML 的 lang 属性透传；嵌套 Provider 会产生嵌套 div。默认使用白色主题 `LightTheme`、简体中文 `zhCN` 和上海时区 `Asia/Shanghai`。后代在 setup 中调用 UI 包的 `useCss()`、`useTheme()` 和 `useLang()`；主题和语言都是稳定的只读 reactive 对象，直接读取字段，无需 `.value`。
 
 实现位于 `packages/ui/src/config`：`Provider.tsx` 集中管理上下文注入、读取和配置继承；`lang/` 收纳语言配置和类型；`theme/types.ts` 定义统一 `UiTheme` 接口，`BaseTheme` 提供公共值，`LightTheme`、`DarkTheme` 继承它并显式 `implements UiTheme`。所有主题必须提供完整配色和阴影，公共属性组属于各自实例。
 

@@ -26,16 +26,16 @@ afterEach(() => {
 });
 
 describe('_component', () => {
-  test('readonly props and attr reject structural writes without poisoning later updates', async () => {
+  test('readonly props and rest reject structural writes without poisoning later updates', async () => {
     let plain: object = {};
     let remaining: object = {};
     const Plain = _component((props: { label: string }) => {
       plain = props;
       return <button>{props.label}</button>;
     });
-    const Forwarded = _component(({ label, ...attr }: { label: string }) => {
-      remaining = attr;
-      return <button {...attr}>{label}</button>;
+    const Forwarded = _component(({ label, ...rest }: { label: string }) => {
+      remaining = rest;
+      return <button {...rest}>{label}</button>;
     });
     const wrappers = [
       mount(Plain, { props: { label: 'initial' } }),
@@ -90,16 +90,16 @@ describe('_component', () => {
     expect(calls).toBe(0);
   });
 
-  test('filtered attr forwards only selected attributes to the chosen descendant', async () => {
+  test('filtered rest forwards only selected attributes to the chosen descendant', async () => {
     let calls = 0;
     const attrs = ref<Record<string, unknown>>({
       id: 'first',
       title: 'discarded',
       onClick: () => calls++,
     });
-    const Button = _component(({ ...attr }) => (
+    const Button = _component(({ ...rest }) => (
       <section>
-        <button {...Object.fromEntries(Object.entries(attr).filter(([key]) => key !== 'title'))}>
+        <button {...Object.fromEntries(Object.entries(rest).filter(([key]) => key !== 'title'))}>
           action
         </button>
       </section>
@@ -121,7 +121,7 @@ describe('_component', () => {
     expect(calls).toBe(1);
   });
 
-  test('ordinary props and attr expose the same native attributes and reflect removal', async () => {
+  test('ordinary props and rest expose the same native attributes and reflect removal', async () => {
     interface NativeProps extends /* @vue-ignore */ HTMLAttributes {
       label?: string;
     }
@@ -140,9 +140,9 @@ describe('_component', () => {
         {props.id}
       </button>
     ));
-    const Forwarded = _component(({ ...attr }: NativeProps) => (
-      <button {...attr} data-has-id={'id' in attr} data-keys={Object.keys(attr).sort().join(',')}>
-        {attr.id}
+    const Forwarded = _component(({ ...rest }: NativeProps) => (
+      <button {...rest} data-has-id={'id' in rest} data-keys={Object.keys(rest).sort().join(',')}>
+        {rest.id}
       </button>
     ));
     const App = _component(() => (
@@ -169,7 +169,7 @@ describe('_component', () => {
     expect(calls).toBe(1);
   });
 
-  test('computed native prop keys and presence update for both props and attr', async () => {
+  test('computed native prop keys and presence update for both props and rest', async () => {
     interface NativeProps extends /* @vue-ignore */ HTMLAttributes {}
     const attrs = ref<Record<string, unknown>>({});
     const Plain = _component((props: NativeProps) => {
@@ -182,12 +182,12 @@ describe('_component', () => {
         </output>
       );
     });
-    const Forwarded = _component(({ ...attr }: NativeProps) => {
-      const keys = computed(() => Object.keys(attr).join(','));
-      const hasId = computed(() => 'id' in attr);
+    const Forwarded = _component(({ ...rest }: NativeProps) => {
+      const keys = computed(() => Object.keys(rest).join(','));
+      const hasId = computed(() => 'id' in rest);
       return (
         <output data-keys={keys.value} data-present={hasId.value}>
-          {attr.id}
+          {rest.id}
         </output>
       );
     });
@@ -233,13 +233,13 @@ describe('_component', () => {
     expect(wrapper.text()).toBe('nested');
   });
 
-  test('attr keeps its own readonly proxy without exposing excluded inputs or internal class metadata', () => {
-    const Button = _component(({ label, ...attr }: { label: string }) => {
-      expect(isReadonly(attr)).toBe(true);
-      expect(Object.keys(toRaw(attr))).toEqual(['id']);
-      expect(Reflect.get(toRaw(attr), 'label')).toBeUndefined();
-      expect(Reflect.get(toRaw(attr), '__zerodepVueClass')).toBeUndefined();
-      return <button {...attr}>{label}</button>;
+  test('rest keeps its own readonly proxy without exposing excluded inputs or internal class metadata', () => {
+    const Button = _component(({ label, ...rest }: { label: string }) => {
+      expect(isReadonly(rest)).toBe(true);
+      expect(Object.keys(toRaw(rest))).toEqual(['id']);
+      expect(Reflect.get(toRaw(rest), 'label')).toBeUndefined();
+      expect(Reflect.get(toRaw(rest), '__zerodepVueClass')).toBeUndefined();
+      return <button {...rest}>{label}</button>;
     });
     const wrapper = mount(Button, { props: { label: 'consumed' }, attrs: { id: 'forwarded' } });
     mounted.push(wrapper);
@@ -582,8 +582,8 @@ describe('_component', () => {
   test('forwards remaining props once and reflects deletions', async () => {
     let calls = 0;
     const props = ref<Record<string, unknown>>({ title: 'first', onClick: () => calls++ });
-    const Button = _component(({ label = 'save', ...attr }: { label?: string }) => (
-      <button {...attr}>{label}</button>
+    const Button = _component(({ label = 'save', ...rest }: { label?: string }) => (
+      <button {...rest}>{label}</button>
     ));
     const App = defineComponent(() => () => <Button {...props.value} />);
     const wrapper = mount(App);

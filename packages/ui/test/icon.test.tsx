@@ -33,8 +33,8 @@ afterEach(() => {
 test('one SVG inherits text size and color, forwards attributes and updates the icon and event once', async () => {
   const icon = shallowRef(Search);
   const click = vi.fn();
-  const attr = reactive({ id: 'search', 'data-state': 'ready', onClick: click });
-  const { wrapper, css } = render(_component(() => <Icon icon={icon.value} {...attr} />));
+  const rest = reactive({ id: 'search', 'data-state': 'ready', onClick: click });
+  const { wrapper, css } = render(_component(() => <Icon icon={icon.value} {...rest} />));
   const svg = wrapper.get('svg').element as SVGSVGElement;
   expect(svg.tagName).toBe('svg');
   expect(svg.namespaceURI).toBe('http://www.w3.org/2000/svg');
@@ -55,8 +55,8 @@ test('one SVG inherits text size and color, forwards attributes and updates the 
 
   const before = svg.innerHTML;
   icon.value = Heart;
-  attr.id = 'heart';
-  attr['data-state'] = 'changed';
+  rest.id = 'heart';
+  rest['data-state'] = 'changed';
   await nextTick();
   expect(svg.innerHTML).not.toBe(before);
   expect(svg.querySelector('path')!.getAttribute('d')).toBe(Heart.node[0]![1].d);
@@ -118,7 +118,7 @@ test('CSS props resolve tokens, follow nested Provider changes and keep zero/nul
 });
 
 test('filtered undefined SVG attributes retain defaults after updates', async () => {
-  const attr = ref<{
+  const rest = ref<{
     stroke?: string | undefined;
     viewBox?: string | undefined;
     focusable?: string | undefined;
@@ -127,12 +127,12 @@ test('filtered undefined SVG attributes retain defaults after updates', async ()
     viewBox: undefined,
     focusable: undefined,
   });
-  const { wrapper } = render(_component(() => <Icon icon={Search} {...attr.value} />));
+  const { wrapper } = render(_component(() => <Icon icon={Search} {...rest.value} />));
   for (const next of [
     { stroke: 'red', viewBox: '0 0 32 32', focusable: 'true' },
     { stroke: undefined, viewBox: undefined, focusable: undefined },
   ]) {
-    attr.value = next;
+    rest.value = next;
     await nextTick();
     const svg = wrapper.get('svg');
     expect(svg.attributes('stroke')).toBe(next.stroke ?? 'currentColor');

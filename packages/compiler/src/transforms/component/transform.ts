@@ -268,7 +268,7 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
   const options: (t.ObjectProperty | t.SpreadElement)[] = [];
   if (declaredName)
     options.push(t.objectProperty(t.identifier('name'), t.stringLiteral(declaredName)));
-  // 作者通过 props/attr 决定转发位置；不因根节点或 spread 的写法恢复隐式透传。
+  // 作者通过 props/rest 决定转发位置；不因根节点或 spread 的写法恢复隐式透传。
   options.push(t.objectProperty(t.identifier('inheritAttrs'), t.booleanLiteral(false)));
   const extra = call.node.arguments[1];
   if (extra && t.isExpression(extra)) options.push(t.spreadElement(extra));

@@ -275,14 +275,14 @@ test('native Vue template hosting reuses value props, callbacks, default slots a
         label,
         children,
         onCommit,
-        ...attr
+        ...rest
       }: { label: string; children?: VNodeChild; onCommit: (value: string) => void },
       { expose },
     ) => {
       const button = ref<HTMLButtonElement | null>(null);
       expose({ focus: () => button.value?.focus() });
       return (
-        <button ref={button} class={s.color('red')} {...attr} onClick={() => onCommit(label)}>
+        <button ref={button} class={s.color('red')} {...rest} onClick={() => onCommit(label)}>
           {label}
           {children}
         </button>

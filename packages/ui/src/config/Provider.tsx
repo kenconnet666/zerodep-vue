@@ -54,7 +54,7 @@ export function useLang(): UiLanguage {
 
 /** 通过 Vue 组件树向下提供配置；同级区域和不同应用之间互不修改配置。 */
 export const Provider = _component(
-  ({ theme: themeSource, lang: langSource, children, ...attr }: ProviderProps) => {
+  ({ theme: themeSource, lang: langSource, children, ...rest }: ProviderProps) => {
     // 先读取父级，再提供本层对象；每个 Provider 拥有自己的分组，不修改父级或调用方来源。
     const parentTheme = useTheme();
     const parentLang = useLang();
@@ -86,6 +86,6 @@ export const Provider = _component(
     );
     themeContext.provideTheme(readonly(theme));
     provide(languageKey, readonly(lang));
-    return <div {...attr}>{children}</div>;
+    return <div {...rest}>{children}</div>;
   },
 );
