@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { transformAsync } from '@babel/core';
+import { parseAsync, transformAsync } from '@babel/core';
 import presetTypeScript from '@babel/preset-typescript';
 import { babelPlugin as compiler } from '../src/index.ts';
 
@@ -14,6 +14,29 @@ const compile = async (code) =>
       presets: [presetTypeScript],
     })
   )?.code;
+
+test('render lowering diagnoses async work crossing its synchronous boundary', async () => {
+  for (const body of [
+    'async () => <div>{await Promise.resolve("loaded")}</div>',
+    'async () => { if (ready) return <div/>; const value = await load(); return <div>{value}</div>; }',
+    'async () => { for await (const value of rows) { return <div>{value}</div>; } return null; }',
+    'async () => { if (ready) return null; await using handle = acquire(); return <div/>; }',
+  ]) {
+    await assert.rejects(
+      compile(`import {_component} from '@zerodep-vue/core'; const C = _component(${body});`),
+      /ZV_RENDER_ASYNC/,
+    );
+  }
+  const valid = await compile(`import {_component} from '@zerodep-vue/core';
+    const C = _component(async () => {
+      const value = await Promise.resolve('loaded');
+      return <button onClick={async () => {
+        await using handle = acquire();
+        for await (const item of rows) await save(item);
+      }}>{value}</button>;
+    });`);
+  await parseAsync(valid, { sourceType: 'module' });
+});
 
 test('component macros recognize import aliases and namespace bindings', async () => {
   const aliased = await compile(

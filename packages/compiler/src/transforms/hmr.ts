@@ -125,6 +125,8 @@ function assignmentTarget(path: NodePath): boolean {
     if (!parent) return false;
     switch (parent.node.type) {
       case 'AssignmentExpression':
+      case 'ForOfStatement':
+      case 'ForInStatement':
         return current.key === 'left';
       case 'UpdateExpression':
         return current.key === 'argument';

@@ -47,6 +47,8 @@ export const Example = _component(() => {
 
 系统值和主题名使用字面量；`useTheme()` 返回当前区域的 reactive 对象。动态样式显式使用 `bx`，编译器负责内联 style 接线；`cx` 只负责有序组合，不新增 JSX 样式属性。
 
+`_component` 支持 async setup：先在初始化阶段完成 `await`，再返回 JSX；返回分支及其后的渲染代码必须同步执行。嵌套的 async 事件回调保留正常 JavaScript 语义。`bx` 也同步读取值，异步结果应先取得或写入 Vue 状态，不能直接把 `await`、`yield` 放进绑定表达式。
+
 ## UI Provider
 
 `Provider` 渲染一个 `div`，通过 Vue 组件树向下传递 `theme` 和 `lang`。消费配置与 `children` 后，其余 Props 通过 `...attr` 显式转发到根 div，包括原生属性、事件、`style` 和支持链式 CSS 的 `class`。`lang` 是 UI 语言配置，不作为 HTML 的 lang 属性透传；嵌套 Provider 会产生嵌套 div。默认使用白色主题 `LightTheme`、简体中文 `zhCN` 和上海时区 `Asia/Shanghai`。后代在 setup 中调用 UI 包的 `useCss()`、`useTheme()` 和 `useLang()`；主题和语言都是稳定的只读 reactive 对象，直接读取字段，无需 `.value`。

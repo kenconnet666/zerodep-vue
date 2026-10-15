@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
 import type { State } from '../upstream/interface.ts';
-import { coreModule, importedName, runtimeImports } from './bindings.ts';
+import { assertSynchronous, coreModule, importedName, runtimeImports } from './bindings.ts';
 
 /** 显式开启可处理只导入项目共享样式的普通 Vue 文件；省略时按工具导入自动接入。 */
 export interface CssOptions {
@@ -151,6 +151,10 @@ export function transformCss(
         throw path.buildCodeFrameError(
           '[ZV_BX_ARGUMENT] bx 直接接收值表达式，不需要 getter 回调。',
         );
+      assertSynchronous(
+        path.get('arguments.0'),
+        '[ZV_BX_ASYNC] bx 必须同步读取值，不能直接捕获 await 或 yield；请先完成异步操作，再传入结果或读取 Vue 状态。',
+      );
       const getter = t.arrowFunctionExpression([], argument);
       captures.add(getter);
       path.replaceWith(t.callExpression(helper('binding'), [getter]));

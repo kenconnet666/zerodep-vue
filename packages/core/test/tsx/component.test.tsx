@@ -26,6 +26,45 @@ afterEach(() => {
 });
 
 describe('_component', () => {
+  test('readonly props and attr reject structural writes without poisoning later updates', async () => {
+    let plain: object = {};
+    let remaining: object = {};
+    const Plain = _component((props: { label: string }) => {
+      plain = props;
+      return <button>{props.label}</button>;
+    });
+    const Forwarded = _component(({ label, ...attr }: { label: string }) => {
+      remaining = attr;
+      return <button {...attr}>{label}</button>;
+    });
+    const wrappers = [
+      mount(Plain, { props: { label: 'initial' } }),
+      mount(Forwarded, { props: { label: 'initial' }, attrs: { id: 'forwarded' } }),
+    ];
+    mounted.push(...wrappers);
+    for (const input of [plain, remaining]) {
+      const keys = Object.keys(input);
+      for (const operation of [
+        (value: object) =>
+          Object.defineProperty(value, 'label', { value: 'mutated', configurable: true }),
+        (value: object) => Object.defineProperty(value, 'hidden', { value: 'hidden' }),
+        Object.freeze,
+        Object.seal,
+        Object.preventExtensions,
+        (value: object) => Object.setPrototypeOf(value, {}),
+      ]) {
+        expect(() => operation(input)).toThrow(TypeError);
+        expect(Object.keys(input)).toEqual(keys);
+      }
+    }
+    expect(Reflect.get(plain, 'label')).toBe('initial');
+    expect(Reflect.get(remaining, 'id')).toBe('forwarded');
+    for (const wrapper of wrappers) {
+      await wrapper.setProps({ label: 'changed' });
+      expect(wrapper.text()).toBe('changed');
+    }
+  });
+
   test('unforwarded attributes never reach single or fragment roots, including SSR', async () => {
     let calls = 0;
     const Single = _component(() => <button>single</button>);

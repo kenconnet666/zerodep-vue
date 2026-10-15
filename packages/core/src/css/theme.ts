@@ -111,6 +111,7 @@ function checkSource(source: unknown): void {
 function themeResolver(readTheme: () => SystemKeywords): ThemeResolver {
   const checked = new WeakSet<object>();
   const references = new Map<string, ThemeReference>();
+  const values = new Map<string, ThemeReference>();
   const readGroup = (property: string): object | undefined => {
     const group: unknown = Reflect.get(readTheme(), property);
     if (group === undefined) return undefined;
@@ -129,26 +130,47 @@ function themeResolver(readTheme: () => SystemKeywords): ThemeResolver {
     checked.add(group);
     return group;
   };
-  return (property, name) => {
+  const ownerFor = (property: string, name: string): string | undefined => {
     let owner = property;
     let group = readGroup(owner);
     if ((!group || !(name in group)) && colors.has(property) && property !== 'color') {
       owner = 'color';
       group = readGroup(owner);
     }
-    if (!group || !(name in group)) throw new Error(`当前主题的 ${property} 没有关键字 ${name}。`);
-    // 同一来源的共享颜色引用保持身份，多个声明在一次消费中只读取一次。
-    const key = `${owner}:${name}`;
+    return group && name in group ? owner : undefined;
+  };
+  return (property, name) => {
+    if (!ownerFor(property, name)) throw new Error(`当前主题的 ${property} 没有关键字 ${name}。`);
+    const key = `${property}:${name}`;
     let reference = references.get(key);
     if (!reference) {
       reference = Object.freeze({
         [THEME]: Object.freeze({
-          property: owner,
+          property,
           name,
           read() {
-            const current = readGroup(owner);
-            if (!current || !(name in current)) throw new Error(`当前主题缺少 ${owner}.${name}。`);
-            return unref(Reflect.get(current, name));
+            // 来源替换或分组增删后重新选择所属组，既有样式仍保持“属性自身优先”。
+            const owner = ownerFor(property, name);
+            if (!owner) throw new Error(`当前主题缺少 ${property}.${name}。`);
+            const valueKey = `${owner}:${name}`;
+            let value = values.get(valueKey);
+            if (!value) {
+              value = Object.freeze({
+                [THEME]: Object.freeze({
+                  property: owner,
+                  name,
+                  read() {
+                    const group = readGroup(owner);
+                    if (!group || !(name in group))
+                      throw new Error(`当前主题缺少 ${owner}.${name}。`);
+                    return unref(Reflect.get(group, name));
+                  },
+                }),
+              });
+              values.set(valueKey, value);
+            }
+            // 复用解析器的递归读取缓存，让共享 color 的 getter 在一次消费中仍只读一次。
+            return value;
           },
         }),
       });

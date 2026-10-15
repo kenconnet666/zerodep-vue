@@ -17,6 +17,35 @@ async function compile(source, command = 'serve', ssr = false) {
 }
 const stamp = (code) => code.match(/import\.meta\.hot,\s*"([a-f0-9]{24})"/)?.[1];
 
+test('hot factories preserve for-of and for-in destructuring writes to captured bindings', async () => {
+  const source = `import {createCssContext, SystemKeywords} from '@zerodep-vue/core';
+    const {useCss} = createCssContext(new SystemKeywords());
+    const s = useCss();
+    export function sample() {
+      let first = 0, tail = [], third = 0, key = '', suffix = '';
+      const style = s.width((() => {
+        for ([first = 5, ...tail] of [[undefined, 8, 9]]) {}
+        for ({value: third = first} of [{}]) {}
+        for ([key, ...suffix] in {ab: true}) {}
+        let localTotal = 0;
+        for (const [first] of [[7]]) localTotal += first;
+        return first + third + localTotal;
+      })());
+      return {style, first, tail, third, key, suffix};
+    }`;
+  for (const command of ['serve', 'build']) {
+    const code = await compile(source, command);
+    const entry = new URL('../../core/src/index.ts', import.meta.url).href;
+    const executable = code.replace(/(['"])@zerodep-vue\/core\1/g, JSON.stringify(entry));
+    const { sample } = await import(
+      'data:text/javascript;base64,' + Buffer.from(executable).toString('base64')
+    );
+    const { style, ...values } = sample();
+    assert.deepEqual(values, { first: 5, tail: [8, 9], third: 5, key: 'a', suffix: ['b'] });
+    assert(resolveClass(style).cssText.includes('width:17px;'));
+  }
+});
+
 test('HMR factory environments keep user dollar names separate from this receivers', async () => {
   const code = await compile(`import {createCssContext, SystemKeywords} from '@zerodep-vue/core';
     const {useCss} = createCssContext(new SystemKeywords());

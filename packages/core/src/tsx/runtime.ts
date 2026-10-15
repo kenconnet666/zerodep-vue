@@ -65,6 +65,10 @@ type Props = Readonly<Record<string, unknown>>;
 type Defaults = Record<string, () => unknown>;
 const own = (value: object, key: PropertyKey) => Object.prototype.hasOwnProperty.call(value, key);
 
+function rejectPropsMutation(): never {
+  throw new TypeError('组件 props 只读；需要写入共享状态时修改传入 Ref 的 .value。');
+}
+
 function hasExplicitChildren(instance: ComponentInternalInstance | null, context: SetupContext) {
   const supplied = own(instance?.vnode.props ?? {}, 'children');
   if (supplied && context.slots.default)
@@ -125,12 +129,11 @@ export function resolveProps(
       }
       return checked(key, fallback.get(key));
     },
-    set() {
-      throw new TypeError('组件 props 只读；需要写入共享状态时修改传入 Ref 的 .value。');
-    },
-    deleteProperty() {
-      throw new TypeError('组件 props 只读，不能删除。');
-    },
+    set: rejectPropsMutation,
+    deleteProperty: rejectPropsMutation,
+    defineProperty: rejectPropsMutation,
+    preventExtensions: rejectPropsMutation,
+    setPrototypeOf: rejectPropsMutation,
     ownKeys(target) {
       return [...new Set([...Reflect.ownKeys(target), ...Reflect.ownKeys(attrs())])].filter(
         (key) => key !== CLASS_PROP,
@@ -176,9 +179,12 @@ export function restProps(
         if ((typeof key !== 'string' || !omitted.has(key)) && own(props, key))
           return { configurable: true, enumerable: true };
       },
-      set() {
-        throw new TypeError('组件 rest props 只读。');
-      },
+      // 不能让结构写入修改空目标，否则后续 ownKeys 会违反 Proxy 不变量。
+      set: rejectPropsMutation,
+      deleteProperty: rejectPropsMutation,
+      defineProperty: rejectPropsMutation,
+      preventExtensions: rejectPropsMutation,
+      setPrototypeOf: rejectPropsMutation,
     }),
   );
 }

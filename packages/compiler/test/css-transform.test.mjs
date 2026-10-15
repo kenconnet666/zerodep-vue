@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { transformAsync } from '@babel/core';
+import { parseAsync, transformAsync } from '@babel/core';
 import presetTypeScript from '@babel/preset-typescript';
 import { babelPlugin as plugin } from '../src/index.ts';
 
@@ -14,6 +14,20 @@ const compile = async (source, options = {}) =>
       presets: [presetTypeScript],
     })
   )?.code;
+
+test('bx diagnoses await and yield crossing the synchronous binding boundary', async () => {
+  for (const source of [
+    'async function paint(){ return bx(await load()); }',
+    'function* paint(){ return bx(yield "red"); }',
+    'function* paint(){ return bx(yield* ["red"]); }',
+  ]) {
+    await assert.rejects(compile(`import {bx} from '@zerodep-vue/core'; ${source}`), /ZV_BX_ASYNC/);
+  }
+  const valid = await compile(`import {bx} from '@zerodep-vue/core';
+    async function paint(){ const color = await load(); return bx(color); }
+    const color = bx((function*(){ yield 'red'; })().next().value);`);
+  await parseAsync(valid, { sourceType: 'module' });
+});
 
 test('CSS captures aliased bindings before JSX and keeps multiple template pieces', async () => {
   const code = await compile(

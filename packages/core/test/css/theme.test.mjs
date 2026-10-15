@@ -73,6 +73,32 @@ test('template theme names resolve only when they form the entire property value
   ]);
 });
 
+test('existing color declarations reselect dedicated groups and shared colors after replacement', () => {
+  class Specific extends Theme {
+    borderColor = {};
+    backgroundColor = {};
+  }
+  const source = shallowRef(new Specific());
+  const context = createCssContext(source);
+  const s = context.useCss();
+  const style = s.borderColor('_brand').backgroundColor('_brand').color('_brand');
+  const original = resolveClass(style);
+  assert.deepEqual(Object.values(original.variables), ['red', 'red', 'red']);
+  const dedicated = new Specific();
+  dedicated.borderColor = { _brand: 'blue' };
+  dedicated.backgroundColor = { _brand: 'black' };
+  source.value = dedicated;
+  assert.deepEqual(Object.values(resolveClass(style).variables), ['blue', 'black', 'red']);
+  assert.equal(resolveClass(style).ruleName, original.ruleName);
+  source.value = new Specific();
+  assert.deepEqual(Object.values(resolveClass(style).variables), ['red', 'red', 'red']);
+  const theme = context.useTheme();
+  theme.borderColor._brand = 'green';
+  assert.deepEqual(Object.values(resolveClass(style).variables), ['green', 'red', 'red']);
+  delete theme.borderColor._brand;
+  assert.deepEqual(Object.values(resolveClass(style).variables), ['red', 'red', 'red']);
+});
+
 test('typed theme hooks isolate nested providers, independent contexts and SSR requests', async () => {
   const theme = createCssContext(new Theme());
   const independent = createCssContext(new Theme());

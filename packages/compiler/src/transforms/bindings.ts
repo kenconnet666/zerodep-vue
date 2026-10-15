@@ -4,6 +4,41 @@ import * as t from '@babel/types';
 
 export const coreModule = '@zerodep-vue/core';
 
+/** 搬入同步回调前检查暂停语法；嵌套函数自己的 body/params 仍保留原有边界。 */
+export function assertSynchronous(root: NodePath, message: string): void {
+  const inspect = (path: NodePath) => {
+    for (
+      let current: NodePath | null = path;
+      current && current !== root;
+      current = current.parentPath
+    ) {
+      if (
+        current.parentPath?.isFunction() &&
+        (current.key === 'body' || current.listKey === 'params')
+      )
+        return;
+    }
+    throw path.buildCodeFrameError(message);
+  };
+  if (
+    root.isAwaitExpression() ||
+    root.isYieldExpression() ||
+    (root.isForOfStatement() && root.node.await) ||
+    (root.isVariableDeclaration() && root.node.kind === 'await using')
+  )
+    inspect(root);
+  root.traverse({
+    AwaitExpression: inspect,
+    YieldExpression: inspect,
+    ForOfStatement(path) {
+      if (path.node.await) inspect(path);
+    },
+    VariableDeclaration(path) {
+      if (path.node.kind === 'await using') inspect(path);
+    },
+  });
+}
+
 /** 每次变换维护自己的导入缓存；返回副本，避免多个 AST 位置共用可变节点。 */
 export function runtimeImports(program: NodePath<t.Program>) {
   const names = new Map<string, t.Identifier>();

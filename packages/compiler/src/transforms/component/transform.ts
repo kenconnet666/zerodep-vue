@@ -5,11 +5,14 @@ import { runtimeProps } from './types.ts';
 import { prepareDefaults } from './defaults.ts';
 import { writableModels } from './writes.ts';
 import type { State } from '../../upstream/interface.ts';
-import { coreModule, importedName, propertyName } from '../bindings.ts';
+import { assertSynchronous, coreModule, importedName, propertyName } from '../bindings.ts';
 
 /** 把本函数的第一个返回分支及后续语句放入 render；嵌套函数的 return 不改变边界。 */
 function lowerRender(setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpression>) {
+  const asyncMessage =
+    '[ZV_RENDER_ASYNC] render 必须同步返回内容；请在 async setup 的返回分支之前完成 await，再把结果用于渲染。';
   if (!t.isBlockStatement(setup.node.body)) {
+    assertSynchronous(setup.get('body'), asyncMessage);
     setup.node.body = t.blockStatement([
       t.returnStatement(t.arrowFunctionExpression([], setup.node.body)),
     ]);
@@ -31,6 +34,7 @@ function lowerRender(setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpre
   });
   if (boundary < 0)
     throw setup.buildCodeFrameError('[ZV_RENDER] _component 需要返回内容；空内容可明确返回 null。');
+  for (const statement of statements.slice(boundary)) assertSynchronous(statement, asyncMessage);
   if (!statements[boundary]!.isReturnStatement()) {
     for (const statement of statements.slice(boundary))
       statement.traverse({
@@ -264,7 +268,7 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
   const options: (t.ObjectProperty | t.SpreadElement)[] = [];
   if (declaredName)
     options.push(t.objectProperty(t.identifier('name'), t.stringLiteral(declaredName)));
-  // 作者通过 props/rest 决定转发位置；不因根节点或 spread 的写法恢复隐式透传。
+  // 作者通过 props/attr 决定转发位置；不因根节点或 spread 的写法恢复隐式透传。
   options.push(t.objectProperty(t.identifier('inheritAttrs'), t.booleanLiteral(false)));
   const extra = call.node.arguments[1];
   if (extra && t.isExpression(extra)) options.push(t.spreadElement(extra));
