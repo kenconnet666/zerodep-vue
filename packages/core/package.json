@@ -37,16 +37,7 @@
     "vue": "^3.5.43"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
-    "@vue/server-renderer": "catalog:",
-    "@vue/test-utils": "catalog:",
-    "jsdom": "catalog:",
-    "mdn-data": "catalog:",
-    "prettier": "catalog:",
-    "typescript": "catalog:",
-    "vite": "catalog:",
-    "vitest": "catalog:",
-    "vue": "catalog:"
+    "mdn-data": "catalog:"
   },
   "license": "MIT",
   "repository": {

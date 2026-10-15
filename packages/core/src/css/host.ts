@@ -50,19 +50,6 @@ const STORE = Symbol.for('@zerodep-vue/core/registry/v1');
 /** Vue 应用/子树的可选样式宿主入口；普通使用由运行时按应用建立。 */
 export const cssHostKey: InjectionKey<CssHost> = Symbol.for('@zerodep-vue/core/host/v1');
 
-function safeText(text: string): string {
-  return text
-    .replace(/<\/style/gi, (value) => '<\\/' + value.slice(2))
-    .replace(/\r\n?/g, '\n')
-    .replace(/\0/g, '\uFFFD');
-}
-function escapeAttribute(text: string): string {
-  return text.replace(
-    /[&"<>]/g,
-    (value) => ({ '&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;' })[value]!,
-  );
-}
-
 function registry(target: HTMLElement | ShadowRoot, limit: number): Registry {
   const owner = target as (HTMLElement | ShadowRoot) & { [STORE]?: Registry };
   if (!owner[STORE])
@@ -79,17 +66,6 @@ function registry(target: HTMLElement | ShadowRoot, limit: number): Registry {
   const result = owner[STORE]!;
   result.limit = Math.min(result.limit, limit);
   return result;
-}
-
-function prune(store: Registry) {
-  while (store.unused.size > store.limit) {
-    const [key, entry] = store.unused.entries().next().value!;
-    store.unused.delete(key);
-    store.entries.delete(key);
-    const named = store.names.get(entry.rule.name)!;
-    if (--named.entries === 0) store.names.delete(entry.rule.name);
-    if (entry.node.parentNode === store.target) entry.node.remove();
-  }
 }
 
 /** 宿主拥有样式租约与显式全局副作用的停止句柄，不保留已释放的消费者。 */
@@ -127,7 +103,10 @@ export class CssHost {
     const text = this.options.layer
       ? `@layer ${this.options.layer}{${rule.cssText}}`
       : rule.cssText;
-    return safeText(text);
+    return text
+      .replace(/<\/style/gi, (value) => '<\\/' + value.slice(2))
+      .replace(/\r\n?/g, '\n')
+      .replace(/\0/g, '\uFFFD');
   }
 
   /** SSR 在实际消费时收集；为每个请求创建宿主，不接触浏览器 DOM。 */
@@ -187,7 +166,14 @@ export class CssHost {
       released = true;
       this.owned.delete(release);
       if (--entry.references === 0) store.unused.set(key, entry);
-      prune(store);
+      while (store.unused.size > store.limit) {
+        const [unusedKey, unusedEntry] = store.unused.entries().next().value!;
+        store.unused.delete(unusedKey);
+        store.entries.delete(unusedKey);
+        const named = store.names.get(unusedEntry.rule.name)!;
+        if (--named.entries === 0) store.names.delete(unusedEntry.rule.name);
+        if (unusedEntry.node.parentNode === store.target) unusedEntry.node.remove();
+      }
     };
     this.owned.add(release);
     return release;
@@ -286,10 +272,17 @@ export class CssHost {
   }
   renderStyles(): string {
     return this.orderedCollection()
-      .map(
-        ({ text, nonce, id, kind }) =>
-          `<style data-zv-${kind}="${id}"${nonce === undefined ? '' : ` nonce="${escapeAttribute(nonce)}"`}>${text}</style>`,
-      )
+      .map(({ text, nonce, id, kind }) => {
+        let nonceAttribute = '';
+        if (nonce !== undefined) {
+          const escaped = nonce.replace(
+            /[&"<>]/g,
+            (value) => ({ '&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;' })[value]!,
+          );
+          nonceAttribute = ` nonce="${escaped}"`;
+        }
+        return `<style data-zv-${kind}="${id}"${nonceAttribute}>${text}</style>`;
+      })
       .join('');
   }
   stats() {

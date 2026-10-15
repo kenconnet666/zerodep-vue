@@ -3,7 +3,7 @@ import { existsSync, realpathSync, watch } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { requireProject, root, serviceConfig } from './environment.mjs';
+import { requireProject, root } from './environment.mjs';
 
 const { createMessageConnection, StreamMessageReader, StreamMessageWriter } =
   requireProject('vscode-jsonrpc/node.js');
@@ -26,12 +26,18 @@ function stop(child) {
 }
 
 async function start() {
-  const config = serviceConfig();
-  const child = spawn(config.command, config.args, {
-    cwd: root,
-    stdio: 'pipe',
-    windowsHide: true,
-  });
+  const typescriptVersion = requireProject('typescript/package.json').version;
+  if (typescriptVersion !== '6.0.3')
+    throw new Error('This workspace requires TypeScript 6.0.3, found ' + typescriptVersion);
+  const child = spawn(
+    process.execPath,
+    [requireProject.resolve('typescript-language-server/lib/cli.mjs'), '--stdio'],
+    {
+      cwd: root,
+      stdio: 'pipe',
+      windowsHide: true,
+    },
+  );
   children.add(child);
   const connection = createMessageConnection(
     new StreamMessageReader(child.stdout),
@@ -148,7 +154,16 @@ async function start() {
           },
         },
       },
-      initializationOptions: config.initializationOptions,
+      initializationOptions: {
+        hostInfo: 'Codex zerodep-vue',
+        disableAutomaticTypingAcquisition: true,
+        plugins: [{ name: '@zerodep-vue/compiler/src/editor/plugin.cjs', location: root }],
+        // 使用本仓库的完整语义服务，不回退到全局 SDK 或只做语法的进程。
+        tsserver: {
+          path: resolve(root, 'node_modules/typescript/lib'),
+          useSyntaxServer: 'never',
+        },
+      },
     });
     await connection.sendNotification('initialized', {});
     installWatcher('');
@@ -165,9 +180,7 @@ async function start() {
       capabilities: initialized.capabilities,
       request,
       get version() {
-        return (
-          activeVersion ?? { version: config.typescriptVersion, source: 'configured-workspace' }
-        );
+        return activeVersion ?? { version: typescriptVersion, source: 'configured-workspace' };
       },
       run(doc, read) {
         // 一次只打开一个磁盘快照；操作后关闭，避免覆盖 IDE 的真实缓冲区。

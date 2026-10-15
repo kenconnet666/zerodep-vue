@@ -19,7 +19,7 @@
   "sideEffects": false,
   "scripts": {
     "check": "tsc --noEmit -p tsconfig.json",
-    "build": "tsc -p tsconfig.build.json && node scripts/build.mjs",
+    "build": "tsc -p tsconfig.build.json && node build.mjs",
     "test": "vitest run --config vitest.config.ts",
     "test:watch": "vitest --config vitest.config.ts"
   },
@@ -34,23 +34,14 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@babel/core": "catalog:",
     "@babel/preset-typescript": "catalog:",
     "@floating-ui/dom": "catalog:",
     "@internationalized/date": "catalog:",
     "@lucide/icons": "catalog:",
-    "@types/node": "catalog:",
-    "@vue/server-renderer": "catalog:",
-    "@vue/test-utils": "catalog:",
     "@zerodep-vue/compiler": "workspace:*",
     "@zerodep-vue/core": "workspace:*",
     "decimal.js": "catalog:",
-    "jsdom": "catalog:",
     "tabbable": "catalog:",
-    "typescript": "catalog:",
-    "vite": "catalog:",
-    "vitest": "catalog:",
-    "vue": "catalog:",
     "zod": "catalog:"
   },
   "license": "MIT",

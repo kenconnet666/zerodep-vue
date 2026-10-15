@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { emitModule } from '../scripts/build.mjs';
+import { emitModule } from '../build.mjs';
 
 test('production emission lowers TSX, preserves peers and maps the original source', async () => {
   const source = `import { _component } from '@zerodep-vue/core';

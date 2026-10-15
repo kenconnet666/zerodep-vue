@@ -42,16 +42,8 @@
     "vite": "^8.0.0"
   },
   "devDependencies": {
-    "@babel/core": "catalog:",
     "@babel/plugin-syntax-typescript": "catalog:",
-    "@types/node": "catalog:",
     "@vue/babel-plugin-jsx": "catalog:",
-    "@vue/server-renderer": "catalog:",
-    "@vue/test-utils": "catalog:",
-    "jsdom": "catalog:",
-    "vite": "catalog:",
-    "vitest": "catalog:",
-    "vue": "catalog:",
     "@zerodep-vue/core": "workspace:*"
   },
   "license": "MIT",

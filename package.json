@@ -19,13 +19,21 @@
     "packages:pack": "node scripts/pack.mjs"
   },
   "devDependencies": {
+    "@babel/core": "catalog:",
     "@modelcontextprotocol/sdk": "catalog:",
+    "@types/node": "catalog:",
+    "@vue/server-renderer": "catalog:",
+    "@vue/test-utils": "catalog:",
     "@zerodep-vue/compiler": "workspace:*",
+    "jsdom": "catalog:",
     "prettier": "catalog:",
     "smol-toml": "catalog:",
     "typescript": "catalog:",
     "typescript-language-server": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:",
     "vscode-jsonrpc": "catalog:",
+    "vue": "catalog:",
     "zod": "catalog:"
   }
 }

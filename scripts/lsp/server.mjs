@@ -20,23 +20,6 @@ const languages = new Map([
   ['.cjs', 'javascript'],
 ]);
 
-async function document(filePath) {
-  const absolute = await realpath(resolve(root, filePath));
-  const fromRoot = relative(root, absolute);
-  if (isAbsolute(fromRoot) || fromRoot === '..' || fromRoot.startsWith('..' + sep))
-    throw new Error('File is outside the configured workspace.');
-  const extension = extname(absolute);
-  const languageId = languages.get(extension);
-  if (!languageId) throw new Error('Unsupported source file extension: ' + extension);
-  return {
-    path: absolute,
-    relativePath: fromRoot,
-    uri: pathToFileURL(absolute).href,
-    text: await readFile(absolute, 'utf8'),
-    languageId,
-  };
-}
-
 function range(value) {
   return (
     value && {
@@ -72,7 +55,20 @@ function tool(name, description, inputSchema, read) {
     },
     async (args) => {
       try {
-        const doc = await document(args.filePath);
+        const absolute = await realpath(resolve(root, args.filePath));
+        const fromRoot = relative(root, absolute);
+        if (isAbsolute(fromRoot) || fromRoot === '..' || fromRoot.startsWith('..' + sep))
+          throw new Error('File is outside the configured workspace.');
+        const extension = extname(absolute);
+        const languageId = languages.get(extension);
+        if (!languageId) throw new Error('Unsupported source file extension: ' + extension);
+        const doc = {
+          path: absolute,
+          relativePath: fromRoot,
+          uri: pathToFileURL(absolute).href,
+          text: await readFile(absolute, 'utf8'),
+          languageId,
+        };
         const language = await service();
         const result = await language.run(doc, (version) => read(args, doc, language, version));
         return { content: [{ type: 'text', text: JSON.stringify(result) }] };
