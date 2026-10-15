@@ -9,16 +9,28 @@ export interface HotTransform {
   compatible: string;
   managed: boolean;
 }
+
+/** 按声明节点去重，只沿未被重新赋值的局部变量追踪，避免循环别名和同名遮蔽。 */
+function stableDeclaration(
+  scope: Scope,
+  name: string,
+  seen: Set<t.Node>,
+): NodePath<t.VariableDeclarator> | undefined {
+  const binding = scope.getBinding(name);
+  if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
+    return;
+  seen.add(binding.path.node);
+  return binding.path;
+}
+
 function context(scope: Scope, node: t.Node, seen = new Set<t.Node>()): boolean {
   if (t.isCallExpression(node))
     return importedName(scope, node.callee, coreModule) === 'createCssContext';
   if (!t.isIdentifier(node)) return false;
-  const binding = scope.getBinding(node.name);
-  if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
-    return false;
-  seen.add(binding.path.node);
-  const init = binding.path.node.init;
-  return !!init && t.isIdentifier(binding.path.node.id) && context(binding.path.scope, init, seen);
+  const declaration = stableDeclaration(scope, node.name, seen);
+  if (!declaration) return false;
+  const { id, init } = declaration.node;
+  return !!init && t.isIdentifier(id) && context(declaration.scope, init, seen);
 }
 
 /** 按真实 binding 追踪独立入口、命名空间、主题上下文与解构别名，局部同名对象不接管。 */
@@ -26,16 +38,14 @@ function entry(scope: Scope, node: t.Node, name: string, seen = new Set<t.Node>(
   if (name !== 'useCss' && importedName(scope, node, coreModule) === name) return true;
   if (t.isMemberExpression(node)) return propertyName(node) === name && context(scope, node.object);
   if (!t.isIdentifier(node)) return false;
-  const binding = scope.getBinding(node.name);
-  if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
-    return false;
-  seen.add(binding.path.node);
-  const { id, init } = binding.path.node;
+  const declaration = stableDeclaration(scope, node.name, seen);
+  if (!declaration) return false;
+  const { id, init } = declaration.node;
   if (!init) return false;
-  if (t.isIdentifier(id)) return entry(binding.path.scope, init, name, seen);
+  if (t.isIdentifier(id)) return entry(declaration.scope, init, name, seen);
   return (
     t.isObjectPattern(id) &&
-    context(binding.path.scope, init) &&
+    context(declaration.scope, init) &&
     id.properties.some(
       (item) =>
         t.isObjectProperty(item) &&
@@ -53,12 +63,10 @@ function author(scope: Scope, node: t.Node, seen = new Set<t.Node>()): boolean {
     return t.isMemberExpression(node.callee) && author(scope, node.callee.object, seen);
   }
   if (!t.isIdentifier(node)) return false;
-  const binding = scope.getBinding(node.name);
-  if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
-    return false;
-  seen.add(binding.path.node);
-  const init = binding.path.node.init;
-  return !!init && author(binding.path.scope, init, seen);
+  const declaration = stableDeclaration(scope, node.name, seen);
+  if (!declaration) return false;
+  const init = declaration.node.init;
+  return !!init && author(declaration.scope, init, seen);
 }
 
 const cssEntries = new Map([
@@ -85,22 +93,23 @@ function signature(node: t.Program): string {
   };
   return createHash('sha256')
     .update(
-      JSON.stringify(program, (key, value) =>
-        value?.extra?.zerodepSource
-          ? { type: 'ObjectExpression', properties: [] }
-          : [
-                'start',
-                'end',
-                'loc',
-                'extra',
-                'leadingComments',
-                'innerComments',
-                'trailingComments',
-                'comments',
-              ].includes(key)
-            ? undefined
-            : value,
-      ),
+      JSON.stringify(program, (key, value) => {
+        // 已隔离的热更新源使用固定占位，不让内部表达式变化污染 setup 签名。
+        if (value?.extra?.zerodepSource) return { type: 'ObjectExpression', properties: [] };
+        switch (key) {
+          case 'start':
+          case 'end':
+          case 'loc':
+          case 'extra':
+          case 'leadingComments':
+          case 'innerComments':
+          case 'trailingComments':
+          case 'comments':
+            return undefined;
+          default:
+            return value;
+        }
+      }),
     )
     .digest('hex')
     .slice(0, 24);
@@ -110,20 +119,32 @@ function inside(path: NodePath, root: NodePath): boolean {
 }
 function assignmentTarget(path: NodePath): boolean {
   let current = path;
+  // 解构只沿写入位置上溯；属性键和默认值表达式属于读取，不能改写成环境 setter。
   for (;;) {
     const parent = current.parentPath;
     if (!parent) return false;
-    if (parent.isAssignmentExpression()) return current.key === 'left';
-    if (parent.isUpdateExpression()) return current.key === 'argument';
-    if (parent.isObjectProperty() && current.key === 'value' && parent.parentPath.isObjectPattern())
-      current = parent.parentPath;
-    else if (
-      parent.isArrayPattern() ||
-      parent.isRestElement() ||
-      (parent.isAssignmentPattern() && current.key === 'left')
-    )
-      current = parent;
-    else return false;
+    switch (parent.node.type) {
+      case 'AssignmentExpression':
+        return current.key === 'left';
+      case 'UpdateExpression':
+        return current.key === 'argument';
+      case 'ObjectProperty': {
+        const pattern = parent.parentPath;
+        if (current.key !== 'value' || !pattern?.isObjectPattern()) return false;
+        current = pattern;
+        break;
+      }
+      case 'ArrayPattern':
+      case 'RestElement':
+        current = parent;
+        break;
+      case 'AssignmentPattern':
+        if (current.key !== 'left') return false;
+        current = parent;
+        break;
+      default:
+        return false;
+    }
   }
 }
 function liftable(root: NodePath): boolean {

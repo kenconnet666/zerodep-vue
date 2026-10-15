@@ -39,6 +39,34 @@ test('HMR factory environments keep user dollar names separate from this receive
     assert(resolved.cssText.includes('padding:5px;'));
   }
 });
+test('hot factories retain destructuring writes and default-value reads', async () => {
+  const code = await compile(`import {createCssContext, SystemKeywords} from '@zerodep-vue/core';
+    const {useCss} = createCssContext(new SystemKeywords());
+    const s = useCss();
+    export function sample(input) {
+      let first = 0, rest = [], third = 0;
+      const style = s
+        .width(([first = 5, ...rest] = input, first))
+        .height(({value: third = first} = {}, third));
+      return {style, first, rest, third};
+    }`);
+  const entry = new URL('../../core/src/index.ts', import.meta.url).href;
+  const executable = code.replace(/(['"])@zerodep-vue\/core\1/g, JSON.stringify(entry));
+  const { sample } = await import(
+    'data:text/javascript;base64,' + Buffer.from(executable).toString('base64')
+  );
+  for (const [input, expected, tail] of [
+    [[undefined, 8, 9], 5, [8, 9]],
+    [[7], 7, []],
+  ]) {
+    const { style, first, rest, third } = sample(input);
+    assert.deepEqual({ first, rest, third }, { first: expected, rest: tail, third: expected });
+    const resolved = resolveClass(style);
+    assert(resolved.cssText.includes(`width:${expected}px;`));
+    assert(resolved.cssText.includes(`height:${expected}px;`));
+  }
+});
+
 const source = `import { ref } from 'vue'; import { _component } from '@zerodep-vue/core'; import { bx, cx, globalCss } from '@zerodep-vue/core';
 import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = createCssContext(new SystemKeywords());

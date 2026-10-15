@@ -58,6 +58,7 @@ interface Lease {
   vnode: VNode;
   observerRoot?: Node;
   stopObserving?: () => void;
+  /** 离场动画仍保留 DOM；固定观察原根，等真实移除后再释放规则。 */
   pendingRemoval: boolean;
   release(): void;
   present(): boolean;
@@ -172,10 +173,7 @@ function observeLease(vnode: VNode) {
         )
       )
         return;
-      for (const item of [...tracked]) {
-        if (!item.present()) item.release();
-        else if (!item.pendingRemoval) observeLease(item.vnode);
-      }
+      refreshLeases(tracked);
     });
     observer.observe(root, {
       subtree: true,
@@ -201,17 +199,24 @@ function observeLease(vnode: VNode) {
   };
 }
 
+/** DOM 观察和组件生命周期共用一套回收规则，避免两个入口对租约存活作出不同判断。 */
+function refreshLeases(tracked: ReadonlySet<Lease>) {
+  // 释放和观察根迁移都会修改集合；本轮只处理进入时的租约快照。
+  for (const lease of [...tracked]) {
+    if (!lease.present()) {
+      lease.release();
+      continue;
+    }
+    if (!lease.pendingRemoval) observeLease(lease.vnode);
+  }
+}
+
 function ownerLeases(owner: ComponentInternalInstance): Set<Lease> {
   let owned = owners.get(owner);
   if (!owned) {
     owned = new Set();
     owners.set(owner, owned);
-    const cleanup = () => {
-      for (const lease of [...owned!])
-        if (!lease.present()) {
-          lease.release();
-        } else if (!lease.pendingRemoval) observeLease(lease.vnode);
-    };
+    const cleanup = () => refreshLeases(owned!);
     onUpdated(cleanup, owner);
     onActivated(cleanup, owner);
     onDeactivated(cleanup, owner);
@@ -542,15 +547,32 @@ export function mergeCssProps(...sources: (Props | null | undefined)[]): Props {
     if (!source) continue;
     for (const key in source) {
       const value = source[key];
-      if (key === 'class') {
-        if (result.class !== value) result.class = [result.class, structuredClass(value)];
-      } else if (key === 'style') result.style = normalizeStyle([result.style, value]);
-      else if (/^on[^a-z]/.test(key)) {
-        const existing = result[key];
-        if (value && existing !== value && !(Array.isArray(existing) && existing.includes(value))) {
-          result[key] = existing ? ([] as unknown[]).concat(existing, value) : value;
+      switch (key) {
+        case 'class':
+          // 保留有序描述，等最终消费时再解决属性覆盖及 bx 的读取。
+          if (result.class !== value) result.class = [result.class, structuredClass(value)];
+          break;
+        case 'style':
+          result.style = normalizeStyle([result.style, value]);
+          break;
+        case '':
+          break;
+        default: {
+          if (!/^on[^a-z]/.test(key)) {
+            result[key] = value;
+            break;
+          }
+          // 监听器按来源顺序合并，单个监听器以引用去重，沿用 Vue mergeProps 的语义。
+          const existing = result[key];
+          if (
+            value &&
+            existing !== value &&
+            !(Array.isArray(existing) && existing.includes(value))
+          ) {
+            result[key] = existing ? ([] as unknown[]).concat(existing, value) : value;
+          }
         }
-      } else if (key !== '') result[key] = value;
+      }
     }
   }
   return result;
