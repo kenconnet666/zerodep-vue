@@ -2,7 +2,7 @@
 # BEGIN ZERODEP VUE LANGUAGE SERVICES
 [mcp_servers.zerodep_vue_lsp]
 command = __NODE__
-args = ["scripts/language-services/server.mjs", "."]
+args = ["scripts/lsp/server.mjs", "."]
 cwd = __ROOT__
 startup_timeout_sec = 30
 tool_timeout_sec = 90

@@ -161,7 +161,7 @@ jobs:
         if: always()
         with:
           name: lsp-${{ matrix.os }}-${{ github.sha }}
-          path: test-results/language-services/verification.json
+          path: test-results/lsp/verification.json
           if-no-files-found: ignore
           retention-days: 7
 

@@ -1,4 +1,4 @@
-import { connect } from './client.mjs';
+import { connect } from './mcp-client.mjs';
 
 const files = process.argv.slice(3);
 if (!files.length) throw new Error('Usage: pnpm lsp:inspect <source-file> [source-file...]');

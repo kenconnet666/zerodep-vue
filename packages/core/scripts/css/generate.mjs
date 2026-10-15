@@ -14,7 +14,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const require = createRequire(import.meta.url);
 assert.equal(ts.version, '6.0.3');
 assert.equal(require('csstype/package.json').version, '3.2.3');
-assert.equal(createRequire(import.meta.url)('mdn-data/package.json').version, '2.27.1');
+assert.equal(require('mdn-data/package.json').version, '2.27.1');
 const filename = require.resolve('csstype/index.d.ts');
 const inputFile = resolve(root, '__css-generator-types__.ts');
 const inputSource =

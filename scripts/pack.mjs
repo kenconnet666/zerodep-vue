@@ -1,17 +1,19 @@
 import assert from 'node:assert/strict';
-import { mkdir, readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import {
-  artifacts,
-  command,
-  files,
-  names,
-  pnpm,
-  readJson,
-  report,
-  root,
-  sha256,
-} from './common.mjs';
+import { fileURLToPath } from 'node:url';
+import { command, files } from './build-utils.mjs';
+
+const root = fileURLToPath(new URL('../', import.meta.url));
+const artifacts = join(root, 'test-results/packages');
+const names = ['core', 'compiler', 'ui'];
+const readJson = async (path) => JSON.parse(await readFile(path, 'utf8'));
+const pnpmEntry = process.env.npm_execpath;
+assert(
+  pnpmEntry && /pnpm\.(?:c?js|mjs)$/.test(pnpmEntry),
+  'Run this workflow through pnpm packages:pack.',
+);
 
 await mkdir(artifacts, { recursive: true });
 const commit = command('git', ['rev-parse', 'HEAD'], root).trim();
@@ -45,7 +47,11 @@ try {
       );
     }
     const filename = `zerodep-vue-${name}-${manifest.version}.tgz`;
-    pnpm(['pack', '--json', '--out', join(artifacts, filename)], directory);
+    command(
+      process.execPath,
+      [pnpmEntry, 'pack', '--json', '--out', join(artifacts, filename)],
+      directory,
+    );
     const archive = join(artifacts, filename);
     const listed = command('tar', ['-tzf', archive], root).trim().split(/\r?\n/).filter(Boolean);
     assert(
@@ -86,7 +92,7 @@ try {
       name: packed.name,
       version: packed.version,
       file: filename,
-      sha256: sha256(bytes),
+      sha256: createHash('sha256').update(bytes).digest('hex'),
       bytes: bytes.length,
       files: listed.length,
       exports: packed.exports,
@@ -98,5 +104,5 @@ try {
   result.error = error.stack ?? String(error);
   throw error;
 } finally {
-  await report('pack.json', result);
+  await writeFile(join(artifacts, 'pack.json'), JSON.stringify(result, null, 2) + '\n');
 }

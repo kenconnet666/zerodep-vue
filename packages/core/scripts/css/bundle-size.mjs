@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { build } from 'vite';
-import { command } from '../../../../scripts/packages/common.mjs';
+import { command } from '../../../../scripts/build-utils.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 

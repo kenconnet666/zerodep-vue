@@ -13,10 +13,10 @@
     "build": "pnpm -r run build",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "lsp:setup": "node scripts/language-services/setup.mjs",
-    "lsp:verify": "node scripts/language-services/verify.mjs .",
-    "lsp:inspect": "node scripts/language-services/inspect.mjs .",
-    "packages:pack": "node scripts/packages/pack.mjs"
+    "lsp:setup": "node scripts/lsp/setup.mjs",
+    "lsp:verify": "node scripts/lsp/verify.mjs .",
+    "lsp:inspect": "node scripts/lsp/inspect.mjs .",
+    "packages:pack": "node scripts/pack.mjs"
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "catalog:",

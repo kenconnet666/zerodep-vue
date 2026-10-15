@@ -8,7 +8,8 @@ Vue VDOM TSX 编译器、运行时 CSS 和自有 UI 组件库。仅维护 Vue VD
 - `packages/core`：`_component`、`For`、运行时 CSS、继承主题、HMR 与 DevTools 接线。
 - `packages/ui`：组件库及其集成测试；当前只有基础工程和工具链验证，尚未导出正式组件。
 - `packages/core/scripts/css`：CSS 生成和体积检查；各包的测试配置及命令由本包维护。
-- `scripts`：工作区打包和项目 LSP 工具。
+- `scripts/pack.mjs`：工作区打包；`scripts/build-utils.mjs` 提供打包、CSS 和 UI 构建共用的文件遍历及命令执行。
+- `scripts/lsp`：项目语言服务、MCP 桥接和配置生成。
 
 三个包都通过根入口使用。UI 依赖 core，业务组件不进入 core/compiler；第三方能力通过显式 peer 依赖使用，不从 UI 重新导出。
 

@@ -2,7 +2,7 @@ import { readFile, realpath } from 'node:fs/promises';
 import { extname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { requireProject, root as configuredRoot } from './environment.mjs';
-import { service, closeService } from './language-client.mjs';
+import { service, closeService } from './ts-client.mjs';
 
 const { McpServer } = requireProject('@modelcontextprotocol/sdk/server/mcp.js');
 const { StdioServerTransport } = requireProject('@modelcontextprotocol/sdk/server/stdio.js');

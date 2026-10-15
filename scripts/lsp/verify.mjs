@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdir, readFile, unlink, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { createRequire } from 'node:module';
-import { connect } from './client.mjs';
+import { connect } from './mcp-client.mjs';
 import { root, requireProject } from './environment.mjs';
 
 const shared = 'packages/ui/test/__lsp_shared__.ts';
@@ -187,9 +187,9 @@ try {
     definitions: cssDefinitions,
     completions: cssCompletions,
   });
-  await mkdir(resolve(root, 'test-results/language-services'), { recursive: true });
+  await mkdir(resolve(root, 'test-results/lsp'), { recursive: true });
   await writeFile(
-    resolve(root, 'test-results/language-services/verification.json'),
+    resolve(root, 'test-results/lsp/verification.json'),
     JSON.stringify(report, null, 2) + '\n',
   );
   console.log(
