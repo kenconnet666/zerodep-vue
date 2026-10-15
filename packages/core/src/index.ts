@@ -10,13 +10,15 @@ export { createCssHost, cssHostKey } from './css/host.ts';
 export { getCssHost } from './css/context.ts';
 export type { CssHost, CssHostOptions } from './css/host.ts';
 export type { CssClass, ClassValue, CssInput, CssNestedInput } from './css/style-value.ts';
-export type { CssCondition, PropertyValue, CustomPropertyValue } from './css/types.ts';
+export type { CssCondition, CssValue, PropertyValue, CustomPropertyValue } from './css/types.ts';
 export type { CssBinding } from './css/bindings.ts';
 export type { CssAnimation } from './css/animation-token.ts';
 export type { Keyframes } from './css/animation.ts';
 export type { GlobalRules, GlobalOptions } from './css/global.ts';
 
 export { _component } from './tsx/component.ts';
+/** @internal 让组件推断声明可通过公共入口命名，无需每个组件重复 ReturnType 注解。 */
+export type { AuthorProps } from './tsx/component.ts';
 export { For } from './tsx/For.ts';
 export type { ForProps } from './tsx/For.ts';
 // 类型转导会保留在 .d.ts 中；空的 import type 会被发射器移除，丢失 JSX 注册。

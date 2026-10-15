@@ -17,9 +17,11 @@
 - 状态直接使用 Vue API。CSS 作者入口为 class，编译器负责 bx 的隐式 style 接线，不新增独立 JSX 样式属性。
 - CSS 采用运行时处理加辅助编译；系统值和主题名使用字面量，主题通过继承扩展，泛型 T 贯穿作者入口、链式样式和主题映射。
 - 组件统一写 `const s = useCss()`；应用主题模块从 `createCssContext(source)` 直接解构导出 `useCss`、`provideTheme`、`useTheme`。core 不导出默认 hooks 或创建默认上下文，不提供 keywords 对象视图。
-- `useTheme()` 返回当前区域的 reactive 对象，直接使用 `theme.color._brand`，嵌套 Ref 按 Vue 规则解包，可替换的来源 Ref 继续支持。动态样式显式使用 bx，cx 只负责有序组合。
+- `useTheme()` 返回当前区域的 reactive 对象，直接使用 `theme.color._primary`，嵌套 Ref 按 Vue 规则解包，可替换的来源 Ref 继续支持。动态样式显式使用 bx，cx 只负责有序组合。
 - 属性、系统值和主题名须有准确补全及中文 JSDoc；发布声明须保留类型和注释。CSS 属性用 `@default:'值'` 表达规范初始值、`@extend:'是/否'` 表达继承性，保留“常用值：”及反引号列表，不生成 @example，缺项不猜测。
 - 新源码遵循 TypeScript 和 Vue 正常语义。中文注释解释边界、所有权及非显然处理；作者类型与运行时值分清职责。
+- 上层组件暴露出共享类型、编译器或运行时的问题时，修正问题所属模块并验证已有能力和新用法；不以 `as unknown as`、复制类型或组件内特例绕过，也不只是把断言搬到公共层。通用 token 由 CSS 工具统一解析，组件局部 token 的类型和实现留在组件内。
+- UI 样式 Props 直接复用 `CssValue<'属性', UiTheme>`，使用普通 Props 接口；不为每个样式属性增加泛型或层层辅助类型。`bx` 是组件内部的 CSS 接线，不进入 Props 值域。
 - 同一判别值的多分支适当使用 switch，类型守卫和二选一保留 if；重复策略或明确的状态转换可采用策略、状态等设计模式，以减少分支和重复。保持清晰命名、直接数据流和明确所有权，不为套用模式增加层级、文件或转发跳转；公共 API 取舍先讨论。
 - UI 位于 packages/ui，组件 DOM、交互和公开 API 自行实现，不引入 headless 组件、表单或表格底座。UI 业务不进入 core/compiler，未实现能力不导出占位 API。
 - UI Provider 的 theme 按“CSS 属性组 → 主题名”局部覆盖，lang 按文案、locale、timeZone 字段局部覆盖；未提供或 undefined 的字段持续继承父级。完整主题或语言预设覆盖其全部字段，theme/lang 均支持对象、Ref 和 computed；对象来源使用 Vue reactive，后代视图只读。

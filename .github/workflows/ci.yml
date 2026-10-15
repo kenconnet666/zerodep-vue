@@ -115,7 +115,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
-      - name: Verify Provider, peer values, SSR and production emission
+      - name: Verify UI components, peer values, SSR and production emission
         env:
           UI_MODE: ${{ matrix.mode }}
         run: pnpm --filter @zerodep-vue/ui test --mode "$UI_MODE"

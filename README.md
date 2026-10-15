@@ -6,7 +6,7 @@ Vue VDOM TSX 编译器、运行时 CSS 和自有 UI 组件库。仅维护 Vue VD
 
 - `packages/compiler`：官方 Vue JSX v3.0.0 源码 fork、Babel/Vite 接入和编辑器扩展；来源记录在 `upstream.json`。
 - `packages/core`：`_component`、`For`、运行时 CSS、继承主题、HMR 与 DevTools 接线。
-- `packages/ui`：组件库及其集成测试；目前提供 `Provider`、UI 主题和语言配置，其他交互组件尚未实现。
+- `packages/ui`：组件库及其集成测试；目前提供 `Provider`、`Icon`、UI 主题和语言配置，其他交互组件尚未实现。
 - `packages/core/scripts/css`：CSS 生成和体积检查；各包的测试配置及命令由本包维护。
 - `scripts/pack.mjs`：工作区打包；`scripts/build-utils.mjs` 提供打包、CSS 和 UI 构建共用的文件遍历及命令执行。
 - `scripts/lsp`：项目语言服务、MCP 桥接和配置生成。
@@ -68,11 +68,15 @@ import {
 class BrandTheme extends LightTheme {
   override readonly color = {
     ...new LightTheme().color,
-    _brand: '#7c3aed',
-    _brandHover: '#6d28d9',
-    _brandActive: '#5b21b6',
-    _brandSoft: '#f5f3ff',
-    _onBrand: '#ffffff',
+    _primary: '#7c3aed',
+    _primaryHover: '#6d28d9',
+    _primaryPressed: '#5b21b6',
+    _primarySubtleBackground: '#f5f3ff',
+    _primaryBorder: '#ddd6fe',
+    _textOnPrimary: '#ffffff',
+    _textSelected: '#6d28d9',
+    _surfaceSelected: '#ede9fe',
+    _borderSelected: '#7c3aed',
     _focusRing: '#7c3aed',
   };
 }
@@ -82,7 +86,7 @@ const Status = _component(() => {
   const theme = useTheme();
   const lang = useLang();
   return (
-    <output class={s.color('_brand')} data-brand={theme.color._brand}>
+    <output class={s.color('_primary')} data-primary={theme.color._primary}>
       {lang.confirm} / {lang.locale} / {lang.timeZone}
     </output>
   );
@@ -107,7 +111,7 @@ export const App = _component(() => {
 
 嵌套配置遵循以下规则：
 
-- `theme` 接收完整主题或 `UiThemeInput` 局部配置，例如 `theme={{ color: { _brand: '#7c3aed' } }}`。只覆盖写出的主题名，组内其他字段和其他属性组继续跟随父级。完整 `LightTheme`、`DarkTheme` 实例带齐所有字段，可完成整套切换；新主题可继承它们，也可以继承 `BaseTheme` 并实现 `UiTheme`。
+- `theme` 接收完整主题或 `UiThemeInput` 局部配置，例如 `theme={{ color: { _primary: '#7c3aed' } }}`。只覆盖写出的主题名，组内其他字段和其他属性组继续跟随父级。完整 `LightTheme`、`DarkTheme` 实例带齐所有字段，可完成整套切换；新主题可继承它们，也可以继承 `BaseTheme` 并实现 `UiTheme`。
 - `lang` 接收完整配置或 `UiLanguageInput` 局部字段，如 `lang={{ confirm: '保存', timeZone: 'UTC' }}`。未设置的文案、区域和时区继续跟随父级，文案允许空字符串。
 - `theme` 和 `lang` 都支持对象、Ref 和 computed。省略、删除字段或设为 `undefined` 会恢复对应的父级值；主题的整个属性组也可设为 `undefined`。整个 prop 或来源 Ref 的值设为 `undefined` 时恢复全部继承。根区域使用默认白色主题和简体中文上海时区配置。
 - 所有语言字段直接从 `useLang()` 返回值读取：`lang.confirm`、`lang.locale`、`lang.timeZone`。没有 Provider 时使用 `zhCN`；Provider 只继承和传递配置，格式化由使用这些字段的组件负责。
@@ -119,26 +123,66 @@ export const App = _component(() => {
 
 ```tsx
 <Provider theme={new DarkTheme()} lang={enUS}>
-  <Provider theme={{ color: { _brand: '#7c3aed' } }} lang={{ confirm: '保存' }}>
+  <Provider theme={{ color: { _primary: '#7c3aed' } }} lang={{ confirm: '保存' }}>
     <Status />
   </Provider>
 </Provider>
 ```
 
-公共主题变量参考了 [Naive UI 的公共明暗主题](https://github.com/tusen-ai/naive-ui/tree/main/src/_styles/common)、[MUI 的语义配色](https://mui.com/material-ui/customization/palette/)与[间距](https://mui.com/material-ui/customization/spacing/)、[Element Plus 的公共变量](https://github.com/element-plus/element-plus/blob/dev/packages/theme-chalk/src/common/var.scss)，沿用本项目的 CSS 属性分组和 `_` 名称。具体值由本项目定义，无新增运行时依赖。
+公共主题变量参考了 [Naive UI 的公共明暗主题](https://github.com/tusen-ai/naive-ui/tree/main/src/_styles/common)、[Radix 的颜色角色](https://www.radix-ui.com/themes/docs/theme/color)、[MUI 的语义配色](https://mui.com/material-ui/customization/palette/)与[间距](https://mui.com/material-ui/customization/spacing/)、[Element Plus 的公共变量](https://github.com/element-plus/element-plus/blob/dev/packages/theme-chalk/src/common/var.scss)，沿用本项目的 CSS 属性分组和 `_` 名称。具体值由本项目定义，无新增运行时依赖。
 
-| 分组                                                       | 提供的内容                                                                                                |
-| ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `color`                                                    | 品牌、信息、成功、警告、危险的默认/悬停/按下/浅背景及配对文字色；文字、表面、边框、焦点、遮罩和滚动条层级 |
-| `fontFamily`、`fontSize`、`fontWeight`、`lineHeight`       | 界面/等宽字体、0.75–1.5rem 字号、四档字重和三档无单位行高                                                 |
-| `height`、`minHeight`                                      | em 控件尺寸；14px 字号下对应原设计的 24、28、32、40、48px                                                 |
-| `padding`、`margin`、`gap`                                 | em 间距；14px 字号下对应原设计的 0、4、8、12、16、24、32px；各属性组独立修改                              |
-| `borderRadius`、`borderWidth`、`boxShadow`、`opacity`      | em 圆角、边框、阴影，以及无单位的禁用透明度                                                               |
-| `transitionDuration`、`transitionTimingFunction`、`zIndex` | 三档时长、进入/离开曲线和基础浮层顺序                                                                     |
+| 分组                                                       | 提供的内容                                                                                                          |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `color`                                                    | 主操作、信息、成功、警告、危险的默认/悬停/按下/低强调背景/边框/配对文字色；文字、表面、选中、焦点、遮罩和滚动条层级 |
+| `fontFamily`、`fontSize`、`fontWeight`、`lineHeight`       | 界面/等宽字体、0.75–1.5rem 字号、四档字重和三档无单位行高                                                           |
+| `height`、`minHeight`                                      | em 控件尺寸；14px 字号下对应原设计的 24、28、32、40、48px                                                           |
+| `padding`、`margin`、`gap`、`rowGap`、`columnGap`          | em 间距；14px 字号下对应原设计的 0、4、8、12、16、24、32px；各属性组独立修改                                        |
+| `borderRadius`、`borderWidth`、`boxShadow`、`opacity`      | em 圆角、边框、阴影，以及无单位的禁用透明度                                                                         |
+| `strokeWidth`                                              | SVG 图形坐标中的描边宽度：`_thin` 为 1、`_medium` 为 2、`_thick` 为 3；不换算为 em                                  |
+| `transitionDuration`、`transitionTimingFunction`、`zIndex` | 三档时长、进入/离开曲线和基础浮层顺序                                                                               |
 
-直接使用 `s.backgroundColor('_surface').color('_text').height('_control').padding('_md')`；颜色组也可用于 `borderColor` 等其他颜色属性。品牌和状态颜色各自有配对文字色，如 `_brand` 与 `_onBrand`。定制配色时应一起考虑其交互状态和文字对比度。动效减少和实际浮层层叠由使用变量的组件处理。
+直接使用 `s.backgroundColor('_surface').color('_textPrimary').height('_medium').padding('_medium')`；颜色组也可用于 `borderColor` 等其他颜色属性。大小刻度统一为 `_extraSmall`、`_small`、`_medium`、`_large`、`_extraLarge`，需要第六档的字号和间距另有 `_extraExtraLarge`。刻度只表示各自组内的大小，不表示不同 CSS 属性使用同一个数值。圆角保留 `_none`、`_pill`，另有 `_circle: '50%'`；只有正方形元素使用 50% 圆角时才呈圆形。
+
+颜色按用途配对：`_primary` 实色背景搭配 `_textOnPrimary`，`_primarySubtleBackground` 低强调背景搭配 `_primary` 文字和 `_primaryBorder` 装饰边框；其他四组语义色同理。`Pressed` 只表示按下期间，持久选中使用 `_surfaceSelected`、`_textSelected`、`_borderSelected`。`_textPrimary/_textSecondary/_textTertiary` 表示文字层级，禁用与占位另有名称。字段独立覆盖：只改 `_primary` 不会自动推导其他主色、焦点或选中颜色；整套定制时应同步考虑相关字段和文字对比度。
 
 字号刻度以 `rem` 跟随页面基准，组件默认继承当前字号，内部长度以 `em` 等比缩放。内置长度按 14px 设计字号换算并保留六位小数：例如默认控件高度为 `2.285714em`，字号 14px 时约为 32px，改为 20px 后约为 45.71px。统一调整一组组件时在容器上设字号，避免每个子组件重新指定基准字号。自定义主题仍可使用其他合法 CSS 单位；数字长度遵循 core 的 px 规则。
+
+## UI Icon
+
+从 `@lucide/icons` 按需导入原始数据，交给自有 `Icon` 渲染为一个 SVG。默认宽高为 `1em`，颜色和字号继承周围文字，不安装现成图标组件，也不注册全量图标。
+
+```tsx
+import { Search, CircleCheck, LoaderCircle, ChevronRight, X } from '@lucide/icons';
+import { _component } from '@zerodep-vue/core';
+import { Icon, useCss } from '@zerodep-vue/ui';
+
+export const Examples = _component(() => {
+  const s = useCss();
+  return (
+    <div class={s.fontSize('1.25rem')}>
+      <span>
+        <Icon icon={Search} /> 搜索
+      </span>
+      <Icon icon={CircleCheck} color="_success" size="_large" aria-label="已完成" />
+      <Icon icon={LoaderCircle} spin color="_primary" aria-label="加载中" />
+      <Icon icon={ChevronRight} rotate="90deg" opacity="_disabled" />
+      <Icon icon={Search} size="2em" strokeWidth="_thin" nonScalingStroke />
+      <Icon icon={Search} color="_primary" class={s.color('_danger')} />
+      <button aria-label="关闭">
+        <Icon icon={X} />
+      </button>
+    </div>
+  );
+});
+```
+
+`IconProps` 是普通接口，样式字段直接复用 core 的 `CssValue<'属性', UiTheme>`。`color`、`opacity`、`width`、`height`、`strokeWidth`、`rotate` 对应同名 CSS 属性，`size` 对应 `fontSize`。例如 `color="_danger"` 与 `s.color('_danger')` 使用相同的主题解析；`size="small"` 是 CSS 关键字，`size="_small"` 才是主题字号。支持原生 CSS 字符串、CSS 变量和该属性允许的数字：`size={20}` 为 20px，`opacity={0.5}` 无单位，`rotate` 使用 `"90deg"` 等合法 CSS 值。`bx`、Ref 和 getter 不属于 Props 值域；响应式来源在调用处正常读取，例如 `size={size.value}`。
+
+`undefined` 保留继承或默认值，`null` 清除便捷 Props 产生的 CSS 声明；SVG 默认宽高 `1em` 和描边宽度 2 仍会生效。显式 `width/height` 覆盖对应显示尺寸，图标数据中的 `size/width/height` 用于 viewBox 坐标，不会被当成显示像素。Props 保留 CSS 和主题候选补全，也接收自由 CSS 字符串；未知的 `_名称` 由共享主题解析器明确报错，不为此给组件增加逐字段泛型。
+
+外部链式 `class` 最后组合，可覆盖同属性的便捷 Props；普通类名和内联 `style` 遵循浏览器层叠。原生 SVG 属性和事件透传，例如 `fill`、`stroke`、`viewBox`、`aria-*`；CSS `strokeWidth` 优先于根 SVG 的 `stroke-width` 属性，数据子节点自身的描边属性优先于继承。`nonScalingStroke` 作用于实际绘制节点，关闭后保留原始节点样式；`spin` 遵循减少动态效果的媒体设置，停止动画时仍保留 `rotate` 的静态角度。
+
+没有非空 `aria-label/aria-labelledby` 时图标默认作为装饰隐藏；单独表达含义时提供名称，默认获得 `role="img"`。显式 `role`、`aria-hidden` 优先。图标按钮的可访问名称写在 button 上。自定义图标使用相同的可信节点数据结构，支持嵌套分组；不接收 children、HTML 字符串或替换子树的 DOM 属性，重复实例中的自定义 SVG ID 由数据作者保证唯一。
 
 ## 开发与验证
 

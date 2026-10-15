@@ -46,9 +46,9 @@ const Probe = _component(({ id = 'value' }: { id?: string }) => {
       data-cancel={lang.cancel}
       data-locale={lang.locale}
       data-zone={lang.timeZone}
-      data-brand={theme.color._brand}
-      data-text={theme.color._text}
-      class={s.color('_brand')}
+      data-primary={theme.color._primary}
+      data-text={theme.color._textPrimary}
+      class={s.color('_primary')}
     >
       {lang.confirm}
     </output>
@@ -102,7 +102,7 @@ test('defaults are available without Provider, and Provider adds no DOM containe
     expect(lang.confirm).toBe('确认');
     expect(lang.locale).toBe('zh-CN');
     expect(lang.timeZone).toBe('Asia/Shanghai');
-    expect(theme.color._brand).toBe('#2563eb');
+    expect(theme.color._primary).toBe('#2563eb');
     expect(theme.color._surface).toBe('#ffffff');
     for (const view of [lang, theme]) {
       expect(isRef(view)).toBe(false);
@@ -174,8 +174,8 @@ test('partial theme fields follow the parent across source switches and resume i
   const parent = shallowRef<UiTheme>(reactive(new DarkTheme()));
   const brand = ref<string | undefined>('#7c3aed');
   const local = reactive<UiThemeInput>({
-    color: { _brand: brand },
-    borderRadius: { _control: 0 },
+    color: { _primary: brand },
+    borderRadius: { _medium: 0 },
     opacity: { _disabled: 0 },
   });
   const state = reactive<{ theme: UiThemeInput | undefined }>({ theme: local });
@@ -195,41 +195,41 @@ test('partial theme fields follow the parent across source switches and resume i
   const theme = views.get('inner')!.theme;
   const colors = theme.color;
   const deeper = views.get('deeper')!.theme;
-  expect(theme.color._brand).toBe('#7c3aed');
+  expect(theme.color._primary).toBe('#7c3aed');
   expect(theme.color._surface).toBe('#0f172a');
-  expect(theme.color._text).toBe('#f1f5f9');
-  expect(theme.borderRadius._control).toBe(0);
+  expect(theme.color._textPrimary).toBe('#f1f5f9');
+  expect(theme.borderRadius._medium).toBe(0);
   expect(theme.opacity._disabled).toBe(0);
-  expect(deeper.color._brand).toBe('#7c3aed');
+  expect(deeper.color._primary).toBe('#7c3aed');
   expect(deeper.fontWeight._medium).toBe(700);
-  expect(views.get('sibling')!.theme.color._brand).toBe('#60a5fa');
-  expect(parent.value.color._brand).toBe('#60a5fa');
+  expect(views.get('sibling')!.theme.color._primary).toBe('#60a5fa');
+  expect(parent.value.color._primary).toBe('#60a5fa');
 
-  parent.value.color._text = '#e2e8f0';
-  parent.value.fontSize._body = '1rem';
-  expect(theme.color._text).toBe('#e2e8f0');
-  expect(deeper.fontSize._body).toBe('1rem');
+  parent.value.color._textPrimary = '#e2e8f0';
+  parent.value.fontSize._medium = '1rem';
+  expect(theme.color._textPrimary).toBe('#e2e8f0');
+  expect(deeper.fontSize._medium).toBe('1rem');
   parent.value = new LightTheme();
-  expect(theme.color._brand).toBe('#7c3aed');
+  expect(theme.color._primary).toBe('#7c3aed');
   expect(theme.color._surface).toBe('#ffffff');
-  expect(deeper.color._text).toBe('#0f172a');
-  expect(deeper.fontSize._body).toBe('0.875rem');
+  expect(deeper.color._textPrimary).toBe('#0f172a');
+  expect(deeper.fontSize._medium).toBe('0.875rem');
   await nextTick();
   expect(wrapper.get('[data-id="inner"]').attributes('style')).toContain('#7c3aed');
 
   brand.value = undefined;
-  expect(theme.color._brand).toBe('#2563eb');
+  expect(theme.color._primary).toBe('#2563eb');
   brand.value = '#e11d48';
-  expect(deeper.color._brand).toBe('#e11d48');
-  delete local.color!._brand;
-  expect(theme.color._brand).toBe('#2563eb');
-  local.color = { _brand: '#f97316' };
-  expect(theme.color._brand).toBe('#f97316');
+  expect(deeper.color._primary).toBe('#e11d48');
+  delete local.color!._primary;
+  expect(theme.color._primary).toBe('#2563eb');
+  local.color = { _primary: '#f97316' };
+  expect(theme.color._primary).toBe('#f97316');
   local.color = undefined;
-  expect(theme.color._brand).toBe('#2563eb');
+  expect(theme.color._primary).toBe('#2563eb');
   state.theme = undefined;
   await nextTick();
-  expect(theme.borderRadius._control).toBe(parent.value.borderRadius._control);
+  expect(theme.borderRadius._medium).toBe(parent.value.borderRadius._medium);
   expect(theme.opacity._disabled).toBe(0.5);
   expect(views.get('inner')!.theme).toBe(theme);
   expect(theme.color).toBe(colors);
@@ -237,7 +237,7 @@ test('partial theme fields follow the parent across source switches and resume i
 });
 
 test('theme and language sources accept refs and computed values that restore inheritance', async () => {
-  const theme = shallowRef<UiThemeInput | undefined>({ color: { _brand: '#7c3aed' } });
+  const theme = shallowRef<UiThemeInput | undefined>({ color: { _primary: '#7c3aed' } });
   const lang = shallowRef<UiLanguageInput | undefined>({
     confirm: '保存',
     timeZone: 'Europe/London',
@@ -259,7 +259,7 @@ test('theme and language sources accept refs and computed values that restore in
   );
   for (const id of ['computed', 'ref']) {
     const view = views.get(id)!;
-    expect(view.theme.color._brand).toBe('#7c3aed');
+    expect(view.theme.color._primary).toBe('#7c3aed');
     expect(view.theme.color._surface).toBe('#0f172a');
     expect({ ...view.lang }).toEqual({ ...enUS, confirm: '保存', timeZone: 'Europe/London' });
   }
@@ -267,7 +267,7 @@ test('theme and language sources accept refs and computed values that restore in
   lang.value = undefined;
   for (const id of ['computed', 'ref']) {
     const view = views.get(id)!;
-    expect(view.theme.color._brand).toBe('#60a5fa');
+    expect(view.theme.color._primary).toBe('#60a5fa');
     expect({ ...view.lang }).toEqual(enUS);
   }
   await nextTick();
@@ -277,10 +277,10 @@ test('theme and language sources accept refs and computed values that restore in
 
 test('complete themes override every field and follow reactive fields, nested refs and source replacement', async () => {
   class BrandTheme extends LightTheme {
-    override readonly color = { ...new LightTheme().color, _brand: ref('#7c3aed') };
+    override readonly color = { ...new LightTheme().color, _primary: ref('#7c3aed') };
   }
   const parent = reactive(new LightTheme());
-  parent.color._text = '#ffffff';
+  parent.color._textPrimary = '#ffffff';
   const brand = new BrandTheme();
   const selected = shallowRef<UiTheme>(brand);
   const current = computed(() => selected.value);
@@ -299,33 +299,33 @@ test('complete themes override every field and follow reactive fields, nested re
     )),
   );
   const theme = views.get('inner')!.theme;
-  expect(theme.color._brand).toBe('#7c3aed');
-  expect(theme.color._text).toBe('#0f172a');
-  expect(views.get('sibling')!.theme.color._text).toBe('#ffffff');
+  expect(theme.color._primary).toBe('#7c3aed');
+  expect(theme.color._textPrimary).toBe('#0f172a');
+  expect(views.get('sibling')!.theme.color._textPrimary).toBe('#ffffff');
   expect(host.stats().ownedReferences).toBe(3);
   expect(wrapper.get('[data-id="inner"]').attributes('style')).toContain('#7c3aed');
   expect(document.head.textContent).toContain('color:var(--zv-');
 
-  brand.color._brand.value = '#e11d48';
+  brand.color._primary.value = '#e11d48';
   await nextTick();
-  expect(wrapper.get('[data-id="inner"]').attributes('data-brand')).toBe('#e11d48');
+  expect(wrapper.get('[data-id="inner"]').attributes('data-primary')).toBe('#e11d48');
   expect(wrapper.get('[data-id="inner"]').attributes('style')).toContain('#e11d48');
 
   selected.value = new DarkTheme();
   await nextTick();
-  expect(theme.color._brand).toBe('#60a5fa');
+  expect(theme.color._primary).toBe('#60a5fa');
   expect(theme.color._surface).toBe('#0f172a');
   expect(theme.fontFamily._ui).toBe(parent.fontFamily._ui);
-  expect(theme.fontSize._body).toBe(parent.fontSize._body);
-  expect(theme.borderRadius._control).toBe(parent.borderRadius._control);
-  expect(views.get('ref')!.theme.color._brand).toBe('#60a5fa');
+  expect(theme.fontSize._medium).toBe(parent.fontSize._medium);
+  expect(theme.borderRadius._medium).toBe(parent.borderRadius._medium);
+  expect(views.get('ref')!.theme.color._primary).toBe('#60a5fa');
   state.override = false;
   await nextTick();
-  expect(theme.color._text).toBe('#ffffff');
-  parent.color._brand = '#059669';
+  expect(theme.color._textPrimary).toBe('#ffffff');
+  parent.color._primary = '#059669';
   await nextTick();
-  expect(wrapper.get('[data-id="inner"]').attributes('data-brand')).toBe('#059669');
-  expect(views.get('ref')!.theme.color._brand).toBe('#60a5fa');
+  expect(wrapper.get('[data-id="inner"]').attributes('data-primary')).toBe('#059669');
+  expect(views.get('ref')!.theme.color._primary).toBe('#60a5fa');
   expect(views.get('inner')!.theme).toBe(theme);
 });
 
@@ -337,17 +337,20 @@ test('shared theme scales resolve in CSS with the correct units and remain owned
       <div
         class={s
           .backgroundColor('_surface')
-          .color('_text')
-          .height('_control')
-          .padding('_md')
-          .margin('_sm')
-          .gap('_xs')
-          .fontSize('_body')
+          .color('_textPrimary')
+          .height('_medium')
+          .padding('_medium')
+          .margin('_small')
+          .gap('_extraSmall')
+          .rowGap('_small')
+          .columnGap('_large')
+          .strokeWidth('_medium')
+          .fontSize('_medium')
           .fontWeight('_medium')
-          .lineHeight('_body')
-          .borderRadius('_control')
+          .lineHeight('_normal')
+          .borderRadius('_medium')
           .borderWidth('_thin')
-          .boxShadow('_md')
+          .boxShadow('_medium')
           .opacity('_disabled')
           .transitionDuration('_normal')
           .transitionTimingFunction('_standard')
@@ -374,6 +377,8 @@ test('shared theme scales resolve in CSS with the correct units and remain owned
       '0.857143em',
       '0.571429em',
       '0.285714em',
+      '1.142857em',
+      '2',
       '0.875rem',
       '500',
       '1.5',
@@ -393,12 +398,15 @@ test('shared theme scales resolve in CSS with the correct units and remain owned
   expect(element.getAttribute('style')).toContain('rgba(0, 0, 0, 0.4)');
 
   const customized = new LightTheme();
-  customized.padding._md = '2em';
-  customized.fontSize._body = '1rem';
-  expect(new LightTheme().padding._md).toBe('0.857143em');
-  expect(new LightTheme().fontSize._body).toBe('0.875rem');
-  expect(customized.gap._md).toBe('0.857143em');
-  expect(selected.value.fontSize._body).toBe('0.875rem');
+  customized.padding._medium = '2em';
+  customized.fontSize._medium = '1rem';
+  expect(new LightTheme().padding._medium).toBe('0.857143em');
+  expect(new LightTheme().fontSize._medium).toBe('0.875rem');
+  expect(customized.gap._medium).toBe('0.857143em');
+  customized.rowGap._medium = '3em';
+  expect(customized.columnGap._medium).toBe('0.857143em');
+  expect(customized.gap._medium).toBe('0.857143em');
+  expect(selected.value.fontSize._medium).toBe('0.875rem');
 });
 
 test.each([
@@ -409,30 +417,52 @@ test.each([
   (_name, Theme) => {
     const color = reactive(new Theme()).color;
     const pairs: [string, string][] = [
-      [color._text, color._surface],
+      [color._textPrimary, color._surface],
       [color._textSecondary, color._surface],
-      [color._textMuted, color._surface],
+      [color._textTertiary, color._surface],
       [color._textPlaceholder, color._surface],
       [color._textInverse, color._surfaceInverse],
+      [color._textSelected, color._surfaceSelected],
+      [color._textTertiary, color._surfaceMuted],
+      [color._textPlaceholder, color._surfaceMuted],
+      [color._textTertiary, color._surfaceHover],
     ];
     for (const [base, hover, active, soft, foreground] of [
-      [color._brand, color._brandHover, color._brandActive, color._brandSoft, color._onBrand],
-      [color._info, color._infoHover, color._infoActive, color._infoSoft, color._onInfo],
+      [
+        color._primary,
+        color._primaryHover,
+        color._primaryPressed,
+        color._primarySubtleBackground,
+        color._textOnPrimary,
+      ],
+      [
+        color._info,
+        color._infoHover,
+        color._infoPressed,
+        color._infoSubtleBackground,
+        color._textOnInfo,
+      ],
       [
         color._success,
         color._successHover,
-        color._successActive,
-        color._successSoft,
-        color._onSuccess,
+        color._successPressed,
+        color._successSubtleBackground,
+        color._textOnSuccess,
       ],
       [
         color._warning,
         color._warningHover,
-        color._warningActive,
-        color._warningSoft,
-        color._onWarning,
+        color._warningPressed,
+        color._warningSubtleBackground,
+        color._textOnWarning,
       ],
-      [color._danger, color._dangerHover, color._dangerActive, color._dangerSoft, color._onDanger],
+      [
+        color._danger,
+        color._dangerHover,
+        color._dangerPressed,
+        color._dangerSubtleBackground,
+        color._textOnDanger,
+      ],
     ] as const) {
       pairs.push([foreground, base], [foreground, hover], [foreground, active], [base, soft]);
     }
@@ -460,28 +490,28 @@ test('descendant views reject writes while caller-owned reactive sources remain 
   const view = views.get('value')!;
   const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
   Reflect.set(view.lang, 'confirm', 'Changed by child');
-  Reflect.set(view.theme.color, '_brand', '#000000');
+  Reflect.set(view.theme.color, '_primary', '#000000');
   expect(warn).toHaveBeenCalled();
   expect(lang.confirm).toBe(enUS.confirm);
-  expect(theme.color._brand).toBe('#2563eb');
+  expect(theme.color._primary).toBe('#2563eb');
 
   lang.confirm = 'Changed by owner';
-  theme.color._brand = '#f97316';
+  theme.color._primary = '#f97316';
   expect(view.lang.confirm).toBe('Changed by owner');
-  expect(view.theme.color._brand).toBe('#f97316');
+  expect(view.theme.color._primary).toBe('#f97316');
   await nextTick();
 
   if (false) {
     // @ts-expect-error 后代只能读取语言配置。
     view.lang.confirm = 'Forbidden';
     // @ts-expect-error 后代只能读取主题字段。
-    view.theme.color._brand = '#000000';
+    view.theme.color._primary = '#000000';
     // @ts-expect-error 文案直接位于 lang 上，不再保留 messages 层。
     view.lang.messages.confirm;
     // @ts-expect-error 局部主题也只接受已声明的主题名。
     <Provider theme={{ color: { _missing: '#000000' } }} />;
     // @ts-expect-error 颜色字段不能使用数字。
-    <Provider theme={{ color: { _brand: 123 } }} />;
+    <Provider theme={{ color: { _primary: 123 } }} />;
   }
 });
 
@@ -520,7 +550,7 @@ test('SSR requests isolate configuration and hydrate the same resolved language 
       context: {},
       component: _component(() => (
         <Provider theme={theme} lang={lang}>
-          <Provider theme={{ color: { _brand: color } }} lang={{ confirm: lang.confirm }}>
+          <Provider theme={{ color: { _primary: color } }} lang={{ confirm: lang.confirm }}>
             <Probe id={id} />
           </Provider>
         </Provider>
@@ -534,8 +564,8 @@ test('SSR requests isolate configuration and hydrate the same resolved language 
     for (const [index, request] of requests.entries()) {
       expect(html[index]).toContain(`data-locale="${request.lang.locale}"`);
       expect(html[index]).toContain(`data-zone="${request.lang.timeZone}"`);
-      expect(html[index]).toContain(`data-brand="${request.color}"`);
-      expect(html[index]).toContain(`data-text="${request.theme.color._text}"`);
+      expect(html[index]).toContain(`data-primary="${request.color}"`);
+      expect(html[index]).toContain(`data-text="${request.theme.color._textPrimary}"`);
       expect(getCssHost(request.context)?.renderStyles()).toContain('color:var(--zv-');
       const markup = document.createElement('template');
       markup.innerHTML = html[index]!;

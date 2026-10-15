@@ -25,14 +25,16 @@ type AnimationProperty =
   | 'MozAnimation'
   | 'MozAnimationName';
 
-/** 直接输入使用原生 CSS 值或当前主题名，不再暴露关键字包装对象。 */
+/** CSS 属性的普通值：原生值、当前主题名及 null/undefined；组件 Props 直接复用，不暴露绑定实现。 */
+export type CssValue<Key extends PropertyName, T extends SystemKeywords = SystemKeywords> =
+  PropertyValues[Key] | ThemeLiteral<T, Key> | null;
+
+/** 作者入口还可直接接收动画引用。 */
 type DirectPropertyValue<Key extends PropertyName, T extends SystemKeywords> =
-  | PropertyValues[Key]
-  | ThemeLiteral<T, Key>
-  | (Key extends AnimationProperty ? CssAnimation : never);
+  CssValue<Key, T> | (Key extends AnimationProperty ? CssAnimation : never);
 /** 属性的完整值域；null 清除前项，原生值域中的 undefined 则保留前项。 */
 export type PropertyValue<Key extends PropertyName, T extends SystemKeywords = SystemKeywords> =
-  DirectPropertyValue<Key, T> | null | CssBinding<DirectPropertyValue<Key, T> | null> | CssTemplate;
+  DirectPropertyValue<Key, T> | CssBinding<DirectPropertyValue<Key, T>> | CssTemplate;
 
 /** 自由 CSS 字符串保留，已知的 _ 名称必须属于当前主题，避免被宽泛 string 吞掉。 */
 type CheckedPropertyValue<Key extends PropertyName, T extends SystemKeywords, Value> =

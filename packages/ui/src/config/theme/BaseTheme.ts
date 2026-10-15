@@ -17,12 +17,12 @@ export abstract class BaseTheme extends SystemKeywords implements UiTheme {
   };
 
   override readonly fontSize: UiTheme['fontSize'] = {
-    _caption: '0.75rem',
+    _extraSmall: '0.75rem',
     _small: '0.8125rem',
-    _body: '0.875rem',
+    _medium: '0.875rem',
     _large: '1rem',
-    _title: '1.25rem',
-    _heading: '1.5rem',
+    _extraLarge: '1.25rem',
+    _extraExtraLarge: '1.5rem',
   };
   override readonly fontWeight: UiTheme['fontWeight'] = {
     _regular: 400,
@@ -32,38 +32,42 @@ export abstract class BaseTheme extends SystemKeywords implements UiTheme {
   };
   override readonly lineHeight: UiTheme['lineHeight'] = {
     _tight: 1.25,
-    _body: 1.5,
+    _normal: 1.5,
     _relaxed: 1.75,
   };
 
   override readonly height: UiTheme['height'] = {
-    _xs: em(24),
-    _sm: em(28),
-    _control: em(32),
-    _lg: em(40),
-    _xl: em(48),
+    _extraSmall: em(24),
+    _small: em(28),
+    _medium: em(32),
+    _large: em(40),
+    _extraLarge: em(48),
   };
   override readonly minHeight: UiTheme['minHeight'] = { ...this.height };
   override readonly padding: UiTheme['padding'] = {
     _none: 0,
-    _xs: em(4),
-    _sm: em(8),
-    _md: em(12),
-    _lg: em(16),
-    _xl: em(24),
-    _xxl: em(32),
+    _extraSmall: em(4),
+    _small: em(8),
+    _medium: em(12),
+    _large: em(16),
+    _extraLarge: em(24),
+    _extraExtraLarge: em(32),
   };
   // 共用初始刻度，但各 CSS 属性组独立；修改某一组不会隐式改变其他组。
   override readonly margin: UiTheme['margin'] = { ...this.padding };
   override readonly gap: UiTheme['gap'] = { ...this.padding };
+  override readonly rowGap: UiTheme['rowGap'] = { ...this.padding };
+  override readonly columnGap: UiTheme['columnGap'] = { ...this.padding };
   override readonly borderRadius: UiTheme['borderRadius'] = {
     _none: 0,
-    _sm: em(4),
-    _control: em(6),
-    _lg: em(12),
+    _small: em(4),
+    _medium: em(6),
+    _large: em(12),
     _pill: em(9999),
+    _circle: '50%',
   };
-  override readonly borderWidth: UiTheme['borderWidth'] = { _thin: em(1), _strong: em(2) };
+  override readonly borderWidth: UiTheme['borderWidth'] = { _none: 0, _thin: em(1), _thick: em(2) };
+  override readonly strokeWidth: UiTheme['strokeWidth'] = { _thin: 1, _medium: 2, _thick: 3 };
   override readonly opacity: UiTheme['opacity'] = { _disabled: 0.5 };
   override readonly transitionDuration: UiTheme['transitionDuration'] = {
     _fast: '100ms',
@@ -77,7 +81,7 @@ export abstract class BaseTheme extends SystemKeywords implements UiTheme {
   };
   override readonly zIndex: UiTheme['zIndex'] = {
     _dropdown: 1000,
-    _overlay: 1100,
+    _backdrop: 1100,
     _modal: 1200,
     _notification: 1300,
     _tooltip: 1400,

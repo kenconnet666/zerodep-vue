@@ -1,4 +1,6 @@
 /** UI 公共入口：第三方依赖仍由应用从原包显式导入。 */
+export { Icon } from './display/Icon.tsx';
+export type { IconProps } from './display/Icon.tsx';
 export { Provider, useCss, useTheme, useLang } from './config/Provider.tsx';
 export type { ProviderProps } from './config/Provider.tsx';
 export { BaseTheme } from './config/theme/BaseTheme.ts';

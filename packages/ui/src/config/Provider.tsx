@@ -38,7 +38,7 @@ const languageKey: InjectionKey<UiLanguage> = Symbol('UI language');
 /** 取得当前区域的样式作者，在后代 setup 中使用 const s = useCss()。 */
 export const useCss = themeContext.useCss;
 
-/** 读取当前区域的只读主题对象，例如 theme.color._brand；整套替换时视图保持稳定。 */
+/** 读取当前区域的只读主题对象，例如 theme.color._primary；整套替换时视图保持稳定。 */
 export function useTheme(): DeepReadonly<UnwrapNestedRefs<UiTheme>> {
   return readonly(themeContext.useTheme());
 }
@@ -49,7 +49,7 @@ export function useLang(): UiLanguage {
 }
 
 /** 通过 Vue 组件树向下提供配置；同级区域和不同应用之间互不修改配置。 */
-export const Provider: ReturnType<typeof _component<ProviderProps>> = _component(
+export const Provider = _component(
   (props: ProviderProps) => {
     // 先读取父级，再提供本层对象；每个 Provider 拥有自己的分组，不修改父级或调用方来源。
     const parentTheme = useTheme();
