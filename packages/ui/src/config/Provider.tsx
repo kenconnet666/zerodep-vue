@@ -1,14 +1,5 @@
 import { _component, createCssContext } from '@zerodep-vue/core';
-import {
-  computed,
-  hasInjectionContext,
-  inject,
-  provide,
-  reactive,
-  readonly,
-  unref,
-  watchEffect,
-} from 'vue';
+import { hasInjectionContext, inject, provide, reactive, readonly, unref, watchEffect } from 'vue';
 import type {
   ComputedRef,
   DeepReadonly,
@@ -20,13 +11,21 @@ import type {
 import { zhCN } from './lang/zhCN.ts';
 import type { UiLanguage, UiLanguageInput } from './lang/types.ts';
 import { LightTheme } from './theme/LightTheme.ts';
-import type { UiTheme } from './theme/types.ts';
+import type { UiTheme, UiThemeInput } from './theme/types.ts';
 
 export interface ProviderProps {
-  /** 完整主题实例、Ref 或 computed；省略/undefined 继承父级，不合并主题属性。 */
-  theme?: UiTheme | Ref<UiTheme> | ComputedRef<UiTheme> | undefined;
-  /** 文案、locale 和 timeZone 逐字段覆盖，未设置的字段继续响应父级更新。 */
-  lang?: UiLanguageInput | undefined;
+  /** 完整主题或局部分组，支持 Ref/computed；只覆盖写出的字段，undefined 恢复继承。 */
+  theme?:
+    | UiThemeInput
+    | Ref<UiThemeInput | undefined>
+    | ComputedRef<UiThemeInput | undefined>
+    | undefined;
+  /** 文案、locale 和 timeZone 逐字段覆盖，支持 Ref/computed；undefined 恢复继承。 */
+  lang?:
+    | UiLanguageInput
+    | Ref<UiLanguageInput | undefined>
+    | ComputedRef<UiLanguageInput | undefined>
+    | undefined;
   /** 当前配置覆盖范围内的内容，不增加额外 DOM 容器。 */
   children?: VNodeChild;
 }
@@ -52,26 +51,36 @@ export function useLang(): UiLanguage {
 /** 通过 Vue 组件树向下提供配置；同级区域和不同应用之间互不修改配置。 */
 export const Provider: ReturnType<typeof _component<ProviderProps>> = _component(
   (props: ProviderProps) => {
-    // 先读取父级，再注入本层配置；computed 只负责跟随整套主题来源的替换。
+    // 先读取父级，再提供本层对象；每个 Provider 拥有自己的分组，不修改父级或调用方来源。
     const parentTheme = useTheme();
     const parentLang = useLang();
-    themeContext.provideTheme(
-      computed(() =>
-        props.theme === undefined ? parentTheme : readonly(reactive(unref(props.theme))),
-      ),
-    );
-
+    // LightTheme 提供完整结构和 core 所需的主题身份；下面立即用父级值和本层覆盖同步所有字段。
+    const theme = reactive(new LightTheme());
     const lang = reactive({ ...parentLang });
-    // 同步更新同一个对象，后代直接读 lang.xx；undefined 恢复继承，空文案仍是有效覆盖。
     watchEffect(
       () => {
+        const ownTheme = reactive<UiThemeInput>(unref(props.theme) ?? {});
+        const ownLang = reactive<UiLanguageInput>(unref(props.lang) ?? {});
+        // 主题仅有“CSS 属性组 → 主题名”两层，按已声明的完整结构逐字段继承。
+        for (const group of Object.keys(theme) as (keyof UiThemeInput)[]) {
+          const target: Record<string, string | number> = theme[group];
+          const parent: Readonly<Record<string, string | number>> = parentTheme[group];
+          const own: Readonly<Record<string, string | number | undefined>> | undefined =
+            ownTheme[group];
+          for (const key of Object.keys(target)) {
+            const value = own?.[key];
+            target[key] = value === undefined ? parent[key]! : value;
+          }
+        }
         for (const key of Object.keys(lang) as (keyof UiLanguage)[]) {
-          const value = props.lang?.[key];
+          const value = ownLang[key];
           lang[key] = value === undefined ? parentLang[key] : value;
         }
       },
+      // 维持 theme、属性组和 lang 的对象身份，来源更新后直接读取就能取得新值。
       { flush: 'sync' },
     );
+    themeContext.provideTheme(readonly(theme));
     provide(languageKey, readonly(lang));
     return props.children;
   },

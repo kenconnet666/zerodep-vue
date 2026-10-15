@@ -25,7 +25,7 @@ import {
   useTheme,
   zhCN,
 } from '../src/index.ts';
-import type { UiLanguageInput, UiTheme } from '../src/index.ts';
+import type { UiLanguageInput, UiTheme, UiThemeInput } from '../src/index.ts';
 
 const views = new Map<
   string,
@@ -170,7 +170,112 @@ test('reactive language fields inherit, override and resume independently in a s
   expect(views.get('inner')!.lang).toBe(inner);
 });
 
-test('themes replace as a whole and follow reactive fields, nested refs and source replacement', async () => {
+test('partial theme fields follow the parent across source switches and resume inheritance', async () => {
+  const parent = shallowRef<UiTheme>(reactive(new DarkTheme()));
+  const brand = ref<string | undefined>('#7c3aed');
+  const local = reactive<UiThemeInput>({
+    color: { _brand: brand },
+    borderRadius: { _control: 0 },
+    opacity: { _disabled: 0 },
+  });
+  const state = reactive<{ theme: UiThemeInput | undefined }>({ theme: local });
+  const { wrapper } = render(
+    _component(() => (
+      <Provider theme={parent}>
+        <Provider theme={state.theme}>
+          <Probe id="inner" />
+          <Provider theme={{ fontWeight: { _medium: 700 } }}>
+            <Probe id="deeper" />
+          </Provider>
+        </Provider>
+        <Probe id="sibling" />
+      </Provider>
+    )),
+  );
+  const theme = views.get('inner')!.theme;
+  const colors = theme.color;
+  const deeper = views.get('deeper')!.theme;
+  expect(theme.color._brand).toBe('#7c3aed');
+  expect(theme.color._surface).toBe('#0f172a');
+  expect(theme.color._text).toBe('#f1f5f9');
+  expect(theme.borderRadius._control).toBe(0);
+  expect(theme.opacity._disabled).toBe(0);
+  expect(deeper.color._brand).toBe('#7c3aed');
+  expect(deeper.fontWeight._medium).toBe(700);
+  expect(views.get('sibling')!.theme.color._brand).toBe('#60a5fa');
+  expect(parent.value.color._brand).toBe('#60a5fa');
+
+  parent.value.color._text = '#e2e8f0';
+  parent.value.fontSize._body = '1rem';
+  expect(theme.color._text).toBe('#e2e8f0');
+  expect(deeper.fontSize._body).toBe('1rem');
+  parent.value = new LightTheme();
+  expect(theme.color._brand).toBe('#7c3aed');
+  expect(theme.color._surface).toBe('#ffffff');
+  expect(deeper.color._text).toBe('#0f172a');
+  expect(deeper.fontSize._body).toBe('0.875rem');
+  await nextTick();
+  expect(wrapper.get('[data-id="inner"]').attributes('style')).toContain('#7c3aed');
+
+  brand.value = undefined;
+  expect(theme.color._brand).toBe('#2563eb');
+  brand.value = '#e11d48';
+  expect(deeper.color._brand).toBe('#e11d48');
+  delete local.color!._brand;
+  expect(theme.color._brand).toBe('#2563eb');
+  local.color = { _brand: '#f97316' };
+  expect(theme.color._brand).toBe('#f97316');
+  local.color = undefined;
+  expect(theme.color._brand).toBe('#2563eb');
+  state.theme = undefined;
+  await nextTick();
+  expect(theme.borderRadius._control).toBe(parent.value.borderRadius._control);
+  expect(theme.opacity._disabled).toBe(0.5);
+  expect(views.get('inner')!.theme).toBe(theme);
+  expect(theme.color).toBe(colors);
+  expect(deeper.fontWeight._medium).toBe(700);
+});
+
+test('theme and language sources accept refs and computed values that restore inheritance', async () => {
+  const theme = shallowRef<UiThemeInput | undefined>({ color: { _brand: '#7c3aed' } });
+  const lang = shallowRef<UiLanguageInput | undefined>({
+    confirm: '保存',
+    timeZone: 'Europe/London',
+  });
+  const selectedTheme = computed(() => theme.value);
+  const selectedLang = computed(() => lang.value);
+  const parentTheme = new DarkTheme();
+  const { wrapper } = render(
+    _component(() => (
+      <Provider theme={parentTheme} lang={enUS}>
+        <Provider theme={selectedTheme} lang={selectedLang}>
+          <Probe id="computed" />
+        </Provider>
+        <Provider theme={theme} lang={lang}>
+          <Probe id="ref" />
+        </Provider>
+      </Provider>
+    )),
+  );
+  for (const id of ['computed', 'ref']) {
+    const view = views.get(id)!;
+    expect(view.theme.color._brand).toBe('#7c3aed');
+    expect(view.theme.color._surface).toBe('#0f172a');
+    expect({ ...view.lang }).toEqual({ ...enUS, confirm: '保存', timeZone: 'Europe/London' });
+  }
+  theme.value = undefined;
+  lang.value = undefined;
+  for (const id of ['computed', 'ref']) {
+    const view = views.get(id)!;
+    expect(view.theme.color._brand).toBe('#60a5fa');
+    expect({ ...view.lang }).toEqual(enUS);
+  }
+  await nextTick();
+  expect(wrapper.get('[data-id="computed"]').text()).toBe('Confirm');
+  expect(wrapper.get('[data-id="ref"]').attributes('style')).toContain('#60a5fa');
+});
+
+test('complete themes override every field and follow reactive fields, nested refs and source replacement', async () => {
   class BrandTheme extends LightTheme {
     override readonly color = { ...new LightTheme().color, _brand: ref('#7c3aed') };
   }
@@ -373,6 +478,10 @@ test('descendant views reject writes while caller-owned reactive sources remain 
     view.theme.color._brand = '#000000';
     // @ts-expect-error 文案直接位于 lang 上，不再保留 messages 层。
     view.lang.messages.confirm;
+    // @ts-expect-error 局部主题也只接受已声明的主题名。
+    <Provider theme={{ color: { _missing: '#000000' } }} />;
+    // @ts-expect-error 颜色字段不能使用数字。
+    <Provider theme={{ color: { _brand: 123 } }} />;
   }
 });
 
@@ -402,16 +511,18 @@ test('SSR requests isolate configuration and hydrate the same resolved language 
     { id: 'zh', lang: zhCN, color: '#7c3aed' },
     { id: 'en', lang: enUS, color: '#059669' },
   ].map(({ id, lang, color }) => {
-    const theme = new LightTheme();
-    theme.color._brand = color;
+    const theme = id === 'zh' ? new LightTheme() : new DarkTheme();
     return {
       id,
       lang,
       color,
+      theme,
       context: {},
       component: _component(() => (
         <Provider theme={theme} lang={lang}>
-          <Probe id={id} />
+          <Provider theme={{ color: { _brand: color } }} lang={{ confirm: lang.confirm }}>
+            <Probe id={id} />
+          </Provider>
         </Provider>
       )),
     };
@@ -424,6 +535,7 @@ test('SSR requests isolate configuration and hydrate the same resolved language 
       expect(html[index]).toContain(`data-locale="${request.lang.locale}"`);
       expect(html[index]).toContain(`data-zone="${request.lang.timeZone}"`);
       expect(html[index]).toContain(`data-brand="${request.color}"`);
+      expect(html[index]).toContain(`data-text="${request.theme.color._text}"`);
       expect(getCssHost(request.context)?.renderStyles()).toContain('color:var(--zv-');
       const markup = document.createElement('template');
       markup.innerHTML = html[index]!;

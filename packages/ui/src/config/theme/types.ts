@@ -1,5 +1,5 @@
 import type { SystemKeywords } from '@zerodep-vue/core';
-import type { Ref } from 'vue';
+import type { Ref, UnwrapRef } from 'vue';
 
 type ThemeValue<Value extends string | number = string> = Value | Ref<Value>;
 
@@ -242,3 +242,22 @@ export interface UiTheme extends SystemKeywords {
     _tooltip: ThemeValue<number>;
   };
 }
+
+/**
+ * Provider 的主题输入：属性组和组内字段均可省略，undefined 恢复父级值。
+ * 只保留 UiTheme 中实际声明了主题名的分组；不暴露 core 的空属性槽和内部标记。
+ */
+export type UiThemeInput = {
+  -readonly [
+    Group in keyof UiTheme as Group extends string
+      ? keyof UiTheme[Group] extends never
+        ? never
+        : Group
+      : never
+  ]?:
+    | {
+        -readonly [Name in keyof UiTheme[Group]]?:
+          UiTheme[Group][Name] | Ref<UnwrapRef<UiTheme[Group][Name]> | undefined> | undefined;
+      }
+    | undefined;
+};

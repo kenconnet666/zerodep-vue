@@ -107,12 +107,23 @@ export const App = _component(() => {
 
 嵌套配置遵循以下规则：
 
-- `theme` 接收完整主题实例、Ref 或 computed；传入主题时整套替换，不和父主题合并。一般继承 `LightTheme` 或 `DarkTheme` 定制配色，也可以继承 `BaseTheme` 并实现 `UiTheme`；覆盖属性组时用展开语法保留必要字段。`theme={undefined}` 恢复父级主题，根区域默认使用 `LightTheme`。
-- `lang` 接收完整配置或局部字段，如 `lang={{ confirm: '保存', timeZone: 'UTC' }}`。省略或设为 `undefined` 的字段继续跟随父级；`lang={undefined}` 恢复全部继承。文案允许空字符串。
+- `theme` 接收完整主题或 `UiThemeInput` 局部配置，例如 `theme={{ color: { _brand: '#7c3aed' } }}`。只覆盖写出的主题名，组内其他字段和其他属性组继续跟随父级。完整 `LightTheme`、`DarkTheme` 实例带齐所有字段，可完成整套切换；新主题可继承它们，也可以继承 `BaseTheme` 并实现 `UiTheme`。
+- `lang` 接收完整配置或 `UiLanguageInput` 局部字段，如 `lang={{ confirm: '保存', timeZone: 'UTC' }}`。未设置的文案、区域和时区继续跟随父级，文案允许空字符串。
+- `theme` 和 `lang` 都支持对象、Ref 和 computed。省略、删除字段或设为 `undefined` 会恢复对应的父级值；主题的整个属性组也可设为 `undefined`。整个 prop 或来源 Ref 的值设为 `undefined` 时恢复全部继承。根区域使用默认白色主题和简体中文上海时区配置。
 - 所有语言字段直接从 `useLang()` 返回值读取：`lang.confirm`、`lang.locale`、`lang.timeZone`。没有 Provider 时使用 `zhCN`；Provider 只继承和传递配置，格式化由使用这些字段的组件负责。
 - 调用方可修改自己的 reactive 配置或 Ref；后代只读视图不能反向修改来源。保留视图并在渲染或 computed 中读字段，直接解构出的普通值仍是 JavaScript 快照。
 
 `Provider` 只覆盖 UI 包的 CSS 上下文。应用自行创建的 `createCssContext` 独立管理；在父组件 setup 中取得的主题或样式作者也不会被其返回 JSX 内部的 Provider 改写。Teleport 按 Vue 的逻辑组件树继承配置。SSR 每次请求使用自己的配置来源，首屏 hydration 使用相同值。
+
+例如下面内层只改品牌色和确认文案，背景、文字颜色继续使用暗色主题，取消文案、区域和时区继续使用 `enUS`。父级换主题时，内层未覆盖的字段会同步更新。
+
+```tsx
+<Provider theme={new DarkTheme()} lang={enUS}>
+  <Provider theme={{ color: { _brand: '#7c3aed' } }} lang={{ confirm: '保存' }}>
+    <Status />
+  </Provider>
+</Provider>
+```
 
 公共主题变量参考了 [Naive UI 的公共明暗主题](https://github.com/tusen-ai/naive-ui/tree/main/src/_styles/common)、[MUI 的语义配色](https://mui.com/material-ui/customization/palette/)与[间距](https://mui.com/material-ui/customization/spacing/)、[Element Plus 的公共变量](https://github.com/element-plus/element-plus/blob/dev/packages/theme-chalk/src/common/var.scss)，沿用本项目的 CSS 属性分组和 `_` 名称。具体值由本项目定义，无新增运行时依赖。
 
