@@ -174,13 +174,13 @@ test('owned components compose through cx, retain states and transfer bindings w
   interface BaseProps extends /* @vue-ignore */ Pick<HTMLAttributes, 'title'> {
     class?: CssInput;
   }
-  const Base = _component(({ class: external, ...rest }: BaseProps) => (
-    <button {...rest} class={cx(s.color('red').select(':hover', s.color('blue')), external)}>
+  const Base = _component(({ class: external, ...attr }: BaseProps) => (
+    <button {...attr} class={cx(s.color('red').select(':hover', s.color('blue')), external)}>
       owned
     </button>
   ));
   interface WrapperProps extends /* @vue-ignore */ Pick<HTMLAttributes, 'title'> {}
-  const Wrapper = _component(({ ...rest }: WrapperProps) => <Base {...rest} />);
+  const Wrapper = _component(({ ...attr }: WrapperProps) => <Base {...attr} />);
   const App = _component(() => (
     <Wrapper class={s.color('black').width(bx(width.value))} title="forwarded" />
   ));

@@ -7,7 +7,7 @@ import { useCss } from '../config/Provider.tsx';
 import type { UiTheme } from '../config/theme/types.ts';
 
 /** 常用样式直接采用 CSS 属性值类型；其余 SVG 属性和事件透传。 */
-// Vue 仅解析自有字段的运行时声明；原生 SVG 属性统一通过 rest 显式转发。
+// Vue 仅解析自有字段的运行时声明；剩余 Props 通过 attr 显式转发到 SVG。
 export interface IconProps extends /* @vue-ignore */ Omit<
   SVGAttributes,
   'class' | 'color' | 'width' | 'height' | 'opacity' | 'rotate'
@@ -57,7 +57,7 @@ export const Icon = _component(
     spin = false,
     nonScalingStroke = false,
     class: className,
-    ...attrs
+    ...attr
   }: IconProps) => {
     const s = useCss();
     const style = s
@@ -120,20 +120,20 @@ export const Icon = _component(
         stroke-linejoin="round"
         focusable="false"
         {...Object.fromEntries(
-          Object.keys(attrs).flatMap((key) => {
+          Object.keys(attr).flatMap((key) => {
             // 先排除图标子树的替换入口，再读取值，避免调用被忽略的 children slot。
             if (key === 'children' || key === 'innerHTML' || key === 'textContent') return [];
-            const value = Reflect.get(attrs, key);
+            const value = Reflect.get(attr, key);
             return value === undefined ? [] : [[key, value]];
           }),
         )}
         role={
-          attrs.role ??
-          (attrs['aria-label']?.trim() || attrs['aria-labelledby']?.trim() ? 'img' : undefined)
+          attr.role ??
+          (attr['aria-label']?.trim() || attr['aria-labelledby']?.trim() ? 'img' : undefined)
         }
         aria-hidden={
-          attrs['aria-hidden'] ??
-          (attrs['aria-label']?.trim() || attrs['aria-labelledby']?.trim() ? undefined : true)
+          attr['aria-hidden'] ??
+          (attr['aria-label']?.trim() || attr['aria-labelledby']?.trim() ? undefined : true)
         }
         class={cx(style, spin && spinning, className)}
       >

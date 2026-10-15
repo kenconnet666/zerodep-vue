@@ -87,17 +87,17 @@ afterEach(() => {
 test('Provider forwards rest to its div for explicit children and default slots', async () => {
   const click = vi.fn();
   const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-  const attrs = { class: 'provider', title: 'region', onClick: click };
+  const attr = { class: 'provider', title: 'region', onClick: click };
   const App = _component(() => (
     <>
       <Provider
         id="explicit"
-        {...attrs}
+        {...attr}
         theme={new DarkTheme()}
         lang={enUS}
         children={<button>explicit</button>}
       />
-      <Provider id="nested" {...attrs}>
+      <Provider id="nested" {...attr}>
         <button>nested</button>
       </Provider>
     </>
@@ -130,7 +130,7 @@ test('Provider forwards rest to its div for explicit children and default slots'
 
 test('Provider div updates and removes native props, CSS input and event listeners', async () => {
   const click = vi.fn();
-  const attrs = shallowRef<Pick<ProviderProps, 'id' | 'style' | 'onClick'>>({
+  const attr = shallowRef<Pick<ProviderProps, 'id' | 'style' | 'onClick'>>({
     id: 'first',
     style: { padding: '2px' },
     onClick: click,
@@ -139,7 +139,7 @@ test('Provider div updates and removes native props, CSS input and event listene
   const App = _component(() => {
     const s = useCss();
     return (
-      <Provider {...attrs.value} class={styled.value ? s.color('red') : undefined}>
+      <Provider {...attr.value} class={styled.value ? s.color('red') : undefined}>
         <button>action</button>
       </Provider>
     );
@@ -154,7 +154,7 @@ test('Provider div updates and removes native props, CSS input and event listene
   expect(wrapper.get('button').attributes('class')).toBeUndefined();
   await wrapper.get('button').trigger('click');
   expect(click).toHaveBeenCalledTimes(1);
-  attrs.value = {};
+  attr.value = {};
   styled.value = false;
   await nextTick();
   expect(wrapper.attributes('id')).toBeUndefined();
