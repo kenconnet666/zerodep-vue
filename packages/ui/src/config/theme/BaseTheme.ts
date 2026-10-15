@@ -1,6 +1,11 @@
 import { SystemKeywords } from '@zerodep-vue/core';
 import type { UiTheme } from './types.ts';
 
+/** @internal 按 14px 设计字号换算内置尺寸；保留六位小数，实际缩放由浏览器按组件字号完成。 */
+export function em(px: number): string {
+  return `${Number((px / 14).toFixed(6))}em`;
+}
+
 /** 明暗主题共用排版、尺寸和动效；配色与阴影由具体主题提供，所有属性组属于各自实例。 */
 export abstract class BaseTheme extends SystemKeywords implements UiTheme {
   abstract override readonly color: UiTheme['color'];
@@ -12,12 +17,12 @@ export abstract class BaseTheme extends SystemKeywords implements UiTheme {
   };
 
   override readonly fontSize: UiTheme['fontSize'] = {
-    _caption: 12,
-    _small: 13,
-    _body: 14,
-    _large: 16,
-    _title: 20,
-    _heading: 24,
+    _caption: '0.75rem',
+    _small: '0.8125rem',
+    _body: '0.875rem',
+    _large: '1rem',
+    _title: '1.25rem',
+    _heading: '1.5rem',
   };
   override readonly fontWeight: UiTheme['fontWeight'] = {
     _regular: 400,
@@ -32,33 +37,33 @@ export abstract class BaseTheme extends SystemKeywords implements UiTheme {
   };
 
   override readonly height: UiTheme['height'] = {
-    _xs: 24,
-    _sm: 28,
-    _control: 32,
-    _lg: 40,
-    _xl: 48,
+    _xs: em(24),
+    _sm: em(28),
+    _control: em(32),
+    _lg: em(40),
+    _xl: em(48),
   };
   override readonly minHeight: UiTheme['minHeight'] = { ...this.height };
   override readonly padding: UiTheme['padding'] = {
     _none: 0,
-    _xs: 4,
-    _sm: 8,
-    _md: 12,
-    _lg: 16,
-    _xl: 24,
-    _xxl: 32,
+    _xs: em(4),
+    _sm: em(8),
+    _md: em(12),
+    _lg: em(16),
+    _xl: em(24),
+    _xxl: em(32),
   };
   // 共用初始刻度，但各 CSS 属性组独立；修改某一组不会隐式改变其他组。
   override readonly margin: UiTheme['margin'] = { ...this.padding };
   override readonly gap: UiTheme['gap'] = { ...this.padding };
   override readonly borderRadius: UiTheme['borderRadius'] = {
     _none: 0,
-    _sm: 4,
-    _control: 6,
-    _lg: 12,
-    _pill: 9999,
+    _sm: em(4),
+    _control: em(6),
+    _lg: em(12),
+    _pill: em(9999),
   };
-  override readonly borderWidth: UiTheme['borderWidth'] = { _thin: 1, _strong: 2 };
+  override readonly borderWidth: UiTheme['borderWidth'] = { _thin: em(1), _strong: em(2) };
   override readonly opacity: UiTheme['opacity'] = { _disabled: 0.5 };
   override readonly transitionDuration: UiTheme['transitionDuration'] = {
     _fast: '100ms',

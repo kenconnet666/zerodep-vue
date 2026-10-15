@@ -6,6 +6,7 @@
 - 包专用命令、测试配置及工具脚本放在所属包；根 package.json 只保留工作区聚合命令与公共工具。共享配置留在根目录，不增加仅转发到某个子包的脚本。
 - 多个包共用的开发工具依赖放在根 package.json，独立工具留在所属包；发布所需的 dependencies 和 peerDependencies 必须由对应包显式声明。
 - src 根目录一般只放 index.ts 和职责目录，同类实现集中收纳；不要为了单个入口新建目录。src 外的单文件工具直接按用途命名，工具要求的固定目录结构除外。
+- packages/ui/src 下的 display、feedback、input、layout、table、time 是预留组件分类，即使暂时为空也保留。
 - 除各包 src/index.ts 外，其他文件不使用 index 命名，按职责命名；上游源码改名时同步来源映射，保留原始内容与校验值。
 - 仅为单次使用抽取的辅助函数直接内联；文件名直接表达用途，避免无意义的 index 转发层。
 - packages/compiler 保留官方 Vue JSX v3.0.0 的真实源码 fork 和对照测试，来源以 upstream.json 记录。
@@ -20,6 +21,7 @@
 - UI Provider 的 theme 按完整主题替换；lang 是包含文案、locale 和 timeZone 的扁平对象，内置语言预设带齐所有字段。局部 lang 的 undefined 字段继承父级，通过 useLang 统一读取；对象来源使用 Vue reactive，后代视图只读。
 - Provider.tsx 集中管理上下文注入与 useCss/useTheme/useLang，默认使用白色 LightTheme、简体中文 zhCN 和 Asia/Shanghai。Provider 只负责配置继承，不承担格式化校验。
 - UI 的语言配置及类型放在 src/config/lang；主题统一接口 UiTheme、公共实现 BaseTheme 与显式实现接口的 LightTheme/DarkTheme 放在 src/config/theme。这两个目录按多语言、多主题职责保留，不因当前实现数量少而展平。
+- UI 组件默认继承字号，内部高度、间距、圆角、边框和阴影优先使用 em，随当前字号等比缩放；主题字号刻度使用 rem 作为页面基准。行高、字重、透明度、层级保持无单位，时长使用 ms，不机械替换所有数字。
 - UI 直接使用 Zod 4，不接入其他校验兼容层或自建校验 DSL。第三方运行时依赖作为显式 peer，开发版本由 catalog 固定，不从 UI 重新导出。
 - 图标使用 @lucide/icons 原始数据，由自有组件渲染，不安装现成 Lucide Vue 组件或注册全量图标。业务值使用 Decimal、CalendarDate/Time 等明确类型；输入草稿与业务值分离，不修改 Decimal 全局配置。
 - 文档仅保留根 AGENTS.md 和 README.md；许可证文件只保留根 LICENSE，汇总必要版权和来源，并验证打包时携带。不要维护独立 docs、fixtures 或分散的计划和进度文档。

@@ -107,7 +107,7 @@ export interface UiTheme extends SystemKeywords {
     /** 代码和等宽内容的字体。 */
     _mono: ThemeValue;
   };
-  /** 字号；数值按 px 处理，也允许带单位的字符串。 */
+  /** 内置字号使用 rem 跟随页面基准；自定义数字仍按 CSS 运行时的 px 规则处理。 */
   readonly fontSize: {
     /** 紧凑注释字号。 */
     _caption: ThemeValue<string | number>;
@@ -142,7 +142,7 @@ export interface UiTheme extends SystemKeywords {
     /** 长文本行高。 */
     _relaxed: ThemeValue<number>;
   };
-  /** 控件高度刻度；数值按 px 处理。 */
+  /** 内置控件高度使用 em 跟随组件字号；自定义数字仍按 px 处理。 */
   readonly height: {
     /** 极紧凑控件。 */
     _xs: ThemeValue<string | number>;
@@ -157,7 +157,7 @@ export interface UiTheme extends SystemKeywords {
   };
   /** 最小高度使用同一套控件尺寸名称。 */
   readonly minHeight: UiTheme['height'];
-  /** 间距刻度；数值按 px 处理。 */
+  /** 内置间距使用 em 跟随组件字号；自定义数字仍按 px 处理。 */
   readonly padding: {
     /** 无间距。 */
     _none: ThemeValue<string | number>;
@@ -178,7 +178,7 @@ export interface UiTheme extends SystemKeywords {
   readonly margin: UiTheme['padding'];
   /** Flex/Grid 间距使用同一套间距名称。 */
   readonly gap: UiTheme['padding'];
-  /** 圆角刻度；数值按 px 处理。 */
+  /** 内置圆角使用 em 跟随组件字号；自定义数字仍按 px 处理。 */
   readonly borderRadius: {
     /** 直角。 */
     _none: ThemeValue<string | number>;
@@ -191,14 +191,14 @@ export interface UiTheme extends SystemKeywords {
     /** 胶囊形圆角。 */
     _pill: ThemeValue<string | number>;
   };
-  /** 边框宽度；数值按 px 处理。 */
+  /** 内置边框宽度使用 em 跟随组件字号；自定义数字仍按 px 处理。 */
   readonly borderWidth: {
     /** 常规边框。 */
     _thin: ThemeValue<string | number>;
     /** 强调边框。 */
     _strong: ThemeValue<string | number>;
   };
-  /** 阴影层级，由具体明暗主题提供。 */
+  /** 阴影层级，由具体明暗主题提供；内置偏移和模糊半径使用 em。 */
   readonly boxShadow: {
     /** 轻微抬升。 */
     _sm: ThemeValue;

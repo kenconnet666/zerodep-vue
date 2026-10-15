@@ -1,4 +1,4 @@
-import { BaseTheme } from './BaseTheme.ts';
+import { BaseTheme, em } from './BaseTheme.ts';
 import type { UiTheme } from './types.ts';
 
 /** 暗色主题；字体、字号和圆角继承公共主题。 */
@@ -52,8 +52,8 @@ export class DarkTheme extends BaseTheme implements UiTheme {
     _scrollbarHover: 'rgba(148, 163, 184, 0.65)',
   };
   override readonly boxShadow: UiTheme['boxShadow'] = {
-    _sm: '0 1px 3px rgba(0, 0, 0, 0.32)',
-    _md: '0 4px 12px rgba(0, 0, 0, 0.4)',
-    _lg: '0 12px 32px rgba(0, 0, 0, 0.48)',
+    _sm: `0 ${em(1)} ${em(3)} rgba(0, 0, 0, 0.32)`,
+    _md: `0 ${em(4)} ${em(12)} rgba(0, 0, 0, 0.4)`,
+    _lg: `0 ${em(12)} ${em(32)} rgba(0, 0, 0, 0.48)`,
   };
 }

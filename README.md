@@ -119,13 +119,15 @@ export const App = _component(() => {
 | 分组                                                       | 提供的内容                                                                                                |
 | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `color`                                                    | 品牌、信息、成功、警告、危险的默认/悬停/按下/浅背景及配对文字色；文字、表面、边框、焦点、遮罩和滚动条层级 |
-| `fontFamily`、`fontSize`、`fontWeight`、`lineHeight`       | 界面/等宽字体、12–24px 字号、四档字重和三档行高                                                           |
-| `height`、`minHeight`                                      | 24、28、32、40、48px 控件尺寸                                                                             |
-| `padding`、`margin`、`gap`                                 | 0、4、8、12、16、24、32px 间距；各属性组独立修改                                                          |
-| `borderRadius`、`borderWidth`、`boxShadow`、`opacity`      | 圆角、边框、三级阴影和禁用透明度                                                                          |
+| `fontFamily`、`fontSize`、`fontWeight`、`lineHeight`       | 界面/等宽字体、0.75–1.5rem 字号、四档字重和三档无单位行高                                                 |
+| `height`、`minHeight`                                      | em 控件尺寸；14px 字号下对应原设计的 24、28、32、40、48px                                                 |
+| `padding`、`margin`、`gap`                                 | em 间距；14px 字号下对应原设计的 0、4、8、12、16、24、32px；各属性组独立修改                              |
+| `borderRadius`、`borderWidth`、`boxShadow`、`opacity`      | em 圆角、边框、阴影，以及无单位的禁用透明度                                                               |
 | `transitionDuration`、`transitionTimingFunction`、`zIndex` | 三档时长、进入/离开曲线和基础浮层顺序                                                                     |
 
 直接使用 `s.backgroundColor('_surface').color('_text').height('_control').padding('_md')`；颜色组也可用于 `borderColor` 等其他颜色属性。品牌和状态颜色各自有配对文字色，如 `_brand` 与 `_onBrand`。定制配色时应一起考虑其交互状态和文字对比度。动效减少和实际浮层层叠由使用变量的组件处理。
+
+字号刻度以 `rem` 跟随页面基准，组件默认继承当前字号，内部长度以 `em` 等比缩放。内置长度按 14px 设计字号换算并保留六位小数：例如默认控件高度为 `2.285714em`，字号 14px 时约为 32px，改为 20px 后约为 45.71px。统一调整一组组件时在容器上设字号，避免每个子组件重新指定基准字号。自定义主题仍可使用其他合法 CSS 单位；数字长度遵循 core 的 px 规则。
 
 ## 开发与验证
 

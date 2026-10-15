@@ -265,16 +265,16 @@ test('shared theme scales resolve in CSS with the correct units and remain owned
     expect.arrayContaining([
       '#ffffff',
       '#0f172a',
-      '32px',
-      '12px',
-      '8px',
-      '4px',
-      '14px',
+      '2.285714em',
+      '0.857143em',
+      '0.571429em',
+      '0.285714em',
+      '0.875rem',
       '500',
       '1.5',
-      '6px',
-      '1px',
-      '0 4px 12px rgba(15, 23, 42, 0.14)',
+      '0.428571em',
+      '0.071429em',
+      '0 0.285714em 0.857143em rgba(15, 23, 42, 0.14)',
       '0.5',
       '180ms',
       'cubic-bezier(0.4, 0, 0.2, 1)',
@@ -288,12 +288,12 @@ test('shared theme scales resolve in CSS with the correct units and remain owned
   expect(element.getAttribute('style')).toContain('rgba(0, 0, 0, 0.4)');
 
   const customized = new LightTheme();
-  customized.padding._md = 24;
-  customized.fontSize._body = 16;
-  expect(new LightTheme().padding._md).toBe(12);
-  expect(new LightTheme().fontSize._body).toBe(14);
-  expect(customized.gap._md).toBe(12);
-  expect(selected.value.fontSize._body).toBe(14);
+  customized.padding._md = '2em';
+  customized.fontSize._body = '1rem';
+  expect(new LightTheme().padding._md).toBe('0.857143em');
+  expect(new LightTheme().fontSize._body).toBe('0.875rem');
+  expect(customized.gap._md).toBe('0.857143em');
+  expect(selected.value.fontSize._body).toBe('0.875rem');
 });
 
 test.each([
