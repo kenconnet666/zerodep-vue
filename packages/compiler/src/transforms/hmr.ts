@@ -179,6 +179,15 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
   program.scope.crawl();
   const renders: NodePath<t.ArrowFunctionExpression>[] = [];
   program.traverse({
+    Function(fn) {
+      if (!fn.node.extra?.zerodepAuthoring) return;
+      const body = fn.get('body');
+      if (!body.isBlockStatement()) return;
+      const last = body.get('body').at(-1);
+      if (!last?.isReturnStatement()) return;
+      const render = last.get('argument');
+      if (render.isArrowFunctionExpression() && liftable(render)) renders.push(render);
+    },
     CallExpression(call) {
       if (importedName(call.scope, call.node.callee, coreModule) !== 'createComponent') return;
       const options = call.get('arguments')[0];
@@ -188,6 +197,7 @@ export function transformHot(program: NodePath<t.Program>): HotTransform | undef
         .find((path) => path.isObjectProperty() && propertyName(path.node) === 'setup');
       if (!setup?.isObjectProperty()) return;
       const value = setup.get('value');
+      if (value.node.extra?.zerodepAuthoring) return;
       if (!value.isFunctionExpression() && !value.isArrowFunctionExpression()) return;
       const body = value.get('body');
       if (!body.isBlockStatement()) return;

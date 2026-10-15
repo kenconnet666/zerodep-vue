@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { parseAsync } from '@babel/core';
+import { createSSRApp } from 'vue';
+import { renderToString } from '@vue/server-renderer';
 import { vitePlugin as vueTsx } from '../src/index.ts';
 import { resolveClass } from '../../core/src/css/resolve.ts';
 
@@ -16,6 +18,29 @@ async function compile(source, command = 'serve', ssr = false) {
   return (await plugin.transform(source, '/project/App.tsx', { ssr })).code;
 }
 const stamp = (code) => code.match(/import\.meta\.hot,\s*"([a-f0-9]{24})"/)?.[1];
+
+test('named setup copies retain HMR and inspection without changing their lexical environment', async () => {
+  const source = `import {_component} from '@zerodep-vue/core'; import {ref} from 'vue';
+    const label = 'outer';
+    function setup(){ const count=ref(1); return <div>{label}:{count.value}</div>; }
+    function create(label){ return _component(setup); }
+    export const App=create('inner');`;
+  for (const command of ['serve', 'build']) {
+    const code = await compile(source, command);
+    assert.equal(code.includes('.render('), command === 'serve');
+    assert.equal(code.includes('enableInspection'), command === 'serve');
+    const executable = code
+      .replace(
+        /(['"])@zerodep-vue\/core\1/g,
+        JSON.stringify(new URL('../../core/src/index.ts', import.meta.url).href),
+      )
+      .replace(/(['"])vue\1/g, JSON.stringify(import.meta.resolve('vue')));
+    const { App } = await import(
+      'data:text/javascript;base64,' + Buffer.from(executable).toString('base64')
+    );
+    assert.equal(await renderToString(createSSRApp(App)), '<div>outer:1</div>');
+  }
+});
 
 test('hot factories preserve for-of and for-in destructuring writes to captured bindings', async () => {
   const source = `import {createCssContext, SystemKeywords} from '@zerodep-vue/core';

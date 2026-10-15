@@ -9,7 +9,7 @@ import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
 import { declarationValue, inheritsVariables, scopedSelector, validateFragment } from './syntax.ts';
 import { THEME, isThemeReference } from './tokens.ts';
 import type { ThemeReference } from './tokens.ts';
-import { ANIMATION, isAnimation } from './animation-token.ts';
+import { ANIMATION, hasStableAnimation, isAnimation } from './animation-token.ts';
 import type { CssAnimation } from './animation-token.ts';
 import type { CssRule } from './host.ts';
 import { inspectionHooks } from './inspection-hooks.ts';
@@ -151,6 +151,7 @@ export function resolveClass(
   const animation = (value: CssAnimation, property: string, literal: boolean): string => {
     if (!/^(?:-[a-z]+-)?animation(?:-name)?$/.test(propertyName(property)))
       throw new Error('动画引用只能用于 animation 或 animationName。');
+    dynamic ||= !hasStableAnimation(value);
     const mode = literal ? 'literal' : 'bound';
     const existing = animations.get(value) ?? {};
     if (existing[mode]) return existing[mode]!;

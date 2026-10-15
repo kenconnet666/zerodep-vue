@@ -1,5 +1,5 @@
 import { addNamed } from '@babel/helper-module-imports';
-import type { NodePath } from '@babel/core';
+import type { NodePath, Scope } from '@babel/core';
 import * as t from '@babel/types';
 import { runtimeProps } from './types.ts';
 import { prepareDefaults } from './defaults.ts';
@@ -7,8 +7,12 @@ import { writableModels } from './writes.ts';
 import type { State } from '../../upstream/interface.ts';
 import { assertSynchronous, coreModule, importedName, propertyName } from '../bindings.ts';
 
+type Binding = Scope['bindings'][string];
+
 /** 把本函数的第一个返回分支及后续语句放入 render；嵌套函数的 return 不改变边界。 */
-function lowerRender(setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpression>) {
+function lowerRender(
+  setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpression | t.FunctionDeclaration>,
+) {
   const asyncMessage =
     '[ZV_RENDER_ASYNC] render 必须同步返回内容；请在 async setup 的返回分支之前完成 await，再把结果用于渲染。';
   if (!t.isBlockStatement(setup.node.body)) {
@@ -21,6 +25,7 @@ function lowerRender(setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpre
   const statements = setup.get('body').get('body') as NodePath<t.Statement>[];
   const boundary = statements.findIndex((statement) => {
     if (statement.isReturnStatement()) return true;
+    if (statement.isFunctionDeclaration()) return false;
     let found = false;
     statement.traverse({
       Function(path) {
@@ -34,9 +39,104 @@ function lowerRender(setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpre
   });
   if (boundary < 0)
     throw setup.buildCodeFrameError('[ZV_RENDER] _component 需要返回内容；空内容可明确返回 null。');
-  for (const statement of statements.slice(boundary)) assertSynchronous(statement, asyncMessage);
+  setup.scope.crawl();
+  const bodyPath = setup.get('body');
+  const renderRoots = new Set<t.Node>(statements.slice(boundary).map((path) => path.node));
+  const inRender = (path: NodePath) => {
+    let current: NodePath | null = path;
+    while (current && current.parentPath !== bodyPath) current = current.parentPath;
+    return !!current && renderRoots.has(current.node);
+  };
+  const retained = new Set<Binding>();
+  const runtimeReferences = (binding: Binding) =>
+    [...binding.referencePaths, ...binding.constantViolations].filter(
+      (path) => !path.findParent((parent) => t.isTSType(parent.node)),
+    );
+  const retain = (binding: Binding, reference: NodePath) => {
+    if (!inRender(binding.path) || retained.has(binding)) return;
+    if (
+      binding.kind !== 'var' &&
+      !(binding.path.isFunctionDeclaration() && binding.path.parentPath === bodyPath)
+    )
+      throw reference.buildCodeFrameError(
+        `[ZV_RENDER_SCOPE] ${binding.identifier.name} 属于渲染局部作用域，初始化代码不能跨边界捕获它；请把依赖它的函数也放在渲染分支内。`,
+      );
+    retained.add(binding);
+  };
+  for (const binding of Object.values(setup.scope.bindings)) {
+    for (const reference of runtimeReferences(binding)) {
+      if (!inRender(reference)) retain(binding, reference);
+    }
+  }
+  // 只保留确实被初始化阶段捕获的声明；渲染 helper 继续拥有每次渲染的局部闭包。
+  for (const binding of retained) {
+    if (!binding.path.isFunctionDeclaration()) continue;
+    for (const dependency of Object.values(setup.scope.bindings)) {
+      const reference = runtimeReferences(dependency).find((path) =>
+        path.findParent((parent) => parent === binding.path),
+      );
+      if (reference) retain(dependency, reference);
+    }
+  }
+  const hoisted: t.Statement[] = [];
+  const variables = new Set<string>();
+  const lowerVar = (path: NodePath<t.VariableDeclaration>) => {
+    if (
+      path.node.kind !== 'var' ||
+      path.findParent((parent) => parent.isFunction() || parent.isStaticBlock()) !== setup
+    )
+      return;
+    const names = Object.keys(t.getBindingIdentifiers(path.node));
+    if (
+      !names.some((name) => {
+        const binding = setup.scope.getOwnBinding(name);
+        return binding && (!inRender(binding.path) || retained.has(binding));
+      })
+    )
+      return;
+    for (const name of names) variables.add(name);
+    const assignments = path.node.declarations.flatMap((declaration) => {
+      if (!declaration.init) return [];
+      if (t.isVoidPattern(declaration.id))
+        throw path.buildCodeFrameError('[ZV_RENDER_SCOPE] 无法保留此 var 声明的提升绑定。');
+      return [t.assignmentExpression('=', declaration.id, declaration.init)];
+    });
+    if (
+      (path.parentPath.isForOfStatement() || path.parentPath.isForInStatement()) &&
+      path.key === 'left'
+    ) {
+      path.replaceWith(path.node.declarations[0]!.id);
+    } else if (path.parentPath.isForStatement() && path.key === 'init') {
+      if (assignments.length) path.replaceWith(t.sequenceExpression(assignments));
+      else path.remove();
+    } else if (assignments.length)
+      path.replaceWith(t.expressionStatement(t.sequenceExpression(assignments)));
+    else path.remove();
+  };
+  for (const statement of statements.slice(boundary)) {
+    if (statement.isFunctionDeclaration()) {
+      const binding = statement.node.id && setup.scope.getBinding(statement.node.id.name);
+      if (binding && retained.has(binding)) {
+        hoisted.push(statement.node);
+        statement.remove();
+      }
+      continue;
+    }
+    if (statement.isVariableDeclaration()) lowerVar(statement);
+    else statement.traverse({ VariableDeclaration: lowerVar });
+  }
+  if (variables.size)
+    hoisted.push(
+      t.variableDeclaration(
+        'var',
+        [...variables].map((name) => t.variableDeclarator(t.identifier(name))),
+      ),
+    );
+  const renderPaths = (setup.get('body').get('body') as NodePath<t.Statement>[]).slice(boundary);
+  for (const statement of renderPaths) assertSynchronous(statement, asyncMessage);
   if (!statements[boundary]!.isReturnStatement()) {
-    for (const statement of statements.slice(boundary))
+    for (const statement of renderPaths) {
+      if (statement.isFunctionDeclaration()) continue;
       statement.traverse({
         Function(path) {
           path.skip();
@@ -66,8 +166,10 @@ function lowerRender(setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpre
           }
         },
       });
+    }
   }
   const renderStatements = setup.node.body.body.splice(boundary);
+  setup.node.body.body.push(...hoisted);
   setup.node.body.body.push(
     t.returnStatement(t.arrowFunctionExpression([], t.blockStatement(renderStatements))),
   );
@@ -76,35 +178,59 @@ function lowerRender(setup: NodePath<t.ArrowFunctionExpression | t.FunctionExpre
 function lower(call: NodePath<t.CallExpression>, state: State) {
   state.set('zerodep:authoring', true);
   let setup = call.get('arguments.0');
-  // 允许局部命名 setup，但复制其函数，避免改变同一函数在其他调用位置的语义。
+  let setupReference: t.Identifier | undefined;
+  let namedSetup:
+    NodePath<t.ArrowFunctionExpression | t.FunctionExpression | t.FunctionDeclaration> | undefined;
+  // 私有副本留在原声明的词法环境，普通调用仍使用原函数；不能在调用处重新捕获自由变量。
   if (setup.isIdentifier()) {
     const binding = setup.scope.getBinding(setup.node.name);
     if (binding?.constant && binding.path.isFunctionDeclaration()) {
-      const node = binding.path.node;
-      const expression = t.functionExpression(
-        node.id,
-        node.params,
-        node.body,
-        node.generator,
-        node.async,
-      );
-      if (node.typeParameters) expression.typeParameters = node.typeParameters;
-      setup.replaceWith(t.cloneNode(expression, true));
+      const copy = t.cloneNode(binding.path.node, true);
+      setupReference = binding.scope.generateUidIdentifier('setup');
+      copy.id = t.cloneNode(setupReference);
+      const statement =
+        binding.path.parentPath.isExportNamedDeclaration() ||
+        binding.path.parentPath.isExportDefaultDeclaration()
+          ? binding.path.parentPath
+          : binding.path;
+      const [inserted] = statement.insertAfter(copy);
+      if (inserted?.isFunctionDeclaration()) namedSetup = inserted;
     } else if (
       binding?.constant &&
       binding.path.isVariableDeclarator() &&
+      t.isIdentifier(binding.path.node.id) &&
       (t.isArrowFunctionExpression(binding.path.node.init) ||
         t.isFunctionExpression(binding.path.node.init))
     ) {
-      setup.replaceWith(t.cloneNode(binding.path.node.init, true));
+      const copy = t.cloneNode(binding.path.node.init, true);
+      setupReference = binding.scope.generateUidIdentifier('setup');
+      let initializer: t.Expression = copy;
+      if (t.isFunctionExpression(copy) && copy.id) {
+        // 命名表达式的递归仍指向普通原函数，不递归调用已返回 render 的转换副本。
+        const self = copy.id;
+        copy.id = null;
+        initializer = t.callExpression(t.arrowFunctionExpression([self], copy), [
+          t.cloneNode(binding.path.node.id),
+        ]);
+      }
+      const [inserted] = binding.path.insertAfter(
+        t.variableDeclarator(t.cloneNode(setupReference), initializer),
+      );
+      if (inserted?.isVariableDeclarator()) {
+        const value = inserted.get('init');
+        if (value.isArrowFunctionExpression() || value.isFunctionExpression()) namedSetup = value;
+        else if (value.isCallExpression()) {
+          const copyPath = value.get('callee.body');
+          if (copyPath.isFunctionExpression()) namedSetup = copyPath;
+        }
+      }
     }
-    setup = call.get('arguments.0');
   }
-  if (!setup.isArrowFunctionExpression() && !setup.isFunctionExpression())
+  if (!namedSetup && !setup.isArrowFunctionExpression() && !setup.isFunctionExpression())
     throw call.buildCodeFrameError(
       '[ZV_SETUP] _component 的 setup 必须是可分析的函数或局部常量函数。',
     );
-  const fn = setup as NodePath<t.ArrowFunctionExpression | t.FunctionExpression>;
+  const fn = namedSetup ?? (setup as NodePath<t.ArrowFunctionExpression | t.FunctionExpression>);
   if (fn.node.generator)
     throw fn.buildCodeFrameError(
       '[ZV_SETUP] setup 不能是 generator；异步初始化使用 async 与 Vue Suspense。',
@@ -272,9 +398,12 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
   options.push(t.objectProperty(t.identifier('inheritAttrs'), t.booleanLiteral(false)));
   const extra = call.node.arguments[1];
   if (extra && t.isExpression(extra)) options.push(t.spreadElement(extra));
+  const setupValue = setupReference ?? fn.node;
+  if (!t.isExpression(setupValue))
+    throw call.buildCodeFrameError('[ZV_SETUP] 私有 setup 副本缺少引用。');
   options.push(
     t.objectProperty(t.identifier('props'), metadata),
-    t.objectProperty(t.identifier('setup'), fn.node),
+    t.objectProperty(t.identifier('setup'), setupValue),
   );
   call.replaceWith(
     t.callExpression(addNamed(call, 'createComponent', coreModule), [t.objectExpression(options)]),

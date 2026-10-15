@@ -4,7 +4,7 @@ import { propertyName } from '../bindings.ts';
 
 /** 标记直接 .value 编辑与 v-model 的 prop，便于接线时诊断 Vue 可识别的只读来源。 */
 export function writableModels(
-  fn: NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
+  fn: NodePath<t.ArrowFunctionExpression | t.FunctionExpression | t.FunctionDeclaration>,
 ): string[] {
   const first = fn.node.params[0];
   const aliases = new Map<string, string>();

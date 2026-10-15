@@ -42,6 +42,12 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
     }
   }
   program.traverse({
+    Function(fn) {
+      if (fn.node.extra?.zerodepAuthoring && t.isBlockStatement(fn.node.body))
+        fn.node.body.body.unshift(
+          t.expressionStatement(t.callExpression(helper('enableInspection'), [])),
+        );
+    },
     CallExpression: {
       exit(call) {
         if (call.node.extra?.zerodepTraced) return;
@@ -52,6 +58,7 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
               if (!prop.isObjectProperty() || !t.isIdentifier(prop.node.key, { name: 'setup' }))
                 continue;
               const fn = prop.get('value');
+              if (fn.node.extra?.zerodepAuthoring) continue;
               if (
                 (fn.isArrowFunctionExpression() || fn.isFunctionExpression()) &&
                 t.isBlockStatement(fn.node.body)

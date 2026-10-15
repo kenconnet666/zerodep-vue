@@ -61,22 +61,41 @@ export function propertyName(
   if (t.isStringLiteral(value)) return value.value;
 }
 
-/** 按作用域中的真实导入识别别名和命名空间，局部同名变量不会被接管。 */
+/** 跟随真实导入与不可变 const 别名；可变来源、循环别名和局部同名变量不接管。 */
 export function importedName(scope: Scope, node: t.Node, source: string): string | undefined {
-  let local: t.Identifier;
-  if (t.isIdentifier(node)) local = node;
-  else if (t.isMemberExpression(node) && t.isIdentifier(node.object)) local = node.object;
-  else return;
-  const binding = scope.getBinding(local.name);
-  if (
-    !binding?.path.parentPath?.isImportDeclaration() ||
-    binding.path.parentPath.node.source.value !== source
-  )
-    return;
-  if (t.isIdentifier(node) && binding.path.isImportSpecifier()) {
-    const imported = binding.path.node.imported;
-    return t.isIdentifier(imported) ? imported.name : imported.value;
-  }
-  if (t.isMemberExpression(node) && binding.path.isImportNamespaceSpecifier())
-    return propertyName(node);
+  const seen = new Set<t.Node>();
+  const resolve = (scope: Scope, node: t.Node): string | true | undefined => {
+    if (
+      t.isParenthesizedExpression(node) ||
+      t.isTSAsExpression(node) ||
+      t.isTSTypeAssertion(node) ||
+      t.isTSNonNullExpression(node) ||
+      t.isTSSatisfiesExpression(node)
+    )
+      return resolve(scope, node.expression);
+    if (t.isMemberExpression(node))
+      return resolve(scope, node.object) === true ? propertyName(node) : undefined;
+    if (!t.isIdentifier(node)) return;
+    const binding = scope.getBinding(node.name);
+    if (!binding || seen.has(binding.path.node)) return;
+    seen.add(binding.path.node);
+    const declaration = binding.path.parentPath;
+    if (declaration?.isImportDeclaration() && declaration.node.source.value === source) {
+      if (binding.path.isImportNamespaceSpecifier()) return true;
+      if (binding.path.isImportSpecifier()) {
+        const imported = binding.path.node.imported;
+        return t.isIdentifier(imported) ? imported.name : imported.value;
+      }
+    }
+    if (
+      binding.constant &&
+      binding.path.isVariableDeclarator() &&
+      declaration?.isVariableDeclaration({ kind: 'const' }) &&
+      t.isIdentifier(binding.path.node.id) &&
+      binding.path.node.init
+    )
+      return resolve(binding.path.scope, binding.path.node.init);
+  };
+  const resolved = resolve(scope, node);
+  return typeof resolved === 'string' ? resolved : undefined;
 }

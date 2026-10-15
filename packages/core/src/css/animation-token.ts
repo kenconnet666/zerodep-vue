@@ -8,3 +8,13 @@ export interface CssAnimation {
 export function isAnimation(value: unknown): value is CssAnimation {
   return !!value && typeof value === 'object' && ANIMATION in value;
 }
+
+// 只登记本库构造且帧结构稳定的描述；HMR 代理和外部 getter 不能继承静态缓存资格。
+const stableAnimations = new WeakSet<object>();
+export function markStableAnimation<Value extends CssAnimation>(value: Value): Value {
+  stableAnimations.add(value);
+  return value;
+}
+export function hasStableAnimation(value: CssAnimation): boolean {
+  return stableAnimations.has(value);
+}

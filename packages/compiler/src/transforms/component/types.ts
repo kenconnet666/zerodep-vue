@@ -51,7 +51,7 @@ function originalNode(
 /** 复用 Vue 的类型解析，支持导入类型与泛型容器，不实现第二套 TypeScript 类型系统。 */
 export function runtimeProps(
   call: NodePath<t.CallExpression>,
-  setup: t.ArrowFunctionExpression | t.FunctionExpression,
+  setup: t.ArrowFunctionExpression | t.FunctionExpression | t.FunctionDeclaration,
   state: State,
 ): t.ObjectExpression {
   const parameter = setup.params[0];

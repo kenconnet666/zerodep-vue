@@ -9,7 +9,6 @@ import {
   watchSyncEffect,
 } from 'vue';
 import type { Ref } from 'vue';
-import selectorParser from 'postcss-selector-parser';
 import { declarations } from './composition.ts';
 import { CLASS } from './style-value.ts';
 import type { CssNestedInput, Declaration } from './style-value.ts';
@@ -17,7 +16,7 @@ import { resolveClass } from './resolve.ts';
 import { cssHostKey } from './host.ts';
 import type { CssHost, GlobalLease } from './host.ts';
 import { hostFor } from './context.ts';
-import { validateFragment } from './syntax.ts';
+import { parseSelectors, validateFragment } from './syntax.ts';
 import { inspectionHooks } from './inspection-hooks.ts';
 
 /** 显式全局选择器映射；每个选择器内部沿用普通属性、状态分组和媒体条件。 */
@@ -33,12 +32,10 @@ function renderGlobal(rules: GlobalRules) {
     validateFragment(selector);
     if (selector.trimStart().startsWith('@'))
       throw new Error('全局规则根键需要选择器；媒体条件放在选择器内部。');
-    const parsed = selectorParser().astSync(selector);
+    const parsed = parseSelectors(selector);
     parsed.walkNesting(() => {
       throw new Error('全局选择器没有父作用域，不能在根选择器中使用 &。');
     });
-    if (!parsed.nodes.length || parsed.nodes.some((node) => !node.nodes.length))
-      throw new Error('全局选择器不能为空。');
     for (const node of parsed.nodes) {
       const target = node.toString();
       entries.push(...declarations(style, { selector: target, target, conditions: [] }));

@@ -2,7 +2,9 @@ import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
 
 /** 默认值搬到实例 getter 前，保留参数环境对外层绑定的解析和声明顺序。 */
-export function prepareDefaults(fn: NodePath<t.ArrowFunctionExpression | t.FunctionExpression>) {
+export function prepareDefaults(
+  fn: NodePath<t.ArrowFunctionExpression | t.FunctionExpression | t.FunctionDeclaration>,
+) {
   const parameter = fn.get('params')[0];
   if (!parameter?.isObjectPattern()) return;
   const properties = parameter.get('properties');

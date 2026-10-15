@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { parseAsync, transformAsync } from '@babel/core';
 import presetTypeScript from '@babel/preset-typescript';
+import { createSSRApp } from 'vue';
+import { renderToString } from '@vue/server-renderer';
 import { babelPlugin as compiler } from '../src/index.ts';
 
 const compile = async (code) =>
@@ -14,6 +16,122 @@ const compile = async (code) =>
       presets: [presetTypeScript],
     })
   )?.code;
+
+async function evaluate(source) {
+  const code = (await compile(source))
+    .replace(
+      /(['"])@zerodep-vue\/core\1/g,
+      JSON.stringify(new URL('../../core/src/index.ts', import.meta.url).href),
+    )
+    .replace(/(['"])vue\1/g, JSON.stringify(import.meta.resolve('vue')));
+  return import('data:text/javascript;base64,' + Buffer.from(code).toString('base64'));
+}
+
+test('setup helper returns do not move later Vue initialization into render', async () => {
+  const { C } =
+    await evaluate(`import {_component} from '@zerodep-vue/core'; import {ref} from 'vue';
+    export const C = _component(() => {
+      function caption(){ return 'ready'; }
+      const count = ref(1);
+      return <div>{caption()}:{count.value}</div>;
+    });`);
+  assert.equal(await renderToString(createSSRApp(C)), '<div>ready:1</div>');
+});
+
+test('hoisted setup declarations remain visible before return while render helpers keep local captures', async () => {
+  const module = await evaluate(`import {_component} from '@zerodep-vue/core';
+    export let write, readCatch;
+    export const C = _component(() => {
+      const first = format(); const initial = late;
+      return <div>{first}:{String(initial)}</div>;
+      function format(){ return 'ready'; }
+      var late = 1;
+    });
+    export const Local = _component(() => {
+      if (false) return null;
+      const value = 'render';
+      function caption(){return value;}
+      return <div>{caption()}</div>;
+    });
+    export const Writable = _component(() => {
+      write = update;
+      if (false) return null;
+      var value = 'initial';
+      return <div>{value}</div>;
+      function update(){ [value] = ['changed']; return value; }
+    });
+    export const Catcher = _component(() => {
+      readCatch = () => value;
+      var outer = 'outer';
+      if (false) return null;
+      let seen;
+      try { throw 1; } catch(value) { var value = 2; seen = value; }
+      class Local { static { var outer = 'local'; } }
+      return <div>{String(value)}:{seen}:{outer}</div>;
+    });`);
+  assert.equal(await renderToString(createSSRApp(module.C)), '<div>ready:undefined</div>');
+  assert.equal(await renderToString(createSSRApp(module.Local)), '<div>render</div>');
+  assert.equal(await renderToString(createSSRApp(module.Writable)), '<div>initial</div>');
+  assert.equal(module.write(), 'changed');
+  assert.equal(await renderToString(createSSRApp(module.Catcher)), '<div>undefined:2:outer</div>');
+  assert.equal(module.readCatch(), undefined);
+});
+
+test('cross-boundary lexical captures diagnose both reads and writes before changing closure ownership', async () => {
+  for (const operation of ['return value', 'value = "changed"', '[value] = ["changed"]']) {
+    await assert.rejects(
+      compile(`import {_component} from '@zerodep-vue/core';
+      const C = _component(() => {
+        const callback = helper;
+        if (ready) return null;
+        let value = 'render';
+        return <button onClick={callback}/>;
+        function helper(){ ${operation}; }
+      });`),
+      /ZV_RENDER_SCOPE/,
+    );
+  }
+  const { C } = await evaluate(`import {_component} from '@zerodep-vue/core';
+    export const C = _component(() => {
+      type Caption = typeof caption;
+      const first = helper();
+      if (false) return null;
+      const caption = 'ready';
+      return <div>{first}:{caption}</div>;
+      function helper(){ type Value = typeof caption; return 'ok'; }
+    });`);
+  assert.equal(await renderToString(createSSRApp(C)), '<div>ok:ready</div>');
+});
+
+test('named setup copies retain their declaration scope, lexical values and ordinary recursion', async () => {
+  const { C, A, D, Early, Constructed, Recursive, plain } =
+    await evaluate(`import {_component} from '@zerodep-vue/core';
+    const label = 'outer';
+    function setup(){ return <div>{label}</div>; }
+    function create(label){ return _component(setup); }
+    export const C = create('inner');
+    function capture(value) {
+      const arrow = () => <div>{this.label}:{arguments[0]}</div>;
+      return (function(){ return _component(arrow); }).call({label:'wrong'}, 'wrong');
+    }
+    export const A = capture.call({label:'source'}, 'argument');
+    const same = () => <div>same</div>, Declared = _component(same);
+    export const D = Declared;
+    export const Early = _component(early);
+    function early(){ return <div>early</div>; }
+    function Capture(){ const setup=()=> <div>{new.target.name}</div>; this.C=_component(setup); }
+    export const Constructed = new Capture().C;
+    const recursive = function recursive({n}) { if(n>0)return recursive({n:n-1}); return <div>done</div>; };
+    export const Recursive = _component(recursive);
+    export const plain = setup();`);
+  assert.equal(await renderToString(createSSRApp(C)), '<div>outer</div>');
+  assert.equal(await renderToString(createSSRApp(A)), '<div>source:argument</div>');
+  assert.equal(await renderToString(createSSRApp(D)), '<div>same</div>');
+  assert.equal(await renderToString(createSSRApp(Early)), '<div>early</div>');
+  assert.equal(await renderToString(createSSRApp(Constructed)), '<div>Capture</div>');
+  assert.equal(await renderToString(createSSRApp(Recursive, { n: 2 })), '<div>done</div>');
+  assert.equal(plain.children[0], 'outer');
+});
 
 test('render lowering diagnoses async work crossing its synchronous boundary', async () => {
   for (const body of [

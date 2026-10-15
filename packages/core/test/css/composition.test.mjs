@@ -9,6 +9,21 @@ const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 
+test('selector lists reject empty branches instead of creating unconditional root rules', () => {
+  for (const selector of [
+    '&:hover,,&:focus',
+    ',&:hover',
+    '&:hover,',
+    '&:hover, /* empty */, &:focus',
+    ',',
+  ]) {
+    assert.throws(() => s.select(selector, s.color('red')), /选择器.*空/);
+  }
+  const result = resolveClass(s.select('&:hover, &:focus', s.color('red')));
+  assert.equal(result.declarations.length, 2);
+  assert(!result.cssText.includes(`.${result.ruleName}{`));
+});
+
 test('cx defers flattening, snapshots input arrays and caches only stable static descriptions', () => {
   let reads = 0;
   let current = s.color('red');

@@ -83,9 +83,21 @@ export interface SelectorContext {
   conditions: readonly string[];
 }
 
+/** 空列表项不能被补成根选择器；局部和全局规则使用相同的结构边界。 */
+export function parseSelectors(input: string) {
+  const parsed = selectorParser().astSync(input);
+  if (
+    Reflect.get(parsed, 'trailingComma') === true ||
+    !parsed.nodes.length ||
+    parsed.nodes.some((selector) => selector.nodes.every((node) => node.type === 'comment'))
+  )
+    throw new Error('选择器列表不能包含空项。');
+  return parsed;
+}
+
 /** 使用选择器 AST 展开 &，不会替换字符串/属性值中的同名字符。 */
 export function selectors(parent: SelectorContext, input: string): SelectorContext[] {
-  const parsed = selectorParser().astSync(input);
+  const parsed = parseSelectors(input);
   return parsed.nodes.map((item) => {
     let part = item.toString().trim();
     let hasNesting = false;

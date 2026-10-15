@@ -26,6 +26,30 @@ const context = () => ({
   },
 });
 
+test('retained style chains follow consecutive hot keyframe changes without losing dependencies', () => {
+  const hot = context();
+  const factories = (opacity) => ({
+    animation: () => keyframes({ from: s.opacity(opacity), to: s.opacity(1) }),
+  });
+  const runtime = registerModule(hot, 'same', factories(0.2));
+  const animation = runtime.style('animation', {}, 'keyframes');
+  const style = s.animationName(animation);
+  const seen = [];
+  const stop = watchSyncEffect(() => seen.push(resolveClass(style).resources[0].cssText));
+  try {
+    registerModule(hot, 'same', factories(0.4));
+    registerModule(hot, 'same', factories(0.6));
+    assert.equal(seen.length, 3);
+    for (const [index, opacity] of [0.2, 0.4, 0.6].entries())
+      assert(seen[index].includes(`opacity:${opacity};`));
+  } finally {
+    stop();
+    hot.cleanup();
+  }
+  const stable = s.animationName(keyframes({ from: s.opacity(0), to: s.opacity(1) }));
+  assert.equal(resolveClass(stable), resolveClass(stable));
+});
+
 test('test runners with an incomplete hot context retain ordinary evaluation', () => {
   const style = s.color('red');
   const runtime = registerModule({}, 'unit', { style: () => style, render: (env) => env.value });

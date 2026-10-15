@@ -15,6 +15,22 @@ const compile = async (source, options = {}) =>
     })
   )?.code;
 
+test('immutable helper aliases follow declaration scopes without capturing mutable or shadowed bindings', async () => {
+  const code =
+    await compile(`import {bx} from '@zerodep-vue/core'; import * as api from '@zerodep-vue/core';
+    const bind = bx as typeof bx; const chained = bind; const namespace = api;
+    const first = chained('red'); const second = namespace.bx('blue');
+    let mutable = bx; const untouched = mutable('green');
+    function shadow(chained){ return chained('black'); }
+  `);
+  assert.equal((code.match(/_binding\(\(\) => /g) ?? []).length, 2);
+  assert(code.includes("mutable('green')"));
+  assert(code.includes("chained('black')"));
+  const cycle = await compile(`import {bx} from '@zerodep-vue/core';
+    const first = second; const second = first; const result = first('red');`);
+  assert(!cycle.includes('binding as'));
+});
+
 test('bx diagnoses await and yield crossing the synchronous binding boundary', async () => {
   for (const source of [
     'async function paint(){ return bx(await load()); }',

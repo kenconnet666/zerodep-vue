@@ -1,7 +1,7 @@
 import { cx } from './composition.ts';
-import { CLASS } from './style-value.ts';
+import { CLASS, hasStableParts } from './style-value.ts';
 import type { CssNestedInput } from './style-value.ts';
-import { ANIMATION } from './animation-token.ts';
+import { ANIMATION, markStableAnimation } from './animation-token.ts';
 import type { CssAnimation } from './animation-token.ts';
 
 type FramePosition = 'from' | 'to' | `${number}%`;
@@ -38,10 +38,13 @@ export function keyframes(frames: Keyframes): CssAnimation {
     return Object.freeze({ at, style: resolved });
   });
   if (!result.length) throw new Error('keyframes 至少需要一个帧。');
-  return Object.freeze({
+  const animation = Object.freeze({
     [ANIMATION]: Object.freeze(result),
     [Symbol.toPrimitive](): never {
       throw new Error('动画引用直接用于 animationName 或经编译的 animation 模板。');
     },
   });
+  return result.every((frame) => hasStableParts(frame.style))
+    ? markStableAnimation(animation)
+    : animation;
 }

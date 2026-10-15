@@ -49,6 +49,8 @@ export const Example = _component(() => {
 
 `_component` 支持 async setup：先在初始化阶段完成 `await`，再返回 JSX；返回分支及其后的渲染代码必须同步执行。嵌套的 async 事件回调保留正常 JavaScript 语义。`bx` 也同步读取值，异步结果应先取得或写入 Vue 状态，不能直接把 `await`、`yield` 放进绑定表达式。
 
+普通 helper 的 `return` 不划分组件渲染边界；具名 setup 保留声明处的词法环境及普通调用语义。初始化阶段捕获的函数可以使用同一 setup 的提升声明，但不能跨边界捕获每次渲染新建的 `let`、`const` 或 class；这类代码会得到 `ZV_RENDER_SCOPE`，应把 helper 与其依赖放在同一阶段。编译器也识别直接导入及不可变 `const` helper 别名，按真实绑定区分同名变量，不跟随可变或循环别名。
+
 ## UI Provider
 
 `Provider` 渲染一个 `div`，通过 Vue 组件树向下传递 `theme` 和 `lang`。消费配置与 `children` 后，其余 Props 通过 `...rest` 显式转发到根 div，包括原生属性、事件、`style` 和支持链式 CSS 的 `class`。`lang` 是 UI 语言配置，不作为 HTML 的 lang 属性透传；嵌套 Provider 会产生嵌套 div。默认使用白色主题 `LightTheme`、简体中文 `zhCN` 和上海时区 `Asia/Shanghai`。后代在 setup 中调用 UI 包的 `useCss()`、`useTheme()` 和 `useLang()`；主题和语言都是稳定的只读 reactive 对象，直接读取字段，无需 `.value`。
