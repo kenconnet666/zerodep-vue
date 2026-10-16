@@ -30,9 +30,11 @@ import { vitePlugin } from '@zerodep-vue/compiler';
 export default defineConfig({ plugins: [vitePlugin()] });
 ```
 
+含 core 导入的文件自动启用 CSS 与属性袋接线；只导入外部样式或 UI 的普通 Vue 文件，如需在多个 JSX 来源间组合 `css` / `slotX`，可使用 `vitePlugin({ zerodep: { css: true } })`。普通 Vue 文件保持原有 JSX 行为，第三方组件的业务 `css` 属性也保持原值。
+
 状态直接使用 Vue API。应用主题模块从 `createCssContext(source)` 解构导出 `useCss`、`provideTheme`、`useTheme`；主题样式使用 `const css = useCss()`，结构化样式通过 `css` 传入；`class` 和 `style` 保留原生含义。
 
-`_component` 从声明变量名自动生成组件名，默认关闭 Vue 的隐式属性透传。作者 setup 只接收一个 Props 参数，参数解构后的剩余 Props 统一命名 `rest`，通过 `{...rest}` 或逐项赋值决定传给哪个节点；原生属性也包含在同一个 Props 只读视图中。状态传可写 Ref，事件传回调，内容传 children 或明确的渲染函数；不公开 emit、Vue slots、expose 或组件实例。DOM 引用通过 `elementRef/inputRef/viewportRef` 等普通 Props 接收，再传给内部原生节点的 ref。`key` 和 VNode 生命周期保留 Vue 语义；原生元素和普通 Vue 组件仍可使用 Vue 自己的 ref、slots 与模型指令。无需重复声明组件名；第二参数只用于覆盖 name。属性始终显式转发，CSS 不再通过隐藏的 class 通道传递。
+`_component` 从声明变量名自动生成组件名，关闭 Vue 的隐式属性透传。作者 setup 只接收一个 Props 参数，参数解构后的剩余 Props 统一命名 `rest`，通过 `{...rest}` 或逐项赋值决定传给哪个节点；原生属性也包含在同一个 Props 只读视图中。状态传可写 Ref，事件传回调，内容传 children 或明确的渲染函数；不公开 emit、Vue slots、expose 或组件实例。DOM 引用通过 `elementRef/inputRef/viewportRef` 等普通 Props 接收，再传给内部原生节点的 ref。`key` 和 VNode 生命周期保留 Vue 语义；原生元素和普通 Vue 组件仍可使用 Vue 自己的 ref、slots 与模型指令。无需重复声明组件名；第二参数只用于覆盖 name。属性始终显式转发，CSS 不再通过隐藏的 class 通道传递。
 
 ```tsx
 import { _component, createCssContext, SystemKeywords } from '@zerodep-vue/core';
@@ -49,7 +51,7 @@ export const Example = _component(() => {
 
 CSS 对象属性有中文说明、初始值和继承性元数据。`css({ overflow: 'hidden' })` 的值可定位到 `OverflowValues.hidden`，`css({ color: '_primaryHover' })` 可定位到当前主题成员。泛型检查保留属性值域与未知主题名诊断，CSS 字符串仍可表达 calc/var 等开放语法。
 
-WebStorm 2026.3 实测需要在 **Settings → Languages & Frameworks → TypeScript → Vue** 关闭 **Enable service-powered type engine**，保留语言服务和项目 TypeScript 6.0.3，才能让 IDE 的字面量跳转和悬浮保留 `keyof` 声明来源。语言服务返回唯一结果不代表 IDE 的解析也已正确；修改后需在真实使用位置检查跳转和中文注释。
+WebStorm 应选择项目 TypeScript 6.0.3 并启用 TypeScript Language Service。IDE 内部类型引擎与 TypeScript 服务并非同一路径，不能把独立语言服务的结果当作 IDE 的验收；修改插件后可从状态栏 Language Services → Restart Service 刷新，再核对实际悬浮和跳转。当前已核对属性中文说明，值字面量和主题 token 的 IDE 悬浮仍待刷新后复核；不要套用旧链式入口的引擎设置结论。[JetBrains 官方说明](https://www.jetbrains.com/help/webstorm/typescript-support.html)
 
 `_component` 支持 async setup：先在初始化阶段完成 `await`，再返回 JSX；返回分支及其后的渲染代码必须同步执行。嵌套的 async 事件回调保留正常 JavaScript 语义。CSS 来源函数也必须同步返回对象；异步结果应先取得或写入 Vue 状态。
 
@@ -478,6 +480,8 @@ const Action = _component(({ slotIcon, children, ...rest }: ActionProps) => (
 自有 `_component` 将 `slot` 后接大写字母的字段保留为子节点属性袋。JSX 多来源转发按顺序合并这些属性袋：class/style 和事件沿用 Vue 规则，css 保留顺序，普通字段后项覆盖，undefined 属性袋保留默认项。内容替换、key、ref 和 VNode 生命周期字段在此边界过滤；额外 Owned 状态由组件最后写入。`mergeAttrs` 也提供同一属性组合入口。业务对象整项覆盖；普通 Vue 组件的 css 和 slotX 都是其自身 Props，保持原值与末项覆盖，不触发属性袋 getter 或深合并；结构化 CSS 由原生元素和自有组件消费。纯 class/style 转发允许已有生成变量继续穿过第三方组件，主动消费结构化 CSS 的入口保护运行时变量。
 
 TSX 的属性展开按 TypeScript 的最终属性类型检查；当后面的 spread 自带 `css` 时，前面原始对象的多余字段检查可能被掩盖。组件默认样式使用 `css({...})` 先独立检查，再写 `<_div css={defaults} {...rest} />`；不使用类型断言补洞。直接写在元素上的对象仍提供原生属性、CSS 属性及 ARIA/data 状态补全。编译器能确认的对象字面量记录静态字段；来自外部模块或运行时组合的对象保守使用变量，保持值更新和普通对象身份。
+
+`Props` 用于建立自有组件的属性协议；要提取目标的原始公开属性可用 `PropsOf`。`Slot` 则遵循实际子节点：原生元素与自有组件提供结构化 CSS，普通 Vue 组件保留自己声明的业务 `css` 类型；没有声明时不会为它添加 CSS 属性。这与第三方 VNode 边界的原值转发一致。
 
 UI、主题工厂、keyframes/globalCss、HMR、DevTools 和编辑器提示均使用对象协议。隐式 class 缓存已移除；重复计算按需使用 Vue `computed`，普通函数与对象遵循 JavaScript 求值规则。`pnpm --filter @zerodep-vue/ui probe:css` 可追加 `types`、`browser`、`ssr` 或 `component` 选择探测范围：类型探针使用真实 core 声明；组件、SSR 和浏览器探针直接使用正式实现，不再保留原型适配器。浏览器优先使用已安装的 Playwright Chromium，其次使用系统 Chrome/Edge，不自动下载；结束时清理本次临时报告。完整类型、生产构建、安装消费与跨平台验证以对应提交的 CI 为准；本地定向测试不替代这些验收。
 

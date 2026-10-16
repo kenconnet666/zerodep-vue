@@ -60,6 +60,22 @@ test('foreign css props retain replacement and clone semantics', () => {
   assert.equal(copy.props.css, first);
 });
 
+test('a foreign child receives its original business css after an authored slot merge', () => {
+  const first = { business: 1 };
+  const last = { business: 2 };
+  const parent = createCssVNode(
+    Own,
+    mergeAttrs(
+      { slotPanel: { css: first, title: 'default' } },
+      { slotPanel: { css: last, id: 'child' } },
+    ),
+  );
+  const child = createCssVNode(() => null, parent.props.slotPanel);
+  assert.equal(child.props.css, last);
+  assert.equal(child.props.title, 'default');
+  assert.equal(child.props.id, 'child');
+});
+
 test('undefined preserves defaults, null resets a bag and component-owned content is filtered', () => {
   const input = mergeAttrs(
     {

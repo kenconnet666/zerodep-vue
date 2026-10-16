@@ -48,11 +48,25 @@ type ProtectedSlot =
   | 'onVnodeBeforeUnmount'
   | 'onVnodeUnmounted';
 
+type UsesCss<Target> = Target extends keyof NativeElements | TypedProps<object>
+  ? true
+  : Target extends abstract new (...args: any[]) => { $props: infer Public }
+    ? typeof propsType extends keyof Public
+      ? true
+      : false
+    : false;
+
+type SlotCss<Target> =
+  UsesCss<Target> extends true
+    ? {
+        /** CSS 可观察目标的完整状态，包括组件拥有而调用方不能改写的属性。 */
+        css?: CssInput<PropsOf<Target> & AriaAttributes>;
+      }
+    : // 第三方的 css 可能是业务属性；只沿用其原声明，不创造样式通道。
+      Partial<Pick<PropsOf<Target>, Extract<'css', keyof PropsOf<Target>>>>;
+
 /** 子节点属性袋；内容、身份和 DOM 引用由所属组件管理，Owned 明确额外保留字段。 */
 export type Slot<Target, Owned extends PropertyKey = never> = Partial<
   Omit<PropsOf<Target>, ProtectedSlot | Owned | 'css'>
 > &
-  DataAttributes & { [Key in ProtectedSlot | Owned]?: never } & {
-    /** CSS 可观察目标的完整状态，包括组件拥有而调用方不能改写的属性。 */
-    css?: CssInput<PropsOf<Target> & AriaAttributes>;
-  };
+  DataAttributes & { [Key in ProtectedSlot | Owned]?: never } & SlotCss<Target>;

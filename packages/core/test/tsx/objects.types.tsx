@@ -79,6 +79,14 @@ const replaced: Props<typeof _input, { size?: 'small' | 'large' }> = { size: 10 
 const valid: Props<typeof _input, { size?: 'small' | 'large' }> = { size: 'small' };
 const Foreign = defineComponent({ props: { label: String } });
 const foreignSlot: Slot<typeof Foreign> = { label: 'ordinary Vue' };
+const NumericCss = defineComponent({ props: { css: Number, title: String } });
+const numericSlot: Slot<typeof NumericCss> = { css: 123, title: 'business' };
+// @ts-expect-error foreign CSS props retain the target's number contract
+const invalidForeignCss: Slot<typeof NumericCss> = { css: { color: 'red' } };
+// @ts-expect-error foreign components do not acquire an undeclared CSS protocol
+const undeclaredCss: Slot<typeof Foreign> = { css: { color: 'red' } };
+const nativeSlot: Slot<'button'> = { css: { ':disabled': { opacity: 0.5 } } };
+void [numericSlot, invalidForeignCss, undeclaredCss, nativeSlot];
 void [owned, identity, content, replaced, valid, foreignSlot];
 
 class Theme extends SystemKeywords {
