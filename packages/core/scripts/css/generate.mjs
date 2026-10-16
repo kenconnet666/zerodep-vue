@@ -185,6 +185,7 @@ function keywordDoc(name, value, color) {
 
 const literalInterfaces = [];
 const literalProperties = [];
+const keywordProperties = [];
 const slotLines = [];
 const colorNames = [];
 const header =
@@ -247,6 +248,7 @@ for (const property of properties) {
   );
   const shared = new Set(common.flatMap((group) => group.values));
   const literalName = name[0].toUpperCase() + name.slice(1) + 'Values';
+  keywordProperties.push(`readonly ${name}: ${literalName};`);
   literalInterfaces.push(
     `export interface ${literalName}` +
       (common.length ? ' extends ' + common.map((group) => group.name).join(', ') : '') +
@@ -284,8 +286,10 @@ for (const property of properties) {
   );
   const comment = jsdoc(description(name));
   slotLines.push(comment + `declare readonly ${name}: {};`);
+  const keywordSignature = `${name}(value: KeywordInput<${JSON.stringify(name)}, T>): this`;
   const signature = `${name}<const Value>(value: PropertyInput<${JSON.stringify(name)}, T, Value>): this`;
-  let overloads = comment;
+  // 普通字面量先保留声明来源；后面的泛型重载仍拒绝未知主题名，不能退化为宽泛 string。
+  let overloads = comment + keywordSignature + ';\n' + comment + signature + ';\n';
   const supported = supportedLegacyValues[name];
   if (supported) {
     assert(obsolete.has(name), `Compatibility overload needs an obsolete property: ${name}`);
@@ -298,19 +302,21 @@ for (const property of properties) {
         description(name, false) + '\n\n' + supported.description + '\n@see ' + supported.source,
       ) +
       `${name}(value: ${JSON.stringify(supported.value)}): this;\n` +
-      comment +
-      signature +
-      ';\n';
+      overloads;
   }
   groups
     .get(propertyGroup(name, svg, obsolete))
-    .push(overloads + `${signature} { return this.write(${JSON.stringify(name)}, value); }`);
+    .push(
+      overloads +
+        `${name}(value: PropertyValue<${JSON.stringify(name)}, T>): this { return this.write(${JSON.stringify(name)}, value); }`,
+    );
 }
 const outputs = {
   'literal-values.ts':
     header +
     `/** 保留字面量候选，同时接收原属性允许的自由 CSS 字符串。 */\ntype CssString = string & {};\n` +
     literalInterfaces.join('\n') +
+    `\n/** 各属性的关键字声明；普通重载通过 keyof 保留成员的导航与文档来源。 */\nexport interface PropertyKeywords {\n${keywordProperties.join('\n')}\n}\n` +
     `\n/** 各属性的原生输入值域；字面量说明只维护一份。 */\nexport interface PropertyValues {\n${literalProperties.join('\n')}\n}\n`,
   'system.ts':
     header +
@@ -318,7 +324,7 @@ const outputs = {
     `/** 主题扩展基类；属性槽仅作类型声明，子类定义 _ 开头的主题映射。 */\nexport class SystemKeywords {\nreadonly [THEME_SOURCE] = true as const;\n${slotLines.join('\n')}\n}\n`,
   'author.ts':
     header +
-    `import type { PropertyInput } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\nimport { CssAuthor } from '../author.ts';\n` +
+    `import type { KeywordInput, PropertyInput, PropertyValue } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\nimport { CssAuthor } from '../author.ts';\n` +
     `/** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */\nexport class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor {\n${propertyGroups.map(([name]) => groups.get(name).join('\n')).join('\n')}\n}\n`,
   'metadata.ts':
     header +

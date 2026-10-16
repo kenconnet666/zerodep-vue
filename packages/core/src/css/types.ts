@@ -3,7 +3,7 @@ import type { Ref, UnwrapNestedRefs } from 'vue';
 import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
 import type { SystemKeywords } from './generated/system.ts';
 import type { ColorProperty } from './generated/metadata.ts';
-import type { PropertyValues } from './generated/literal-values.ts';
+import type { PropertyKeywords, PropertyValues } from './generated/literal-values.ts';
 import type { Css } from './generated/author.ts';
 import type { CssAnimation } from './animation-token.ts';
 
@@ -17,6 +17,13 @@ type ThemeNames<T extends SystemKeywords, Key extends PropertyName> = keyof T[Ke
 /** 属性自身的主题名优先，颜色类属性还接受共享 color 组。 */
 type ThemeLiteral<T extends SystemKeywords, Key extends PropertyName> =
   ThemeNames<T, Key> | (Key extends ColorProperty ? ThemeNames<T, 'color'> : never);
+
+/**
+ * 已知字面量使用普通重载，保留 keyof 成员的声明和中文说明，供编辑器精确定位。
+ * 此入口不能混入宽泛 string 或 Value 推断；自由值与 bx 继续由 PropertyInput 校验。
+ */
+export type KeywordInput<Key extends PropertyName, T extends SystemKeywords> =
+  keyof PropertyKeywords[Key] | ThemeLiteral<T, Key> | null | undefined;
 type AnimationProperty =
   | 'animation'
   | 'animationName'

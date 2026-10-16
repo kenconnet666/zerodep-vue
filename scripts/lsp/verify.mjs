@@ -179,7 +179,8 @@ try {
     resolveLimit: 1,
   });
   assert(/\p{Script=Han}/u.test(JSON.stringify(cssHover.contents)));
-  assert(cssDefinitions.items.some((entry) => /literal-values\.ts$/.test(entry.filePath)));
+  assert.equal(cssDefinitions.total, 1);
+  assert(cssDefinitions.items.every((entry) => /literal-values\.ts$/.test(entry.filePath)));
   assert(cssCompletions.items.some((entry) => entry.label === 'block'));
   report.checks.push({
     name: 'ui-css-literal',

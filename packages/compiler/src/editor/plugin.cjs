@@ -165,7 +165,13 @@ module.exports = function init({ typescript: ts }) {
             ts.isPropertyDeclaration(node),
         );
         if (!symbol || !declaration) return;
-        const container = declaration.parent.name?.text ?? 'CSS';
+        // 内联主题组也保留所属接口和属性名，补全与悬浮能区分不同来源的同名 token。
+        const owners = [];
+        for (let node = declaration.parent; node && !ts.isSourceFile(node); node = node.parent) {
+          if (node.name && (ts.isIdentifier(node.name) || ts.isStringLiteral(node.name)))
+            owners.unshift(node.name.text);
+        }
+        const container = owners.join('.') || 'CSS';
         const member = /^[a-zA-Z_$][\w$]*$/.test(symbol.name)
           ? '.' + symbol.name
           : '[' + JSON.stringify(symbol.name) + ']';

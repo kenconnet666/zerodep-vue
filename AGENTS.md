@@ -16,6 +16,7 @@
 - 组件统一写 `const s = useCss()`；应用主题模块从 `createCssContext(source)` 直接解构导出 `useCss`、`provideTheme`、`useTheme`。core 不导出默认 hooks 或创建默认上下文，不提供 keywords 对象视图。
 - `useTheme()` 返回当前区域的 reactive 对象，直接使用 `theme.color._primary`，嵌套 Ref 按 Vue 规则解包，可替换的来源 Ref 继续支持。动态样式显式使用 bx，cx 只负责有序组合。
 - 属性、系统值和主题名须有准确补全及中文 JSDoc；发布声明须保留类型和注释。CSS 属性用 `@default:'值'` 表达规范初始值、`@extend:'是/否'` 表达继承性，保留“常用值：”及反引号列表，不生成 @example，缺项不猜测。
+- 保持 `s.overflow('hidden')`、`s.color('_primary')` 等字面量用法。生成的普通关键字重载保留 keyof 成员的声明来源，完整输入由泛型重载继续校验；不能为改善跳转改成具名常量 API，也不能放宽未知主题名检查。编辑体验同时核对项目语言服务和实际 IDE，不能互相代替。
 - 新源码遵循 TypeScript 和 Vue 正常语义。中文注释解释边界、所有权及非显然处理；作者类型与运行时值分清职责。
 - 上层组件暴露出共享类型、编译器或运行时的问题时，修正问题所属模块并验证已有能力和新用法；不以 `as unknown as`、复制类型或组件内特例绕过，也不只是把断言搬到公共层。通用 token 由 CSS 工具统一解析，组件局部 token 的类型和实现留在组件内。
 - UI 样式 Props 直接复用 `CssValue<'属性', UiTheme>`，使用普通 Props 接口；不为每个样式属性增加泛型或层层辅助类型。`bx` 是组件内部的 CSS 接线，不进入 Props 值域。

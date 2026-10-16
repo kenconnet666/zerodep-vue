@@ -47,6 +47,10 @@ export const Example = _component(() => {
 
 系统值和主题名使用字面量；`useTheme()` 返回当前区域的 reactive 对象。动态样式显式使用 `bx`，编译器负责内联 style 接线；`cx` 只负责有序组合，不新增 JSX 样式属性。
 
+CSS 方法先通过普通重载接收已知关键字和主题名，使 `s.overflow('hidden')` 定位到 `OverflowValues.hidden`，`s.color('_primaryHover')` 定位到当前主题的成员说明。自由 CSS 值、数字、`bx` 和模板仍通过泛型重载检查，未知 `_` 主题名继续报错，不需要导入值常量。
+
+WebStorm 2026.3 实测需要在 **Settings → Languages & Frameworks → TypeScript → Vue** 关闭 **Enable service-powered type engine**，保留语言服务和项目 TypeScript 6.0.3，才能让 IDE 的字面量跳转和悬浮保留 `keyof` 声明来源。语言服务返回唯一结果不代表 IDE 的解析也已正确；修改后需在真实使用位置检查跳转和中文注释。
+
 `_component` 支持 async setup：先在初始化阶段完成 `await`，再返回 JSX；返回分支及其后的渲染代码必须同步执行。嵌套的 async 事件回调保留正常 JavaScript 语义。`bx` 也同步读取值，异步结果应先取得或写入 Vue 状态，不能直接把 `await`、`yield` 放进绑定表达式。
 
 普通 helper 的 `return` 不划分组件渲染边界；具名 setup 保留声明处的词法环境及普通调用语义。初始化阶段捕获的函数可以使用同一 setup 的提升声明，但不能跨边界捕获每次渲染新建的 `let`、`const` 或 class；这类代码会得到 `ZV_RENDER_SCOPE`，应把 helper 与其依赖放在同一阶段。编译器也识别直接导入及不可变 `const` helper 别名，按真实绑定区分同名变量，不跟随可变或循环别名。
