@@ -1,10 +1,10 @@
-import { _component, bx, cx } from '@zerodep-vue/core';
 import type { CssInput } from '@zerodep-vue/core';
-import { computed, onMounted, onUpdated, ref, shallowRef, useId, watchEffect } from 'vue';
+import { _component, bx, cx } from '@zerodep-vue/core';
 import type { HTMLAttributes, Ref, VNodeChild } from 'vue';
+import { computed, onMounted, onUpdated, ref, shallowRef, useId, watchEffect } from 'vue';
 import { useCss, useLang } from '../config/Provider.tsx';
 
-export interface EllipsisProps extends /* @vue-ignore */ Omit<HTMLAttributes, 'class'> {
+export interface EllipsisProps extends Omit<HTMLAttributes, 'class'> {
   /** 最大显示行数，默认 1；必须是正整数，单行和多行均保留完整内容。 */
   lines?: number | undefined;
   /** 内容溢出时显示原生展开/收起按钮；默认关闭。 */
