@@ -409,6 +409,8 @@ pnpm --filter @zerodep-vue/ui test:browser --project chromium -g "scrollbars pre
 
 包专用命令直接通过 `pnpm --filter <包名>` 执行；根 `package.json` 只保留工作区聚合构建/检查、格式化、打包和 LSP 工具。共享 TypeScript 基础与构建选项保留在根配置，各包配置负责自己的源码和测试范围。
 
+候选 `_button` / CSS 对象 / `Props` 与 `Slot` 协议通过 `pnpm --filter @zerodep-vue/ui probe:css` 做局部探测，可追加 `types`、`browser`、`ssr` 或 `component` 选择范围。探测包含类型补全、动态 CSS 变量、状态选择器、转发合并和 SSR 接管；使用当前 CSS 后端及隔离的候选适配器，尚未从包入口导出新 API。浏览器优先使用已安装的 Playwright Chromium，其次使用系统 Chrome/Edge，不自动下载；探测结束清理本次临时报告。CI 分别在编译器任务与开发 Chromium 任务中运行这些探测。
+
 多个包共用的开发依赖统一放在根目录，独立工具放在所属包。各包仍显式声明发布所需的运行时依赖与 peer。src 根目录只保留 index.ts 和职责目录；Babel/Vite 入口统一收纳到 `compiler/src/plugins`，单文件构建工具直接使用 `ui/build.mjs`。
 
 `lsp:setup` 从 `.codex/config.example.toml` 生成被忽略的本机配置。MCP 名为 `zerodep_vue_lsp`，提供 diagnostics、hover、definitions、references、completions；配置生成、独立 stdio 验证与重启后会话可调用是三个不同状态。
