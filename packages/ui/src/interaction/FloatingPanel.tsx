@@ -17,6 +17,8 @@ import type { ElementProps } from '../config/props.ts';
 import { useLayer, useLayerContext } from './layer.ts';
 import type { OverlayCloseReason } from './layer.ts';
 import { usePortalStyle } from './portal.ts';
+import { callCallbacks } from './callbacks.ts';
+import type { Callback } from './callbacks.ts';
 import { Scrollbar } from '../layout/Scrollbar.tsx';
 
 export interface FloatingPanelProps extends ElementProps {
@@ -32,7 +34,7 @@ export interface FloatingPanelProps extends ElementProps {
   restoreFocus?: boolean;
   surface?: 'normal' | 'inverse';
   scrollable?: boolean;
-  onClose?: (reason: OverlayCloseReason) => void;
+  onClose?: Callback<[reason: OverlayCloseReason]>;
 }
 
 /** Popover/Tooltip 的共同面板；定位订阅只存在于可见期间。 */
@@ -77,7 +79,7 @@ export const FloatingPanel = _component(
     const close = (reason: OverlayCloseReason) => {
       if (!open.value) return;
       open.value = false;
-      onClose?.(reason);
+      callCallbacks(onClose, reason);
     };
     useLayer({
       context,

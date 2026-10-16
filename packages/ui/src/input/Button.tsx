@@ -2,8 +2,8 @@ import { _component, bx, cx } from '@zerodep-vue/core';
 import type { CssValue } from '@zerodep-vue/core';
 import { LoaderCircle } from '@lucide/icons';
 import type { LucideIconData } from '@lucide/icons';
-import type { ButtonHTMLAttributes } from 'vue';
-import { computed, shallowRef } from 'vue';
+import type { ButtonHTMLAttributes, Ref } from 'vue';
+import { computed } from 'vue';
 import { useCss } from '../config/Provider.tsx';
 import { slotRest } from '../config/props.ts';
 import type { ElementProps, ElementSlotProps } from '../config/props.ts';
@@ -16,6 +16,8 @@ export interface ButtonProps
   extends
     Omit<ElementProps, 'color'>,
     /* @vue-ignore */ Omit<ButtonHTMLAttributes, keyof ElementProps | 'disabled'> {
+  /** 实际按钮 DOM 引用，通过普通 Props 提供。 */
+  elementRef?: Ref<HTMLElement | null | undefined>;
   /** 按钮外观，默认 solid。 */
   variant?: 'solid' | 'soft' | 'outline' | 'dashed' | 'text';
   /** 语义色，默认 primary；neutral 使用中性色。 */
@@ -53,109 +55,37 @@ export interface ButtonProps
   borderColor?: CssValue<'borderColor', UiTheme>;
 }
 
-export interface ButtonInstance {
-  readonly element: HTMLButtonElement | undefined;
-  focus(options?: FocusOptions): void;
-}
-
-const tones = {
-  neutral: {
-    base: '_textPrimary',
-    hover: '_textSecondary',
-    pressed: '_textTertiary',
-    soft: '_surfaceMuted',
-    border: '_border',
-    on: '_textInverse',
-  },
-  primary: {
-    base: '_primary',
-    hover: '_primaryHover',
-    pressed: '_primaryPressed',
-    soft: '_primarySubtleBackground',
-    border: '_primaryBorder',
-    on: '_textOnPrimary',
-  },
-  info: {
-    base: '_info',
-    hover: '_infoHover',
-    pressed: '_infoPressed',
-    soft: '_infoSubtleBackground',
-    border: '_infoBorder',
-    on: '_textOnInfo',
-  },
-  success: {
-    base: '_success',
-    hover: '_successHover',
-    pressed: '_successPressed',
-    soft: '_successSubtleBackground',
-    border: '_successBorder',
-    on: '_textOnSuccess',
-  },
-  warning: {
-    base: '_warning',
-    hover: '_warningHover',
-    pressed: '_warningPressed',
-    soft: '_warningSubtleBackground',
-    border: '_warningBorder',
-    on: '_textOnWarning',
-  },
-  danger: {
-    base: '_danger',
-    hover: '_dangerHover',
-    pressed: '_dangerPressed',
-    soft: '_dangerSubtleBackground',
-    border: '_dangerBorder',
-    on: '_textOnDanger',
-  },
-} satisfies Record<
-  NonNullable<ButtonProps['tone']>,
-  Record<'base' | 'hover' | 'pressed' | 'soft' | 'border' | 'on', keyof UiTheme['color']>
->;
-
 /** 原生 button，默认 type=button；表单提交可显式指定 type=submit。 */
 export const Button = _component(
-  (
-    {
-      type = 'button',
-      variant = 'solid',
-      tone = 'primary',
-      size,
-      density = 'normal',
-      shape = 'default',
-      iconOnly = false,
-      block = false,
-      iconPlacement = 'start',
-      disabled = false,
-      loading = false,
-      'aria-busy': ariaBusy,
-      ripple = true,
-      slotIcon,
-      slotLoading,
-      slotContent,
-      icon,
-      color,
-      backgroundColor,
-      borderColor,
-      class: className,
-      children,
-      innerHTML: _innerHTML,
-      textContent: _textContent,
-      ...rest
-    }: ButtonProps,
-    { expose },
-  ) => {
+  ({
+    type = 'button',
+    elementRef,
+    variant = 'solid',
+    tone = 'primary',
+    size,
+    density = 'normal',
+    shape = 'default',
+    iconOnly = false,
+    block = false,
+    iconPlacement = 'start',
+    disabled = false,
+    loading = false,
+    'aria-busy': ariaBusy,
+    ripple = true,
+    slotIcon,
+    slotLoading,
+    slotContent,
+    icon,
+    color,
+    backgroundColor,
+    borderColor,
+    class: className,
+    children,
+    innerHTML: _innerHTML,
+    textContent: _textContent,
+    ...rest
+  }: ButtonProps) => {
     const s = useCss();
-    const element = shallowRef<HTMLButtonElement>();
-    const instance: ButtonInstance = {
-      get element() {
-        return element.value;
-      },
-      focus(options) {
-        element.value?.focus(options);
-      },
-    };
-    expose(instance);
-    const palette = computed(() => tones[tone]);
     const iconGeometry = computed(() => iconOnly || shape === 'circle');
     const densityHeight = computed(() => {
       switch (density) {
@@ -204,73 +134,299 @@ export const Button = _component(
         '@media (forced-colors: active)',
         s.borderColor('ButtonText').select('&:focus-visible', s.outlineColor('Highlight')),
       );
-    const outlined = s
-      .color(bx(palette.value.base))
-      .backgroundColor('transparent')
-      .borderColor(bx(palette.value.border))
-      .select(
-        '&:enabled:hover',
-        s.backgroundColor(bx(palette.value.soft)).borderColor(bx(palette.value.base)),
-      )
-      .select(
-        '&:enabled:active',
-        s
-          .color(bx(palette.value.pressed))
-          .backgroundColor(bx(palette.value.soft))
-          .borderColor(bx(palette.value.pressed)),
-      )
-      .select(
-        '&[aria-pressed="true"], &[aria-pressed="mixed"]',
-        s.backgroundColor(bx(palette.value.soft)).borderColor(bx(palette.value.base)),
-      );
     const variants = {
-      solid: s
-        .color(bx(palette.value.on))
-        .backgroundColor(bx(palette.value.base))
-        .borderColor(bx(palette.value.base))
-        .select(
-          '&:enabled:hover',
-          s.backgroundColor(bx(palette.value.hover)).borderColor(bx(palette.value.hover)),
-        )
-        .select(
-          '&:enabled:active',
-          s.backgroundColor(bx(palette.value.pressed)).borderColor(bx(palette.value.pressed)),
-        )
-        .select(
-          '&[aria-pressed="true"], &[aria-pressed="mixed"]',
-          s.backgroundColor(bx(palette.value.pressed)).borderColor(bx(palette.value.pressed)),
-        ),
-      soft: s
-        .color(bx(palette.value.base))
-        .backgroundColor(bx(palette.value.soft))
-        .borderColor('transparent')
-        .select(
-          '&:enabled:hover',
-          s.color(bx(palette.value.hover)).borderColor(bx(palette.value.border)),
-        )
-        .select(
-          '&:enabled:active',
-          s.color(bx(palette.value.pressed)).borderColor(bx(palette.value.base)),
-        )
-        .select(
-          '&[aria-pressed="true"], &[aria-pressed="mixed"]',
-          s.borderColor(bx(palette.value.base)),
-        ),
-      outline: outlined,
-      dashed: outlined.borderStyle('dashed'),
+      solid: undefined,
+      soft: s.borderColor('transparent'),
+      outline: s.backgroundColor('transparent'),
+      dashed: s.backgroundColor('transparent').borderStyle('dashed'),
       text: s
-        .color(bx(palette.value.base))
         .backgroundColor('transparent')
         .borderColor('transparent')
         .select('&:enabled:hover', s.backgroundColor('_surfaceHover'))
-        .select(
-          '&:enabled:active',
-          s.color(bx(palette.value.pressed)).backgroundColor('_surfacePressed'),
-        )
+        .select('&:enabled:active', s.backgroundColor('_surfacePressed'))
         .select(
           '&[aria-pressed="true"], &[aria-pressed="mixed"]',
           s.backgroundColor('_surfaceSelected'),
         ),
+    };
+    // tone 直接表达最终 CSS；:where 不增加优先级，外部颜色和 class 仍能按原顺序覆盖。
+    const toneStyles = {
+      neutral: s
+        .color('_textPrimary')
+        .select(
+          '&:where([data-zv-variant="solid"])',
+          s
+            .color('_textInverse')
+            .backgroundColor('_textPrimary')
+            .borderColor('_textPrimary')
+            .select(
+              '&:enabled:hover',
+              s.backgroundColor('_textSecondary').borderColor('_textSecondary'),
+            )
+            .select(
+              '&:enabled:active, &[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_textTertiary').borderColor('_textTertiary'),
+            ),
+        )
+        .select(
+          '&:where([data-zv-variant="soft"])',
+          s
+            .backgroundColor('_surfaceMuted')
+            .select('&:enabled:hover', s.color('_textSecondary').borderColor('_border'))
+            .select('&:enabled:active', s.color('_textTertiary').borderColor('_textPrimary'))
+            .select(
+              '&[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.borderColor('_textPrimary'),
+            ),
+        )
+        .select(
+          '&:where([data-zv-variant="outline"], [data-zv-variant="dashed"])',
+          s
+            .borderColor('_border')
+            .select(
+              '&:enabled:hover',
+              s.backgroundColor('_surfaceMuted').borderColor('_textPrimary'),
+            )
+            .select(
+              '&:enabled:active',
+              s
+                .color('_textTertiary')
+                .backgroundColor('_surfaceMuted')
+                .borderColor('_textTertiary'),
+            )
+            .select(
+              '&[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_surfaceMuted').borderColor('_textPrimary'),
+            ),
+        )
+        .select('&:where([data-zv-variant="text"]):enabled:active', s.color('_textTertiary')),
+      primary: s
+        .color('_primary')
+        .select(
+          '&:where([data-zv-variant="solid"])',
+          s
+            .color('_textOnPrimary')
+            .backgroundColor('_primary')
+            .borderColor('_primary')
+            .select(
+              '&:enabled:hover',
+              s.backgroundColor('_primaryHover').borderColor('_primaryHover'),
+            )
+            .select(
+              '&:enabled:active, &[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_primaryPressed').borderColor('_primaryPressed'),
+            ),
+        )
+        .select(
+          '&:where([data-zv-variant="soft"])',
+          s
+            .backgroundColor('_primarySubtleBackground')
+            .select('&:enabled:hover', s.color('_primaryHover').borderColor('_primaryBorder'))
+            .select('&:enabled:active', s.color('_primaryPressed').borderColor('_primary'))
+            .select('&[aria-pressed="true"], &[aria-pressed="mixed"]', s.borderColor('_primary')),
+        )
+        .select(
+          '&:where([data-zv-variant="outline"], [data-zv-variant="dashed"])',
+          s
+            .borderColor('_primaryBorder')
+            .select(
+              '&:enabled:hover',
+              s.backgroundColor('_primarySubtleBackground').borderColor('_primary'),
+            )
+            .select(
+              '&:enabled:active',
+              s
+                .color('_primaryPressed')
+                .backgroundColor('_primarySubtleBackground')
+                .borderColor('_primaryPressed'),
+            )
+            .select(
+              '&[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_primarySubtleBackground').borderColor('_primary'),
+            ),
+        )
+        .select('&:where([data-zv-variant="text"]):enabled:active', s.color('_primaryPressed')),
+      info: s
+        .color('_info')
+        .select(
+          '&:where([data-zv-variant="solid"])',
+          s
+            .color('_textOnInfo')
+            .backgroundColor('_info')
+            .borderColor('_info')
+            .select('&:enabled:hover', s.backgroundColor('_infoHover').borderColor('_infoHover'))
+            .select(
+              '&:enabled:active, &[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_infoPressed').borderColor('_infoPressed'),
+            ),
+        )
+        .select(
+          '&:where([data-zv-variant="soft"])',
+          s
+            .backgroundColor('_infoSubtleBackground')
+            .select('&:enabled:hover', s.color('_infoHover').borderColor('_infoBorder'))
+            .select('&:enabled:active', s.color('_infoPressed').borderColor('_info'))
+            .select('&[aria-pressed="true"], &[aria-pressed="mixed"]', s.borderColor('_info')),
+        )
+        .select(
+          '&:where([data-zv-variant="outline"], [data-zv-variant="dashed"])',
+          s
+            .borderColor('_infoBorder')
+            .select(
+              '&:enabled:hover',
+              s.backgroundColor('_infoSubtleBackground').borderColor('_info'),
+            )
+            .select(
+              '&:enabled:active',
+              s
+                .color('_infoPressed')
+                .backgroundColor('_infoSubtleBackground')
+                .borderColor('_infoPressed'),
+            )
+            .select(
+              '&[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_infoSubtleBackground').borderColor('_info'),
+            ),
+        )
+        .select('&:where([data-zv-variant="text"]):enabled:active', s.color('_infoPressed')),
+      success: s
+        .color('_success')
+        .select(
+          '&:where([data-zv-variant="solid"])',
+          s
+            .color('_textOnSuccess')
+            .backgroundColor('_success')
+            .borderColor('_success')
+            .select(
+              '&:enabled:hover',
+              s.backgroundColor('_successHover').borderColor('_successHover'),
+            )
+            .select(
+              '&:enabled:active, &[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_successPressed').borderColor('_successPressed'),
+            ),
+        )
+        .select(
+          '&:where([data-zv-variant="soft"])',
+          s
+            .backgroundColor('_successSubtleBackground')
+            .select('&:enabled:hover', s.color('_successHover').borderColor('_successBorder'))
+            .select('&:enabled:active', s.color('_successPressed').borderColor('_success'))
+            .select('&[aria-pressed="true"], &[aria-pressed="mixed"]', s.borderColor('_success')),
+        )
+        .select(
+          '&:where([data-zv-variant="outline"], [data-zv-variant="dashed"])',
+          s
+            .borderColor('_successBorder')
+            .select(
+              '&:enabled:hover',
+              s.backgroundColor('_successSubtleBackground').borderColor('_success'),
+            )
+            .select(
+              '&:enabled:active',
+              s
+                .color('_successPressed')
+                .backgroundColor('_successSubtleBackground')
+                .borderColor('_successPressed'),
+            )
+            .select(
+              '&[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_successSubtleBackground').borderColor('_success'),
+            ),
+        )
+        .select('&:where([data-zv-variant="text"]):enabled:active', s.color('_successPressed')),
+      warning: s
+        .color('_warning')
+        .select(
+          '&:where([data-zv-variant="solid"])',
+          s
+            .color('_textOnWarning')
+            .backgroundColor('_warning')
+            .borderColor('_warning')
+            .select(
+              '&:enabled:hover',
+              s.backgroundColor('_warningHover').borderColor('_warningHover'),
+            )
+            .select(
+              '&:enabled:active, &[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_warningPressed').borderColor('_warningPressed'),
+            ),
+        )
+        .select(
+          '&:where([data-zv-variant="soft"])',
+          s
+            .backgroundColor('_warningSubtleBackground')
+            .select('&:enabled:hover', s.color('_warningHover').borderColor('_warningBorder'))
+            .select('&:enabled:active', s.color('_warningPressed').borderColor('_warning'))
+            .select('&[aria-pressed="true"], &[aria-pressed="mixed"]', s.borderColor('_warning')),
+        )
+        .select(
+          '&:where([data-zv-variant="outline"], [data-zv-variant="dashed"])',
+          s
+            .borderColor('_warningBorder')
+            .select(
+              '&:enabled:hover',
+              s.backgroundColor('_warningSubtleBackground').borderColor('_warning'),
+            )
+            .select(
+              '&:enabled:active',
+              s
+                .color('_warningPressed')
+                .backgroundColor('_warningSubtleBackground')
+                .borderColor('_warningPressed'),
+            )
+            .select(
+              '&[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_warningSubtleBackground').borderColor('_warning'),
+            ),
+        )
+        .select('&:where([data-zv-variant="text"]):enabled:active', s.color('_warningPressed')),
+      danger: s
+        .color('_danger')
+        .select(
+          '&:where([data-zv-variant="solid"])',
+          s
+            .color('_textOnDanger')
+            .backgroundColor('_danger')
+            .borderColor('_danger')
+            .select(
+              '&:enabled:hover',
+              s.backgroundColor('_dangerHover').borderColor('_dangerHover'),
+            )
+            .select(
+              '&:enabled:active, &[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_dangerPressed').borderColor('_dangerPressed'),
+            ),
+        )
+        .select(
+          '&:where([data-zv-variant="soft"])',
+          s
+            .backgroundColor('_dangerSubtleBackground')
+            .select('&:enabled:hover', s.color('_dangerHover').borderColor('_dangerBorder'))
+            .select('&:enabled:active', s.color('_dangerPressed').borderColor('_danger'))
+            .select('&[aria-pressed="true"], &[aria-pressed="mixed"]', s.borderColor('_danger')),
+        )
+        .select(
+          '&:where([data-zv-variant="outline"], [data-zv-variant="dashed"])',
+          s
+            .borderColor('_dangerBorder')
+            .select(
+              '&:enabled:hover',
+              s.backgroundColor('_dangerSubtleBackground').borderColor('_danger'),
+            )
+            .select(
+              '&:enabled:active',
+              s
+                .color('_dangerPressed')
+                .backgroundColor('_dangerSubtleBackground')
+                .borderColor('_dangerPressed'),
+            )
+            .select(
+              '&[aria-pressed="true"], &[aria-pressed="mixed"]',
+              s.backgroundColor('_dangerSubtleBackground').borderColor('_danger'),
+            ),
+        )
+        .select('&:where([data-zv-variant="text"]):enabled:active', s.color('_dangerPressed')),
     };
     const spacing = {
       compact: s.paddingBlock('0.125em').paddingInline('0.5em'),
@@ -295,16 +451,22 @@ export const Button = _component(
     return (
       <button
         {...rest}
-        ref={element}
+        ref={elementRef}
         type={type}
         disabled={disabled || loading}
         aria-busy={loading || ariaBusy}
+        data-zv-variant={variant}
         class={cx(
           style,
           spacing[density],
           iconGeometry.value && s.padding(0),
           variants[variant],
-          overrides,
+          toneStyles[tone],
+          // 和变体保持同一选择器作用域，使 null 也能清除颜色，而不仅是覆盖已有值。
+          overrides.select(
+            '&:where([data-zv-variant="solid"]), &:where([data-zv-variant="soft"]), &:where([data-zv-variant="outline"], [data-zv-variant="dashed"]), &:where([data-zv-variant="text"])',
+            overrides,
+          ),
           className,
         )}
       >

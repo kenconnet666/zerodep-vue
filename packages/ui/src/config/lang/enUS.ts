@@ -5,6 +5,7 @@ export const enUS: UiLanguage = Object.freeze({
   confirm: 'Confirm',
   cancel: 'Cancel',
   clear: 'Clear',
+  validationFailed: 'Validation could not complete. Please try again.',
   loading: 'Loading',
   expand: 'Show more',
   collapse: 'Show less',

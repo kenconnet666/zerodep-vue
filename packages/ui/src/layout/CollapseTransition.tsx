@@ -6,6 +6,8 @@ import { slotRest } from '../config/props.ts';
 import { useCss } from '../config/Provider.tsx';
 import type { UiTheme } from '../config/theme/types.ts';
 import { useMediaQuery } from '../interaction/media.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
 
 export interface CollapseTransitionProps extends ElementProps {
   /** 是否展开；动画组件本身不修改调用方状态。 */
@@ -22,8 +24,8 @@ export interface CollapseTransitionProps extends ElementProps {
   /** 收起动画完成后销毁内容；默认保留表单等子组件状态。 */
   unmountOnHide?: boolean;
   slotContent?: ElementSlotProps;
-  onAfterEnter?: () => void;
-  onAfterLeave?: () => void;
+  onAfterEnter?: Callback<[]>;
+  onAfterLeave?: Callback<[]>;
 }
 
 /** 自然尺寸与零之间的过渡；反向切换从当前画面继续，结束后释放尺寸控制。 */
@@ -100,8 +102,8 @@ export const CollapseTransition = _component(
         animation?.cancel();
         animation = undefined;
         animating.value = false;
-        if (opened) onAfterEnter?.();
-        else onAfterLeave?.();
+        if (opened) callCallbacks(onAfterEnter);
+        else callCallbacks(onAfterLeave);
       };
       if (
         reduced.value ||

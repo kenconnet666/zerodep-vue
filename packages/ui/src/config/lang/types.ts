@@ -6,6 +6,8 @@ export interface UiLanguage {
   readonly cancel: string;
   /** 清空输入或选择的文案。 */
   readonly clear: string;
+  /** 校验规则执行异常时的提示；业务规则消息由 Zod schema 提供。 */
+  readonly validationFailed: string;
   /** 正在加载时的文案。 */
   readonly loading: string;
   /** 展开被省略的完整内容。 */

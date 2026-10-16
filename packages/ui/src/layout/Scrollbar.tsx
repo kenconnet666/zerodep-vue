@@ -10,6 +10,7 @@ import {
   useId,
   watchPostEffect,
 } from 'vue';
+import type { Ref } from 'vue';
 import type { UiTheme } from '../config/theme/types.ts';
 import { slotRest } from '../config/props.ts';
 import type { ElementProps, ElementSlotProps } from '../config/props.ts';
@@ -19,6 +20,8 @@ import { usePointerDrag } from '../interaction/pointer.ts';
 import { measureTrack, trackProgress } from '../interaction/track.ts';
 
 export interface ScrollbarProps extends ElementProps {
+  /** 实际滚动视口，通过普通 Ref Props 访问浏览器 scrollTo/scrollBy 等能力。 */
+  viewportRef?: Ref<HTMLDivElement | null | undefined>;
   /** 默认同时允许横纵滚动。 */
   axis?: 'vertical' | 'horizontal' | 'both';
   /** 有溢出时始终显示轨道；默认在悬停、焦点、滚动或拖动期间显示。 */
@@ -38,53 +41,36 @@ export interface ScrollbarProps extends ElementProps {
   slotVerticalThumb?: ElementSlotProps;
   slotHorizontalThumb?: ElementSlotProps;
 }
-export interface ScrollbarInstance {
-  readonly viewport: HTMLDivElement | undefined;
-  /** 与原生 scrollTo 相同；left 使用浏览器的原生坐标。 */
-  scrollTo(options: ScrollToOptions): void;
-  scrollBy(options: ScrollToOptions): void;
-  /** 只在本视口中滚动到后代元素，不移动外部页面。 */
-  scrollToElement(
-    element: HTMLElement,
-    options?: { offset?: number; behavior?: ScrollBehavior },
-  ): void;
-  /** 供特殊内容的外部布局变化主动触发测量。 */
-  sync(): void;
-}
-
 /** 原生滚动视口加半透明浮动滑块；溢出、显隐、拖动均不改变内容可用宽度。 */
 export const Scrollbar = _component(
-  (
-    {
-      axis = 'both',
-      always = false,
-      height,
-      maxHeight,
-      thickness = '0.5em',
-      hideDelay = 800,
-      class: className,
-      slotViewport,
-      slotContent,
-      slotVerticalRail,
-      slotHorizontalRail,
-      slotVerticalThumb,
-      slotHorizontalThumb,
-      children,
-      onScroll,
-      tabindex = 0,
-      role,
-      'aria-label': label,
-      'aria-labelledby': labelledBy,
-      innerHTML: _innerHTML,
-      textContent: _textContent,
-      ...rest
-    }: ScrollbarProps,
-    { expose },
-  ) => {
+  ({
+    axis = 'both',
+    viewportRef = shallowRef<HTMLDivElement | null | undefined>(),
+    always = false,
+    height,
+    maxHeight,
+    thickness = '0.5em',
+    hideDelay = 800,
+    class: className,
+    slotViewport,
+    slotContent,
+    slotVerticalRail,
+    slotHorizontalRail,
+    slotVerticalThumb,
+    slotHorizontalThumb,
+    children,
+    onScroll,
+    tabindex = 0,
+    role,
+    'aria-label': label,
+    'aria-labelledby': labelledBy,
+    innerHTML: _innerHTML,
+    textContent: _textContent,
+    ...rest
+  }: ScrollbarProps) => {
     const s = useCss();
     const lang = useLang();
     const root = shallowRef<HTMLDivElement>();
-    const viewport = shallowRef<HTMLDivElement>();
     const content = shallowRef<HTMLDivElement>();
     const verticalRail = shallowRef<HTMLDivElement>();
     const horizontalRail = shallowRef<HTMLDivElement>();
@@ -108,7 +94,10 @@ export const Scrollbar = _component(
     const viewportId = `zv-scroll-${useId()}`;
     let schedule = () => {};
     let hideTimer: ReturnType<typeof setTimeout> | undefined;
-    provide(scrollTargetKey, viewport);
+    provide(
+      scrollTargetKey,
+      computed(() => viewportRef.value ?? undefined),
+    );
     const reveal = () => {
       active.value = true;
       clearTimeout(hideTimer);
@@ -120,7 +109,7 @@ export const Scrollbar = _component(
       );
     };
     const measure = () => {
-      const element = viewport.value;
+      const element = viewportRef.value;
       const view = element?.ownerDocument.defaultView;
       if (!element || !view) return;
       rtl.value = view.getComputedStyle(element).direction === 'rtl';
@@ -148,32 +137,8 @@ export const Scrollbar = _component(
       geometry.x = geometry.xRange ? (geometry.xValue / geometry.xRange) * geometry.xTravel : 0;
       geometry.y = geometry.yRange ? (geometry.yValue / geometry.yRange) * geometry.yTravel : 0;
     };
-    const instance: ScrollbarInstance = {
-      get viewport() {
-        return viewport.value;
-      },
-      scrollTo(options) {
-        viewport.value?.scrollTo(options);
-      },
-      scrollBy(options) {
-        viewport.value?.scrollBy(options);
-      },
-      scrollToElement(element, options = {}) {
-        const target = viewport.value;
-        if (!target?.contains(element)) return;
-        const top =
-          element.getBoundingClientRect().top -
-          target.getBoundingClientRect().top -
-          target.clientTop +
-          target.scrollTop -
-          (options.offset ?? 0);
-        target.scrollTo({ top: Math.max(0, top), behavior: options.behavior ?? 'auto' });
-      },
-      sync: () => schedule(),
-    };
-    expose(instance);
     watchPostEffect((cleanup) => {
-      const element = viewport.value;
+      const element = viewportRef.value;
       const child = content.value;
       const container = root.value;
       const view = element?.ownerDocument.defaultView;
@@ -240,7 +205,7 @@ export const Scrollbar = _component(
     onUpdated(() => schedule());
     onScopeDispose(() => clearTimeout(hideTimer));
     const moveTo = (direction: 'x' | 'y', value: number) => {
-      const element = viewport.value;
+      const element = viewportRef.value;
       if (!element) return;
       if (direction === 'x') setInlineScroll(element, value, rtl.value);
       else element.scrollTop = Math.max(0, Math.min(geometry.yRange, value));
@@ -272,7 +237,7 @@ export const Scrollbar = _component(
     };
     const key = (event: KeyboardEvent, direction: 'x' | 'y') => {
       if (event.defaultPrevented) return;
-      const element = viewport.value;
+      const element = viewportRef.value;
       if (!element) return;
       const value = direction === 'x' ? geometry.xValue : geometry.yValue;
       const page = direction === 'x' ? element.clientWidth : element.clientHeight;
@@ -372,7 +337,7 @@ export const Scrollbar = _component(
       <div {...rest} ref={root} class={cx(rootStyle, className)}>
         <div
           {...slotRest(slotViewport)}
-          ref={viewport}
+          ref={viewportRef}
           id={viewportId}
           tabindex={tabindex}
           role={role ?? (label || labelledBy ? 'region' : undefined)}

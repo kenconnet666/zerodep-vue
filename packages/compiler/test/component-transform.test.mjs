@@ -194,6 +194,28 @@ test('invalid prop reassignment and ambiguous initialization have located errors
   );
 });
 
+test('author setup only accepts props while Vue components retain their native context', async () => {
+  for (const source of [
+    'const C = _component((props, context) => <div/>);',
+    'const C = _component((props, { expose }) => <div/>);',
+    'function setup(props, { slots }) { return <div/>; } const C = _component(setup);',
+    'const C = _component(({ a = context }, context) => <div>{a}</div>);',
+  ]) {
+    await assert.rejects(
+      compile(`import {_component} from '@zerodep-vue/core'; ${source}`),
+      /ZV_PROPS_ONLY/,
+    );
+  }
+  const { Native } = await evaluate(`import {defineComponent} from 'vue';
+    export const Native = defineComponent({
+      setup(props, { slots, expose }) {
+        expose({ read: () => 'native' });
+        return () => <div>{slots.default?.() ?? 'native'}</div>;
+      }
+    });`);
+  assert.equal(await renderToString(createSSRApp(Native)), '<div>native</div>');
+});
+
 test('render initialization recognizes namespace calls and watcher aliases', async () => {
   for (const expression of [
     'Vue.ref(0)',
@@ -223,7 +245,7 @@ test('render initialization recognizes namespace calls and watcher aliases', asy
 });
 
 test('default parameter order has located diagnostics but deferred callbacks can read later props', async () => {
-  for (const code of ['{a=a}', '{a=b,b=1}', '{a=ctx},ctx']) {
+  for (const code of ['{a=a}', '{a=b,b=1}']) {
     await assert.rejects(
       compile(
         `import {_component} from '@zerodep-vue/core'; const C=_component((${code})=><div>{a}</div>);`,

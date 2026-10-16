@@ -1,19 +1,8 @@
 import { shallowRef, watchPostEffect } from 'vue';
-import type { ComponentPublicInstance, Ref } from 'vue';
-
-/** Vue 原生 ref 兼容类型；支持 Element 和通过 expose 暴露 element 的基础组件。 */
-export function referenceElement(
-  value: Element | ComponentPublicInstance | null,
-): HTMLElement | undefined {
-  if (!value) return undefined;
-  if (value instanceof HTMLElement) return value;
-  if ('element' in value && value.element instanceof HTMLElement) return value.element;
-  if ('$el' in value && value.$el instanceof HTMLElement) return value.$el;
-  return undefined;
-}
+import type { Ref } from 'vue';
 
 /** Teleport 后继续继承触发位置的字体与方向，而非 body 的样式。 */
-export function usePortalStyle(source: Readonly<Ref<HTMLElement | undefined>>) {
+export function usePortalStyle(source: Readonly<Ref<HTMLElement | null | undefined>>) {
   const appearance = shallowRef({
     fontSize: 'inherit',
     fontFamily: 'inherit',

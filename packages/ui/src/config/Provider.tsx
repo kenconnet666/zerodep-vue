@@ -14,8 +14,10 @@ import { zhCN } from './lang/zhCN.ts';
 import type { UiLanguage, UiLanguageInput } from './lang/types.ts';
 import { LightTheme } from './theme/LightTheme.ts';
 import type { UiTheme, UiThemeInput } from './theme/types.ts';
+import type { DataAttributes } from './props.ts';
 
-export interface ProviderProps extends /* @vue-ignore */ Omit<HTMLAttributes, 'class' | 'lang'> {
+export interface ProviderProps
+  extends DataAttributes, /* @vue-ignore */ Omit<HTMLAttributes, 'class' | 'lang'> {
   /** 完整主题或局部分组，支持 Ref/computed；只覆盖写出的字段，undefined 恢复继承。 */
   theme?:
     | UiThemeInput

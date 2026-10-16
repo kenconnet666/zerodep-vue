@@ -37,6 +37,16 @@ test('text input keeps IME drafts, native form submission, reset and clear focus
   await expect(input).toHaveValue('');
   await expect(input).toBeFocused();
   await expect(input).toHaveAttribute('aria-invalid', 'true');
+  await input.fill('原始值');
+  await input.dispatchEvent('compositionstart');
+  await input.evaluate((element) => {
+    (element as HTMLInputElement).value = '组合草稿';
+    element.dispatchEvent(new InputEvent('input', { bubbles: true, isComposing: true }));
+  });
+  await input.locator('..').getByRole('button', { name: '清空', exact: true }).click();
+  await input.dispatchEvent('compositionend');
+  await expect(input).toHaveValue('');
+  await expect(page.getByTestId('input-value')).toHaveText('');
   const notes = page.getByRole('textbox', { name: '备注内容', exact: true });
   await notes.fill('修改\n保留换行');
   expect(
@@ -46,9 +56,64 @@ test('text input keeps IME drafts, native form submission, reset and clear focus
   await expect(notes).toHaveValue('第一行\n第二行');
 });
 
+test('fields compose native choice controls, validation, keyboard movement and reset', async ({
+  page,
+}) => {
+  const form = page.getByTestId('field-form');
+  const input = form.getByRole('textbox', { name: '称呼', exact: true });
+  await input.focus();
+  await input.press('Tab');
+  await expect(input).toHaveAttribute('aria-invalid', 'true');
+  await expect(form.getByText('请填写称呼', { exact: true })).toBeVisible();
+  await input.fill('  用户  ');
+  await expect(page.getByTestId('field-output')).toHaveText('用户');
+  await expect(input).toHaveValue('  用户  ');
+  const accepted = form.getByRole('checkbox', { name: '接受条款', exact: true });
+  await accepted.check();
+  const daily = form.getByRole('radio', { name: '每天', exact: true });
+  const weekly = form.getByRole('radio', { name: '每周', exact: true });
+  await daily.focus();
+  await daily.press('ArrowRight');
+  await expect(weekly).toBeChecked();
+  await expect(page.getByTestId('radio-touched')).toHaveText('false');
+  await form.getByRole('button', { name: '切换选择只读', exact: true }).click();
+  await daily.click();
+  await expect(weekly).toBeChecked();
+  await accepted.click();
+  await expect(accepted).toBeChecked();
+  expect(
+    await form.evaluate((element) => Object.fromEntries(new FormData(element as HTMLFormElement))),
+  ).toEqual({ nickname: '  用户  ', accepted: 'on', notifications: 'on', frequency: 'weekly' });
+  await form.getByRole('button', { name: '切换选择只读', exact: true }).click();
+  await form.getByRole('button', { name: '切换选择取消', exact: true }).click();
+  await daily.click();
+  await expect(weekly).toBeChecked();
+  await form.getByRole('button', { name: '重置字段', exact: true }).click();
+  await expect(daily).toBeChecked();
+  await expect(accepted).not.toBeChecked();
+  await expect(input).toHaveValue('');
+  await expect(input).toHaveAttribute('aria-invalid', 'false');
+  await expect(page.getByTestId('radio-touched')).toHaveText('false');
+  await form.getByRole('button', { name: '切换选择取消', exact: true }).click();
+  await form.getByRole('button', { name: '切换选择回退', exact: true }).click();
+  await weekly.click();
+  await expect(daily).toBeChecked();
+  await expect(weekly).not.toBeChecked();
+  expect(
+    await form.evaluate((element) => new FormData(element as HTMLFormElement).get('frequency')),
+  ).toBe('daily');
+});
+
 test('tooltip survives disable while hovered and theme, RTL and reduced motion remain reactive', async ({
   page,
 }) => {
+  const custom = page.getByTestId('button-colors');
+  await custom.hover();
+  await expect(custom).toHaveCSS('color', 'rgb(102, 51, 153)');
+  await expect(custom).toHaveCSS('background-color', 'rgb(255, 240, 245)');
+  await expect(custom).toHaveCSS('border-top-color', 'rgb(0, 128, 128)');
+  await custom.evaluate((element) => element.setAttribute('aria-pressed', 'true'));
+  await expect(custom).toHaveCSS('background-color', 'rgb(255, 240, 245)');
   const trigger = page.getByRole('button', { name: '悬停提示', exact: true });
   await trigger.hover();
   const tooltip = page.getByRole('tooltip');

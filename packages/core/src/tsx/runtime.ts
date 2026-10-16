@@ -31,35 +31,20 @@ export function createComponent(options: ComponentOptions) {
     props: declared,
     setup(raw, context) {
       const instance = getCurrentInstance()!;
-      const wrapped: SetupContext = {
-        get attrs() {
-          return new Proxy(context.attrs, {
-            get(target, key) {
-              return key === 'class' && hasIncomingClass(instance)
-                ? (raw as Props)[CLASS_PROP]
-                : Reflect.get(target, key);
-            },
-          });
-        },
-        get slots() {
-          return context.slots;
-        },
-        emit: context.emit,
-        expose: context.expose,
-      };
       const finish = (value: unknown): unknown => {
         if (typeof value !== 'function') return value;
         return (...args: unknown[]) =>
           renderCss(() => {
             // children 可能已被 computed 缓存，仍须在每次渲染前检查宿主新加入的冲突。
-            hasExplicitChildren(instance, wrapped);
+            hasExplicitChildren(instance, context);
             const result = value(...args);
             return options.inheritAttrs !== false && !declaresClass && hasIncomingClass(instance)
               ? inheritClass(result, (raw as Props)[CLASS_PROP] as ClassValue)
               : result;
           });
       };
-      const result = setup?.(raw, wrapped);
+      // context 只供生成的 props 接线使用，不再向作者转发第二参数或实例 API。
+      const result = setup?.(raw, context);
       return (result instanceof Promise ? result.then(finish) : finish(result)) as ReturnType<
         NonNullable<ComponentOptions['setup']>
       >;
@@ -77,7 +62,10 @@ function rejectPropsMutation(): never {
   throw new TypeError('组件 props 只读；需要写入共享状态时修改传入 Ref 的 .value。');
 }
 
-function hasExplicitChildren(instance: ComponentInternalInstance | null, context: SetupContext) {
+function hasExplicitChildren(
+  instance: ComponentInternalInstance | null,
+  context: Pick<SetupContext, 'slots'>,
+) {
   const supplied = own(instance?.vnode.props ?? {}, 'children');
   if (supplied && context.slots.default)
     throw new TypeError('组件不能同时接收显式 children prop 和嵌套 children。');
@@ -90,7 +78,7 @@ function hasExplicitChildren(instance: ComponentInternalInstance | null, context
  */
 export function resolveProps(
   raw: Props,
-  context: SetupContext,
+  context: Pick<SetupContext, 'attrs' | 'slots'>,
   defaults: Defaults = {},
   writable: readonly string[] = [],
 ): Props {
@@ -183,11 +171,7 @@ export function resolveProps(
 }
 
 /** @internal rest 仅过滤统一的 props 视图；context 参数保留已有编译产物的调用兼容。 */
-export function restProps(
-  props: Props,
-  _context: SetupContext,
-  excluded: readonly string[],
-): Props {
+export function restProps(props: Props, _context: unknown, excluded: readonly string[]): Props {
   const omitted = new Set(excluded);
   omitted.add(CLASS_PROP);
   // Vue 对公开的只读代理会在构造 VNode 时复制 props。否则两个 VNode 共用实时对象，

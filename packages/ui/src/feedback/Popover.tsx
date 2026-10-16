@@ -1,15 +1,16 @@
 import { _component } from '@zerodep-vue/core';
 import { ref, shallowRef, useId, watch } from 'vue';
-import type { ComponentPublicInstance, Ref, VNodeChild } from 'vue';
+import type { Ref, VNodeChild } from 'vue';
 import type { Placement } from '@floating-ui/dom';
 import type { ElementSlotProps } from '../config/props.ts';
 import { slotRest } from '../config/props.ts';
 import { FloatingPanel } from '../interaction/FloatingPanel.tsx';
-import { referenceElement } from '../interaction/portal.ts';
 import type { OverlayCloseReason } from '../interaction/layer.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
 
 export interface FloatingTriggerProps {
-  ref: (value: Element | ComponentPublicInstance | null) => void;
+  elementRef: Ref<HTMLElement | null | undefined>;
   'aria-expanded'?: boolean;
   'aria-controls'?: string | undefined;
   'aria-haspopup'?: 'dialog';
@@ -21,7 +22,7 @@ export interface FloatingTriggerProps {
   onBlur?: (event: FocusEvent) => void;
 }
 export interface PopoverProps {
-  /** 明确将绑定展开到一个可聚焦触发节点上，兼容原生元素与 Button。 */
+  /** Button/Link 可直接展开；原生节点需将 elementRef 映射到 ref，其余绑定展开。 */
   trigger: (props: FloatingTriggerProps) => VNodeChild;
   open?: Ref<boolean>;
   disabled?: boolean;
@@ -38,7 +39,7 @@ export interface PopoverProps {
   closeOnFocusOutside?: boolean;
   slotPanel?: Omit<ElementSlotProps, 'id' | 'role' | 'tabindex'>;
   children?: VNodeChild;
-  onOpenChange?: (open: boolean, reason: OverlayCloseReason) => void;
+  onOpenChange?: Callback<[open: boolean, reason: OverlayCloseReason]>;
 }
 
 /** 非模态浮层；触发器和内容不包裹额外的交互元素。 */
@@ -59,10 +60,7 @@ export const Popover = _component(
     children,
     onOpenChange,
   }: PopoverProps) => {
-    const element = shallowRef<HTMLElement>();
-    const setReference: FloatingTriggerProps['ref'] = (value) => {
-      element.value = referenceElement(value);
-    };
+    const element = shallowRef<HTMLElement | null | undefined>();
     const id = `zv-popover-${useId()}`;
     watch(
       () => disabled,
@@ -73,14 +71,14 @@ export const Popover = _component(
     return (
       <>
         {trigger({
-          ref: setReference,
+          elementRef: element,
           'aria-haspopup': 'dialog',
           'aria-expanded': open.value && !disabled,
           'aria-controls': open.value && !disabled ? id : undefined,
           onClick: (event) => {
             if (!event.defaultPrevented && !disabled) {
               open.value = !open.value;
-              onOpenChange?.(open.value, 'trigger');
+              callCallbacks(onOpenChange, open.value, 'trigger');
             }
           },
         })}
@@ -91,7 +89,7 @@ export const Popover = _component(
             role="dialog"
             aria-label={slotPanel?.['aria-label'] ?? label}
             open={open}
-            reference={element.value}
+            reference={element.value ?? undefined}
             placement={placement}
             offset={offset}
             matchWidth={matchWidth}
@@ -100,7 +98,7 @@ export const Popover = _component(
             closeOnOutside={closeOnOutside}
             closeOnFocusOutside={closeOnFocusOutside}
             class={slotPanel?.class}
-            onClose={(reason) => onOpenChange?.(false, reason)}
+            onClose={(reason) => callCallbacks(onOpenChange, false, reason)}
           >
             {children}
           </FloatingPanel>

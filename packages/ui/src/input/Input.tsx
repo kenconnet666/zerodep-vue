@@ -1,13 +1,14 @@
 import { _component, cx } from '@zerodep-vue/core';
-import { ref } from 'vue';
-import type { InputHTMLAttributes } from 'vue';
+import { ref, shallowRef } from 'vue';
+import type { InputHTMLAttributes, Ref } from 'vue';
 import { useCss } from '../config/Provider.tsx';
+import { callCallbacks } from '../interaction/callbacks.ts';
 import { slotRest } from '../config/props.ts';
 import type { DataAttributes, ElementSlotProps } from '../config/props.ts';
 import { TextControlFrame } from './TextControlFrame.tsx';
 import type { TextControlAppearance } from './TextControlFrame.tsx';
 import { textControlStyle, useTextControl } from './text-control.ts';
-import type { TextControlInstance, TextValueProps } from './text-control.ts';
+import type { TextValueProps } from './text-control.ts';
 
 export interface InputProps
   extends
@@ -20,62 +21,60 @@ export interface InputProps
     > {
   /** 只接收文本类输入；数字和日期的业务值由专门组件管理。 */
   type?: 'text' | 'search' | 'password' | 'email' | 'url' | 'tel';
+  /** 原生 input 引用；挂载、卸载和来源替换遵循 Vue DOM ref 语义。 */
+  inputRef?: Ref<HTMLInputElement | null | undefined>;
   slotInput?: Omit<ElementSlotProps, 'id' | 'role' | 'tabindex'>;
 }
-export type InputInstance = TextControlInstance<HTMLInputElement>;
 
 /** 原生 input 组合共用外观和模型工具；保留 Vue v-model 的组合输入及普通属性语义。 */
 export const Input = _component(
-  (
-    {
-      value = ref(''),
-      resetValue,
-      type = 'text',
-      size,
-      width,
-      density,
-      variant,
-      status,
-      color,
-      backgroundColor,
-      borderColor,
-      clearable,
-      prefix,
-      suffix,
-      slotInput,
-      slotPrefix,
-      slotSuffix,
-      slotClear,
-      onValueChange,
-      onValueCommit,
-      onValueReset,
-      onClear,
-      disabled = false,
-      readonly: readOnly = false,
-      form,
-      class: className,
-      style,
-      'aria-invalid': ariaInvalid,
-      children: _children,
-      innerHTML: _innerHTML,
-      textContent: _textContent,
-      ...rest
-    }: InputProps,
-    { expose },
-  ) => {
+  ({
+    value = ref(''),
+    inputRef = shallowRef<HTMLInputElement | null | undefined>(),
+    resetValue,
+    type = 'text',
+    size,
+    width,
+    density,
+    variant,
+    status,
+    color,
+    backgroundColor,
+    borderColor,
+    clearable,
+    prefix,
+    suffix,
+    slotInput,
+    slotPrefix,
+    slotSuffix,
+    slotClear,
+    onValueChange,
+    onValueCommit,
+    onValueReset,
+    onClear,
+    disabled = false,
+    readonly: readOnly = false,
+    form,
+    class: className,
+    style,
+    'aria-invalid': ariaInvalid,
+    children: _children,
+    innerHTML: _innerHTML,
+    textContent: _textContent,
+    ...rest
+  }: InputProps) => {
     const s = useCss();
     const control = useTextControl<HTMLInputElement>({
+      element: () => inputRef.value,
       value: () => value,
       resetValue: () => resetValue,
       disabled: () => disabled,
       readOnly: () => readOnly,
-      form: () => form,
-      change: (next) => onValueChange?.(next),
-      commit: (next) => onValueCommit?.(next),
-      reset: (next) => onValueReset?.(next),
-      clear: () => onClear?.(),
+      change: (next) => callCallbacks(onValueChange, next),
+      commit: (next) => callCallbacks(onValueCommit, next),
+      reset: (next) => callCallbacks(onValueReset, next),
+      clear: () => callCallbacks(onClear),
     });
-    expose(control.instance);
     return (
       <TextControlFrame
         {...{
@@ -104,7 +103,7 @@ export const Input = _component(
         <input
           {...slotRest(slotInput)}
           {...rest}
-          ref={control.element}
+          ref={inputRef}
           type={type}
           form={form}
           data-zv-text-value=""

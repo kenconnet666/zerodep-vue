@@ -6,7 +6,6 @@ import { useCss } from '../config/Provider.tsx';
 import { slotRest } from '../config/props.ts';
 import type { ElementSlotProps } from '../config/props.ts';
 import { FloatingPanel } from '../interaction/FloatingPanel.tsx';
-import { referenceElement } from '../interaction/portal.ts';
 import type { FloatingTriggerProps } from './Popover.tsx';
 
 export interface TooltipProps {
@@ -33,10 +32,7 @@ export const Tooltip = _component(
   }: TooltipProps) => {
     const s = useCss();
     const open = ref(false);
-    const element = shallowRef<HTMLElement>();
-    const setReference: FloatingTriggerProps['ref'] = (value) => {
-      element.value = referenceElement(value);
-    };
+    const element = shallowRef<HTMLElement | null | undefined>();
     const id = `zv-tooltip-${useId()}`;
     let timer: ReturnType<typeof setTimeout> | undefined;
     let focused = false;
@@ -52,6 +48,15 @@ export const Tooltip = _component(
         Math.max(0, delay),
       );
     };
+    watch(element, (value, previous) => {
+      if (value === previous) return;
+      // 被替换的 DOM 不保证触发 blur/pointerleave；交互状态只属于当前触发器。
+      clearTimeout(timer);
+      triggerHovered = false;
+      panelHovered = false;
+      focused = value != null && value.ownerDocument.activeElement === value;
+      open.value = focused && !disabled;
+    });
     watch(
       () => disabled,
       (value) => {
@@ -67,7 +72,7 @@ export const Tooltip = _component(
     return (
       <>
         {trigger({
-          ref: setReference,
+          elementRef: element,
           'aria-describedby': open.value && !disabled ? id : undefined,
           onPointerenter: (event) => {
             if (event.pointerType !== 'touch') {
@@ -95,7 +100,7 @@ export const Tooltip = _component(
             id={id}
             role="tooltip"
             open={open}
-            reference={element.value}
+            reference={element.value ?? undefined}
             placement={placement}
             surface="inverse"
             scrollable={false}

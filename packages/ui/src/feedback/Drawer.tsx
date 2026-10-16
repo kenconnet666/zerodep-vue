@@ -14,6 +14,8 @@ import type { ScrollbarProps } from '../layout/Scrollbar.tsx';
 import { lockDocumentScroll, useLayer, useLayerContext } from '../interaction/layer.ts';
 import type { OverlayCloseReason } from '../interaction/layer.ts';
 import { usePortalStyle } from '../interaction/portal.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
 
 export interface DrawerProps {
   open: Ref<boolean>;
@@ -39,7 +41,7 @@ export interface DrawerProps {
   slotScrollbar?: Omit<ScrollbarProps, 'children' | 'height'>;
   slotFooter?: ElementSlotProps;
   slotClose?: Omit<ButtonProps, 'children' | 'type' | 'disabled' | 'loading'>;
-  onOpenChange?: (open: boolean, reason: OverlayCloseReason) => void;
+  onOpenChange?: Callback<[open: boolean, reason: OverlayCloseReason]>;
 }
 
 /** 原生 dialog 承担模态焦点与背景 inert；内容滚动和关闭操作组合现有基础组件。 */
@@ -82,7 +84,7 @@ export const Drawer = _component(
     const close = (reason: OverlayCloseReason) => {
       if (!open.value) return;
       open.value = false;
-      onOpenChange?.(false, reason);
+      callCallbacks(onOpenChange, false, reason);
     };
     useLayer({
       context,

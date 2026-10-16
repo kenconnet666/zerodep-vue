@@ -173,7 +173,7 @@ test('TransitionGroup keeps a departing row styled while keyed rows retain ident
   expect(host.stats().ownedReferences).toBe(1);
 });
 
-test('async setup exposes methods, updates shared Ref and clears DOM/component refs', async () => {
+test('async setup updates shared state and clears its ordinary DOM Ref prop on removal', async () => {
   const { host, mountTo } = environment();
   let ready!: () => void;
   const gate = new Promise<void>((resolve) => {
@@ -181,27 +181,27 @@ test('async setup exposes methods, updates shared Ref and clears DOM/component r
   });
   let mounts = 0;
   let disposed = 0;
-  const Async = _component(async ({ model }: { model: Ref<string> }, { expose }) => {
-    const element = ref<HTMLInputElement | null>(null);
-    onMounted(() => {
-      mounts++;
-    });
-    onScopeDispose(() => {
-      disposed++;
-    });
-    expose({ focus: () => element.value?.focus() });
-    await gate;
-    return (
-      <input ref={element} v-model={model.value} class={s.width(bx(model.value.length * 10))} />
-    );
-  });
+  const Async = _component(
+    async ({ model, inputRef }: { model: Ref<string>; inputRef: Ref<HTMLInputElement | null> }) => {
+      onMounted(() => {
+        mounts++;
+      });
+      onScopeDispose(() => {
+        disposed++;
+      });
+      await gate;
+      return (
+        <input ref={inputRef} v-model={model.value} class={s.width(bx(model.value.length * 10))} />
+      );
+    },
+  );
   const model = ref('abc');
-  const handle = ref<{ focus(): void } | null>(null);
+  const input = ref<HTMLInputElement | null>(null);
   const visible = ref(true);
   const App = _component(() => (
     <Suspense
       v-slots={{
-        default: () => (visible.value ? <Async ref={handle} model={model} /> : <i>removed</i>),
+        default: () => (visible.value ? <Async inputRef={input} model={model} /> : <i>removed</i>),
         fallback: () => <b>loading</b>,
       }}
     />
@@ -212,15 +212,15 @@ test('async setup exposes methods, updates shared Ref and clears DOM/component r
   ready();
   await flushPromises();
   expect(mounts).toBe(1);
-  handle.value!.focus();
+  input.value!.focus();
   expect(document.activeElement).toBe(wrapper.get('input').element);
   await wrapper.get('input').setValue('updated');
   expect(model.value).toBe('updated');
-  const input = wrapper.get('input').element;
+  const element = wrapper.get('input').element;
   visible.value = false;
   await nextTick();
-  expect(input.isConnected).toBe(false);
-  expect(handle.value).toBeNull();
+  expect(element.isConnected).toBe(false);
+  expect(input.value).toBeNull();
   expect(disposed).toBe(1);
   expect(host.stats().ownedReferences).toBe(0);
 });
@@ -267,22 +267,24 @@ test('a cancelled pending async component releases setup resources and never mou
   expect(host.stats().ownedReferences).toBe(0);
 });
 
-test('native Vue template hosting reuses value props, callbacks, default slots and exposed methods', async () => {
+test('native Vue template hosting reuses props, callbacks, nested children and DOM Ref props', async () => {
   const { host, mountTo } = environment();
+  const element = ref<HTMLButtonElement | null>(null);
   const Action = _component(
-    (
-      {
-        label,
-        children,
-        onCommit,
-        ...rest
-      }: { label: string; children?: VNodeChild; onCommit: (value: string) => void },
-      { expose },
-    ) => {
-      const button = ref<HTMLButtonElement | null>(null);
-      expose({ focus: () => button.value?.focus() });
+    ({
+      label,
+      children,
+      elementRef,
+      onCommit,
+      ...rest
+    }: {
+      label: string;
+      children?: VNodeChild;
+      elementRef: Ref<HTMLButtonElement | null>;
+      onCommit: (value: string) => void;
+    }) => {
       return (
-        <button ref={button} class={s.color('red')} {...rest} onClick={() => onCommit(label)}>
+        <button ref={elementRef} class={s.color('red')} {...rest} onClick={() => onCommit(label)}>
           {label}
           {children}
         </button>
@@ -291,15 +293,17 @@ test('native Vue template hosting reuses value props, callbacks, default slots a
   );
   const Host = defineComponent({
     components: { Action },
+    // 普通对象保留嵌套 Ref 身份，模板不会把它当作顶层模板 Ref 自动解包。
+    setup: () => ({ references: { element } }),
     data: () => ({ label: 'template', committed: '' }),
     template:
-      '<Action ref="action" class="host-class" :label="label" @commit="committed=$event"><i>slot</i></Action>',
+      '<Action :element-ref="references.element" class="host-class" :label="label" @commit="committed=$event"><i>slot</i></Action>',
   });
   const wrapper = mount(Host, { attachTo: mountTo, global: { plugins: [host] } });
   wrappers.push(wrapper);
   expect(wrapper.text()).toBe('templateslot');
   expect(wrapper.get('button').classes()).toContain('host-class');
-  (wrapper.vm.$refs.action as { focus(): void }).focus();
+  element.value!.focus();
   expect(document.activeElement).toBe(wrapper.get('button').element);
   await wrapper.setData({ label: 'changed' });
   await wrapper.get('button').trigger('click');

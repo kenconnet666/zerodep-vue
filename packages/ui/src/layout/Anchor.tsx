@@ -7,6 +7,8 @@ import type { ElementProps, ElementSlotProps } from '../config/props.ts';
 import { Link } from '../display/Link.tsx';
 import type { LinkProps } from '../display/Link.tsx';
 import { useMediaQuery } from '../interaction/media.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
 import {
   isWindow,
   observeScroll,
@@ -32,7 +34,7 @@ export interface AnchorProps extends Omit<ElementProps, 'children'> {
   behavior?: ScrollBehavior;
   /** 只在主动点击时修改当前地址；默认 push 保留浏览器返回能力。 */
   history?: 'push' | 'replace' | 'none';
-  onActiveChange?: (href: string | undefined) => void;
+  onActiveChange?: Callback<[href: string | undefined]>;
   /** 只作用于根列表，避免递归列表复制同一 id。 */
   slotList?: ElementSlotProps;
   /** 所有条目共享的属性，不分配重复 id。 */
@@ -96,7 +98,7 @@ export const Anchor = _component(
         next = entries.at(-1)?.href;
       if (active.value !== next) {
         active.value = next;
-        onActiveChange?.(next);
+        callCallbacks(onActiveChange, next);
       }
     }
     observeScroll(scrollTarget, measure);

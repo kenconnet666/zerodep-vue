@@ -32,7 +32,7 @@ export default defineConfig({ plugins: [vitePlugin()] });
 
 状态直接使用 Vue API。应用主题模块从 `createCssContext(source)` 解构导出 `useCss`、`provideTheme`、`useTheme`；组件内统一写 `const s = useCss()`，样式通过 `class` 传入。
 
-`_component` 从声明变量名自动生成组件名，默认关闭 Vue 的隐式属性透传。组件通过普通 Props 声明输入，参数解构后的剩余 Props 统一命名 `rest`，通过 `{...rest}` 或逐项赋值决定传给哪个节点；原生属性也包含在同一个 Props 只读视图中。Vue 的 `context.attrs` 保留官方字段名。无需重复写 `{ name: 'Provider', inheritAttrs: false }`。Vue 的 `key`、`ref` 和 VNode 生命周期属性仍按 Vue 保留语义处理。已有第二参数选项保留，只有明确需要 Vue 自动透传时才显式设为 `inheritAttrs: true`。
+`_component` 从声明变量名自动生成组件名，默认关闭 Vue 的隐式属性透传。作者 setup 只接收一个 Props 参数，参数解构后的剩余 Props 统一命名 `rest`，通过 `{...rest}` 或逐项赋值决定传给哪个节点；原生属性也包含在同一个 Props 只读视图中。状态传可写 Ref，事件传回调，内容传 children 或明确的渲染函数；不公开 emit、Vue slots、expose 或组件实例。DOM 引用通过 `elementRef/inputRef/viewportRef` 等普通 Props 接收，再传给内部原生节点的 ref。`key` 和 VNode 生命周期保留 Vue 语义；原生元素和普通 Vue 组件仍可使用 Vue 自己的 ref、slots 与模型指令。无需重复写 `{ name: 'Provider', inheritAttrs: false }`；`_component` 的第二参数是组件选项，只有明确需要 Vue 自动透传时才显式设为 `inheritAttrs: true`。
 
 ```tsx
 import { _component, createCssContext, SystemKeywords } from '@zerodep-vue/core';
@@ -271,11 +271,30 @@ const query = ref('');
 
 输入法组合期间由 Vue 原生 v-model 保留 DOM 草稿，组合完成后写回字符串。`onValueChange` 只报告用户输入和清空，`onValueCommit` 对应原生 change 或清空；外部赋值不触发这两个回调。原生表单 reset 恢复首次 setup 的值，可通过 `resetValue` 指定基准，并通过 `onValueReset` 观察重置；取消的 reset 不修改值，form 属性切换后跟随新的表单。只读使用原生 `readonly`。
 
-`variant="outline|filled|underlined"` 控制外观，`density` 控制内部尺寸，`size` 是字号，默认继承。`status="error|warning|success"` 提供状态颜色，error 同时输出 aria-invalid；名称和错误说明仍通过 label、aria-describedby 等原生方式关联。`prefix/suffix` 提供前后内容，`slotPrefix/slotSuffix/slotClear` 定制对应节点。清空按钮使用当前语言的 clear 文案，清空后聚焦输入；readonly 不显示清空操作。组件 ref 可声明为 `shallowRef<InputInstance>()`，公开 element、focus 和 select。
+`variant="outline|filled|underlined"` 控制外观，`density` 控制内部尺寸，`size` 是字号，默认继承。`status="error|warning|success"` 提供状态颜色，error 同时输出 aria-invalid；名称和错误说明仍通过 label、aria-describedby 等原生方式关联。`prefix/suffix` 提供前后内容，`slotPrefix/slotSuffix/slotClear` 定制对应节点。清空按钮使用当前语言的 clear 文案，清空后聚焦输入；readonly 不显示清空操作。`inputRef={shallowRef<HTMLInputElement | null>()}` 接收真实 DOM，可直接调用原生 focus/select；卸载或引用替换时遵循 Vue DOM ref 的清空语义。
 
-`Textarea` 使用同样的字符串模型、外观、清空和表单重置契约，保留换行。`rows` 默认 3 且必须为正整数；`resize` 默认 vertical，`minHeight/maxHeight` 接收 CSS 属性值。原生节点属性通过 `slotTextarea` 定制，组件 ref 使用 `TextareaInstance`。
+`Textarea` 使用同样的字符串模型、外观、清空和表单重置契约，保留换行。`rows` 默认 3 且必须为正整数；`resize` 默认 vertical，`minHeight/maxHeight` 接收 CSS 属性值。原生节点属性通过 `slotTextarea` 定制，`inputRef` 接收 `Ref<HTMLTextAreaElement | null | undefined>`。
 
-两个组件组合内部的 TextControlFrame，并共用 useTextControl、原生节点样式和 useFormReset。外观层继续组合 Button/Icon，slotPrefix、slotSuffix、slotClear 逐层转发，外部 class 最后组合；Input/Textarea 各自持有实际 DOM、原生属性和 v-model。字段层采用独立状态工具加组合视图的方向：useField 负责 Zod、dirty/touched 与异步校验结果归属，Field 负责标签、说明和错误展示，避免状态只能通过组件 ref 使用。
+两个组件组合内部的 TextControlFrame，并共用 useTextControl、原生节点样式和 useFormReset。外观层继续组合 Button/Icon，slotPrefix、slotSuffix、slotClear 逐层转发，外部 class 最后组合；Input/Textarea 各自持有实际 DOM、原生属性和 v-model。复杂组件的 `slotX` 只是节点属性 Props，不使用 Vue 插槽协议。业务回调接受单个函数或只读函数数组，逐个按顺序调用，支持上层 Props 展开时 Vue 的回调合并。
+
+`Checkbox` 和 `Switch` 共享布尔 Ref、原生表单生命周期与 ChoiceControlFrame，标记分别组合 Icon 或滑块。`value` 默认 false，`resetValue` 默认初始值；`formValue` 是提交字符串，默认 on，与布尔模型分离。`readonly` 保留焦点与表单提交并阻止切换，`disabled` 使用原生禁用语义；Checkbox 的 `indeterminate` 受控，既不修改 value，也不改变提交值。`inputRef` 接收真实 input，`slotInput/slotIndicator/slotLabel` 逐层转发，Switch 另有 `slotThumb`。Switch 使用原生 checkbox 的键盘与表单行为，通过 role=switch 表达开关语义。
+
+`RadioGroup` 组合 fieldset/legend、Flex 和内部 Radio，组独占模型和重置监听，叶子通过 Props 接收状态与通知。`options` 提供唯一的 string/number value、label、disabled 和可选 formValue；数值 1 与字符串 "1" 是不同业务值，提交值默认 String(value)。`value` 使用可写 Ref，null/undefined 表示未选择，动态移除选项不会自动改写模型。`orientation` 控制水平或垂直排列；原生同名单选按钮负责方向键和表单语义，readonly 保留焦点与提交并禁止切换。name 默认生成独立值以隔离原生分组，业务表单应显式传 name。`slotInput/slotIndicator/slotLabel/slotOption` 应用于每一项，不接受重复 id；`elementRef` 接收组的 fieldset。
+
+`useField(value, schema, options)` 在 Vue setup 或 effectScope 中管理字段状态，直接接收 Zod 4 schema；effectScope 中必须显式提供 id。`control` 是可展开到控件的普通 Props 对象，保留原始 value Ref，并提供 id/name/required、描述与错误关联、状态、焦点离开与重置回调。`Field` 组合 Grid/Text，负责 label、help 和错误展示，子控件由调用者传入，不扫描或克隆 VNode。
+
+```tsx
+const name = ref('');
+const field = useField(name, z.string().trim().min(1, '请填写姓名'), {
+  name: 'name',
+  required: true,
+});
+<Field state={field} label="姓名" help="用于显示称呼" slotError={{ color: '_danger' }}>
+  <Input {...field.control} clearable />
+</Field>;
+```
+
+默认 `validateOn="blur"` 在首次离开整个控件后校验，之后随编辑更新；`change` 每次变化校验，`submit` 只由 `validate()` 主动触发。组内焦点切换不算离开。`output` 保存 Zod 的解析结果，不将 trim/transform 写回编辑草稿；`issues` 保留原生问题信息，校验自身抛错单独放入 failure。旧请求、reset 前的请求和卸载后的结果均不会覆盖新状态；pending、valid、touched、dirty 是只读 computed。dirty 使用 Object.is 与重置基准比较，对象值按整体替换更新。`reset()` 恢复基准，`reset(next)` 同时替换模型和基准；原生表单 reset 与这份基准一致。
 
 ## UI 布局、导航与交互
 
@@ -332,7 +351,7 @@ const progress = ref(0);
 
 `Scrollbar` 使用真实原生滚动视口，隐藏原生滚动槽，将半透明滑块浮动在内容上；有无溢出、轨道显隐都不预留或回收内容宽度。默认允许双向滚动，`axis` 可限制方向，`always` 可使有溢出的滑块持续显示。轨道不拦截内容点击，滑块支持指针拖动、方向键、PageUp/PageDown、Home/End。`height` / `maxHeight` 或外部布局约束决定可视尺寸。原生视口用 `slotViewport`，内容用 `slotContent`，轨道和滑块分别用 `slotVerticalRail` / `slotHorizontalRail` / `slotVerticalThumb` / `slotHorizontalThumb` 定制。
 
-组件 ref 可声明为 `shallowRef<ScrollbarInstance>()`，公开 `viewport`、`scrollTo`、`scrollBy`、`scrollToElement` 和 `sync`。前两个滚动方法沿用原生坐标；`scrollToElement` 只移动当前视口的纵向位置，不连带滚动外部页面。内容变化、字体加载、尺寸和方向变化会自动重测。
+`viewportRef` 接收 `Ref<HTMLDivElement | null | undefined>`，需要程序滚动时直接调用真实视口的 scrollTo/scrollBy，也可将同一个 Ref 传给 Anchor/BackTop 的 target。内容变化、字体加载、尺寸和方向变化自动重测，不公开组件实例或手动 sync 方法。
 
 `CollapseTransition` 根据 `show` 展开收起，支持 `axis`、`fade`、`appear`、主题 `duration`、`lazy` 和 `unmountOnHide`，快速反向切换从当前画面继续。`Collapse` / `CollapseItem` 提供真实标题和按钮语义；`expandedKeys` 使用可写 Ref，`multiple` 决定是否多开，item 的 `name` 在组内唯一。默认保留隐藏内容状态，关闭后内容不再进入焦点序列；方向键与 Home/End 只在当前组的标题之间移动。复杂内容可通过 item 的 `region` 显式声明命名区域。
 
@@ -349,13 +368,17 @@ const expandedKeys = ref<readonly string[]>(['filters']);
 
 ### 浮层与导航
 
-`Popover` 与 `Tooltip` 共用定位面板、浮层关闭顺序和 Teleport 继承处理。`trigger` 是显式渲染函数，将收到的绑定展开到一个可聚焦原生元素或 Button 上；不自动克隆任意 VNode。Popover 是非模态 dialog，通过 `label` 或 `slotPanel.aria-labelledby` 命名，默认聚焦第一个控件。`open` 使用可写 Ref；`placement/offset/matchWidth` 控制定位，`closeOnEscape/closeOnOutside/closeOnFocusOutside` 控制关闭。定位在打开期间随滚动和尺寸更新，越界时翻转和避让。子层优先处理 Escape，关闭后按焦点归属恢复触发器；外部点击和焦点切换不会被强行拉回。
+`Popover` 与 `Tooltip` 共用定位面板、浮层关闭顺序和 Teleport 继承处理。`trigger` 是普通渲染函数 Prop：Button/Link 可直接展开收到的绑定，原生节点需将 elementRef 映射到 ref，其余属性展开；不自动克隆任意 VNode 或读取组件实例。Popover 是非模态 dialog，通过 `label` 或 `slotPanel.aria-labelledby` 命名，默认聚焦第一个控件。`open` 使用可写 Ref；`placement/offset/matchWidth` 控制定位，`closeOnEscape/closeOnOutside/closeOnFocusOutside` 控制关闭。定位在打开期间随滚动和尺寸更新，越界时翻转和避让。子层优先处理 Escape，关闭后按焦点归属恢复触发器；外部点击和焦点切换不会被强行拉回。
 
 ```tsx
 <Popover label="筛选条件" trigger={(props) => <Button {...props}>打开筛选</Button>}>
   {/* 可交互内容 */}
 </Popover>
 <Tooltip content="刷新当前数据" trigger={(props) => <Button {...props}>刷新</Button>} />
+<Tooltip
+  content="原生按钮"
+  trigger={({ elementRef, ...rest }) => <button ref={elementRef} {...rest}>提示</button>}
+/>
 ```
 
 Tooltip 用于简短说明，保留触发器焦点，同时合并触发器悬停、面板悬停和键盘焦点；`openDelay/closeDelay` 单位 ms。它不承载可交互内容，较长或可操作内容使用 Popover。两个组件通过 `slotPanel` 定制面板属性；Popover 的长内容复用浮动 Scrollbar。
@@ -402,24 +425,25 @@ pnpm --filter @zerodep-vue/ui test:browser --project chromium -g "scrollbars pre
 
 以下审查以当前源码、测试入口和 CI 配置为依据。安装消费、生产浏览器和交互组件声明检查已接入 CI；是否通过以对应 SHA 的运行报告为准，不代表组件库已全部完成。
 
-| 范围            | 已有实现与验证                                                                                                                                     | 仍需补齐                                                            |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| compiler / core | Vue JSX v3.0.0 源码 fork 与上游对照；TSX 作者语义、CSS/主题、资源生命周期、SSR、HMR 和 DevTools 的现有单测；双模式作者测试及 Linux/Windows LSP     | 持续核对安装消费者对当前提交的声明与运行时报告                      |
-| 配置与展示      | Provider、Light/DarkTheme、zhCN/enUS；Icon、Text、Heading、Paragraph、Link、Ellipsis；主题继承、原生属性、部分组件 SSR/hydration 与资源释放单测    | 新组件按同等标准加入公开声明与交互验收                              |
-| 布局与输入基础  | Flex、Grid/GridItem、Divider、Scrollbar、Collapse/CollapseItem/CollapseTransition、Affix、BackTop、Anchor、Split/SplitPane、Button、Ripple、Slider | 已提供 Input/Textarea；字段校验与选择控件按后续阶段推进             |
-| 浮层与导航      | Popover、Tooltip、Drawer、Menu、Breadcrumb、Sidebar；共享定位、关闭栈、指针所有权与滚动工具，已有嵌套关闭、焦点、禁用重开和跨断点回归              | 随真实组件用法继续补充状态组合                                      |
-| CI 与交付       | 格式、三包类型检查、core/compiler/UI 测试、公开组件声明、构建打包、跨平台 LSP/安装消费；开发/生产 × Chromium/Firefox                               | 每项验收都与当前 SHA 的 CI 报告关联；新功能同步增加消费和浏览器场景 |
+| 范围            | 已有实现与验收入口                                                                                                        | 下一步                                                            |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| compiler / core | Vue JSX v3.0.0 真实源码 fork；Props 作者入口、CSS/主题、资源生命周期、SSR/HMR；双模式作者测试与跨平台 LSP                 | 随真实组件组合补齐回归，保持普通 Vue 组件兼容边界                 |
+| 配置与展示      | Provider、Light/DarkTheme、zhCN/enUS；Icon、Text、Heading、Paragraph、Link、Ellipsis                                      | 组合 Alert、Tag/Badge、Empty、Skeleton，先确认实际复用与样式需求  |
+| 布局与交互      | Flex、Grid/GridItem、Divider、Scrollbar、Collapse、Affix、BackTop、Anchor、Split、Button、Ripple、Slider                  | 保持原生语义，继续验证主题、RTL、缩放与减少动画                   |
+| 表单基础        | Input/Textarea、Checkbox/Switch、RadioGroup、Field/useField；共享模型与 reset 工具，Zod 原生输入/输出、异步归属与错误说明 | 先建立 Listbox 的选项、焦点和键盘契约，再组合 Select/Autocomplete |
+| 浮层与导航      | Popover、Tooltip、Drawer、Menu、Breadcrumb、Sidebar；共享定位、关闭栈、指针所有权与滚动工具                               | 新输入组件复用浮层与 Scrollbar，保留各自的焦点责任                |
+| CI 与交付       | 三包类型/构建/打包、core/compiler/UI 测试、公开声明、跨平台 LSP/安装消费、开发/生产 × Chromium/Firefox                    | 结果按确切 SHA 核对；新增组件同步扩展消费与浏览器场景             |
 
-本轮修正了 Link/Scrollbar 把 Vue 合并的原生事件数组当单个函数调用的问题，回归覆盖事件顺序、禁用、`preventDefault()` 和 `stopImmediatePropagation()`。原生事件继续交给 Vue DOM 层分发，业务回调仍采用组件现有契约。Tooltip 还修正了“指针进入面板后禁用，再启用并离开触发器”时残留悬停状态导致面板不关闭的问题。
+原生事件交给 Vue DOM 层分发，业务通知通过共享 callCallbacks 按顺序处理合并后的函数。已建立的回归包括：中文输入法草稿与清空、原生 FormData/reset、回调合并、DOM 引用替换、Tooltip 禁用或触发器移除、单选组回调恢复旧值，以及 CSS null 清除。普通字段状态通过 Props 组合，不依赖组件实例或隐式查找子节点。
 
-实施顺序如下；前两项的检查流程已建立，后续功能逐项接入同一验收链路：
+接下来的实施顺序按依赖推进：
 
-1. **补齐交付验收。** 在 UI 包维护安装消费脚本，由 CI 的 build 产物驱动 Linux/Windows 消费任务，并纳入 CI result。运行时创建有明确所有权的仓库外临时消费者，直接安装三个 tarball，禁用源码条件，验证 dist JS/d.ts、显式 peer、单 Vue 实例、中文类型提示和未知主题名负向诊断，以及 Vite 客户端构建与 SSR/hydration。退出时清理临时工程；不恢复独立 fixtures 工程。完成条件是同一 SHA 的产物、消费报告和 CI 汇总全部通过。
-2. **补齐交互验收。** 复用 UI 浏览器页面覆盖生产构建，并增加 Firefox 与现有 Chromium 的关键交互回归。优先检查嵌套浮层的 Escape/Tab/焦点恢复、Tooltip 禁用与重新进入、Sidebar 跨断点、Scrollbar 实际尺寸、Slider/Split 的 RTL 与拖动取消、减少动态效果，以及原生事件组合。声明发射检查从现有展示/配置组件扩展到已导出的交互组件；新增任务仍由 CI 并行承担。
-3. **先试点文本输入，再建立字段能力。** 先形成可审阅的 Props 与状态方案，明确可写 Ref、输入草稿、中文输入法组合期间的更新、清空、只读/禁用、原生表单 reset/submit、名称及错误描述关联。以一个文本输入组件完成双模式、浏览器和安装消费验证，再推广 Textarea、Checkbox、Radio、Switch；Field 直接使用 Zod 4，明确 touched/dirty、校验时机、重置与异步结果归属，不另建校验 DSL。
-4. **按业务值推进复杂输入与数据组件。** 基础输入稳定后，再规划 Decimal 数值输入和 CalendarDate/Time 日期时间输入，保持草稿与业务值分离；Select/Autocomplete 复用现有浮层与键盘基础，表格另行明确行标识、排序、选择、滚动和大数据边界。每一类先试点和验收，再扩展。
+1. **选择基础与上层输入。** 先实现可独立验收的 Listbox/选项视图，明确焦点移动、禁用项、选中值和可访问名称。Select 组合触发器、Popover、Listbox、Scrollbar；Autocomplete 再组合 Input 与同一选项基础，额外管理查询草稿、过滤和异步结果归属。选项业务值与键的公开契约先用真实场景评审，不预置万能数据源层。
+2. **表单组合与反馈。** 在多个 useField 的实际提交场景上确定 Form 的校验与重置调度；Alert/Empty 等视图复用 Text、Icon、Button。仅抽取多个组件确实共用的职责，子节点属性沿 slotX 普通 Props 逐层转发。
+3. **明确业务值的输入。** InputNumber 使用 Decimal，日期和时间输入使用 CalendarDate/Time；先完成草稿解析、提交、格式化和语言边界，再扩展 DatePicker/RangePicker。保持外部业务值与编辑草稿分离。
+4. **数据展示。** 先用基础表格验证行标识、列渲染和排序，选择功能复用 Checkbox，分页组合 Button。虚拟化、树表和复杂编辑在明确数据量与交互要求后扩展。
 
-新组件有三条可行路线：先增加 Tag/Badge/Avatar 等展示组件，状态成本低但不能验证表单链路；先建立基础输入与 Field，能直接验证现有 Ref、主题、语言和 Zod 契约；直接进入复杂表格或日期选择器，则同时引入较多状态与交互责任。推荐在前两项验收补齐后采用基础输入路线，先用真实表单场景确认 API，再决定后续组件顺序。
+每一阶段都保留同一条交付链路：相关文件的本地 LSP 与必要短测试、子代理独立复核、中文提交推送，再由 CI 执行全量与跨平台验收。运行中或排队的 CI 记为 pending，不以此前的绿色记录代替新代码验收。
 
 ## 许可
 

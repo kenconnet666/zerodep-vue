@@ -3,8 +3,12 @@ import { _component, bx, cx } from '@zerodep-vue/core';
 import type { HTMLAttributes, Ref, VNodeChild } from 'vue';
 import { computed, onMounted, onUpdated, ref, shallowRef, useId, watchEffect } from 'vue';
 import { useCss, useLang } from '../config/Provider.tsx';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
+import type { DataAttributes } from '../config/props.ts';
 
-export interface EllipsisProps extends /* @vue-ignore */ Omit<HTMLAttributes, 'class'> {
+export interface EllipsisProps
+  extends DataAttributes, /* @vue-ignore */ Omit<HTMLAttributes, 'class'> {
   /** 最大显示行数，默认 1；必须是正整数，单行和多行均保留完整内容。 */
   lines?: number | undefined;
   /** 内容溢出时显示原生展开/收起按钮；默认关闭。 */
@@ -12,7 +16,7 @@ export interface EllipsisProps extends /* @vue-ignore */ Omit<HTMLAttributes, 'c
   /** 可写展开状态；省略时每个实例持有独立的 Ref(false)。 */
   expanded?: Ref<boolean>;
   /** 首次可测量及实际裁剪状态变化时调用；展开时报告 false。 */
-  onOverflowChange?: (overflowing: boolean) => void;
+  onOverflowChange?: Callback<[overflowing: boolean]>;
   /** 约束外层宽度及继承样式；外部链式样式最后组合。 */
   class?: CssInput;
   /** 文字及非交互行内内容；交互控件放在裁剪区域之外。 */
@@ -122,7 +126,7 @@ export const Ellipsis = _component(
           const notify = onOverflowChange;
           if (notify && lastReportedOverflow !== overflowing) {
             lastReportedOverflow = overflowing;
-            notify(overflowing);
+            callCallbacks(notify, overflowing);
           }
         };
         const schedule = () => {

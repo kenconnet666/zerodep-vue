@@ -21,6 +21,8 @@ import { slotRest } from '../config/props.ts';
 import type { ElementProps, ElementSlotProps } from '../config/props.ts';
 import { Button } from '../input/Button.tsx';
 import { usePointerDrag } from '../interaction/pointer.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
 import { SplitPane } from './SplitPane.tsx';
 import type { SplitPaneProps } from './SplitPane.tsx';
 import { fitSplit, splitPercent } from './split-layout.ts';
@@ -43,10 +45,10 @@ export interface SplitProps extends ElementProps {
   /** 方向键每次移动的百分比点，默认 1；Shift 为十倍。 */
   keyboardStep?: number;
   slotSeparator?: Omit<ElementSlotProps, 'id' | 'role' | 'tabindex'>;
-  onSizesChange?: (sizes: Readonly<Record<string, number>>) => void;
-  onResizeStart?: (event: SplitResizeEvent) => void;
-  onResizeEnd?: (event: SplitResizeEvent) => void;
-  onCollapseChange?: (name: string, collapsed: boolean) => void;
+  onSizesChange?: Callback<[sizes: Readonly<Record<string, number>>]>;
+  onResizeStart?: Callback<[event: SplitResizeEvent]>;
+  onResizeEnd?: Callback<[event: SplitResizeEvent]>;
+  onCollapseChange?: Callback<[name: string, collapsed: boolean]>;
 }
 interface Pane {
   node: VNode;
@@ -332,7 +334,7 @@ export const Split = _component(
       next[bounds.before.props.name] = value;
       next[bounds.after.props.name] = bounds.total - value;
       sizes.value = next;
-      onSizesChange?.(next);
+      callCallbacks(onSizesChange, next);
     }
     function resizeEvent(
       index: number,
@@ -358,7 +360,7 @@ export const Split = _component(
         else set.delete(name);
         localCollapsed.value = set;
       }
-      onCollapseChange?.(name, next);
+      callCallbacks(onCollapseChange, name, next);
     }
     function pointerdown(event: PointerEvent, index: number) {
       if (
@@ -393,12 +395,12 @@ export const Split = _component(
         (cancelled) => {
           if (cancelled && sizes === source) {
             source.value = previous;
-            onSizesChange?.(record());
+            callCallbacks(onSizesChange, record());
           }
-          onResizeEnd?.({ ...initialEvent, sizes: record(), cancelled });
+          callCallbacks(onResizeEnd, { ...initialEvent, sizes: record(), cancelled });
         },
       );
-      if (dragging.value) onResizeStart?.(initialEvent);
+      if (dragging.value) callCallbacks(onResizeStart, initialEvent);
     }
     function keydown(event: KeyboardEvent, index: number) {
       if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || disabled)
@@ -442,9 +444,9 @@ export const Split = _component(
       }
       event.preventDefault();
       cancel();
-      onResizeStart?.(resizeEvent(index, 'keyboard'));
+      callCallbacks(onResizeStart, resizeEvent(index, 'keyboard'));
       change(index, requested);
-      onResizeEnd?.(resizeEvent(index, 'keyboard'));
+      callCallbacks(onResizeEnd, resizeEvent(index, 'keyboard'));
     }
     const barStyle = s.position('relative').flex('0 0 0.5em').touchAction('none');
     const handleStyle = s

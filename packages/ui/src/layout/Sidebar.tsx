@@ -15,6 +15,8 @@ import { Scrollbar } from './Scrollbar.tsx';
 import type { ScrollbarProps } from './Scrollbar.tsx';
 import { useMediaQuery } from '../interaction/media.ts';
 import { sidebarCompactKey } from './sidebar-context.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
 
 export interface SidebarProps extends ElementProps {
   /** 桌面收窄与窄屏打开独立保存，不混用同一状态。 */
@@ -32,7 +34,7 @@ export interface SidebarProps extends ElementProps {
   slotContent?: Omit<ScrollbarProps, 'children'>;
   slotToggle?: Omit<ButtonProps, 'children' | 'type' | 'aria-expanded'>;
   slotDrawer?: Omit<DrawerProps, 'open' | 'inline' | 'scrollable' | 'children' | 'unmountOnHide'>;
-  onCollapsedChange?: (collapsed: boolean) => void;
+  onCollapsedChange?: Callback<[collapsed: boolean]>;
 }
 
 /** Sidebar → Drawer/Scrollbar/Button；同一内容树跨断点移动，保留子组件与输入状态。 */
@@ -149,7 +151,7 @@ export const Sidebar = _component(
                     onClick={(event) => {
                       if (!event.defaultPrevented) {
                         collapsed.value = !collapsed.value;
-                        onCollapsedChange?.(collapsed.value);
+                        callCallbacks(onCollapsedChange, collapsed.value);
                       }
                     }}
                   />

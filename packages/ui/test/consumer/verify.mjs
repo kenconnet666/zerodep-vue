@@ -212,6 +212,32 @@ switch (phase) {
       notes.dispatchEvent(new dom.window.Event('input', { bubbles: true }));
       await mounted.nextTick();
       assert.equal(document.querySelector('#notes-value').textContent, 'third\nfourth');
+      const accepted = document.querySelector('#accepted');
+      accepted.click();
+      document.querySelector('input[type="radio"][value="weekly"]').click();
+      await mounted.nextTick();
+      const form = document.querySelector('#fields');
+      const submitted = new dom.window.FormData(form);
+      assert.equal(submitted.get('accepted'), 'on');
+      assert.equal(submitted.get('notifications'), 'on');
+      assert.equal(submitted.get('frequency'), 'weekly');
+      form.reset();
+      await Promise.resolve();
+      await mounted.nextTick();
+      assert.equal(input.value, 'installed');
+      assert.equal(accepted.checked, false);
+      assert.equal(document.querySelector('input[type="radio"][value="daily"]').checked, true);
+      input.value = '';
+      input.dispatchEvent(new dom.window.Event('input', { bubbles: true }));
+      input.dispatchEvent(new dom.window.FocusEvent('focusout', { bubbles: true }));
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      await mounted.nextTick();
+      assert.equal(input.getAttribute('aria-invalid'), 'true');
+      assert(
+        document
+          .getElementById(input.getAttribute('aria-describedby'))
+          .textContent.includes('请输入查询内容'),
+      );
       assert.deepEqual(messages, []);
       report.sameNodes = true;
       report.reactive = true;

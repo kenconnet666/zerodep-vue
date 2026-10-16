@@ -1,5 +1,5 @@
 import { _component, bx, cx } from '@zerodep-vue/core';
-import type { AnchorHTMLAttributes } from 'vue';
+import type { AnchorHTMLAttributes, Ref } from 'vue';
 import { useCss } from '../config/Provider.tsx';
 import type { TextProps } from './Text.tsx';
 
@@ -10,6 +10,8 @@ export interface LinkProps
   href: string;
   /** 禁用时移除原生导航地址及 Tab 停靠点，并阻止点击回调。 */
   disabled?: boolean;
+  /** 实际链接 DOM 引用，供浮层和焦点操作通过 Props 组合。 */
+  elementRef?: Ref<HTMLElement | null | undefined>;
 }
 
 /** 原生 a，保留浏览器导航、键盘和修饰键行为。 */
@@ -17,6 +19,7 @@ export const Link = _component(
   ({
     href,
     disabled = false,
+    elementRef,
     tabindex,
     onClick = () => {},
     onAuxclick = () => {},
@@ -62,6 +65,7 @@ export const Link = _component(
     return (
       <a
         {...rest}
+        ref={elementRef}
         href={disabled ? undefined : href}
         tabindex={disabled ? -1 : tabindex}
         aria-disabled={disabled || ariaDisabled}

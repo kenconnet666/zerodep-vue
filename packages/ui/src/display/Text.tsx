@@ -3,9 +3,11 @@ import type { CssInput, CssValue } from '@zerodep-vue/core';
 import type { HTMLAttributes, VNodeChild } from 'vue';
 import { useCss } from '../config/Provider.tsx';
 import type { UiTheme } from '../config/theme/types.ts';
+import type { DataAttributes } from '../config/props.ts';
 
 /** 行内文字的公共属性；字号、颜色和字重默认继承当前区域。 */
-export interface TextProps extends /* @vue-ignore */ Omit<HTMLAttributes, 'class' | 'color'> {
+export interface TextProps
+  extends DataAttributes, /* @vue-ignore */ Omit<HTMLAttributes, 'class' | 'color'> {
   /** 同 s.color(...)；支持当前主题颜色名，默认继承文字颜色。 */
   color?: CssValue<'color', UiTheme>;
   /** 同 s.fontSize(...)；沿用 Icon 的 size 命名，默认继承字号。 */

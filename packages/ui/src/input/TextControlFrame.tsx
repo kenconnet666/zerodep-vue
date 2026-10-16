@@ -1,7 +1,6 @@
 import { _component, bx, cx } from '@zerodep-vue/core';
 import type { CssInput, CssValue } from '@zerodep-vue/core';
 import { X } from '@lucide/icons';
-import { computed } from 'vue';
 import type { StyleValue, VNodeChild } from 'vue';
 import { useCss, useLang } from '../config/Provider.tsx';
 import { slotRest } from '../config/props.ts';
@@ -69,18 +68,6 @@ export const TextControlFrame = _component(
   }: TextControlFrameProps) => {
     const s = useCss();
     const lang = useLang();
-    const palette = computed(() => {
-      switch (status) {
-        case 'error':
-          return '_danger';
-        case 'warning':
-          return '_warning';
-        case 'success':
-          return '_success';
-        default:
-          return '_border';
-      }
-    });
     const control = s
       .display('inline-flex')
       .alignItems(bx(multiline ? 'flex-start' : 'center'))
@@ -103,14 +90,14 @@ export const TextControlFrame = _component(
       .borderRadius('_small')
       .color('_textPrimary')
       .backgroundColor('_surface')
-      .borderColor(bx(palette.value))
+      .borderColor('_border')
       .transitionProperty('border-color, background-color, box-shadow')
       .transitionDuration('_fast')
-      .select('&:hover', s.borderColor(bx(status ? palette.value : '_borderStrong')))
+      .select('&:hover', s.borderColor('_borderStrong'))
       .select(
         '&:focus-within',
         s
-          .borderColor(bx(status ? palette.value : '_primary'))
+          .borderColor('_primary')
           .outlineStyle('solid')
           .outlineWidth('0.125em')
           .outlineOffset('0.0625em')
@@ -130,6 +117,15 @@ export const TextControlFrame = _component(
       filled: s.backgroundColor('_surfaceMuted').borderColor('transparent'),
       underlined: s.borderRadius(0).borderWidth('0 0 0.0625em').backgroundColor('transparent'),
     };
+    const states = {
+      error: s.borderColor('_danger').select('&:hover, &:focus-within', s.borderColor('_danger')),
+      warning: s
+        .borderColor('_warning')
+        .select('&:hover, &:focus-within', s.borderColor('_warning')),
+      success: s
+        .borderColor('_success')
+        .select('&:hover, &:focus-within', s.borderColor('_success')),
+    };
     const overrides = s
       .color(bx(color))
       .backgroundColor(bx(backgroundColor))
@@ -141,7 +137,7 @@ export const TextControlFrame = _component(
         class={cx(
           control,
           variants[variant],
-          s.borderColor(bx(status ? palette.value : undefined)),
+          status && states[status],
           overrides,
           overrides.select('&:hover, &:focus-within', overrides),
           className,

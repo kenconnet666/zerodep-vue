@@ -6,7 +6,7 @@ import type { ElementProps, ElementSlotProps } from '../config/props.ts';
 import { slotRest } from '../config/props.ts';
 import { useCss } from '../config/Provider.tsx';
 import { Button } from '../input/Button.tsx';
-import type { ButtonInstance, ButtonProps } from '../input/Button.tsx';
+import type { ButtonProps } from '../input/Button.tsx';
 import { Icon } from '../display/Icon.tsx';
 import type { IconProps } from '../display/Icon.tsx';
 import { CollapseTransition } from './CollapseTransition.tsx';
@@ -27,7 +27,14 @@ export interface CollapseItemProps extends Omit<ElementProps, 'title'> {
   slotHeader?: ElementSlotProps;
   slotTrigger?: Omit<
     ButtonProps,
-    'children' | 'disabled' | 'type' | 'block' | 'id' | 'aria-controls' | 'aria-expanded'
+    | 'children'
+    | 'disabled'
+    | 'type'
+    | 'block'
+    | 'id'
+    | 'elementRef'
+    | 'aria-controls'
+    | 'aria-expanded'
   >;
   slotIcon?: Omit<IconProps, 'icon' | 'rotate' | 'aria-hidden'>;
   slotContent?: ElementSlotProps;
@@ -58,7 +65,7 @@ export const CollapseItem = _component(
     const group = inject(collapseKey);
     if (!group) throw new Error('CollapseItem 必须放在 Collapse 内。');
     const expanded = computed(() => group.expanded(name));
-    const trigger = shallowRef<ButtonInstance>();
+    const trigger = shallowRef<HTMLButtonElement | null | undefined>();
     const root = shallowRef<HTMLDivElement>();
     const id = `zv-collapse-${useId()}`;
     watch(
@@ -80,7 +87,7 @@ export const CollapseItem = _component(
     function keydown(event: KeyboardEvent) {
       if (event.defaultPrevented || !['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key))
         return;
-      const element = trigger.value?.element;
+      const element = trigger.value;
       const owner = element?.closest('[data-zv-collapse]');
       if (!element || !owner) return;
       const triggers = Array.from(
@@ -112,7 +119,7 @@ export const CollapseItem = _component(
           >
             <Button
               {...slotRest(slotTrigger)}
-              ref={trigger}
+              elementRef={trigger}
               type="button"
               variant={slotTrigger?.variant ?? 'text'}
               tone={slotTrigger?.tone ?? 'neutral'}

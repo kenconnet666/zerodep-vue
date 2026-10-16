@@ -12,9 +12,6 @@ export function prepareDefaults(
   for (const [index, property] of properties.entries())
     for (const name of Object.keys(t.getBindingIdentifiers(property.node)))
       positions.set(name, index);
-  if (fn.node.params[1])
-    for (const name of Object.keys(t.getBindingIdentifiers(fn.node.params[1])))
-      positions.set(name, properties.length);
   const shadows = new Set<string>();
   for (const [index, property] of properties.entries()) {
     if (!property.isObjectProperty()) continue;

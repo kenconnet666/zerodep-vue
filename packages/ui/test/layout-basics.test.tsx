@@ -209,6 +209,36 @@ test('button variants, tone, density and child props update without remounting',
   expect(wrapper.find('[data-zv-ripple]').exists()).toBe(false);
 });
 
+test('button null colors clear each variant back to native defaults', () => {
+  const wrapper = mount(
+    _component(() => (
+      <div>
+        <button data-native="">基准</button>
+        {(['solid', 'soft', 'outline', 'dashed', 'text'] as const).map((variant) => (
+          <Button
+            key={variant}
+            variant={variant}
+            color={null}
+            backgroundColor={null}
+            borderColor={null}
+            ripple={false}
+          >
+            清除
+          </Button>
+        ))}
+      </div>
+    )),
+  );
+  cleanup.push(() => wrapper.unmount());
+  const native = getComputedStyle(wrapper.get('[data-native]').element);
+  for (const button of wrapper.findAll('[data-zv-variant]')) {
+    const actual = getComputedStyle(button.element);
+    expect(actual.color).toBe(native.color);
+    expect(actual.backgroundColor).toBe(native.backgroundColor);
+    expect(actual.borderTopColor).toBe(native.borderTopColor);
+  }
+});
+
 test('collapse changes one shared Ref, preserves hidden content and restores focus before closing', async () => {
   const expandedKeys = ref<readonly string[]>([]);
   const changed = vi.fn();

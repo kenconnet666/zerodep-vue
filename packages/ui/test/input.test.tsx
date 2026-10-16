@@ -3,11 +3,11 @@ import { mount } from '@vue/test-utils';
 import { nextTick, ref, shallowRef } from 'vue';
 import { _component } from '@zerodep-vue/core';
 import { Input, Textarea } from '../src/index.ts';
-import type { InputInstance } from '../src/index.ts';
 
 const cleanup: (() => void)[] = [];
 afterEach(() => {
   while (cleanup.length) cleanup.pop()!();
+  vi.restoreAllMocks();
 });
 
 test('input uses Vue composition handling and notifies only user value changes', async () => {
@@ -47,18 +47,18 @@ test('input uses Vue composition handling and notifies only user value changes',
   expect(input.attributes('name')).toBe('query');
 });
 
-test('input clear preserves focus and exposes its native element while read-only and disabled block changes', async () => {
+test('input clear preserves focus and provides its DOM through props while read-only and disabled block changes', async () => {
   const value = ref('hello');
   const readOnly = ref(false);
   const disabled = ref(false);
-  const instance = shallowRef<InputInstance>();
+  const inputRef = shallowRef<HTMLInputElement | null | undefined>();
   const changed = vi.fn();
   const container = document.createElement('div');
   document.body.append(container);
   const wrapper = mount(
     _component(() => (
       <Input
-        ref={instance}
+        inputRef={inputRef}
         value={value}
         clearable
         readonly={readOnly.value}
@@ -72,10 +72,10 @@ test('input clear preserves focus and exposes its native element while read-only
     wrapper.unmount();
     container.remove();
   });
-  expect(instance.value?.element).toBe(wrapper.get('input').element);
+  expect(inputRef.value).toBe(wrapper.get('input').element);
   await wrapper.get('button').trigger('click');
   expect(value.value).toBe('');
-  expect(document.activeElement).toBe(instance.value?.element);
+  expect(document.activeElement).toBe(inputRef.value);
   expect(changed).toHaveBeenCalledExactlyOnceWith('');
   value.value = 'protected';
   readOnly.value = true;
@@ -210,6 +210,123 @@ test('textarea composes the shared frame, forwards slot handlers and preserves m
   await wrapper.get('[data-testid="clear"]').trigger('click');
   expect(cancel).toHaveBeenCalledOnce();
   expect(value.value).toBe('third\nfourth');
+});
+
+test.each([Input, Textarea])(
+  'composition clear keeps the DOM empty and composes value callbacks',
+  async (Control) => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const value = ref('initial');
+    const first = vi.fn();
+    const second = vi.fn();
+    const committed = vi.fn();
+    const cleared = vi.fn();
+    const wrapper = mount(
+      _component(() => (
+        <Control
+          {...{ onValueChange: first }}
+          value={value}
+          clearable
+          onValueChange={second}
+          onValueCommit={committed}
+          onClear={cleared}
+        />
+      )),
+    );
+    cleanup.push(() => wrapper.unmount());
+    const input = wrapper.get<HTMLInputElement | HTMLTextAreaElement>('input,textarea');
+    await input.trigger('compositionstart');
+    input.element.value = '组合草稿';
+    await input.trigger('input');
+    await wrapper.get('button').trigger('click');
+    expect(value.value).toBe('');
+    expect(input.element.value).toBe('');
+    await input.trigger('compositionend');
+    expect(value.value).toBe('');
+    expect(first).toHaveBeenCalledExactlyOnceWith('');
+    expect(second).toHaveBeenCalledExactlyOnceWith('');
+    expect(first.mock.invocationCallOrder[0]).toBeLessThan(second.mock.invocationCallOrder[0]!);
+    expect(committed).toHaveBeenCalledExactlyOnceWith('');
+    expect(cleared).toHaveBeenCalledOnce();
+    expect(warn).not.toHaveBeenCalled();
+  },
+);
+
+test('reset follows late form creation and same-id replacement without observing each form', async () => {
+  const value = ref('initial');
+  const reset = vi.fn();
+  const container = document.createElement('div');
+  document.body.append(container);
+  const wrapper = mount(
+    _component(() => <Input value={value} form="late-owner" onValueReset={reset} />),
+    { attachTo: container },
+  );
+  const first = document.createElement('form');
+  first.id = 'late-owner';
+  const second = document.createElement('form');
+  second.id = 'late-owner';
+  cleanup.push(() => {
+    wrapper.unmount();
+    container.remove();
+    first.remove();
+    second.remove();
+  });
+  document.body.append(first);
+  value.value = 'changed';
+  await nextTick();
+  first.reset();
+  await Promise.resolve();
+  expect(value.value).toBe('initial');
+  first.replaceWith(second);
+  value.value = 'replacement';
+  await nextTick();
+  first.reset();
+  await Promise.resolve();
+  expect(value.value).toBe('replacement');
+  second.reset();
+  await Promise.resolve();
+  expect(value.value).toBe('initial');
+  expect(reset).toHaveBeenCalledTimes(2);
+});
+
+test('DOM ref props follow replacement and release on unmount', async () => {
+  const first = shallowRef<HTMLInputElement | null | undefined>();
+  const second = shallowRef<HTMLInputElement | null | undefined>();
+  const swapped = ref(false);
+  const wrapper = mount(_component(() => <Input inputRef={swapped.value ? second : first} />));
+  const element = wrapper.get('input').element;
+  expect(first.value).toBe(element);
+  swapped.value = true;
+  await nextTick();
+  expect(first.value).toBeNull();
+  expect(second.value).toBe(element);
+  wrapper.unmount();
+  expect(second.value).toBeNull();
+});
+
+test('a detached form attached later resets once', async () => {
+  const value = ref('initial');
+  const reset = vi.fn();
+  const container = document.createElement('div');
+  const wrapper = mount(
+    _component(() => (
+      <form>
+        <Input value={value} onValueReset={reset} />
+      </form>
+    )),
+    { attachTo: container },
+  );
+  cleanup.push(() => {
+    wrapper.unmount();
+    container.remove();
+  });
+  document.body.append(container);
+  value.value = 'edited';
+  await nextTick();
+  wrapper.get('form').element.reset();
+  await Promise.resolve();
+  expect(value.value).toBe('initial');
+  expect(reset).toHaveBeenCalledExactlyOnceWith('initial');
 });
 
 function contracts() {

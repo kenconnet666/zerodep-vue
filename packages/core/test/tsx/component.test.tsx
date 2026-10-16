@@ -553,17 +553,25 @@ describe('_component', () => {
     expect(wrapper.text()).toBe('changed');
   });
 
-  test('forwards setup context attrs once and exposes methods', async () => {
+  test('forwards native callbacks once and shares the DOM through an ordinary Ref prop', async () => {
     let calls = 0;
-    const Button = _component((_props: {}, { attrs, expose }) => {
-      expose({ read: () => 'public' });
-      return <button {...attrs}>action</button>;
+    const element = ref<HTMLButtonElement | null>(null);
+    interface ButtonProps extends /* @vue-ignore */ HTMLAttributes {
+      elementRef: Ref<HTMLButtonElement | null>;
+    }
+    const Button = _component(({ elementRef, ...rest }: ButtonProps) => (
+      <button {...rest} ref={elementRef}>
+        action
+      </button>
+    ));
+    const wrapper = mount(Button, {
+      props: { elementRef: element },
+      attrs: { onClick: () => calls++ },
     });
-    const wrapper = mount(Button, { attrs: { onClick: () => calls++ } });
     mounted.push(wrapper);
     await wrapper.trigger('click');
     expect(calls).toBe(1);
-    expect((wrapper.vm as unknown as { read(): string }).read()).toBe('public');
+    expect(element.value).toBe(wrapper.element);
   });
 
   test('initializes once and updates render expressions', async () => {

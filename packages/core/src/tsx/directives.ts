@@ -18,7 +18,7 @@ export interface ModelDirectives {
   /**
    * 双向绑定。原生 input/textarea/select 使用 Vue 表单指令；组件使用 modelValue/onUpdate:modelValue。
    * @example <input v-model={text.value} />
-   * @example <Field v-model={[text.value, 'value', ['trim']]} />
+   * @example <NativeField v-model={[text.value, 'value', ['trim']]} />
    */
   'v-model'?: unknown;
   /** 原生文本输入在 change 时写回，避免每次 input 都更新；组件需自己处理相应 modifier。 */
@@ -54,7 +54,7 @@ export interface ComponentDirectives extends ElementDirectives, ModelDirectives 
   'v-slots'?: Readonly<Record<string, ((...args: any[]) => VNodeChild) | undefined>>;
   /**
    * 批量组件双向绑定，使用二维数组字面量；每项对应一个 prop 及 onUpdate:prop。
-   * @example <Field v-models={[[first.value, 'first'], [last.value, 'last']]} />
+   * @example <NativeField v-models={[[first.value, 'first'], [last.value, 'last']]} />
    */
   'v-models'?: readonly ModelTuple[];
   /** 命名组件双向绑定，例如 v-model:value；下划线后可以附加 modifier。 */

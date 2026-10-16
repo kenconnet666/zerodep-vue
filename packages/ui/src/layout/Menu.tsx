@@ -11,7 +11,7 @@ import type { IconProps } from '../display/Icon.tsx';
 import { Link } from '../display/Link.tsx';
 import type { LinkProps } from '../display/Link.tsx';
 import { Button } from '../input/Button.tsx';
-import type { ButtonInstance, ButtonProps } from '../input/Button.tsx';
+import type { ButtonProps } from '../input/Button.tsx';
 import { Popover } from '../feedback/Popover.tsx';
 import type { FloatingTriggerProps } from '../feedback/Popover.tsx';
 import { Tooltip } from '../feedback/Tooltip.tsx';
@@ -19,6 +19,8 @@ import { CollapseTransition } from './CollapseTransition.tsx';
 import { Divider } from './Divider.tsx';
 import { sidebarCompactKey } from './sidebar-context.ts';
 import { usePortalStyle } from '../interaction/portal.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
 
 export interface MenuEntry {
   type?: 'item';
@@ -29,7 +31,7 @@ export interface MenuEntry {
   disabled?: boolean;
   children?: readonly MenuItem[];
   /** 单个链接的原生属性，例如 target、download 和 aria-describedby。 */
-  slotLink?: Omit<LinkProps, 'href' | 'children' | 'aria-current'>;
+  slotLink?: Omit<LinkProps, 'href' | 'children' | 'aria-current' | 'elementRef'>;
 }
 export type MenuItem =
   | MenuEntry
@@ -53,8 +55,8 @@ export interface MenuProps extends Omit<ElementProps, 'children' | 'onSelect'> {
   slotList?: ElementSlotProps;
   slotItem?: Omit<ElementSlotProps, 'id'>;
   slotIcon?: Omit<IconProps, 'icon' | 'aria-hidden'>;
-  onSelect?: (key: string, event: MouseEvent) => void;
-  onExpandedChange?: (keys: readonly string[]) => void;
+  onSelect?: Callback<[key: string, event: MouseEvent]>;
+  onExpandedChange?: Callback<[keys: readonly string[]]>;
 }
 interface MenuContext {
   compact(): boolean;
@@ -133,7 +135,7 @@ export const Menu = _component(
               key,
             ];
         expandedKeys.value = next;
-        onExpandedChange?.(next);
+        callCallbacks(onExpandedChange, next);
       },
       select(key, event) {
         if (
@@ -147,7 +149,7 @@ export const Menu = _component(
           return;
         selected.value = key;
         selection.value++;
-        onSelect?.(key, event);
+        callCallbacks(onSelect, key, event);
       },
       variant: () => variant,
       density: () => density,
@@ -194,7 +196,7 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
   const s = useCss();
   const owner = inject(menuKey)!;
   const popup = ref(false);
-  const trigger = shallowRef<ButtonInstance>();
+  const trigger = shallowRef<HTMLButtonElement | null | undefined>();
   const id = `zv-menu-${useId()}`;
   const compact = computed(() => depth === 0 && owner.compact());
   const floating = computed(() => depth === 0 && (owner.compact() || owner.horizontal()));
@@ -209,7 +211,7 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
   watch(
     expanded,
     (opened) => {
-      const button = trigger.value?.element;
+      const button = trigger.value;
       const panel = button?.ownerDocument.getElementById(id);
       if (!opened && panel?.contains(panel.ownerDocument.activeElement))
         button?.focus({ preventScroll: true });
@@ -306,7 +308,7 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
   const disclosure = (entry: MenuEntry, bindings?: FloatingTriggerProps, iconOnly = false) => (
     <Button
       {...bindings}
-      ref={bindings?.ref ?? trigger}
+      elementRef={bindings?.elementRef ?? trigger}
       type="button"
       variant="text"
       tone="neutral"
@@ -382,7 +384,7 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
               <>
                 {link(item)}
                 <Button
-                  ref={trigger}
+                  elementRef={trigger}
                   type="button"
                   variant="text"
                   tone="neutral"

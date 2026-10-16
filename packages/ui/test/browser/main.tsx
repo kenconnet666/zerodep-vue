@@ -1,5 +1,6 @@
 import { createApp, computed, ref, shallowRef } from 'vue';
 import { Search } from '@lucide/icons';
+import { z } from 'zod';
 import { _component, createCssHost } from '@zerodep-vue/core';
 import {
   Button,
@@ -30,9 +31,14 @@ import {
   Icon,
   Input,
   Textarea,
+  Checkbox,
+  Switch,
+  RadioGroup,
+  Field,
+  useField,
   useCss,
 } from '../../src/index.ts';
-import type { ButtonProps, ScrollbarInstance } from '../../src/index.ts';
+import type { ButtonProps } from '../../src/index.ts';
 
 const dark = ref(false);
 const rtl = ref(false);
@@ -67,13 +73,24 @@ const Demo = _component(() => {
   });
   const inspector = ref(false);
   const showInspector = ref(true);
-  const splitScroll = shallowRef<ScrollbarInstance>();
+  const splitScroll = shallowRef<HTMLDivElement | null | undefined>();
   const drawer = ref(false);
   const secondDrawer = ref(false);
   const tooltipDisabled = ref(false);
   const text = ref('初始内容');
   const submissions = ref(0);
   const notes = ref('第一行\n第二行');
+  const nickname = ref('');
+  const nameField = useField(nickname, z.string().trim().min(1, '请填写称呼'), {
+    name: 'nickname',
+  });
+  const accepted = ref(false);
+  const notifications = ref(true);
+  const frequency = ref<'daily' | 'weekly'>('daily');
+  const frequencyField = useField(frequency, z.enum(['daily', 'weekly']), { name: 'frequency' });
+  const choicesReadonly = ref(false);
+  const cancelRadio = ref(false);
+  const rejectRadio = ref(false);
   return (
     <main
       dir={rtl.value ? 'rtl' : 'ltr'}
@@ -139,6 +156,14 @@ const Demo = _component(() => {
               宽松
             </Button>
             <Button disabled>禁用</Button>
+            <Button
+              data-testid="button-colors"
+              color="rebeccapurple"
+              backgroundColor="#fff0f5"
+              borderColor="teal"
+            >
+              颜色覆盖
+            </Button>
           </Flex>
         </GridItem>
       </Grid>
@@ -176,6 +201,65 @@ const Demo = _component(() => {
           width="25em"
           clearable
         />
+      </form>
+      <Divider class={s.marginBlock('_large')}>字段与选择控件</Divider>
+      <form data-testid="field-form" onSubmit={(event) => event.preventDefault()}>
+        <Field state={nameField} label="称呼" help="校验结果保留原始草稿">
+          <Input {...nameField.control} clearable width="20em" />
+        </Field>
+        <output data-testid="field-output">{nameField.output.value}</output>
+        <Flex gap="_medium" class={s.marginBlock('_medium')}>
+          <Checkbox name="accepted" value={accepted} readonly={choicesReadonly.value}>
+            接受条款
+          </Checkbox>
+          <Switch name="notifications" value={notifications} readonly={choicesReadonly.value}>
+            启用通知
+          </Switch>
+        </Flex>
+        <Field state={frequencyField} label="发送频率">
+          <RadioGroup
+            {...frequencyField.control}
+            readonly={choicesReadonly.value}
+            onValueChange={() => {
+              if (rejectRadio.value) frequency.value = 'daily';
+            }}
+            options={[
+              { value: 'daily', label: '每天' },
+              { value: 'weekly', label: '每周' },
+            ]}
+            slotInput={{
+              onClick: (event) => {
+                if (cancelRadio.value) event.preventDefault();
+              },
+            }}
+          />
+        </Field>
+        <output data-testid="radio-touched">{String(frequencyField.touched.value)}</output>
+        <Button type="reset">重置字段</Button>
+        <Button
+          variant="text"
+          onClick={() => {
+            choicesReadonly.value = !choicesReadonly.value;
+          }}
+        >
+          切换选择只读
+        </Button>
+        <Button
+          variant="text"
+          onClick={() => {
+            cancelRadio.value = !cancelRadio.value;
+          }}
+        >
+          切换选择取消
+        </Button>
+        <Button
+          variant="text"
+          onClick={() => {
+            rejectRadio.value = !rejectRadio.value;
+          }}
+        >
+          切换选择回退
+        </Button>
       </form>
       <Divider class={s.marginBlock('_large')}>浮动滚动条</Divider>
       <Button
@@ -368,11 +452,11 @@ const Demo = _component(() => {
               { href: '#section-one', label: '概览' },
               { href: '#section-two', label: '详细信息' },
             ]}
-            target={() => splitScroll.value?.viewport}
+            target={() => splitScroll.value ?? undefined}
           />
         </SplitPane>
         <SplitPane name="content" min="12em">
-          <Scrollbar ref={splitScroll} height="100%" aria-label="工作区内容">
+          <Scrollbar viewportRef={splitScroll} height="100%" aria-label="工作区内容">
             <Affix class={s.backgroundColor('_surface').padding('1em')}>固定工具栏</Affix>
             <section id="section-one" class={s.padding('1em').minHeight('18em')}>
               概览内容，当前分配 {Math.round(splitSizes.value.content ?? 0)}%

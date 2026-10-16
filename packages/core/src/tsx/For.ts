@@ -15,10 +15,12 @@ export interface ForProps<T> extends AuthorProps {
 }
 
 /** 用 Vue keyed Fragment 组织列表，不增加 DOM 包装或改变 item 的数据类型。 */
-export function For<T>(props: ForProps<T>, context: SetupContext): VNode {
+export function For<T>(props: ForProps<T>): VNode;
+export function For<T>(props: ForProps<T>, context?: Pick<SetupContext, 'slots'>): VNode {
   return renderCss(() => {
     const items = props.each ?? [];
-    const render = props.children ?? context.slots.default;
+    // Vue JSX 将嵌套函数放进默认插槽；此适配仅在内部，作者只使用 children Prop。
+    const render = props.children ?? context?.slots.default;
     if (!items.length) return createVNode(Fragment, null, [props.fallback]);
     if (!render) throw new Error('[For] 非空列表需要 children renderer。');
     const keys = new Set<PropertyKey>();

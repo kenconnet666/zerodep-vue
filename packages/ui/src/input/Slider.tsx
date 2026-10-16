@@ -5,6 +5,8 @@ import { useCss } from '../config/Provider.tsx';
 import { slotRest } from '../config/props.ts';
 import type { ElementProps, ElementSlotProps } from '../config/props.ts';
 import { usePointerDrag } from '../interaction/pointer.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
 import { measureTrack, trackProgress } from '../interaction/track.ts';
 
 export interface SliderProps extends Omit<ElementProps, 'onChange'> {
@@ -34,9 +36,9 @@ export interface SliderProps extends Omit<ElementProps, 'onChange'> {
   slotThumb?: ElementSlotProps;
   slotLabel?: ElementSlotProps;
   /** 仅用户输入导致数值变化时通知，取消拖动恢复旧值也会通知。 */
-  onValueChange?: (value: number) => void;
+  onValueChange?: Callback<[value: number]>;
   /** 指针成功释放或键盘改变值后通知一次；取消与卸载不提交。 */
-  onValueCommit?: (value: number) => void;
+  onValueCommit?: Callback<[value: number]>;
 }
 
 /** 单值输入基础组件；完成滑动只表示输入提交，业务验证由上层处理。 */
@@ -107,7 +109,7 @@ export const Slider = _component(
       }
       if (Object.is(value.value, next)) return false;
       value.value = next;
-      onValueChange?.(next);
+      callCallbacks(onValueChange, next);
       return true;
     }
     function pointerdown(event: PointerEvent, onThumb: boolean) {
@@ -139,9 +141,9 @@ export const Slider = _component(
         if (cancelled) {
           if (value === source && !Object.is(source.value, previous)) {
             source.value = previous;
-            onValueChange?.(previous);
+            callCallbacks(onValueChange, previous);
           }
-        } else onValueCommit?.(current.value);
+        } else callCallbacks(onValueCommit, current.value);
       });
       knob.focus({ preventScroll: true });
       if (!onThumb) move(event);
@@ -187,7 +189,7 @@ export const Slider = _component(
       }
       event.preventDefault();
       cancel();
-      if (update(next)) onValueCommit?.(current.value);
+      if (update(next)) callCallbacks(onValueCommit, current.value);
     }
     const trackStyle = s
       .position('relative')

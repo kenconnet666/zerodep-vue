@@ -235,14 +235,15 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
     throw fn.buildCodeFrameError(
       '[ZV_SETUP] setup 不能是 generator；异步初始化使用 async 与 Vue Suspense。',
     );
+  if (fn.node.params.length > 1)
+    throw fn.buildCodeFrameError(
+      '[ZV_PROPS_ONLY] _component 作者函数只接收 Props；状态、回调、children 和 DOM Ref 请通过普通 Props 传递。',
+    );
   prepareDefaults(fn);
   const writable = writableModels(fn);
   const metadata = runtimeProps(call, fn.node, state);
   const first = fn.node.params[0];
-  const contextParam = fn.node.params[1];
-  const context = t.isIdentifier(contextParam)
-    ? contextParam
-    : fn.scope.generateUidIdentifier('context');
+  const context = fn.scope.generateUidIdentifier('context');
   const raw = fn.scope.generateUidIdentifier('rawProps');
   const props = fn.scope.generateUidIdentifier('props');
   const initializers: t.Statement[] = [];
@@ -357,13 +358,6 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
   lowerRender(fn);
   fn.node.extra = { ...fn.node.extra, zerodepAuthoring: true };
   const body = fn.node.body as t.BlockStatement;
-  if (contextParam && !t.isIdentifier(contextParam)) {
-    if (!t.isObjectPattern(contextParam))
-      throw fn.buildCodeFrameError('[ZV_CONTEXT] setup context 使用具名对象或对象解构。');
-    initializers.unshift(
-      t.variableDeclaration('const', [t.variableDeclarator(contextParam, t.cloneNode(context))]),
-    );
-  }
   if (t.isIdentifier(first)) {
     initializers.unshift(
       t.variableDeclaration('const', [

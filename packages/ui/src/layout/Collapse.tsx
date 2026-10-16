@@ -4,6 +4,8 @@ import type { Ref } from 'vue';
 import type { ElementProps } from '../config/props.ts';
 import { useCss } from '../config/Provider.tsx';
 import { collapseKey } from './collapse-context.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
 
 export interface CollapseProps extends ElementProps {
   /** 可写展开项名称；省略时每个实例独立维护。 */
@@ -11,7 +13,7 @@ export interface CollapseProps extends ElementProps {
   /** 默认单开；开启后允许同时展开多个面板。 */
   multiple?: boolean;
   /** 交互产生的新状态；外部直接写 Ref 不重复通知。 */
-  onExpandedChange?: (keys: readonly string[]) => void;
+  onExpandedChange?: Callback<[keys: readonly string[]]>;
 }
 
 /** 折叠面板组，使用稳定的 item name 管理状态。 */
@@ -37,7 +39,7 @@ export const Collapse = _component(
             ? [...expandedKeys.value, name]
             : [name];
         expandedKeys.value = next;
-        onExpandedChange?.(next);
+        callCallbacks(onExpandedChange, next);
       },
       register(name) {
         if (names.has(name)) throw new Error(`CollapseItem name 必须唯一：${name}`);

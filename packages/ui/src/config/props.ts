@@ -12,7 +12,7 @@ export interface ElementProps
   extends DataAttributes, /* @vue-ignore */ Omit<HTMLAttributes, 'class'> {
   /** 支持原生类名和链式 CSS，外部样式最后组合。 */
   class?: CssInput;
-  /** 普通 TSX 内容或默认插槽。 */
+  /** 普通 TSX 内容，由 children Prop 传递。 */
   children?: VNodeChild;
   /** 内容由 children 管理。 */
   innerHTML?: never;
