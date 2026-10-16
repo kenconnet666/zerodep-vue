@@ -197,6 +197,7 @@ export function connectCss(program: NodePath<t.Program>, state: State) {
     const potential = path.node.openingElement.attributes.some((attribute) => {
       if (t.isJSXSpreadAttribute(attribute)) return true;
       if (t.isJSXIdentifier(attribute.name, { name: 'css' })) return true;
+      if (t.isJSXIdentifier(attribute.name) && /^slot[A-Z]/.test(attribute.name.name)) return true;
       if (!t.isJSXIdentifier(attribute.name, { name: 'class' })) return false;
       if (!t.isJSXExpressionContainer(attribute.value)) return false;
       const value = attribute.value.expression;

@@ -430,9 +430,11 @@ const Action = _component(({ slotIcon, children, ...rest }: ActionProps) => (
 ));
 ```
 
-`Props` 替换同名字段，`Slot` 禁止调用方接管内容、节点身份、引用和显式 Owned 字段。可复用 Props/Slot 的 data 状态在目标契约中声明；直接基础元素的 CSS 从本次 data 属性联合值推断，ARIA 则保留完整原生值域。原始属性选择器仍可通过 `'&[data-…]'` 编写。`_component` 的运行时元数据仅包含实际解构字段，复杂映射和条件类型由 TypeScript 检查，不重建 Vue 类型推导或隐式转换 Boolean。
+`Props` 替换同名字段，`Slot` 禁止调用方接管内容、节点身份、引用和显式 Owned 字段。可复用 Props/Slot 的 data 状态在目标契约中声明；直接基础元素的 CSS 从本次 data 属性联合值推断，ARIA 则保留完整原生值域。原始属性选择器仍可通过 `'&[data-…]'` 编写。`_component` 的运行时元数据仅包含实际解构字段，复杂映射和条件类型由 TypeScript 检查，不重建 Vue 类型推导或隐式转换 Boolean；类型标记放在实例的 Props 内，保留泛型 setup 的参数传播。
 
-这次重构仍在迁移中：现有 UI、主题作者入口、keyframes/globalCss 和旧链式代码尚未切换，不能把基础协议验证当作整体迁移完成。`pnpm --filter @zerodep-vue/ui probe:css` 可追加 `types`、`browser`、`ssr` 或 `component` 选择探测范围；其中 types 已使用真实 core 声明检查补全，其他历史探测仍含隔离适配器。浏览器优先使用已安装的 Playwright Chromium，其次使用系统 Chrome/Edge，不自动下载；结束时清理本次临时报告。CI 另行运行正式 core/compiler 对象测试与源码类型检查。
+自有 `_component` 将 `slot` 后接大写字母的字段保留为子节点属性袋。JSX 多来源转发按顺序合并这些属性袋：class/style 和事件沿用 Vue 规则，css 保留顺序，普通字段后项覆盖，undefined 属性袋保留默认项。内容替换、key、ref 和 VNode 生命周期字段在此边界过滤；额外 Owned 状态由组件最后写入。`mergeAttrs` 也提供同一属性组合入口。业务对象整项覆盖；普通 Vue 组件收到 slotX 时仍是原始末项，不触发属性袋 getter 或深合并。纯 class/style 转发允许已有生成变量继续穿过第三方组件，主动消费结构化 CSS 的入口保护运行时变量。
+
+这次重构仍在迁移中：现有 UI、主题作者入口、keyframes/globalCss 和旧链式代码尚未切换，不能把基础协议验证当作整体迁移完成。`pnpm --filter @zerodep-vue/ui probe:css` 可追加 `types`、`browser`、`ssr` 或 `component` 选择探测范围；types 已使用真实 core 声明检查补全，组件及 SSR 转发使用正式基础元素、组件编译和属性合并，浏览器底层边界仍有历史适配器。浏览器优先使用已安装的 Playwright Chromium，其次使用系统 Chrome/Edge，不自动下载；结束时清理本次临时报告。CI 另行运行正式 core/compiler 对象测试与源码类型检查。
 
 多个包共用的开发依赖统一放在根目录，独立工具放在所属包。各包仍显式声明发布所需的运行时依赖与 peer。src 根目录只保留 index.ts 和职责目录；Babel/Vite 入口统一收纳到 `compiler/src/plugins`，单文件构建工具直接使用 `ui/build.mjs`。
 

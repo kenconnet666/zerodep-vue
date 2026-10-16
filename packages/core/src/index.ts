@@ -19,6 +19,7 @@ export type { GlobalRules, GlobalOptions } from './css/global.ts';
 export { _component } from './tsx/component.ts';
 export * from './tsx/elements.ts';
 export type { Props, PropsOf, Slot, TypedProps } from './tsx/props.ts';
+export { mergeAttrs } from './tsx/attrs.ts';
 export type { NativeElement, NativeProps } from './tsx/element.ts';
 export type {
   CssObject,

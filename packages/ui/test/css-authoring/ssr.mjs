@@ -12,11 +12,10 @@ import {
   root,
   openBrowser,
   writeReport,
-  autoSnapshotCss,
 } from './prototype.mjs';
 const require = createRequire(resolve(root, 'package.json'));
 const compilerRequire = createRequire(resolve(root, 'packages/compiler/package.json'));
-const { transformAsync, types: t } = require('@babel/core');
+const { transformAsync } = require('@babel/core');
 const presetTypeScript = compilerRequire('@babel/preset-typescript').default;
 const { babelPlugin } = await import(
   pathToFileURL(resolve(root, 'packages/compiler/src/index.ts')).href
@@ -26,7 +25,6 @@ const { renderToString } = await import(
 );
 const coreUrl = pathToFileURL(resolve(root, 'packages/core/src/index.ts')).href;
 const vueUrl = pathToFileURL(require.resolve('vue')).href;
-const adapterUrl = new URL('./prototype.mjs', import.meta.url).href;
 const results = [];
 async function test(name, run, kind = 'check') {
   try {
@@ -38,47 +36,19 @@ async function test(name, run, kind = 'check') {
     console.log('FAIL ' + name + ': ' + error.message);
   }
 }
-async function compile(source, proposed, automatic = false) {
+async function compile(source) {
   let code = (
     await transformAsync(source, {
       filename: resolve(root, 'packages/compiler/test/__probe_css_forwarding.tsx'),
       babelrc: false,
       configFile: false,
-      plugins: automatic ? [autoSnapshotCss, babelPlugin] : [babelPlugin],
+      plugins: [babelPlugin],
       presets: [presetTypeScript],
     })
   ).code;
-  code = (
-    await transformAsync(code, {
-      babelrc: false,
-      configFile: false,
-      plugins: [
-        () => ({
-          visitor: {
-            ImportDeclaration(path) {
-              if (path.node.source.value === '@zerodep-vue/core') {
-                const moved = path.node.specifiers.filter(
-                  (x) =>
-                    t.isImportSpecifier(x) && t.isIdentifier(x.imported, { name: 'mergeCssProps' }),
-                );
-                if (proposed && moved.length) {
-                  path.node.specifiers = path.node.specifiers.filter((x) => !moved.includes(x));
-                  path.insertAfter(
-                    t.importDeclaration(
-                      moved.map((x) => t.importSpecifier(x.local, t.identifier('mergeAttrs'))),
-                      t.stringLiteral(adapterUrl),
-                    ),
-                  );
-                }
-                path.node.source.value = coreUrl;
-              } else if (path.node.source.value === 'vue') path.node.source.value = vueUrl;
-              else if (path.node.source.value === 'probe-base') path.node.source.value = adapterUrl;
-            },
-          },
-        }),
-      ],
-    })
-  ).code;
+  code = code
+    .replace(/(['"])@zerodep-vue\/core\1/g, JSON.stringify(coreUrl))
+    .replace(/(['"])vue\1/g, JSON.stringify(vueUrl));
   return {
     code,
     module: await import('data:text/javascript;base64,' + Buffer.from(code).toString('base64')),
@@ -104,8 +74,7 @@ export const App=_component(({width,tint,pressed=false}:PageProps)=>
  <Wrapper aria-pressed={pressed} css={{width:bx(width),color:bx(tint)}} style={{marginTop:'7px','--public-gap':'3px'}}
  slotIcon={{css:{width:bx(width/2)},'aria-hidden':false}}>body</Wrapper>);
 `;
-const current = await compile(authorSource, false);
-const proposed = await compile(authorSource, true);
+const current = await compile(authorSource);
 async function renderApp(App, props) {
   const context = {};
   const html = await renderToString(vue.createSSRApp(App, props), context);
@@ -113,20 +82,9 @@ async function renderApp(App, props) {
   return { html, css: host?.cssText() ?? '', styles: host?.renderStyles() ?? '' };
 }
 let red, blue;
-await test(
-  'core CSS merging preserves root defaults; slot bag merging remains a separate migration',
-  async () => {
-    const r = await renderApp(current.module.App, { width: 40, tint: 'red' });
-    assert(r.css.includes('padding:4px'));
-    assert(!r.css.includes('height:6px'));
-    assert(!r.html.includes('6px'));
-    return { cssMergeImplemented: true, slotMergeImplemented: false };
-  },
-  'boundary',
-);
-await test('prototype css and registered slot merge preserve wrapper defaults and bindings', async () => {
-  red = await renderApp(proposed.module.App, { width: 40, tint: 'red', pressed: true });
-  blue = await renderApp(proposed.module.App, { width: 80, tint: 'blue', pressed: false });
+await test('core CSS and slot attribute merge preserve wrapper defaults and bindings', async () => {
+  red = await renderApp(current.module.App, { width: 40, tint: 'red', pressed: true });
+  blue = await renderApp(current.module.App, { width: 80, tint: 'blue', pressed: false });
   assert(red.css.includes('padding:4px'));
   assert(red.html.includes('6px'));
   assert(red.html.includes('40px'));
@@ -174,7 +132,7 @@ await test('inline CSS values can bind automatically without bx and preserve sta
     .replaceAll('bx(width/2)', 'width/2')
     .replaceAll('bx(width)', 'width')
     .replaceAll('bx(tint)', 'tint');
-  const { module } = await compile(plain, true, true);
+  const { module } = await compile(plain);
   const first = await renderApp(module.App, { width: 40, tint: 'red' });
   const second = await renderApp(module.App, { width: 80, tint: 'blue' });
   assert.equal(first.css, second.css);
@@ -189,7 +147,7 @@ await test('inline CSS values can bind automatically without bx and preserve sta
 await test('automatic binding evaluates CSS expressions once in normal source order', async () => {
   const source =
     "import {_component,_button} from '@zerodep-vue/core';export const calls=[];function take(name,value){calls.push(name);return value;}export const App=_component(()=><_button css={[{color:take('base','red')},{color:take('override','blue')}]}/>);";
-  const { module } = await compile(source, true, true);
+  const { module } = await compile(source);
   const first = await renderApp(module.App, {});
   assert.deepEqual(module.calls, ['base', 'override']);
   assert(first.html.includes('blue'));
@@ -204,7 +162,7 @@ page.on('console', (m) => {
   if (['warning', 'error'].includes(m.type())) warnings.push(m.text());
 });
 try {
-  await test('prototype component SSR output has actual root and slot computed styles', async () => {
+  await test('core component SSR output has actual root and slot computed styles', async () => {
     await page.setContent(red.styles + red.html);
     assert.equal(await page.locator('button').evaluate((e) => getComputedStyle(e).width), '40px');
     assert.equal(

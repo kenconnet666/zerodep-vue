@@ -14,7 +14,9 @@ export type PropsOf<Target> =
     : Target extends keyof NativeElements
       ? NativeElements[Target]
       : Target extends abstract new (...args: any[]) => { $props: infer Props extends object }
-        ? Props
+        ? typeof propsType extends keyof Props
+          ? NonNullable<Props[typeof propsType]>
+          : Props
         : Target extends (props: infer Props extends object, ...args: any[]) => unknown
           ? Props
           : never;

@@ -31,14 +31,13 @@ for (const key of [
       writable: true,
     });
 const { core, vue, writeReport } = await import('./prototype.mjs');
-const { transformAsync, types: t } = require('@babel/core');
+const { transformAsync } = require('@babel/core');
 const presetTypeScript = compilerRequire('@babel/preset-typescript').default;
 const { babelPlugin } = await import(
   pathToFileURL(resolve(root, 'packages/compiler/src/index.ts')).href
 );
 const coreUrl = pathToFileURL(resolve(root, 'packages/core/src/index.ts')).href;
 const vueUrl = pathToFileURL(require.resolve('vue')).href;
-const adapterUrl = new URL('./prototype.mjs', import.meta.url).href;
 const source = `import {_component,bx,_button} from '@zerodep-vue/core';
 import {ref,shallowRef} from 'vue';
 type Base={__props:{disabled?:boolean;css?:unknown;id?:string;title?:string;model?:unknown}};
@@ -67,37 +66,9 @@ let code = (
     presets: [presetTypeScript],
   })
 ).code;
-code = (
-  await transformAsync(code, {
-    babelrc: false,
-    configFile: false,
-    plugins: [
-      () => ({
-        visitor: {
-          ImportDeclaration(path) {
-            if (path.node.source.value === '@zerodep-vue/core') {
-              const moved = path.node.specifiers.filter(
-                (x) =>
-                  t.isImportSpecifier(x) && t.isIdentifier(x.imported, { name: 'mergeCssProps' }),
-              );
-              if (moved.length) {
-                path.node.specifiers = path.node.specifiers.filter((x) => !moved.includes(x));
-                path.insertAfter(
-                  t.importDeclaration(
-                    moved.map((x) => t.importSpecifier(x.local, t.identifier('mergeAttrs'))),
-                    t.stringLiteral(adapterUrl),
-                  ),
-                );
-              }
-              path.node.source.value = coreUrl;
-            } else if (path.node.source.value === 'vue') path.node.source.value = vueUrl;
-            else if (path.node.source.value === 'probe-base') path.node.source.value = adapterUrl;
-          },
-        },
-      }),
-    ],
-  })
-).code;
+code = code
+  .replace(/(['"])@zerodep-vue\/core\1/g, JSON.stringify(coreUrl))
+  .replace(/(['"])vue\1/g, JSON.stringify(vueUrl));
 const module = await import('data:text/javascript;base64,' + Buffer.from(code).toString('base64'));
 const results = [];
 const host = core.createCssHost({ target: document.head, maxUnusedRules: 0 });

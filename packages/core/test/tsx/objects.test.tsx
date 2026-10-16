@@ -12,7 +12,7 @@ import {
   createCssHost,
   getCssHost,
 } from '@zerodep-vue/core';
-import type { Props } from '@zerodep-vue/core';
+import type { Props, Slot } from '@zerodep-vue/core';
 
 const wrappers: VueWrapper[] = [];
 const targets: HTMLElement[] = [];
@@ -83,6 +83,45 @@ test('native input model and ref remain DOM protocols', async () => {
   expect(input.value?.value).toBe('first');
   await wrapper.get('input').setValue('changed');
   expect(value.value).toBe('changed');
+});
+
+test('slot attributes compose across wrappers, then owned state wins on the actual child', async () => {
+  type WithSlot = Props<typeof _div, { slotButton?: Slot<typeof _button, 'disabled'> }>;
+  const width = ref(20);
+  const calls: string[] = [];
+  const attrs = shallowRef<WithSlot>({
+    slotButton: { class: 'external', css: { width: 20 }, onClick: () => calls.push('external') },
+  });
+  const Child = _component(({ slotButton, ...rest }: WithSlot) => (
+    <_div {...rest}>
+      <_button css={{ color: 'red', width: width.value }} {...slotButton} disabled={false}>
+        child
+      </_button>
+    </_div>
+  ));
+  const Wrapper = _component((props: WithSlot) => (
+    <Child
+      slotButton={{ title: 'default', css: { padding: 4 }, onClick: () => calls.push('wrapper') }}
+      {...props}
+    />
+  ));
+  const App = _component(() => <Wrapper {...attrs.value} />);
+  const wrapper = mount(App, { global: { plugins: [host()] } });
+  wrappers.push(wrapper);
+  const button = wrapper.get('button');
+  expect(button.attributes('title')).toBe('default');
+  expect(button.classes()).toContain('external');
+  expect(button.attributes('disabled')).toBeUndefined();
+  expect(variables(button.element)).toEqual(['4px', '20px']);
+  await button.trigger('click');
+  expect(calls).toEqual(['wrapper', 'external']);
+  attrs.value = {};
+  width.value = 40;
+  await nextTick();
+  expect(button.classes()).not.toContain('external');
+  expect(variables(button.element)).toEqual(['40px', '4px']);
+  await button.trigger('click');
+  expect(calls).toEqual(['wrapper', 'external', 'wrapper']);
 });
 
 test('cloning CSS keeps native class/style and raw state attributes independent', async () => {

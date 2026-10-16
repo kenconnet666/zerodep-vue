@@ -32,6 +32,8 @@ import type { ClassValue } from './style-value.ts';
 import { CLASS } from './style-value.ts';
 import { objectClass } from './object.ts';
 import { ELEMENT } from '../tsx/element.ts';
+import { mergeAttrs, resolveSlotAttrs, structuredClass } from '../tsx/attrs.ts';
+export { mergeAttrs as mergeCssProps } from '../tsx/attrs.ts';
 
 /** 仅由编译器和自有组件消费，不进入作者 JSX 或第三方组件的 props。 */
 export const CLASS_PROP = '__zerodepVueClass';
@@ -385,7 +387,9 @@ function evaluatePlan(
   delete props.css;
   if ('class' in source || resolved.hasCss) props.class = resolved.className;
   const inline = normalizeStyle([source.style]);
+  // 主动消费 CSS 时保护变量；普通 Vue 边界收到的 class/style 已包含合法生成变量。
   if (
+    resolved.hasCss &&
     inline &&
     typeof inline === 'object' &&
     Object.keys(inline).some((name) => name.startsWith('--zv-'))
@@ -469,6 +473,7 @@ export function createCssVNode(...args: Parameters<typeof createVNode>): VNode {
   const source = snapshot(raw);
   if ('class' in source) source.class = structuredClass(source.class);
   if (isOwnComponent(type)) {
+    resolveSlotAttrs(raw, source);
     if ('class' in source) {
       source[CLASS_PROP] = source.class;
       source.class = '';
@@ -571,7 +576,7 @@ export function cloneCssVNode(...args: Parameters<typeof cloneVNode>): VNode {
   const plan = planOf(original);
   const source = snapshot(pending ?? plan?.source ?? original.props);
   if (isOwnComponent(original.type) && CLASS_PROP in source) source.class = source[CLASS_PROP];
-  const merged = mergeCssProps(source, additions);
+  const merged = mergeAttrs(source, additions);
   const copy = cloneVNode(
     original,
     { ...additions, class: undefined, style: undefined },
@@ -579,6 +584,7 @@ export function cloneCssVNode(...args: Parameters<typeof cloneVNode>): VNode {
     cloneTransition,
   );
   if (isOwnComponent(copy.type)) {
+    resolveSlotAttrs(merged, merged);
     copy.props = { ...merged, class: '', [CLASS_PROP]: merged.class };
     copy.patchFlag = PatchFlags.FULL_PROPS;
     return copy;
@@ -588,51 +594,4 @@ export function cloneCssVNode(...args: Parameters<typeof cloneVNode>): VNode {
     return copy;
   }
   return finalizeVNode(copy, merged);
-}
-
-function structuredClass(value: unknown): ClassValue {
-  if (isCssClass(value)) return value;
-  if (Array.isArray(value)) return value.map(structuredClass);
-  return normalizeClass(value);
-}
-
-/** @internal 延续 Vue mergeProps 的样式及事件规则，只延后 class 的最终归一化。 */
-export function mergeCssProps(...sources: (Props | null | undefined)[]): Props {
-  const result: Props = {};
-  for (const source of sources) {
-    if (!source) continue;
-    for (const key in source) {
-      const value = source[key];
-      switch (key) {
-        case 'class':
-          // 保留有序描述，等最终消费时再解决属性覆盖及 bx 的读取。
-          if (result.class !== value) result.class = [result.class, structuredClass(value)];
-          break;
-        case 'style':
-          result.style = normalizeStyle([result.style, value]);
-          break;
-        case 'css':
-          if (result.css !== value) result.css = [result.css, value];
-          break;
-        case '':
-          break;
-        default: {
-          if (!/^on[^a-z]/.test(key)) {
-            result[key] = value;
-            break;
-          }
-          // 监听器按来源顺序合并，单个监听器以引用去重，沿用 Vue mergeProps 的语义。
-          const existing = result[key];
-          if (
-            value &&
-            existing !== value &&
-            !(Array.isArray(existing) && existing.includes(value))
-          ) {
-            result[key] = existing ? ([] as unknown[]).concat(existing, value) : value;
-          }
-        }
-      }
-    }
-  }
-  return result;
 }
