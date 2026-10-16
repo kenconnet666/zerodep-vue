@@ -1,4 +1,11 @@
-import { defineComponent, getCurrentInstance, isReadonly, shallowReadonly } from 'vue';
+import {
+  defineComponent,
+  getCurrentInstance,
+  isReadonly,
+  onBeforeUpdate,
+  shallowReadonly,
+  shallowRef,
+} from 'vue';
 import type { ComponentInternalInstance, ComponentOptions, SetupContext } from 'vue';
 import { CLASS_PROP, hasIncomingClass, inheritClass, renderCss } from '../css/vnode.ts';
 import type { ClassValue } from '../css/style-value.ts';
@@ -87,6 +94,13 @@ export function resolveProps(
   writable: readonly string[] = [],
 ): Props {
   const instance = getCurrentInstance();
+  const incomingVNode = shallowRef(instance?.vnode);
+  if (instance)
+    onBeforeUpdate(() => {
+      // Vue 已更新本次 props/slots；用输入 VNode 追踪非响应式的插槽替换与撤除。
+      // 自身状态更新沿用同一 VNode，不会使仅消费 children 的 computed 无故失效。
+      incomingVNode.value = instance.vnode;
+    });
   const fallback = new Map<PropertyKey, unknown>();
   const evaluating = new Set<PropertyKey>();
   const editable = new Set<PropertyKey>(writable);
@@ -107,6 +121,7 @@ export function resolveProps(
   return new Proxy(raw, {
     get(target, key) {
       if (key === CLASS_PROP) return undefined;
+      if (key === 'children') void incomingVNode.value;
       const value =
         key === 'class' && instance && hasIncomingClass(instance)
           ? raw[CLASS_PROP]

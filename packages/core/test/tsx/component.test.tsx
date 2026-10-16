@@ -295,6 +295,63 @@ describe('_component', () => {
     expect(calls).toBe(2);
   });
 
+  test('computed children track captured host slots, removal and explicit props without losing local caching', async () => {
+    const source = ref<{ kind: 'slot' | 'prop' | 'empty'; text?: string }>({
+      kind: 'slot',
+      text: 'first',
+    });
+    let reads = 0;
+    const Child = _component(({ children = 'fallback' }: { children?: VNodeChild }) => {
+      const cached = computed(() => {
+        reads++;
+        return children;
+      });
+      const count = ref(0);
+      return (
+        <section>
+          <p>{cached.value}</p>
+          <button onClick={() => count.value++}>{count.value}</button>
+        </section>
+      );
+    });
+    const Host = defineComponent(() => () => {
+      // 插槽只捕获本次父级渲染的普通值，不能依赖插槽内部碰巧读取 Ref 来更新。
+      const { kind, text } = source.value;
+      switch (kind) {
+        case 'slot':
+          return h(Child, {}, { default: () => text });
+        case 'prop':
+          return h(Child, { children: text });
+        default:
+          return h(Child);
+      }
+    });
+    const wrapper = mount(Host);
+    mounted.push(wrapper);
+    expect(wrapper.get('p').text()).toBe('first');
+    expect(reads).toBe(1);
+    await wrapper.get('button').trigger('click');
+    expect(wrapper.get('button').text()).toBe('1');
+    expect(reads).toBe(1);
+
+    for (const next of [
+      { kind: 'slot', text: 'second' },
+      { kind: 'empty' },
+      { kind: 'slot', text: 'restored' },
+      { kind: 'prop', text: 'explicit' },
+      { kind: 'prop' },
+      { kind: 'slot', text: 'final' },
+    ] as const) {
+      source.value = next;
+      await nextTick();
+      expect(wrapper.get('p').text()).toBe('text' in next ? next.text : 'fallback');
+    }
+    expect(reads).toBe(7);
+    expect(await renderToString(createSSRApp(Host))).toBe(
+      '<section><p><!--[-->final<!--]--></p><button>0</button></section>',
+    );
+  });
+
   test('editable models diagnose native readonly sources while writable computed keeps writeback', async () => {
     const Edit = _component(({ model: state }: { model: Ref<string> }) => (
       <input v-model={state.value} />
