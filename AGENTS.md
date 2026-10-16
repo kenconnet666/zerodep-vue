@@ -22,6 +22,7 @@
 - UI 样式 Props 直接复用 `CssValue<'属性', UiTheme>`，使用普通 Props 接口；不为每个样式属性增加泛型或层层辅助类型。`bx` 是组件内部的 CSS 接线，不进入 Props 值域。
 - 长期审视主题 API：根据真实组件需求，能力不足、设计不合理或存在冗余时，可以适当补充、调整、合并或删除；不能仅为维持旧主题 API 而堆积组件特例。涉及公共 API 与兼容性影响时在方案中说明，并遵循当次任务的规划或实施范围。
 - 组件参数解构后的剩余 Props 统一命名 `rest`，使用 `{...rest}` 显式转发；Vue 原生 `context.attrs` 字段和上游源码保留原名。
+- 复杂组件按需通过普通 Props 暴露子节点属性，命名为 `slotIcon`、`slotLoading`、`slotViewport` 等，不集中到 `slotProps` 对象。复用对应子组件或原生属性类型，外部 class 最后组合；内部内容、测量 ref、状态与必要无障碍属性由所属组件管理。
 - 同一判别值的多分支适当使用 switch，类型守卫和二选一保留 if；重复策略或明确的状态转换可采用策略、状态等设计模式，以减少分支和重复。保持清晰命名、直接数据流和明确所有权，不为套用模式增加层级、文件或转发跳转；公共 API 取舍先讨论。
 - UI 位于 packages/ui，组件 DOM、交互和公开 API 自行实现，不引入 headless 组件、表单或表格底座。UI 业务不进入 core/compiler，未实现能力不导出占位 API。
 - UI Provider 的 theme 按“CSS 属性组 → 主题名”局部覆盖，lang 按文案、locale、timeZone 字段局部覆盖；未提供或 undefined 的字段持续继承父级。完整主题或语言预设覆盖其全部字段，theme/lang 均支持对象、Ref 和 computed；对象来源使用 Vue reactive，后代视图只读。

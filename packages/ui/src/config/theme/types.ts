@@ -192,6 +192,12 @@ export interface UiTheme extends SystemKeywords {
   };
   /** 外边距使用同一套间距名称。 */
   readonly margin: UiTheme['padding'];
+  /** 逻辑方向内边距刻度；各属性组可独立覆盖。 */
+  readonly paddingInline: UiTheme['padding'];
+  readonly paddingBlock: UiTheme['padding'];
+  /** 逻辑方向外边距刻度；各属性组可独立覆盖。 */
+  readonly marginInline: UiTheme['padding'];
+  readonly marginBlock: UiTheme['padding'];
   /** Flex/Grid 间距使用同一套间距名称。 */
   readonly gap: UiTheme['padding'];
   /** 行间距使用同一套间距名称；修改此组不会修改 gap 或 columnGap。 */
@@ -243,6 +249,8 @@ export interface UiTheme extends SystemKeywords {
     _large: ThemeValue;
   };
   readonly opacity: {
+    /** 水波纹反馈层的最大不透明度。 */
+    _ripple: ThemeValue<number>;
     /** 整体禁用态透明度。 */
     _disabled: ThemeValue<number>;
   };
@@ -265,6 +273,10 @@ export interface UiTheme extends SystemKeywords {
   };
   /** 同一层叠上下文内的基础层级；仍须服从实际 DOM 的层叠上下文。 */
   readonly zIndex: {
+    /** 吸附在滚动视口边缘的内容。 */
+    _affix: ThemeValue<number>;
+    /** 回到顶部等页面浮动操作，低于弹出层。 */
+    _floating: ThemeValue<number>;
     /** 下拉菜单和浮动选项。 */
     _dropdown: ThemeValue<number>;
     /** 遮罩。 */

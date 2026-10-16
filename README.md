@@ -252,6 +252,40 @@ export const Description = _component(() => {
 
 ## 开发与验证
 
+### 布局、按钮与滚动基础
+
+`Flex` 提供一维布局，`Grid` / `GridItem` 提供原生二维轨道和跨行跨列，`Divider` 提供水平或垂直分隔。它们默认继承字号，样式值直接复用 `CssValue`，`class` 最后组合；响应式布局继续用原生 CSS `repeat/minmax`、媒体条件和容器查询。
+
+`Button` 默认是 `type="button"` 的原生按钮并带水波纹，`variant` 支持 `solid`、`soft`、`outline`、`dashed`、`text`，`tone` 支持 `neutral`、`primary`、`info`、`success`、`warning`、`danger`。`size` 只控制字号，`density="compact|normal|comfortable"` 控制几何尺寸；`shape="default|round|circle"`、`iconOnly`、`block` 和 `iconPlacement` 负责外形和排列。仅图标按钮应提供 `aria-label`。加载时保留宽度与可访问名称，阻止激活；`color`、`backgroundColor`、`borderColor` 的显式值在各交互状态中保持。
+
+复杂组件的子节点属性是直接的普通 Props，例如 `slotIcon`、`slotLoading`、`slotContent`，不需要额外的 `slotProps` 层。外部 class 最后组合；内容、测量 ref、状态和必要 ARIA 属性由组件管理。`Ripple` 也可独立放进 `position: relative` 的原生交互元素，监听父级指针和键盘操作，并响应减少动画偏好。
+
+```tsx
+<Button variant="soft" tone="success" icon={Search} slotIcon={{ size: '1.1em' }}>
+  查询
+</Button>
+<Grid columns="repeat(auto-fit, minmax(16em, 1fr))" gap="_medium">
+  <GridItem column="1 / -1">跨越全部列</GridItem>
+</Grid>
+```
+
+`Scrollbar` 使用真实原生滚动视口，隐藏原生滚动槽，将半透明滑块浮动在内容上；有无溢出、轨道显隐都不预留或回收内容宽度。默认允许双向滚动，`axis` 可限制方向，`always` 可使有溢出的滑块持续显示。轨道不拦截内容点击，滑块支持指针拖动、方向键、PageUp/PageDown、Home/End。`height` / `maxHeight` 或外部布局约束决定可视尺寸。原生视口用 `slotViewport`，内容用 `slotContent`，轨道和滑块分别用 `slotVerticalRail` / `slotHorizontalRail` / `slotVerticalThumb` / `slotHorizontalThumb` 定制。
+
+组件 ref 可声明为 `shallowRef<ScrollbarInstance>()`，公开 `viewport`、`scrollTo`、`scrollBy`、`scrollToElement` 和 `sync`。前两个滚动方法沿用原生坐标；`scrollToElement` 只移动当前视口的纵向位置，不连带滚动外部页面。内容变化、字体加载、尺寸和方向变化会自动重测。
+
+`CollapseTransition` 根据 `show` 展开收起，支持 `axis`、`fade`、`appear`、主题 `duration`、`lazy` 和 `unmountOnHide`，快速反向切换从当前画面继续。`Collapse` / `CollapseItem` 提供真实标题和按钮语义；`expandedKeys` 使用可写 Ref，`multiple` 决定是否多开，item 的 `name` 在组内唯一。默认保留隐藏内容状态，关闭后内容不再进入焦点序列；方向键与 Home/End 只在当前组的标题之间移动。复杂内容可通过 item 的 `region` 显式声明命名区域。
+
+```tsx
+const expandedKeys = ref<readonly string[]>(['filters']);
+<Collapse expandedKeys={expandedKeys}>
+  <CollapseItem name="filters" title="筛选条件">
+    {/* 表单内容 */}
+  </CollapseItem>
+</Collapse>;
+```
+
+主题已补充独立的逻辑方向间距组、`opacity._ripple`、`zIndex._affix` 和 `zIndex._floating`。本包的浏览器验收页面通过 `pnpm --filter @zerodep-vue/ui dev:components` 启动，默认地址为 `http://127.0.0.1:4176`。
+
 默认在本地检查，只运行本次修改直接相关的测试和必要的 LSP 诊断，不例行运行全仓类型检查、构建或全量测试：
 
 ```powershell

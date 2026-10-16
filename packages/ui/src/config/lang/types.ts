@@ -12,6 +12,26 @@ export interface UiLanguage {
   readonly expand: string;
   /** 收起已展开的内容。 */
   readonly collapse: string;
+  /** 关闭浮层或抽屉。 */
+  readonly close: string;
+  /** 回到当前滚动区域顶部。 */
+  readonly backTop: string;
+  /** 默认导航区域名称。 */
+  readonly navigation: string;
+  /** 面包屑导航区域名称。 */
+  readonly breadcrumb: string;
+  /** 显示被折叠的路径。 */
+  readonly morePaths: string;
+  /** 展开侧边导航。 */
+  readonly expandNavigation: string;
+  /** 收窄侧边导航。 */
+  readonly collapseNavigation: string;
+  /** 分割条没有显式面板标签时的名称。 */
+  readonly resizePanel: string;
+  /** 可键盘操作的纵向滚动滑块名称。 */
+  readonly verticalScrollbar: string;
+  /** 可键盘操作的横向滚动滑块名称。 */
+  readonly horizontalScrollbar: string;
   /** 日期和数字的格式化区域，使用 BCP 47 标识，例如 zh-CN、en-GB。 */
   readonly locale: string;
   /** 日期展示和转换的时区，例如 Asia/Shanghai、Europe/London；默认 Asia/Shanghai。 */

@@ -9,6 +9,7 @@ dist/
 coverage/
 *.lcov
 test-results/
+.playwright-mcp/
 artifacts/
 .tmp/
 

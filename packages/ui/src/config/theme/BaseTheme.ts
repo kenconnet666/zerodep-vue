@@ -55,6 +55,10 @@ export abstract class BaseTheme extends SystemKeywords implements UiTheme {
   };
   // 共用初始刻度，但各 CSS 属性组独立；修改某一组不会隐式改变其他组。
   override readonly margin: UiTheme['margin'] = { ...this.padding };
+  override readonly paddingInline: UiTheme['paddingInline'] = { ...this.padding };
+  override readonly paddingBlock: UiTheme['paddingBlock'] = { ...this.padding };
+  override readonly marginInline: UiTheme['marginInline'] = { ...this.padding };
+  override readonly marginBlock: UiTheme['marginBlock'] = { ...this.padding };
   override readonly gap: UiTheme['gap'] = { ...this.padding };
   override readonly rowGap: UiTheme['rowGap'] = { ...this.padding };
   override readonly columnGap: UiTheme['columnGap'] = { ...this.padding };
@@ -68,7 +72,7 @@ export abstract class BaseTheme extends SystemKeywords implements UiTheme {
   };
   override readonly borderWidth: UiTheme['borderWidth'] = { _none: 0, _thin: em(1), _thick: em(2) };
   override readonly strokeWidth: UiTheme['strokeWidth'] = { _thin: 1, _medium: 2, _thick: 3 };
-  override readonly opacity: UiTheme['opacity'] = { _disabled: 0.5 };
+  override readonly opacity: UiTheme['opacity'] = { _disabled: 0.5, _ripple: 0.16 };
   override readonly transitionDuration: UiTheme['transitionDuration'] = {
     _fast: '100ms',
     _normal: '180ms',
@@ -80,6 +84,8 @@ export abstract class BaseTheme extends SystemKeywords implements UiTheme {
     _leave: 'cubic-bezier(0.4, 0, 1, 1)',
   };
   override readonly zIndex: UiTheme['zIndex'] = {
+    _affix: 100,
+    _floating: 200,
     _dropdown: 1000,
     _backdrop: 1100,
     _modal: 1200,
