@@ -2,7 +2,7 @@ import { TokenType, tokenizer } from '@csstools/css-tokenizer';
 import unitless from '@emotion/unitless';
 import { normalizeClass } from 'vue';
 import type { CssAnimation } from './animation-token.ts';
-import { ANIMATION, hasStableAnimation, isAnimation } from './animation-token.ts';
+import { ANIMATION, isAnimation, isAnimationNames } from './animation-token.ts';
 import type { CssBinding } from './bindings.ts';
 import { BINDING, isBinding } from './bindings.ts';
 import { compose } from './composition.ts';
@@ -146,7 +146,8 @@ export function resolveClass(
   const animation = (value: CssAnimation, property: string, literal: boolean): string => {
     if (!/^(?:-[a-z]+-)?animation(?:-name)?$/.test(propertyName(property)))
       throw new Error('动画引用只能用于 animation 或 animationName。');
-    dynamic ||= !hasStableAnimation(value);
+    // 帧可以持有普通可变对象或显式来源；每次消费都读取，不能缓存第一次的帧值。
+    dynamic = true;
     const mode = literal ? 'literal' : 'bound';
     const existing = animations.get(value) ?? {};
     if (existing[mode]) return existing[mode]!;
@@ -171,8 +172,26 @@ export function resolveClass(
     resources.push({ name, cssText: `@keyframes ${name}{${body}}` });
     return name;
   };
-  const renderValue = (value: unknown, property?: string, literal = false): string =>
-    isAnimation(value) ? animation(value, property ?? '', literal) : scalar(value, property);
+  const renderValue = (value: unknown, declaration: Declaration, literal: boolean): string => {
+    const { property, resolveTheme } = declaration;
+    if (isAnimation(value)) return animation(value, property, literal);
+    if (isAnimationNames(value)) {
+      if (!/^(?:-[a-z]+-)?animation-name$/.test(propertyName(property)))
+        throw new Error('动画名称列表只能用于 animationName。');
+      return (
+        value
+          .map((name) => {
+            if (isAnimation(name)) return animation(name, property, literal);
+            const current =
+              resolveTheme && name.startsWith('_') ? read(resolveTheme(property, name)) : name;
+            // 空主题成员保留列表位置，避免 duration/delay 等对应项错位。
+            return current == null ? 'none' : scalar(current, property);
+          })
+          .join(', ') || 'none'
+      );
+    }
+    return scalar(value, property);
+  };
   const evaluating = new Set<object>();
   const read = (input: CssBinding<unknown> | ThemeReference): unknown => {
     dynamic = true;
@@ -213,9 +232,9 @@ export function resolveClass(
     if (isBinding(input) || isThemeReference(input)) {
       const current = valueOf(input, declaration);
       if (current == null) continue;
-      text = renderValue(current, property, literal);
+      text = renderValue(current, declaration, literal);
       bound = true;
-    } else text = renderValue(input, property, literal);
+    } else text = renderValue(input, declaration, literal);
     const parsed = declarationValue(text);
     if (options.keyframe && parsed.important) throw new Error('关键帧不能使用 !important。');
     const keyword = cssWide(parsed.value);

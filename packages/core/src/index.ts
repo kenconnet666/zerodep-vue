@@ -1,4 +1,4 @@
-export type { CssAnimation } from './css/animation-token.ts';
+export type { CssAnimation, CssAnimationNames } from './css/animation-token.ts';
 export { keyframes } from './css/animation.ts';
 export type { Keyframes } from './css/animation.ts';
 export { getCssHost } from './css/context.ts';

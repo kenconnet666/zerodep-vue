@@ -1,6 +1,6 @@
 import type * as CSS from 'csstype';
 import type { Ref, UnwrapNestedRefs } from 'vue';
-import type { CssAnimation } from './animation-token.ts';
+import type { CssAnimation, CssAnimationNames } from './animation-token.ts';
 import type { Scalar } from './bindings.ts';
 import type { PropertyValues } from './generated/literal-values.ts';
 import type { ColorProperty } from './generated/metadata.ts';
@@ -19,8 +19,13 @@ type ThemeLiteral<T extends SystemKeywords, Key extends PropertyName> =
   ThemeNames<T, Key> | (Key extends ColorProperty ? ThemeNames<T, 'color'> : never);
 
 /** 上下文已经检查 CSS 值域；额外只检查可识别的主题字面量，避免重复交叉大型关键字联合。 */
-export type CheckedCssValue<Key extends PropertyName, T extends SystemKeywords, Value> = Value &
-  (Exclude<Value, `_${string}`> | ThemeLiteral<T, Key>);
+export type CheckedCssValue<
+  Key extends PropertyName,
+  T extends SystemKeywords,
+  Value,
+> = Value extends readonly unknown[]
+  ? { [Index in keyof Value]: CheckedCssValue<Key, T, Value[Index]> }
+  : Value & (Exclude<Value, `_${string}`> | ThemeLiteral<T, Key>);
 
 type AnimationProperty =
   | 'animation'
@@ -36,7 +41,11 @@ export type CssValue<Key extends PropertyName, T extends SystemKeywords = System
 
 /** 作者入口还可直接接收动画引用。 */
 export type CssDeclarationValue<Key extends PropertyName, T extends SystemKeywords> =
-  CssValue<Key, T> | (Key extends AnimationProperty ? CssAnimation : never);
+  | CssValue<Key, T>
+  | (Key extends AnimationProperty ? CssAnimation : never)
+  | (Key extends 'animationName' | 'WebkitAnimationName' | 'MozAnimationName'
+      ? CssAnimationNames
+      : never);
 /** 常用伪类保留补全，函数伪类、属性选择器与条件在各作者入口共用。 */
 export type CssCondition =
   | CSS.Pseudos

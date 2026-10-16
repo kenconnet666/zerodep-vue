@@ -131,6 +131,7 @@ module.exports = function init({ typescript: ts }) {
           const parent = value.parent;
           if (
             (transparent(parent) && parent.expression === value) ||
+            ts.isArrayLiteralExpression(parent) ||
             (ts.isConditionalExpression(parent) &&
               (parent.whenTrue === value || parent.whenFalse === value))
           )

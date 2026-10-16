@@ -7,6 +7,7 @@ import {
   _input,
   _span,
   createCssContext,
+  keyframes,
 } from '@zerodep-vue/core';
 import { defineComponent, ref } from 'vue';
 
@@ -82,11 +83,22 @@ void [owned, identity, content, replaced, valid, foreignSlot];
 
 class Theme extends SystemKeywords {
   color = { _brand: 'red' };
+  animationName = { _external: 'external' };
 }
 const css = createCssContext(new Theme()).useCss();
 declare const enabled: boolean;
 declare const rail: Slot<typeof _div, 'aria-hidden' | 'data-part'>;
 const paint = css({ color: '_brand' });
+const fade = keyframes({ from: { opacity: 0 }, to: { opacity: 1 } });
+css({ animationName: [fade, 'external'], animationDuration: '1s, 2s' });
+css({ animationName: [fade, '_external'] });
+// @ts-expect-error animation lists retain theme-name validation
+css({ animationName: [fade, '_missing'] });
+<_div css={{ animationName: [fade, 'none'] }} />;
+// @ts-expect-error animation names cannot contain numeric values
+<_div css={{ animationName: [fade, 2] }} />;
+// @ts-expect-error only animationName accepts animation lists
+css({ color: [fade] });
 <_div css={enabled && paint} />;
 <_div css={[paint]} {...rail} aria-hidden="true" data-part="rail" />;
 // @ts-expect-error a forwarding spread cannot hide invalid local CSS values

@@ -65,20 +65,39 @@ test('multiple animations and frames retain distinct stable resource names and l
     b = 0.8;
   const first = keyframes({ from: () => ({ opacity: a }), to: () => ({ opacity: b }) });
   const second = keyframes({ from: () => ({ opacity: b }), to: () => ({ opacity: a }) });
-  const style = { animationName: first, '& > span': { animationName: second } };
+  const style = { animationName: [first, second], animationDuration: '1s, 2s' };
   const one = resolve(style);
   assert.equal(one.resources.length, 2);
   assert.equal(new Set(one.resources.map((rule) => rule.name)).size, 2);
-  assert.deepEqual(Object.values(one.variables), ['0.2', '0.8', '0.8', '0.2']);
+  assert(
+    one.cssText.includes(`animation-name:${one.resources.map((rule) => rule.name).join(', ')}`),
+  );
+  assert.deepEqual(Object.values(one.variables), ['0.2', '0.8', '0.8', '0.2', '1s, 2s']);
   a = 0.4;
   b = 0.6;
   const two = resolve(style);
   assert.equal(one.ruleName, two.ruleName);
   assert.deepEqual(one.resources, two.resources);
-  assert.deepEqual(Object.values(two.variables), ['0.4', '0.6', '0.6', '0.4']);
+  assert.deepEqual(Object.values(two.variables), ['0.4', '0.6', '0.6', '0.4', '1s, 2s']);
   const literal = resolve(style, { literal: true });
   assert.deepEqual(literal.variables, {});
   assert(literal.resources[0].cssText.includes('from{opacity:0.4;}'));
+  assert.equal(resolve({ animationName: [first, first, 'external'] }).resources.length, 1);
+  const cleared = resolve([style, { animationName: [] }]);
+  assert.deepEqual(cleared.resources, []);
+  assert(cleared.cssText.includes('animation-name:none'));
+  class Theme extends SystemKeywords {
+    animationName = { _external: 'external' };
+  }
+  const context = createCssContext(new Theme());
+  const themed = context.useCss()({ animationName: [first, '_external'] });
+  assert(resolve(themed).cssText.includes(', external'));
+  context.useTheme().animationName._external = null;
+  assert(resolve(themed).cssText.includes(', none'));
+  assert.throws(
+    () => resolve(context.useCss()({ animationName: [first, '_missing'] })),
+    /没有关键字/,
+  );
 });
 
 test('unused animations do not evaluate frames and invalid boundaries fail when consumed', () => {
@@ -92,6 +111,7 @@ test('unused animations do not evaluate frames and invalid boundaries fail when 
   assert.equal(resolve({ animationName: good }).resources.length, 1);
   assert.throws(() => `${good} 1s`, /animationName/);
   assert.throws(() => resolve({ color: good }), /只能用于/);
+  assert.throws(() => resolve({ color: [good] }), /动画名称列表只能用于 animationName/);
   assert.throws(() => keyframes({ '101%': { opacity: 1 } }), /无效关键帧位置/);
   for (const [frame, error] of [
     [{ ':hover': { opacity: 1 } }, /嵌套选择器/],

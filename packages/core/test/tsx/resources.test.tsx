@@ -113,6 +113,7 @@ test('keyframes share rule leases, update inline values and release on the last 
   });
   const opacity = ref(0.2);
   const show = ref(true);
+  const animated = ref(true);
   const App = _component(() => {
     const fade = keyframes({
       from: css(() => ({
@@ -122,11 +123,15 @@ test('keyframes share rule leases, update inline values and release on the last 
         opacity: 1,
       }),
     });
-    const style = css({
-      animationName: fade,
-      animationDuration: '1s',
-      animationTimingFunction: 'linear',
+    const stretch = keyframes({
+      from: { transform: 'scale(1)' },
+      to: () => ({ transform: `scale(${opacity.value + 1})` }),
     });
+    const style = css(() => ({
+      animationName: animated.value ? [fade, stretch] : [],
+      animationDuration: '1s, 2s',
+      animationTimingFunction: 'linear',
+    }));
     return (
       <_section>
         {show.value && <_div css={style} />}
@@ -140,8 +145,8 @@ test('keyframes share rule leases, update inline values and release on the last 
     },
   });
   try {
-    expect(host.stats().activeRules).toBe(2);
-    expect(host.stats().ownedReferences).toBe(4);
+    expect(host.stats().activeRules).toBe(3);
+    expect(host.stats().ownedReferences).toBe(6);
     const original = [...target.children];
     expect(target.textContent).toContain('@keyframes zva-');
     expect(wrapper.get('span').attributes('style')).toContain('0.2');
@@ -151,8 +156,13 @@ test('keyframes share rule leases, update inline values and release on the last 
     expect(wrapper.get('span').attributes('style')).toContain('0.7');
     show.value = false;
     await nextTick();
-    expect(host.stats().ownedReferences).toBe(2);
+    expect(host.stats().ownedReferences).toBe(3);
     expect([...target.children]).toEqual(original);
+    animated.value = false;
+    await nextTick();
+    expect(host.stats().ownedReferences).toBe(1);
+    expect(target.textContent).not.toContain('@keyframes');
+    expect(wrapper.get('span').attributes('style') ?? '').not.toContain('--zv-');
   } finally {
     wrapper.unmount();
     expect(host.stats().activeRules).toBe(0);

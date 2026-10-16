@@ -96,7 +96,7 @@ const Toggle = _component(() => {
 - 根的兄弟或外部选择目标无法继承元素变量，会输出当前字面值；后代和伪元素通常可以继承。Teleport 按实际 DOM 继承 CSS 变量，逻辑组件树只决定主题注入。
 - CSS 只描述外观。原生 disabled 保留浏览器禁用规则；ARIA/data 状态不会自动实现交互行为。
 
-`keyframes({ from: { opacity: 0 }, to: () => ({ opacity: opacity.value }) })` 返回动画引用，写入 `animationName`，其他参数用对应属性设置。全局样式用 `globalCss(name, () => ({ '.target': { color: color.value } }))`；setup 之外须提供 host。全局规则在自己的 effect 中输出字面值，动画变量由使用动画的元素承担，作用域销毁会清理资源。
+`keyframes({ from: { opacity: 0 }, to: () => ({ opacity: opacity.value }) })` 返回动画引用，写入 `animationName`，其他参数用对应属性设置。同一元素的多个动画写为 `animationName: [fade, pulse]`，允许混用已有动画名称字符串；空列表表示 `none`，时长等列表仍写普通 CSS 字符串，如 `animationDuration: '200ms, 1s'`。全局样式用 `globalCss(name, () => ({ '.target': { color: color.value } }))`；setup 之外须提供 host。全局规则在自己的 effect 中输出字面值，动画变量由使用动画的元素承担，作用域销毁会清理资源。
 
 ## UI Provider
 

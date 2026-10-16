@@ -1,4 +1,4 @@
-import type { CssAnimation } from './animation-token.ts';
+import type { CssAnimation, CssAnimationNames } from './animation-token.ts';
 import type { CssBinding, Scalar } from './bindings.ts';
 import type { ThemeReference, ThemeResolver } from './tokens.ts';
 
@@ -11,7 +11,8 @@ export interface Declaration {
   readonly target: string;
   readonly conditions: readonly string[];
   readonly property: string;
-  readonly value: Scalar | CssBinding<unknown> | ThemeReference | CssAnimation | null;
+  readonly value:
+    Scalar | CssBinding<unknown> | ThemeReference | CssAnimation | CssAnimationNames | null;
   readonly resolveTheme?: ThemeResolver;
   /** 开发来源只携带描述身份；检查器不会重新读取用户代码。 */
   readonly origin?: object;

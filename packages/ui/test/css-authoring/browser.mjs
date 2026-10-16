@@ -551,8 +551,9 @@ try {
     },
     'tradeoff',
   );
-  await test('dynamic keyframe variables evaluate on the animated element', async () => {
+  await test('multiple dynamic keyframes evaluate on the same animated element', async () => {
     let alpha = 0.2;
+    let scale = 1.2;
     const animation = core.keyframes({
       from: () => ({
         opacity: alpha,
@@ -561,24 +562,32 @@ try {
         opacity: 1,
       },
     });
+    const stretch = core.keyframes({
+      from: () => ({ transform: `scale(${scale})` }),
+      to: { transform: 'scale(1)' },
+    });
     const r = resolveCss({
-      animationName: animation,
-      animationDuration: '1s',
+      animationName: [animation, stretch],
+      animationDuration: '1s, 2s',
       animationPlayState: 'paused',
       animationFillMode: 'both',
     });
     await mount(r);
     assert(Math.abs(Number(await get('#target', 'opacity')) - 0.2) < 0.01);
+    assert.equal((await get('#target', 'animation-name')).split(',').length, 2);
+    assert.equal(await get('#target', 'transform'), 'matrix(1.2, 0, 0, 1.2, 0, 0)');
     alpha = 0.4;
+    scale = 1.4;
     const next = resolveCss({
-      animationName: animation,
-      animationDuration: '1s',
+      animationName: [animation, stretch],
+      animationDuration: '1s, 2s',
       animationPlayState: 'paused',
       animationFillMode: 'both',
     });
     assert.equal(r.ruleName, next.ruleName);
     await apply('#target', next);
     assert(Math.abs(Number(await get('#target', 'opacity')) - 0.4) < 0.01);
+    assert.equal(await get('#target', 'transform'), 'matrix(1.4, 0, 0, 1.4, 0, 0)');
   });
   const version = browser.version();
   writeReport('browser-results.json', {

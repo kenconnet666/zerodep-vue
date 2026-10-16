@@ -1,5 +1,5 @@
 import selectorParser from 'postcss-selector-parser';
-import { isAnimation } from './animation-token.ts';
+import { isAnimation, isAnimationNames } from './animation-token.ts';
 import { binding, isBinding } from './bindings.ts';
 import type { SystemKeywords } from './generated/system.ts';
 import type { CssFactory, CssStyle } from './object-types.ts';
@@ -169,6 +169,7 @@ export function objectClass(input: unknown): CssClass {
             typeof value !== 'number' &&
             !isBinding(value) &&
             !isAnimation(value) &&
+            !isAnimationNames(value) &&
             !isThemeReference(value)
           )
             throw new TypeError(`CSS 属性 ${key} 需要字符串或数字；Vue Ref 请读取 .value。`);
