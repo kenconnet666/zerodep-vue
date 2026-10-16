@@ -250,6 +250,33 @@ export const Description = _component(() => {
 
 可选 `onOverflowChange(overflowing)` 在首次可测量及实际裁剪状态变化时调用；展开时为 `false`，不可测量的隐藏内容不提前报告。它可供调用方组合提示等交互，组件不内置浮层、复制或编辑功能。只有启用展开或溢出回调时才创建观察器；容器尺寸、内容、继承样式和字体加载变化会合并到下一动画帧测量，卸载时取消回调并释放观察器。SSR 不读取 DOM 尺寸，首屏保留完整内容，hydration 后才决定是否显示省略控制。
 
+## UI 文本输入
+
+`Input` 使用 `Ref<string>` 保存文本；省略 value 时每个实例独立持有空字符串。`type` 支持 text、search、password、email、url、tel，原生 id、name、required、maxlength、autocomplete、form 和事件通过 rest 转发给实际 input。`class/style` 作用于外层样式容器，`slotInput` 用于输入节点的 class、事件和附加属性。
+
+```tsx
+const query = ref('');
+<label for="query">查询</label>;
+<Input
+  id="query"
+  name="query"
+  value={query}
+  clearable
+  prefix={<Icon icon={Search} />}
+  width="20em"
+  variant="outline"
+  onValueCommit={(text) => search(text)}
+/>;
+```
+
+输入法组合期间由 Vue 原生 v-model 保留 DOM 草稿，组合完成后写回字符串。`onValueChange` 只报告用户输入和清空，`onValueCommit` 对应原生 change 或清空；外部赋值不触发这两个回调。原生表单 reset 恢复首次 setup 的值，可通过 `resetValue` 指定基准，并通过 `onValueReset` 观察重置；取消的 reset 不修改值，form 属性切换后跟随新的表单。只读使用原生 `readonly`。
+
+`variant="outline|filled|underlined"` 控制外观，`density` 控制内部尺寸，`size` 是字号，默认继承。`status="error|warning|success"` 提供状态颜色，error 同时输出 aria-invalid；名称和错误说明仍通过 label、aria-describedby 等原生方式关联。`prefix/suffix` 提供前后内容，`slotPrefix/slotSuffix/slotClear` 定制对应节点。清空按钮使用当前语言的 clear 文案，清空后聚焦输入；readonly 不显示清空操作。组件 ref 可声明为 `shallowRef<InputInstance>()`，公开 element、focus 和 select。
+
+`Textarea` 使用同样的字符串模型、外观、清空和表单重置契约，保留换行。`rows` 默认 3 且必须为正整数；`resize` 默认 vertical，`minHeight/maxHeight` 接收 CSS 属性值。原生节点属性通过 `slotTextarea` 定制，组件 ref 使用 `TextareaInstance`。
+
+两个组件组合内部的 TextControlFrame，并共用 useTextControl、原生节点样式和 useFormReset。外观层继续组合 Button/Icon，slotPrefix、slotSuffix、slotClear 逐层转发，外部 class 最后组合；Input/Textarea 各自持有实际 DOM、原生属性和 v-model。字段层采用独立状态工具加组合视图的方向：useField 负责 Zod、dirty/touched 与异步校验结果归属，Field 负责标签、说明和错误展示，避免状态只能通过组件 ref 使用。
+
 ## UI 布局、导航与交互
 
 `Split` / `SplitPane` 支持多面板、嵌套、指针与键盘调整以及可选折叠。直接子节点仅接受 SplitPane（允许 Fragment），每块有唯一 `name`；`sizes` 是按名称保存百分比的可写 `Ref<Readonly<Record<string, number>>>`，顺序变化不会错配尺寸。省略项均分剩余比例。Pane 的 `min/max` 接受明确的 `px/em/rem/%`（或数字 0）；百分比相对扣除内边距、分隔条后的可用长度，em 相对 Split 字号。容器太小时按比例压缩最小值，最大值总和不足时放宽以铺满。每根分隔条只调整相邻两块，不把拖动传给远端面板。
@@ -379,7 +406,7 @@ pnpm --filter @zerodep-vue/ui test:browser --project chromium -g "scrollbars pre
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
 | compiler / core | Vue JSX v3.0.0 源码 fork 与上游对照；TSX 作者语义、CSS/主题、资源生命周期、SSR、HMR 和 DevTools 的现有单测；双模式作者测试及 Linux/Windows LSP     | 持续核对安装消费者对当前提交的声明与运行时报告                      |
 | 配置与展示      | Provider、Light/DarkTheme、zhCN/enUS；Icon、Text、Heading、Paragraph、Link、Ellipsis；主题继承、原生属性、部分组件 SSR/hydration 与资源释放单测    | 新组件按同等标准加入公开声明与交互验收                              |
-| 布局与输入基础  | Flex、Grid/GridItem、Divider、Scrollbar、Collapse/CollapseItem/CollapseTransition、Affix、BackTop、Anchor、Split/SplitPane、Button、Ripple、Slider | 表单输入与字段状态仍未实现；当前 Slider 不构成完整表单底座          |
+| 布局与输入基础  | Flex、Grid/GridItem、Divider、Scrollbar、Collapse/CollapseItem/CollapseTransition、Affix、BackTop、Anchor、Split/SplitPane、Button、Ripple、Slider | 已提供 Input/Textarea；字段校验与选择控件按后续阶段推进             |
 | 浮层与导航      | Popover、Tooltip、Drawer、Menu、Breadcrumb、Sidebar；共享定位、关闭栈、指针所有权与滚动工具，已有嵌套关闭、焦点、禁用重开和跨断点回归              | 随真实组件用法继续补充状态组合                                      |
 | CI 与交付       | 格式、三包类型检查、core/compiler/UI 测试、公开组件声明、构建打包、跨平台 LSP/安装消费；开发/生产 × Chromium/Firefox                               | 每项验收都与当前 SHA 的 CI 报告关联；新功能同步增加消费和浏览器场景 |
 

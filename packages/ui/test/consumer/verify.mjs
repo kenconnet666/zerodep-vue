@@ -153,6 +153,8 @@ switch (phase) {
     for (const name of [
       'window',
       'document',
+      'Document',
+      'ShadowRoot',
       'navigator',
       'Node',
       'Element',
@@ -160,6 +162,7 @@ switch (phase) {
       'SVGElement',
       'MutationObserver',
       'CustomEvent',
+      'Event',
       'getComputedStyle',
       'requestAnimationFrame',
       'cancelAnimationFrame',
@@ -174,6 +177,7 @@ switch (phase) {
       });
     const title = document.querySelector('#title');
     const button = document.querySelector('#increment');
+    const input = document.querySelector('#query');
     const messages = [];
     const warn = console.warn;
     const error = console.error;
@@ -192,10 +196,22 @@ switch (phase) {
       assert(mounted, 'The built client must mount.');
       assert.equal(document.querySelector('#title'), title);
       assert.equal(document.querySelector('#increment'), button);
+      assert.equal(document.querySelector('#query'), input);
+      assert.equal(input.value, 'installed');
       assert.equal(document.querySelector('#count').textContent, '0');
       button.click();
       await mounted.nextTick();
       assert.equal(document.querySelector('#count').textContent, '1');
+      input.value = 'changed';
+      input.dispatchEvent(new dom.window.Event('input', { bubbles: true }));
+      await mounted.nextTick();
+      assert.equal(document.querySelector('#query-value').textContent, 'changed');
+      const notes = document.querySelector('#notes');
+      assert.equal(notes.value, 'first\nsecond');
+      notes.value = 'third\nfourth';
+      notes.dispatchEvent(new dom.window.Event('input', { bubbles: true }));
+      await mounted.nextTick();
+      assert.equal(document.querySelector('#notes-value').textContent, 'third\nfourth');
       assert.deepEqual(messages, []);
       report.sameNodes = true;
       report.reactive = true;

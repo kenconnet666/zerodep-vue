@@ -1,10 +1,15 @@
 import type { CssInput } from '@zerodep-vue/core';
 import type { HTMLAttributes, VNodeChild } from 'vue';
 
-/** UI 容器的公共原生属性；内容、class 与 DOM 替换入口使用统一约定。 */
-export interface ElementProps extends /* @vue-ignore */ Omit<HTMLAttributes, 'class'> {
+/** HTML 与 SVG 共用的数据属性，也可通过 slotX 普通对象逐层转发。 */
+export interface DataAttributes {
   /** 原生 data-* 属性也可通过 slotX 对象传入。 */
   [name: `data-${string}`]: string | number | boolean | null | undefined;
+}
+
+/** UI 容器的公共原生属性；内容、class 与 DOM 替换入口使用统一约定。 */
+export interface ElementProps
+  extends DataAttributes, /* @vue-ignore */ Omit<HTMLAttributes, 'class'> {
   /** 支持原生类名和链式 CSS，外部样式最后组合。 */
   class?: CssInput;
   /** 普通 TSX 内容或默认插槽。 */

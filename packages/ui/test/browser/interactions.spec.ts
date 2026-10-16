@@ -12,6 +12,40 @@ test.afterEach(({ page }) => {
   expect(pageErrors.get(page)).toEqual([]);
 });
 
+test('text input keeps IME drafts, native form submission, reset and clear focus', async ({
+  page,
+}) => {
+  const form = page.getByTestId('input-form');
+  const input = page.getByRole('textbox', { name: '查询内容', exact: true });
+  await input.focus();
+  await input.dispatchEvent('compositionstart');
+  await input.evaluate((element) => {
+    (element as HTMLInputElement).value = '中文';
+    element.dispatchEvent(new InputEvent('input', { bubbles: true, isComposing: true }));
+  });
+  await expect(page.getByTestId('input-value')).toHaveText('初始内容');
+  await input.dispatchEvent('compositionend');
+  await expect(page.getByTestId('input-value')).toHaveText('中文');
+  await input.press('Enter');
+  await expect(page.getByTestId('input-submissions')).toHaveText('1');
+  expect(
+    await form.evaluate((element) => new FormData(element as HTMLFormElement).get('query')),
+  ).toBe('中文');
+  await form.getByRole('button', { name: '重置输入', exact: true }).click();
+  await expect(input).toHaveValue('初始内容');
+  await input.locator('..').getByRole('button', { name: '清空', exact: true }).click();
+  await expect(input).toHaveValue('');
+  await expect(input).toBeFocused();
+  await expect(input).toHaveAttribute('aria-invalid', 'true');
+  const notes = page.getByRole('textbox', { name: '备注内容', exact: true });
+  await notes.fill('修改\n保留换行');
+  expect(
+    await form.evaluate((element) => new FormData(element as HTMLFormElement).get('notes')),
+  ).toBe('修改\n保留换行');
+  await form.getByRole('button', { name: '重置输入', exact: true }).click();
+  await expect(notes).toHaveValue('第一行\n第二行');
+});
+
 test('tooltip survives disable while hovered and theme, RTL and reduced motion remain reactive', async ({
   page,
 }) => {

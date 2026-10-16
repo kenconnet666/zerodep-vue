@@ -28,6 +28,8 @@ import {
   Breadcrumb,
   Sidebar,
   Icon,
+  Input,
+  Textarea,
   useCss,
 } from '../../src/index.ts';
 import type { ButtonProps, ScrollbarInstance } from '../../src/index.ts';
@@ -69,6 +71,9 @@ const Demo = _component(() => {
   const drawer = ref(false);
   const secondDrawer = ref(false);
   const tooltipDisabled = ref(false);
+  const text = ref('初始内容');
+  const submissions = ref(0);
+  const notes = ref('第一行\n第二行');
   return (
     <main
       dir={rtl.value ? 'rtl' : 'ltr'}
@@ -137,6 +142,41 @@ const Demo = _component(() => {
           </Flex>
         </GridItem>
       </Grid>
+      <Divider class={s.marginBlock('_large')}>文本输入</Divider>
+      <form
+        data-testid="input-form"
+        onSubmit={(event) => {
+          event.preventDefault();
+          submissions.value++;
+        }}
+      >
+        <label for="demo-query">查询内容</label>
+        <Input
+          id="demo-query"
+          name="query"
+          value={text}
+          clearable
+          prefix={<Icon icon={Search} />}
+          width="20em"
+          status={text.value ? undefined : 'error'}
+        />
+        <Button type="submit">提交输入</Button>
+        <Button type="reset" variant="outline">
+          重置输入
+        </Button>
+        <output data-testid="input-value">{text.value}</output>
+        <output data-testid="input-submissions">{submissions.value}</output>
+        <label for="demo-notes">备注内容</label>
+        <Textarea
+          id="demo-notes"
+          name="notes"
+          value={notes}
+          rows={3}
+          variant="filled"
+          width="25em"
+          clearable
+        />
+      </form>
       <Divider class={s.marginBlock('_large')}>浮动滚动条</Divider>
       <Button
         onClick={() => {

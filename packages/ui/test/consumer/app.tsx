@@ -1,8 +1,10 @@
 import { ref } from 'vue';
 import { _component, bx } from '@zerodep-vue/core';
-import { Button, Heading, Provider, Text, useCss } from '@zerodep-vue/ui';
+import { Button, Heading, Input, Provider, Text, Textarea, useCss } from '@zerodep-vue/ui';
 
 export const count = ref(0);
+const text = ref('installed');
+const notes = ref('first\nsecond');
 const Content = _component(() => {
   const s = useCss();
   return (
@@ -16,6 +18,11 @@ const Content = _component(() => {
       <Button id="increment" onClick={() => count.value++}>
         增加
       </Button>
+      <label for="query">查询</label>
+      <Input id="query" value={text} clearable />
+      <output id="query-value">{text.value}</output>
+      <Textarea id="notes" value={notes} aria-label="备注" />
+      <output id="notes-value">{notes.value}</output>
     </section>
   );
 });

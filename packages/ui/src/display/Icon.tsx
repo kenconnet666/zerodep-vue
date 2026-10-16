@@ -5,13 +5,17 @@ import { h } from 'vue';
 import type { SVGAttributes, VNode } from 'vue';
 import { useCss } from '../config/Provider.tsx';
 import type { UiTheme } from '../config/theme/types.ts';
+import type { DataAttributes } from '../config/props.ts';
 
 /** 常用样式直接采用 CSS 属性值类型；其余 SVG 属性和事件透传。 */
 // Vue 仅解析自有字段的运行时声明；剩余 Props 通过 rest 显式转发到 SVG。
-export interface IconProps extends /* @vue-ignore */ Omit<
-  SVGAttributes,
-  'class' | 'color' | 'width' | 'height' | 'opacity' | 'rotate'
-> {
+export interface IconProps
+  extends
+    DataAttributes,
+    /* @vue-ignore */ Omit<
+      SVGAttributes,
+      'class' | 'color' | 'width' | 'height' | 'opacity' | 'rotate'
+    > {
   /** 按需导入的 Lucide 原始数据，或同结构的可信 SVG 节点树。 */
   icon: LucideIconData;
   /** 同 s.color(...)；默认继承文字颜色，图形使用 currentColor。 */
