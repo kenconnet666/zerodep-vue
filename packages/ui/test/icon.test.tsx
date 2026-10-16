@@ -1,7 +1,7 @@
 import { afterEach, expect, test, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { renderToString } from '@vue/server-renderer';
-import { createSSRApp, nextTick, reactive, ref, shallowRef } from 'vue';
+import { createSSRApp, h, nextTick, reactive, ref, shallowRef } from 'vue';
 import type { Component } from 'vue';
 import { Search, Heart, LoaderCircle } from '@lucide/icons';
 import type { LucideIconData } from '@lucide/icons';
@@ -117,28 +117,65 @@ test('CSS props resolve tokens, follow nested Provider changes and keep zero/nul
   expect(svg.getAttribute('stroke-width')).toBe('2');
 });
 
-test('filtered undefined SVG attributes retain defaults after updates', async () => {
+test('native SVG defaults survive undefined overrides and follow icon replacement', async () => {
+  const icon = shallowRef<LucideIconData>(Search);
   const rest = ref<{
+    xmlns?: IconProps['xmlns'];
+    fill?: IconProps['fill'];
     stroke?: string | undefined;
+    'stroke-linecap'?: IconProps['stroke-linecap'];
+    'stroke-linejoin'?: IconProps['stroke-linejoin'];
     viewBox?: string | undefined;
     focusable?: string | undefined;
   }>({
+    xmlns: undefined,
+    fill: undefined,
     stroke: undefined,
+    'stroke-linecap': undefined,
+    'stroke-linejoin': undefined,
     viewBox: undefined,
     focusable: undefined,
   });
-  const { wrapper } = render(_component(() => <Icon icon={Search} {...rest.value} />));
+  const { wrapper } = render(_component(() => <Icon icon={icon.value} {...rest.value} />));
+  const svg = wrapper.get('svg');
+  expect(svg.attributes('viewBox')).toBe('0 0 24 24');
+  icon.value = { width: 32, height: 16, node: Search.node };
+  await nextTick();
+  expect(svg.attributes('viewBox')).toBe('0 0 32 16');
   for (const next of [
-    { stroke: 'red', viewBox: '0 0 32 32', focusable: 'true' },
-    { stroke: undefined, viewBox: undefined, focusable: undefined },
-  ]) {
+    {
+      xmlns: 'urn:custom-svg',
+      fill: 'blue',
+      stroke: 'red',
+      'stroke-linecap': 'square',
+      'stroke-linejoin': 'bevel',
+      viewBox: '0 0 32 32',
+      focusable: 'true',
+    },
+    {
+      xmlns: undefined,
+      fill: undefined,
+      stroke: undefined,
+      'stroke-linecap': undefined,
+      'stroke-linejoin': undefined,
+      viewBox: undefined,
+      focusable: undefined,
+    },
+  ] as const) {
     rest.value = next;
     await nextTick();
-    const svg = wrapper.get('svg');
+    expect(svg.attributes('xmlns')).toBe(next.xmlns ?? 'http://www.w3.org/2000/svg');
+    expect(svg.attributes('fill')).toBe(next.fill ?? 'none');
     expect(svg.attributes('stroke')).toBe(next.stroke ?? 'currentColor');
-    expect(svg.attributes('viewBox')).toBe(next.viewBox ?? '0 0 24 24');
+    expect(svg.attributes('stroke-width')).toBe('2');
+    expect(svg.attributes('stroke-linecap')).toBe(next['stroke-linecap'] ?? 'round');
+    expect(svg.attributes('stroke-linejoin')).toBe(next['stroke-linejoin'] ?? 'round');
+    expect(svg.attributes('viewBox')).toBe(next.viewBox ?? '0 0 32 16');
     expect(svg.attributes('focusable')).toBe(String(next.focusable ?? false));
   }
+  icon.value = { size: 48, node: Heart.node };
+  await nextTick();
+  expect(svg.attributes('viewBox')).toBe('0 0 48 48');
 });
 
 test('external CSS overrides convenience props without leaking component options to the SVG', () => {
@@ -200,6 +237,7 @@ test('nested raw nodes keep geometry, node paint and ownership; nonScalingStroke
 
 test('named icons and explicit ARIA overrides update, while untyped subtree replacement is ignored', async () => {
   const label = ref('搜索');
+  const ignoredSlot = vi.fn(() => h('text', 'ignored'));
   const { wrapper } = render(
     _component(() => (
       <div>
@@ -210,6 +248,7 @@ test('named icons and explicit ARIA overrides update, while untyped subtree repl
           icon={Search}
           {...({ innerHTML: '<rect/>', textContent: 'bad', children: 'bad' } as any)}
         />
+        {h(Icon, { icon: Search }, { default: ignoredSlot })}
       </div>
     )),
   );
@@ -224,11 +263,14 @@ test('named icons and explicit ARIA overrides update, while untyped subtree repl
   expect(icons[3]!.find('path').exists()).toBe(true);
   expect(icons[3]!.find('rect').exists()).toBe(false);
   expect(icons[3]!.text()).toBe('');
+  expect(icons[4]!.text()).toBe('');
+  expect(ignoredSlot).not.toHaveBeenCalled();
   label.value = '  ';
   await nextTick();
   expect(icons[0]!.attributes('aria-label')).toBe('  ');
   expect(icons[0]!.attributes('role')).toBeUndefined();
   expect(icons[0]!.attributes('aria-hidden')).toBe('true');
+  expect(ignoredSlot).not.toHaveBeenCalled();
 });
 
 test('spin owns its keyframes, keeps static rotate separate and releases animation rules when stopped', async () => {

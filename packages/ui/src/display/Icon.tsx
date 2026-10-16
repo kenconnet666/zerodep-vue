@@ -61,6 +61,18 @@ export const Icon = _component(
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
     'aria-hidden': ariaHidden,
+    xmlns = 'http://www.w3.org/2000/svg',
+    fill = 'none',
+    stroke = 'currentColor',
+    'stroke-linecap': strokeLinecap = 'round',
+    'stroke-linejoin': strokeLinejoin = 'round',
+    focusable = 'false',
+    // 回退尺寸依赖当前 icon，在渲染时计算，不放入实例默认值缓存。
+    viewBox,
+    // 只排除这些入口，不读取 children，避免执行被忽略的插槽。
+    children: _children,
+    innerHTML: _innerHTML,
+    textContent: _textContent,
     ...rest
   }: IconProps) => {
     const s = useCss();
@@ -113,24 +125,21 @@ export const Icon = _component(
 
     return (
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        xmlns={xmlns}
         width="1em"
         height="1em"
-        viewBox={`0 0 ${icon.width ?? icon.size ?? 24} ${icon.height ?? icon.size ?? 24}`}
-        fill="none"
-        stroke="currentColor"
+        viewBox={
+          viewBox === undefined
+            ? `0 0 ${icon.width ?? icon.size ?? 24} ${icon.height ?? icon.size ?? 24}`
+            : viewBox
+        }
+        fill={fill}
+        stroke={stroke}
         stroke-width={2}
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        focusable="false"
-        {...Object.fromEntries(
-          Object.keys(rest).flatMap((key) => {
-            // 先排除图标子树的替换入口，再读取值，避免调用被忽略的 children slot。
-            if (key === 'children' || key === 'innerHTML' || key === 'textContent') return [];
-            const value = Reflect.get(rest, key);
-            return value === undefined ? [] : [[key, value]];
-          }),
-        )}
+        stroke-linecap={strokeLinecap}
+        stroke-linejoin={strokeLinejoin}
+        focusable={focusable}
+        {...rest}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         role={role ?? (ariaLabel?.trim() || ariaLabelledBy?.trim() ? 'img' : undefined)}
