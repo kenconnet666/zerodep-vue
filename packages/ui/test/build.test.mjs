@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { emitModule } from '../build.mjs';
-import { dirname, resolve } from 'node:path';
+import { basename, dirname, resolve } from 'node:path';
 import ts from 'typescript';
 
 test('production emission lowers TSX, preserves peers and maps the original source', async () => {
@@ -23,10 +23,15 @@ test('inferred UI component declarations retain public prop types and comments w
   const root = dirname(configPath);
   const config = ts.readConfigFile(configPath, ts.sys.readFile);
   const { options } = ts.parseJsonConfigFileContent(config.config, ts.sys, root);
-  const files = ['display/Icon.tsx', 'config/Provider.tsx'].map((name) =>
-    resolve(root, 'packages/ui/src', name),
-  );
-  // 只在内存中发射这两个入口的声明，不写 dist，也不运行全仓类型检查。
+  const files = [
+    'display/Icon.tsx',
+    'display/Text.tsx',
+    'display/Heading.tsx',
+    'display/Paragraph.tsx',
+    'display/Link.tsx',
+    'config/Provider.tsx',
+  ].map((name) => resolve(root, 'packages/ui/src', name));
+  // 只在内存中发射公共组件的声明，不写 dist，也不运行全仓类型检查。
   const program = ts.createProgram(files, {
     ...options,
     noEmit: false,
@@ -49,10 +54,16 @@ test('inferred UI component declarations retain public prop types and comments w
     expect(result.diagnostics).toEqual([]);
     expect(declaration).toContain('DefineSetupFnComponent<');
     expect(declaration).toContain('import("@zerodep-vue/core").AuthorProps');
-    expect(declaration).not.toMatch(/export declare const (Icon|Provider): any/);
+    expect(declaration).not.toContain(`export declare const ${basename(file, '.tsx')}: any`);
     if (file.endsWith('Icon.tsx')) {
       expect(declaration).toContain("color?: CssValue<'color', UiTheme>");
       expect(declaration).toContain('默认继承文字颜色');
     }
+    if (file.endsWith('Text.tsx')) {
+      expect(declaration).toContain("fontWeight?: CssValue<'fontWeight', UiTheme>");
+      expect(declaration).toContain('默认继承字号');
+    }
+    if (file.endsWith('Heading.tsx')) expect(declaration).toContain('level: 1 | 2 | 3 | 4 | 5 | 6');
+    if (file.endsWith('Link.tsx')) expect(declaration).toContain('href: string');
   }
 });

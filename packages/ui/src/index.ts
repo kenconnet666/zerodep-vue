@@ -1,6 +1,14 @@
 /** UI 公共入口：第三方依赖仍由应用从原包显式导入。 */
 export { Icon } from './display/Icon.tsx';
 export type { IconProps } from './display/Icon.tsx';
+export { Text } from './display/Text.tsx';
+export type { TextProps } from './display/Text.tsx';
+export { Heading } from './display/Heading.tsx';
+export type { HeadingProps } from './display/Heading.tsx';
+export { Paragraph } from './display/Paragraph.tsx';
+export type { ParagraphProps } from './display/Paragraph.tsx';
+export { Link } from './display/Link.tsx';
+export type { LinkProps } from './display/Link.tsx';
 export { Provider, useCss, useTheme, useLang } from './config/Provider.tsx';
 export type { ProviderProps } from './config/Provider.tsx';
 export { BaseTheme } from './config/theme/BaseTheme.ts';

@@ -190,6 +190,36 @@ export const Examples = _component(() => {
 
 没有非空 `aria-label/aria-labelledby` 时图标默认作为装饰隐藏；单独表达含义时提供名称，默认获得 `role="img"`。显式 `role`、`aria-hidden` 优先。图标按钮的可访问名称写在 button 上。自定义图标使用相同的可信节点数据结构，支持嵌套分组；不接收 children、HTML 字符串或替换子树的 DOM 属性，重复实例中的自定义 SVG ID 由数据作者保证唯一。
 
+## UI 文字与排版
+
+`Text`、`Heading`、`Paragraph`、`Link` 分别渲染原生 `span`、`h1`–`h6`、`p`、`a`，从包根入口直接导入。它们共用普通文字 Props，`size` 对应 `CssValue<'fontSize', UiTheme>`，`color`、`fontWeight`、`lineHeight` 对应同名 CSS 属性；`Heading` 和 `Paragraph` 另支持 `textAlign`。不传样式字段时保留继承或组件默认值，`null` 清除对应组件声明，之后遵循浏览器层叠与原生元素规则。
+
+```tsx
+import { _component } from '@zerodep-vue/core';
+import { Heading, Link, Paragraph, Text } from '@zerodep-vue/ui';
+
+export const ProjectDescription = _component(() => (
+  <>
+    <Heading level={1} size="_extraExtraLarge">
+      项目设置
+    </Heading>
+    <Paragraph lineHeight="_relaxed">
+      当前项目有 <Text fontWeight="_semibold">12 位成员</Text>。
+    </Paragraph>
+    <Text color="_textSecondary" size="_small">
+      修改后自动保存。
+    </Text>
+    <Link href="/members">查看成员</Link>
+  </>
+));
+```
+
+`Text` 默认继承字号、颜色、字重和行高。`Paragraph` 使用 `_normal` 行高；`Heading` 使用 `_semibold` 字重、`_tight` 行高，字号仍继承；两种块级文字都清除浏览器默认外边距，间距交给布局或 `class`。标题的 `level` 必填且只接受 1–6，决定文档层级，不决定视觉大小；层级和样式来源更新后都会反映到实际 DOM。段落和标题的内容应符合原生 HTML 语义，列表、卡片等块级区域使用布局容器。
+
+`Link` 的 `href` 必填，导航、下载、键盘和修饰键点击都交给原生 `a`。默认颜色为 `_primary`，悬停和按下使用对应主题色，保留下划线和键盘可见焦点；显式 `color` 同时覆盖普通、悬停和按下颜色，外部 `class` 可继续定制各状态。`target="_blank"` 且未提供 `rel` 时默认补 `noopener`；显式 `rel` 保持原值，默认不修改引用来源策略。应用路由通过原生 `href`、`onClick` 自行接入，执行操作使用按钮。
+
+内容统一通过 `children` 或普通 Vue 默认插槽传入，不解析 HTML 字符串，也不透传 `innerHTML`、`textContent` 覆盖子树。组件消费的属性显式解构，其余原生属性和事件由 `rest` 直接转发；外部链式 `class` 最后组合，原生 `style` 遵循浏览器层叠。强调语义使用 `strong`、`em` 等原生行内标签，字重 Props 只控制外观。
+
 ## 开发与验证
 
 默认在本地检查，只运行本次修改直接相关的测试和必要的 LSP 诊断，不例行运行全仓类型检查、构建或全量测试：
