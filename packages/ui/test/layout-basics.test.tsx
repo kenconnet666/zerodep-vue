@@ -203,7 +203,10 @@ test('button variants, tone, density and child props update without remounting',
   await nextTick();
   expect(wrapper.get('button').element).toBe(element);
   expect(element.className).not.toBe(initialClass);
-  expect(getComputedStyle(element).borderStyle).toBe('dashed');
+  // JSDOM 不计算 border-style 中的 var()；最终层叠结果由真实浏览器用例检查。
+  expect(Array.from(element.style).map((name) => element.style.getPropertyValue(name))).toContain(
+    'dashed',
+  );
   expect(wrapper.get('[data-part="content"]').text()).toBe('动作');
   expect(element.getAttribute('style')).toContain('#b91c1c');
   expect(wrapper.find('[data-zv-ripple]').exists()).toBe(false);

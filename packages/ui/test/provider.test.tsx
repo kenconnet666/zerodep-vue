@@ -666,18 +666,18 @@ test('descendant views reject writes while caller-owned reactive sources remain 
     view.theme.color._primary = '#000000';
     // @ts-expect-error 文案直接位于 lang 上，不再保留 messages 层。
     view.lang.messages.confirm;
-    // @ts-expect-error 局部主题也只接受已声明的主题名。
     <Provider
       theme={{
         color: {
+          // @ts-expect-error 局部主题也只接受已声明的主题名。
           _missing: '#000000',
         },
       }}
     />;
-    // @ts-expect-error 颜色字段不能使用数字。
     <Provider
       theme={{
         color: {
+          // @ts-expect-error 颜色字段不能使用数字。
           _primary: 123,
         },
       }}

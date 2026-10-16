@@ -20,6 +20,8 @@ export type {
 } from './css/object-types.ts';
 export { mergeAttrs } from './tsx/attrs.ts';
 export { _component } from './tsx/component.ts';
+// 推断组件的发布声明可通过包入口命名原生指令契约，不引用私有源码路径。
+export type { ElementDirectives, ModelDirectives } from './tsx/directives.ts';
 export type { NativeElement, NativeProps } from './tsx/element.ts';
 export * from './tsx/elements.ts';
 export type { Props, PropsOf, Slot, TypedProps } from './tsx/props.ts';

@@ -59,9 +59,8 @@ async function mount(result, html = '<div id="target">test</div>', inline = {}) 
   });
   await page.setContent(html);
   await page.mouse.move(950, 650);
-  await page.addStyleTag({
-    content: result.resources.map((x) => x.cssText).join('') + result.cssText,
-  });
+  const content = result.resources.map((x) => x.cssText).join('') + result.cssText;
+  if (content) await page.addStyleTag({ content });
   await apply('#target', result, inline);
 }
 try {

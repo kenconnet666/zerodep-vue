@@ -179,15 +179,12 @@ export const CollapseItem = _component(
           aria-labelledby={`${id}-trigger`}
           lazy={lazy}
           unmountOnHide={unmountOnHide}
-          slotContent={{
-            css: css({
-              paddingBlock: '_small',
-              paddingInline: '_medium',
-            }),
-          }}
           {...{
-            slotContent,
+            slotContent: {
+              css: css({ paddingBlock: '_small', paddingInline: '_medium' }),
+            },
           }}
+          slotContent={slotContent}
         >
           {children}
         </CollapseTransition>
