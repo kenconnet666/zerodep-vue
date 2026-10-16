@@ -57,6 +57,8 @@ export const Tooltip = _component(
       (value) => {
         if (value) {
           clearTimeout(timer);
+          // 禁用会直接移除面板，不会收到 pointerleave；旧面板不能继续持有悬停状态。
+          panelHovered = false;
           open.value = false;
         }
       },

@@ -6,7 +6,7 @@ Vue VDOM TSX 编译器、运行时 CSS 和自有 UI 组件库。仅维护 Vue VD
 
 - `packages/compiler`：官方 Vue JSX v3.0.0 源码 fork、Babel/Vite 接入和编辑器扩展；来源记录在 `upstream.json`。
 - `packages/core`：`_component`、`For`、运行时 CSS、继承主题、HMR 与 DevTools 接线。
-- `packages/ui`：组件库及其集成测试；目前提供 `Provider`、`Icon`、UI 主题和语言配置，其他交互组件尚未实现。
+- `packages/ui`：组件库及其集成测试；已提供 Provider、主题与语言、文字图标、布局、按钮、滑轨、滚动、折叠、浮层和站点导航组件，详见下文。
 - `packages/core/scripts/css`：CSS 生成和体积检查；各包的测试配置及命令由本包维护。
 - `scripts/pack.mjs`：工作区打包；`scripts/build-utils.mjs` 提供打包、CSS 和 UI 构建共用的文件遍历及命令执行。
 - `scripts/lsp`：项目语言服务、MCP 桥接和配置生成。
@@ -368,6 +368,29 @@ pnpm --filter @zerodep-vue/ui test:browser
 后续组件交互、浏览器与安装消费验证围绕 `packages/ui` 建立。旧的独立夹具、Naive UI 构建和浏览器验收已移除；当前 CI 通过只代表现有测试通过，不能作为这些覆盖已恢复或组件库已完成的证据。
 
 协作约定集中在 [AGENTS.md](AGENTS.md)。提交前核对上一轮提交的远程 CI；推送后记录新运行状态，不等待长测试或反复轮询。
+
+## 实现状态与下一步
+
+以下审查以当前源码、测试入口和 CI 配置为依据。已有实现与待补验收分别记录；测试通过不能替代尚未建立的覆盖，也不代表组件库已全部完成。
+
+| 范围            | 已有实现与验证                                                                                                                                     | 仍需补齐                                                                                                               |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| compiler / core | Vue JSX v3.0.0 源码 fork 与上游对照；TSX 作者语义、CSS/主题、资源生命周期、SSR、HMR 和 DevTools 的现有单测；双模式作者测试及 Linux/Windows LSP     | 当前包结构在仓库外的安装、声明与运行时消费验证                                                                         |
+| 配置与展示      | Provider、Light/DarkTheme、zhCN/enUS；Icon、Text、Heading、Paragraph、Link、Ellipsis；主题继承、原生属性、部分组件 SSR/hydration 与资源释放单测    | 新增交互组件的声明消费与浏览器无障碍回归                                                                               |
+| 布局与输入基础  | Flex、Grid/GridItem、Divider、Scrollbar、Collapse/CollapseItem/CollapseTransition、Affix、BackTop、Anchor、Split/SplitPane、Button、Ripple、Slider | 表单输入与字段状态仍未实现；当前 Slider 不构成完整表单底座                                                             |
+| 浮层与导航      | Popover、Tooltip、Drawer、Menu、Breadcrumb、Sidebar；共享定位、关闭栈、指针所有权与滚动工具，已有嵌套关闭、焦点和跨断点内容保留回归                | 更完整的禁用/卸载/重新打开状态组合、生产构建及多浏览器验证                                                             |
+| CI 与交付       | 格式、三包类型检查、core/compiler/UI 测试、构建、打包与跨平台 LSP；浏览器包含 3 个组合交互用例                                                     | Playwright 当前仅覆盖 Vite 开发服务器、优化编译和 Chromium；打包只验证文件、导出、许可与源码映射，尚未执行隔离安装消费 |
+
+本轮修正了 Link/Scrollbar 把 Vue 合并的原生事件数组当单个函数调用的问题，回归覆盖事件顺序、禁用、`preventDefault()` 和 `stopImmediatePropagation()`。原生事件继续交给 Vue DOM 层分发，业务回调仍采用组件现有契约。Tooltip 还修正了“指针进入面板后禁用，再启用并离开触发器”时残留悬停状态导致面板不关闭的问题。
+
+后续先完成已有能力的验收，再扩展新组件；以下均为待实施计划：
+
+1. **补齐交付验收。** 在 UI 包维护安装消费脚本，由 CI 的 build 产物驱动 Linux/Windows 消费任务，并纳入 CI result。运行时创建有明确所有权的仓库外临时消费者，直接安装三个 tarball，禁用源码条件，验证 dist JS/d.ts、显式 peer、单 Vue 实例、中文类型提示和未知主题名负向诊断，以及 Vite 客户端构建与 SSR/hydration。退出时清理临时工程；不恢复独立 fixtures 工程。完成条件是同一 SHA 的产物、消费报告和 CI 汇总全部通过。
+2. **补齐交互验收。** 复用 UI 浏览器页面覆盖生产构建，并增加 Firefox 与现有 Chromium 的关键交互回归。优先检查嵌套浮层的 Escape/Tab/焦点恢复、Tooltip 禁用与重新进入、Sidebar 跨断点、Scrollbar 实际尺寸、Slider/Split 的 RTL 与拖动取消、减少动态效果，以及原生事件组合。声明发射检查从现有展示/配置组件扩展到已导出的交互组件；新增任务仍由 CI 并行承担。
+3. **先试点文本输入，再建立字段能力。** 先形成可审阅的 Props 与状态方案，明确可写 Ref、输入草稿、中文输入法组合期间的更新、清空、只读/禁用、原生表单 reset/submit、名称及错误描述关联。以一个文本输入组件完成双模式、浏览器和安装消费验证，再推广 Textarea、Checkbox、Radio、Switch；Field 直接使用 Zod 4，明确 touched/dirty、校验时机、重置与异步结果归属，不另建校验 DSL。
+4. **按业务值推进复杂输入与数据组件。** 基础输入稳定后，再规划 Decimal 数值输入和 CalendarDate/Time 日期时间输入，保持草稿与业务值分离；Select/Autocomplete 复用现有浮层与键盘基础，表格另行明确行标识、排序、选择、滚动和大数据边界。每一类先试点和验收，再扩展。
+
+新组件有三条可行路线：先增加 Tag/Badge/Avatar 等展示组件，状态成本低但不能验证表单链路；先建立基础输入与 Field，能直接验证现有 Ref、主题、语言和 Zod 契约；直接进入复杂表格或日期选择器，则同时引入较多状态与交互责任。推荐在前两项验收补齐后采用基础输入路线，先用真实表单场景确认 API，再决定后续组件顺序。
 
 ## 许可
 

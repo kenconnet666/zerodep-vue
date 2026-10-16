@@ -106,6 +106,46 @@ test('tooltip remains while either hover or focus owns it, and Escape dismisses 
   expect(document.querySelector('[role="tooltip"]')).toBeNull();
 });
 
+test('tooltip releases a removed hovered panel when disabled and re-enabled', async () => {
+  const disabled = ref(false);
+  const container = document.createElement('div');
+  document.body.append(container);
+  const wrapper = mount(
+    _component(() => (
+      <Tooltip
+        disabled={disabled.value}
+        content="说明"
+        openDelay={0}
+        closeDelay={0}
+        trigger={(props) => <Button {...props}>提示</Button>}
+      />
+    )),
+    { attachTo: container },
+  );
+  cleanup.push(() => {
+    wrapper.unmount();
+    container.remove();
+  });
+  const button = wrapper.get('button');
+  await button.trigger('pointerenter');
+  await new Promise((resolve) => setTimeout(resolve, 10));
+  const panel = document.querySelector('[role="tooltip"]');
+  expect(panel).not.toBeNull();
+  panel!.dispatchEvent(new Event('pointerenter'));
+  await button.trigger('pointerleave');
+  disabled.value = true;
+  await nextTick();
+  expect(document.querySelector('[role="tooltip"]')).toBeNull();
+  disabled.value = false;
+  await nextTick();
+  await button.trigger('pointerenter');
+  await new Promise((resolve) => setTimeout(resolve, 10));
+  expect(document.querySelector('[role="tooltip"]')).not.toBeNull();
+  await button.trigger('pointerleave');
+  await new Promise((resolve) => setTimeout(resolve, 10));
+  expect(document.querySelector('[role="tooltip"]')).toBeNull();
+});
+
 test('drawer ignores an old close event after reopening and restores the last scroll lock', async () => {
   dialogMethods();
   const open = ref(false);
