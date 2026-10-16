@@ -6,12 +6,11 @@ import {
   getCssHost,
   keyframes,
   globalCss,
-  cx,
   createCssContext,
   SystemKeywords,
 } from '../../src/index.ts';
 import { renderToString } from '@vue/server-renderer';
-import { binding } from '../../src/css/bindings.ts';
+import { objectClass, staticCss } from '../../src/css/object.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
 import {
   inspectApp,
@@ -25,7 +24,8 @@ const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 
-const source = (line, kind = 'class') => ({ file: '/project/App.tsx', line, column: 3, kind });
+const source = (line, kind = 'css') => ({ file: '/project/App.tsx', line, column: 3, kind });
+const resolve = (input) => resolveClass(objectClass(input));
 
 test('loading the root API leaves inspection disabled until explicitly used', () => {
   assert.equal(inspectionHooks(), undefined);
@@ -33,52 +33,45 @@ test('loading the root API leaves inspection disabled until explicitly used', ()
 
 test('inspection uses consumed values, records override/clear provenance and never re-reads getters', () => {
   let reads = 0;
-  const live = traceCss(
-    binding(() => {
+  const base = traceCss(
+    s(() => {
       reads++;
-      return '24px';
+      return { color: 'red', width: '24px', padding: 4 };
     }),
-    source(8, 'binding'),
+    source(5),
   );
-  const unused = traceCss(
-    binding(() => {
-      throw new Error('overridden binding ran');
-    }),
-    source(7, 'binding'),
-  );
-  const base = traceCss(s.color(unused).width(live).padding(4), source(5));
-  const override = traceCss(s.color('green').padding(null), source(12));
-  const resolved = resolveClass(cx(base, override));
+  const override = traceCss(s({ color: 'green', padding: null }), source(12));
+  const resolved = resolve([base, override]);
   const snapshot = inspectionSnapshot(resolved);
   assert.equal(reads, 1);
   assert.equal(snapshot.sources[0].source.line, 5);
   assert.equal(snapshot.sources[0].declarations[0].status, '被覆盖');
   assert.equal(snapshot.sources[0].declarations[0].bindings[0].consumed, false);
-  assert.equal(snapshot.sources[0].declarations[1].bindings[0].source.line, 8);
   assert.deepEqual(snapshot.sources[0].declarations[1].values, ['24px']);
   assert.equal(snapshot.sources[1].declarations[1].status, '清除标记');
   for (let i = 0; i < 20; i++) JSON.stringify(inspectionSnapshot(resolved));
   assert.equal(reads, 1);
 });
 
-test('animation frame inspection keeps declaration and binding locations', () => {
+test('animation frame inspection keeps frame locations without consuming factories twice', () => {
+  let reads = 0;
   const fade = traceCss(
     keyframes({
-      from: s.opacity(
-        traceCss(
-          binding(() => 0.3),
-          source(21, 'binding'),
-        ),
-      ),
-      to: s.opacity(1),
+      from: () => {
+        reads++;
+        return { opacity: 0.3 };
+      },
+      to: { opacity: 1 },
     }),
     source(20, 'keyframes'),
   );
-  const snapshot = inspectionSnapshot(resolveClass(s.animationName(fade)));
+  assert.equal(reads, 0);
+  const snapshot = inspectionSnapshot(resolve({ animationName: fade }));
   assert.equal(snapshot.frames.length, 2);
   assert.equal(snapshot.frames[0].sources[0].source.name, 'from');
-  assert.equal(snapshot.frames[0].sources[0].declarations[0].bindings[0].source.line, 21);
+  assert.equal(snapshot.frames[0].sources[0].source.line, 20);
   assert.equal(snapshot.frames[0].sources[0].declarations[0].bindings[0].value, 0.3);
+  assert.equal(reads, 1);
 });
 
 test('global inspection follows active leases and releases data with the host', () => {
@@ -87,13 +80,9 @@ test('global inspection follows active leases and releases data with the host', 
   const color = ref('red');
   let reads = 0;
   const rules = traceGlobal(
-    {
-      body: s.color(
-        binding(() => {
-          reads++;
-          return color.value;
-        }),
-      ),
+    () => {
+      reads++;
+      return { body: { color: color.value } };
     },
     source(30, 'global'),
   );
@@ -112,7 +101,7 @@ test('global inspection follows active leases and releases data with the host', 
 test('client development tooling does not retain SSR request registrations', async () => {
   const app = createSSRApp({
     setup() {
-      globalCss('request', { body: s.color('red') });
+      globalCss('request', { body: { color: 'red' } });
       return () => null;
     },
   });
@@ -121,4 +110,23 @@ test('client development tooling does not retain SSR request registrations', asy
   assert.deepEqual(inspectApp(app), []);
   assert(getCssHost(context).cssText().includes('color:red'));
   getCssHost(context).dispose();
+});
+
+test('partial object metadata retains identity and source without additional getter reads', () => {
+  let reads = 0;
+  const object = {
+    ...{ opacity: 0.5 },
+    get width() {
+      reads++;
+      return 24;
+    },
+  };
+  const marked = traceCss(staticCss(object, null), source(42));
+  assert.equal(marked, object);
+  assert.equal(reads, 0);
+  const resolved = resolve(marked);
+  assert.equal(inspectionSnapshot(resolved).sources[0].source.line, 42);
+  assert.deepEqual(Object.values(resolved.variables), ['0.5', '24px']);
+  for (let i = 0; i < 20; i++) inspectionSnapshot(resolved);
+  assert.equal(reads, 1);
 });

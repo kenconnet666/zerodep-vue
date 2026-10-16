@@ -1,27 +1,24 @@
-import { _component, bx, cx } from '@zerodep-vue/core';
-import { ChevronDown, Circle } from '@lucide/icons';
 import type { LucideIconData } from '@lucide/icons';
-import { computed, inject, provide, ref, shallowRef, useId, watch } from 'vue';
+import { ChevronDown, Circle } from '@lucide/icons';
+import type { Slot } from '@zerodep-vue/core';
+import { _component, _div, _li, _nav, _span, _ul } from '@zerodep-vue/core';
 import type { InjectionKey, Ref } from 'vue';
+import { computed, inject, provide, ref, shallowRef, useId, watch } from 'vue';
 import { useCss, useLang } from '../config/Provider.tsx';
-import { slotRest } from '../config/props.ts';
-import type { ElementProps, ElementSlotProps } from '../config/props.ts';
+import type { ElementProps } from '../config/props.ts';
 import { Icon } from '../display/Icon.tsx';
-import type { IconProps } from '../display/Icon.tsx';
 import { Link } from '../display/Link.tsx';
-import type { LinkProps } from '../display/Link.tsx';
-import { Button } from '../input/Button.tsx';
-import type { ButtonProps } from '../input/Button.tsx';
-import { Popover } from '../feedback/Popover.tsx';
 import type { FloatingTriggerProps } from '../feedback/Popover.tsx';
+import { Popover } from '../feedback/Popover.tsx';
 import { Tooltip } from '../feedback/Tooltip.tsx';
+import type { ButtonProps } from '../input/Button.tsx';
+import { Button } from '../input/Button.tsx';
+import type { Callback } from '../interaction/callbacks.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import { usePortalStyle } from '../interaction/portal.ts';
 import { CollapseTransition } from './CollapseTransition.tsx';
 import { Divider } from './Divider.tsx';
 import { sidebarCompactKey } from './sidebar-context.ts';
-import { usePortalStyle } from '../interaction/portal.ts';
-import { callCallbacks } from '../interaction/callbacks.ts';
-import type { Callback } from '../interaction/callbacks.ts';
-
 export interface MenuEntry {
   type?: 'item';
   key: string;
@@ -31,12 +28,20 @@ export interface MenuEntry {
   disabled?: boolean;
   children?: readonly MenuItem[];
   /** 单个链接的原生属性，例如 target、download 和 aria-describedby。 */
-  slotLink?: Omit<LinkProps, 'href' | 'children' | 'aria-current' | 'elementRef'>;
+  slotLink?: Slot<typeof Link, 'href' | 'aria-current' | 'elementRef'>;
 }
 export type MenuItem =
   | MenuEntry
-  | { type: 'group'; key: string; label: string; children: readonly MenuItem[] }
-  | { type: 'divider'; key: string };
+  | {
+      type: 'group';
+      key: string;
+      label: string;
+      children: readonly MenuItem[];
+    }
+  | {
+      type: 'divider';
+      key: string;
+    };
 export interface MenuProps extends Omit<ElementProps, 'children' | 'onSelect'> {
   items: readonly MenuItem[];
   /** 当前页面/操作名称；省略时保留最近激活项。 */
@@ -52,9 +57,9 @@ export interface MenuProps extends Omit<ElementProps, 'children' | 'onSelect'> {
   /** soft 使用选中背景，line 使用边线强调。 */
   variant?: 'soft' | 'line';
   density?: ButtonProps['density'];
-  slotList?: ElementSlotProps;
-  slotItem?: Omit<ElementSlotProps, 'id'>;
-  slotIcon?: Omit<IconProps, 'icon' | 'aria-hidden'>;
+  slotList?: Slot<typeof _ul>;
+  slotItem?: Slot<typeof _li, 'id'>;
+  slotIcon?: Slot<typeof Icon, 'icon' | 'aria-hidden'>;
   onSelect?: Callback<[key: string, event: MouseEvent]>;
   onExpandedChange?: Callback<[keys: readonly string[]]>;
 }
@@ -93,12 +98,12 @@ export const Menu = _component(
     onSelect,
     onExpandedChange,
     'aria-label': label,
-    class: className,
+    css: cssProp,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: MenuProps) => {
-    const s = useCss();
+    const css = useCss();
     const lang = useLang();
     const root = shallowRef<HTMLElement>();
     const appearance = usePortalStyle(root);
@@ -158,42 +163,44 @@ export const Menu = _component(
       selection,
     });
     return (
-      <nav
+      <_nav
+        css={[
+          css({
+            minWidth: 0,
+          }),
+          cssProp,
+        ]}
         {...rest}
         ref={root}
         aria-label={label ?? lang.navigation}
-        class={cx(s.minWidth(0), className)}
       >
-        <ul
-          {...slotRest(slotList)}
-          class={cx(
-            s
-              .listStyleType('none')
-              .margin(0)
-              .padding(0)
-              .display('flex')
-              .flexDirection(bx(orientation === 'horizontal' ? 'row' : 'column'))
-              .flexWrap(bx(orientation === 'horizontal' ? 'wrap' : 'nowrap'))
-              .gap('0.25em'),
-            slotList?.class,
-          )}
+        <_ul
+          css={css(() => ({
+            listStyleType: 'none',
+            margin: 0,
+            padding: 0,
+            display: 'flex',
+            flexDirection: orientation === 'horizontal' ? 'row' : 'column',
+            flexWrap: orientation === 'horizontal' ? 'wrap' : 'nowrap',
+            gap: '0.25em',
+          }))}
+          {...slotList}
         >
           {validated.value.map((item) => (
             <MenuNode key={item.key} item={item} siblings={validated.value} depth={0} />
           ))}
-        </ul>
-      </nav>
+        </_ul>
+      </_nav>
     );
   },
 );
-
 interface MenuNodeProps {
   item: MenuItem;
   siblings: readonly MenuItem[];
   depth: number;
 }
 const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
-  const s = useCss();
+  const css = useCss();
   const owner = inject(menuKey)!;
   const popup = ref(false);
   const trigger = shallowRef<HTMLButtonElement | null | undefined>();
@@ -214,49 +221,56 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
       const button = trigger.value;
       const panel = button?.ownerDocument.getElementById(id);
       if (!opened && panel?.contains(panel.ownerDocument.activeElement))
-        button?.focus({ preventScroll: true });
+        button?.focus({
+          preventScroll: true,
+        });
     },
-    { flush: 'sync' },
+    {
+      flush: 'sync',
+    },
   );
   watch([() => owner.selection.value, floating, blocked], () => {
     popup.value = false;
   });
-  const actionStyle = s
-    .display('flex')
-    .alignItems('center')
-    .justifyContent('flex-start')
-    .gap('0.5em')
-    .minWidth(0)
-    .width('100%')
-    .boxSizing('border-box')
-    .border(0)
-    .borderRadius('_small')
-    .textAlign('start')
-    .textDecorationLine('none')
-    .paddingBlock(
-      bx(
-        owner.density() === 'compact'
-          ? '0.375em'
-          : owner.density() === 'comfortable'
-            ? '0.75em'
-            : '0.5em',
-      ),
-    )
-    .paddingInline('0.75em')
-    .color(bx(marked.value ? '_textSelected' : '_textPrimary'))
-    .backgroundColor(
-      bx(marked.value && owner.variant() === 'soft' ? '_surfaceSelected' : 'transparent'),
-    )
-    .select('&:hover', s.backgroundColor('_surfaceHover'))
-    .select('&[aria-disabled="true"]', s.color('_textDisabled').cursor('not-allowed'));
-  const lineStyle = s
-    .borderRadius(0)
-    .borderInlineStartStyle('solid')
-    .borderInlineStartWidth(bx(owner.horizontal() && depth === 0 ? 0 : '0.1875em'))
-    .borderInlineStartColor(bx(marked.value ? '_primary' : 'transparent'))
-    .borderBottomStyle('solid')
-    .borderBottomWidth(bx(owner.horizontal() && depth === 0 ? '0.1875em' : 0))
-    .borderBottomColor(bx(marked.value ? '_primary' : 'transparent'));
+  const actionStyle = css(() => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: '0.5em',
+    minWidth: 0,
+    width: '100%',
+    boxSizing: 'border-box',
+    border: 0,
+    borderRadius: '_small',
+    textAlign: 'start',
+    textDecorationLine: 'none',
+    paddingBlock:
+      owner.density() === 'compact'
+        ? '0.375em'
+        : owner.density() === 'comfortable'
+          ? '0.75em'
+          : '0.5em',
+    paddingInline: '0.75em',
+    color: marked.value ? '_textSelected' : '_textPrimary',
+    backgroundColor:
+      marked.value && owner.variant() === 'soft' ? '_surfaceSelected' : 'transparent',
+    '&:hover': {
+      backgroundColor: '_surfaceHover',
+    },
+    '&[aria-disabled="true"]': {
+      color: '_textDisabled',
+      cursor: 'not-allowed',
+    },
+  }));
+  const lineStyle = css(() => ({
+    borderRadius: 0,
+    borderInlineStartStyle: 'solid',
+    borderInlineStartWidth: owner.horizontal() && depth === 0 ? 0 : '0.1875em',
+    borderInlineStartColor: marked.value ? '_primary' : 'transparent',
+    borderBottomStyle: 'solid',
+    borderBottomWidth: owner.horizontal() && depth === 0 ? '0.1875em' : 0,
+    borderBottomColor: marked.value ? '_primary' : 'transparent',
+  }));
   function select(event: MouseEvent) {
     if (blocked.value) {
       event.preventDefault();
@@ -267,19 +281,31 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
   const content = (entry: MenuEntry, iconOnly = false) => (
     <>
       {(entry.icon || iconOnly) && (
-        <Icon
-          {...slotRest(owner.iconProps())}
-          icon={entry.icon ?? Circle}
-          aria-hidden={true}
-          class={owner.iconProps()?.class}
-        />
+        <Icon {...owner.iconProps()} icon={entry.icon ?? Circle} aria-hidden={true} />
       )}
-      {!iconOnly && <span class={s.minWidth(0).overflowWrap('anywhere')}>{entry.label}</span>}
+      {!iconOnly && (
+        <_span
+          css={css({
+            minWidth: 0,
+            overflowWrap: 'anywhere',
+          })}
+        >
+          {entry.label}
+        </_span>
+      )}
     </>
   );
   const link = (entry: MenuEntry, bindings?: FloatingTriggerProps, iconOnly = false) => (
     <Link
-      {...slotRest(entry.slotLink)}
+      css={[
+        actionStyle,
+        owner.variant() === 'line' && lineStyle,
+        iconOnly &&
+          css({
+            justifyContent: 'center',
+          }),
+      ]}
+      {...entry.slotLink}
       {...bindings}
       href={entry.href!}
       disabled={blocked.value}
@@ -288,25 +314,34 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
       aria-disabled={blocked.value || undefined}
       aria-current={owner.selected(entry.key) ? 'page' : undefined}
       onClick={select}
-      class={cx(
-        actionStyle,
-        owner.variant() === 'line' && lineStyle,
-        iconOnly && s.justifyContent('center'),
-        entry.slotLink?.class,
-      )}
     >
       {content(entry, iconOnly)}
     </Link>
   );
   const list = (entries: readonly MenuItem[], childDepth = depth + 1) => (
-    <ul id={id} class={s.listStyleType('none').margin(0).padding(0)}>
+    <_ul
+      css={css({
+        listStyleType: 'none',
+        margin: 0,
+        padding: 0,
+      })}
+      id={id}
+    >
       {entries.map((child) => (
         <MenuNode key={child.key} item={child} siblings={entries} depth={childDepth} />
       ))}
-    </ul>
+    </_ul>
   );
   const disclosure = (entry: MenuEntry, bindings?: FloatingTriggerProps, iconOnly = false) => (
     <Button
+      css={[
+        actionStyle,
+        owner.variant() === 'line' && lineStyle,
+        iconOnly &&
+          css({
+            justifyContent: 'center',
+          }),
+      ]}
       {...bindings}
       elementRef={bindings?.elementRef ?? trigger}
       type="button"
@@ -317,11 +352,6 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
       aria-label={iconOnly ? entry.label : undefined}
       aria-expanded={bindings ? bindings['aria-expanded'] : expanded.value}
       aria-controls={bindings ? bindings['aria-controls'] : id}
-      class={cx(
-        actionStyle,
-        owner.variant() === 'line' && lineStyle,
-        iconOnly && s.justifyContent('center'),
-      )}
       onClick={(event) => {
         if (!bindings && !event.defaultPrevented) owner.toggle(entry.key, siblings);
       }}
@@ -341,9 +371,11 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
       case 'divider':
         return (
           <Divider
+            css={css({
+              marginBlock: '0.5em',
+            })}
             decorative
             orientation={owner.horizontal() && depth === 0 ? 'vertical' : 'horizontal'}
-            class={s.marginBlock('0.5em')}
           />
         );
       case 'group':
@@ -352,9 +384,15 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
             {compact.value ? (
               <Divider decorative />
             ) : (
-              <div class={s.padding('0.5em 0.75em').fontSize('0.875em').color('_textTertiary')}>
+              <_div
+                css={css({
+                  padding: '0.5em 0.75em',
+                  fontSize: '0.875em',
+                  color: '_textTertiary',
+                })}
+              >
                 {item.label}
-              </div>
+              </_div>
             )}
             {list(item.children, depth)}
           </>
@@ -371,7 +409,11 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
               owner.horizontal() ? 'bottom-start' : owner.rtl() ? 'left-start' : 'right-start'
             }
             trigger={(bindings) => disclosure(item, bindings, compact.value)}
-            slotPanel={{ class: s.minWidth('12em') }}
+            slotPanel={{
+              css: css({
+                minWidth: '12em',
+              }),
+            }}
           >
             {item.href && link(item)}
             {list(item.children)}
@@ -379,7 +421,12 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
         );
       return (
         <>
-          <div class={s.display('flex').alignItems('center')}>
+          <_div
+            css={css({
+              display: 'flex',
+              alignItems: 'center',
+            })}
+          >
             {item.href ? (
               <>
                 {link(item)}
@@ -402,8 +449,13 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
             ) : (
               disclosure(item)
             )}
-          </div>
-          <CollapseTransition show={expanded.value} class={s.paddingInlineStart('1em')}>
+          </_div>
+          <CollapseTransition
+            css={css({
+              paddingInlineStart: '1em',
+            })}
+            show={expanded.value}
+          >
             {list(item.children)}
           </CollapseTransition>
         </>
@@ -418,13 +470,18 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
               link(item, bindings, true)
             ) : (
               <Button
+                css={[
+                  actionStyle,
+                  css({
+                    justifyContent: 'center',
+                  }),
+                ]}
                 {...bindings}
                 type="button"
                 variant="text"
                 tone="neutral"
                 disabled={blocked.value}
                 aria-label={item.label}
-                class={cx(actionStyle, s.justifyContent('center'))}
                 onClick={select}
               >
                 {content(item, true)}
@@ -436,13 +493,13 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
     if (item.href) return link(item);
     return (
       <Button
+        css={[actionStyle, owner.variant() === 'line' && lineStyle]}
         type="button"
         variant="text"
         tone="neutral"
         density={owner.density()}
         disabled={blocked.value}
         aria-pressed={owner.selected(item.key)}
-        class={cx(actionStyle, owner.variant() === 'line' && lineStyle)}
         onClick={select}
       >
         {content(item)}
@@ -450,8 +507,13 @@ const MenuNode = _component(({ item, siblings, depth }: MenuNodeProps) => {
     );
   }
   return (
-    <li {...slotRest(owner.itemProps())} class={cx(s.minWidth(0), owner.itemProps()?.class)}>
+    <_li
+      css={css({
+        minWidth: 0,
+      })}
+      {...owner.itemProps()}
+    >
       {renderEntry()}
-    </li>
+    </_li>
   );
 });

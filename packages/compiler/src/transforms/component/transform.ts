@@ -1,10 +1,10 @@
-import { addNamed } from '@babel/helper-module-imports';
 import type { NodePath, Scope } from '@babel/core';
+import { addNamed } from '@babel/helper-module-imports';
 import * as t from '@babel/types';
-import { prepareDefaults } from './defaults.ts';
-import { writableModels } from './writes.ts';
 import type { State } from '../../upstream/interface.ts';
 import { assertSynchronous, coreModule, importedName, propertyName } from '../bindings.ts';
+import { prepareDefaults } from './defaults.ts';
+import { writableModels } from './writes.ts';
 
 type Binding = Scope['bindings'][string];
 
@@ -263,7 +263,6 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
               t.cloneNode(property.argument),
               t.callExpression(addNamed(call, 'restProps', coreModule), [
                 t.cloneNode(props),
-                t.cloneNode(context),
                 t.arrayExpression(
                   first.properties.flatMap((item) =>
                     t.isObjectProperty(item) ? [t.stringLiteral(propertyName(item) ?? '')] : [],

@@ -28,7 +28,7 @@ const result = await build({
       },
       load(id) {
         if (id === entry)
-          return "import {createCssContext,SystemKeywords} from '@zerodep-vue/core';export const style=createCssContext(new SystemKeywords()).useCss().display('flex');";
+          return "import {createCssContext,SystemKeywords} from '@zerodep-vue/core';export const style=createCssContext(new SystemKeywords()).useCss()({display:'flex'});";
       },
     },
   ],

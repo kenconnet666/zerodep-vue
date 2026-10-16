@@ -1,3 +1,4 @@
+import type { Ref } from 'vue';
 import {
   effectScope,
   getCurrentInstance,
@@ -8,19 +9,20 @@ import {
   unref,
   watchSyncEffect,
 } from 'vue';
-import type { Ref } from 'vue';
 import { declarations } from './composition.ts';
-import { CLASS } from './style-value.ts';
-import type { CssNestedInput, Declaration } from './style-value.ts';
-import { resolveClass } from './resolve.ts';
-import { cssHostKey } from './host.ts';
-import type { CssHost, GlobalLease } from './host.ts';
 import { hostFor } from './context.ts';
-import { parseSelectors, validateFragment } from './syntax.ts';
+import type { CssHost, GlobalLease } from './host.ts';
+import { cssHostKey } from './host.ts';
 import { inspectionHooks } from './inspection-hooks.ts';
+import type { CssInput } from './object-types.ts';
+import { objectClass } from './object.ts';
+import { resolveClass } from './resolve.ts';
+import type { Declaration } from './style-value.ts';
+import { CLASS } from './style-value.ts';
+import { parseSelectors, validateFragment } from './syntax.ts';
 
 /** 显式全局选择器映射；每个选择器内部沿用普通属性、状态分组和媒体条件。 */
-export type GlobalRules = Readonly<Record<string, CssNestedInput>>;
+export type GlobalRules = Readonly<Record<string, CssInput>>;
 export interface GlobalOptions {
   /** 组件 setup 以外必须明确提供宿主，保证更新和清理有所有者。 */
   host?: CssHost;
@@ -36,9 +38,10 @@ function renderGlobal(rules: GlobalRules) {
     parsed.walkNesting(() => {
       throw new Error('全局选择器没有父作用域，不能在根选择器中使用 &。');
     });
+    const resolvedStyle = objectClass(style);
     for (const node of parsed.nodes) {
       const target = node.toString();
-      entries.push(...declarations(style, { selector: target, target, conditions: [] }));
+      entries.push(...declarations(resolvedStyle, { selector: target, target, conditions: [] }));
     }
   }
   // 全局规则没有元素可持有内联变量；在自己的 Vue effect 中输出当前字面值。
@@ -49,12 +52,12 @@ function renderGlobal(rules: GlobalRules) {
 }
 
 /**
- * 登记有名称和所有者的全局规则。bx/主题更新原节点；作用域或宿主释放时停止读取。
+ * 登记有名称和所有者的全局规则。函数来源及主题更新原节点；作用域或宿主释放时停止读取。
  * 返回值可提前撤销，重复调用安全。动态命名规则应由应用/区域入口注册一次。
  */
 export function globalCss(
   name: string,
-  source: GlobalRules | Ref<GlobalRules>,
+  source: GlobalRules | Ref<GlobalRules> | (() => GlobalRules),
   options: GlobalOptions = {},
 ): () => void {
   const instance = getCurrentInstance();
@@ -86,7 +89,7 @@ export function globalCss(
   try {
     effect.run(() =>
       watchSyncEffect(() => {
-        const rules = unref(source);
+        const rules = typeof source === 'function' ? source() : unref(source);
         const result = renderGlobal(rules);
         const text = result.resources.map((rule) => rule.cssText).join('') + result.cssText;
         if (lease) lease.update(text);

@@ -1,54 +1,15 @@
-import { CLASS, hasStableParts, isCssClass, markStableParts } from './style-value.ts';
-import type { ClassPart, CssClass, CssInput, CssNestedInput, Declaration } from './style-value.ts';
-import { selectors } from './syntax.ts';
+import type { ClassPart, CssClass, Declaration } from './style-value.ts';
+import { CLASS } from './style-value.ts';
 import type { SelectorContext } from './syntax.ts';
-
-/** 只组合已声明样式和类名，不猜测普通对象的含义，也不提前读取绑定。 */
-export function cx(...inputs: readonly CssInput[]): CssClass {
-  const roots: (CssClass | string)[] = [];
-  const arrays = new Set<readonly unknown[]>();
-  const collect = (input: unknown): void => {
-    if (input == null || input === false || input === 0) return;
-    if (typeof input === 'string') {
-      if (input) roots.push(input);
-      return;
-    }
-    if (isCssClass(input)) {
-      roots.push(input);
-      return;
-    }
-    if (!Array.isArray(input)) throw new Error('cx 只接受链式样式、类名或条件数组。');
-    if (arrays.has(input)) throw new Error('CSS 组合包含循环数组。');
-    arrays.add(input);
-    for (const item of input) collect(item);
-    arrays.delete(input);
-  };
-  for (const input of inputs) collect(input);
-  const stable = roots.every((root) => typeof root === 'string' || hasStableParts(root));
-  let parts: readonly ClassPart[] | undefined;
-  const result = Object.freeze({
-    // 快照组合输入但不展开样式链，未消费的分支不会创建完整声明数组。
-    get [CLASS]() {
-      const expand = () =>
-        Object.freeze(
-          roots.flatMap((root) => (typeof root === 'string' ? [root] : [...root[CLASS]])),
-        );
-      return stable ? (parts ??= expand()) : expand();
-    },
-    [Symbol.toPrimitive](): never {
-      throw new Error('CSS 样式直接交给 class 或 cx，不能转换成字符串丢弃绑定。');
-    },
-  });
-  return stable ? markStableParts(result) : result;
-}
+import { selectors } from './syntax.ts';
 
 /** 把已有声明移入局部或全局选择器；保留清除标记及主题、绑定的延迟求值。 */
 export function declarations(
-  input: CssNestedInput,
+  input: CssClass,
   context: SelectorContext = { selector: '&', target: '&', conditions: [] },
 ): readonly Declaration[] {
   const result: Declaration[] = [];
-  for (const part of cx(input)[CLASS]) {
+  for (const part of input[CLASS]) {
     if (typeof part === 'string')
       throw new Error('嵌套样式不能包含普通类名；其选择器无法重新限定。');
     for (const entry of part.declarations)

@@ -1,21 +1,26 @@
-import { afterEach, expect, test, vi } from 'vitest';
-import { mount } from '@vue/test-utils';
-import { renderToString } from '@vue/server-renderer';
-import { createSSRApp, h, nextTick, reactive, ref, shallowRef } from 'vue';
-import type { Component } from 'vue';
-import { Search, Heart, LoaderCircle } from '@lucide/icons';
 import type { LucideIconData } from '@lucide/icons';
-import { _component, bx, createCssHost, getCssHost } from '@zerodep-vue/core';
-import { DarkTheme, Icon, LightTheme, Provider, useCss } from '../src/index.ts';
+import { Heart, LoaderCircle, Search } from '@lucide/icons';
+import { renderToString } from '@vue/server-renderer';
+import { mount } from '@vue/test-utils';
+import { _component, _div, createCssHost, getCssHost } from '@zerodep-vue/core';
+import { afterEach, expect, test, vi } from 'vitest';
+import type { Component } from 'vue';
+import { createSSRApp, h, nextTick, reactive, ref, shallowRef } from 'vue';
 import type { IconProps } from '../src/index.ts';
-
+import { DarkTheme, Icon, LightTheme, Provider, useCss } from '../src/index.ts';
 const cleanup: (() => void)[] = [];
-
 function render(component: Component) {
   const target = document.createElement('div');
   document.head.append(target);
-  const host = createCssHost({ target, maxUnusedRules: 0 });
-  const wrapper = mount(component, { global: { plugins: [host] } });
+  const host = createCssHost({
+    target,
+    maxUnusedRules: 0,
+  });
+  const wrapper = mount(component, {
+    global: {
+      plugins: [host],
+    },
+  });
   cleanup.push(() => {
     wrapper.unmount();
     const references = host.stats().ownedReferences;
@@ -23,17 +28,23 @@ function render(component: Component) {
     target.remove();
     expect(references).toBe(0);
   });
-  return { wrapper, host, css: () => target.textContent ?? '' };
+  return {
+    wrapper,
+    host,
+    css: () => target.textContent ?? '',
+  };
 }
-
 afterEach(() => {
   while (cleanup.length) cleanup.pop()!();
 });
-
 test('one SVG inherits text size and color, forwards attributes and updates the icon and event once', async () => {
   const icon = shallowRef(Search);
   const click = vi.fn();
-  const rest = reactive({ id: 'search', 'data-state': 'ready', onClick: click });
+  const rest = reactive({
+    id: 'search',
+    'data-state': 'ready',
+    onClick: click,
+  });
   const { wrapper, css } = render(_component(() => <Icon icon={icon.value} {...rest} />));
   const svg = wrapper.get('svg').element as SVGSVGElement;
   expect(svg.tagName).toBe('svg');
@@ -52,7 +63,6 @@ test('one SVG inherits text size and color, forwards attributes and updates the 
   expect(svg.children.length).toBe(Search.node.length);
   await wrapper.trigger('click');
   expect(click).toHaveBeenCalledTimes(1);
-
   const before = svg.innerHTML;
   icon.value = Heart;
   rest.id = 'heart';
@@ -63,7 +73,6 @@ test('one SVG inherits text size and color, forwards attributes and updates the 
   expect(svg.id).toBe('heart');
   expect(svg.dataset.state).toBe('changed');
 });
-
 test('CSS props resolve tokens, follow nested Provider changes and keep zero/null/undefined semantics', async () => {
   const theme = shallowRef(new LightTheme());
   const state = reactive({
@@ -75,7 +84,13 @@ test('CSS props resolve tokens, follow nested Provider changes and keep zero/nul
   const { wrapper, css } = render(
     _component(() => (
       <Provider theme={theme}>
-        <Provider theme={{ opacity: { _disabled: 0.35 } }}>
+        <Provider
+          theme={{
+            opacity: {
+              _disabled: 0.35,
+            },
+          }}
+        >
           <Icon
             icon={Search}
             color={state.color}
@@ -116,7 +131,6 @@ test('CSS props resolve tokens, follow nested Provider changes and keep zero/nul
   expect(css()).not.toMatch(/(?:^|[;{])(?:color|font-size|opacity|stroke-width):/);
   expect(svg.getAttribute('stroke-width')).toBe('2');
 });
-
 test('native SVG defaults survive undefined overrides and follow icon replacement', async () => {
   const icon = shallowRef<LucideIconData>(Search);
   const rest = ref<{
@@ -139,7 +153,11 @@ test('native SVG defaults survive undefined overrides and follow icon replacemen
   const { wrapper } = render(_component(() => <Icon icon={icon.value} {...rest.value} />));
   const svg = wrapper.get('svg');
   expect(svg.attributes('viewBox')).toBe('0 0 24 24');
-  icon.value = { width: 32, height: 16, node: Search.node };
+  icon.value = {
+    width: 32,
+    height: 16,
+    node: Search.node,
+  };
   await nextTick();
   expect(svg.attributes('viewBox')).toBe('0 0 32 16');
   for (const next of [
@@ -173,17 +191,27 @@ test('native SVG defaults survive undefined overrides and follow icon replacemen
     expect(svg.attributes('viewBox')).toBe(next.viewBox ?? '0 0 32 16');
     expect(svg.attributes('focusable')).toBe(String(next.focusable ?? false));
   }
-  icon.value = { size: 48, node: Heart.node };
+  icon.value = {
+    size: 48,
+    node: Heart.node,
+  };
   await nextTick();
   expect(svg.attributes('viewBox')).toBe('0 0 48 48');
 });
-
 test('external CSS overrides convenience props without leaking component options to the SVG', () => {
   const { wrapper, css } = render(
     _component(() => {
-      const s = useCss();
+      const css = useCss();
       return (
-        <Icon icon={Search} size={20} color="_primary" class={s.color('_danger').fontSize('2em')} />
+        <Icon
+          css={css({
+            color: '_danger',
+            fontSize: '2em',
+          })}
+          icon={Search}
+          size={20}
+          color="_primary"
+        />
       );
     }),
   );
@@ -191,11 +219,11 @@ test('external CSS overrides convenience props without leaking component options
   const values = Array.from(svg.style).map((name) => svg.style.getPropertyValue(name));
   expect(values).toContain('#b91c1c');
   expect(values).not.toContain('#2563eb');
-  expect(css()).toContain('font-size:2em;');
+  expect(css()).toContain('font-size:var(');
+  expect(values).toContain('2em');
   expect(svg.hasAttribute('size')).toBe(false);
   expect(svg.hasAttribute('color')).toBe(false);
 });
-
 test('nested raw nodes keep geometry, node paint and ownership; nonScalingStroke applies to shapes', async () => {
   const custom: LucideIconData = {
     width: 32,
@@ -203,10 +231,27 @@ test('nested raw nodes keep geometry, node paint and ownership; nonScalingStroke
     node: [
       [
         'g',
-        { fill: 'currentColor' },
+        {
+          fill: 'currentColor',
+        },
         [
-          ['path', { d: 'M0 8h32', 'stroke-width': 4, key: 'line' }],
-          ['circle', { cx: 8, cy: 8, r: 4, style: 'opacity:0.5;vector-effect:none' }],
+          [
+            'path',
+            {
+              d: 'M0 8h32',
+              'stroke-width': 4,
+              key: 'line',
+            },
+          ],
+          [
+            'circle',
+            {
+              cx: 8,
+              cy: 8,
+              r: 4,
+              style: 'opacity:0.5;vector-effect:none',
+            },
+          ],
         ],
       ],
     ],
@@ -234,22 +279,33 @@ test('nested raw nodes keep geometry, node paint and ownership; nonScalingStroke
   expect(circle.style.vectorEffect).toBe('none');
   expect(JSON.stringify(custom)).toBe(original);
 });
-
 test('named icons and explicit ARIA overrides update, while untyped subtree replacement is ignored', async () => {
   const label = ref('搜索');
   const ignoredSlot = vi.fn(() => h('text', 'ignored'));
   const { wrapper } = render(
     _component(() => (
-      <div>
+      <_div>
         <Icon icon={Search} aria-label={label.value} />
         <Icon icon={Heart} aria-labelledby="favorite-label" />
         <Icon icon={Heart} aria-label="收藏" aria-hidden role="presentation" />
         <Icon
           icon={Search}
-          {...({ innerHTML: '<rect/>', textContent: 'bad', children: 'bad' } as any)}
+          {...({
+            innerHTML: '<rect/>',
+            textContent: 'bad',
+            children: 'bad',
+          } as any)}
         />
-        {h(Icon, { icon: Search }, { default: ignoredSlot })}
-      </div>
+        {h(
+          Icon,
+          {
+            icon: Search,
+          },
+          {
+            default: ignoredSlot,
+          },
+        )}
+      </_div>
     )),
   );
   const icons = wrapper.findAll('svg');
@@ -272,17 +328,19 @@ test('named icons and explicit ARIA overrides update, while untyped subtree repl
   expect(icons[0]!.attributes('aria-hidden')).toBe('true');
   expect(ignoredSlot).not.toHaveBeenCalled();
 });
-
 test('spin owns its keyframes, keeps static rotate separate and releases animation rules when stopped', async () => {
   const spin = ref(true);
   const { wrapper, css } = render(
     _component(() => <Icon icon={LoaderCircle} spin={spin.value} rotate="45deg" />),
   );
   expect(css()).toContain('@keyframes');
-  expect(css()).toContain('transform:rotate(360deg)');
+  expect(css()).toContain('transform:var(');
+  expect(wrapper.attributes('style')).toContain('rotate(360deg)');
   expect(css()).toContain('@media (prefers-reduced-motion: reduce)');
-  expect(css()).toContain('animation-name:none;');
-  expect(css()).toContain('transform-origin:center;');
+  expect(css()).toContain('animation-name:var(');
+  expect(wrapper.attributes('style')).toContain('none');
+  expect(css()).toContain('transform-origin:var(');
+  expect(wrapper.attributes('style')).toContain('center');
   expect(wrapper.attributes('style')).toContain('45deg');
   expect(wrapper.attributes('spin')).toBeUndefined();
   spin.value = false;
@@ -290,7 +348,6 @@ test('spin owns its keyframes, keeps static rotate separate and releases animati
   expect(css()).not.toContain('@keyframes');
   expect(wrapper.attributes('style')).toContain('45deg');
 });
-
 test('SSR isolates theme values and hydrates the same SVG and animation without mismatch', async () => {
   const context = {};
   const App = _component(() => (
@@ -307,7 +364,10 @@ test('SSR isolates theme values and hydrates the same SVG and animation without 
   target.innerHTML = html;
   document.body.append(target);
   const svg = target.querySelector('svg');
-  const host = createCssHost({ target: document.head, maxUnusedRules: 0 });
+  const host = createCssHost({
+    target: document.head,
+    maxUnusedRules: 0,
+  });
   const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
   const error = vi.spyOn(console, 'error').mockImplementation(() => {});
   const app = createSSRApp(App).use(host);
@@ -323,7 +383,6 @@ test('SSR isolates theme values and hydrates the same SVG and animation without 
     serverHost.dispose();
   }
 });
-
 test('unknown theme names fail in the shared CSS resolver instead of becoming invalid CSS', async () => {
   const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
   const context = {};
@@ -342,8 +401,13 @@ test('unknown theme names fail in the shared CSS resolver instead of becoming in
 
 // Props 使用普通 CSS 值，绑定属于内部实现；字面量和对象写法使用同一个接口。
 if (false) {
-  const s = useCss();
-  const props: IconProps = { icon: Search, color: '_danger', size: '1.25em', strokeWidth: '_thin' };
+  const css = useCss();
+  const props: IconProps = {
+    icon: Search,
+    color: '_danger',
+    size: '1.25em',
+    strokeWidth: '_thin',
+  };
   <Icon {...props} />;
   <Icon icon={Search} color="_danger" size="_medium" strokeWidth="_thin" opacity="_disabled" />;
   <Icon icon={Search} size="small" width="calc(100% - 1em)" color="currentColor" rotate="90deg" />;
@@ -356,14 +420,25 @@ if (false) {
     opacity={0}
     strokeWidth={0}
   />;
-  <Icon icon={Search} {...({ color: '_primary', size: '_large' } as const)} />;
-  s.color('_danger').fontSize('_medium').strokeWidth('_thin').opacity('_disabled');
+  <Icon
+    icon={Search}
+    {...({
+      color: '_primary',
+      size: '_large',
+    } as const)}
+  />;
+  css({
+    color: '_danger',
+    fontSize: '_medium',
+    strokeWidth: '_thin',
+    opacity: '_disabled',
+  });
   // @ts-expect-error color 不接受数字。
   <Icon icon={Search} color={12} />;
   // @ts-expect-error rotate 与 CSS 方法一样必须带单位。
   <Icon icon={Search} rotate={90} />;
-  // @ts-expect-error bx 属于内部 CSS 接线，不作为组件值输入。
-  <Icon icon={Search} color={bx('red')} />;
+  // @ts-expect-error CSS 描述用于 css 属性，不作为单个颜色值。
+  <Icon icon={Search} color={css({ color: 'red' })} />;
   // @ts-expect-error Props 不接收 getter，响应式来源在调用处正常读取。
   <Icon icon={Search} size={() => 20} />;
   // @ts-expect-error 不接受外部子树。

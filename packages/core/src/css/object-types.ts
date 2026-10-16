@@ -1,8 +1,9 @@
 import type { AriaAttributes } from 'vue';
-import type { CssAnimation } from './animation-token.ts';
+import type { CssDeclarations } from './generated/declarations.ts';
 import type { SystemKeywords } from './generated/system.ts';
-import type { CssCondition, CssValue, PropertyInput, PropertyName } from './types.ts';
 import type { CSS_STYLE } from './object.ts';
+import type { CheckedCssValue, CssCondition, PropertyName } from './types.ts';
+export type { CssDeclarations } from './generated/declarations.ts';
 
 /** 原生 data-* 值；false 仍是存在的字符串属性，与 HTML 布尔属性不同。 */
 export interface DataAttributes {
@@ -11,15 +12,6 @@ export interface DataAttributes {
 
 type StateKey<Attrs> = Extract<keyof Attrs, `aria-${string}` | `data-${string}`>;
 type State<Value> = `${Extract<NonNullable<Value>, string | number | boolean>}`;
-type AnimationProperty =
-  'animation' | 'animationName' | `${'Webkit' | 'Moz'}Animation${'' | 'Name'}`;
-
-/** 普通属性使用 camelCase；数字是否补 px 沿用各属性的 CSS 语义。 */
-export type CssDeclarations<Theme extends SystemKeywords = SystemKeywords> = {
-  [Key in PropertyName]?:
-    CssValue<Key, Theme> | (Key extends AnimationProperty ? CssAnimation : never);
-};
-
 /** 属性条件观察完整目标契约；slot 可写字段的限制不会缩减这里的状态值。 */
 export type CssObject<
   Attrs extends object = AriaAttributes,
@@ -33,7 +25,6 @@ export interface CssStyle {
   readonly [CSS_STYLE]: {
     readonly source: unknown;
     readonly resolveTheme?: import('./tokens.ts').ThemeResolver;
-    readonly literal: boolean;
   };
 }
 
@@ -90,7 +81,7 @@ export type CheckCss<Input, Attrs extends object, Theme extends SystemKeywords =
                 ? Input
                 : {
                     [Key in keyof Input]: Key extends PropertyName
-                      ? PropertyInput<Key, Theme, Input[Key]>
+                      ? CheckedCssValue<Key, Theme, Input[Key]>
                       : Key extends `--zv-${string}`
                         ? never
                         : Key extends `--${string}`
@@ -107,11 +98,21 @@ export type CheckCss<Input, Attrs extends object, Theme extends SystemKeywords =
                   }
               : never;
 
+/** 元素转发复用已声明的契约；新字面量按本次原生属性检查，避免重复展开递归联合。 */
+export type CssAttribute<Input, Attrs extends object> =
+  DeclaredCss<Input> extends true
+    ? Input
+    : unknown extends Input
+      ? CssInput
+      : CssContextual<Input, Attrs> & CheckCss<Input, Attrs>;
+
 /** 主题工厂只绑定解析上下文；返回值可组合、复用，并随所属区域的主题更新。 */
 export interface CssFactory<Theme extends SystemKeywords> {
   <const Input>(
     source: Input &
-      CssInput<AriaAttributes & DataAttributes, Theme> &
-      CheckCss<Input, AriaAttributes & DataAttributes, Theme>,
+      NoInfer<
+        CssContextual<Input, AriaAttributes & DataAttributes, Theme> &
+          CheckCss<Input, AriaAttributes & DataAttributes, Theme>
+      >,
   ): CssStyle;
 }

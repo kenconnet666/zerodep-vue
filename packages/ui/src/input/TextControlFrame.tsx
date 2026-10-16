@@ -1,14 +1,11 @@
-import { _component, bx, cx } from '@zerodep-vue/core';
-import type { CssInput, CssValue } from '@zerodep-vue/core';
 import { X } from '@lucide/icons';
-import type { StyleValue, VNodeChild } from 'vue';
+import type { CssInput, CssValue, Slot } from '@zerodep-vue/core';
+import { _component, _span } from '@zerodep-vue/core';
+import type { HTMLAttributes, StyleValue, VNodeChild } from 'vue';
 import { useCss, useLang } from '../config/Provider.tsx';
-import { slotRest } from '../config/props.ts';
-import type { ElementSlotProps } from '../config/props.ts';
 import type { UiTheme } from '../config/theme/types.ts';
-import { Button } from './Button.tsx';
 import type { ButtonProps } from './Button.tsx';
-
+import { Button } from './Button.tsx';
 export interface TextControlAppearance {
   /** 继承字号，或使用主题字号；不对应 HTML input 的 size 属性。 */
   size?: CssValue<'fontSize', UiTheme>;
@@ -22,14 +19,15 @@ export interface TextControlAppearance {
   backgroundColor?: CssValue<'backgroundColor', UiTheme>;
   borderColor?: CssValue<'borderColor', UiTheme>;
   /** 外层容器样式；原生节点样式通过 slotInput/slotTextarea 提供。 */
-  class?: CssInput;
+  class?: HTMLAttributes['class'];
+  css?: CssInput;
   style?: StyleValue;
   clearable?: boolean;
   prefix?: VNodeChild;
   suffix?: VNodeChild;
-  slotPrefix?: ElementSlotProps;
-  slotSuffix?: ElementSlotProps;
-  slotClear?: Omit<ButtonProps, 'children' | 'type' | 'disabled' | 'loading' | 'icon'>;
+  slotPrefix?: Slot<typeof _span>;
+  slotSuffix?: Slot<typeof _span>;
+  slotClear?: Slot<typeof Button, 'type' | 'iconOnly' | 'disabled' | 'icon' | 'loading'>;
 }
 interface TextControlFrameProps extends TextControlAppearance {
   hasValue: boolean;
@@ -52,6 +50,7 @@ export const TextControlFrame = _component(
     backgroundColor,
     borderColor,
     class: className,
+    css: cssProp,
     style,
     prefix,
     suffix,
@@ -66,95 +65,132 @@ export const TextControlFrame = _component(
     onClear,
     children,
   }: TextControlFrameProps) => {
-    const s = useCss();
+    const css = useCss();
     const lang = useLang();
-    const control = s
-      .display('inline-flex')
-      .alignItems(bx(multiline ? 'flex-start' : 'center'))
-      .boxSizing('border-box')
-      .verticalAlign('middle')
-      .minWidth(0)
-      .width(bx(width))
-      .fontSize(bx(size))
-      .lineHeight('_normal')
-      .minHeight(
-        bx(density === 'compact' ? '_small' : density === 'comfortable' ? '_large' : '_medium'),
-      )
-      .gap('0.5em')
-      .paddingInline('0.75em')
-      .paddingBlock(
-        bx(density === 'compact' ? '0.125em' : density === 'comfortable' ? '0.5em' : '0.25em'),
-      )
-      .borderStyle('solid')
-      .borderWidth('0.0625em')
-      .borderRadius('_small')
-      .color('_textPrimary')
-      .backgroundColor('_surface')
-      .borderColor('_border')
-      .transitionProperty('border-color, background-color, box-shadow')
-      .transitionDuration('_fast')
-      .select('&:hover', s.borderColor('_borderStrong'))
-      .select(
-        '&:focus-within',
-        s
-          .borderColor('_primary')
-          .outlineStyle('solid')
-          .outlineWidth('0.125em')
-          .outlineOffset('0.0625em')
-          .outlineColor('_focusRing'),
-      )
-      .select(
-        '&:has([data-zv-text-value]:disabled)',
-        s.backgroundColor('_surfaceDisabled').color('_textDisabled').cursor('not-allowed'),
-      )
-      .select('@media (prefers-reduced-motion: reduce)', s.transitionDuration('0ms'))
-      .select(
-        '@media (forced-colors: active)',
-        s.borderColor('ButtonText').select('&:focus-within', s.outlineColor('Highlight')),
-      );
+    const control = css(() => ({
+      display: 'inline-flex',
+      alignItems: multiline ? 'flex-start' : 'center',
+      boxSizing: 'border-box',
+      verticalAlign: 'middle',
+      minWidth: 0,
+      width: width,
+      fontSize: size,
+      lineHeight: '_normal',
+      minHeight:
+        density === 'compact' ? '_small' : density === 'comfortable' ? '_large' : '_medium',
+      gap: '0.5em',
+      paddingInline: '0.75em',
+      paddingBlock:
+        density === 'compact' ? '0.125em' : density === 'comfortable' ? '0.5em' : '0.25em',
+      borderStyle: 'solid',
+      borderWidth: '0.0625em',
+      borderRadius: '_small',
+      color: '_textPrimary',
+      backgroundColor: '_surface',
+      borderColor: '_border',
+      transitionProperty: 'border-color, background-color, box-shadow',
+      transitionDuration: '_fast',
+      '&:hover': {
+        borderColor: '_borderStrong',
+      },
+      '&:focus-within': {
+        borderColor: '_primary',
+        outlineStyle: 'solid',
+        outlineWidth: '0.125em',
+        outlineOffset: '0.0625em',
+        outlineColor: '_focusRing',
+      },
+      '&:has([data-zv-text-value]:disabled)': {
+        backgroundColor: '_surfaceDisabled',
+        color: '_textDisabled',
+        cursor: 'not-allowed',
+      },
+      '@media (prefers-reduced-motion: reduce)': {
+        transitionDuration: '0ms',
+      },
+      '@media (forced-colors: active)': {
+        borderColor: 'ButtonText',
+        '&:focus-within': {
+          outlineColor: 'Highlight',
+        },
+      },
+    }));
     const variants = {
       outline: undefined,
-      filled: s.backgroundColor('_surfaceMuted').borderColor('transparent'),
-      underlined: s.borderRadius(0).borderWidth('0 0 0.0625em').backgroundColor('transparent'),
+      filled: css({
+        backgroundColor: '_surfaceMuted',
+        borderColor: 'transparent',
+      }),
+      underlined: css({
+        borderRadius: 0,
+        borderWidth: '0 0 0.0625em',
+        backgroundColor: 'transparent',
+      }),
     };
     const states = {
-      error: s.borderColor('_danger').select('&:hover, &:focus-within', s.borderColor('_danger')),
-      warning: s
-        .borderColor('_warning')
-        .select('&:hover, &:focus-within', s.borderColor('_warning')),
-      success: s
-        .borderColor('_success')
-        .select('&:hover, &:focus-within', s.borderColor('_success')),
+      error: css({
+        borderColor: '_danger',
+        '&:hover, &:focus-within': {
+          borderColor: '_danger',
+        },
+      }),
+      warning: css({
+        borderColor: '_warning',
+        '&:hover, &:focus-within': {
+          borderColor: '_warning',
+        },
+      }),
+      success: css({
+        borderColor: '_success',
+        '&:hover, &:focus-within': {
+          borderColor: '_success',
+        },
+      }),
     };
-    const overrides = s
-      .color(bx(color))
-      .backgroundColor(bx(backgroundColor))
-      .borderColor(bx(borderColor));
+    const overrides = css(() => ({
+      color: color,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+    }));
     return (
-      <span
-        data-zv-text-control=""
-        style={style}
-        class={cx(
+      <_span
+        css={[
           control,
           variants[variant],
           status && states[status],
           overrides,
-          overrides.select('&:hover, &:focus-within', overrides),
-          className,
-        )}
+          css([
+            overrides,
+            {
+              '&:hover, &:focus-within': overrides,
+            },
+          ]),
+          cssProp,
+        ]}
+        data-zv-text-control=""
+        class={className}
+        style={style}
       >
         {prefix != null && (
-          <span
-            {...slotRest(slotPrefix)}
-            class={cx(s.display('inline-flex').flexShrink(0), slotPrefix?.class)}
+          <_span
+            css={css({
+              display: 'inline-flex',
+              flexShrink: 0,
+            })}
+            {...slotPrefix}
           >
             {prefix}
-          </span>
+          </_span>
         )}
         {children}
         {clearable && !readOnly && (
           <Button
-            {...slotRest(slotClear)}
+            css={css(() => ({
+              fontSize: '0.875em',
+              visibility: hasValue ? 'visible' : 'hidden',
+              flexShrink: 0,
+            }))}
+            {...slotClear}
             type="button"
             variant={slotClear?.variant ?? 'text'}
             tone={slotClear?.tone ?? 'neutral'}
@@ -162,14 +198,8 @@ export const TextControlFrame = _component(
             iconOnly
             icon={X}
             disabled={disabled}
+            loading={false}
             aria-label={slotClear?.['aria-label'] ?? lang.clear}
-            class={cx(
-              s
-                .fontSize('0.875em')
-                .visibility(bx(hasValue ? 'visible' : 'hidden'))
-                .flexShrink(0),
-              slotClear?.class,
-            )}
             onPointerdown={(event) => {
               if (!event.defaultPrevented) event.preventDefault();
             }}
@@ -179,14 +209,17 @@ export const TextControlFrame = _component(
           />
         )}
         {suffix != null && (
-          <span
-            {...slotRest(slotSuffix)}
-            class={cx(s.display('inline-flex').flexShrink(0), slotSuffix?.class)}
+          <_span
+            css={css({
+              display: 'inline-flex',
+              flexShrink: 0,
+            })}
+            {...slotSuffix}
           >
             {suffix}
-          </span>
+          </_span>
         )}
-      </span>
+      </_span>
     );
   },
 );

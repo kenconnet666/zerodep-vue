@@ -1,7 +1,7 @@
-import { computed, ReactiveEffect, shallowRef, unref } from 'vue';
 import type { ShallowRef } from 'vue';
-import { CLASS } from '../css/style-value.ts';
+import { ReactiveEffect, computed, shallowRef, unref } from 'vue';
 import { ANIMATION } from '../css/animation-token.ts';
+import { CSS_STYLE } from '../css/object.ts';
 
 type Environment = Record<string, unknown>;
 type Factory = (environment: Environment, ...args: unknown[]) => any;
@@ -76,7 +76,7 @@ export function registerModule(
       const next = current.factories.value;
       if (version !== next) {
         // 热替换只重算这段样式。独立且立即停止的 Vue effect 防止普通 setup 读取
-        // 意外成为消费组件的长期依赖；bx 的 getter 仍由正常 CSS 消费过程读取。
+        // 意外成为消费组件的长期依赖；显式样式函数仍由正常 CSS 消费过程读取。
         const isolated = new ReactiveEffect(() => next[site]!(environment));
         try {
           value = isolated.run();
@@ -95,21 +95,7 @@ export function registerModule(
         get(_target, key) {
           const current = read();
           if (key === token) return current[token];
-          const value = Reflect.get(current, key);
-          if (typeof value !== 'function' || typeof key !== 'string') return value;
-          return (...args: unknown[]) => {
-            let owner = current;
-            let result = Reflect.apply(value, owner, args);
-            // 方法调用立即执行；后续热更新才重建同一分支，普通参数仍是调用时的快照。
-            return view(() => {
-              const next = read();
-              if (next !== owner) {
-                result = Reflect.apply(Reflect.get(next, key), next, args);
-                owner = next;
-              }
-              return result;
-            }, CLASS);
-          };
+          return Reflect.get(current, key);
         },
         has(_target, key) {
           return key in read();
@@ -123,12 +109,15 @@ export function registerModule(
     style(site: string, environment: Environment, kind: string) {
       const read = snapshot(site, environment);
       switch (kind) {
-        case 'class':
-          return view(read, CLASS);
+        case 'css':
+          return view(read, CSS_STYLE);
         case 'keyframes':
           return view(read, ANIMATION);
         case 'source':
-          return computed(() => unref(read()));
+          return computed(() => {
+            const value = unref(read());
+            return typeof value === 'function' ? value() : value;
+          });
         default:
           throw new Error('未知 HMR 样式类型：' + kind);
       }

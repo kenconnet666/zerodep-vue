@@ -68,7 +68,7 @@ export type ManagedProps<P> = typeof authorProps extends keyof P
 // 类型元数据放在 $props 内，保留单一构造签名，让 TS 继续传播泛型 setup 的类型参数。
 export function _component<Props extends object = {}>(
   setup: (props: Props) => VNodeChild | Promise<VNodeChild>,
-  options?: Pick<ComponentOptions, 'name' | 'inheritAttrs'>,
+  options?: Pick<ComponentOptions, 'name'>,
 ): DefineSetupFnComponent<Props & AuthorProps & Partial<TypedProps<Props>>> {
   void setup;
   void options;

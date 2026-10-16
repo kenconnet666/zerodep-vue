@@ -1,12 +1,11 @@
-import { _component, cx } from '@zerodep-vue/core';
-import { provide, ref } from 'vue';
+import { _component, _div } from '@zerodep-vue/core';
 import type { Ref } from 'vue';
-import type { ElementProps } from '../config/props.ts';
+import { provide, ref } from 'vue';
 import { useCss } from '../config/Provider.tsx';
-import { collapseKey } from './collapse-context.ts';
-import { callCallbacks } from '../interaction/callbacks.ts';
+import type { ElementProps } from '../config/props.ts';
 import type { Callback } from '../interaction/callbacks.ts';
-
+import { callCallbacks } from '../interaction/callbacks.ts';
+import { collapseKey } from './collapse-context.ts';
 export interface CollapseProps extends ElementProps {
   /** 可写展开项名称；省略时每个实例独立维护。 */
   expandedKeys?: Ref<readonly string[]>;
@@ -22,13 +21,13 @@ export const Collapse = _component(
     expandedKeys = ref<readonly string[]>([]),
     multiple = false,
     onExpandedChange,
-    class: className,
+    css: cssProp,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: CollapseProps) => {
-    const s = useCss();
+    const css = useCss();
     const names = new Set<string>();
     provide(collapseKey, {
       expanded: (name) => expandedKeys.value.includes(name),
@@ -50,9 +49,19 @@ export const Collapse = _component(
       },
     });
     return (
-      <div {...rest} data-zv-collapse="" class={cx(s.display('block').minWidth(0), className)}>
+      <_div
+        css={[
+          css({
+            display: 'block',
+            minWidth: 0,
+          }),
+          cssProp,
+        ]}
+        {...rest}
+        data-zv-collapse=""
+      >
         {children}
-      </div>
+      </_div>
     );
   },
 );

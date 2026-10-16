@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { objectClass, staticCss, valueBinding, createCssFactory } from '../../src/css/object.ts';
+import { objectClass, staticCss, createCssFactory } from '../../src/css/object.ts';
 import { resolveClass } from '../../src/css/resolve.ts';
 import { THEME } from '../../src/css/tokens.ts';
 import { createCssVNode } from '../../src/css/vnode.ts';
@@ -14,7 +14,7 @@ test('plain objects keep dynamic rules stable and numbers retain CSS property un
   assert.equal(first.cssText, next.cssText);
   assert.deepEqual(Object.values(first.variables), ['10px', '0.5', '2', '3']);
   assert.deepEqual(Object.values(next.variables), ['30px', '0.8', '4', '5']);
-  const compiled = resolve(staticCss({ display: 'flex', width: valueBinding(20) }));
+  const compiled = resolve(staticCss({ display: 'flex', width: 20 }, ['width']));
   assert(compiled.cssText.includes('display:flex'));
   assert.deepEqual(Object.values(compiled.variables), ['20px']);
 });

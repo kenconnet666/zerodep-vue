@@ -1,7 +1,10 @@
-import { afterEach, expect, test, vi } from 'vitest';
-import { mount } from '@vue/test-utils';
 import { renderToString } from '@vue/server-renderer';
+import { mount } from '@vue/test-utils';
+import { _button, _component, _div, _output, createCssHost, getCssHost } from '@zerodep-vue/core';
+import { afterEach, expect, test, vi } from 'vitest';
+import type { Component } from 'vue';
 import {
+  Teleport,
   computed,
   createSSRApp,
   isReactive,
@@ -11,36 +14,41 @@ import {
   reactive,
   ref,
   shallowRef,
-  Teleport,
 } from 'vue';
-import type { Component } from 'vue';
-import { _component, createCssHost, getCssHost } from '@zerodep-vue/core';
+import type { ProviderProps, UiLanguageInput, UiTheme, UiThemeInput } from '../src/index.ts';
 import {
   DarkTheme,
-  enUS,
   LightTheme,
   Provider,
+  enUS,
   useCss,
   useLang,
   useTheme,
   zhCN,
 } from '../src/index.ts';
-import type { ProviderProps, UiLanguageInput, UiTheme, UiThemeInput } from '../src/index.ts';
-
 const views = new Map<
   string,
-  { lang: ReturnType<typeof useLang>; theme: ReturnType<typeof useTheme> }
+  {
+    lang: ReturnType<typeof useLang>;
+    theme: ReturnType<typeof useTheme>;
+  }
 >();
 const cleanup: (() => void)[] = [];
 
 // 同时读取配置和 CSS，验证 Provider 在真实 TSX 渲染链路中使用同一个主题来源。
 const Probe = _component(({ id = 'value' }: { id?: string }) => {
-  const s = useCss();
+  const css = useCss();
   const lang = useLang();
   const theme = useTheme();
-  views.set(id, { lang, theme });
+  views.set(id, {
+    lang,
+    theme,
+  });
   return (
-    <output
+    <_output
+      css={css({
+        color: '_primary',
+      })}
       data-id={id}
       data-confirm={lang.confirm}
       data-cancel={lang.cancel}
@@ -48,25 +56,32 @@ const Probe = _component(({ id = 'value' }: { id?: string }) => {
       data-zone={lang.timeZone}
       data-primary={theme.color._primary}
       data-text={theme.color._textPrimary}
-      class={s.color('_primary')}
     >
       {lang.confirm}
-    </output>
+    </_output>
   );
 });
-
 function render(component: Component) {
-  const host = createCssHost({ target: document.head, maxUnusedRules: 0 });
-  const wrapper = mount(component, { global: { plugins: [host] } });
+  const host = createCssHost({
+    target: document.head,
+    maxUnusedRules: 0,
+  });
+  const wrapper = mount(component, {
+    global: {
+      plugins: [host],
+    },
+  });
   cleanup.push(() => {
     wrapper.unmount();
     const references = host.stats().ownedReferences;
     host.dispose();
     expect(references).toBe(0);
   });
-  return { wrapper, host };
+  return {
+    wrapper,
+    host,
+  };
 }
-
 function luminance(hex: string): number {
   const weights = [0.2126, 0.7152, 0.0722];
   return weights.reduce((sum, weight, index) => {
@@ -75,7 +90,6 @@ function luminance(hex: string): number {
     return sum + linear * weight;
   }, 0);
 }
-
 afterEach(() => {
   try {
     while (cleanup.length) cleanup.pop()!();
@@ -83,11 +97,14 @@ afterEach(() => {
     views.clear();
   }
 });
-
 test('Provider forwards rest to its div for explicit children and default slots', async () => {
   const click = vi.fn();
   const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-  const rest = { class: 'provider', title: 'region', onClick: click };
+  const rest = {
+    class: 'provider',
+    title: 'region',
+    onClick: click,
+  };
   const App = _component(() => (
     <>
       <Provider
@@ -95,10 +112,10 @@ test('Provider forwards rest to its div for explicit children and default slots'
         {...rest}
         theme={new DarkTheme()}
         lang={enUS}
-        children={<button>explicit</button>}
+        children={<_button>explicit</_button>}
       />
       <Provider id="nested" {...rest}>
-        <button>nested</button>
+        <_button>nested</_button>
       </Provider>
     </>
   ));
@@ -127,20 +144,30 @@ test('Provider forwards rest to its div for explicit children and default slots'
   expect(html).not.toContain('lang=');
   expect(warn).not.toHaveBeenCalled();
 });
-
 test('Provider div updates and removes native props, CSS input and event listeners', async () => {
   const click = vi.fn();
   const rest = shallowRef<Pick<ProviderProps, 'id' | 'style' | 'onClick'>>({
     id: 'first',
-    style: { padding: '2px' },
+    style: {
+      padding: '2px',
+    },
     onClick: click,
   });
   const styled = ref(true);
   const App = _component(() => {
-    const s = useCss();
+    const css = useCss();
     return (
-      <Provider {...rest.value} class={styled.value ? s.color('red') : undefined}>
-        <button>action</button>
+      <Provider
+        css={
+          styled.value
+            ? css({
+                color: 'red',
+              })
+            : undefined
+        }
+        {...rest.value}
+      >
+        <_button>action</_button>
       </Provider>
     );
   });
@@ -149,7 +176,8 @@ test('Provider div updates and removes native props, CSS input and event listene
   expect(wrapper.attributes('id')).toBe('first');
   expect(wrapper.attributes('style')).toContain('padding: 2px');
   expect(wrapper.classes().some((name) => name.startsWith('zv-'))).toBe(true);
-  expect(document.head.textContent).toContain('color:red');
+  expect(document.head.textContent).toContain('color:var(--zv-');
+  expect(wrapper.attributes('style')).toContain('red');
   expect(host.stats().ownedReferences).toBe(1);
   expect(wrapper.get('button').attributes('class')).toBeUndefined();
   await wrapper.get('button').trigger('click');
@@ -164,7 +192,6 @@ test('Provider div updates and removes native props, CSS input and event listene
   await wrapper.get('button').trigger('click');
   expect(click).toHaveBeenCalledTimes(1);
 });
-
 test('defaults are available without Provider, and Provider renders one div', () => {
   const { wrapper } = render(
     _component(() => (
@@ -183,7 +210,9 @@ test('defaults are available without Provider, and Provider renders one div', ()
   ]);
   for (const id of ['outside', 'inside']) {
     const { lang, theme } = views.get(id)!;
-    expect({ ...lang }).toEqual(zhCN);
+    expect({
+      ...lang,
+    }).toEqual(zhCN);
     expect(lang.confirm).toBe('确认');
     expect(lang.locale).toBe('zh-CN');
     expect(lang.timeZone).toBe('Asia/Shanghai');
@@ -197,11 +226,21 @@ test('defaults are available without Provider, and Provider renders one div', ()
   }
   expect(useLang()).toEqual(zhCN);
 });
-
 test('reactive language fields inherit, override and resume independently in a stable view', async () => {
-  const parent = reactive({ ...enUS, locale: 'en-GB', timeZone: 'Europe/London' });
-  const local = reactive<UiLanguageInput>({ confirm: 'Save', timeZone: 'UTC' });
-  const state = reactive<{ lang: UiLanguageInput | undefined }>({ lang: local });
+  const parent = reactive({
+    ...enUS,
+    locale: 'en-GB',
+    timeZone: 'Europe/London',
+  });
+  const local = reactive<UiLanguageInput>({
+    confirm: 'Save',
+    timeZone: 'UTC',
+  });
+  const state = reactive<{
+    lang: UiLanguageInput | undefined;
+  }>({
+    lang: local,
+  });
   const { wrapper } = render(
     _component(() => (
       <Provider lang={parent}>
@@ -213,8 +252,13 @@ test('reactive language fields inherit, override and resume independently in a s
     )),
   );
   const inner = views.get('inner')!.lang;
-  expect({ ...inner }).toEqual({ ...parent, confirm: 'Save', timeZone: 'UTC' });
-
+  expect({
+    ...inner,
+  }).toEqual({
+    ...parent,
+    confirm: 'Save',
+    timeZone: 'UTC',
+  });
   Object.assign(parent, {
     confirm: 'Yes',
     cancel: 'Stop',
@@ -231,15 +275,15 @@ test('reactive language fields inherit, override and resume independently in a s
     'data-zone': 'UTC',
   });
   expect(views.get('sibling')!.lang).toEqual(parent);
-
   local.confirm = '';
   await nextTick();
   expect(wrapper.get('[data-id="inner"]').text()).toBe('');
   local.confirm = undefined;
   local.timeZone = undefined;
   await nextTick();
-  expect({ ...inner }).toEqual(parent);
-
+  expect({
+    ...inner,
+  }).toEqual(parent);
   state.lang = zhCN;
   await nextTick();
   expect(inner.locale).toBe('zh-CN');
@@ -247,29 +291,47 @@ test('reactive language fields inherit, override and resume independently in a s
   // 完整预设携带文案、locale 和 timeZone；切换对象时一起覆盖父级配置。
   state.lang = enUS;
   await nextTick();
-  expect({ ...inner }).toEqual(enUS);
-
+  expect({
+    ...inner,
+  }).toEqual(enUS);
   state.lang = undefined;
   await nextTick();
-  expect({ ...inner }).toEqual(parent);
+  expect({
+    ...inner,
+  }).toEqual(parent);
   expect(views.get('inner')!.lang).toBe(inner);
 });
-
 test('partial theme fields follow the parent across source switches and resume inheritance', async () => {
   const parent = shallowRef<UiTheme>(reactive(new DarkTheme()));
   const brand = ref<string | undefined>('#7c3aed');
   const local = reactive<UiThemeInput>({
-    color: { _primary: brand },
-    borderRadius: { _medium: 0 },
-    opacity: { _disabled: 0 },
+    color: {
+      _primary: brand,
+    },
+    borderRadius: {
+      _medium: 0,
+    },
+    opacity: {
+      _disabled: 0,
+    },
   });
-  const state = reactive<{ theme: UiThemeInput | undefined }>({ theme: local });
+  const state = reactive<{
+    theme: UiThemeInput | undefined;
+  }>({
+    theme: local,
+  });
   const { wrapper } = render(
     _component(() => (
       <Provider theme={parent}>
         <Provider theme={state.theme}>
           <Probe id="inner" />
-          <Provider theme={{ fontWeight: { _medium: 700 } }}>
+          <Provider
+            theme={{
+              fontWeight: {
+                _medium: 700,
+              },
+            }}
+          >
             <Probe id="deeper" />
           </Provider>
         </Provider>
@@ -289,7 +351,6 @@ test('partial theme fields follow the parent across source switches and resume i
   expect(deeper.fontWeight._medium).toBe(700);
   expect(views.get('sibling')!.theme.color._primary).toBe('#60a5fa');
   expect(parent.value.color._primary).toBe('#60a5fa');
-
   parent.value.color._textPrimary = '#e2e8f0';
   parent.value.fontSize._medium = '1rem';
   expect(theme.color._textPrimary).toBe('#e2e8f0');
@@ -301,14 +362,15 @@ test('partial theme fields follow the parent across source switches and resume i
   expect(deeper.fontSize._medium).toBe('0.875rem');
   await nextTick();
   expect(wrapper.get('[data-id="inner"]').attributes('style')).toContain('#7c3aed');
-
   brand.value = undefined;
   expect(theme.color._primary).toBe('#2563eb');
   brand.value = '#e11d48';
   expect(deeper.color._primary).toBe('#e11d48');
   delete local.color!._primary;
   expect(theme.color._primary).toBe('#2563eb');
-  local.color = { _primary: '#f97316' };
+  local.color = {
+    _primary: '#f97316',
+  };
   expect(theme.color._primary).toBe('#f97316');
   local.color = undefined;
   expect(theme.color._primary).toBe('#2563eb');
@@ -320,9 +382,12 @@ test('partial theme fields follow the parent across source switches and resume i
   expect(theme.color).toBe(colors);
   expect(deeper.fontWeight._medium).toBe(700);
 });
-
 test('theme and language sources accept refs and computed values that restore inheritance', async () => {
-  const theme = shallowRef<UiThemeInput | undefined>({ color: { _primary: '#7c3aed' } });
+  const theme = shallowRef<UiThemeInput | undefined>({
+    color: {
+      _primary: '#7c3aed',
+    },
+  });
   const lang = shallowRef<UiLanguageInput | undefined>({
     confirm: '保存',
     timeZone: 'Europe/London',
@@ -346,30 +411,42 @@ test('theme and language sources accept refs and computed values that restore in
     const view = views.get(id)!;
     expect(view.theme.color._primary).toBe('#7c3aed');
     expect(view.theme.color._surface).toBe('#0f172a');
-    expect({ ...view.lang }).toEqual({ ...enUS, confirm: '保存', timeZone: 'Europe/London' });
+    expect({
+      ...view.lang,
+    }).toEqual({
+      ...enUS,
+      confirm: '保存',
+      timeZone: 'Europe/London',
+    });
   }
   theme.value = undefined;
   lang.value = undefined;
   for (const id of ['computed', 'ref']) {
     const view = views.get(id)!;
     expect(view.theme.color._primary).toBe('#60a5fa');
-    expect({ ...view.lang }).toEqual(enUS);
+    expect({
+      ...view.lang,
+    }).toEqual(enUS);
   }
   await nextTick();
   expect(wrapper.get('[data-id="computed"]').text()).toBe('Confirm');
   expect(wrapper.get('[data-id="ref"]').attributes('style')).toContain('#60a5fa');
 });
-
 test('complete themes override every field and follow reactive fields, nested refs and source replacement', async () => {
   class BrandTheme extends LightTheme {
-    override readonly color = { ...new LightTheme().color, _primary: ref('#7c3aed') };
+    override readonly color = {
+      ...new LightTheme().color,
+      _primary: ref('#7c3aed'),
+    };
   }
   const parent = reactive(new LightTheme());
   parent.color._textPrimary = '#ffffff';
   const brand = new BrandTheme();
   const selected = shallowRef<UiTheme>(brand);
   const current = computed(() => selected.value);
-  const state = reactive({ override: true });
+  const state = reactive({
+    override: true,
+  });
   const { wrapper, host } = render(
     _component(() => (
       <Provider theme={parent}>
@@ -390,12 +467,10 @@ test('complete themes override every field and follow reactive fields, nested re
   expect(host.stats().ownedReferences).toBe(3);
   expect(wrapper.get('[data-id="inner"]').attributes('style')).toContain('#7c3aed');
   expect(document.head.textContent).toContain('color:var(--zv-');
-
   brand.color._primary.value = '#e11d48';
   await nextTick();
   expect(wrapper.get('[data-id="inner"]').attributes('data-primary')).toBe('#e11d48');
   expect(wrapper.get('[data-id="inner"]').attributes('style')).toContain('#e11d48');
-
   selected.value = new DarkTheme();
   await nextTick();
   expect(theme.color._primary).toBe('#60a5fa');
@@ -413,37 +488,37 @@ test('complete themes override every field and follow reactive fields, nested re
   expect(views.get('ref')!.theme.color._primary).toBe('#60a5fa');
   expect(views.get('inner')!.theme).toBe(theme);
 });
-
 test('shared theme scales resolve in CSS with the correct units and remain owned by each instance', async () => {
   const selected = shallowRef<UiTheme>(new LightTheme());
   const Styled = _component(() => {
-    const s = useCss();
+    const css = useCss();
     return (
-      <div
+      <_div
+        css={css({
+          backgroundColor: '_surface',
+          color: '_textPrimary',
+          height: '_medium',
+          padding: '_medium',
+          margin: '_small',
+          gap: '_extraSmall',
+          rowGap: '_small',
+          columnGap: '_large',
+          strokeWidth: '_medium',
+          fontSize: '_medium',
+          fontWeight: '_medium',
+          lineHeight: '_normal',
+          borderRadius: '_medium',
+          borderWidth: '_thin',
+          boxShadow: '_medium',
+          opacity: '_disabled',
+          transitionDuration: '_normal',
+          transitionTimingFunction: '_standard',
+          zIndex: '_dropdown',
+        })}
         data-theme-scales=""
-        class={s
-          .backgroundColor('_surface')
-          .color('_textPrimary')
-          .height('_medium')
-          .padding('_medium')
-          .margin('_small')
-          .gap('_extraSmall')
-          .rowGap('_small')
-          .columnGap('_large')
-          .strokeWidth('_medium')
-          .fontSize('_medium')
-          .fontWeight('_medium')
-          .lineHeight('_normal')
-          .borderRadius('_medium')
-          .borderWidth('_thin')
-          .boxShadow('_medium')
-          .opacity('_disabled')
-          .transitionDuration('_normal')
-          .transitionTimingFunction('_standard')
-          .zIndex('_dropdown')}
       >
         Theme
-      </div>
+      </_div>
     );
   });
   const { wrapper } = render(
@@ -482,7 +557,6 @@ test('shared theme scales resolve in CSS with the correct units and remain owned
   await nextTick();
   expect(element.className).toBe(className);
   expect(element.getAttribute('style')).toContain('rgba(0, 0, 0, 0.4)');
-
   const customized = new LightTheme();
   customized.padding._medium = '2em';
   customized.fontSize._medium = '1rem';
@@ -494,7 +568,6 @@ test('shared theme scales resolve in CSS with the correct units and remain owned
   expect(customized.gap._medium).toBe('0.857143em');
   expect(selected.value.fontSize._medium).toBe('0.875rem');
 });
-
 test.each([
   ['light', LightTheme],
   ['dark', DarkTheme],
@@ -562,9 +635,10 @@ test.each([
     }
   },
 );
-
 test('descendant views reject writes while caller-owned reactive sources remain editable', async () => {
-  const lang = reactive({ ...enUS });
+  const lang = reactive({
+    ...enUS,
+  });
   const theme = reactive(new LightTheme());
   render(
     _component(() => (
@@ -580,13 +654,11 @@ test('descendant views reject writes while caller-owned reactive sources remain 
   expect(warn).toHaveBeenCalled();
   expect(lang.confirm).toBe(enUS.confirm);
   expect(theme.color._primary).toBe('#2563eb');
-
   lang.confirm = 'Changed by owner';
   theme.color._primary = '#f97316';
   expect(view.lang.confirm).toBe('Changed by owner');
   expect(view.theme.color._primary).toBe('#f97316');
   await nextTick();
-
   if (false) {
     // @ts-expect-error 后代只能读取语言配置。
     view.lang.confirm = 'Forbidden';
@@ -595,17 +667,32 @@ test('descendant views reject writes while caller-owned reactive sources remain 
     // @ts-expect-error 文案直接位于 lang 上，不再保留 messages 层。
     view.lang.messages.confirm;
     // @ts-expect-error 局部主题也只接受已声明的主题名。
-    <Provider theme={{ color: { _missing: '#000000' } }} />;
+    <Provider
+      theme={{
+        color: {
+          _missing: '#000000',
+        },
+      }}
+    />;
     // @ts-expect-error 颜色字段不能使用数字。
-    <Provider theme={{ color: { _primary: 123 } }} />;
+    <Provider
+      theme={{
+        color: {
+          _primary: 123,
+        },
+      }}
+    />;
   }
 });
-
 test('teleported children keep the logical Provider context', async () => {
   const target = document.createElement('div');
   document.body.append(target);
   cleanup.push(() => target.remove());
-  const lang = reactive({ ...enUS, confirm: 'In portal', timeZone: 'Asia/Shanghai' });
+  const lang = reactive({
+    ...enUS,
+    confirm: 'In portal',
+    timeZone: 'Asia/Shanghai',
+  });
   render(
     _component(() => (
       <Provider lang={lang}>
@@ -621,11 +708,18 @@ test('teleported children keep the logical Provider context', async () => {
   expect(target.querySelector('output')?.textContent).toBe('Updated portal');
   expect(views.get('value')!.lang.timeZone).toBe('Asia/Shanghai');
 });
-
 test('SSR requests isolate configuration and hydrate the same resolved language and theme', async () => {
   const requests = [
-    { id: 'zh', lang: zhCN, color: '#7c3aed' },
-    { id: 'en', lang: enUS, color: '#059669' },
+    {
+      id: 'zh',
+      lang: zhCN,
+      color: '#7c3aed',
+    },
+    {
+      id: 'en',
+      lang: enUS,
+      color: '#059669',
+    },
   ].map(({ id, lang, color }) => {
     const theme = id === 'zh' ? new LightTheme() : new DarkTheme();
     return {
@@ -636,7 +730,16 @@ test('SSR requests isolate configuration and hydrate the same resolved language 
       context: {},
       component: _component(() => (
         <Provider theme={theme} lang={lang}>
-          <Provider theme={{ color: { _primary: color } }} lang={{ confirm: lang.confirm }}>
+          <Provider
+            theme={{
+              color: {
+                _primary: color,
+              },
+            }}
+            lang={{
+              confirm: lang.confirm,
+            }}
+          >
             <Probe id={id} />
           </Provider>
         </Provider>
@@ -661,7 +764,6 @@ test('SSR requests isolate configuration and hydrate the same resolved language 
       );
     }
     expect(getCssHost(requests[0]!.context)).not.toBe(getCssHost(requests[1]!.context));
-
     const request = requests[0]!;
     const container = document.createElement('div');
     container.innerHTML = html[0]!;
@@ -684,11 +786,15 @@ test('SSR requests isolate configuration and hydrate the same resolved language 
     for (const request of requests) getCssHost(request.context)?.dispose();
   }
 });
-
 test('language formatting settings pass through without normalization', () => {
   render(
     _component(() => (
-      <Provider lang={{ locale: 'en-us', timeZone: 'Etc/UTC' }}>
+      <Provider
+        lang={{
+          locale: 'en-us',
+          timeZone: 'Etc/UTC',
+        }}
+      >
         <Probe />
       </Provider>
     )),

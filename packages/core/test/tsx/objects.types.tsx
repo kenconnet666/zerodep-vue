@@ -1,5 +1,13 @@
-import { _button, _div, _input, _component, _span } from '@zerodep-vue/core';
-import type { Props, Slot } from '@zerodep-vue/core';
+import type { CssFactory, Props, Slot } from '@zerodep-vue/core';
+import {
+  SystemKeywords,
+  _button,
+  _component,
+  _div,
+  _input,
+  _span,
+  createCssContext,
+} from '@zerodep-vue/core';
 import { defineComponent, ref } from 'vue';
 
 declare const tone: 'primary' | 'danger';
@@ -71,3 +79,29 @@ const valid: Props<typeof _input, { size?: 'small' | 'large' }> = { size: 'small
 const Foreign = defineComponent({ props: { label: String } });
 const foreignSlot: Slot<typeof Foreign> = { label: 'ordinary Vue' };
 void [owned, identity, content, replaced, valid, foreignSlot];
+
+class Theme extends SystemKeywords {
+  color = { _brand: 'red' };
+}
+const css = createCssContext(new Theme()).useCss();
+declare const enabled: boolean;
+declare const rail: Slot<typeof _div, 'aria-hidden' | 'data-part'>;
+const paint = css({ color: '_brand' });
+<_div css={enabled && paint} />;
+<_div css={[paint]} {...rail} aria-hidden="true" data-part="rail" />;
+// @ts-expect-error a forwarding spread cannot hide invalid local CSS values
+<_div css={{ opacity: true }} {...rail} />;
+// @ts-expect-error explicit factories validate defaults before a later typed CSS spread
+<_div css={css({ opactiy: 1 })} {...rail} />;
+function genericTheme<T extends Theme>(style: CssFactory<T>) {
+  return style({ color: '_brand' });
+}
+genericTheme(css);
+css({ color: '_brand', ':hover': { backgroundColor: '_brand' } });
+css(() => ({ color: '_brand', width: 30 }));
+// @ts-expect-error unknown theme token in an ordinary object
+css({ color: '_missing' });
+// @ts-expect-error factories retain theme validation
+css(() => ({ color: '_missing' }));
+// @ts-expect-error nested objects retain value domains
+css({ ':hover': { opacity: true } });

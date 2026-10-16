@@ -1,30 +1,28 @@
-import type { CssInput } from '@zerodep-vue/core';
-import { _component, bx, cx } from '@zerodep-vue/core';
-import type { HTMLAttributes, Ref, VNodeChild } from 'vue';
+import type { Props } from '@zerodep-vue/core';
+import { _button, _component, _span } from '@zerodep-vue/core';
+import type { Ref, VNodeChild } from 'vue';
 import { computed, onMounted, onUpdated, ref, shallowRef, useId, watchEffect } from 'vue';
 import { useCss, useLang } from '../config/Provider.tsx';
-import { callCallbacks } from '../interaction/callbacks.ts';
 import type { Callback } from '../interaction/callbacks.ts';
-import type { DataAttributes } from '../config/props.ts';
-
-export interface EllipsisProps
-  extends DataAttributes, /* @vue-ignore */ Omit<HTMLAttributes, 'class'> {
-  /** 最大显示行数，默认 1；必须是正整数，单行和多行均保留完整内容。 */
-  lines?: number | undefined;
-  /** 内容溢出时显示原生展开/收起按钮；默认关闭。 */
-  expandable?: boolean | undefined;
-  /** 可写展开状态；省略时每个实例持有独立的 Ref(false)。 */
-  expanded?: Ref<boolean>;
-  /** 首次可测量及实际裁剪状态变化时调用；展开时报告 false。 */
-  onOverflowChange?: Callback<[overflowing: boolean]>;
-  /** 约束外层宽度及继承样式；外部链式样式最后组合。 */
-  class?: CssInput;
-  /** 文字及非交互行内内容；交互控件放在裁剪区域之外。 */
-  children?: VNodeChild;
-  /** 内容由 children 管理，不接受替换子树的 DOM 属性。 */
-  innerHTML?: never;
-  textContent?: never;
-}
+import { callCallbacks } from '../interaction/callbacks.ts';
+export type EllipsisProps = Props<
+  typeof _span,
+  {
+    /** 最大显示行数，默认 1；必须是正整数，单行和多行均保留完整内容。 */
+    lines?: number | undefined;
+    /** 内容溢出时显示原生展开/收起按钮；默认关闭。 */
+    expandable?: boolean | undefined;
+    /** 可写展开状态；省略时每个实例持有独立的 Ref(false)。 */
+    expanded?: Ref<boolean>;
+    /** 首次可测量及实际裁剪状态变化时调用；展开时报告 false。 */
+    onOverflowChange?: Callback<[overflowing: boolean]>;
+    /** 文字及非交互行内内容；交互控件放在裁剪区域之外。 */
+    children?: VNodeChild;
+    /** 内容由 children 管理，不接受替换子树的 DOM 属性。 */
+    innerHTML?: never;
+    textContent?: never;
+  }
+>;
 
 /** CSS 裁剪与可选展开独立于基础排版；不测量字符数，也不截断字符串或 VNode。 */
 export const Ellipsis = _component(
@@ -33,13 +31,13 @@ export const Ellipsis = _component(
     expandable = false,
     expanded = ref(false),
     onOverflowChange,
-    class: className,
+    css: cssProp,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: EllipsisProps) => {
-    const s = useCss();
+    const css = useCss();
     const lang = useLang();
     const root = shallowRef<HTMLElement>();
     const content = shallowRef<HTMLElement>();
@@ -53,42 +51,58 @@ export const Ellipsis = _component(
         throw new RangeError('Ellipsis lines 必须是正整数。');
       return lines;
     });
-    const containerStyle = s.display('block').minWidth(0).maxWidth('100%');
-    const contentStyle = s.display('block').minWidth(0).overflowWrap('anywhere');
-    const singleLine = s.overflow('hidden').whiteSpace('nowrap').textOverflow('ellipsis');
-    const multipleLines = s
-      .overflow('hidden')
-      .display('-webkit-box')
-      .WebkitBoxOrient('vertical')
-      .WebkitLineClamp(bx(lineCount.value))
-      .lineClamp(bx(lineCount.value));
-    const toggleStyle = s
-      .font('inherit')
-      .color('_primary')
-      .backgroundColor('transparent')
-      .border(0)
-      .borderRadius('_small')
-      .margin(0)
-      .padding('0.125em 0')
-      .cursor('pointer')
-      .textAlign('start')
-      .textDecorationLine('underline')
-      .textUnderlineOffset('0.15em')
-      .select('&:hover', s.color('_primaryHover'))
-      .select('&:active', s.color('_primaryPressed'))
-      .select(
-        '&:focus-visible',
-        s
-          .outlineColor('_focusRing')
-          .outlineStyle('solid')
-          .outlineWidth('0.125em')
-          .outlineOffset('0.125em'),
-      )
-      .select(
-        '@media (forced-colors: active)',
-        s.select('&:focus-visible', s.outlineColor('Highlight')),
-      );
-
+    const containerStyle = css({
+      display: 'block',
+      minWidth: 0,
+      maxWidth: '100%',
+    });
+    const contentStyle = css({
+      display: 'block',
+      minWidth: 0,
+      overflowWrap: 'anywhere',
+    });
+    const singleLine = css({
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+    });
+    const multipleLines = css(() => ({
+      overflow: 'hidden',
+      display: '-webkit-box',
+      WebkitBoxOrient: 'vertical',
+      WebkitLineClamp: lineCount.value,
+      lineClamp: lineCount.value,
+    }));
+    const toggleStyle = css({
+      font: 'inherit',
+      color: '_primary',
+      backgroundColor: 'transparent',
+      border: 0,
+      borderRadius: '_small',
+      margin: 0,
+      padding: '0.125em 0',
+      cursor: 'pointer',
+      textAlign: 'start',
+      textDecorationLine: 'underline',
+      textUnderlineOffset: '0.15em',
+      '&:hover': {
+        color: '_primaryHover',
+      },
+      '&:active': {
+        color: '_primaryPressed',
+      },
+      '&:focus-visible': {
+        outlineColor: '_focusRing',
+        outlineStyle: 'solid',
+        outlineWidth: '0.125em',
+        outlineOffset: '0.125em',
+      },
+      '@media (forced-colors: active)': {
+        '&:focus-visible': {
+          outlineColor: 'Highlight',
+        },
+      },
+    });
     let scheduleMeasure: (() => void) | undefined;
     let lastReportedOverflow: boolean | undefined;
     onMounted(() => {
@@ -120,7 +134,9 @@ export const Ellipsis = _component(
               element.scrollHeight > element.clientHeight);
           const nextToggle = canExpand && (expanded.value || overflowing);
           if (!nextToggle && button.value === element.ownerDocument.activeElement)
-            element.focus({ preventScroll: true });
+            element.focus({
+              preventScroll: true,
+            });
           // 测量完成后才更新按钮，展开后再收起不会短暂移除当前聚焦的按钮。
           showToggle.value = nextToggle;
           const notify = onOverflowChange;
@@ -175,37 +191,38 @@ export const Ellipsis = _component(
           view.removeEventListener('resize', schedule);
         });
       },
-      { flush: 'post' },
+      {
+        flush: 'post',
+      },
     );
-
     return (
-      <span {...rest} ref={root} class={cx(containerStyle, className)}>
-        <span
+      <_span css={[containerStyle, cssProp]} {...rest} ref={root}>
+        <_span
+          css={[
+            contentStyle,
+            !expanded.value && (lineCount.value === 1 ? singleLine : multipleLines),
+          ]}
           id={contentId}
           ref={content}
           tabindex={expandable ? -1 : undefined}
-          class={cx(
-            contentStyle,
-            !expanded.value && (lineCount.value === 1 ? singleLine : multipleLines),
-          )}
         >
           {children}
-        </span>
+        </_span>
         {expandable && (expanded.value || showToggle.value) && (
-          <button
+          <_button
+            css={toggleStyle}
             ref={button}
             type="button"
             aria-controls={contentId}
             aria-expanded={expanded.value}
-            class={toggleStyle}
             onClick={() => {
               expanded.value = !expanded.value;
             }}
           >
             {expanded.value ? lang.collapse : lang.expand}
-          </button>
+          </_button>
         )}
-      </span>
+      </_span>
     );
   },
 );

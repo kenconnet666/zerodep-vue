@@ -1,42 +1,30 @@
+import { PatchFlags } from '@vue/shared';
+import type { ComponentInternalInstance, ObjectDirective, VNode, VNodeChild } from 'vue';
 import {
   cloneVNode,
-  computed,
   createVNode,
   getCurrentInstance,
-  inject,
   guardReactiveProps,
+  inject,
   isVNode,
   normalizeClass,
   normalizeStyle,
-  onUnmounted,
-  onUpdated,
   onActivated,
   onDeactivated,
+  onUnmounted,
+  onUpdated,
   ssrContextKey,
 } from 'vue';
-import { PatchFlags } from '@vue/shared';
-import type {
-  ComponentInternalInstance,
-  ComputedRef,
-  ObjectDirective,
-  VNode,
-  VNodeChild,
-} from 'vue';
-import { cssHostKey } from './host.ts';
+import { mergeAttrs, preserveCssProp, resolveSlotAttrs } from '../tsx/attrs.ts';
+import { ELEMENT } from '../tsx/element.ts';
 import { hostFor } from './context.ts';
 import type { CssHost, CssRule } from './host.ts';
-import { resolveClass } from './resolve.ts';
-import type { ResolvedClass } from './resolve.ts';
-import { isCssClass } from './style-value.ts';
-import type { ClassValue } from './style-value.ts';
-import { CLASS } from './style-value.ts';
+import { cssHostKey } from './host.ts';
 import { objectClass } from './object.ts';
-import { ELEMENT } from '../tsx/element.ts';
-import { mergeAttrs, resolveSlotAttrs, structuredClass } from '../tsx/attrs.ts';
-export { mergeAttrs as mergeCssProps } from '../tsx/attrs.ts';
+import type { ResolvedClass } from './resolve.ts';
+import { resolveClass } from './resolve.ts';
+import { CLASS } from './style-value.ts';
 
-/** 仅由编译器和自有组件消费，不进入作者 JSX 或第三方组件的 props。 */
-export const CLASS_PROP = '__zerodepVueClass';
 const COMPONENT = Symbol.for('@zerodep-vue/component');
 const DIRECTIVE = Symbol.for('@zerodep-vue/core/directive/v1');
 
@@ -56,23 +44,16 @@ interface RenderPlan {
   readonly owner: ComponentInternalInstance | null;
   readonly host?: CssHost;
 }
-interface ClassMemo {
-  readonly inputs: readonly unknown[];
-  readonly source: { read: () => ClassValue };
-  readonly value: ComputedRef<ClassValue>;
-}
 interface RenderFrame {
-  /** 待求值的 props 来源；class 透传和克隆先完成合并，帧结束后统一求值。 */
+  /** 待求值的 props 来源；属性转发和克隆先完成合并，帧结束后统一求值。 */
   readonly pending: Map<VNode, Props>;
   /** 同一帧内的相同绑定/主题对象共享读取结果，嵌套帧使用独立缓存。 */
   readonly reads: Map<object, unknown>;
   readonly owner: ComponentInternalInstance | null;
-  readonly memo: { calls?: Map<string, number> };
 }
 
-// 渲染侧：入口登记待求值节点，attachPlan 发布快照；memo 按组件缓存并在卸载时清理。
+// 渲染侧：入口登记待求值节点，attachPlan 发布快照。
 const plansByVNode = new WeakMap<VNode, RenderPlan>();
-const memosByOwner = new WeakMap<ComponentInternalInstance, Map<string, ClassMemo[]>>();
 // 只有 renderCss 压入/还原当前帧；求值函数显式接收所属帧，不自行读取这个全局入口。
 let activeFrame: RenderFrame | undefined;
 
@@ -98,49 +79,6 @@ const leasesByVNode = new WeakMap<VNode, DomLease>();
 const leasesByOwner = new WeakMap<ComponentInternalInstance, Set<DomLease>>();
 const observersByRoot = new WeakMap<Node, { leases: Set<DomLease>; observer: MutationObserver }>();
 
-/** @internal 自有 class 表达式按 Vue 依赖缓存；位置和词法输入共同隔离循环及实例。 */
-export function memoClass(
-  site: string,
-  readInputs: () => readonly unknown[],
-  read: () => ClassValue,
-): ClassValue {
-  const owner = activeFrame?.owner;
-  if (!owner || !activeFrame) return read();
-  let inputs: readonly unknown[];
-  try {
-    inputs = readInputs();
-  } catch {
-    // 编译器只采样词法绑定；短路分支可能引用尚未初始化的绑定（含循环导入）。
-    // 此时放弃本次缓存，让原表达式决定是否读取它；原表达式自身的错误继续抛出。
-    return read();
-  }
-  let sites = memosByOwner.get(owner);
-  if (!sites) {
-    sites = new Map();
-    memosByOwner.set(owner, sites);
-    onUnmounted(() => memosByOwner.delete(owner), owner);
-  }
-  const calls = (activeFrame.memo.calls ??= new Map());
-  const index = calls.get(site) ?? 0;
-  calls.set(site, index + 1);
-  let entries = sites.get(site);
-  if (!entries) {
-    entries = [];
-    sites.set(site, entries);
-  }
-  let entry = entries[index];
-  if (
-    !entry ||
-    inputs.length !== entry.inputs.length ||
-    inputs.some((input, at) => !Object.is(input, entry!.inputs[at]))
-  ) {
-    const source = { read };
-    entry = { inputs: [...inputs], source, value: computed(() => source.read()) };
-    entries[index] = entry;
-  } else entry.source.read = read;
-  return entry.value.value;
-}
-
 export function isOwnComponent(type: unknown): boolean {
   return (
     !!type &&
@@ -148,10 +86,6 @@ export function isOwnComponent(type: unknown): boolean {
     Reflect.get(type, COMPONENT) === true
   );
 }
-export function hasIncomingClass(instance: ComponentInternalInstance): boolean {
-  return Object.prototype.hasOwnProperty.call(instance.vnode.props ?? {}, CLASS_PROP);
-}
-
 function containsRule(vnode: VNode, name: string, root?: Node): boolean {
   if (vnode.component) return containsRule(vnode.component.subTree, name, root);
   const element = vnode.el as Element | null;
@@ -245,7 +179,7 @@ function collectSsrRules(plan: RenderPlan) {
   if (!plan.owner) return;
   for (const rule of rulesOf(plan.resolved)) hostFor(plan.owner).collect(rule, plan.host);
 }
-/** 客户端挂载/更新只消费求值快照；不重读 class、bx 或当前渲染帧。 */
+/** 客户端挂载/更新只消费求值快照；不重读作者来源或当前渲染帧。 */
 function acquireLease(plan: RenderPlan, vnode: VNode, previous?: VNode | null) {
   if (!plan.resolved.cssText || !plan.owner) {
     if (previous) releaseLease(previous);
@@ -376,13 +310,13 @@ function evaluatePlan(
     (part) => typeof part !== 'string' && part.declarations.length > 0,
   );
   const resolved = resolveClass(
-    hasObjectStyle ? [source.class as ClassValue, objectStyle!] : (source.class as ClassValue),
+    hasObjectStyle ? [normalizeClass(source.class), objectStyle!] : normalizeClass(source.class),
     renderFrame?.reads,
   );
   const owner = renderFrame?.owner ?? getCurrentInstance();
   const host = owner ? inject<CssHost | undefined>(cssHostKey, undefined) : undefined;
   if (resolved.hasCss && !owner)
-    throw new Error('CSS class 应在 Vue 组件的 render 中消费；样式声明本身可以放在模块中。');
+    throw new Error('CSS 应在 Vue 组件的 render 中消费；样式声明本身可以放在模块中。');
   const props = { ...source };
   delete props.css;
   if ('class' in source || resolved.hasCss) props.class = resolved.className;
@@ -471,13 +405,8 @@ export function createCssVNode(...args: Parameters<typeof createVNode>): VNode {
     }
   }
   const source = snapshot(raw);
-  if ('class' in source) source.class = structuredClass(source.class);
   if (isOwnComponent(type)) {
     resolveSlotAttrs(raw, source);
-    if ('class' in source) {
-      source[CLASS_PROP] = source.class;
-      source.class = '';
-    }
     return createVNode(
       type,
       source,
@@ -488,9 +417,19 @@ export function createCssVNode(...args: Parameters<typeof createVNode>): VNode {
     );
   }
   if (typeof type === 'symbol') return createVNode(...args);
+  // 第三方 css 可能是业务 Props；只传递原生 class/style，不解释其私有属性协议。
+  if (typeof type !== 'string') {
+    preserveCssProp(raw, source);
+    return createVNode(type, source, children, flag, dynamic, block);
+  }
+  if (Object.prototype.hasOwnProperty.call(source, 'children')) {
+    if (children != null)
+      throw new TypeError('原生元素不能同时接收 children Prop 和嵌套 children。');
+    children = source.children as VNodeChild;
+    delete source.children;
+  }
   if (activeFrame) {
     const props = { ...source };
-    if ('class' in props) props.class = nativeClass(props.class as ClassValue);
     const vnode = createVNode(type, props, children, flag, dynamic, block);
     activeFrame.pending.set(vnode, source);
     return vnode;
@@ -502,40 +441,7 @@ export function createCssVNode(...args: Parameters<typeof createVNode>): VNode {
   return attachPlan(vnode, plan);
 }
 
-/** @internal 自有组件的自动 class 透传仍在同一次描述组合中完成。 */
-export function inheritClass(value: VNodeChild, incoming: ClassValue): VNodeChild {
-  if (!isVNode(value) || typeof value.type === 'symbol') return value;
-  const pending = activeFrame?.pending.get(value);
-  if (pending) {
-    pending.class = [pending.class, incoming];
-    return value;
-  }
-  const original = planOf(value);
-  const source = snapshot(original?.source ?? value.props);
-  const ownComponent = isOwnComponent(value.type);
-  const local = ownComponent && CLASS_PROP in source ? source[CLASS_PROP] : source.class;
-  source.class = [local, incoming];
-  const copy = cloneVNode(value);
-  if (ownComponent) {
-    copy.props = { ...source, class: '', [CLASS_PROP]: source.class };
-    copy.patchFlag = PatchFlags.FULL_PROPS;
-    return copy;
-  }
-  if (activeFrame) {
-    activeFrame.pending.set(copy, source);
-    return copy;
-  }
-  return finalizeVNode(copy, source);
-}
-
-function nativeClass(value: ClassValue): string {
-  if (isCssClass(value))
-    return normalizeClass(value[CLASS].filter((part) => typeof part === 'string'));
-  if (Array.isArray(value)) return normalizeClass(value.map(nativeClass));
-  return normalizeClass(value);
-}
-
-/** @internal JSX 节点正常创建；class 构造的依赖缓存与最终 CSS 消费共享本次渲染边界。 */
+/** @internal 每次渲染拥有独立的 CSS 求值边界；Vue 管理响应性和组件生命周期。 */
 export function renderCss(render: () => VNodeChild): VNodeChild {
   const previous = activeFrame;
   const owner = getCurrentInstance();
@@ -543,8 +449,6 @@ export function renderCss(render: () => VNodeChild): VNodeChild {
     pending: new Map(),
     reads: new Map(),
     owner,
-    // 同组件的嵌套 render 共享调用序号，待处理节点和绑定读取缓存仍属于各自帧。
-    memo: previous?.owner === owner ? previous.memo : {},
   };
   activeFrame = current;
   try {
@@ -554,14 +458,6 @@ export function renderCss(render: () => VNodeChild): VNodeChild {
     }
     return value;
   } finally {
-    // 仅同组件最外层帧裁剪未使用的 memo；成功或抛错都须把环境还给上一层 render。
-    if (owner && previous?.owner !== owner) {
-      for (const [site, entries] of memosByOwner.get(owner) ?? []) {
-        const used = current.memo.calls?.get(site) ?? 0;
-        if (used) entries.length = used;
-        else memosByOwner.get(owner)!.delete(site);
-      }
-    }
     activeFrame = previous;
   }
 }
@@ -572,10 +468,13 @@ export function cloneCssVNode(...args: Parameters<typeof cloneVNode>): VNode {
   // 本入口面向 Vue VDOM；内部 DOM/组件生命周期记录使用其标准 VNode 类型。
   const original = input as VNode;
   const additions = snapshot(extra);
+  if (typeof original.type !== 'string' && !isOwnComponent(original.type)) {
+    preserveCssProp(extra, additions);
+    return cloneVNode(original, additions, mergeRef, cloneTransition);
+  }
   const pending = activeFrame?.pending.get(original);
   const plan = planOf(original);
   const source = snapshot(pending ?? plan?.source ?? original.props);
-  if (isOwnComponent(original.type) && CLASS_PROP in source) source.class = source[CLASS_PROP];
   const merged = mergeAttrs(source, additions);
   const copy = cloneVNode(
     original,
@@ -585,7 +484,7 @@ export function cloneCssVNode(...args: Parameters<typeof cloneVNode>): VNode {
   );
   if (isOwnComponent(copy.type)) {
     resolveSlotAttrs(merged, merged);
-    copy.props = { ...merged, class: '', [CLASS_PROP]: merged.class };
+    copy.props = merged;
     copy.patchFlag = PatchFlags.FULL_PROPS;
     return copy;
   }

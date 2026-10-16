@@ -1,30 +1,28 @@
-import { _component, cx } from '@zerodep-vue/core';
 import { ChevronRight, Ellipsis as MoreIcon } from '@lucide/icons';
-import { computed, ref } from 'vue';
+import type { Slot } from '@zerodep-vue/core';
+import { _component, _li, _nav, _ol, _span } from '@zerodep-vue/core';
 import type { VNodeChild } from 'vue';
+import { computed, ref } from 'vue';
 import { useCss, useLang } from '../config/Provider.tsx';
-import { slotRest } from '../config/props.ts';
-import type { ElementProps, ElementSlotProps } from '../config/props.ts';
-import { Link } from '../display/Link.tsx';
-import type { LinkProps } from '../display/Link.tsx';
+import type { ElementProps } from '../config/props.ts';
 import { Icon } from '../display/Icon.tsx';
-import { Button } from '../input/Button.tsx';
+import { Link } from '../display/Link.tsx';
 import { Popover } from '../feedback/Popover.tsx';
-
+import { Button } from '../input/Button.tsx';
 export interface BreadcrumbItem {
   key: string;
   label: VNodeChild;
   href?: string;
-  slotLink?: Omit<LinkProps, 'children' | 'href' | 'aria-current'>;
+  slotLink?: Slot<typeof Link, 'href' | 'aria-current'>;
 }
 export interface BreadcrumbProps extends Omit<ElementProps, 'children'> {
   items: readonly BreadcrumbItem[];
   /** 超过时折叠中间路径；0 显示全部，其他值必须至少为 3。 */
   maxItems?: number;
   separator?: VNodeChild;
-  slotList?: ElementSlotProps;
-  slotItem?: Omit<ElementSlotProps, 'id'>;
-  slotSeparator?: Omit<ElementSlotProps, 'id'>;
+  slotList?: Slot<typeof _ol>;
+  slotItem?: Slot<typeof _li, 'id'>;
+  slotSeparator?: Slot<typeof _span, 'aria-hidden' | 'id'>;
 }
 /** 最后一项使用 aria-current；中间折叠项仍可通过普通链接访问。 */
 export const Breadcrumb = _component(
@@ -36,12 +34,12 @@ export const Breadcrumb = _component(
     slotItem,
     slotSeparator,
     'aria-label': label,
-    class: className,
+    css: cssProp,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: BreadcrumbProps) => {
-    const s = useCss();
+    const css = useCss();
     const lang = useLang();
     const open = ref(false);
     const overflowKey = Symbol('breadcrumb overflow');
@@ -57,13 +55,13 @@ export const Breadcrumb = _component(
     const crumb = (item: BreadcrumbItem, current: boolean) =>
       item.href ? (
         <Link
-          {...slotRest(item.slotLink)}
+          css={css({
+            textDecorationLine: 'none',
+            color: current ? '_textPrimary' : '_textSecondary',
+          })}
+          {...item.slotLink}
           href={item.href}
           aria-current={current ? 'page' : undefined}
-          class={cx(
-            s.textDecorationLine('none').color(current ? '_textPrimary' : '_textSecondary'),
-            item.slotLink?.class,
-          )}
           onClick={(event) => {
             if (!event.defaultPrevented) open.value = false;
           }}
@@ -71,43 +69,62 @@ export const Breadcrumb = _component(
           {item.label}
         </Link>
       ) : (
-        <span aria-current={current ? 'page' : undefined}>{item.label}</span>
+        <_span aria-current={current ? 'page' : undefined}>{item.label}</_span>
       );
     return (
-      <nav {...rest} aria-label={label ?? lang.breadcrumb} class={cx(s.minWidth(0), className)}>
-        <ol
-          {...slotRest(slotList)}
-          class={cx(
-            s
-              .display('flex')
-              .alignItems('center')
-              .flexWrap('wrap')
-              .gap('0.5em')
-              .listStyleType('none')
-              .margin(0)
-              .padding(0),
-            slotList?.class,
-          )}
+      <_nav
+        css={[
+          css({
+            minWidth: 0,
+          }),
+          cssProp,
+        ]}
+        {...rest}
+        aria-label={label ?? lang.breadcrumb}
+      >
+        <_ol
+          css={css({
+            display: 'flex',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '0.5em',
+            listStyleType: 'none',
+            margin: 0,
+            padding: 0,
+          })}
+          {...slotList}
         >
           {shown.value.map((item, index) => (
-            <li
-              {...slotRest(slotItem)}
+            <_li
+              css={css({
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5em',
+                minWidth: 0,
+              })}
+              {...slotItem}
               key={item?.key ?? overflowKey}
-              class={cx(
-                s.display('flex').alignItems('center').gap('0.5em').minWidth(0),
-                slotItem?.class,
-              )}
             >
               {index > 0 && (
-                <span
-                  {...slotRest(slotSeparator)}
+                <_span
+                  css={css({
+                    display: 'inline-flex',
+                    color: '_textTertiary',
+                  })}
+                  {...slotSeparator}
                   aria-hidden={true}
-                  class={cx(s.display('inline-flex').color('_textTertiary'), slotSeparator?.class)}
                 >
                   {separator ?? (
-                    <Icon icon={ChevronRight} class={s.select('&:dir(rtl)', s.rotate('180deg'))} />
+                    <Icon
+                      css={css({
+                        '&:dir(rtl)': {
+                          rotate: '180deg',
+                        },
+                      })}
+                      icon={ChevronRight}
+                    />
                   )}
-                </span>
+                </_span>
               )}
               {item ? (
                 crumb(item, item === items.at(-1))
@@ -127,25 +144,26 @@ export const Breadcrumb = _component(
                     />
                   )}
                 >
-                  <ol
-                    class={s
-                      .listStyleType('none')
-                      .padding(0)
-                      .margin(0)
-                      .display('flex')
-                      .flexDirection('column')
-                      .gap('_small')}
+                  <_ol
+                    css={css({
+                      listStyleType: 'none',
+                      padding: 0,
+                      margin: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '_small',
+                    })}
                   >
                     {items.slice(1, items.length - (maxItems - 2)).map((hidden) => (
-                      <li key={hidden.key}>{crumb(hidden, false)}</li>
+                      <_li key={hidden.key}>{crumb(hidden, false)}</_li>
                     ))}
-                  </ol>
+                  </_ol>
                 </Popover>
               )}
-            </li>
+            </_li>
           ))}
-        </ol>
-      </nav>
+        </_ol>
+      </_nav>
     );
   },
 );

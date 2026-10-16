@@ -1,10 +1,9 @@
-import type { Css } from '@zerodep-vue/core';
-import { watchPostEffect } from 'vue';
+import type { CssFactory } from '@zerodep-vue/core';
 import type { Ref } from 'vue';
+import { watchPostEffect } from 'vue';
 import type { UiTheme } from '../config/theme/types.ts';
 import type { Callback } from '../interaction/callbacks.ts';
 import { useFormReset } from './form-reset.ts';
-
 export interface ChoiceValueProps {
   /** 可写布尔值；省略时每个实例独立保存 false。 */
   value?: Ref<boolean>;
@@ -84,13 +83,14 @@ export function useChoiceControl(options: {
 }
 
 /** 透明原生 input 覆盖标记区域，保留浏览器焦点、键盘、标签与表单语义。 */
-export function choiceInputStyle(s: Css<UiTheme>) {
-  return s
-    .position('absolute')
-    .insetInlineStart(0)
-    .top('50%')
-    .transform('translateY(-50%)')
-    .margin(0)
-    .opacity(0)
-    .cursor('inherit');
+export function choiceInputStyle(css: CssFactory<UiTheme>) {
+  return css({
+    position: 'absolute',
+    insetInlineStart: 0,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    margin: 0,
+    opacity: 0,
+    cursor: 'inherit',
+  });
 }

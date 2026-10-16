@@ -30,9 +30,9 @@ import { vitePlugin } from '@zerodep-vue/compiler';
 export default defineConfig({ plugins: [vitePlugin()] });
 ```
 
-状态直接使用 Vue API。应用主题模块从 `createCssContext(source)` 解构导出 `useCss`、`provideTheme`、`useTheme`；组件内统一写 `const s = useCss()`，样式通过 `class` 传入。
+状态直接使用 Vue API。应用主题模块从 `createCssContext(source)` 解构导出 `useCss`、`provideTheme`、`useTheme`；主题样式使用 `const css = useCss()`，结构化样式通过 `css` 传入；`class` 和 `style` 保留原生含义。
 
-`_component` 从声明变量名自动生成组件名，默认关闭 Vue 的隐式属性透传。作者 setup 只接收一个 Props 参数，参数解构后的剩余 Props 统一命名 `rest`，通过 `{...rest}` 或逐项赋值决定传给哪个节点；原生属性也包含在同一个 Props 只读视图中。状态传可写 Ref，事件传回调，内容传 children 或明确的渲染函数；不公开 emit、Vue slots、expose 或组件实例。DOM 引用通过 `elementRef/inputRef/viewportRef` 等普通 Props 接收，再传给内部原生节点的 ref。`key` 和 VNode 生命周期保留 Vue 语义；原生元素和普通 Vue 组件仍可使用 Vue 自己的 ref、slots 与模型指令。无需重复写 `{ name: 'Provider', inheritAttrs: false }`；`_component` 的第二参数是组件选项，只有明确需要 Vue 自动透传时才显式设为 `inheritAttrs: true`。
+`_component` 从声明变量名自动生成组件名，默认关闭 Vue 的隐式属性透传。作者 setup 只接收一个 Props 参数，参数解构后的剩余 Props 统一命名 `rest`，通过 `{...rest}` 或逐项赋值决定传给哪个节点；原生属性也包含在同一个 Props 只读视图中。状态传可写 Ref，事件传回调，内容传 children 或明确的渲染函数；不公开 emit、Vue slots、expose 或组件实例。DOM 引用通过 `elementRef/inputRef/viewportRef` 等普通 Props 接收，再传给内部原生节点的 ref。`key` 和 VNode 生命周期保留 Vue 语义；原生元素和普通 Vue 组件仍可使用 Vue 自己的 ref、slots 与模型指令。无需重复声明组件名；第二参数只用于覆盖 name。属性始终显式转发，CSS 不再通过隐藏的 class 通道传递。
 
 ```tsx
 import { _component, createCssContext, SystemKeywords } from '@zerodep-vue/core';
@@ -40,24 +40,67 @@ import { _component, createCssContext, SystemKeywords } from '@zerodep-vue/core'
 const { useCss } = createCssContext(new SystemKeywords());
 
 export const Example = _component(() => {
-  const s = useCss();
-  return <div class={s.display('inline-flex').padding(12)}>内容</div>;
+  const css = useCss();
+  return <div css={css({ display: 'inline-flex', padding: 12 })}>内容</div>;
 });
 ```
 
-系统值和主题名使用字面量；`useTheme()` 返回当前区域的 reactive 对象。动态样式显式使用 `bx`，编译器负责内联 style 接线；`cx` 只负责有序组合，不新增 JSX 样式属性。
+系统值和主题名使用字面量；`useTheme()` 返回当前区域的 reactive 对象。内联 CSS 对象保留正常 JavaScript 求值，编译器记录动态字段，由最终元素绑定完整 CSS 变量。setup 中复用且需要持续读取的样式写为 `css(() => ({ color, width: width.value }))`。对象是普通 JS 快照，数组按顺序组合；不再提供 bx/cx 或链式作者。
 
-CSS 方法先通过普通重载接收已知关键字和主题名，使 `s.overflow('hidden')` 定位到 `OverflowValues.hidden`，`s.color('_primaryHover')` 定位到当前主题的成员说明。自由 CSS 值、数字、`bx` 和模板仍通过泛型重载检查，未知 `_` 主题名继续报错，不需要导入值常量。
+CSS 对象属性有中文说明、初始值和继承性元数据。`css({ overflow: 'hidden' })` 的值可定位到 `OverflowValues.hidden`，`css({ color: '_primaryHover' })` 可定位到当前主题成员。泛型检查保留属性值域与未知主题名诊断，CSS 字符串仍可表达 calc/var 等开放语法。
 
 WebStorm 2026.3 实测需要在 **Settings → Languages & Frameworks → TypeScript → Vue** 关闭 **Enable service-powered type engine**，保留语言服务和项目 TypeScript 6.0.3，才能让 IDE 的字面量跳转和悬浮保留 `keyof` 声明来源。语言服务返回唯一结果不代表 IDE 的解析也已正确；修改后需在真实使用位置检查跳转和中文注释。
 
-`_component` 支持 async setup：先在初始化阶段完成 `await`，再返回 JSX；返回分支及其后的渲染代码必须同步执行。嵌套的 async 事件回调保留正常 JavaScript 语义。`bx` 也同步读取值，异步结果应先取得或写入 Vue 状态，不能直接把 `await`、`yield` 放进绑定表达式。
+`_component` 支持 async setup：先在初始化阶段完成 `await`，再返回 JSX；返回分支及其后的渲染代码必须同步执行。嵌套的 async 事件回调保留正常 JavaScript 语义。CSS 来源函数也必须同步返回对象；异步结果应先取得或写入 Vue 状态。
 
 普通 helper 的 `return` 不划分组件渲染边界；具名 setup 保留声明处的词法环境及普通调用语义。初始化阶段捕获的函数可以使用同一 setup 的提升声明，但不能跨边界捕获每次渲染新建的 `let`、`const` 或 class；这类代码会得到 `ZV_RENDER_SCOPE`，应把 helper 与其依赖放在同一阶段。编译器也识别直接导入及不可变 `const` helper 别名，按真实绑定区分同名变量，不跟随可变或循环别名。
 
+## 对象 CSS 与属性状态
+
+基础元素是普通 TSX 值组件，例如 `_button`、`_div`、`_input`；编译后直接创建原生 VNode。原生属性沿用 Vue 类型，data 属性的本次联合值用于校验状态映射，ARIA 状态按完整原生契约补全。
+
+```tsx
+import { ref } from 'vue';
+import { _button, _component } from '@zerodep-vue/core';
+
+const Toggle = _component(() => {
+  const width = ref(120);
+  const pressed = ref(false);
+  const tone = ref<'primary' | 'danger'>('primary');
+  return (
+    <_button
+      aria-pressed={pressed.value}
+      data-tone={tone.value}
+      css={{
+        width: width.value,
+        ':focus-visible': { outline: '2px solid currentColor' },
+        ':disabled': { opacity: 0.5 },
+        'aria-pressed': { true: { fontWeight: 600 } },
+        'data-tone': { primary: { color: 'royalblue' }, danger: { color: 'crimson' } },
+      }}
+      onClick={() => {
+        pressed.value = !pressed.value;
+      }}
+    >
+      切换
+    </_button>
+  );
+});
+```
+
+- `css={[defaults, external]}` 保留声明顺序；同一选择器、条件路径和属性的后项优先。`undefined` 跳过，属性值 `null` 清除该路径；根输入的 false/null/undefined 是空输入。组合样式使用数组，普通对象 spread 仍遵守 JavaScript 的属性顺序。
+- 数字按属性决定是否补 px；opacity、lineHeight 等无单位，自定义变量不补单位。自动生成的变量保存完整值，因此模板字符串照常写成 ``transform: `translateX(${offset.value}px)` ``。
+- 原生 `style={{ '--progress': progress.value + '%' }}` 可以给 `css={{ width: 'var(--progress)' }}` 提供变量。直接 `style.color` 具有普通内联样式优先级，可能覆盖样式表中的 hover；自动变量绑定只提供值，不占据目标属性的内联声明。
+- `initial/inherit/unset/revert/revert-layer` 保持真实属性语义，`!important` 写到声明优先级。变量存在但替换后值无效时，浏览器不会重新选择前一条声明；自由 CSS 字符串仍由浏览器判断支持和计算结果。
+- 支持伪类、伪元素、`&` 原始选择器和局部 media/supports/container/starting-style。保留原生 specificity；只归一化可交换的简单根状态，不尝试证明复杂选择器等价。
+- 根的兄弟或外部选择目标无法继承元素变量，会输出当前字面值；后代和伪元素通常可以继承。Teleport 按实际 DOM 继承 CSS 变量，逻辑组件树只决定主题注入。
+- CSS 只描述外观。原生 disabled 保留浏览器禁用规则；ARIA/data 状态不会自动实现交互行为。
+
+`keyframes({ from: { opacity: 0 }, to: () => ({ opacity: opacity.value }) })` 返回动画引用，写入 `animationName`，其他参数用对应属性设置。全局样式用 `globalCss(name, () => ({ '.target': { color: color.value } }))`；setup 之外须提供 host。全局规则在自己的 effect 中输出字面值，动画变量由使用动画的元素承担，作用域销毁会清理资源。
+
 ## UI Provider
 
-`Provider` 渲染一个 `div`，通过 Vue 组件树向下传递 `theme` 和 `lang`。消费配置与 `children` 后，其余 Props 通过 `...rest` 显式转发到根 div，包括原生属性、事件、`style` 和支持链式 CSS 的 `class`。`lang` 是 UI 语言配置，不作为 HTML 的 lang 属性透传；嵌套 Provider 会产生嵌套 div。默认使用白色主题 `LightTheme`、简体中文 `zhCN` 和上海时区 `Asia/Shanghai`。后代在 setup 中调用 UI 包的 `useCss()`、`useTheme()` 和 `useLang()`；主题和语言都是稳定的只读 reactive 对象，直接读取字段，无需 `.value`。
+`Provider` 渲染一个 `div`，通过 Vue 组件树向下传递 `theme` 和 `lang`。消费配置与 `children` 后，其余 Props 通过 `...rest` 显式转发到根 div，包括原生属性、事件、原生 `class` / `style` 和结构化 `css`。`lang` 是 UI 语言配置，不作为 HTML 的 lang 属性透传；嵌套 Provider 会产生嵌套 div。默认使用白色主题 `LightTheme`、简体中文 `zhCN` 和上海时区 `Asia/Shanghai`。后代在 setup 中调用 UI 包的 `useCss()`、`useTheme()` 和 `useLang()`；主题和语言都是稳定的只读 reactive 对象，直接读取字段，无需 `.value`。
 
 实现位于 `packages/ui/src/config`：`Provider.tsx` 集中管理上下文注入、读取和配置继承；`lang/` 收纳语言配置和类型；`theme/types.ts` 定义统一 `UiTheme` 接口，`BaseTheme` 提供公共值，`LightTheme`、`DarkTheme` 继承它并显式 `implements UiTheme`。所有主题必须提供完整配色和阴影，公共属性组属于各自实例。
 
@@ -92,11 +135,11 @@ class BrandTheme extends LightTheme {
 }
 
 const Status = _component(() => {
-  const s = useCss();
+  const css = useCss();
   const theme = useTheme();
   const lang = useLang();
   return (
-    <output class={s.color('_primary')} data-primary={theme.color._primary}>
+    <output css={css({ color: '_primary' })} data-primary={theme.color._primary}>
       {lang.confirm} / {lang.locale} / {lang.timeZone}
     </output>
   );
@@ -151,7 +194,7 @@ export const App = _component(() => {
 | `strokeWidth`                                              | SVG 图形坐标中的描边宽度：`_thin` 为 1、`_medium` 为 2、`_thick` 为 3；不换算为 em                                  |
 | `transitionDuration`、`transitionTimingFunction`、`zIndex` | 三档时长、进入/离开曲线和基础浮层顺序                                                                               |
 
-直接使用 `s.backgroundColor('_surface').color('_textPrimary').height('_medium').padding('_medium')`；颜色组也可用于 `borderColor` 等其他颜色属性。大小刻度统一为 `_extraSmall`、`_small`、`_medium`、`_large`、`_extraLarge`，需要第六档的字号和间距另有 `_extraExtraLarge`。刻度只表示各自组内的大小，不表示不同 CSS 属性使用同一个数值。圆角保留 `_none`、`_pill`，另有 `_circle: '50%'`；只有正方形元素使用 50% 圆角时才呈圆形。
+直接使用 `css({ backgroundColor: '_surface', color: '_textPrimary', height: '_medium', padding: '_medium' })`；颜色组也可用于 `borderColor` 等其他颜色属性。大小刻度统一为 `_extraSmall`、`_small`、`_medium`、`_large`、`_extraLarge`，需要第六档的字号和间距另有 `_extraExtraLarge`。刻度只表示各自组内的大小，不表示不同 CSS 属性使用同一个数值。圆角保留 `_none`、`_pill`，另有 `_circle: '50%'`；只有正方形元素使用 50% 圆角时才呈圆形。
 
 颜色按用途配对：`_primary` 实色背景搭配 `_textOnPrimary`，`_primarySubtleBackground` 低强调背景搭配 `_primary` 文字和 `_primaryBorder` 装饰边框；其他四组语义色同理。`Pressed` 只表示按下期间，持久选中使用 `_surfaceSelected`、`_textSelected`、`_borderSelected`。`_textPrimary/_textSecondary/_textTertiary` 表示文字层级，禁用与占位另有名称。字段独立覆盖：只改 `_primary` 不会自动推导其他主色、焦点或选中颜色；整套定制时应同步考虑相关字段和文字对比度。
 
@@ -167,9 +210,9 @@ import { _component } from '@zerodep-vue/core';
 import { Icon, useCss } from '@zerodep-vue/ui';
 
 export const Examples = _component(() => {
-  const s = useCss();
+  const css = useCss();
   return (
-    <div class={s.fontSize('1.25rem')}>
+    <div css={css({ fontSize: '1.25rem' })}>
       <span>
         <Icon icon={Search} /> 搜索
       </span>
@@ -177,7 +220,7 @@ export const Examples = _component(() => {
       <Icon icon={LoaderCircle} spin color="_primary" aria-label="加载中" />
       <Icon icon={ChevronRight} rotate="90deg" opacity="_disabled" />
       <Icon icon={Search} size="2em" strokeWidth="_thin" nonScalingStroke />
-      <Icon icon={Search} color="_primary" class={s.color('_danger')} />
+      <Icon icon={Search} color="_primary" css={css({ color: '_danger' })} />
       <button aria-label="关闭">
         <Icon icon={X} />
       </button>
@@ -186,11 +229,11 @@ export const Examples = _component(() => {
 });
 ```
 
-`IconProps` 是普通接口，样式字段直接复用 core 的 `CssValue<'属性', UiTheme>`。`color`、`opacity`、`width`、`height`、`strokeWidth`、`rotate` 对应同名 CSS 属性，`size` 对应 `fontSize`。例如 `color="_danger"` 与 `s.color('_danger')` 使用相同的主题解析；`size="small"` 是 CSS 关键字，`size="_small"` 才是主题字号。支持原生 CSS 字符串、CSS 变量和该属性允许的数字：`size={20}` 为 20px，`opacity={0.5}` 无单位，`rotate` 使用 `"90deg"` 等合法 CSS 值。`bx`、Ref 和 getter 不属于 Props 值域；响应式来源在调用处正常读取，例如 `size={size.value}`。
+`IconProps` 复用基础元素的 Props，样式字段直接复用 core 的 `CssValue<'属性', UiTheme>`。`color`、`opacity`、`width`、`height`、`strokeWidth`、`rotate` 对应同名 CSS 属性，`size` 对应 `fontSize`。例如 `color="_danger"` 与 `css({ color: '_danger' })` 使用相同的主题解析；`size="small"` 是 CSS 关键字，`size="_small"` 才是主题字号。支持原生 CSS 字符串、CSS 变量和该属性允许的数字：`size={20}` 为 20px，`opacity={0.5}` 无单位，`rotate` 使用 `"90deg"` 等合法 CSS 值。Ref 和 getter 不属于便捷样式 Props 的值域；响应式来源在调用处正常读取，例如 `size={size.value}`。
 
 `undefined` 保留继承或默认值，`null` 清除便捷 Props 产生的 CSS 声明；SVG 默认宽高 `1em` 和描边宽度 2 仍会生效。显式 `width/height` 覆盖对应显示尺寸，图标数据中的 `size/width/height` 用于 viewBox 坐标，不会被当成显示像素。Props 保留 CSS 和主题候选补全，也接收自由 CSS 字符串；未知的 `_名称` 由共享主题解析器明确报错，不为此给组件增加逐字段泛型。
 
-外部链式 `class` 最后组合，可覆盖同属性的便捷 Props；普通类名和内联 `style` 遵循浏览器层叠。原生 SVG 属性和事件透传，例如 `fill`、`stroke`、`viewBox`、`aria-*`；CSS `strokeWidth` 优先于根 SVG 的 `stroke-width` 属性，数据子节点自身的描边属性优先于继承。`nonScalingStroke` 作用于实际绘制节点，关闭后保留原始节点样式；`spin` 遵循减少动态效果的媒体设置，停止动画时仍保留 `rotate` 的静态角度。
+外部 `css` 最后组合，可覆盖同属性的便捷 Props；普通类名和内联 `style` 遵循浏览器层叠。原生 SVG 属性和事件透传，例如 `fill`、`stroke`、`viewBox`、`aria-*`；CSS `strokeWidth` 优先于根 SVG 的 `stroke-width` 属性，数据子节点自身的描边属性优先于继承。`nonScalingStroke` 作用于实际绘制节点，关闭后保留原始节点样式；`spin` 遵循减少动态效果的媒体设置，停止动画时仍保留 `rotate` 的静态角度。
 
 没有非空 `aria-label/aria-labelledby` 时图标默认作为装饰隐藏；单独表达含义时提供名称，默认获得 `role="img"`。显式 `role`、`aria-hidden` 优先。图标按钮的可访问名称写在 button 上。自定义图标使用相同的可信节点数据结构，支持嵌套分组；不接收 children、HTML 字符串或替换子树的 DOM 属性，重复实例中的自定义 SVG ID 由数据作者保证唯一。
 
@@ -218,15 +261,15 @@ export const ProjectDescription = _component(() => (
 ));
 ```
 
-`Text` 默认继承字号、颜色、字重和行高。`Paragraph` 使用 `_normal` 行高；`Heading` 使用 `_semibold` 字重、`_tight` 行高，字号仍继承；两种块级文字都清除浏览器默认外边距，间距交给布局或 `class`。标题通过必填的 `as` 直接指定 `h1`–`h6`，决定文档层级，不决定视觉大小；标签和样式来源更新后都会反映到实际 DOM。段落和标题的内容应符合原生 HTML 语义，列表、卡片等块级区域使用布局容器。
+`Text` 默认继承字号、颜色、字重和行高。`Paragraph` 使用 `_normal` 行高；`Heading` 使用 `_semibold` 字重、`_tight` 行高，字号仍继承；两种块级文字都清除浏览器默认外边距，间距交给布局或 `css`。标题通过必填的 `as` 直接指定 `h1`–`h6`，决定文档层级，不决定视觉大小；标签和样式来源更新后都会反映到实际 DOM。段落和标题的内容应符合原生 HTML 语义，列表、卡片等块级区域使用布局容器。
 
-`Link` 的 `href` 必填，导航、下载、键盘和修饰键点击都交给原生 `a`。默认颜色为 `_primary`，悬停和按下使用对应主题色，保留下划线和键盘可见焦点；显式 `color` 同时覆盖普通、悬停和按下颜色，外部 `class` 可继续定制各状态。`target="_blank"` 且未提供 `rel` 时默认补 `noopener`；显式 `rel` 保持原值，默认不修改引用来源策略。应用路由通过原生 `href`、`onClick` 自行接入，执行操作使用按钮。
+`Link` 的 `href` 必填，导航、下载、键盘和修饰键点击都交给原生 `a`。默认颜色为 `_primary`，悬停和按下使用对应主题色，保留下划线和键盘可见焦点；显式 `color` 同时覆盖普通、悬停和按下颜色，外部 `css` 可继续定制各状态。`target="_blank"` 且未提供 `rel` 时默认补 `noopener`；显式 `rel` 保持原值，默认不修改引用来源策略。应用路由通过原生 `href`、`onClick` 自行接入，执行操作使用按钮。
 
-内容统一通过 `children` 或普通 Vue 默认插槽传入，不解析 HTML 字符串，也不透传 `innerHTML`、`textContent` 覆盖子树。组件消费的属性显式解构，其余原生属性和事件由 `rest` 直接转发；外部链式 `class` 最后组合，原生 `style` 遵循浏览器层叠。强调语义使用 `strong`、`em` 等原生行内标签，字重 Props 只控制外观。
+内容统一通过 `children` 或普通 Vue 默认插槽传入，不解析 HTML 字符串，也不透传 `innerHTML`、`textContent` 覆盖子树。组件消费的属性显式解构，其余原生属性和事件由 `rest` 直接转发；外部 `css` 最后组合，原生 `style` 遵循浏览器层叠。强调语义使用 `strong`、`em` 等原生行内标签，字重 Props 只控制外观。
 
 ## UI 文字省略
 
-`Ellipsis` 独立负责单行、多行省略及可选展开。内容保留为完整的文字和 VNode，由 CSS 裁剪；父级布局需要提供有效宽度。外层是块级显示的 `span`，默认 `min-width: 0`、`max-width: 100%`，可放入 Flex/Grid 项或段落；通过 `class` 约束宽度及继承字号等样式。
+`Ellipsis` 独立负责单行、多行省略及可选展开。内容保留为完整的文字和 VNode，由 CSS 裁剪；父级布局需要提供有效宽度。外层是块级显示的 `span`，默认 `min-width: 0`、`max-width: 100%`，可放入 Flex/Grid 项或段落；通过 `css` 约束宽度及继承字号等样式。
 
 ```tsx
 import { ref } from 'vue';
@@ -234,17 +277,17 @@ import { _component } from '@zerodep-vue/core';
 import { Ellipsis, useCss } from '@zerodep-vue/ui';
 
 export const Description = _component(() => {
-  const s = useCss();
+  const css = useCss();
   const expanded = ref(false);
   return (
-    <Ellipsis lines={3} expandable expanded={expanded} class={s.maxWidth('30em')}>
+    <Ellipsis lines={3} expandable expanded={expanded} css={css({ maxWidth: '30em' })}>
       这里是完整描述，可以包含强调等非交互行内内容。展开与收起不会修改原始文本。
     </Ellipsis>
   );
 });
 ```
 
-`lines` 默认 1，必须是正整数；1 使用单行省略，多行同时提供标准 `line-clamp` 和 WebKit 兼容组合。`WebkitBoxOrient('vertical')` 对应 CSS Overflow 明确保留的多行省略兼容用法，其专用签名不标记弃用，其他旧版布局值仍提示弃用。`expanded` 是可写 `Ref<boolean>`，不传时每个实例独立创建；父级替换 Ref 或修改其值都能更新组件。`expandable` 默认关闭，仅决定是否提供内置控制，不限制父级直接控制展开状态。
+`lines` 默认 1，必须是正整数；1 使用单行省略，多行同时提供标准 `line-clamp` 和 WebKit 兼容组合。`WebkitBoxOrient: 'vertical'` 对应多行省略兼容用法，属性文档会说明其支持边界，旧版布局值保留各自的弃用说明。`expanded` 是可写 `Ref<boolean>`，不传时每个实例独立创建；父级替换 Ref 或修改其值都能更新组件。`expandable` 默认关闭，仅决定是否提供内置控制，不限制父级直接控制展开状态。
 
 开启 `expandable` 后，实际溢出时显示原生按钮，提供 `aria-expanded`、`aria-controls` 和 `type="button"`，支持键盘操作；按钮文字从 Provider 的 `lang.expand`、`lang.collapse` 继承，可局部覆盖。展开后收起保留按钮焦点；内容变短或容器变宽导致按钮消失时，将焦点交回内容。裁剪区域只支持文字和非交互行内片段，链接、按钮等交互控件应放在外部；启用 `expandable` 的 Ellipsis 不应嵌入另一个按钮或链接。未启用展开时不添加内容焦点入口，可作为 Link 的文字内容组合使用。
 
@@ -302,7 +345,7 @@ const field = useField(name, z.string().trim().min(1, '请填写姓名'), {
 
 ```tsx
 const sizes = ref<Readonly<Record<string, number>>>({ navigation: 25, content: 75 });
-<Split sizes={sizes} class={s.height('30em')}>
+<Split sizes={sizes} css={css({ height: '30em' })}>
   <SplitPane name="navigation" label="导航" min="10em" collapsible>
     导航内容
   </SplitPane>
@@ -325,7 +368,7 @@ const progress = ref(0);
   variant="rail"
   trackClick={false}
   aria-label="拖动进度"
-  slotThumb={{ class: s.borderRadius('_small') }}
+  slotThumb={{ css: css({ borderRadius: '_small' }) }}
   onValueCommit={(value) => submitProgress(value)}
 >
   拖动滑块至末端
@@ -432,9 +475,11 @@ const Action = _component(({ slotIcon, children, ...rest }: ActionProps) => (
 
 `Props` 替换同名字段，`Slot` 禁止调用方接管内容、节点身份、引用和显式 Owned 字段。可复用 Props/Slot 的 data 状态在目标契约中声明；直接基础元素的 CSS 从本次 data 属性联合值推断，ARIA 则保留完整原生值域。原始属性选择器仍可通过 `'&[data-…]'` 编写。`_component` 的运行时元数据仅包含实际解构字段，复杂映射和条件类型由 TypeScript 检查，不重建 Vue 类型推导或隐式转换 Boolean；类型标记放在实例的 Props 内，保留泛型 setup 的参数传播。
 
-自有 `_component` 将 `slot` 后接大写字母的字段保留为子节点属性袋。JSX 多来源转发按顺序合并这些属性袋：class/style 和事件沿用 Vue 规则，css 保留顺序，普通字段后项覆盖，undefined 属性袋保留默认项。内容替换、key、ref 和 VNode 生命周期字段在此边界过滤；额外 Owned 状态由组件最后写入。`mergeAttrs` 也提供同一属性组合入口。业务对象整项覆盖；普通 Vue 组件收到 slotX 时仍是原始末项，不触发属性袋 getter 或深合并。纯 class/style 转发允许已有生成变量继续穿过第三方组件，主动消费结构化 CSS 的入口保护运行时变量。
+自有 `_component` 将 `slot` 后接大写字母的字段保留为子节点属性袋。JSX 多来源转发按顺序合并这些属性袋：class/style 和事件沿用 Vue 规则，css 保留顺序，普通字段后项覆盖，undefined 属性袋保留默认项。内容替换、key、ref 和 VNode 生命周期字段在此边界过滤；额外 Owned 状态由组件最后写入。`mergeAttrs` 也提供同一属性组合入口。业务对象整项覆盖；普通 Vue 组件的 css 和 slotX 都是其自身 Props，保持原值与末项覆盖，不触发属性袋 getter 或深合并；结构化 CSS 由原生元素和自有组件消费。纯 class/style 转发允许已有生成变量继续穿过第三方组件，主动消费结构化 CSS 的入口保护运行时变量。
 
-这次重构仍在迁移中：现有 UI、主题作者入口、keyframes/globalCss 和旧链式代码尚未切换，不能把基础协议验证当作整体迁移完成。`pnpm --filter @zerodep-vue/ui probe:css` 可追加 `types`、`browser`、`ssr` 或 `component` 选择探测范围；types 已使用真实 core 声明检查补全，组件及 SSR 转发使用正式基础元素、组件编译和属性合并，浏览器底层边界仍有历史适配器。浏览器优先使用已安装的 Playwright Chromium，其次使用系统 Chrome/Edge，不自动下载；结束时清理本次临时报告。CI 另行运行正式 core/compiler 对象测试与源码类型检查。
+TSX 的属性展开按 TypeScript 的最终属性类型检查；当后面的 spread 自带 `css` 时，前面原始对象的多余字段检查可能被掩盖。组件默认样式使用 `css({...})` 先独立检查，再写 `<_div css={defaults} {...rest} />`；不使用类型断言补洞。直接写在元素上的对象仍提供原生属性、CSS 属性及 ARIA/data 状态补全。编译器能确认的对象字面量记录静态字段；来自外部模块或运行时组合的对象保守使用变量，保持值更新和普通对象身份。
+
+UI、主题工厂、keyframes/globalCss、HMR、DevTools 和编辑器提示均使用对象协议。隐式 class 缓存已移除；重复计算按需使用 Vue `computed`，普通函数与对象遵循 JavaScript 求值规则。`pnpm --filter @zerodep-vue/ui probe:css` 可追加 `types`、`browser`、`ssr` 或 `component` 选择探测范围：类型探针使用真实 core 声明；组件、SSR 和浏览器探针直接使用正式实现，不再保留原型适配器。浏览器优先使用已安装的 Playwright Chromium，其次使用系统 Chrome/Edge，不自动下载；结束时清理本次临时报告。完整类型、生产构建、安装消费与跨平台验证以对应提交的 CI 为准；本地定向测试不替代这些验收。
 
 多个包共用的开发依赖统一放在根目录，独立工具放在所属包。各包仍显式声明发布所需的运行时依赖与 peer。src 根目录只保留 index.ts 和职责目录；Babel/Vite 入口统一收纳到 `compiler/src/plugins`，单文件构建工具直接使用 `ui/build.mjs`。
 

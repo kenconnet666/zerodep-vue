@@ -1,48 +1,42 @@
-import { _component, bx, cx, keyframes } from '@zerodep-vue/core';
-import type { CssInput, CssValue } from '@zerodep-vue/core';
 import type { LucideIconData, LucideIconNode } from '@lucide/icons';
+import type { CssValue, Props } from '@zerodep-vue/core';
+import { _component, _svg, keyframes } from '@zerodep-vue/core';
+import type { VNode } from 'vue';
 import { h } from 'vue';
-import type { SVGAttributes, VNode } from 'vue';
 import { useCss } from '../config/Provider.tsx';
 import type { UiTheme } from '../config/theme/types.ts';
-import type { DataAttributes } from '../config/props.ts';
 
 /** 常用样式直接采用 CSS 属性值类型；其余 SVG 属性和事件透传。 */
 // Vue 仅解析自有字段的运行时声明；剩余 Props 通过 rest 显式转发到 SVG。
-export interface IconProps
-  extends
-    DataAttributes,
-    /* @vue-ignore */ Omit<
-      SVGAttributes,
-      'class' | 'color' | 'width' | 'height' | 'opacity' | 'rotate'
-    > {
-  /** 按需导入的 Lucide 原始数据，或同结构的可信 SVG 节点树。 */
-  icon: LucideIconData;
-  /** 同 s.color(...)；默认继承文字颜色，图形使用 currentColor。 */
-  color?: CssValue<'color', UiTheme>;
-  /** 同 s.fontSize(...)；默认继承字号，1em 图标随文字等比缩放。 */
-  size?: CssValue<'fontSize', UiTheme>;
-  /** 同 s.width(...)；覆盖默认 1em 宽度，不修改 SVG 的 viewBox。 */
-  width?: CssValue<'width', UiTheme>;
-  /** 同 s.height(...)；覆盖默认 1em 高度，不修改 SVG 的 viewBox。 */
-  height?: CssValue<'height', UiTheme>;
-  /** 同 s.opacity(...)；作用于整个图标，支持 _disabled 等主题名。 */
-  opacity?: CssValue<'opacity', UiTheme>;
-  /** 同 s.strokeWidth(...)；默认 2，子节点自己的描边属性仍优先于继承值。 */
-  strokeWidth?: CssValue<'strokeWidth', UiTheme>;
-  /** 同 s.rotate(...)，如 90deg；与 spin 的旋转叠加，不接收无单位数字。 */
-  rotate?: CssValue<'rotate', UiTheme>;
-  /** 持续旋转；遵循 prefers-reduced-motion，减少动态效果时停止。 */
-  spin?: boolean | undefined;
-  /** 保持绘制节点的描边不随 SVG 缩放；不会修改原始图标数据。 */
-  nonScalingStroke?: boolean | undefined;
-  /** 外部链式样式最后组合；同属性覆盖组件样式，普通类名按浏览器层叠处理。 */
-  class?: CssInput;
-  /** 图标节点由 icon 管理，不接收插槽或替换子树的 DOM 属性。 */
-  children?: never;
-  innerHTML?: never;
-  textContent?: never;
-}
+export type IconProps = Props<
+  typeof _svg,
+  {
+    /** 按需导入的 Lucide 原始数据，或同结构的可信 SVG 节点树。 */
+    icon: LucideIconData;
+    /** CSS color；默认继承文字颜色，图形使用 currentColor。 */
+    color?: CssValue<'color', UiTheme>;
+    /** CSS fontSize；默认继承字号，1em 图标随文字等比缩放。 */
+    size?: CssValue<'fontSize', UiTheme>;
+    /** CSS width；覆盖默认 1em 宽度，不修改 SVG 的 viewBox。 */
+    width?: CssValue<'width', UiTheme>;
+    /** CSS height；覆盖默认 1em 高度，不修改 SVG 的 viewBox。 */
+    height?: CssValue<'height', UiTheme>;
+    /** CSS opacity；作用于整个图标，支持 _disabled 等主题名。 */
+    opacity?: CssValue<'opacity', UiTheme>;
+    /** CSS strokeWidth；默认 2，子节点自己的描边属性仍优先于继承值。 */
+    strokeWidth?: CssValue<'strokeWidth', UiTheme>;
+    /** CSS rotate，如 90deg；与 spin 的旋转叠加，不接收无单位数字。 */
+    rotate?: CssValue<'rotate', UiTheme>;
+    /** 持续旋转；遵循 prefers-reduced-motion，减少动态效果时停止。 */
+    spin?: boolean | undefined;
+    /** 保持绘制节点的描边不随 SVG 缩放；不会修改原始图标数据。 */
+    nonScalingStroke?: boolean | undefined;
+    /** 图标节点由 icon 管理，不接收插槽或替换子树的 DOM 属性。 */
+    children?: never;
+    innerHTML?: never;
+    textContent?: never;
+  }
+>;
 
 /**
  * 单个 SVG 图标。无名称时默认作为装饰隐藏；独立表达含义时提供 aria-label/aria-labelledby。
@@ -60,7 +54,7 @@ export const Icon = _component(
     rotate,
     spin = false,
     nonScalingStroke = false,
-    class: className,
+    css: cssProp,
     role,
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
@@ -79,34 +73,44 @@ export const Icon = _component(
     textContent: _textContent,
     ...rest
   }: IconProps) => {
-    const s = useCss();
-    const style = s
-      .display('inline-block')
-      .verticalAlign('-0.125em')
-      .flexShrink(0)
-      .color(bx(color))
-      .fontSize(bx(size))
-      .width(bx(width))
-      .height(bx(height))
-      .opacity(bx(opacity))
-      .strokeWidth(bx(strokeWidth))
-      .rotate(bx(rotate))
-      .transformOrigin('center')
-      .transformBox('view-box');
+    const css = useCss();
+    const style = css(() => ({
+      display: 'inline-block',
+      verticalAlign: '-0.125em',
+      flexShrink: 0,
+      color: color,
+      fontSize: size,
+      width: width,
+      height: height,
+      opacity: opacity,
+      strokeWidth: strokeWidth,
+      rotate: rotate,
+      transformOrigin: 'center',
+      transformBox: 'view-box',
+    }));
     const rotation = keyframes({
-      from: s.transform('rotate(0deg)'),
-      to: s.transform('rotate(360deg)'),
+      from: css({
+        transform: 'rotate(0deg)',
+      }),
+      to: css({
+        transform: 'rotate(360deg)',
+      }),
     });
-    const spinning = s
-      .animationName(rotation)
-      .animationDuration('1s')
-      .animationTimingFunction('linear')
-      .animationIterationCount('infinite')
-      .select('@media (prefers-reduced-motion: reduce)', s.animationName('none'));
+    const spinning = css({
+      animationName: rotation,
+      animationDuration: '1s',
+      animationTimingFunction: 'linear',
+      animationIterationCount: 'infinite',
+      '@media (prefers-reduced-motion: reduce)': {
+        animationName: 'none',
+      },
+    });
 
     // 每次渲染创建自己的 VNode，不缓存或修改可能被多个实例共用的原始节点。
     function renderNode([tag, attributes, children]: LucideIconNode): VNode {
-      let props = { ...attributes };
+      let props = {
+        ...attributes,
+      };
       if (nonScalingStroke) {
         // vector-effect 不继承，只在实际绘制节点上设置；分组和 defs 保留原样。
         switch (tag) {
@@ -121,14 +125,22 @@ export const Icon = _component(
           case 'textPath':
           case 'tspan':
           case 'use':
-            props = { ...props, style: [props.style, { vectorEffect: 'non-scaling-stroke' }] };
+            props = {
+              ...props,
+              style: [
+                props.style,
+                {
+                  vectorEffect: 'non-scaling-stroke',
+                },
+              ],
+            };
         }
       }
       return h(tag, props, children?.map(renderNode));
     }
-
     return (
-      <svg
+      <_svg
+        css={[style, spin && spinning, cssProp]}
         xmlns={xmlns}
         width="1em"
         height="1em"
@@ -148,10 +160,9 @@ export const Icon = _component(
         aria-labelledby={ariaLabelledBy}
         role={role ?? (ariaLabel?.trim() || ariaLabelledBy?.trim() ? 'img' : undefined)}
         aria-hidden={ariaHidden ?? (ariaLabel?.trim() || ariaLabelledBy?.trim() ? undefined : true)}
-        class={cx(style, spin && spinning, className)}
       >
         {icon.node.map(renderNode)}
-      </svg>
+      </_svg>
     );
   },
 );

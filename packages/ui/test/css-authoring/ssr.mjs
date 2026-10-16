@@ -5,14 +5,13 @@ import { resolve } from 'node:path';
 import {
   core,
   vue,
-  dyn,
-  objectCss,
   resolveCss,
   serial,
   root,
   openBrowser,
   writeReport,
-} from './prototype.mjs';
+  staticCss,
+} from './support.mjs';
 const require = createRequire(resolve(root, 'package.json'));
 const compilerRequire = createRequire(resolve(root, 'packages/compiler/package.json'));
 const { transformAsync } = require('@babel/core');
@@ -29,10 +28,20 @@ const results = [];
 async function test(name, run, kind = 'check') {
   try {
     const evidence = await run();
-    results.push({ name, kind, status: 'passed', evidence });
+    results.push({
+      name,
+      kind,
+      status: 'passed',
+      evidence,
+    });
     console.log('PASS ' + name);
   } catch (error) {
-    results.push({ name, kind, status: 'failed', error: error.stack });
+    results.push({
+      name,
+      kind,
+      status: 'failed',
+      error: error.stack,
+    });
     console.log('FAIL ' + name + ': ' + error.message);
   }
 }
@@ -54,14 +63,9 @@ async function compile(source) {
     module: await import('data:text/javascript;base64,' + Buffer.from(code).toString('base64')),
   };
 }
-const authorSource = `import {_component,bx,_button,_span} from '@zerodep-vue/core';
-import type {VNodeChild} from 'vue';
-interface ButtonProps{
- css?:unknown;
- slotIcon?:{css?:unknown;title?:string;'aria-hidden'?:boolean};
- children?:VNodeChild;
- disabled?:boolean;
-}
+const authorSource = `import {_component,_button,_span} from '@zerodep-vue/core';
+import type {Props,Slot} from '@zerodep-vue/core';
+type ButtonProps=Props<typeof _button,{slotIcon?:Slot<typeof _span,'aria-hidden'>}>;
 const Button=_component(({slotIcon,children,disabled=false,...rest}:ButtonProps)=>
  <_button css={{padding:4,':hover':{opacity:.8},'aria-pressed':{true:{borderWidth:2,borderStyle:'solid'}}}} {...rest} disabled={disabled}>
   <_span css={{display:'inline-block',width:4}} {...slotIcon} aria-hidden={true}>icon</_span>
@@ -71,20 +75,32 @@ const Wrapper=_component((props:ButtonProps)=>
  <Button slotIcon={{css:{height:6},title:'wrapper'}} {...props}/>);
 interface PageProps{width:number;tint:string;pressed?:boolean}
 export const App=_component(({width,tint,pressed=false}:PageProps)=>
- <Wrapper aria-pressed={pressed} css={{width:bx(width),color:bx(tint)}} style={{marginTop:'7px','--public-gap':'3px'}}
- slotIcon={{css:{width:bx(width/2)},'aria-hidden':false}}>body</Wrapper>);
+ <Wrapper aria-pressed={pressed} css={{width:width,color:tint}} style={{marginTop:'7px','--public-gap':'3px'}}
+ slotIcon={{css:{width:width/2}}}>body</Wrapper>);
 `;
 const current = await compile(authorSource);
 async function renderApp(App, props) {
   const context = {};
   const html = await renderToString(vue.createSSRApp(App, props), context);
   const host = core.getCssHost(context);
-  return { html, css: host?.cssText() ?? '', styles: host?.renderStyles() ?? '' };
+  return {
+    html,
+    css: host?.cssText() ?? '',
+    styles: host?.renderStyles() ?? '',
+  };
 }
 let red, blue;
 await test('core CSS and slot attribute merge preserve wrapper defaults and bindings', async () => {
-  red = await renderApp(current.module.App, { width: 40, tint: 'red', pressed: true });
-  blue = await renderApp(current.module.App, { width: 80, tint: 'blue', pressed: false });
+  red = await renderApp(current.module.App, {
+    width: 40,
+    tint: 'red',
+    pressed: true,
+  });
+  blue = await renderApp(current.module.App, {
+    width: 80,
+    tint: 'blue',
+    pressed: false,
+  });
   assert(red.css.includes('padding:4px'));
   assert(red.html.includes('6px'));
   assert(red.html.includes('40px'));
@@ -100,16 +116,17 @@ await test('core CSS and slot attribute merge preserve wrapper defaults and bind
   assert(blue.html.includes('blue'));
   assert(!blue.html.includes('red;'));
   assert.equal(red.css, blue.css);
-  return { sameRuleTextAcrossRequests: true, rootAndSlotVariablesPresent: true, html: red.html };
+  return {
+    sameRuleTextAcrossRequests: true,
+    rootAndSlotVariablesPresent: true,
+    html: red.html,
+  };
 });
 await test(
   'component compilation accepts complex Props and Slot without runtime type extraction',
   async () => {
-    const sample = `import {_component} from '@zerodep-vue/core';
- type Base={__props:{disabled?:boolean;css?:unknown;children?:unknown}};
- declare const _button:Base;
- type Props<B extends Base,E extends object={}> = Omit<B['__props'],keyof E>&E;
- type Slot<B extends Base,K extends keyof B['__props']=never> = Partial<Omit<B['__props'],K>>&{[P in K]?:never};
+    const sample = `import {_component,_button} from '@zerodep-vue/core';
+ import type {Props,Slot} from '@zerodep-vue/core';
  type ButtonProps=Props<typeof _button,{loading?:boolean;slotIcon?:Slot<typeof _button,'disabled'>}>;
  export const Button=_component<ButtonProps>(({loading=false,...rest})=><button {...rest}>{String(loading)}</button>);`;
     const code = (
@@ -123,18 +140,23 @@ await test(
     ).code;
     assert(code.includes('createComponent'));
     assert(!code.includes('mergeSlot'));
-    return { compileSupported: true, slotPolicyRuntimeMetadataGenerated: false };
+    return {
+      compileSupported: true,
+      slotPolicyRuntimeMetadataGenerated: false,
+    };
   },
   'boundary',
 );
-await test('inline CSS values can bind automatically without bx and preserve stable SSR rules', async () => {
-  const plain = authorSource
-    .replaceAll('bx(width/2)', 'width/2')
-    .replaceAll('bx(width)', 'width')
-    .replaceAll('bx(tint)', 'tint');
-  const { module } = await compile(plain);
-  const first = await renderApp(module.App, { width: 40, tint: 'red' });
-  const second = await renderApp(module.App, { width: 80, tint: 'blue' });
+await test('inline CSS values preserve stable SSR rules across requests', async () => {
+  const { module } = await compile(authorSource);
+  const first = await renderApp(module.App, {
+    width: 40,
+    tint: 'red',
+  });
+  const second = await renderApp(module.App, {
+    width: 80,
+    tint: 'blue',
+  });
   assert.equal(first.css, second.css);
   assert(first.html.includes('40px'));
   assert(first.html.includes('20px'));
@@ -142,7 +164,10 @@ await test('inline CSS values can bind automatically without bx and preserve sta
   assert(second.html.includes('80px'));
   assert(second.html.includes('40px'));
   assert(second.html.includes('blue'));
-  return { automaticLeafBinding: true, slotLeafBinding: true };
+  return {
+    automaticLeafBinding: true,
+    slotLeafBinding: true,
+  };
 });
 await test('automatic binding evaluates CSS expressions once in normal source order', async () => {
   const source =
@@ -152,9 +177,11 @@ await test('automatic binding evaluates CSS expressions once in normal source or
   assert.deepEqual(module.calls, ['base', 'override']);
   assert(first.html.includes('blue'));
   assert(!first.html.includes('red;'));
-  return { overriddenExpressionStillEvaluated: true, reads: module.calls };
+  return {
+    overriddenExpressionStillEvaluated: true,
+    reads: module.calls,
+  };
 });
-
 const { browser, page } = await openBrowser();
 const vueDev = require.resolve('vue/dist/vue.global.js');
 const warnings = [];
@@ -184,7 +211,14 @@ try {
   });
   await test('Vue hydration preserves SSR node and subsequent style updates remove stale vars', async () => {
     let width = 32;
-    const style = { width: dyn(() => width), opacity: 0.9 };
+    const style = () =>
+      staticCss(
+        {
+          width: width,
+          opacity: 0.9,
+        },
+        ['width'],
+      );
     const first = resolveCss(style);
     width = 64;
     const second = resolveCss(style);
@@ -199,8 +233,11 @@ try {
               'div',
               {
                 id: 'target',
-                class: objectCss(style),
-                style: { marginTop: '7px', '--public-gap': '3px' },
+                css: style,
+                style: {
+                  marginTop: '7px',
+                  '--public-gap': '3px',
+                },
               },
               'bound',
             ),
@@ -211,8 +248,12 @@ try {
     const html = await renderToString(vue.createSSRApp(View), context);
     const host = core.getCssHost(context);
     await page.setContent(host.renderStyles() + '<div id="app">' + html + '</div>');
-    await page.addStyleTag({ content: cleared.cssText });
-    await page.addScriptTag({ path: vueDev });
+    await page.addStyleTag({
+      content: cleared.cssText,
+    });
+    await page.addScriptTag({
+      path: vueDev,
+    });
     await page.evaluate(
       ({ first, second, cleared }) => {
         const states = [first, second, cleared];
@@ -226,7 +267,11 @@ try {
               {
                 id: 'target',
                 class: r.className,
-                style: { ...r.variables, marginTop: '7px', '--public-gap': '3px' },
+                style: {
+                  ...r.variables,
+                  marginTop: '7px',
+                  '--public-gap': '3px',
+                },
               },
               'bound',
             );
@@ -234,9 +279,17 @@ try {
         };
         const app = Vue.createSSRApp(App);
         app.mount('#app');
-        window.probe = { app, step, old };
+        window.probe = {
+          app,
+          step,
+          old,
+        };
       },
-      { first: serial(first), second: serial(second), cleared: serial(cleared) },
+      {
+        first: serial(first),
+        second: serial(second),
+        cleared: serial(cleared),
+      },
     );
     assert.equal(
       await page.evaluate(() => window.probe.old === document.getElementById('target')),
@@ -263,36 +316,59 @@ try {
     assert.equal(warnings.filter((x) => /hydration/i.test(x)).length, 0);
     await page.evaluate(() => window.probe.app.unmount());
     assert.equal(await page.locator('#target').count(), 0);
-    return { hydrationWarnings: 0, nodeReused: true, staleVariablesRemoved: true };
+    return {
+      hydrationWarnings: 0,
+      nodeReused: true,
+      staleVariablesRemoved: true,
+    };
   });
   await test('Teleport follows physical CSS inheritance and explicit forwarding restores value', async () => {
     await page.setContent('<div id="app"></div><div id="portal"></div>');
-    await page.addScriptTag({ path: vueDev });
+    await page.addScriptTag({
+      path: vueDev,
+    });
     await page.evaluate(() => {
       const forwarded = Vue.ref(false);
       const app = Vue.createApp({
         render() {
-          return Vue.h('section', { style: { '--accent': 'red' } }, [
-            Vue.h(
-              Vue.Teleport,
-              { to: '#portal' },
+          return Vue.h(
+            'section',
+            {
+              style: {
+                '--accent': 'red',
+              },
+            },
+            [
               Vue.h(
-                'span',
+                Vue.Teleport,
                 {
-                  id: 'teleported',
-                  style: {
-                    color: 'var(--accent, purple)',
-                    ...(forwarded.value ? { '--accent': 'red' } : {}),
-                  },
+                  to: '#portal',
                 },
-                'p',
+                Vue.h(
+                  'span',
+                  {
+                    id: 'teleported',
+                    style: {
+                      color: 'var(--accent, purple)',
+                      ...(forwarded.value
+                        ? {
+                            '--accent': 'red',
+                          }
+                        : {}),
+                    },
+                  },
+                  'p',
+                ),
               ),
-            ),
-          ]);
+            ],
+          );
         },
       });
       app.mount('#app');
-      window.tp = { app, forwarded };
+      window.tp = {
+        app,
+        forwarded,
+      };
     });
     assert.equal(
       await page.locator('#teleported').evaluate((e) => getComputedStyle(e).color),
@@ -311,7 +387,10 @@ try {
 } finally {
   await browser.close();
 }
-writeReport('ssr-results.json', { results, warnings });
+writeReport('ssr-results.json', {
+  results,
+  warnings,
+});
 console.log(
   JSON.stringify({
     total: results.length,

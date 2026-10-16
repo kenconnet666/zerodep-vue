@@ -1,19 +1,17 @@
 import type { NativeElements, ReservedProps, VNode, VNodeChild } from 'vue';
+import type { CssInput } from '../css/object-types.ts';
 import type { ManagedProps } from './component.ts';
-import type { ClassValue } from '../css/style-value.ts';
 import type { ElementDirectives, ModelDirectives } from './directives.ts';
 import type { nativeProps } from './element.ts';
-import type { CssInput } from '../css/object-types.ts';
 
 declare const nativeElement: unique symbol;
 
 type Elements = {
-  [Name in keyof NativeElements]: Omit<NativeElements[Name], 'class'> &
+  [Name in keyof NativeElements]: NativeElements[Name] &
     ElementDirectives &
     (Name extends 'input' | 'textarea' | 'select' ? ModelDirectives : {}) & {
       readonly [nativeElement]?: true;
       children?: VNodeChild;
-      class?: ClassValue;
       css?: CssInput<NativeElements[Name]>;
     };
 };

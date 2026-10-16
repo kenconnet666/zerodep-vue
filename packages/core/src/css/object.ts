@@ -1,31 +1,36 @@
 import selectorParser from 'postcss-selector-parser';
-import { binding, isBinding, isTemplate } from './bindings.ts';
 import { isAnimation } from './animation-token.ts';
-import { isThemeReference } from './tokens.ts';
-import type { ThemeResolver } from './tokens.ts';
-import type { CssFactory, CssStyle } from './object-types.ts';
+import { binding, isBinding } from './bindings.ts';
 import type { SystemKeywords } from './generated/system.ts';
-import { CLASS, markStableParts } from './style-value.ts';
+import type { CssFactory, CssStyle } from './object-types.ts';
 import type { CssClass, Declaration } from './style-value.ts';
-import { selectors, validateFragment } from './syntax.ts';
+import { CLASS, markStableParts } from './style-value.ts';
 import type { SelectorContext } from './syntax.ts';
+import { selectors, validateFragment } from './syntax.ts';
+import type { ThemeResolver } from './tokens.ts';
+import { isThemeReference } from './tokens.ts';
 
 export const CSS_STYLE = Symbol.for('@zerodep-vue/core/css-object/v1');
+const compiledObjects = new WeakMap<object, ReadonlySet<string> | null>();
 
 /** @internal 已求值的 JS 快照；与显式 source 工厂的延迟读取分开。 */
 export function valueBinding<Value>(value: Value) {
   return binding(() => value);
 }
 
-/** @internal 只标记当前对象的直接声明；嵌套对象各自携带分析结果，不向未知子树传播。 */
-export function staticCss(source: unknown): CssStyle {
-  return { [CSS_STYLE]: { source, literal: true } };
+/** @internal 仅记录当前对象的动态字段，保持普通 Props 的对象身份与字段值。 */
+export function staticCss<Source extends object>(
+  source: Source,
+  dynamic: readonly string[] | null = [],
+): Source {
+  compiledObjects.set(source, dynamic === null ? null : new Set(dynamic));
+  return source;
 }
 
 export function createCssFactory<Theme extends SystemKeywords>(
   resolveTheme: ThemeResolver,
 ): CssFactory<Theme> {
-  return (source: unknown) => ({ [CSS_STYLE]: { source, resolveTheme, literal: false } });
+  return (source: unknown) => ({ [CSS_STYLE]: { source, resolveTheme } });
 }
 
 const root: SelectorContext = { selector: '&', target: '&', conditions: [] };
@@ -88,7 +93,7 @@ export function objectClass(input: unknown): CssClass {
     source: unknown,
     context: SelectorContext,
     resolveTheme?: ThemeResolver,
-    literal = false,
+    origin?: object,
   ): void => {
     if (source == null || source === false) return;
     if (typeof source !== 'object' && typeof source !== 'function')
@@ -99,21 +104,16 @@ export function objectClass(input: unknown): CssClass {
       if (typeof source === 'function') {
         const read = source as () => unknown;
         if (!results.has(read)) results.set(read, read());
-        visit(results.get(read), context, resolveTheme);
+        visit(results.get(read), context, resolveTheme, origin);
         return;
       }
       if (CSS_STYLE in source) {
         const descriptor = (source as CssStyle)[CSS_STYLE];
-        visit(
-          descriptor.source,
-          context,
-          descriptor.resolveTheme ?? resolveTheme,
-          descriptor.literal,
-        );
+        visit(descriptor.source, context, descriptor.resolveTheme ?? resolveTheme, source);
         return;
       }
       if (Array.isArray(source)) {
-        for (const item of source) visit(item, context, resolveTheme, literal);
+        for (const item of source) visit(item, context, resolveTheme, origin);
         return;
       }
       if (
@@ -121,13 +121,20 @@ export function objectClass(input: unknown): CssClass {
         Object.getPrototypeOf(source) !== null
       )
         throw new TypeError('CSS 样式需要普通对象；Ref 请读取 .value，异步结果请先等待。');
+      const dynamic = compiledObjects.get(source);
+      if (!origin && compiledObjects.has(source)) origin = source;
       for (const [key, value] of Object.entries(source)) {
         if (value === undefined) continue;
         if (key.startsWith('@')) {
           validateFragment(key);
           if (!/^@(media|supports|container)\s+\S|^@starting-style$/.test(key))
             throw new TypeError(`不支持的局部 CSS 条件：${key}`);
-          visit(value, { ...context, conditions: [...context.conditions, key] }, resolveTheme);
+          visit(
+            value,
+            { ...context, conditions: [...context.conditions, key] },
+            resolveTheme,
+            origin,
+          );
         } else if (/^(aria|data)-/.test(key)) {
           if (
             !/^(aria|data)-[\w-]+$/.test(key) ||
@@ -146,11 +153,11 @@ export function objectClass(input: unknown): CssClass {
             });
             attribute.setValue(state, { quoteMark: '"' });
             for (const next of selectors(context, `&${attribute}`))
-              visit(style, next, resolveTheme);
+              visit(style, next, resolveTheme, origin);
           }
         } else if (/^[:[&]/.test(key)) {
           validateFragment(key);
-          for (const next of selectors(context, key)) visit(value, next, resolveTheme);
+          for (const next of selectors(context, key)) visit(value, next, resolveTheme, origin);
         } else {
           if (!/^(?:[a-zA-Z][a-zA-Z\d]*|--[\w-]+)$/.test(key))
             throw new TypeError(`无效 CSS 属性：${key}；普通属性使用 camelCase。`);
@@ -161,7 +168,6 @@ export function objectClass(input: unknown): CssClass {
             typeof value !== 'string' &&
             typeof value !== 'number' &&
             !isBinding(value) &&
-            !isTemplate(value) &&
             !isAnimation(value) &&
             !isThemeReference(value)
           )
@@ -174,7 +180,10 @@ export function objectClass(input: unknown): CssClass {
             value.startsWith('_')
           )
             resolved = resolveTheme(key, value);
-          else if (!literal && (typeof value === 'string' || typeof value === 'number'))
+          else if (
+            (!dynamic || dynamic.has(key)) &&
+            (typeof value === 'string' || typeof value === 'number')
+          )
             resolved = valueBinding(value);
           entries.push({
             ...context,
@@ -182,6 +191,7 @@ export function objectClass(input: unknown): CssClass {
             property: key,
             value: resolved,
             ...(resolveTheme && !key.startsWith('--') ? { resolveTheme } : {}),
+            ...(origin ? { origin } : {}),
           });
         }
       }

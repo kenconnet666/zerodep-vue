@@ -4,7 +4,10 @@ import { parseAsync } from '@babel/core';
 import { createSSRApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { vitePlugin as vueTsx } from '../src/index.ts';
-import { resolveClass } from '../../core/src/css/resolve.ts';
+import { resolveClass as resolveNative } from '../../core/src/css/resolve.ts';
+import { objectClass } from '../../core/src/css/object.ts';
+// 这里核对编译后的闭包求值结果；变量与规则稳定性由运行时 HMR 测试覆盖。
+const resolveClass = (style) => resolveNative(objectClass(style), undefined, { literal: true });
 
 async function compile(source, command = 'serve', ssr = false) {
   const plugin = vueTsx();
@@ -48,14 +51,14 @@ test('hot factories preserve for-of and for-in destructuring writes to captured 
     const s = useCss();
     export function sample() {
       let first = 0, tail = [], third = 0, key = '', suffix = '';
-      const style = s.width((() => {
+      const style = s({width: (() => {
         for ([first = 5, ...tail] of [[undefined, 8, 9]]) {}
         for ({value: third = first} of [{}]) {}
         for ([key, ...suffix] in {ab: true}) {}
         let localTotal = 0;
         for (const [first] of [[7]]) localTotal += first;
         return first + third + localTotal;
-      })());
+      })()});
       return {style, first, tail, third, key, suffix};
     }`;
   for (const command of ['serve', 'build']) {
@@ -78,7 +81,7 @@ test('HMR factory environments keep user dollar names separate from this receive
     export function paint() {
       const $this = '"local"';
       const $$this = 'extra';
-      return s.content($this).color(this.color).padding($$this.length);
+      return s({content: $this, color: this.color, padding: $$this.length});
     }`);
   const entry = new URL('../../core/src/index.ts', import.meta.url).href;
   const executable = code.replace(/(['"])@zerodep-vue\/core\1/g, JSON.stringify(entry));
@@ -99,9 +102,7 @@ test('hot factories retain destructuring writes and default-value reads', async 
     const s = useCss();
     export function sample(input) {
       let first = 0, rest = [], third = 0;
-      const style = s
-        .width(([first = 5, ...rest] = input, first))
-        .height(({value: third = first} = {}, third));
+      const style = s({width: ([first = 5, ...rest] = input, first), height: ({value: third = first} = {}, third)});
       return {style, first, rest, third};
     }`);
   const entry = new URL('../../core/src/index.ts', import.meta.url).href;
@@ -121,20 +122,20 @@ test('hot factories retain destructuring writes and default-value reads', async 
   }
 });
 
-const source = `import { ref } from 'vue'; import { _component } from '@zerodep-vue/core'; import { bx, cx, globalCss } from '@zerodep-vue/core';
+const source = `import { ref } from 'vue'; import { _component, globalCss } from '@zerodep-vue/core';
 import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 
   export const App = _component(()=> { const count=ref(1); let plain=0;
-    const style=s.color('red').width(bx(count.value));
-    return <button class={style} onClick={()=>{count.value++;plain++;}}>{count.value}:{plain}</button>;
+    const style=s(()=>({color:'red',width:count.value}));
+    return <button css={style} onClick={()=>{count.value++;plain++;}}>{count.value}:{plain}</button>;
   });`;
 
 test('hot signatures distinguish isolated style/render edits from initialization changes', async () => {
   const original = await compile(source);
-  const style = await compile(source.replace(".color('red')", ".color('blue')"));
+  const style = await compile(source.replace("color:'red'", "color:'blue'"));
   const render = await compile(
     source.replace('{count.value}:{plain}', 'Count {count.value + 1}:{plain}'),
   );
@@ -155,28 +156,28 @@ test('hot signatures distinguish isolated style/render edits from initialization
 });
 
 test('CSS module hot factories preserve callback receivers, globals and custom properties', async () => {
-  const source = `import { cx, globalCss } from '@zerodep-vue/core';
+  const source = `import { globalCss } from '@zerodep-vue/core';
 import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 
     const invoke=function(){ if(this!==undefined) throw Error('receiver'); return 'red'; };
-    export const styles=({root: s.color(invoke())});
-    export const variables=s.variable("--control-gap", '8px');
+    export const styles=({root: s({color:invoke()})});
+    export const variables=s({"--control-gap": '8px'});
   `;
   const code = await compile(source);
   assert.equal((code.match(/\.style\(/g) ?? []).length, 2);
-  assert(code.includes('"class"'));
+  assert(code.includes('"css"'));
   assert.match(code, /\(0, _environment\d*\["invoke"\]\)\(\)/);
   assert(code.includes('import.meta.hot.invalidate'));
   const globals = await compile(
-    `import { createCssHost, globalCss, cx } from '@zerodep-vue/core';
+    `import { createCssHost, globalCss } from '@zerodep-vue/core';
 import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
- const host=createCssHost(); globalCss('reset', {body: s.color('red')}, {host});`,
+ const host=createCssHost(); globalCss('reset', {body: s({color:'red'})}, {host});`,
   );
   assert(globals.includes('.onceGlobal('));
   assert(globals.includes('import.meta.hot.accept'));
@@ -184,7 +185,7 @@ const s = useCss();
 
 test('independent CSS entries and destructured theme aliases retain hot factories', async () => {
   const source = `import * as api from '@zerodep-vue/core';
-    import { cx as named, keyframes as animation, cx } from '@zerodep-vue/core';
+    import { keyframes as animation } from '@zerodep-vue/core';
 import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = createCssContext(new SystemKeywords());
 
@@ -193,30 +194,29 @@ const s = useCss();
     const context=api.createCssContext(new api.SystemKeywords());
     const {useCss: themed}=context;
     const paint=themed();
-    const compose=named;
-    export const first=({root: s.color('red')});
-    export const second={root:paint.display('flex')};
-    export const value=compose(first.root,second.root);
-    export const fade=animation({from:paint.opacity(0),to:paint.opacity(1)});
-    export const another=animation({from: s.opacity(0), to: s.opacity(1)});
+    export const first=({root: s({color:'red'})});
+    export const second={root:paint({display:'flex'})};
+    export const value=[first.root,second.root];
+    export const fade=animation({from:paint({opacity:0}),to:paint({opacity:1})});
+    export const another=animation({from: s({opacity:0}), to: s({opacity:1})});
   `;
   const before = await compile(source);
-  const after = await compile(source.replace(".color('red')", ".color('blue')"));
+  const after = await compile(source.replace("color:'red'", "color:'blue'"));
   assert(stamp(before));
   assert.equal(stamp(before), stamp(after));
-  for (const kind of ['class', 'keyframes']) assert(before.includes(`"${kind}"`), before);
-  const shadow = await compile(`import { cx } from '@zerodep-vue/core';
+  for (const kind of ['css', 'keyframes']) assert(before.includes(`"${kind}"`), before);
+  const shadow = await compile(`
 import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = createCssContext(new SystemKeywords());
 
 const s = useCss();
 
-    export function user(s){return s.color('red');}`);
+    export function user(s){return s({color:'red'});}`);
   assert(!shadow.includes('registerModule'));
   assert(!shadow.includes('traceCss'));
   // createCssContext 建立真实主题上下文，不能再被旧逻辑当作一个 class 包装。
   const factoryOnly =
-    await compile(`import { createCssContext as theme, SystemKeywords, cx } from '@zerodep-vue/core';
+    await compile(`import { createCssContext as theme, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = theme(new SystemKeywords());
 
     export const context=theme(new SystemKeywords());`);

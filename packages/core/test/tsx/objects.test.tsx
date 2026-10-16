@@ -1,8 +1,7 @@
-import { afterEach, expect, test } from 'vitest';
-import { mount } from '@vue/test-utils';
-import type { VueWrapper } from '@vue/test-utils';
-import { createSSRApp, nextTick, ref, shallowRef } from 'vue';
 import { renderToString } from '@vue/server-renderer';
+import type { VueWrapper } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
+import type { Props, Slot } from '@zerodep-vue/core';
 import {
   _button,
   _component,
@@ -12,7 +11,8 @@ import {
   createCssHost,
   getCssHost,
 } from '@zerodep-vue/core';
-import type { Props, Slot } from '@zerodep-vue/core';
+import { afterEach, expect, test } from 'vitest';
+import { createSSRApp, nextTick, ref, shallowRef } from 'vue';
 
 const wrappers: VueWrapper[] = [];
 const targets: HTMLElement[] = [];
@@ -83,6 +83,28 @@ test('native input model and ref remain DOM protocols', async () => {
   expect(input.value?.value).toBe('first');
   await wrapper.get('input').setValue('changed');
   expect(value.value).toBe('changed');
+});
+
+test('plain props spread forwards children through wrappers and removes replaced content', async () => {
+  const label = ref('first');
+  const Forward = _component((props: Props<typeof _div>) => <_div {...props} />);
+  const Wrapper = _component((props: Props<typeof Forward>) => <Forward {...props} />);
+  const App = _component(() => (
+    <Wrapper>
+      <span>{label.value}</span>
+    </Wrapper>
+  ));
+  const wrapper = mount(App);
+  wrappers.push(wrapper);
+  expect(wrapper.text()).toBe('first');
+  expect(wrapper.attributes('children')).toBeUndefined();
+  label.value = 'next';
+  await nextTick();
+  expect(wrapper.text()).toBe('next');
+  const Explicit = _component(() => <_div children="explicit" />);
+  const explicit = mount(Explicit);
+  wrappers.push(explicit);
+  expect(explicit.text()).toBe('explicit');
 });
 
 test('slot attributes compose across wrappers, then owned state wins on the actual child', async () => {

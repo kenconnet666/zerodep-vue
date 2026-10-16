@@ -1,14 +1,12 @@
-import { _component, bx, cx } from '@zerodep-vue/core';
-import type { CssValue } from '@zerodep-vue/core';
+import type { CssValue, Slot } from '@zerodep-vue/core';
+import { _component, _div } from '@zerodep-vue/core';
 import { nextTick, onMounted, onScopeDispose, shallowRef, watch } from 'vue';
-import type { ElementProps, ElementSlotProps } from '../config/props.ts';
-import { slotRest } from '../config/props.ts';
 import { useCss } from '../config/Provider.tsx';
+import type { ElementProps } from '../config/props.ts';
 import type { UiTheme } from '../config/theme/types.ts';
-import { useMediaQuery } from '../interaction/media.ts';
-import { callCallbacks } from '../interaction/callbacks.ts';
 import type { Callback } from '../interaction/callbacks.ts';
-
+import { callCallbacks } from '../interaction/callbacks.ts';
+import { useMediaQuery } from '../interaction/media.ts';
 export interface CollapseTransitionProps extends ElementProps {
   /** 是否展开；动画组件本身不修改调用方状态。 */
   show?: boolean;
@@ -23,7 +21,7 @@ export interface CollapseTransitionProps extends ElementProps {
   lazy?: boolean;
   /** 收起动画完成后销毁内容；默认保留表单等子组件状态。 */
   unmountOnHide?: boolean;
-  slotContent?: ElementSlotProps;
+  slotContent?: Slot<typeof _div>;
   onAfterEnter?: Callback<[]>;
   onAfterLeave?: Callback<[]>;
 }
@@ -41,13 +39,13 @@ export const CollapseTransition = _component(
     slotContent,
     onAfterEnter,
     onAfterLeave,
-    class: className,
+    css: cssProp,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: CollapseTransitionProps) => {
-    const s = useCss();
+    const css = useCss();
     const root = shallowRef<HTMLDivElement>();
     const content = shallowRef<HTMLDivElement>();
     const present = shallowRef(show);
@@ -115,8 +113,12 @@ export const CollapseTransition = _component(
         return;
       }
       animating.value = true;
-      const from: Keyframe = { [property]: `${reversing || !opened ? beforeSize : 0}px` };
-      const to: Keyframe = { [property]: `${targetSize}px` };
+      const from: Keyframe = {
+        [property]: `${reversing || !opened ? beforeSize : 0}px`,
+      };
+      const to: Keyframe = {
+        [property]: `${targetSize}px`,
+      };
       if (fade) {
         from.opacity = reversing || !opened ? beforeOpacity : 0;
         to.opacity = opened ? Number.parseFloat(style.opacity) || 1 : 0;
@@ -137,7 +139,9 @@ export const CollapseTransition = _component(
           if (show) visited.value = true;
         }
       },
-      { flush: 'post' },
+      {
+        flush: 'post',
+      },
     );
     onMounted(() => {
       mounted = true;
@@ -155,7 +159,10 @@ export const CollapseTransition = _component(
           if (previous) observer?.unobserve(previous);
           if (element) observer?.observe(element);
         },
-        { immediate: true, flush: 'post' },
+        {
+          immediate: true,
+          flush: 'post',
+        },
       );
       onScopeDispose(() => {
         stop();
@@ -167,38 +174,41 @@ export const CollapseTransition = _component(
       version++;
       animation?.cancel();
     });
-    const style = s
-      .display(bx(axis === 'horizontal' ? 'inline-block' : 'block'))
-      .boxSizing('border-box')
-      .minWidth(0)
-      .minHeight(0)
-      .overflow(bx(animating.value ? 'hidden' : undefined))
-      .transitionDuration(bx(duration))
-      .transitionTimingFunction('_standard')
-      .select('&[hidden]', s.display('none'));
+    const style = css(() => ({
+      display: axis === 'horizontal' ? 'inline-block' : 'block',
+      boxSizing: 'border-box',
+      minWidth: 0,
+      minHeight: 0,
+      overflow: animating.value ? 'hidden' : undefined,
+      transitionDuration: duration,
+      transitionTimingFunction: '_standard',
+      '&[hidden]': {
+        display: 'none',
+      },
+    }));
     return (
-      <div
+      <_div
+        css={[style, cssProp]}
         {...rest}
         ref={root}
         hidden={!present.value}
         inert={!show || undefined}
         aria-hidden={!show || undefined}
         data-zv-collapse-state={show ? 'open' : 'closed'}
-        class={cx(style, className)}
       >
         {(!lazy || visited.value) && (!unmountOnHide || present.value) && (
-          <div
-            {...slotRest(slotContent)}
+          <_div
+            css={css(() => ({
+              display: 'flow-root',
+              width: axis === 'horizontal' ? 'max-content' : undefined,
+            }))}
+            {...slotContent}
             ref={content}
-            class={cx(
-              s.display('flow-root').width(bx(axis === 'horizontal' ? 'max-content' : undefined)),
-              slotContent?.class,
-            )}
           >
             {children}
-          </div>
+          </_div>
         )}
-      </div>
+      </_div>
     );
   },
 );

@@ -1,9 +1,8 @@
-import { _component, bx, cx } from '@zerodep-vue/core';
 import type { CssValue } from '@zerodep-vue/core';
+import { _component, _div } from '@zerodep-vue/core';
 import { useCss } from '../config/Provider.tsx';
 import type { ElementProps } from '../config/props.ts';
 import type { UiTheme } from '../config/theme/types.ts';
-
 export interface AffixProps extends ElementProps {
   /** 粘附的视口边缘，默认 top。 */
   side?: 'top' | 'bottom';
@@ -18,29 +17,30 @@ export const Affix = _component(
     side = 'top',
     offset = 0,
     zIndex = '_affix',
-    class: className,
+    css: cssProp,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: AffixProps) => {
-    const s = useCss();
+    const css = useCss();
     return (
-      <div
+      <_div
+        css={[
+          css(() => ({
+            position: 'sticky',
+            zIndex: zIndex,
+            top: side === 'top' ? offset : 'auto',
+            bottom: side === 'bottom' ? offset : 'auto',
+            alignSelf: 'flex-start',
+            minWidth: 0,
+          })),
+          cssProp,
+        ]}
         {...rest}
-        class={cx(
-          s
-            .position('sticky')
-            .zIndex(bx(zIndex))
-            .top(bx(side === 'top' ? offset : 'auto'))
-            .bottom(bx(side === 'bottom' ? offset : 'auto'))
-            .alignSelf('flex-start')
-            .minWidth(0),
-          className,
-        )}
       >
         {children}
-      </div>
+      </_div>
     );
   },
 );

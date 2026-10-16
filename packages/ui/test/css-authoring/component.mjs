@@ -30,7 +30,7 @@ for (const key of [
       configurable: true,
       writable: true,
     });
-const { core, vue, writeReport } = await import('./prototype.mjs');
+const { core, vue, writeReport } = await import('./support.mjs');
 const { transformAsync } = require('@babel/core');
 const presetTypeScript = compilerRequire('@babel/preset-typescript').default;
 const { babelPlugin } = await import(
@@ -38,12 +38,11 @@ const { babelPlugin } = await import(
 );
 const coreUrl = pathToFileURL(resolve(root, 'packages/core/src/index.ts')).href;
 const vueUrl = pathToFileURL(require.resolve('vue')).href;
-const source = `import {_component,bx,_button} from '@zerodep-vue/core';
+const source = `import {_component,_button} from '@zerodep-vue/core';
 import {ref,shallowRef} from 'vue';
-type Base={__props:{disabled?:boolean;css?:unknown;id?:string;title?:string;model?:unknown}};
-declare const ButtonBase:Base;
-type Props<B extends Base,E extends object={}> = Omit<B['__props'],keyof E>&E;
-type ChildProps=Props<typeof ButtonBase,{label?:string}>;
+import type {Ref} from 'vue';
+import type {Props} from '@zerodep-vue/core';
+type ChildProps=Props<typeof _button,{label?:string;model?:Ref<number>}>;
 export const model=ref(1);
 export const width=ref(24);
 export const active=ref(true);
@@ -55,7 +54,7 @@ const Child=_component<ChildProps>(({disabled=true,label='fallback',model,...res
  return <_button {...rest} disabled={disabled} data-label={label}/>;
 });
 export const App=_component(()=>
- <Child {...inputs.value} css={{width:bx(width.value)}} onClick={active.value ? ()=>calls.push('clicked') : undefined}/>);
+ <Child {...inputs.value} css={{width:width.value}} onClick={active.value ? ()=>calls.push('clicked') : undefined}/>);
 `;
 let code = (
   await transformAsync(source, {

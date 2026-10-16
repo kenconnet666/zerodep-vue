@@ -68,8 +68,8 @@ switch (phase) {
       const file = resolve(root, 'contracts.tsx');
       const source = await readFile(file, 'utf8');
       for (const [call, value, text] of [
-        ["s.overflow('hidden')", 'hidden', '裁剪溢出'],
-        ["s.color('_primaryHover')", '_primaryHover', '主操作的悬停色'],
+        ["overflow: 'hidden'", 'hidden', '裁剪溢出'],
+        ["color: '_primaryHover'", '_primaryHover', '主操作的悬停色'],
       ]) {
         const position = source.indexOf(call) + call.indexOf(`'${value}'`) + 2;
         const definitions = enhanced.getDefinitionAtPosition(file, position);
@@ -96,7 +96,7 @@ switch (phase) {
         );
       }
       report.diagnostics = 0;
-      const memberPosition = source.indexOf("chain.color('_danger')") + 'chain.'.length;
+      const memberPosition = source.indexOf("color: '_primaryHover'");
       const members = enhanced.getCompletionsAtPosition(file, memberPosition, {});
       assert.equal(members.entries.filter((entry) => entry.name === 'color').length, 1);
       const member = enhanced.getCompletionEntryDetails(
@@ -108,9 +108,9 @@ switch (phase) {
         {},
       );
       assert(ts.displayPartsToString(member.documentation).includes('设置文字前景色'));
-      assert.match(ts.displayPartsToString(member.displayParts), /\): Css<UiTheme>/);
-      assert(member.tags.some((tag) => tag.name === 'param'));
-      assert(member.tags.some((tag) => tag.name === 'returns'));
+      assert.match(ts.displayPartsToString(member.displayParts), /color\??:/);
+      assert(member.tags.some((tag) => tag.name === 'default'));
+      assert(member.tags.some((tag) => tag.name === 'extend'));
       report.memberCompletionDocumentation = true;
       report.declarations = declarations.length;
       report.literalDocumentation = true;

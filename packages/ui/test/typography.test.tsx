@@ -1,10 +1,11 @@
-import { afterEach, expect, test, vi } from 'vitest';
-import { mount } from '@vue/test-utils';
 import { renderToString } from '@vue/server-renderer';
-import { createSSRApp, defineComponent, h, nextTick, ref, shallowRef } from 'vue';
-import type { Component } from 'vue';
-import { _component, createCssHost, getCssHost } from '@zerodep-vue/core';
+import { mount } from '@vue/test-utils';
 import type { CssValue } from '@zerodep-vue/core';
+import { _component, _div, _em, _strong, createCssHost, getCssHost } from '@zerodep-vue/core';
+import { afterEach, expect, test, vi } from 'vitest';
+import type { Component } from 'vue';
+import { createSSRApp, defineComponent, h, nextTick, ref, shallowRef } from 'vue';
+import type { HeadingProps, UiTheme } from '../src/index.ts';
 import {
   DarkTheme,
   Heading,
@@ -15,18 +16,22 @@ import {
   Text,
   useCss,
 } from '../src/index.ts';
-import type { HeadingProps, UiTheme } from '../src/index.ts';
-
 const cleanup: (() => void)[] = [];
 afterEach(() => {
   while (cleanup.length) cleanup.pop()!();
 });
-
 function render(component: Component) {
   const target = document.createElement('style');
   document.head.append(target);
-  const host = createCssHost({ target, maxUnusedRules: 0 });
-  const wrapper = mount(component, { global: { plugins: [host] } });
+  const host = createCssHost({
+    target,
+    maxUnusedRules: 0,
+  });
+  const wrapper = mount(component, {
+    global: {
+      plugins: [host],
+    },
+  });
   cleanup.push(() => {
     wrapper.unmount();
     const references = host.stats().ownedReferences;
@@ -34,22 +39,24 @@ function render(component: Component) {
     target.remove();
     expect(references).toBe(0);
   });
-  return { wrapper, css: () => target.textContent ?? '' };
+  return {
+    wrapper,
+    css: () => target.textContent ?? '',
+  };
 }
-
 test('native text elements forward attributes and one event without leaking style props', async () => {
   const caption = ref('first');
   const title = ref<string | undefined>('hint');
   const click = vi.fn((event: MouseEvent) => event.preventDefault());
   const { wrapper } = render(
     _component(() => (
-      <div>
+      <_div>
         <Text id="text" title={title.value} lang="zh-CN" dir="rtl" size="_small">
           {caption.value}
-          <strong>!</strong>
+          <_strong>!</_strong>
         </Text>
         <Paragraph id="paragraph" textAlign="end">
-          正文 <em>{caption.value}</em>
+          正文 <_em>{caption.value}</_em>
         </Paragraph>
         <Heading id="heading" as="h2" aria-label="区块标题">
           {caption.value}
@@ -57,7 +64,7 @@ test('native text elements forward attributes and one event without leaking styl
         <Link id="link" href="/first" data-purpose="navigation" onClick={click}>
           {caption.value}
         </Link>
-      </div>
+      </_div>
     )),
   );
   expect(wrapper.get('#text').element.tagName).toBe('SPAN');
@@ -75,7 +82,9 @@ test('native text elements forward attributes and one event without leaking styl
     for (const key of ['size', 'color', 'fontWeight', 'lineHeight', 'textAlign', 'as'])
       expect(element.element.hasAttribute(key)).toBe(false);
   }
-  await wrapper.get('#link').trigger('click', { ctrlKey: true });
+  await wrapper.get('#link').trigger('click', {
+    ctrlKey: true,
+  });
   expect(click).toHaveBeenCalledTimes(1);
   expect(click.mock.calls[0]![0].ctrlKey).toBe(true);
   caption.value = 'updated';
@@ -87,7 +96,6 @@ test('native text elements forward attributes and one event without leaking styl
   expect(wrapper.get('#link').text()).toBe('updated');
   expect(wrapper.get('#text').attributes('title')).toBeUndefined();
 });
-
 test('all text variants react to shared style props and inherited theme replacement', async () => {
   const theme = shallowRef<UiTheme>(new LightTheme());
   const color = ref<CssValue<'color', UiTheme>>('_textSecondary');
@@ -159,17 +167,21 @@ test('all text variants react to shared style props and inherited theme replacem
     for (const value of ['#cbd5e1', '22px', '700', '1.75']) expect(style).not.toContain(value);
   }
 });
-
 test('external CSS wins over convenience props and native style stays on the actual element', () => {
   const { wrapper, css } = render(
     _component(() => {
-      const s = useCss();
+      const css = useCss();
       return (
         <Text
+          css={css({
+            color: '_danger',
+            fontSize: '2em',
+          })}
           color="_primary"
           size={20}
-          class={s.color('_danger').fontSize('2em')}
-          style={{ letterSpacing: '0.1em' }}
+          style={{
+            letterSpacing: '0.1em',
+          }}
         >
           内容
         </Text>
@@ -180,9 +192,9 @@ test('external CSS wins over convenience props and native style stays on the act
   expect(wrapper.attributes('style')).toContain('0.1em');
   expect(wrapper.attributes('style')).not.toContain('#2563eb');
   expect(wrapper.attributes('style')).not.toContain('20px');
-  expect(css()).toContain('font-size:2em');
+  expect(css()).toContain('font-size:var(--zv-');
+  expect(wrapper.attributes('style')).toContain('2em');
 });
-
 test('heading tags remain reactive and independent of visual size', async () => {
   const tag = ref<HeadingProps['as']>('h1');
   const { wrapper, css } = render(
@@ -198,9 +210,9 @@ test('heading tags remain reactive and independent of visual size', async () => 
     expect(wrapper.get('#title').element.tagName).toBe(next.toUpperCase());
   }
   expect(css()).toContain('font-size:inherit');
-  expect(css()).toContain('margin:0');
+  expect(css()).toContain('margin:var(--zv-');
+  expect(wrapper.attributes('style')).toMatch(/--zv-[^:]+: 0;/);
 });
-
 test('link rel defaults follow target updates while explicit rel and anchor attributes retain native meaning', async () => {
   const target = ref<string | undefined>('_blank');
   const rel = ref<string | undefined>();
@@ -235,7 +247,6 @@ test('link rel defaults follow target updates while explicit rel and anchor attr
   for (const selector of [':hover', ':active', ':focus-visible', '@media (forced-colors: active)'])
     expect(css()).toContain(selector);
 });
-
 test('disabled link removes native navigation for every pointer button and restores it reactively', async () => {
   const disabled = ref(true);
   const click = vi.fn((event: MouseEvent) => event.preventDefault());
@@ -249,16 +260,19 @@ test('disabled link removes native navigation for every pointer button and resto
   expect(wrapper.attributes('href')).toBeUndefined();
   expect(wrapper.attributes('tabindex')).toBe('-1');
   await wrapper.trigger('click');
-  await wrapper.trigger('auxclick', { button: 1 });
+  await wrapper.trigger('auxclick', {
+    button: 1,
+  });
   expect(click).not.toHaveBeenCalled();
   disabled.value = false;
   await nextTick();
   expect(wrapper.attributes('href')).toBe('/detail');
   expect(wrapper.attributes('tabindex')).toBeUndefined();
-  await wrapper.trigger('click', { ctrlKey: true });
+  await wrapper.trigger('click', {
+    ctrlKey: true,
+  });
   expect(click).toHaveBeenCalledOnce();
 });
-
 test.each(['click', 'auxclick'] as const)(
   'link forwards merged %s listeners with native cancellation and reactive disabled state',
   async (type) => {
@@ -275,7 +289,14 @@ test.each(['click', 'auxclick'] as const)(
       expect(event.defaultPrevented).toBe(true);
       expect(event.ctrlKey).toBe(true);
     });
-    const listeners = type === 'click' ? { onClick: first } : { onAuxclick: first };
+    const listeners =
+      type === 'click'
+        ? {
+            onClick: first,
+          }
+        : {
+            onAuxclick: first,
+          };
     const { wrapper } = render(
       _component(() => (
         <Link
@@ -289,7 +310,10 @@ test.each(['click', 'auxclick'] as const)(
         </Link>
       )),
     );
-    await wrapper.trigger(type, { ctrlKey: true, button: type === 'click' ? 0 : 1 });
+    await wrapper.trigger(type, {
+      ctrlKey: true,
+      button: type === 'click' ? 0 : 1,
+    });
     expect(calls).toEqual(['first', 'second']);
     expect(first.mock.calls[0]![0]).toBe(second.mock.calls[0]![0]);
     disabled.value = true;
@@ -303,7 +327,6 @@ test.each(['click', 'auxclick'] as const)(
     expect(calls).toEqual(['first', 'second', 'first']);
   },
 );
-
 test('plain Vue host slots stay reactive and untyped DOM replacement cannot replace children', async () => {
   const text = ref('first');
   const Host = defineComponent(() => () => {
@@ -311,8 +334,13 @@ test('plain Vue host slots stay reactive and untyped DOM replacement cannot repl
     return h(
       Paragraph,
       // 模拟没有 TypeScript 检查的宿主，验证被禁止的 DOM 属性仍会被排除。
-      { innerHTML: 'bad', textContent: 'bad' } as any,
-      { default: () => h('strong', captured) },
+      {
+        innerHTML: 'bad',
+        textContent: 'bad',
+      } as any,
+      {
+        default: () => h('strong', captured),
+      },
     );
   });
   const { wrapper } = render(Host);
@@ -322,7 +350,6 @@ test('plain Vue host slots stay reactive and untyped DOM replacement cannot repl
   expect(wrapper.get('strong').text()).toBe('second');
   expect(wrapper.text()).not.toContain('bad');
 });
-
 test('text semantics and theme values survive SSR and hydration without replacing nodes', async () => {
   const App = _component(() => (
     <Provider theme={new DarkTheme()}>
@@ -331,7 +358,7 @@ test('text semantics and theme values survive SSR and hydration without replacin
       </Heading>
       <Paragraph>
         <Text color="_textSecondary">
-          正文 <em>强调</em>
+          正文 <_em>强调</_em>
         </Text>
       </Paragraph>
       <Link href="/detail" target="_blank">
@@ -350,7 +377,10 @@ test('text semantics and theme values survive SSR and hydration without replacin
   target.innerHTML = html;
   document.body.append(target);
   const heading = target.querySelector('h2');
-  const host = createCssHost({ target: document.head, maxUnusedRules: 0 });
+  const host = createCssHost({
+    target: document.head,
+    maxUnusedRules: 0,
+  });
   const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
   const error = vi.spyOn(console, 'error').mockImplementation(() => {});
   const app = createSSRApp(App).use(host);
@@ -366,7 +396,6 @@ test('text semantics and theme values survive SSR and hydration without replacin
     serverHost.dispose();
   }
 });
-
 function typeContracts() {
   <Text color="_textSecondary" size="_small" fontWeight="_semibold" lineHeight="_normal" />;
   <Paragraph textAlign="end" />;

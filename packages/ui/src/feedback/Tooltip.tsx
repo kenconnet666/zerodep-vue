@@ -1,13 +1,11 @@
-import { _component, cx } from '@zerodep-vue/core';
-import { onScopeDispose, ref, shallowRef, useId, watch } from 'vue';
-import type { VNodeChild } from 'vue';
 import type { Placement } from '@floating-ui/dom';
+import type { Slot } from '@zerodep-vue/core';
+import { _component } from '@zerodep-vue/core';
+import type { VNodeChild } from 'vue';
+import { onScopeDispose, ref, shallowRef, useId, watch } from 'vue';
 import { useCss } from '../config/Provider.tsx';
-import { slotRest } from '../config/props.ts';
-import type { ElementSlotProps } from '../config/props.ts';
 import { FloatingPanel } from '../interaction/FloatingPanel.tsx';
 import type { FloatingTriggerProps } from './Popover.tsx';
-
 export interface TooltipProps {
   trigger: (props: FloatingTriggerProps) => VNodeChild;
   /** 简短的说明；可交互内容使用 Popover。 */
@@ -16,7 +14,25 @@ export interface TooltipProps {
   disabled?: boolean;
   openDelay?: number;
   closeDelay?: number;
-  slotPanel?: Omit<ElementSlotProps, 'id' | 'role' | 'tabindex'>;
+  slotPanel?: Slot<
+    typeof FloatingPanel,
+    | 'id'
+    | 'role'
+    | 'open'
+    | 'reference'
+    | 'placement'
+    | 'offset'
+    | 'matchWidth'
+    | 'focus'
+    | 'closeOnEscape'
+    | 'closeOnOutside'
+    | 'closeOnFocusOutside'
+    | 'onClose'
+    | 'surface'
+    | 'scrollable'
+    | 'restoreFocus'
+    | 'tabindex'
+  >;
 }
 
 /** 指针悬停或键盘聚焦显示，焦点始终留在触发器。 */
@@ -30,7 +46,7 @@ export const Tooltip = _component(
     closeDelay = 100,
     slotPanel,
   }: TooltipProps) => {
-    const s = useCss();
+    const css = useCss();
     const open = ref(false);
     const element = shallowRef<HTMLElement | null | undefined>();
     const id = `zv-tooltip-${useId()}`;
@@ -60,7 +76,9 @@ export const Tooltip = _component(
         open.value = focused && !disabled;
       },
       // 首次 ref 注册也必须即时完成，不能在随后 pointerenter 后才清掉它的计时器。
-      { flush: 'sync' },
+      {
+        flush: 'sync',
+      },
     );
     watch(
       () => disabled,
@@ -101,7 +119,10 @@ export const Tooltip = _component(
         })}
         {!disabled && (
           <FloatingPanel
-            {...slotRest(slotPanel)}
+            css={css({
+              maxWidth: '24em',
+            })}
+            {...slotPanel}
             id={id}
             role="tooltip"
             open={open}
@@ -111,7 +132,6 @@ export const Tooltip = _component(
             scrollable={false}
             restoreFocus={false}
             closeOnFocusOutside={false}
-            class={cx(s.maxWidth('24em'), slotPanel?.class)}
             onPointerenter={() => {
               panelHovered = true;
               clearTimeout(timer);

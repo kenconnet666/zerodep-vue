@@ -1,45 +1,55 @@
-import { createApp, computed, ref, shallowRef } from 'vue';
 import { Search } from '@lucide/icons';
-import { z } from 'zod';
-import { _component, createCssHost } from '@zerodep-vue/core';
 import {
+  _component,
+  _div,
+  _form,
+  _input,
+  _label,
+  _main,
+  _output,
+  _p,
+  _section,
+  createCssHost,
+} from '@zerodep-vue/core';
+import { computed, createApp, ref, shallowRef } from 'vue';
+import { z } from 'zod';
+import type { ButtonProps } from '../../src/index.ts';
+import {
+  Affix,
+  Anchor,
+  BackTop,
+  Breadcrumb,
   Button,
+  Checkbox,
   Collapse,
   CollapseItem,
   DarkTheme,
   Divider,
+  Drawer,
+  Field,
   Flex,
   Grid,
   GridItem,
   Heading,
+  Icon,
+  Input,
   LightTheme,
+  Menu,
   Paragraph,
+  Popover,
   Provider,
+  RadioGroup,
   Scrollbar,
+  Sidebar,
   Slider,
   Split,
   SplitPane,
-  Anchor,
-  Affix,
-  BackTop,
-  Popover,
-  Tooltip,
-  Drawer,
-  Menu,
-  Breadcrumb,
-  Sidebar,
-  Icon,
-  Input,
-  Textarea,
-  Checkbox,
   Switch,
-  RadioGroup,
-  Field,
-  useField,
+  Textarea,
+  Tooltip,
   useCss,
+  useField,
 } from '../../src/index.ts';
-import type { ButtonProps } from '../../src/index.ts';
-
 const dark = ref(false);
 const rtl = ref(false);
 const theme = computed(() => (dark.value ? new DarkTheme() : new LightTheme()));
@@ -59,7 +69,7 @@ const tones: NonNullable<ButtonProps['tone']>[] = [
   'danger',
 ];
 const Demo = _component(() => {
-  const s = useCss();
+  const css = useCss();
   const overflow = ref(false);
   const loading = ref(false);
   const expanded = ref<readonly string[]>(['a']);
@@ -87,25 +97,34 @@ const Demo = _component(() => {
   const accepted = ref(false);
   const notifications = ref(true);
   const frequency = ref<'daily' | 'weekly'>('daily');
-  const frequencyField = useField(frequency, z.enum(['daily', 'weekly']), { name: 'frequency' });
+  const frequencyField = useField(frequency, z.enum(['daily', 'weekly']), {
+    name: 'frequency',
+  });
   const choicesReadonly = ref(false);
   const cancelRadio = ref(false);
   const rejectRadio = ref(false);
   return (
-    <main
+    <_main
+      css={css({
+        fontFamily: '_ui',
+        fontSize: '_medium',
+        color: '_textPrimary',
+        backgroundColor: '_pageBackground',
+        minHeight: '100vh',
+        padding: '2em',
+      })}
       dir={rtl.value ? 'rtl' : 'ltr'}
-      class={s
-        .fontFamily('_ui')
-        .fontSize('_medium')
-        .color('_textPrimary')
-        .backgroundColor('_pageBackground')
-        .minHeight('100vh')
-        .padding('2em')}
     >
       <Heading as="h1" size="_extraExtraLarge">
         布局与交互验收
       </Heading>
-      <Flex gap="_small" wrap="wrap" class={s.marginBlock('_large')}>
+      <Flex
+        css={css({
+          marginBlock: '_large',
+        })}
+        gap="_small"
+        wrap="wrap"
+      >
         <Button
           onClick={() => {
             dark.value = !dark.value;
@@ -131,10 +150,12 @@ const Demo = _component(() => {
         </Button>
       </Flex>
       <Grid
+        css={css({
+          maxWidth: '70em',
+        })}
         columns="repeat(6, minmax(7em, 1fr))"
         gap="_small"
         data-testid="buttons"
-        class={s.maxWidth('70em')}
       >
         {variants.map((variant) =>
           tones.map((tone) => (
@@ -167,15 +188,21 @@ const Demo = _component(() => {
           </Flex>
         </GridItem>
       </Grid>
-      <Divider class={s.marginBlock('_large')}>文本输入</Divider>
-      <form
+      <Divider
+        css={css({
+          marginBlock: '_large',
+        })}
+      >
+        文本输入
+      </Divider>
+      <_form
         data-testid="input-form"
         onSubmit={(event) => {
           event.preventDefault();
           submissions.value++;
         }}
       >
-        <label for="demo-query">查询内容</label>
+        <_label for="demo-query">查询内容</_label>
         <Input
           id="demo-query"
           name="query"
@@ -189,9 +216,9 @@ const Demo = _component(() => {
         <Button type="reset" variant="outline">
           重置输入
         </Button>
-        <output data-testid="input-value">{text.value}</output>
-        <output data-testid="input-submissions">{submissions.value}</output>
-        <label for="demo-notes">备注内容</label>
+        <_output data-testid="input-value">{text.value}</_output>
+        <_output data-testid="input-submissions">{submissions.value}</_output>
+        <_label for="demo-notes">备注内容</_label>
         <Textarea
           id="demo-notes"
           name="notes"
@@ -201,14 +228,25 @@ const Demo = _component(() => {
           width="25em"
           clearable
         />
-      </form>
-      <Divider class={s.marginBlock('_large')}>字段与选择控件</Divider>
-      <form data-testid="field-form" onSubmit={(event) => event.preventDefault()}>
+      </_form>
+      <Divider
+        css={css({
+          marginBlock: '_large',
+        })}
+      >
+        字段与选择控件
+      </Divider>
+      <_form data-testid="field-form" onSubmit={(event) => event.preventDefault()}>
         <Field state={nameField} label="称呼" help="校验结果保留原始草稿">
           <Input {...nameField.control} clearable width="20em" />
         </Field>
-        <output data-testid="field-output">{nameField.output.value}</output>
-        <Flex gap="_medium" class={s.marginBlock('_medium')}>
+        <_output data-testid="field-output">{nameField.output.value}</_output>
+        <Flex
+          css={css({
+            marginBlock: '_medium',
+          })}
+          gap="_medium"
+        >
           <Checkbox name="accepted" value={accepted} readonly={choicesReadonly.value}>
             接受条款
           </Checkbox>
@@ -224,8 +262,14 @@ const Demo = _component(() => {
               if (rejectRadio.value) frequency.value = 'daily';
             }}
             options={[
-              { value: 'daily', label: '每天' },
-              { value: 'weekly', label: '每周' },
+              {
+                value: 'daily',
+                label: '每天',
+              },
+              {
+                value: 'weekly',
+                label: '每周',
+              },
             ]}
             slotInput={{
               onClick: (event) => {
@@ -234,7 +278,7 @@ const Demo = _component(() => {
             }}
           />
         </Field>
-        <output data-testid="radio-touched">{String(frequencyField.touched.value)}</output>
+        <_output data-testid="radio-touched">{String(frequencyField.touched.value)}</_output>
         <Button type="reset">重置字段</Button>
         <Button
           variant="text"
@@ -260,8 +304,14 @@ const Demo = _component(() => {
         >
           切换选择回退
         </Button>
-      </form>
-      <Divider class={s.marginBlock('_large')}>浮动滚动条</Divider>
+      </_form>
+      <Divider
+        css={css({
+          marginBlock: '_large',
+        })}
+      >
+        浮动滚动条
+      </Divider>
       <Button
         onClick={() => {
           overflow.value = !overflow.value;
@@ -270,69 +320,118 @@ const Demo = _component(() => {
         切换溢出
       </Button>
       <Scrollbar
+        css={css({
+          width: '30em',
+          maxWidth: '100%',
+          marginBlock: '_medium',
+          borderStyle: 'solid',
+          borderWidth: '0.0625em',
+          borderColor: '_border',
+        })}
         data-testid="scrollbar"
         aria-label="内容滚动区域"
         height="15em"
-        class={s
-          .width('30em')
-          .maxWidth('100%')
-          .marginBlock('_medium')
-          .borderStyle('solid')
-          .borderWidth('0.0625em')
-          .borderColor('_border')}
-        slotContent={{ 'data-testid': 'scroll-content' }}
+        slotContent={{
+          'data-testid': 'scroll-content',
+        }}
       >
-        <div data-testid="scroll-measure" class={s.padding('1em')}>
+        <_div
+          css={css({
+            padding: '1em',
+          })}
+          data-testid="scroll-measure"
+        >
           无论滚动条是否出现，这一行的可用宽度保持不变。
-        </div>
+        </_div>
         {overflow.value && (
-          <div class={s.width('55em').height('40em').backgroundColor('_surfaceMuted')}>
+          <_div
+            css={css({
+              width: '55em',
+              height: '40em',
+              backgroundColor: '_surfaceMuted',
+            })}
+          >
             较长的横向和纵向内容
-          </div>
+          </_div>
         )}
       </Scrollbar>
-      <Divider class={s.marginBlock('_large')}>滑轨</Divider>
-      <div class={s.maxWidth('32em')}>
+      <Divider
+        css={css({
+          marginBlock: '_large',
+        })}
+      >
+        滑轨
+      </Divider>
+      <_div
+        css={css({
+          maxWidth: '32em',
+        })}
+      >
         <Slider value={sliderValue} aria-label="音量" formatValueText={(value) => `${value}%`} />
-        <p>当前值：{sliderValue.value}</p>
+        <_p>当前值：{sliderValue.value}</_p>
         <Slider
           value={slideProgress}
           variant="rail"
           trackClick={false}
           aria-label="拖动进度"
           thumb={<Icon icon={Search} aria-hidden={true} />}
-          slotThumb={{ 'data-testid': 'slide-handle' }}
+          slotThumb={{
+            'data-testid': 'slide-handle',
+          }}
           onValueCommit={(value) => {
             submitted.value = `已提交进度 ${value}%`;
           }}
         >
           拖动滑块至末端
         </Slider>
-        <p role="status">{submitted.value}</p>
-      </div>
-      <Collapse expandedKeys={expanded} class={s.maxWidth('42em')}>
+        <_p role="status">{submitted.value}</_p>
+      </_div>
+      <Collapse
+        css={css({
+          maxWidth: '42em',
+        })}
+        expandedKeys={expanded}
+      >
         <CollapseItem name="a" title="可折叠面板">
           <Paragraph>展开与收起保持状态，并可用方向键导航标题。</Paragraph>
-          <input aria-label="面板内输入" />
+          <_input aria-label="面板内输入" />
         </CollapseItem>
         <CollapseItem name="b" title="另一个面板">
           第二个面板的内容。
         </CollapseItem>
       </Collapse>
-      <Divider class={s.marginBlock('_large')}>分割工作区</Divider>
+      <Divider
+        css={css({
+          marginBlock: '_large',
+        })}
+      >
+        分割工作区
+      </Divider>
       <Menu
         aria-label="顶部导航"
         orientation="horizontal"
         variant="line"
         activeKey="dashboard"
         items={[
-          { key: 'dashboard', label: '仪表盘', href: '#dashboard' },
+          {
+            key: 'dashboard',
+            label: '仪表盘',
+            href: '#dashboard',
+          },
           {
             key: 'tools',
             label: '更多工具',
             children: [
-              { key: 'export', label: '导出记录', href: '#export' },
-              { key: 'history', label: '查看历史', href: '#history' },
+              {
+                key: 'export',
+                label: '导出记录',
+                href: '#export',
+              },
+              {
+                key: 'history',
+                label: '查看历史',
+                href: '#history',
+              },
             ],
           },
         ]}
@@ -340,45 +439,92 @@ const Demo = _component(() => {
       <Breadcrumb
         maxItems={3}
         items={[
-          { key: 'home', label: '首页', href: '#' },
-          { key: 'space', label: '工作区', href: '#space' },
-          { key: 'settings', label: '设置', href: '#settings' },
-          { key: 'current', label: '布局组件' },
+          {
+            key: 'home',
+            label: '首页',
+            href: '#',
+          },
+          {
+            key: 'space',
+            label: '工作区',
+            href: '#space',
+          },
+          {
+            key: 'settings',
+            label: '设置',
+            href: '#settings',
+          },
+          {
+            key: 'current',
+            label: '布局组件',
+          },
         ]}
       />
       <Flex
-        class={s
-          .height('18em')
-          .marginBlock('_medium')
-          .borderStyle('solid')
-          .borderWidth('0.0625em')
-          .borderColor('_border')}
+        css={css({
+          height: '18em',
+          marginBlock: '_medium',
+          borderStyle: 'solid',
+          borderWidth: '0.0625em',
+          borderColor: '_border',
+        })}
       >
         <Sidebar header="导航示例" aria-label="演示导航">
           <Menu
             activeKey="overview"
             items={[
-              { key: 'overview', label: '概览', href: '#section-one', icon: Search },
+              {
+                key: 'overview',
+                label: '概览',
+                href: '#section-one',
+                icon: Search,
+              },
               {
                 key: 'settings',
                 label: '设置',
                 icon: Search,
                 children: [
-                  { key: 'profile', label: '个人资料', href: '#profile' },
-                  { key: 'team', label: '团队设置', href: '#team' },
+                  {
+                    key: 'profile',
+                    label: '个人资料',
+                    href: '#profile',
+                  },
+                  {
+                    key: 'team',
+                    label: '团队设置',
+                    href: '#team',
+                  },
                 ],
               },
-              { key: 'separator', type: 'divider' },
-              { key: 'disabled', label: '暂不可用', disabled: true },
+              {
+                key: 'separator',
+                type: 'divider',
+              },
+              {
+                key: 'disabled',
+                label: '暂不可用',
+                disabled: true,
+              },
             ]}
           />
-          <input aria-label="侧栏草稿" placeholder="跨断点保留内容" />
+          <_input aria-label="侧栏草稿" placeholder="跨断点保留内容" />
         </Sidebar>
-        <div class={s.padding('_large')}>侧边导航在窄屏转为抽屉，内容实例保持不变。</div>
+        <_div
+          css={css({
+            padding: '_large',
+          })}
+        >
+          侧边导航在窄屏转为抽屉，内容实例保持不变。
+        </_div>
       </Flex>
-      <Flex gap="_small" class={s.marginBlock('_medium')}>
+      <Flex
+        css={css({
+          marginBlock: '_medium',
+        })}
+        gap="_small"
+      >
         <Popover label="快捷设置" trigger={(props) => <Button {...props}>打开浮层</Button>}>
-          <input aria-label="浮层输入" />
+          <_input aria-label="浮层输入" />
           <Popover label="子浮层" trigger={(props) => <Button {...props}>打开子浮层</Button>}>
             <Button>子层操作</Button>
           </Popover>
@@ -408,12 +554,18 @@ const Demo = _component(() => {
         </Button>
       </Flex>
       <Drawer open={drawer} title="工作区设置">
-        <Sidebar media="" showToggle={false} class={s.height('5em')}>
+        <Sidebar
+          css={css({
+            height: '5em',
+          })}
+          media=""
+          showToggle={false}
+        >
           <Popover label="内联侧栏浮层" trigger={(props) => <Button {...props}>侧栏内浮层</Button>}>
             <Button>侧栏浮层操作</Button>
           </Popover>
         </Sidebar>
-        <input aria-label="抽屉输入" />
+        <_input aria-label="抽屉输入" />
         <Popover label="抽屉中的浮层" trigger={(props) => <Button {...props}>抽屉内浮层</Button>}>
           <Button>浮层内动作</Button>
         </Popover>
@@ -425,9 +577,15 @@ const Demo = _component(() => {
           打开第二层抽屉
         </Button>
         <Drawer open={secondDrawer} title="第二层">
-          <input aria-label="第二层输入" />
+          <_input aria-label="第二层输入" />
         </Drawer>
-        <div class={s.height('60em')}>可滚动的设置内容</div>
+        <_div
+          css={css({
+            height: '60em',
+          })}
+        >
+          可滚动的设置内容
+        </_div>
       </Drawer>
       <Button
         onClick={() => {
@@ -437,34 +595,65 @@ const Demo = _component(() => {
         切换检查面板
       </Button>
       <Split
+        css={css({
+          height: '25em',
+          padding: '1em',
+          borderStyle: 'solid',
+          borderWidth: '0.0625em',
+          borderColor: '_border',
+        })}
         sizes={splitSizes}
         data-testid="split"
-        class={s
-          .height('25em')
-          .padding('1em')
-          .borderStyle('solid')
-          .borderWidth('0.0625em')
-          .borderColor('_border')}
       >
         <SplitPane name="navigation" label="目录" min="8em" collapsible>
           <Anchor
             items={[
-              { href: '#section-one', label: '概览' },
-              { href: '#section-two', label: '详细信息' },
+              {
+                href: '#section-one',
+                label: '概览',
+              },
+              {
+                href: '#section-two',
+                label: '详细信息',
+              },
             ]}
             target={() => splitScroll.value ?? undefined}
           />
         </SplitPane>
         <SplitPane name="content" min="12em">
           <Scrollbar viewportRef={splitScroll} height="100%" aria-label="工作区内容">
-            <Affix class={s.backgroundColor('_surface').padding('1em')}>固定工具栏</Affix>
-            <section id="section-one" class={s.padding('1em').minHeight('18em')}>
+            <Affix
+              css={css({
+                backgroundColor: '_surface',
+                padding: '1em',
+              })}
+            >
+              固定工具栏
+            </Affix>
+            <_section
+              css={css({
+                padding: '1em',
+                minHeight: '18em',
+              })}
+              id="section-one"
+            >
               概览内容，当前分配 {Math.round(splitSizes.value.content ?? 0)}%
-            </section>
-            <section id="section-two" class={s.padding('1em').minHeight('25em')}>
+            </_section>
+            <_section
+              css={css({
+                padding: '1em',
+                minHeight: '25em',
+              })}
+              id="section-two"
+            >
               详细信息
-            </section>
-            <BackTop threshold={100} class={s.insetInlineEnd('3em')} />
+            </_section>
+            <BackTop
+              css={css({
+                insetInlineEnd: '3em',
+              })}
+              threshold={100}
+            />
           </Scrollbar>
         </SplitPane>
         {showInspector.value && (
@@ -473,7 +662,7 @@ const Demo = _component(() => {
           </SplitPane>
         )}
       </Split>
-    </main>
+    </_main>
   );
 });
 const App = _component(() => (

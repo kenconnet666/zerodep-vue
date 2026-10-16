@@ -1,9 +1,8 @@
-import { _component, bx, cx } from '@zerodep-vue/core';
 import type { CssValue } from '@zerodep-vue/core';
+import { _component } from '@zerodep-vue/core';
 import { useCss } from '../config/Provider.tsx';
 import type { ElementProps, LayoutTag } from '../config/props.ts';
 import type { UiTheme } from '../config/theme/types.ts';
-
 export interface GridItemProps extends ElementProps {
   as?: LayoutTag;
   /** 列位置或跨度，例如 2 / 4、span 2。 */
@@ -24,23 +23,24 @@ export const GridItem = _component(
     area,
     align,
     justify,
-    class: className,
+    css: cssProp,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: GridItemProps) => {
-    const s = useCss();
-    const style = s
-      .minWidth(0)
-      .minHeight(0)
-      .gridArea(bx(area))
-      .gridColumn(bx(column))
-      .gridRow(bx(row))
-      .alignSelf(bx(align))
-      .justifySelf(bx(justify));
+    const css = useCss();
+    const style = css(() => ({
+      minWidth: 0,
+      minHeight: 0,
+      gridArea: area,
+      gridColumn: column,
+      gridRow: row,
+      alignSelf: align,
+      justifySelf: justify,
+    }));
     return (
-      <Tag {...rest} class={cx(style, className)}>
+      <Tag css={[style, cssProp]} {...rest}>
         {children}
       </Tag>
     );

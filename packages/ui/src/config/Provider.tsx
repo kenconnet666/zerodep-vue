@@ -1,44 +1,45 @@
-import { _component, createCssContext } from '@zerodep-vue/core';
-import type { CssInput } from '@zerodep-vue/core';
-import { hasInjectionContext, inject, provide, reactive, readonly, unref, watchEffect } from 'vue';
+import type { Props } from '@zerodep-vue/core';
+import { _component, _div, createCssContext } from '@zerodep-vue/core';
 import type {
   ComputedRef,
   DeepReadonly,
-  HTMLAttributes,
   InjectionKey,
   Ref,
   UnwrapNestedRefs,
   VNodeChild,
 } from 'vue';
-import { zhCN } from './lang/zhCN.ts';
+import { hasInjectionContext, inject, provide, reactive, readonly, unref, watchEffect } from 'vue';
 import type { UiLanguage, UiLanguageInput } from './lang/types.ts';
+import { zhCN } from './lang/zhCN.ts';
 import { LightTheme } from './theme/LightTheme.ts';
 import type { UiTheme, UiThemeInput } from './theme/types.ts';
-import type { DataAttributes } from './props.ts';
-
-export interface ProviderProps
-  extends DataAttributes, /* @vue-ignore */ Omit<HTMLAttributes, 'class' | 'lang'> {
-  /** 完整主题或局部分组，支持 Ref/computed；只覆盖写出的字段，undefined 恢复继承。 */
-  theme?:
-    | UiThemeInput
-    | Ref<UiThemeInput | undefined>
-    | ComputedRef<UiThemeInput | undefined>
-    | undefined;
-  /** 文案、locale 和 timeZone 逐字段覆盖，支持 Ref/computed；undefined 恢复继承。 */
-  lang?:
-    | UiLanguageInput
-    | Ref<UiLanguageInput | undefined>
-    | ComputedRef<UiLanguageInput | undefined>
-    | undefined;
-  /** Provider 根 div 的样式，支持普通类名和链式 CSS。 */
-  class?: CssInput;
-  /** Provider 根 div 内的内容，继承本层主题和语言。 */
-  children?: VNodeChild;
-}
+export type ProviderProps = Props<
+  typeof _div,
+  {
+    /** 完整主题或局部分组，支持 Ref/computed；只覆盖写出的字段，undefined 恢复继承。 */
+    theme?:
+      | UiThemeInput
+      | Ref<UiThemeInput | undefined>
+      | ComputedRef<UiThemeInput | undefined>
+      | undefined;
+    /** 文案、locale 和 timeZone 逐字段覆盖，支持 Ref/computed；undefined 恢复继承。 */
+    lang?:
+      | UiLanguageInput
+      | Ref<UiLanguageInput | undefined>
+      | ComputedRef<UiLanguageInput | undefined>
+      | undefined;
+    /** Provider 根 div 内的内容，继承本层主题和语言。 */
+    children?: VNodeChild;
+  }
+>;
 
 // 默认配置只读共享；各 Provider 的覆盖和响应式同步由各自的组件实例持有。
 const themeContext = createCssContext<UiTheme>(readonly(reactive(new LightTheme())));
-const defaultLanguage: UiLanguage = readonly(reactive({ ...zhCN }));
+const defaultLanguage: UiLanguage = readonly(
+  reactive({
+    ...zhCN,
+  }),
+);
 const languageKey: InjectionKey<UiLanguage> = Symbol('UI language');
 
 /** 取得当前区域的样式作者，在后代 setup 中使用 const s = useCss()。 */
@@ -62,7 +63,9 @@ export const Provider = _component(
     const parentLang = useLang();
     // LightTheme 提供完整结构和 core 所需的主题身份；下面立即用父级值和本层覆盖同步所有字段。
     const theme = reactive(new LightTheme());
-    const lang = reactive({ ...parentLang });
+    const lang = reactive({
+      ...parentLang,
+    });
     watchEffect(
       () => {
         const ownTheme = reactive<UiThemeInput>(unref(themeSource) ?? {});
@@ -84,10 +87,12 @@ export const Provider = _component(
         }
       },
       // 维持 theme、属性组和 lang 的对象身份，来源更新后直接读取就能取得新值。
-      { flush: 'sync' },
+      {
+        flush: 'sync',
+      },
     );
     themeContext.provideTheme(readonly(theme));
     provide(languageKey, readonly(lang));
-    return <div {...rest}>{children}</div>;
+    return <_div {...rest}>{children}</_div>;
   },
 );

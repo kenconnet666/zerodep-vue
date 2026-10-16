@@ -1,10 +1,9 @@
-import { computed, watchPostEffect } from 'vue';
+import type { CssFactory } from '@zerodep-vue/core';
 import type { Ref } from 'vue';
-import type { Css } from '@zerodep-vue/core';
+import { computed, watchPostEffect } from 'vue';
 import type { UiTheme } from '../config/theme/types.ts';
-import { useFormReset } from './form-reset.ts';
 import type { Callback } from '../interaction/callbacks.ts';
-
+import { useFormReset } from './form-reset.ts';
 export interface TextValueProps {
   /** 文本内容由 value 管理，不接受子树替换入口。 */
   children?: never;
@@ -72,24 +71,31 @@ export function useTextControl<Element extends HTMLInputElement | HTMLTextAreaEl
       model.value = '';
       options.commit('');
       options.clear();
-      element?.focus({ preventScroll: true });
+      element?.focus({
+        preventScroll: true,
+      });
     },
   };
 }
 
 /** 文本节点的共同重置样式；几何和后续覆盖由具体 input/textarea 补充。 */
-export function textControlStyle(s: Css<UiTheme>) {
-  return s
-    .font('inherit')
-    .lineHeight('inherit')
-    .color('inherit')
-    .minWidth(0)
-    .width('100%')
-    .flex('1 1 auto')
-    .padding(0)
-    .border(0)
-    .outline('none')
-    .backgroundColor('transparent')
-    .select('&::placeholder', s.color('_textPlaceholder'))
-    .select('&:disabled', s.cursor('not-allowed'));
+export function textControlStyle(css: CssFactory<UiTheme>) {
+  return css({
+    font: 'inherit',
+    lineHeight: 'inherit',
+    color: 'inherit',
+    minWidth: 0,
+    width: '100%',
+    flex: '1 1 auto',
+    padding: 0,
+    border: 0,
+    outline: 'none',
+    backgroundColor: 'transparent',
+    '&::placeholder': {
+      color: '_textPlaceholder',
+    },
+    '&:disabled': {
+      cursor: 'not-allowed',
+    },
+  });
 }

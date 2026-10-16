@@ -40,26 +40,6 @@ module.exports = function init({ typescript: ts }) {
         ts.isSatisfiesExpression(node) ||
         ts.isNonNullExpression(node);
 
-      // 只跟随真实导入和 const 别名；同名函数或声明为 typeof bx 的业务函数不算 bx。
-      function isBindingCall(checker, expression, valuesFile, seen = new Set()) {
-        if (transparent(expression))
-          return isBindingCall(checker, expression.expression, valuesFile, seen);
-        let symbol = checker.getSymbolAtLocation(expression);
-        if (!symbol || seen.has(symbol)) return false;
-        seen.add(symbol);
-        if (symbol.flags & ts.SymbolFlags.Alias) symbol = checker.getAliasedSymbol(symbol);
-        return (symbol.declarations ?? []).some((declaration) => {
-          if (ts.isFunctionDeclaration(declaration))
-            return declaration.name?.text === 'bx' && declaration.getSourceFile() === valuesFile;
-          return (
-            ts.isVariableDeclaration(declaration) &&
-            declaration.initializer &&
-            declaration.parent.flags & ts.NodeFlags.Const &&
-            isBindingCall(checker, declaration.initializer, valuesFile, seen)
-          );
-        });
-      }
-
       // 两种增强共用命中位置的遍历；各自决定节点边界，避免指令与字面量的定位逐渐分叉。
       function nodeAt(source, position, matches) {
         let selected;
@@ -72,6 +52,68 @@ module.exports = function init({ typescript: ts }) {
         return selected;
       }
 
+      // 语义身份来自生成声明或 CssFactory 签名，不按变量名 css 或普通对象键猜测。
+      function cssContext(checker, type, seen = new Set()) {
+        if (!type || seen.has(type)) return;
+        seen.add(type);
+        const symbol = type.getSymbol?.();
+        const declaration = symbol?.declarations?.find(
+          (node) =>
+            ts.isInterfaceDeclaration(node) &&
+            node.name.text === 'CssDeclarations' &&
+            /\/css\/generated\/declarations(\.d)?\.ts$/.test(
+              node.getSourceFile().fileName.replaceAll('\\', '/'),
+            ),
+        );
+        if (declaration)
+          return {
+            origin: declaration.getSourceFile().fileName,
+            theme: checker.getTypeArguments(type)[0],
+          };
+        for (const part of type.types ?? []) {
+          const found = cssContext(checker, part, seen);
+          if (found) return found;
+        }
+        const apparent = checker.getApparentType(type);
+        if (apparent !== type) return cssContext(checker, apparent, seen);
+      }
+      function factoryContext(checker, object) {
+        let node = object;
+        while (node.parent) {
+          const parent = node.parent;
+          if (ts.isCallExpression(parent) && parent.arguments.includes(node)) {
+            const declaration = checker.getResolvedSignature(parent)?.declaration;
+            const owner = declaration?.parent;
+            if (
+              !owner ||
+              !ts.isInterfaceDeclaration(owner) ||
+              owner.name.text !== 'CssFactory' ||
+              !/\/css\/object-types(\.d)?\.ts$/.test(
+                owner.getSourceFile().fileName.replaceAll('\\', '/'),
+              )
+            )
+              return;
+            const type = checker.getApparentType(checker.getTypeAtLocation(parent.expression));
+            return {
+              origin: owner
+                .getSourceFile()
+                .fileName.replace(/object-types(\.d)?\.ts$/, 'generated/declarations$1.ts'),
+              theme: checker.getTypeArguments(type)[0],
+            };
+          }
+          if (
+            (transparent(parent) && parent.expression === node) ||
+            (ts.isPropertyAssignment(parent) && parent.initializer === node) ||
+            (ts.isConditionalExpression(parent) &&
+              (parent.whenTrue === node || parent.whenFalse === node)) ||
+            (ts.isArrowFunction(parent) && parent.body === node) ||
+            ts.isArrayLiteralExpression(parent) ||
+            ts.isObjectLiteralExpression(parent)
+          )
+            node = parent;
+          else return;
+        }
+      }
       function context(fileName, position) {
         const program = service.getProgram();
         const source = program?.getSourceFile(fileName);
@@ -84,93 +126,74 @@ module.exports = function init({ typescript: ts }) {
             (position < node.end || node.isUnterminated),
         );
         if (!literal || position <= literal.getStart(source)) return;
-        // 包装表达式和条件的结果分支仍属于同一属性；条件本身、任意函数和字符串拼接不属于。
         let value = literal;
-        const calls = [];
         while (value.parent) {
           const parent = value.parent;
-          if (transparent(parent) && parent.expression === value) value = parent;
-          else if (
-            ts.isConditionalExpression(parent) &&
-            (parent.whenTrue === value || parent.whenFalse === value)
-          )
-            value = parent;
-          else if (
-            ts.isCallExpression(parent) &&
-            parent.arguments.length === 1 &&
-            parent.arguments[0] === value
-          ) {
-            calls.push(parent.expression);
-            value = parent;
-          } else break;
-        }
-        const checker = program.getTypeChecker();
-        // 由真实方法声明定位属性，不按变量名 s 或方法文本猜测，普通业务方法不受影响。
-        for (const call of calls) {
-          const declaration = checker.getResolvedSignature(call.parent)?.declaration;
-          const property = declaration?.name?.text;
-          if (!property) continue;
-          const origin = declaration.getSourceFile().fileName.replaceAll('\\', '/');
-          if (!/\/generated\/author(\.d)?\.ts$/.test(origin)) continue;
-          const bindingFile = program.getSourceFile(
-            origin.replace(/generated\/author(\.d)?\.ts$/, 'bindings$1.ts'),
-          );
           if (
-            calls
-              .slice(0, calls.indexOf(call))
-              .some((item) => !isBindingCall(checker, item, bindingFile))
+            (transparent(parent) && parent.expression === value) ||
+            (ts.isConditionalExpression(parent) &&
+              (parent.whenTrue === value || parent.whenFalse === value))
           )
-            continue;
-          const valuesFile = program.getSourceFile(
-            origin.replace(/author(\.d)?\.ts$/, 'literal-values$1.ts'),
-          );
-          const dictionary = valuesFile?.statements.find(
-            (node) => ts.isInterfaceDeclaration(node) && node.name.text === 'PropertyValues',
-          );
-          const member = dictionary?.members.find(
-            (node) => node.name?.getText(valuesFile) === property,
-          );
-          const keyType =
-            member?.type &&
-            (ts.isUnionTypeNode(member.type) ? member.type.types : [member.type]).find(
-              (node) => ts.isTypeOperatorNode(node) && node.operator === ts.SyntaxKind.KeyOfKeyword,
-            );
-          if (!keyType) continue;
-          const values = checker.getTypeFromTypeNode(keyType.type);
-          const themeMembers = new Map();
-          const receiver =
-            (ts.isPropertyAccessExpression(call) || ts.isElementAccessExpression(call)) &&
-            call.expression;
-          // 私有字段的类型不会进入 .d.ts；直接读取公开 Css<T> 的主题参数。
-          const author = receiver && checker.getApparentType(checker.getTypeAtLocation(receiver));
-          const theme = author && checker.getTypeArguments(author)[0];
-          if (theme) {
-            const properties = [property];
-            if (
-              property !== 'color' &&
-              checker.getPropertyOfType(values, 'red') &&
-              checker.getPropertyOfType(values, 'blue')
-            )
-              properties.push('color');
-            for (const name of properties) {
-              const group = checker.getTypeOfPropertyOfType(theme, name);
-              if (!group) continue;
-              for (const symbol of checker.getPropertiesOfType(group))
-                if (symbol.name.startsWith('_') && !themeMembers.has(symbol.name))
-                  themeMembers.set(symbol.name, symbol);
-            }
-          }
-          return {
-            checker,
-            literal,
-            values,
-            themeMembers,
-            span: {
-              start: literal.getStart(source) + 1,
-              length: Math.max(0, literal.getWidth(source) - (literal.isUnterminated ? 1 : 2)),
-            },
-          };
+            value = parent;
+          else break;
         }
+        const assignment = value.parent;
+        if (
+          !ts.isPropertyAssignment(assignment) ||
+          assignment.initializer !== value ||
+          !ts.isObjectLiteralExpression(assignment.parent) ||
+          ts.isComputedPropertyName(assignment.name)
+        )
+          return;
+        const property = assignment.name.text;
+        const checker = program.getTypeChecker();
+        const found =
+          cssContext(checker, checker.getContextualType(assignment.parent)) ??
+          factoryContext(checker, assignment.parent);
+        if (!found) return;
+        const valuesFile = program.getSourceFile(
+          found.origin.replace(/declarations(\.d)?\.ts$/, 'literal-values$1.ts'),
+        );
+        const dictionary = valuesFile?.statements.find(
+          (node) => ts.isInterfaceDeclaration(node) && node.name.text === 'PropertyValues',
+        );
+        const member = dictionary?.members.find(
+          (node) => node.name?.getText(valuesFile) === property,
+        );
+        const keyType =
+          member?.type &&
+          (ts.isUnionTypeNode(member.type) ? member.type.types : [member.type]).find(
+            (node) => ts.isTypeOperatorNode(node) && node.operator === ts.SyntaxKind.KeyOfKeyword,
+          );
+        if (!keyType) return;
+        const values = checker.getTypeFromTypeNode(keyType.type);
+        const themeMembers = new Map();
+        if (found.theme) {
+          const properties = [property];
+          if (
+            property !== 'color' &&
+            checker.getPropertyOfType(values, 'red') &&
+            checker.getPropertyOfType(values, 'blue')
+          )
+            properties.push('color');
+          for (const name of properties) {
+            const group = checker.getTypeOfPropertyOfType(found.theme, name);
+            if (!group) continue;
+            for (const symbol of checker.getPropertiesOfType(group))
+              if (symbol.name.startsWith('_') && !themeMembers.has(symbol.name))
+                themeMembers.set(symbol.name, symbol);
+          }
+        }
+        return {
+          checker,
+          literal,
+          values,
+          themeMembers,
+          span: {
+            start: literal.getStart(source) + 1,
+            length: Math.max(0, literal.getWidth(source) - (literal.isUnterminated ? 1 : 2)),
+          },
+        };
       }
 
       function keyword(fileName, position, name) {
@@ -289,7 +312,7 @@ module.exports = function init({ typescript: ts }) {
         }
         const ctx = context(fileName, position);
         if (!ctx) return prior;
-        // bx 的泛型和 as const 等写法可能没有原生候选；仅在确认的 CSS 上下文补齐属性值。
+        // 泛型对象和 as const 等写法可能没有原生候选；仅在确认的 CSS 上下文补齐属性值。
         const names = new Set(prior?.entries.map((entry) => entry.name));
         const entries = [
           ...ctx.checker.getPropertiesOfType(ctx.values),

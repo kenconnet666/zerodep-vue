@@ -1,12 +1,9 @@
-import { _component, bx, cx } from '@zerodep-vue/core';
-import type { CssInput, CssValue } from '@zerodep-vue/core';
-import type { StyleValue, VNodeChild } from 'vue';
+import type { CssInput, CssValue, Slot } from '@zerodep-vue/core';
+import { _component, _label } from '@zerodep-vue/core';
+import type { HTMLAttributes, StyleValue, VNodeChild } from 'vue';
 import { useCss } from '../config/Provider.tsx';
-import { slotRest } from '../config/props.ts';
 import type { UiTheme } from '../config/theme/types.ts';
 import { Text } from '../display/Text.tsx';
-import type { TextProps } from '../display/Text.tsx';
-
 export interface ChoiceControlAppearance {
   /** 默认继承字号；标记和间距使用 em 随之缩放。 */
   size?: CssValue<'fontSize', UiTheme>;
@@ -17,15 +14,15 @@ export interface ChoiceControlAppearance {
   /** 状态边框；error 同时输出 aria-invalid。 */
   status?: 'error' | 'warning' | 'success';
   /** 外层 label 样式；原生输入和标记样式通过对应 slotX 提供。 */
-  class?: CssInput;
+  class?: HTMLAttributes['class'];
+  css?: CssInput;
   style?: StyleValue;
   children?: VNodeChild;
   innerHTML?: never;
   textContent?: never;
   /** 标签复用 Text，内容仍由组件 children 管理。 */
-  slotLabel?: Omit<TextProps, 'children'>;
+  slotLabel?: Slot<typeof Text>;
 }
-
 interface ChoiceControlFrameProps extends ChoiceControlAppearance {
   readOnly: boolean;
   input: VNodeChild;
@@ -38,6 +35,7 @@ export const ChoiceControlFrame = _component(
     size,
     color,
     class: className,
+    css: cssProp,
     style,
     readOnly,
     input,
@@ -45,51 +43,59 @@ export const ChoiceControlFrame = _component(
     slotLabel,
     children,
   }: ChoiceControlFrameProps) => {
-    const s = useCss();
+    const css = useCss();
     return (
-      <label
+      <_label
+        css={[
+          css(() => ({
+            position: 'relative',
+            display: 'inline-flex',
+            alignItems: 'center',
+            verticalAlign: 'middle',
+            gap: '0.5em',
+            minWidth: 0,
+            fontSize: size,
+            lineHeight: '_normal',
+            color: color === undefined ? '_textPrimary' : color,
+            cursor: readOnly ? 'default' : 'pointer',
+            '&:has(> input:disabled)': {
+              cursor: 'not-allowed',
+              color: '_textDisabled',
+            },
+            '&:has(> input:disabled) > [data-zv-choice-indicator]': {
+              opacity: '_disabled',
+            },
+            '&:has(> input:focus-visible) > [data-zv-choice-indicator]': {
+              outlineStyle: 'solid',
+              outlineWidth: '0.125em',
+              outlineOffset: '0.125em',
+              outlineColor: '_focusRing',
+            },
+            '@media (forced-colors: active)': {
+              '&:has(> input:focus-visible) > [data-zv-choice-indicator]': {
+                outlineColor: 'Highlight',
+              },
+            },
+          })),
+          cssProp,
+        ]}
         data-zv-choice=""
+        class={className}
         style={style}
-        class={cx(
-          s
-            .position('relative')
-            .display('inline-flex')
-            .alignItems('center')
-            .verticalAlign('middle')
-            .gap('0.5em')
-            .minWidth(0)
-            .fontSize(bx(size))
-            .lineHeight('_normal')
-            .color(bx(color === undefined ? '_textPrimary' : color))
-            .cursor(bx(readOnly ? 'default' : 'pointer'))
-            .select('&:has(> input:disabled)', s.cursor('not-allowed').color('_textDisabled'))
-            .select('&:has(> input:disabled) > [data-zv-choice-indicator]', s.opacity('_disabled'))
-            .select(
-              '&:has(> input:focus-visible) > [data-zv-choice-indicator]',
-              s
-                .outlineStyle('solid')
-                .outlineWidth('0.125em')
-                .outlineOffset('0.125em')
-                .outlineColor('_focusRing'),
-            )
-            .select(
-              '@media (forced-colors: active)',
-              s.select(
-                '&:has(> input:focus-visible) > [data-zv-choice-indicator]',
-                s.outlineColor('Highlight'),
-              ),
-            ),
-          className,
-        )}
       >
         {input}
         {indicator}
         {children != null && (
-          <Text {...slotRest(slotLabel)} class={cx(s.minWidth(0), slotLabel?.class)}>
+          <Text
+            css={css({
+              minWidth: 0,
+            })}
+            {...slotLabel}
+          >
             {children}
           </Text>
         )}
-      </label>
+      </_label>
     );
   },
 );

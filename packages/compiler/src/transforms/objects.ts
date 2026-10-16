@@ -1,7 +1,7 @@
 import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
 import { isHTMLTag, isSVGTag } from '@vue/shared';
-import { coreModule, importedName, propertyName, runtimeImports } from './bindings.ts';
+import { coreModule, cssCallKind, importedName, propertyName, runtimeImports } from './bindings.ts';
 
 /** 在组件参数重写前捕获 CSS 叶子；表达式仍在原位置求值，不能改成隐式 getter。 */
 export function transformObjects(program: NodePath<t.Program>): void {
@@ -9,6 +9,7 @@ export function transformObjects(program: NodePath<t.Program>): void {
   const input = (node: t.Expression): t.Expression => {
     if (t.isObjectExpression(node)) {
       let complete = true;
+      const dynamic: t.StringLiteral[] = [];
       for (const property of node.properties) {
         if (!t.isObjectProperty(property) || property.computed || !t.isExpression(property.value)) {
           complete = false;
@@ -26,12 +27,26 @@ export function transformObjects(program: NodePath<t.Program>): void {
             else complete = false;
           }
         } else if (key && /^[:[&@]/.test(key)) property.value = input(property.value);
-        else if (!t.isLiteral(property.value)) {
-          property.shorthand = false;
-          property.value = t.callExpression(helper('valueBinding'), [property.value]);
-        }
+        else if (
+          key &&
+          !(
+            t.isStringLiteral(property.value) ||
+            t.isNumericLiteral(property.value) ||
+            t.isNullLiteral(property.value) ||
+            t.isBooleanLiteral(property.value) ||
+            (t.isTemplateLiteral(property.value) && property.value.expressions.length === 0)
+          )
+        )
+          dynamic.push(t.stringLiteral(key));
       }
-      return complete ? t.callExpression(helper('staticCss'), [node]) : node;
+      // 不完整对象也保留来源身份，但所有值保守绑定；不读取 spread/getter 或修改原对象。
+      return t.inherits(
+        t.callExpression(helper('staticCss'), [
+          node,
+          ...(!complete ? [t.nullLiteral()] : dynamic.length ? [t.arrayExpression(dynamic)] : []),
+        ]),
+        node,
+      );
     }
     if (t.isArrayExpression(node)) {
       node.elements = node.elements.map((item) => (t.isExpression(item) ? input(item) : item));
@@ -52,6 +67,13 @@ export function transformObjects(program: NodePath<t.Program>): void {
     return node;
   };
   program.traverse({
+    CallExpression(path) {
+      // 真实主题工厂与 JSX 字面量共享元数据分析；同名业务函数不接管。
+      if (cssCallKind(path.scope, path.node.callee) === 'css') {
+        const source = path.node.arguments[0];
+        if (t.isExpression(source)) path.node.arguments[0] = input(source);
+      }
+    },
     JSXElement(path) {
       const name = path.node.openingElement.name;
       const expression = (
@@ -87,6 +109,6 @@ export function transformObjects(program: NodePath<t.Program>): void {
         path.node.value.expression = input(path.node.value.expression);
     },
   });
-  // 替换叶子后重新登记参数引用；否则组件解构重写会沿旧 NodePath 丢弃 valueBinding。
+  // 包装对象后重新登记参数引用，组件参数改写继续沿当前 AST 读取普通字段值。
   program.scope.crawl();
 }

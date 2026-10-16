@@ -1,7 +1,7 @@
 import type { NodePath } from '@babel/core';
 import * as t from '@babel/types';
-import { cssCallKind } from './hmr.ts';
-import { coreModule, importedName, runtimeImports } from './bindings.ts';
+
+import { coreModule, cssCallKind, importedName, runtimeImports } from './bindings.ts';
 
 /** 只在 Vite 客户端开发转换中调用；位置常量与包装不进入生产及 SSR 输出。 */
 export function instrumentDevtools(program: NodePath<t.Program>, filename: string): void {
@@ -69,14 +69,10 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
             }
           return;
         }
-        let kind = cssCallKind(call.scope, call.node.callee);
-        let point: t.Node = call.node;
-        if (!kind && importedName(call.scope, call.node.callee, coreModule) === 'binding') {
-          kind = 'binding';
-          const getter = call.node.arguments[0];
-          if (t.isArrowFunctionExpression(getter)) point = getter.body;
-        }
-        if (!kind || !['class', 'keyframes', 'binding', 'global'].includes(kind)) return;
+        const object = importedName(call.scope, call.node.callee, coreModule) === 'staticCss';
+        const kind = object ? 'css' : cssCallKind(call.scope, call.node.callee);
+        const point = call.node;
+        if (!kind || !['css', 'keyframes', 'global'].includes(kind)) return;
         call.node.extra = { ...call.node.extra, zerodepTraced: true };
         if (kind === 'global') {
           const value = call.get('arguments')[1];
@@ -95,7 +91,7 @@ export function instrumentDevtools(program: NodePath<t.Program>, filename: strin
         ]);
         wrapped.extra = {
           zerodepTraced: true,
-          ...(kind === 'binding' ? {} : { zerodepCssKind: kind }),
+          ...(object ? {} : { zerodepCssKind: kind }),
         };
         call.replaceWith(wrapped);
         call.skip();

@@ -3,14 +3,15 @@ import test from 'node:test';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
+import { createRequire } from 'node:module';
 
-test('line-clamp vertical compatibility resolves without deprecation while obsolete layout values still warn', () => {
+test('line-clamp object declarations retain supported vertical and deprecated layout documentation', () => {
   const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..');
   const file = resolve(root, 'packages/core/test/css/__compatibility_probe__.ts');
   const source = `import { createCssContext, SystemKeywords } from '../../src/index.ts';
-const s = createCssContext(new SystemKeywords()).useCss();
-s.WebkitBoxOrient('vertical');
-s.WebkitBoxOrient('horizontal');
+const css = createCssContext(new SystemKeywords()).useCss();
+css({ WebkitBoxOrient: 'vertical' });
+css({ WebkitBoxOrient: 'horizontal' });
 `;
   const config = ts.readConfigFile(resolve(root, 'tsconfig.base.json'), ts.sys.readFile);
   const { options } = ts.parseJsonConfigFileContent(config.config, ts.sys, root);
@@ -34,14 +35,24 @@ s.WebkitBoxOrient('horizontal');
   try {
     assert.deepEqual(service.getSyntacticDiagnostics(file), []);
     assert.deepEqual(service.getSemanticDiagnostics(file), []);
-    const deprecated = service
-      .getSuggestionDiagnostics(file)
-      .filter(({ code }) => code === 6385 || code === 6387);
-    assert.equal(deprecated.length, 1);
-    assert(deprecated[0].start >= source.indexOf("s.WebkitBoxOrient('horizontal')"));
-    const info = service.getQuickInfoAtPosition(file, source.indexOf('WebkitBoxOrient'));
+    const plugin = createRequire(import.meta.url)('../../../compiler/src/editor/plugin.cjs');
+    const enhanced = plugin({ typescript: ts }).create({ languageService: service });
+    const position = source.indexOf('WebkitBoxOrient');
+    const info = enhanced.getCompletionEntryDetails(
+      file,
+      position,
+      'WebkitBoxOrient',
+      {},
+      undefined,
+      {},
+    );
     assert(info);
     assert(!info.tags?.some(({ name }) => name === 'deprecated'));
+    assert(ts.displayPartsToString(info.documentation).includes('多行省略'));
+    const vertical = enhanced.getQuickInfoAtPosition(file, source.indexOf("'vertical'") + 2);
+    const horizontal = enhanced.getQuickInfoAtPosition(file, source.indexOf("'horizontal'") + 2);
+    assert(!vertical.tags?.some(({ name }) => name === 'deprecated'));
+    assert(horizontal.tags?.some(({ name }) => name === 'deprecated'));
   } finally {
     service.dispose();
   }

@@ -1,44 +1,59 @@
-import { _component, cx } from '@zerodep-vue/core';
+import type { Props } from '@zerodep-vue/core';
+import { _component, _span } from '@zerodep-vue/core';
 import { onMounted, onScopeDispose, shallowRef, watchEffect } from 'vue';
-import type { CssInput } from '@zerodep-vue/core';
 import { useCss } from '../config/Provider.tsx';
 import { useMediaQuery } from '../interaction/media.ts';
-
-export interface RippleProps {
-  /** 关闭效果并立即清理正在播放的波纹。 */
-  disabled?: boolean;
-  /** 覆盖反馈颜色、不透明度和动效时长；默认使用父级文字颜色。 */
-  class?: CssInput;
-}
+export type RippleProps = Props<
+  typeof _span,
+  {
+    /** 关闭效果并立即清理正在播放的波纹。 */
+    disabled?: boolean;
+    /** 波纹内容由组件管理。 */
+    children?: never;
+    innerHTML?: never;
+    textContent?: never;
+    'aria-hidden'?: never;
+    'data-zv-ripple'?: never;
+  }
+>;
 
 /**
  * 放在 position:relative 的原生交互元素内，监听父元素的指针和键盘激活。
  * 仅负责装饰反馈，不改变事件默认行为、语义、焦点或布局尺寸。
  */
-export const Ripple = _component(({ disabled = false, class: className }: RippleProps) => {
-  const s = useCss();
+export const Ripple = _component(({ disabled = false, css: cssProp, ...rest }: RippleProps) => {
+  const css = useCss();
   const root = shallowRef<HTMLSpanElement>();
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)');
-  const waves = new Map<number | 'keyboard', { release(): void; dispose(): void }>();
-  const style = s
-    .position('absolute')
-    .inset(0)
-    .borderRadius('inherit')
-    .overflow('hidden')
-    .pointerEvents('none')
-    .opacity('_ripple')
-    .transitionDuration('_slow')
-    .transitionTimingFunction('_standard')
-    .select(
-      '& > span',
-      s
-        .position('absolute')
-        .borderRadius('50%')
-        .backgroundColor('currentColor')
-        .pointerEvents('none'),
-    )
-    .select('@media (prefers-reduced-motion: reduce)', s.display('none'))
-    .select('@media (forced-colors: active)', s.display('none'));
+  const waves = new Map<
+    number | 'keyboard',
+    {
+      release(): void;
+      dispose(): void;
+    }
+  >();
+  const style = css({
+    position: 'absolute',
+    inset: 0,
+    borderRadius: 'inherit',
+    overflow: 'hidden',
+    pointerEvents: 'none',
+    opacity: '_ripple',
+    transitionDuration: '_slow',
+    transitionTimingFunction: '_standard',
+    '& > span': {
+      position: 'absolute',
+      borderRadius: '50%',
+      backgroundColor: 'currentColor',
+      pointerEvents: 'none',
+    },
+    '@media (prefers-reduced-motion: reduce)': {
+      display: 'none',
+    },
+    '@media (forced-colors: active)': {
+      display: 'none',
+    },
+  });
   function clear() {
     for (const wave of waves.values()) wave.dispose();
     waves.clear();
@@ -95,11 +110,21 @@ export const Ripple = _component(({ disabled = false, class: className }: Ripple
       const computed = view.getComputedStyle(layer);
       const time = computed.transitionDuration.split(',')[0] ?? '0s';
       const duration = Math.max(0, Number.parseFloat(time) * (time.endsWith('ms') ? 1 : 1000)) || 0;
-      const growth = node.animate([{ transform: 'scale(0)' }, { transform: 'scale(1)' }], {
-        duration,
-        easing: computed.transitionTimingFunction || 'ease-out',
-        fill: 'forwards',
-      });
+      const growth = node.animate(
+        [
+          {
+            transform: 'scale(0)',
+          },
+          {
+            transform: 'scale(1)',
+          },
+        ],
+        {
+          duration,
+          easing: computed.transitionTimingFunction || 'ease-out',
+          fill: 'forwards',
+        },
+      );
       let fading: Animation | undefined;
       let disposed = false;
       let released = false;
@@ -116,10 +141,20 @@ export const Ripple = _component(({ disabled = false, class: className }: Ripple
           void growth.finished.then(
             () => {
               if (disposed) return;
-              fading = node.animate([{ opacity: 1 }, { opacity: 0 }], {
-                duration: Math.min(180, duration),
-                fill: 'forwards',
-              });
+              fading = node.animate(
+                [
+                  {
+                    opacity: 1,
+                  },
+                  {
+                    opacity: 0,
+                  },
+                ],
+                {
+                  duration: Math.min(180, duration),
+                  fill: 'forwards',
+                },
+              );
               void fading.finished.then(
                 () => {
                   wave.dispose();
@@ -182,5 +217,5 @@ export const Ripple = _component(({ disabled = false, class: className }: Ripple
       view.removeEventListener('blur', release);
     });
   });
-  return <span ref={root} aria-hidden="true" data-zv-ripple="" class={cx(style, className)} />;
+  return <_span css={[style, cssProp]} {...rest} ref={root} aria-hidden="true" data-zv-ripple="" />;
 });

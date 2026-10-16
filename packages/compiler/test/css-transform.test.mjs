@@ -3,7 +3,6 @@ import test from 'node:test';
 import { parseAsync, transformAsync } from '@babel/core';
 import presetTypeScript from '@babel/preset-typescript';
 import { babelPlugin as plugin } from '../src/index.ts';
-
 const compile = async (source, options = {}) =>
   (
     await transformAsync(source, {
@@ -13,96 +12,81 @@ const compile = async (source, options = {}) =>
       plugins: [[plugin, options]],
       presets: [presetTypeScript],
     })
-  )?.code;
+  ).code;
 
-test('immutable helper aliases follow declaration scopes without capturing mutable or shadowed bindings', async () => {
-  const code =
-    await compile(`import {bx} from '@zerodep-vue/core'; import * as api from '@zerodep-vue/core';
-    const bind = bx as typeof bx; const chained = bind; const namespace = api;
-    const first = chained('red'); const second = namespace.bx('blue');
-    let mutable = bx; const untouched = mutable('green');
-    function shadow(chained){ return chained('black'); }
+test('factory aliases follow their declaration scope and mutable or shadowed calls stay ordinary', async () => {
+  const code = await compile(`import * as api from '@zerodep-vue/core';
+    const context = api.createCssContext(new api.SystemKeywords());
+    const {useCss: usePaint} = context; const css = usePaint(); const alias=css;
+    export const first=alias({color:'red',width:read()});
+    let mutable=css; mutable=other; export const second=mutable({color:'blue'});
+    function shadow(alias){return alias({color:'black'});}
   `);
-  assert.equal((code.match(/_binding\(\(\) => /g) ?? []).length, 2);
-  assert(code.includes("mutable('green')"));
-  assert(code.includes("chained('black')"));
-  const cycle = await compile(`import {bx} from '@zerodep-vue/core';
-    const first = second; const second = first; const result = first('red');`);
-  assert(!cycle.includes('binding as'));
-});
-
-test('bx diagnoses await and yield crossing the synchronous binding boundary', async () => {
-  for (const source of [
-    'async function paint(){ return bx(await load()); }',
-    'function* paint(){ return bx(yield "red"); }',
-    'function* paint(){ return bx(yield* ["red"]); }',
-  ]) {
-    await assert.rejects(compile(`import {bx} from '@zerodep-vue/core'; ${source}`), /ZV_BX_ASYNC/);
-  }
-  const valid = await compile(`import {bx} from '@zerodep-vue/core';
-    async function paint(){ const color = await load(); return bx(color); }
-    const color = bx((function*(){ yield 'red'; })().next().value);`);
-  await parseAsync(valid, { sourceType: 'module' });
-});
-
-test('CSS captures aliased bindings before JSX and keeps multiple template pieces', async () => {
-  const code = await compile(
-    `import { bx as bind, cx } from "@zerodep-vue/core";
-import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
-const { useCss } = createCssContext(new SystemKeywords());
-
-const s = useCss();
- const x=1,y=2; export const render=()=> <div class={s.transform(\`translate(\${bind(x)}px, \${bind(y)}px)\`)}/>;`,
+  assert.equal((code.match(/_staticCss\(/g) ?? []).length, 1);
+  assert.match(code, /\["width"\]/);
+  assert.match(code, /mutable\(\{/);
+  assert.match(code, /return alias\(\{/);
+  const cycle = await compile(
+    `import {_div} from '@zerodep-vue/core'; const first=second; const second=first; first({color:'red'});`,
   );
-  assert(code.includes('createCssVNode as'));
-  assert.equal((code.match(/_binding\(\(\) => /g) ?? []).length, 2);
-  assert(code.includes('_template'));
-  assert(!code.includes('bind(x)'));
+  assert(!cycle.includes('staticCss as'));
 });
 
-test('ordinary Vue can explicitly enable shared-style wiring, and custom pragma stays explicit', async () => {
+test('interpolation remains normal JS with one complete dynamic property value', async () => {
+  const code =
+    await compile(`import {_div,createCssContext,SystemKeywords} from '@zerodep-vue/core';
+    const {useCss}=createCssContext(new SystemKeywords()); const css=useCss();
+    const x=1,y=2; export const render=()=> <_div css={{transform:\`translate(\${x}px, \${y}px)\`}}/>;
+    const reusable=css(()=>({width:x, color:'red'}));
+    const tagged=tag\`a\${x}\`; const joined='a'+x;
+  `);
+  assert(code.includes('createCssVNode as'));
+  assert.match(code, /\["transform"\]/);
+  assert.match(code, /\["width"\]/);
+  assert(code.includes('tag`a${x}`'));
+  assert(!code.includes('_template'));
+  assert(!code.includes('valueBinding'));
+  await parseAsync(code, { sourceType: 'module' });
+});
+
+test('ordinary Vue can explicitly enable CSS wiring and a custom pragma is diagnosed', async () => {
   const code = await compile(
-    'import {styles} from "./styles"; export const render=()=> <div class={styles.root}/>;',
+    'import {styles} from "./styles"; export const render=()=> <div css={styles.root}/>;',
     { zerodep: { css: true } },
   );
-  assert(code.includes('@zerodep-vue/core'));
+  assert(code.includes('createCssVNode as'));
   assert(!code.includes('@zerodep-vue/compiler'));
   await assert.rejects(
-    compile(
-      `import { cx } from "@zerodep-vue/core";
-import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
-const { useCss } = createCssContext(new SystemKeywords());
-
-const s = useCss();
- <div class={s.color("red")}/>;`,
-      {
-        pragma: 'custom',
-      },
-    ),
+    compile('import {_div} from "@zerodep-vue/core"; <_div css={{color:"red"}}/>;', {
+      pragma: 'custom',
+    }),
     /ZV_CSS_PRAGMA/,
   );
 });
 
-test('CSS lowering does not capture a shadowed bx or rewrite a tagged template', async () => {
-  const code = await compile(
-    'import { bx, cx } from "@zerodep-vue/core";\nimport { createCssContext, SystemKeywords } from \'@zerodep-vue/core\';\nconst { useCss } = createCssContext(new SystemKeywords());\n function use(bx){return bx(1);} const value=tag`a${1}`;',
-  );
-  assert(!code.includes('binding as'));
-  assert(code.includes('tag`a${1}`'));
+test('CSS does not move await or yield across a new function boundary', async () => {
+  for (const [fn, value] of [
+    ['async function', 'await load()'],
+    ['function*', 'yield 20'],
+  ]) {
+    const code = await compile(
+      `import {_div} from '@zerodep-vue/core'; ${fn} paint(){return <_div css={{width:${value}}}/>;}`,
+    );
+    assert(code.includes(value));
+    await parseAsync(code, { sourceType: 'module' });
+  }
 });
 
-test('namespace bindings accept static keys while preserving dynamic and shadowed calls', async () => {
-  const code = await compile(`import * as styles from '@zerodep-vue/core';
-    const first=styles.bx(width);
-    const second=styles['bx'](height);
-    const dynamic=styles[key](height);
-    function local(styles){ return styles.bx(width); }
+test('clone aliases use CSS-aware cloning while unrelated helpers stay untouched', async () => {
+  const code = await compile(`import {_div} from '@zerodep-vue/core'; import * as vue from 'vue';
+    const clone=vue.cloneVNode; const element=<_div css={{color:'red'}}/>;
+    export const next=clone(element,{css:{color:'blue'}});
+    function local(vue){return vue.cloneVNode(element);}
   `);
-  assert.equal((code.match(/_binding\(\(\) => /g) ?? []).length, 2);
-  assert(code.includes('styles[key](height)'));
-  assert(code.includes('return styles.bx(width)'));
-  const unrelated = await compile(`import { bx } from './business'; const value=bx(width);`, {
-    zerodep: { css: true },
-  });
-  assert(!unrelated.includes('binding as'));
+  assert(code.includes('cloneCssVNode as'));
+  assert(code.includes('return vue.cloneVNode(element)'));
+  const business = await compile(
+    `import {css} from './business'; export const value=css({color:'red'});`,
+  );
+  assert(!business.includes('staticCss'));
 });

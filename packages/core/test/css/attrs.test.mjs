@@ -50,6 +50,16 @@ test('slot merge reads top-level getters once and does not inspect foreign slot 
   assert.equal(slotReads, 1);
 });
 
+test('foreign css props retain replacement and clone semantics', () => {
+  const Foreign = () => null;
+  const first = { business: 1 };
+  const second = { business: 2 };
+  const node = createCssVNode(Foreign, mergeAttrs({ css: first }, { css: second }));
+  assert.equal(node.props.css, second);
+  const copy = cloneCssVNode(node, mergeAttrs({ css: second }, { css: first }));
+  assert.equal(copy.props.css, first);
+});
+
 test('undefined preserves defaults, null resets a bag and component-owned content is filtered', () => {
   const input = mergeAttrs(
     {

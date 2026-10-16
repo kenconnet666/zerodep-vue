@@ -37,7 +37,8 @@ test('native primitives keep Vue DOM model/directive semantics across aliases an
   const shadow = await compile(
     `import {_button} from '@zerodep-vue/core'; function view(_button){return <_button/>}`,
   );
-  assert.match(shadow, /createVNode\(_button/);
+  assert.match(shadow, /create(?:Css)?VNode\(_button/);
+  assert(!shadow.includes('"button"'));
 });
 
 test('CSS snapshots preserve expression order, count and throwing behavior even when overridden', async () => {
@@ -77,4 +78,29 @@ test('static parent objects do not turn unknown nested spreads or factories into
   assert.equal(first.match(/class="([^"]+)"/)[1], next.match(/class="([^"]+)"/)[1]);
   assert(first.includes('red'));
   assert(next.includes('blue'));
+});
+
+test('ordinary component css props keep scalar values, nested identity and callbacks', async () => {
+  const module = await evaluate(`
+    import { _component } from '@zerodep-vue/core';
+    import { defineComponent, h } from 'vue';
+    export const shared = { business: true };
+    export const callback = () => 'callback';
+    export const calls = [];
+    export let received;
+    const Foreign = defineComponent({ props: ['css'], setup(props) {
+      received = () => props.css;
+      return () => h('div', null, String(props.css.width));
+    }});
+    export const App = _component(() => <Foreign {...{css: { ignored: true }}} css={{
+      width: (() => { calls.push('width'); return 21; })(), nested: shared, callback,
+    }} />);
+  `);
+  assert.equal(await renderToString(createSSRApp(module.App)), '<div>21</div>');
+  const value = module.received();
+  assert.equal(value.width, 21);
+  assert.equal(value.nested, module.shared);
+  assert.equal(value.callback, module.callback);
+  assert.deepEqual(Object.keys(value), ['width', 'nested', 'callback']);
+  assert.deepEqual(module.calls, ['width']);
 });

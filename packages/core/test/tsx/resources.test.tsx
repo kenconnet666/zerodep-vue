@@ -1,26 +1,28 @@
-import { expect, test } from 'vitest';
-import { mount } from '@vue/test-utils';
-import { createSSRApp, nextTick, ref } from 'vue';
 import { renderToString } from '@vue/server-renderer';
+import { mount } from '@vue/test-utils';
 import {
+  SystemKeywords,
   _component,
-  bx,
+  _div,
+  _section,
+  _span,
+  createCssContext,
   createCssHost,
   getCssHost,
-  keyframes,
   globalCss,
-  createCssContext,
-  SystemKeywords,
+  keyframes,
 } from '@zerodep-vue/core';
-
+import { expect, test } from 'vitest';
+import { createSSRApp, nextTick, ref } from 'vue';
 const { useCss } = createCssContext(new SystemKeywords());
-
-const s = useCss();
-
+const css = useCss();
 test('component global rules use its host and unmount stops all updates', async () => {
   const target = document.createElement('div');
   document.head.appendChild(target);
-  const host = createCssHost({ target, maxUnusedRules: 0 });
+  const host = createCssHost({
+    target,
+    maxUnusedRules: 0,
+  });
   const color = ref('red');
   let reads = 0;
   const read = () => {
@@ -28,10 +30,24 @@ test('component global rules use its host and unmount stops all updates', async 
     return color.value;
   };
   const App = _component(() => {
-    globalCss('document-colors', { ':root': s.color(bx(read())) });
-    return <div class={s.opacity(1)} />;
+    globalCss('document-colors', {
+      ':root': css(() => ({
+        color: read(),
+      })),
+    });
+    return (
+      <_div
+        css={css({
+          opacity: 1,
+        })}
+      />
+    );
   });
-  const wrapper = mount(App, { global: { plugins: [host] } });
+  const wrapper = mount(App, {
+    global: {
+      plugins: [host],
+    },
+  });
   try {
     expect(host.stats().globalRules).toBe(1);
     const node = target.firstElementChild;
@@ -48,16 +64,31 @@ test('component global rules use its host and unmount stops all updates', async 
     target.remove();
   }
 });
-
 test('SSR global effects stop after rendering while request-specific styles remain collectible', async () => {
   const color = ref('red');
   const App = _component(() => {
-    globalCss('request', { body: s.color(bx(color.value)) });
-    return <div class={s.opacity(1)} />;
+    globalCss('request', {
+      body: css(() => ({
+        color: color.value,
+      })),
+    });
+    return (
+      <_div
+        css={css({
+          opacity: 1,
+        })}
+      />
+    );
   });
   const first = {};
   await renderToString(
-    createSSRApp(App).use(createCssHost({ target: null, layer: 'base', nonce: 'example' })),
+    createSSRApp(App).use(
+      createCssHost({
+        target: null,
+        layer: 'base',
+        nonce: 'example',
+      }),
+    ),
     first,
   );
   const saved = getCssHost(first)!.renderStyles();
@@ -73,24 +104,41 @@ test('SSR global effects stop after rendering while request-specific styles rema
   getCssHost(first)?.dispose();
   getCssHost(second)?.dispose();
 });
-
 test('keyframes share rule leases, update inline values and release on the last removal', async () => {
   const target = document.createElement('div');
   document.head.appendChild(target);
-  const host = createCssHost({ target, maxUnusedRules: 0 });
+  const host = createCssHost({
+    target,
+    maxUnusedRules: 0,
+  });
   const opacity = ref(0.2);
   const show = ref(true);
   const App = _component(() => {
-    const fade = keyframes({ from: s.opacity(bx(opacity.value)), to: s.opacity(1) });
-    const style = s.animation(`${fade} 1s linear`);
+    const fade = keyframes({
+      from: css(() => ({
+        opacity: opacity.value,
+      })),
+      to: css({
+        opacity: 1,
+      }),
+    });
+    const style = css({
+      animationName: fade,
+      animationDuration: '1s',
+      animationTimingFunction: 'linear',
+    });
     return (
-      <section>
-        {show.value && <div class={style} />}
-        <span class={style} />
-      </section>
+      <_section>
+        {show.value && <_div css={style} />}
+        <_span css={style} />
+      </_section>
     );
   });
-  const wrapper = mount(App, { global: { plugins: [host] } });
+  const wrapper = mount(App, {
+    global: {
+      plugins: [host],
+    },
+  });
   try {
     expect(host.stats().activeRules).toBe(2);
     expect(host.stats().ownedReferences).toBe(4);
@@ -112,16 +160,39 @@ test('keyframes share rule leases, update inline values and release on the last 
     target.remove();
   }
 });
-
 test('SSR collects animations with request-specific inline values and stable resource names', async () => {
   const Page = _component(({ start }: { start: number }) => {
-    const fade = keyframes({ from: s.opacity(bx(start)), to: s.opacity(1) });
-    return <div class={s.animationName(fade).animationDuration('1s')} />;
+    const fade = keyframes({
+      from: css(() => ({
+        opacity: start,
+      })),
+      to: css({
+        opacity: 1,
+      }),
+    });
+    return (
+      <_div
+        css={css({
+          animationName: fade,
+          animationDuration: '1s',
+        })}
+      />
+    );
   });
   const first = {};
   const second = {};
-  const a = await renderToString(createSSRApp(Page, { start: 0.2 }), first);
-  const b = await renderToString(createSSRApp(Page, { start: 0.8 }), second);
+  const a = await renderToString(
+    createSSRApp(Page, {
+      start: 0.2,
+    }),
+    first,
+  );
+  const b = await renderToString(
+    createSSRApp(Page, {
+      start: 0.8,
+    }),
+    second,
+  );
   expect(a).toContain('0.2');
   expect(b).toContain('0.8');
   expect(getCssHost(first)?.snapshot()).toHaveLength(2);
