@@ -7,6 +7,7 @@ import {
   shallowRef,
 } from 'vue';
 import type { ComponentInternalInstance, ComponentOptions, SetupContext } from 'vue';
+import { camelize } from '@vue/shared';
 import { CLASS_PROP, hasIncomingClass, inheritClass, renderCss } from '../css/vnode.ts';
 import type { ClassValue } from '../css/style-value.ts';
 
@@ -94,6 +95,16 @@ export function resolveProps(
   writable: readonly string[] = [],
 ): Props {
   const instance = getCurrentInstance();
+  const runtimeNames = new Map<PropertyKey, string>();
+  const authorNames = new Map<PropertyKey, string>();
+  const declared = instance?.type.props;
+  // Vue 会规范化声明键；作者的读取、枚举和 rest 统一使用声明时的拼写。
+  for (const name of Array.isArray(declared) ? declared : Object.keys(declared ?? {})) {
+    const normalized = camelize(name);
+    if (normalized === name) continue;
+    runtimeNames.set(name, normalized);
+    authorNames.set(normalized, name);
+  }
   const incomingVNode = shallowRef(instance?.vnode);
   if (instance)
     onBeforeUpdate(() => {
@@ -122,12 +133,12 @@ export function resolveProps(
     get(target, key) {
       if (key === CLASS_PROP) return undefined;
       if (key === 'children') void incomingVNode.value;
-      const value =
-        key === 'class' && instance && hasIncomingClass(instance)
-          ? raw[CLASS_PROP]
-          : own(target, key) || !own(attrs(), key)
-            ? Reflect.get(target, key)
-            : Reflect.get(attrs(), key);
+      const runtimeKey = runtimeNames.get(key) ?? key;
+      let value: unknown;
+      if (key === 'class' && instance && hasIncomingClass(instance)) value = raw[CLASS_PROP];
+      else if (own(target, runtimeKey) || !own(attrs(), key))
+        value = Reflect.get(target, runtimeKey);
+      else value = Reflect.get(attrs(), key);
       // 先读取实际输入，确保 computed 消费 children 时仍追踪 prop 的更新。
       if (key === 'children' && !hasExplicitChildren(instance, context) && context.slots.default) {
         return context.slots.default();
@@ -150,17 +161,21 @@ export function resolveProps(
     preventExtensions: rejectPropsMutation,
     setPrototypeOf: rejectPropsMutation,
     ownKeys(target) {
-      return [...new Set([...Reflect.ownKeys(target), ...Reflect.ownKeys(attrs())])].filter(
+      const keys = Reflect.ownKeys(target).map((key) => authorNames.get(key) ?? key);
+      return [...new Set([...keys, ...Reflect.ownKeys(attrs())])].filter(
         (key) => key !== CLASS_PROP,
       );
     },
     has(target, key) {
-      return key !== CLASS_PROP && (Reflect.has(target, key) || own(attrs(), key));
+      return (
+        key !== CLASS_PROP &&
+        (Reflect.has(target, runtimeNames.get(key) ?? key) || own(attrs(), key))
+      );
     },
     getOwnPropertyDescriptor(target, key) {
       if (key === CLASS_PROP) return;
       return (
-        Reflect.getOwnPropertyDescriptor(target, key) ??
+        Reflect.getOwnPropertyDescriptor(target, runtimeNames.get(key) ?? key) ??
         Reflect.getOwnPropertyDescriptor(attrs(), key)
       );
     },

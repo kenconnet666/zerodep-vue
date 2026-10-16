@@ -169,6 +169,70 @@ describe('_component', () => {
     expect(calls).toBe(1);
   });
 
+  test('declared hyphenated props preserve author keys through reads, rest, updates and SSR', async () => {
+    interface DashedProps {
+      'aria-label'?: string | undefined;
+      'data-state'?: string | undefined;
+    }
+    const source = ref<DashedProps>({});
+    const Plain = _component((props: DashedProps) => (
+      <button
+        {...props}
+        data-keys={Object.keys(props).sort().join(',')}
+        data-present={'aria-label' in props}
+        data-descriptor={Object.getOwnPropertyDescriptor(props, 'aria-label')?.value}
+      >
+        {props['aria-label']}
+      </button>
+    ));
+    const Forwarded = _component(({ ...rest }: DashedProps) => (
+      <button {...rest} data-keys={Object.keys(rest).sort().join(',')}>
+        {rest['aria-label']}
+      </button>
+    ));
+    const Consumed = _component(({ 'aria-label': label = 'fallback', ...rest }: DashedProps) => (
+      <button {...rest} data-keys={Object.keys(rest).join(',')}>
+        {label}
+      </button>
+    ));
+    const App = _component(() => (
+      <div>
+        <Plain {...source.value} />
+        <Forwarded {...source.value} />
+        <Consumed {...source.value} />
+      </div>
+    ));
+    const wrapper = mount(App);
+    mounted.push(wrapper);
+    for (const next of [
+      { 'aria-label': 'first', 'data-state': 'ready' },
+      { 'aria-label': undefined, 'data-state': undefined },
+      { 'aria-label': 'restored', 'data-state': 'done' },
+    ]) {
+      source.value = next;
+      await nextTick();
+      const buttons = wrapper.findAll('button');
+      for (const button of buttons.slice(0, 2)) {
+        expect(button.attributes('aria-label')).toBe(next['aria-label']);
+        expect(button.attributes('data-keys')).toBe('aria-label,data-state');
+        expect(button.text()).toBe(next['aria-label'] ?? '');
+      }
+      for (const button of buttons) {
+        expect(button.attributes('data-state')).toBe(next['data-state']);
+        expect(button.attributes('arialabel')).toBeUndefined();
+        expect(button.attributes('datastate')).toBeUndefined();
+      }
+      expect(buttons[0]!.attributes('data-present')).toBe('true');
+      expect(buttons[0]!.attributes('data-descriptor')).toBe(next['aria-label']);
+      expect(buttons[2]!.attributes('data-keys')).toBe('data-state');
+      expect(buttons[2]!.attributes('aria-label')).toBeUndefined();
+      expect(buttons[2]!.text()).toBe(next['aria-label'] ?? 'fallback');
+    }
+    const html = await renderToString(createSSRApp(App));
+    expect(html.match(/aria-label="restored"/g)).toHaveLength(2);
+    expect(html).not.toMatch(/\s(?:ariaLabel|dataState)=/);
+  });
+
   test('computed native prop keys and presence update for both props and rest', async () => {
     interface NativeProps extends /* @vue-ignore */ HTMLAttributes {}
     const attrs = ref<Record<string, unknown>>({});

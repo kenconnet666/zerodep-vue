@@ -214,8 +214,10 @@ test('named icons and explicit ARIA overrides update, while untyped subtree repl
     )),
   );
   const icons = wrapper.findAll('svg');
+  expect(icons[0]!.attributes('aria-label')).toBe('搜索');
   expect(icons[0]!.attributes('role')).toBe('img');
   expect(icons[0]!.attributes('aria-hidden')).toBeUndefined();
+  expect(icons[1]!.attributes('aria-labelledby')).toBe('favorite-label');
   expect(icons[1]!.attributes('role')).toBe('img');
   expect(icons[2]!.attributes('aria-hidden')).toBe('true');
   expect(icons[2]!.attributes('role')).toBe('presentation');
@@ -224,6 +226,7 @@ test('named icons and explicit ARIA overrides update, while untyped subtree repl
   expect(icons[3]!.text()).toBe('');
   label.value = '  ';
   await nextTick();
+  expect(icons[0]!.attributes('aria-label')).toBe('  ');
   expect(icons[0]!.attributes('role')).toBeUndefined();
   expect(icons[0]!.attributes('aria-hidden')).toBe('true');
 });

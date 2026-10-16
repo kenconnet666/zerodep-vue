@@ -57,6 +57,10 @@ export const Icon = _component(
     spin = false,
     nonScalingStroke = false,
     class: className,
+    role,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledBy,
+    'aria-hidden': ariaHidden,
     ...rest
   }: IconProps) => {
     const s = useCss();
@@ -127,14 +131,10 @@ export const Icon = _component(
             return value === undefined ? [] : [[key, value]];
           }),
         )}
-        role={
-          rest.role ??
-          (rest['aria-label']?.trim() || rest['aria-labelledby']?.trim() ? 'img' : undefined)
-        }
-        aria-hidden={
-          rest['aria-hidden'] ??
-          (rest['aria-label']?.trim() || rest['aria-labelledby']?.trim() ? undefined : true)
-        }
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        role={role ?? (ariaLabel?.trim() || ariaLabelledBy?.trim() ? 'img' : undefined)}
+        aria-hidden={ariaHidden ?? (ariaLabel?.trim() || ariaLabelledBy?.trim() ? undefined : true)}
         class={cx(style, spin && spinning, className)}
       >
         {icon.node.map(renderNode)}
