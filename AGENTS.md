@@ -11,23 +11,23 @@
 - 除各包 src/index.ts 外，其他文件不使用 index 命名，按职责命名；上游源码改名时同步来源映射，保留原始内容与校验值。
 - 仅为单次使用抽取的辅助函数直接内联；文件名直接表达用途，避免无意义的 index 转发层。
 - packages/compiler 保留官方 Vue JSX v3.0.0 的真实源码 fork 和对照测试，来源以 upstream.json 记录。
-- 状态直接使用 Vue API。CSS 作者入口为 class，编译器负责 bx 的隐式 style 接线，不新增独立 JSX 样式属性。
-- CSS 采用运行时处理加辅助编译；系统值和主题名使用字面量，主题通过继承扩展，泛型 T 贯穿作者入口、链式样式和主题映射。
-- 组件统一写 `const s = useCss()`；应用主题模块从 `createCssContext(source)` 直接解构导出 `useCss`、`provideTheme`、`useTheme`。core 不导出默认 hooks 或创建默认上下文，不提供 keywords 对象视图。
-- `useTheme()` 返回当前区域的 reactive 对象，直接使用 `theme.color._primary`，嵌套 Ref 按 Vue 规则解包，可替换的来源 Ref 继续支持。动态样式显式使用 bx，cx 只负责有序组合。
+- 状态直接使用 Vue API。已批准迁移到 `_button` / `_div` 等基础元素及独立 `css` 对象入口，`class` / `style` 保留原生含义；旧链式 API 不作为兼容承诺保留。当前迁移范围及验收状态以 README 和实际源码为准。
+- CSS 采用运行时处理加辅助编译；系统值和主题名使用字面量，主题通过继承扩展，泛型 T 贯穿对象作者入口与主题映射。
+- 主题作者入口迁移为 `const css = useCss()` 的可调用工厂；应用主题模块从 `createCssContext(source)` 直接解构导出 `useCss`、`provideTheme`、`useTheme`。core 不导出默认 hooks 或创建默认上下文，不提供 keywords 对象视图。
+- `useTheme()` 返回当前区域的 reactive 对象，嵌套 Ref 按 Vue 规则解包，可替换的来源 Ref 继续支持。内联 CSS 叶子按正常 JS 求值并由编译器捕获；setup 中需要持续读取的共享样式明确使用函数，组合用有序数组。
 - 属性、系统值和主题名须有准确补全及中文 JSDoc；发布声明须保留类型和注释。CSS 属性用 `@default:'值'` 表达规范初始值、`@extend:'是/否'` 表达继承性，保留“常用值：”及反引号列表，不生成 @example，缺项不猜测。
-- 保持 `s.overflow('hidden')`、`s.color('_primary')` 等字面量用法。生成的普通关键字重载保留 keyof 成员的声明来源，完整输入由泛型重载继续校验；不能为改善跳转改成具名常量 API，也不能放宽未知主题名检查。编辑体验同时核对项目语言服务和实际 IDE，不能互相代替。
+- 保持 `{ overflow: 'hidden', color: '_primary' }` 等字面量用法，属性、普通关键字和主题名保留补全与来源；不能为改善跳转改成具名常量 API，也不能放宽未知主题名检查。编辑体验同时核对项目语言服务和实际 IDE，不能互相代替。
 - 新源码遵循 TypeScript 和 Vue 正常语义。中文注释解释边界、所有权及非显然处理；作者类型与运行时值分清职责。
 - 自有组件公开契约只使用普通 Props：状态传 Ref，事件传回调，内容传 children 或明确的渲染函数，DOM 引用通过 elementRef/inputRef/viewportRef 等属性传递。作者 setup 只接收 Props，不使用 emit、Vue slots、expose 或组件实例方法；普通 Vue 组件的兼容接线留在内部。
 - 上层组件暴露出共享类型、编译器或运行时的问题时，修正问题所属模块并验证已有能力和新用法；不以 `as unknown as`、复制类型或组件内特例绕过，也不只是把断言搬到公共层。通用 token 由 CSS 工具统一解析，组件局部 token 的类型和实现留在组件内。
-- UI 样式 Props 直接复用 `CssValue<'属性', UiTheme>`，使用普通 Props 接口；不为每个样式属性增加泛型或层层辅助类型。`bx` 是组件内部的 CSS 接线，不进入 Props 值域。
+- UI 样式 Props 直接复用 `CssValue<'属性', UiTheme>`，普通属性继承使用 `Props<Target, Extra>` 的字段替换；不为每个样式属性增加泛型或层层辅助类型，编译器绑定标记不进入 Props 值域。
 - 长期审视主题 API：根据真实组件需求，能力不足、设计不合理或存在冗余时，可以适当补充、调整、合并或删除；不能仅为维持旧主题 API 而堆积组件特例。涉及公共 API 与兼容性影响时在方案中说明，并遵循当次任务的规划或实施范围。
 - 组件参数解构后的剩余 Props 统一命名 `rest`，使用 `{...rest}` 显式转发；Vue 原生 `context.attrs` 字段和上游源码保留原名。
-- 复杂组件按需通过普通 Props 暴露子节点属性，命名为 `slotIcon`、`slotLoading`、`slotViewport` 等，不集中到 `slotProps` 对象。复用对应子组件或原生属性类型，外部 class 最后组合；内部内容、测量 ref、状态与必要无障碍属性由所属组件管理。
+- 复杂组件按需通过普通 Props 暴露子节点属性，命名为 `slotIcon`、`slotLoading`、`slotViewport` 等，不集中到 `slotProps` 对象。用 `Slot<Target, Owned>` 明确实际目标和组件拥有的字段；默认 CSS 在前，外部 CSS 在后，组件拥有的状态和无障碍属性最后写入。普通业务对象不深合并。
 - 同一判别值的多分支适当使用 switch，类型守卫和二选一保留 if；重复策略或明确的状态转换可采用策略、状态等设计模式，以减少分支和重复。保持清晰命名、直接数据流和明确所有权，不为套用模式增加层级、文件或转发跳转；公共 API 取舍先讨论。
 - UI 位于 packages/ui，组件 DOM、交互和公开 API 自行实现，不引入 headless 组件、表单或表格底座。UI 业务不进入 core/compiler，未实现能力不导出占位 API。
 - UI Provider 的 theme 按“CSS 属性组 → 主题名”局部覆盖，lang 按文案、locale、timeZone 字段局部覆盖；未提供或 undefined 的字段持续继承父级。完整主题或语言预设覆盖其全部字段，theme/lang 均支持对象、Ref 和 computed；对象来源使用 Vue reactive，后代视图只读。
-- Provider.tsx 集中管理上下文注入与 useCss/useTheme/useLang，默认使用白色 LightTheme、简体中文 zhCN 和 Asia/Shanghai。Provider 渲染 div，消费 theme、lang、children 后通过 rest 显式转发原生属性、事件和样式；class 支持 CssInput。Provider 不承担格式化校验。
+- Provider.tsx 集中管理上下文注入与 useCss/useTheme/useLang，默认使用白色 LightTheme、简体中文 zhCN 和 Asia/Shanghai。Provider 消费 theme、lang、children 后通过 rest 显式转发原生属性、事件和样式；迁移后结构化样式由 css 接收。Provider 不承担格式化校验。
 - UI 的语言配置及类型放在 src/config/lang；主题统一接口 UiTheme、公共实现 BaseTheme 与显式实现接口的 LightTheme/DarkTheme 放在 src/config/theme。这两个目录按多语言、多主题职责保留，不因当前实现数量少而展平。
 - UI 组件默认继承字号，内部高度、间距、圆角、边框和阴影优先使用 em，随当前字号等比缩放；主题字号刻度使用 rem 作为页面基准。行高、字重、透明度、层级保持无单位，时长使用 ms，不机械替换所有数字。
 - UI 直接使用 Zod 4，不接入其他校验兼容层或自建校验 DSL。第三方运行时依赖作为显式 peer，开发版本由 catalog 固定，不从 UI 重新导出。
@@ -40,3 +40,4 @@
 - 推送后继续有用工作，不等待刚启动的长测试或反复轮询。没有下一步工作时，报告运行链接与待核对状态。
 - 本项目 MCP 名为 zerodep_vue_lsp；通过 pnpm lsp:setup 生成被忽略的本机配置，不修改其他项目或全局 LSP。注册配置、独立 stdio 验证和重启后会话可调用分别报告。
 - 保留现有工作与 IDE 设置；只清理本次授权的文件、临时产物和子进程。文件清理须先验证绝对路径与归属，逐文件删除后清理空目录，不直接递归删除或绕过权限限制。
+- 本次实现的代码由主代理独立修改；子代理只负责并行资料搜索和只读审查，不写入、格式化或提交文件。

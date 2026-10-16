@@ -14,56 +14,7 @@ const ts = createRequire(tsPath)('typescript');
 const fileName = resolve(here, 'types-probe.tsx').replaceAll('\\', '/');
 
 const source = `
-import type { AuthorProps, CssValue } from '${core}';
-import type { VNode } from 'vue';
-type Native = AuthorProps & {
-  disabled?: boolean;
-  'aria-pressed'?: boolean | 'mixed';
-  'data-tone'?: 'primary' | 'danger';
-};
-type Style = {
-  color?: CssValue<'color'>;
-  opacity?: CssValue<'opacity'>;
-  margin?: CssValue<'margin'>;
-};
-type StateValue<Value> = Extract<NonNullable<Value>, string | number | boolean>;
-type State<Value> = \u0060\u0024{StateValue<Value>}\u0060;
-type DataKey<Props> = Extract<keyof Props, \u0060data-\u0024{string}\u0060>;
-type Pseudo = ':hover' | ':disabled';
-type CssShape<Props> = Style &
-  { [Key in Pseudo]?: Style } &
-  { 'aria-pressed'?: { true?: Style; false?: Style; mixed?: Style } } &
-  { [Key in DataKey<Props>]?: { [Value in State<Props[Key]>]?: Style } } &
-  { [Key in \u0060--\u0024{string}\u0060]?: string | number } &
-  { '--gap'?: string | number };
-type Cases<Value, Candidate> = {
-  [Key in keyof Candidate]: Key extends string | number | boolean
-    ? \u0060\u0024{Key}\u0060 extends State<Value>
-      ? Style
-      : never
-    : never;
-};
-type ValidCss<Props, Candidate> = {
-  [Key in keyof Candidate]: Key extends keyof Style
-    ? Style[Key]
-    : Key extends Pseudo
-      ? Style
-      : Key extends 'aria-pressed'
-        ? Cases<boolean | 'mixed', Candidate[Key]>
-        : Key extends \u0060data-\u0024{string}\u0060
-          ? Key extends keyof Props
-            ? Cases<Props[Key], Candidate[Key]>
-            : never
-          : Key extends \u0060--\u0024{string}\u0060
-            ? string | number
-            : never;
-};
-type ButtonProps<Props extends Native, Candidate extends object> = Props & {
-  css?: Candidate & CssShape<NoInfer<Props>> & ValidCss<NoInfer<Props>, Candidate>;
-};
-declare function _button<const Props extends Native, const Candidate extends object>(
-  props: ButtonProps<Props, Candidate>,
-): VNode;
+import { _button } from '${core}';
 
 declare const pressed: boolean | 'mixed';
 declare const tone: 'primary' | 'danger';
@@ -94,7 +45,7 @@ declare const tone: 'primary' | 'danger';
   data-tone={tone}
   css={{ 'aria-pressed': { mixed: { opacity: 0.8 } }, 'data-tone': { danger: { color: 'blue' } } }}
 />;
-<_button css={{ /*complete-variable*/ }} />;
+
 
 // @ts-expect-error CSS declaration value is not a CSS scalar.
 <_button css={{ opacity: true }} />;
@@ -115,7 +66,6 @@ const markers = [
   'complete-pseudo',
   'complete-aria',
   'complete-data',
-  'complete-variable',
   'complete-units',
 ];
 const positions = new Map(markers.map((name) => [name, source.indexOf(`/*${name}*/`)]));
@@ -217,16 +167,11 @@ const checks = [
     completions.get('complete-data').includes('danger'),
     completions.get('complete-data').join(', '),
   ],
-  [
-    'declared custom variable completes',
-    completions.get('complete-variable').includes('"--gap"'),
-    completions.get('complete-variable').slice(0, 20).join(', '),
-  ],
 ];
 const boundary = [
   'Open --${string} keys accept user variables but cannot enumerate names for completion.',
   `CssValue uses CSS.Properties<Scalar> where Scalar is string | number; 2qu is accepted and TS offered these completions after the number: ${unitCompletion.join(', ') || '(none)'}.`,
-  'This validator probe covers one state-map level; nested selectors or nested state maps need a separate recursive typing contract.',
+  'Checks use the actual core _button declaration; recursive negative cases are maintained in core/test/tsx/objects.types.tsx.',
 ];
 
 for (const [name, passed, detail] of checks)

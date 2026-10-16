@@ -30,6 +30,8 @@ import type { ResolvedClass } from './resolve.ts';
 import { isCssClass } from './style-value.ts';
 import type { ClassValue } from './style-value.ts';
 import { CLASS } from './style-value.ts';
+import { objectClass } from './object.ts';
+import { ELEMENT } from '../tsx/element.ts';
 
 /** 仅由编译器和自有组件消费，不进入作者 JSX 或第三方组件的 props。 */
 export const CLASS_PROP = '__zerodepVueClass';
@@ -367,14 +369,29 @@ function evaluatePlan(
   source: Props,
   renderFrame?: RenderFrame,
 ): { props: Props; plan: RenderPlan } {
-  const resolved = resolveClass(source.class as ClassValue, renderFrame?.reads);
+  const objectStyle = 'css' in source ? objectClass(source.css) : undefined;
+  const hasObjectStyle = objectStyle?.[CLASS].some(
+    (part) => typeof part !== 'string' && part.declarations.length > 0,
+  );
+  const resolved = resolveClass(
+    hasObjectStyle ? [source.class as ClassValue, objectStyle!] : (source.class as ClassValue),
+    renderFrame?.reads,
+  );
   const owner = renderFrame?.owner ?? getCurrentInstance();
   const host = owner ? inject<CssHost | undefined>(cssHostKey, undefined) : undefined;
   if (resolved.hasCss && !owner)
     throw new Error('CSS class 应在 Vue 组件的 render 中消费；样式声明本身可以放在模块中。');
   const props = { ...source };
+  delete props.css;
   if ('class' in source || resolved.hasCss) props.class = resolved.className;
-  if (resolved.hasCss) props.style = normalizeStyle([resolved.variables, source.style]);
+  const inline = normalizeStyle([source.style]);
+  if (
+    inline &&
+    typeof inline === 'object' &&
+    Object.keys(inline).some((name) => name.startsWith('--zv-'))
+  )
+    throw new TypeError('--zv-* 由 CSS 运行时管理，请使用自己的变量前缀。');
+  if (resolved.hasCss) props.style = normalizeStyle([inline, resolved.variables]);
   return { props, plan: { source, resolved, owner, ...(host ? { host } : {}) } };
 }
 
@@ -433,7 +450,22 @@ function finalizeVNode(vnode: VNode, source: Props, renderFrame?: RenderFrame): 
 
 /** @internal 在 Vue 归一化 class 之前保存自有值；普通组件接收常规 class/style。 */
 export function createCssVNode(...args: Parameters<typeof createVNode>): VNode {
-  const [type, raw, children, flag = 0, dynamic, block] = args;
+  let [type, raw, children, flag = 0, dynamic, block] = args;
+  // 动态标签或 JSX 别名仍能识别基础元素，既不多包 DOM，也不多建组件实例。
+  if (typeof type === 'function' && ELEMENT in type) {
+    const tag = Reflect.get(type, ELEMENT);
+    if (typeof tag !== 'string') throw new TypeError('基础元素缺少原生标签。');
+    type = tag;
+    if (
+      children &&
+      !Array.isArray(children) &&
+      typeof children === 'object' &&
+      'default' in children
+    ) {
+      const slot = children.default;
+      if (typeof slot === 'function') children = slot();
+    }
+  }
   const source = snapshot(raw);
   if ('class' in source) source.class = structuredClass(source.class);
   if (isOwnComponent(type)) {
@@ -578,6 +610,9 @@ export function mergeCssProps(...sources: (Props | null | undefined)[]): Props {
           break;
         case 'style':
           result.style = normalizeStyle([result.style, value]);
+          break;
+        case 'css':
+          if (result.css !== value) result.css = [result.css, value];
           break;
         case '':
           break;

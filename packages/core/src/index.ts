@@ -17,6 +17,18 @@ export type { Keyframes } from './css/animation.ts';
 export type { GlobalRules, GlobalOptions } from './css/global.ts';
 
 export { _component } from './tsx/component.ts';
+export * from './tsx/elements.ts';
+export type { Props, PropsOf, Slot, TypedProps } from './tsx/props.ts';
+export type { NativeElement, NativeProps } from './tsx/element.ts';
+export type {
+  CssObject,
+  CssStyle,
+  CssFactory,
+  CssDeclarations,
+  DataAttributes,
+} from './css/object-types.ts';
+/** @internal CSS 对象的编译接线。 */
+export { staticCss, valueBinding } from './css/object.ts';
 /** @internal 让组件推断声明可通过公共入口命名，无需每个组件重复 ReturnType 注解。 */
 export type { AuthorProps } from './tsx/component.ts';
 export { For } from './tsx/For.ts';

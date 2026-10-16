@@ -7,6 +7,7 @@ import type {
   WritableComputedRef,
 } from 'vue';
 import type { ComponentDirectives, ElementDirectives } from './directives.ts';
+import type { TypedProps } from './props.ts';
 
 declare const authorProps: unique symbol;
 
@@ -67,7 +68,7 @@ export type ManagedProps<P> = typeof authorProps extends keyof P
 export function _component<Props extends object = {}>(
   setup: (props: Props) => VNodeChild | Promise<VNodeChild>,
   options?: Pick<ComponentOptions, 'name' | 'inheritAttrs'>,
-): DefineSetupFnComponent<Props & AuthorProps> {
+): DefineSetupFnComponent<Props & AuthorProps> & TypedProps<Props> {
   void setup;
   void options;
   throw new Error('[_component] 此调用需要 @zerodep-vue/compiler 转换；请检查 JSX 插件入口。');

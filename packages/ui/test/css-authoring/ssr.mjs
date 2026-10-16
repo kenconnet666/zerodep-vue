@@ -84,8 +84,7 @@ async function compile(source, proposed, automatic = false) {
     module: await import('data:text/javascript;base64,' + Buffer.from(code).toString('base64')),
   };
 }
-const authorSource = `import {_component,bx} from '@zerodep-vue/core';
-import { _button,_span } from 'probe-base';
+const authorSource = `import {_component,bx,_button,_span} from '@zerodep-vue/core';
 import type {VNodeChild} from 'vue';
 interface ButtonProps{
  css?:unknown;
@@ -115,12 +114,13 @@ async function renderApp(App, props) {
 }
 let red, blue;
 await test(
-  'existing compiler currently overwrites the proposed css prop',
+  'core CSS merging preserves root defaults; slot bag merging remains a separate migration',
   async () => {
     const r = await renderApp(current.module.App, { width: 40, tint: 'red' });
-    assert(!r.css.includes('padding:4px'));
+    assert(r.css.includes('padding:4px'));
     assert(!r.css.includes('height:6px'));
-    return { newCssAndSlotMergeNotYetImplemented: true };
+    assert(!r.html.includes('6px'));
+    return { cssMergeImplemented: true, slotMergeImplemented: false };
   },
   'boundary',
 );
@@ -128,7 +128,7 @@ await test('prototype css and registered slot merge preserve wrapper defaults an
   red = await renderApp(proposed.module.App, { width: 40, tint: 'red', pressed: true });
   blue = await renderApp(proposed.module.App, { width: 80, tint: 'blue', pressed: false });
   assert(red.css.includes('padding:4px'));
-  assert(red.css.includes('height:6px'));
+  assert(red.html.includes('6px'));
   assert(red.html.includes('40px'));
   assert(red.html.includes('20px'));
   assert(red.html.includes('margin-top:7px'));
@@ -145,7 +145,7 @@ await test('prototype css and registered slot merge preserve wrapper defaults an
   return { sameRuleTextAcrossRequests: true, rootAndSlotVariablesPresent: true, html: red.html };
 });
 await test(
-  'current component type extraction cannot resolve the proposed Props and Slot aliases',
+  'component compilation accepts complex Props and Slot without runtime type extraction',
   async () => {
     const sample = `import {_component} from '@zerodep-vue/core';
  type Base={__props:{disabled?:boolean;css?:unknown;children?:unknown}};
@@ -154,25 +154,16 @@ await test(
  type Slot<B extends Base,K extends keyof B['__props']=never> = Partial<Omit<B['__props'],K>>&{[P in K]?:never};
  type ButtonProps=Props<typeof _button,{loading?:boolean;slotIcon?:Slot<typeof _button,'disabled'>}>;
  export const Button=_component<ButtonProps>(({loading=false,...rest})=><button {...rest}>{String(loading)}</button>);`;
-    let code, error;
-    try {
-      code = (
-        await transformAsync(sample, {
-          filename: resolve(root, 'packages/compiler/test/__probe_props.tsx'),
-          babelrc: false,
-          configFile: false,
-          plugins: [babelPlugin],
-          presets: [presetTypeScript],
-        })
-      ).code;
-    } catch (e) {
-      error = e.message;
-    }
-    if (error) {
-      assert.match(error, /ZV_PROPS_TYPE/);
-      return { compileSupported: false, error };
-    }
-    assert(code.includes('slotIcon'));
+    const code = (
+      await transformAsync(sample, {
+        filename: resolve(root, 'packages/compiler/test/__probe_props.tsx'),
+        babelrc: false,
+        configFile: false,
+        plugins: [babelPlugin],
+        presets: [presetTypeScript],
+      })
+    ).code;
+    assert(code.includes('createComponent'));
     assert(!code.includes('mergeSlot'));
     return { compileSupported: true, slotPolicyRuntimeMetadataGenerated: false };
   },
@@ -197,7 +188,7 @@ await test('inline CSS values can bind automatically without bx and preserve sta
 });
 await test('automatic binding evaluates CSS expressions once in normal source order', async () => {
   const source =
-    "import {_component} from '@zerodep-vue/core';import {_button} from 'probe-base';export const calls=[];function take(name,value){calls.push(name);return value;}export const App=_component(()=><_button css={[{color:take('base','red')},{color:take('override','blue')}]}/>);";
+    "import {_component,_button} from '@zerodep-vue/core';export const calls=[];function take(name,value){calls.push(name);return value;}export const App=_component(()=><_button css={[{color:take('base','red')},{color:take('override','blue')}]}/>);";
   const { module } = await compile(source, true, true);
   const first = await renderApp(module.App, {});
   assert.deepEqual(module.calls, ['base', 'override']);

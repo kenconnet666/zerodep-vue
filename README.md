@@ -409,7 +409,30 @@ pnpm --filter @zerodep-vue/ui test:browser --project chromium -g "scrollbars pre
 
 包专用命令直接通过 `pnpm --filter <包名>` 执行；根 `package.json` 只保留工作区聚合构建/检查、格式化、打包和 LSP 工具。共享 TypeScript 基础与构建选项保留在根配置，各包配置负责自己的源码和测试范围。
 
-候选 `_button` / CSS 对象 / `Props` 与 `Slot` 协议通过 `pnpm --filter @zerodep-vue/ui probe:css` 做局部探测，可追加 `types`、`browser`、`ssr` 或 `component` 选择范围。探测包含类型补全、动态 CSS 变量、状态选择器、转发合并和 SSR 接管；使用当前 CSS 后端及隔离的候选适配器，尚未从包入口导出新 API。浏览器优先使用已安装的 Playwright Chromium，其次使用系统 Chrome/Edge，不自动下载；探测结束清理本次临时报告。CI 分别在编译器任务与开发 Chromium 任务中运行这些探测。
+`_button`、`_div`、`_input` 等基础元素、CSS 对象和 `Props` / `Slot` 类型已从 core 导出。基础元素复用 Vue 原生属性、DOM ref 和表单指令；`css` 承载结构化样式，`class` / `style` 保留原生用途。内联动态表达式按 JavaScript 顺序求值，再绑定完整 CSS 变量；普通对象、数组与显式同步函数也可传入。数组保留声明顺序，`undefined` 跳过，`null` 清除同一路径的属性。`--zv-*` 保留给运行时，不能从 CSS 对象或 inline style 覆写。
+
+```tsx
+import { _button, _component } from '@zerodep-vue/core';
+import type { Props, Slot } from '@zerodep-vue/core';
+
+type ActionProps = Props<
+  typeof _button,
+  {
+    'data-tone'?: 'primary' | 'danger';
+    slotIcon?: Slot<typeof _button, 'disabled'>;
+  }
+>;
+
+const Action = _component(({ slotIcon, children, ...rest }: ActionProps) => (
+  <_button css={{ ':disabled': { opacity: 0.5 } }} {...rest}>
+    {children}
+  </_button>
+));
+```
+
+`Props` 替换同名字段，`Slot` 禁止调用方接管内容、节点身份、引用和显式 Owned 字段。可复用 Props/Slot 的 data 状态在目标契约中声明；直接基础元素的 CSS 从本次 data 属性联合值推断，ARIA 则保留完整原生值域。原始属性选择器仍可通过 `'&[data-…]'` 编写。`_component` 的运行时元数据仅包含实际解构字段，复杂映射和条件类型由 TypeScript 检查，不重建 Vue 类型推导或隐式转换 Boolean。
+
+这次重构仍在迁移中：现有 UI、主题作者入口、keyframes/globalCss 和旧链式代码尚未切换，不能把基础协议验证当作整体迁移完成。`pnpm --filter @zerodep-vue/ui probe:css` 可追加 `types`、`browser`、`ssr` 或 `component` 选择探测范围；其中 types 已使用真实 core 声明检查补全，其他历史探测仍含隔离适配器。浏览器优先使用已安装的 Playwright Chromium，其次使用系统 Chrome/Edge，不自动下载；结束时清理本次临时报告。CI 另行运行正式 core/compiler 对象测试与源码类型检查。
 
 多个包共用的开发依赖统一放在根目录，独立工具放在所属包。各包仍显式声明发布所需的运行时依赖与 peer。src 根目录只保留 index.ts 和职责目录；Babel/Vite 入口统一收纳到 `compiler/src/plugins`，单文件构建工具直接使用 `ui/build.mjs`。
 

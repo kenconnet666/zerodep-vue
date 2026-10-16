@@ -39,8 +39,7 @@ const { babelPlugin } = await import(
 const coreUrl = pathToFileURL(resolve(root, 'packages/core/src/index.ts')).href;
 const vueUrl = pathToFileURL(require.resolve('vue')).href;
 const adapterUrl = new URL('./prototype.mjs', import.meta.url).href;
-const source = `import {_component,bx} from '@zerodep-vue/core';
-import {_button} from 'probe-base';
+const source = `import {_component,bx,_button} from '@zerodep-vue/core';
 import {ref,shallowRef} from 'vue';
 type Base={__props:{disabled?:boolean;css?:unknown;id?:string;title?:string;model?:unknown}};
 declare const ButtonBase:Base;
@@ -59,28 +58,12 @@ const Child=_component<ChildProps>(({disabled=true,label='fallback',model,...res
 export const App=_component(()=>
  <Child {...inputs.value} css={{width:bx(width.value)}} onClick={active.value ? ()=>calls.push('clicked') : undefined}/>);
 `;
-// 探测替代路径：类型检查独立进行；暂时不让 Vue AST 从高级工具类型推断运行时 Props。
-const skipTypeExtraction = () => ({
-  visitor: {
-    Program(path) {
-      path.traverse({
-        CallExpression(call) {
-          if (!t.isIdentifier(call.node.callee, { name: '_component' })) return;
-          call.node.typeArguments = null;
-          const fn = call.node.arguments[0];
-          if ((t.isArrowFunctionExpression(fn) || t.isFunctionExpression(fn)) && fn.params[0])
-            fn.params[0].typeAnnotation = null;
-        },
-      });
-    },
-  },
-});
 let code = (
   await transformAsync(source, {
     filename: resolve(root, 'packages/compiler/test/__probe_live_props.tsx'),
     babelrc: false,
     configFile: false,
-    plugins: [skipTypeExtraction, babelPlugin],
+    plugins: [babelPlugin],
     presets: [presetTypeScript],
   })
 ).code;
@@ -133,7 +116,7 @@ const test = async (name, run) => {
 };
 try {
   app.mount('#app');
-  await test('component with type extraction bypass keeps scalar props and Ref identity', async () => {
+  await test('component without runtime type extraction keeps scalar props and Ref identity', async () => {
     const el = document.querySelector('button');
     assert.equal(el.disabled, false);
     assert.equal(el.dataset.label, 'initial');

@@ -7,6 +7,7 @@ import type { State, VueJSXPluginOptions } from '../upstream/interface.ts';
 import { transformComponents } from '../transforms/component/transform.ts';
 import { connectCss, transformCss } from '../transforms/css.ts';
 import type { CssOptions } from '../transforms/css.ts';
+import { transformObjects } from '../transforms/objects.ts';
 
 export interface CompilerOptions extends VueJSXPluginOptions {
   /** 自有增强的配置；普通上游选项保持原有含义。 */
@@ -24,6 +25,15 @@ const plugin = declare<State, CompilerOptions>((api, options, dirname) => {
       ...base.visitor,
       Program: {
         enter(path, state) {
+          if (
+            options.zerodep?.css !== false &&
+            (options.zerodep?.css === true ||
+              path.node.body.some(
+                (node) =>
+                  node.type === 'ImportDeclaration' && node.source.value === '@zerodep-vue/core',
+              ))
+          )
+            transformObjects(path);
           transformComponents(path, state);
           const cssEnabled = transformCss(path, state, options.zerodep);
           program.enter(path, state);

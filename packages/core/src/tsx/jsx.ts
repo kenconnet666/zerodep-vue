@@ -2,6 +2,8 @@ import type { NativeElements, ReservedProps, VNode, VNodeChild } from 'vue';
 import type { ManagedProps } from './component.ts';
 import type { ClassValue } from '../css/style-value.ts';
 import type { ElementDirectives, ModelDirectives } from './directives.ts';
+import type { nativeProps } from './element.ts';
+import type { CssInput } from '../css/object-types.ts';
 
 declare const nativeElement: unique symbol;
 
@@ -12,6 +14,7 @@ type Elements = {
       readonly [nativeElement]?: true;
       children?: VNodeChild;
       class?: ClassValue;
+      css?: CssInput<NativeElements[Name]>;
     };
 };
 
@@ -32,7 +35,11 @@ declare global {
     export interface IntrinsicAttributes extends ReservedProps {}
     // 原生元素沿用自身指令；自有与普通 Vue 组件的 Props 协议由标记分别处理。
     export type LibraryManagedAttributes<_Component, Props> =
-      typeof nativeElement extends keyof Props ? Props : ManagedProps<Props>;
+      typeof nativeElement extends keyof Props
+        ? Props
+        : typeof nativeProps extends keyof Props
+          ? Props
+          : ManagedProps<Props>;
   }
 }
 export {};
