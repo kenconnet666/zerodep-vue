@@ -286,10 +286,14 @@ for (const property of properties) {
   );
   const comment = jsdoc(description(name));
   slotLines.push(comment + `declare readonly ${name}: {};`);
+  const methodTags =
+    '\n@param value 当前属性值、主题名或 bx 绑定；undefined 跳过，null 清除当前属性。' +
+    '\n@returns 追加声明后的不可变样式链；保留主题和子类类型，不修改原链。';
+  const methodComment = jsdoc(description(name) + methodTags);
   const keywordSignature = `${name}(value: KeywordInput<${JSON.stringify(name)}, T>): this`;
   const signature = `${name}<const Value>(value: PropertyInput<${JSON.stringify(name)}, T, Value>): this`;
   // 普通字面量先保留声明来源；后面的泛型重载仍拒绝未知主题名，不能退化为宽泛 string。
-  let overloads = comment + keywordSignature + ';\n' + comment + signature + ';\n';
+  let overloads = methodComment + keywordSignature + ';\n' + methodComment + signature + ';\n';
   const supported = supportedLegacyValues[name];
   if (supported) {
     assert(obsolete.has(name), `Compatibility overload needs an obsolete property: ${name}`);
@@ -299,17 +303,22 @@ for (const property of properties) {
     );
     overloads =
       jsdoc(
-        description(name, false) + '\n\n' + supported.description + '\n@see ' + supported.source,
+        description(name, false) +
+          '\n\n' +
+          supported.description +
+          '\n@see ' +
+          supported.source +
+          methodTags,
       ) +
       `${name}(value: ${JSON.stringify(supported.value)}): this;\n` +
       overloads;
   }
-  groups
-    .get(propertyGroup(name, svg, obsolete))
-    .push(
-      overloads +
-        `${name}(value: PropertyValue<${JSON.stringify(name)}, T>): this { return this.write(${JSON.stringify(name)}, value); }`,
-    );
+  groups.get(propertyGroup(name, svg, obsolete)).push(
+    overloads +
+      // 补全候选与已解析调用可能定位到不同签名；实现也携带完整文档，不能只依赖重载回退。
+      methodComment +
+      `${name}(value: PropertyValue<${JSON.stringify(name)}, T>): this { return this.write(${JSON.stringify(name)}, value); }`,
+  );
 }
 const outputs = {
   'literal-values.ts':

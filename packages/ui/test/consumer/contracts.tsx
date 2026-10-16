@@ -22,6 +22,8 @@ const s = useCss();
 s.overflow('hidden');
 s.color('_primaryHover');
 s.color(bx('_primary'));
+const chain = s.display('flex').color('_primary').padding('_medium');
+chain.color('_danger');
 <Button density="compact" slotContent={{ 'data-test': 'value' }} />;
 <Drawer open={ref(false)} title="标题" />;
 <Menu items={[{ key: 'home', label: '首页', href: '/' }]} />;
@@ -47,6 +49,8 @@ void FormProbe;
 s.color('_missing');
 // @ts-expect-error 动态绑定同样保留主题约束。
 s.color(bx('_missing'));
+// @ts-expect-error 发布声明中的连续调用仍保留主题约束。
+chain.color('_missing_chain');
 // @ts-expect-error 组件值必须保留原生 Ref 类型。
 <Slider value={1} />;
 // @ts-expect-error 文本输入不能接收数值模型。

@@ -27,6 +27,10 @@ s.width(undefined);
 s.color(bx('_primary'));
 s.overflow(bx('hidden'));
 s.transform('translateX(10px)');
+const chain = s.display('flex').color('_primary').padding('_medium');
+chain.color('_danger');
+// @ts-expect-error 连续调用后仍保留主题名检查。
+chain.color('_missing_chain');
 // @ts-expect-error 自由 CSS 字符串不能放过未知主题名。
 s.color('_missing');
 // @ts-expect-error 绑定同样检查未知主题名。
@@ -84,6 +88,19 @@ s.width(true);
 
       const plugin = createRequire(import.meta.url)('../../compiler/src/editor/plugin.cjs');
       const enhanced = plugin({ typescript: ts }).create({ languageService: service });
+      // 成员下拉详情与调用位置 hover 是不同入口；分别检查原生服务与增强服务。
+      for (const api of [service, enhanced]) {
+        for (const call of ["s.color('_primaryHover')", "chain.color('_danger')"]) {
+          const position = source.indexOf(call) + call.indexOf('.') + 1;
+          const completions = api.getCompletionsAtPosition(file, position, {});
+          assert.equal(completions.entries.filter((entry) => entry.name === 'color').length, 1);
+          const details = api.getCompletionEntryDetails(file, position, 'color', {}, undefined, {});
+          assert(ts.displayPartsToString(details.documentation).includes('设置文字前景色'));
+          assert.match(ts.displayPartsToString(details.displayParts), /\): Css<UiTheme>/);
+          assert(details.tags.some((tag) => tag.name === 'param'));
+          assert(details.tags.some((tag) => tag.name === 'returns'));
+        }
+      }
       for (const [call, value, target, container, documentation] of [
         ["s.overflow('hidden')", 'hidden', 'literal-values.ts', 'OverflowValues', '裁剪溢出'],
         ["s.borderStyle('hidden')", 'hidden', 'literal-values.ts', 'BorderStyleValues', '边框'],

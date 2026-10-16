@@ -1,5 +1,5 @@
 /**
- * 字面量说明只增强编辑体验：读取当前 Program 的真实声明，不改变诊断或编译结果。
+ * 字面量说明与修复请求只增强编辑体验：读取当前 Program，不改变诊断或编译结果。
  * 使用宿主注入的 TypeScript，避免编辑器与插件各自加载不同版本。
  */
 module.exports = function init({ typescript: ts }) {
@@ -11,6 +11,27 @@ module.exports = function init({ typescript: ts }) {
         const member = service[name];
         proxy[name] = typeof member === 'function' ? member.bind(service) : member;
       }
+
+      proxy.getCodeFixesAtPosition = (fileName, start, end, errorCodes, ...rest) => {
+        // WebStorm 编辑途中可能携带旧的参数数量错误；TS 6.0.3 的此修复会访问已消失的 symbol。
+        // 仅排除当前范围已不存在的 2554，保留其他修复请求和所有原生诊断，不吞掉服务异常。
+        if (
+          errorCodes.includes(2554) &&
+          !service
+            .getSemanticDiagnostics(fileName)
+            .some(
+              (diagnostic) =>
+                diagnostic.code === 2554 &&
+                diagnostic.start !== undefined &&
+                diagnostic.start <= end &&
+                diagnostic.start + (diagnostic.length ?? 0) >= start,
+            )
+        )
+          errorCodes = errorCodes.filter((code) => code !== 2554);
+        return errorCodes.length
+          ? service.getCodeFixesAtPosition(fileName, start, end, errorCodes, ...rest)
+          : [];
+      };
 
       const transparent = (node) =>
         ts.isParenthesizedExpression(node) ||

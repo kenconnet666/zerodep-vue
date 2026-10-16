@@ -96,6 +96,22 @@ switch (phase) {
         );
       }
       report.diagnostics = 0;
+      const memberPosition = source.indexOf("chain.color('_danger')") + 'chain.'.length;
+      const members = enhanced.getCompletionsAtPosition(file, memberPosition, {});
+      assert.equal(members.entries.filter((entry) => entry.name === 'color').length, 1);
+      const member = enhanced.getCompletionEntryDetails(
+        file,
+        memberPosition,
+        'color',
+        {},
+        undefined,
+        {},
+      );
+      assert(ts.displayPartsToString(member.documentation).includes('设置文字前景色'));
+      assert.match(ts.displayPartsToString(member.displayParts), /\): Css<UiTheme>/);
+      assert(member.tags.some((tag) => tag.name === 'param'));
+      assert(member.tags.some((tag) => tag.name === 'returns'));
+      report.memberCompletionDocumentation = true;
       report.declarations = declarations.length;
       report.literalDocumentation = true;
     } finally {
