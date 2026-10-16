@@ -8977,10 +8977,23 @@ export class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor {
    *
    * @default:'inline-axis'
    * @extend:'否'
+   * @category 厂商与历史兼容属性
+   * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-orient
+   *
+   * 用于多行省略的兼容组合：与 display: -webkit-box（或 -webkit-inline-box）、-webkit-line-clamp 和 overflow: hidden 配合。此组合由 CSS Overflow 的兼容条款保留，不用于常规弹性布局。
+   * @see https://drafts.csswg.org/css-overflow-4/#webkit-line-clamp
+   */
+  WebkitBoxOrient(value: 'vertical'): this;
+  /**
+   * 指定旧版弹性盒的排列方向；仅为多行截断兼容保留，常规布局请使用 Flex/Grid。
+   *
+   * @default:'inline-axis'
+   * @extend:'否'
    * @deprecated 历史属性；新代码优先使用标准替代属性。
    * @category 厂商与历史兼容属性
    * @see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/-webkit-box-orient
    */
+  WebkitBoxOrient<const Value>(value: PropertyInput<'WebkitBoxOrient', T, Value>): this;
   WebkitBoxOrient<const Value>(value: PropertyInput<'WebkitBoxOrient', T, Value>): this {
     return this.write('WebkitBoxOrient', value);
   }

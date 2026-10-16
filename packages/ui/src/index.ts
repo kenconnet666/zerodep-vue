@@ -9,6 +9,8 @@ export { Paragraph } from './display/Paragraph.tsx';
 export type { ParagraphProps } from './display/Paragraph.tsx';
 export { Link } from './display/Link.tsx';
 export type { LinkProps } from './display/Link.tsx';
+export { Ellipsis } from './display/Ellipsis.tsx';
+export type { EllipsisProps } from './display/Ellipsis.tsx';
 export { Provider, useCss, useTheme, useLang } from './config/Provider.tsx';
 export type { ProviderProps } from './config/Provider.tsx';
 export { BaseTheme } from './config/theme/BaseTheme.ts';

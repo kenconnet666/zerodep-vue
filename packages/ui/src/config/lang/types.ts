@@ -8,6 +8,10 @@ export interface UiLanguage {
   readonly clear: string;
   /** 正在加载时的文案。 */
   readonly loading: string;
+  /** 展开被省略的完整内容。 */
+  readonly expand: string;
+  /** 收起已展开的内容。 */
+  readonly collapse: string;
   /** 日期和数字的格式化区域，使用 BCP 47 标识，例如 zh-CN、en-GB。 */
   readonly locale: string;
   /** 日期展示和转换的时区，例如 Asia/Shanghai、Europe/London；默认 Asia/Shanghai。 */

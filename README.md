@@ -200,7 +200,7 @@ import { Heading, Link, Paragraph, Text } from '@zerodep-vue/ui';
 
 export const ProjectDescription = _component(() => (
   <>
-    <Heading level={1} size="_extraExtraLarge">
+    <Heading as="h1" size="_extraExtraLarge">
       项目设置
     </Heading>
     <Paragraph lineHeight="_relaxed">
@@ -214,11 +214,37 @@ export const ProjectDescription = _component(() => (
 ));
 ```
 
-`Text` 默认继承字号、颜色、字重和行高。`Paragraph` 使用 `_normal` 行高；`Heading` 使用 `_semibold` 字重、`_tight` 行高，字号仍继承；两种块级文字都清除浏览器默认外边距，间距交给布局或 `class`。标题的 `level` 必填且只接受 1–6，决定文档层级，不决定视觉大小；层级和样式来源更新后都会反映到实际 DOM。段落和标题的内容应符合原生 HTML 语义，列表、卡片等块级区域使用布局容器。
+`Text` 默认继承字号、颜色、字重和行高。`Paragraph` 使用 `_normal` 行高；`Heading` 使用 `_semibold` 字重、`_tight` 行高，字号仍继承；两种块级文字都清除浏览器默认外边距，间距交给布局或 `class`。标题通过必填的 `as` 直接指定 `h1`–`h6`，决定文档层级，不决定视觉大小；标签和样式来源更新后都会反映到实际 DOM。段落和标题的内容应符合原生 HTML 语义，列表、卡片等块级区域使用布局容器。
 
 `Link` 的 `href` 必填，导航、下载、键盘和修饰键点击都交给原生 `a`。默认颜色为 `_primary`，悬停和按下使用对应主题色，保留下划线和键盘可见焦点；显式 `color` 同时覆盖普通、悬停和按下颜色，外部 `class` 可继续定制各状态。`target="_blank"` 且未提供 `rel` 时默认补 `noopener`；显式 `rel` 保持原值，默认不修改引用来源策略。应用路由通过原生 `href`、`onClick` 自行接入，执行操作使用按钮。
 
 内容统一通过 `children` 或普通 Vue 默认插槽传入，不解析 HTML 字符串，也不透传 `innerHTML`、`textContent` 覆盖子树。组件消费的属性显式解构，其余原生属性和事件由 `rest` 直接转发；外部链式 `class` 最后组合，原生 `style` 遵循浏览器层叠。强调语义使用 `strong`、`em` 等原生行内标签，字重 Props 只控制外观。
+
+## UI 文字省略
+
+`Ellipsis` 独立负责单行、多行省略及可选展开。内容保留为完整的文字和 VNode，由 CSS 裁剪；父级布局需要提供有效宽度。外层是块级显示的 `span`，默认 `min-width: 0`、`max-width: 100%`，可放入 Flex/Grid 项或段落；通过 `class` 约束宽度及继承字号等样式。
+
+```tsx
+import { ref } from 'vue';
+import { _component } from '@zerodep-vue/core';
+import { Ellipsis, useCss } from '@zerodep-vue/ui';
+
+export const Description = _component(() => {
+  const s = useCss();
+  const expanded = ref(false);
+  return (
+    <Ellipsis lines={3} expandable expanded={expanded} class={s.maxWidth('30em')}>
+      这里是完整描述，可以包含强调等非交互行内内容。展开与收起不会修改原始文本。
+    </Ellipsis>
+  );
+});
+```
+
+`lines` 默认 1，必须是正整数；1 使用单行省略，多行同时提供标准 `line-clamp` 和 WebKit 兼容组合。`WebkitBoxOrient('vertical')` 对应 CSS Overflow 明确保留的多行省略兼容用法，其专用签名不标记弃用，其他旧版布局值仍提示弃用。`expanded` 是可写 `Ref<boolean>`，不传时每个实例独立创建；父级替换 Ref 或修改其值都能更新组件。`expandable` 默认关闭，仅决定是否提供内置控制，不限制父级直接控制展开状态。
+
+开启 `expandable` 后，实际溢出时显示原生按钮，提供 `aria-expanded`、`aria-controls` 和 `type="button"`，支持键盘操作；按钮文字从 Provider 的 `lang.expand`、`lang.collapse` 继承，可局部覆盖。展开后收起保留按钮焦点；内容变短或容器变宽导致按钮消失时，将焦点交回内容。裁剪区域只支持文字和非交互行内片段，链接、按钮等交互控件应放在外部；启用 `expandable` 的 Ellipsis 不应嵌入另一个按钮或链接。未启用展开时不添加内容焦点入口，可作为 Link 的文字内容组合使用。
+
+可选 `onOverflowChange(overflowing)` 在首次可测量及实际裁剪状态变化时调用；展开时为 `false`，不可测量的隐藏内容不提前报告。它可供调用方组合提示等交互，组件不内置浮层、复制或编辑功能。只有启用展开或溢出回调时才创建观察器；容器尺寸、内容、继承样式和字体加载变化会合并到下一动画帧测量，卸载时取消回调并释放观察器。SSR 不读取 DOM 尺寸，首屏保留完整内容，hydration 后才决定是否显示省略控制。
 
 ## 开发与验证
 

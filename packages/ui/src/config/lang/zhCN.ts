@@ -6,6 +6,8 @@ export const zhCN: UiLanguage = Object.freeze({
   cancel: '取消',
   clear: '清空',
   loading: '加载中',
+  expand: '展开全文',
+  collapse: '收起',
   locale: 'zh-CN',
   timeZone: 'Asia/Shanghai',
 });

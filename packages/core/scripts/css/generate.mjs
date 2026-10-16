@@ -7,7 +7,7 @@ import ts from 'typescript';
 import prettier from 'prettier';
 import docs from './property-docs.json' with { type: 'json' };
 import metadata from 'mdn-data/css/properties.json' with { type: 'json' };
-import { aliases, summaries } from './compat-docs.mjs';
+import { aliases, summaries, supportedLegacyValues } from './compat-docs.mjs';
 import { propertyGroup, propertyGroups } from './property-groups.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -112,7 +112,7 @@ function initialValue(value) {
   return initialLabels[value] ?? value;
 }
 
-function description(name) {
+function description(name, deprecated = obsolete.has(name)) {
   const base = normalize(name);
   const direct = docs.properties[name] ?? summaries[base] ?? docs.properties[base];
   const alias = aliases[name] ?? aliases[base];
@@ -148,7 +148,7 @@ function description(name) {
       : '') +
     (initial ? '' : '\n\n初始值：当前固定数据源未记录，参见该属性规范。') +
     (tags.length ? '\n\n' + tags.join('\n') : '') +
-    (obsolete.has(name) ? '\n@deprecated 历史属性；新代码优先使用标准替代属性。' : '') +
+    (deprecated ? '\n@deprecated 历史属性；新代码优先使用标准替代属性。' : '') +
     `\n@category ${propertyGroups.find(([group]) => group === propertyGroup(name, svg, obsolete))[1]}` +
     `\n@see https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/${cssName(name)}`
   );
@@ -284,12 +284,27 @@ for (const property of properties) {
   );
   const comment = jsdoc(description(name));
   slotLines.push(comment + `declare readonly ${name}: {};`);
+  const signature = `${name}<const Value>(value: PropertyInput<${JSON.stringify(name)}, T, Value>): this`;
+  let overloads = comment;
+  const supported = supportedLegacyValues[name];
+  if (supported) {
+    assert(obsolete.has(name), `Compatibility overload needs an obsolete property: ${name}`);
+    assert(
+      literalValues(concreteType).includes(supported.value),
+      `Unknown compatibility value: ${name}`,
+    );
+    overloads =
+      jsdoc(
+        description(name, false) + '\n\n' + supported.description + '\n@see ' + supported.source,
+      ) +
+      `${name}(value: ${JSON.stringify(supported.value)}): this;\n` +
+      comment +
+      signature +
+      ';\n';
+  }
   groups
     .get(propertyGroup(name, svg, obsolete))
-    .push(
-      comment +
-        `${name}<const Value>(value: PropertyInput<${JSON.stringify(name)}, T, Value>): this { return this.write(${JSON.stringify(name)}, value); }`,
-    );
+    .push(overloads + `${signature} { return this.write(${JSON.stringify(name)}, value); }`);
 }
 const outputs = {
   'literal-values.ts':

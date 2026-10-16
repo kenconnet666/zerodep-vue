@@ -1,4 +1,14 @@
 // 兼容属性采用其实际用途说明，不把废弃名称宣传成现代布局方案。
+// 规范明确保留的特定兼容值单独发射签名，其余历史用途仍提示弃用。
+export const supportedLegacyValues = {
+  WebkitBoxOrient: {
+    value: 'vertical',
+    description:
+      '用于多行省略的兼容组合：与 display: -webkit-box（或 -webkit-inline-box）、-webkit-line-clamp 和 overflow: hidden 配合。此组合由 CSS Overflow 的兼容条款保留，不用于常规弹性布局。',
+    source: 'https://drafts.csswg.org/css-overflow-4/#webkit-line-clamp',
+  },
+};
+
 export const aliases = {
   MozBorderEndColor: 'borderInlineEndColor',
   MozBorderEndStyle: 'borderInlineEndStyle',

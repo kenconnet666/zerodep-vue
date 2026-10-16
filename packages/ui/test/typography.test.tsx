@@ -1,7 +1,7 @@
 import { afterEach, expect, test, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { renderToString } from '@vue/server-renderer';
-import { createApp, createSSRApp, defineComponent, h, nextTick, ref, shallowRef } from 'vue';
+import { createSSRApp, defineComponent, h, nextTick, ref, shallowRef } from 'vue';
 import type { Component } from 'vue';
 import { _component, createCssHost, getCssHost } from '@zerodep-vue/core';
 import type { CssValue } from '@zerodep-vue/core';
@@ -51,7 +51,7 @@ test('native text elements forward attributes and one event without leaking styl
         <Paragraph id="paragraph" textAlign="end">
           正文 <em>{caption.value}</em>
         </Paragraph>
-        <Heading id="heading" level={2} aria-label="区块标题">
+        <Heading id="heading" as="h2" aria-label="区块标题">
           {caption.value}
         </Heading>
         <Link id="link" href="/first" data-purpose="navigation" onClick={click}>
@@ -72,7 +72,7 @@ test('native text elements forward attributes and one event without leaking styl
   expect(wrapper.get('#heading').attributes('aria-label')).toBe('区块标题');
   expect(wrapper.get('#link').attributes('data-purpose')).toBe('navigation');
   for (const element of wrapper.findAll('#text, #paragraph, #heading, #link')) {
-    for (const key of ['size', 'color', 'fontWeight', 'lineHeight', 'textAlign', 'level'])
+    for (const key of ['size', 'color', 'fontWeight', 'lineHeight', 'textAlign', 'as'])
       expect(element.element.hasAttribute(key)).toBe(false);
   }
   await wrapper.get('#link').trigger('click', { ctrlKey: true });
@@ -117,7 +117,7 @@ test('all text variants react to shared style props and inherited theme replacem
         </Paragraph>
         <Heading
           data-text
-          level={3}
+          as="h3"
           color={color.value}
           size={size.value}
           fontWeight={fontWeight.value}
@@ -183,33 +183,22 @@ test('external CSS wins over convenience props and native style stays on the act
   expect(css()).toContain('font-size:2em');
 });
 
-test('heading levels remain reactive and independent of visual size', async () => {
-  const level = ref<HeadingProps['level']>(1);
+test('heading tags remain reactive and independent of visual size', async () => {
+  const tag = ref<HeadingProps['as']>('h1');
   const { wrapper, css } = render(
     _component(() => (
-      <Heading level={level.value} id="title">
+      <Heading as={tag.value} id="title">
         标题
       </Heading>
     )),
   );
-  for (const next of [1, 2, 3, 4, 5, 6] as const) {
-    level.value = next;
+  for (const next of ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const) {
+    tag.value = next;
     await nextTick();
-    expect(wrapper.get('#title').element.tagName).toBe(`H${next}`);
+    expect(wrapper.get('#title').element.tagName).toBe(next.toUpperCase());
   }
   expect(css()).toContain('font-size:inherit');
   expect(css()).toContain('margin:0');
-  const errors: unknown[] = [];
-  const app = createApp(Heading, { level: 0 });
-  app.config.errorHandler = (error) => errors.push(error);
-  app.mount(document.createElement('div'));
-  try {
-    expect(errors.some((error) => String(error).includes('Heading level 必须是 1 到 6'))).toBe(
-      true,
-    );
-  } finally {
-    app.unmount();
-  }
 });
 
 test('link rel defaults follow target updates while explicit rel and anchor attributes retain native meaning', async () => {
@@ -269,7 +258,7 @@ test('plain Vue host slots stay reactive and untyped DOM replacement cannot repl
 test('text semantics and theme values survive SSR and hydration without replacing nodes', async () => {
   const App = _component(() => (
     <Provider theme={new DarkTheme()}>
-      <Heading level={2} size="_extraLarge">
+      <Heading as="h2" size="_extraLarge">
         标题
       </Heading>
       <Paragraph>
@@ -313,12 +302,12 @@ test('text semantics and theme values survive SSR and hydration without replacin
 function typeContracts() {
   <Text color="_textSecondary" size="_small" fontWeight="_semibold" lineHeight="_normal" />;
   <Paragraph textAlign="end" />;
-  <Heading level={6} size="2rem" />;
+  <Heading as="h6" size="2rem" />;
   <Link href="/detail" target="_blank" download />;
   // @ts-expect-error 标题层级必须明确。
   <Heading />;
-  // @ts-expect-error 原生标题只有六级。
-  <Heading level={7} />;
+  // @ts-expect-error 仅接受原生标题标签。
+  <Heading as="div" />;
   // @ts-expect-error 导航地址必须明确。
   <Link />;
   // @ts-expect-error 链接不模拟禁用按钮。

@@ -6,6 +6,8 @@ export const enUS: UiLanguage = Object.freeze({
   cancel: 'Cancel',
   clear: 'Clear',
   loading: 'Loading',
+  expand: 'Show more',
+  collapse: 'Show less',
   locale: 'en-US',
   timeZone: 'UTC',
 });

@@ -29,6 +29,7 @@ test('inferred UI component declarations retain public prop types and comments w
     'display/Heading.tsx',
     'display/Paragraph.tsx',
     'display/Link.tsx',
+    'display/Ellipsis.tsx',
     'config/Provider.tsx',
   ].map((name) => resolve(root, 'packages/ui/src', name));
   // 只在内存中发射公共组件的声明，不写 dist，也不运行全仓类型检查。
@@ -63,7 +64,12 @@ test('inferred UI component declarations retain public prop types and comments w
       expect(declaration).toContain("fontWeight?: CssValue<'fontWeight', UiTheme>");
       expect(declaration).toContain('默认继承字号');
     }
-    if (file.endsWith('Heading.tsx')) expect(declaration).toContain('level: 1 | 2 | 3 | 4 | 5 | 6');
+    if (file.endsWith('Heading.tsx'))
+      expect(declaration).toContain("as: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'");
     if (file.endsWith('Link.tsx')) expect(declaration).toContain('href: string');
+    if (file.endsWith('Ellipsis.tsx')) {
+      expect(declaration).toContain('expanded?: Ref<boolean>');
+      expect(declaration).toContain('onOverflowChange?: (overflowing: boolean) => void');
+    }
   }
 });
