@@ -85,7 +85,10 @@ test(
       if (file.endsWith('Link.tsx')) expect(declaration).toContain('href: string');
       if (file.endsWith('Ellipsis.tsx')) {
         expect(declaration).toContain('expanded?: Ref<boolean>');
-        expect(declaration).toContain('onOverflowChange?: (overflowing: boolean) => void');
+        expect(declaration).toContain(
+          "import type { Callback } from '../interaction/callbacks.ts'",
+        );
+        expect(declaration).toContain('onOverflowChange?: Callback<[overflowing: boolean]>');
       }
     }
   },

@@ -9,7 +9,7 @@ import {
   hide,
 } from '@floating-ui/dom';
 import type { Placement } from '@floating-ui/dom';
-import { computed, nextTick, onMounted, shallowRef, Teleport, watch } from 'vue';
+import { nextTick, onMounted, shallowRef, Teleport, watch } from 'vue';
 import type { Ref } from 'vue';
 import { tabbable } from 'tabbable';
 import { useCss } from '../config/Provider.tsx';
@@ -61,7 +61,25 @@ export const FloatingPanel = _component(
   }: FloatingPanelProps) => {
     const s = useCss();
     const panel = shallowRef<HTMLDivElement>();
-    const trigger = computed(() => reference);
+    const trigger = shallowRef(reference);
+    watch(
+      () => reference,
+      (value, _previous, cleanup) => {
+        if (value) {
+          trigger.value = value;
+          return;
+        }
+        // DOM ref 替换先清空再赋新值；等本轮 Vue 更新结束，避免销毁仍属于同一浮层的内容。
+        let active = true;
+        cleanup(() => {
+          active = false;
+        });
+        void nextTick(() => {
+          if (active) trigger.value = undefined;
+        });
+      },
+      { flush: 'sync' },
+    );
     const mounted = shallowRef(false);
     const context = useLayerContext(() => open.value);
     const appearance = usePortalStyle(trigger);
@@ -96,7 +114,7 @@ export const FloatingPanel = _component(
       () =>
         [
           context.active.value,
-          reference,
+          trigger.value,
           panel.value,
           placement,
           offset,
@@ -163,7 +181,8 @@ export const FloatingPanel = _component(
     );
     function keydown(event: KeyboardEvent) {
       const element = panel.value;
-      if (event.defaultPrevented || event.key !== 'Tab' || !element || !reference) return;
+      const anchor = trigger.value;
+      if (event.defaultPrevented || event.key !== 'Tab' || !element || !anchor) return;
       const controls = tabbable(element);
       const focused = element.ownerDocument.activeElement;
       const leaving =
@@ -173,17 +192,17 @@ export const FloatingPanel = _component(
           : focused === controls.at(-1));
       if (!leaving) return;
       event.preventDefault();
-      const scope = reference.closest('dialog[open]') ?? reference.ownerDocument.body;
+      const scope = anchor.closest('dialog[open]') ?? anchor.ownerDocument.body;
       const outside = tabbable(scope).filter((control) => !element.contains(control));
-      const index = outside.indexOf(reference);
-      const next = event.shiftKey ? reference : (outside[index + 1] ?? outside[0] ?? reference);
+      const index = outside.indexOf(anchor);
+      const next = event.shiftKey ? anchor : (outside[index + 1] ?? outside[0] ?? anchor);
       if (closeOnFocusOutside) close('outside');
       next.focus({ preventScroll: true });
     }
     return (
       <>
-        {mounted.value && reference && context.active.value && (
-          <Teleport to={context.portal.value ?? reference.ownerDocument.body}>
+        {mounted.value && trigger.value && context.active.value && (
+          <Teleport to={context.portal.value ?? trigger.value.ownerDocument.body}>
             <div
               {...rest}
               ref={panel}

@@ -48,15 +48,20 @@ export const Tooltip = _component(
         Math.max(0, delay),
       );
     };
-    watch(element, (value, previous) => {
-      if (value === previous) return;
-      // 被替换的 DOM 不保证触发 blur/pointerleave；交互状态只属于当前触发器。
-      clearTimeout(timer);
-      triggerHovered = false;
-      panelHovered = false;
-      focused = value != null && value.ownerDocument.activeElement === value;
-      open.value = focused && !disabled;
-    });
+    watch(
+      element,
+      (value, previous) => {
+        if (value === previous) return;
+        // 被替换的 DOM 不保证触发 blur/pointerleave；交互状态只属于当前触发器。
+        clearTimeout(timer);
+        triggerHovered = false;
+        panelHovered = false;
+        focused = value != null && value.ownerDocument.activeElement === value;
+        open.value = focused && !disabled;
+      },
+      // 首次 ref 注册也必须即时完成，不能在随后 pointerenter 后才清掉它的计时器。
+      { flush: 'sync' },
+    );
     watch(
       () => disabled,
       (value) => {

@@ -8,6 +8,7 @@ import { Breadcrumb, Button, Drawer, Menu, Popover, Sidebar, Tooltip } from '../
 const cleanup: (() => void)[] = [];
 afterEach(() => {
   while (cleanup.length) cleanup.pop()!();
+  vi.useRealTimers();
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
 });
@@ -31,16 +32,19 @@ test('programmatic popover close restores focus and nested trigger replacement k
   const open = ref(false);
   const child = ref(false);
   const version = ref(0);
+  const triggerVisible = ref(true);
   const wrapper = mount(
     _component(() => (
       <Popover
         open={open}
         label="父面板"
-        trigger={(props) => (
-          <Button key={version.value} {...props}>
-            父触发器
-          </Button>
-        )}
+        trigger={(props) =>
+          triggerVisible.value ? (
+            <Button key={version.value} {...props}>
+              父触发器
+            </Button>
+          ) : null
+        }
       >
         <input aria-label="内容" />
         <Popover
@@ -68,18 +72,30 @@ test('programmatic popover close restores focus and nested trigger replacement k
   child.value = true;
   await nextTick();
   await flushPromises();
+  const parentPanel = document.querySelector('[aria-label="父面板"]');
+  const childPanel = document.querySelector('[aria-label="子面板"]');
+  const focused = document.activeElement;
   version.value++;
   await nextTick();
   await flushPromises();
+  expect(document.querySelector('[aria-label="父面板"]')).toBe(parentPanel);
+  expect(document.querySelector('[aria-label="子面板"]')).toBe(childPanel);
+  expect(document.activeElement).toBe(focused);
+  expect(child.value).toBe(true);
   document.dispatchEvent(
     new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }),
   );
   await nextTick();
   expect(child.value).toBe(false);
   expect(open.value).toBe(true);
+  triggerVisible.value = false;
+  await nextTick();
+  await flushPromises();
+  expect(document.querySelector('[aria-label="父面板"]')).toBeNull();
 });
 
 test('tooltip remains while either hover or focus owns it, and Escape dismisses it', async () => {
+  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
   const wrapper = mount(
     _component(() => (
       <Tooltip
@@ -94,10 +110,10 @@ test('tooltip remains while either hover or focus owns it, and Escape dismisses 
   cleanup.push(() => wrapper.unmount());
   const button = wrapper.get('button');
   await button.trigger('pointerenter');
-  await new Promise((resolve) => setTimeout(resolve, 5));
+  await vi.advanceTimersByTimeAsync(0);
   await button.trigger('focus');
   await button.trigger('blur');
-  await new Promise((resolve) => setTimeout(resolve, 5));
+  await vi.advanceTimersByTimeAsync(0);
   expect(document.querySelector('[role="tooltip"]')?.textContent).toBe('说明');
   document.dispatchEvent(
     new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }),
@@ -107,6 +123,7 @@ test('tooltip remains while either hover or focus owns it, and Escape dismisses 
 });
 
 test('tooltip releases a removed hovered panel when disabled and re-enabled', async () => {
+  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
   const disabled = ref(false);
   const container = document.createElement('div');
   document.body.append(container);
@@ -128,7 +145,7 @@ test('tooltip releases a removed hovered panel when disabled and re-enabled', as
   });
   const button = wrapper.get('button');
   await button.trigger('pointerenter');
-  await new Promise((resolve) => setTimeout(resolve, 10));
+  await vi.advanceTimersByTimeAsync(0);
   const panel = document.querySelector('[role="tooltip"]');
   expect(panel).not.toBeNull();
   panel!.dispatchEvent(new Event('pointerenter'));
@@ -139,10 +156,10 @@ test('tooltip releases a removed hovered panel when disabled and re-enabled', as
   disabled.value = false;
   await nextTick();
   await button.trigger('pointerenter');
-  await new Promise((resolve) => setTimeout(resolve, 10));
+  await vi.advanceTimersByTimeAsync(0);
   expect(document.querySelector('[role="tooltip"]')).not.toBeNull();
   await button.trigger('pointerleave');
-  await new Promise((resolve) => setTimeout(resolve, 10));
+  await vi.advanceTimersByTimeAsync(0);
   expect(document.querySelector('[role="tooltip"]')).toBeNull();
 });
 
