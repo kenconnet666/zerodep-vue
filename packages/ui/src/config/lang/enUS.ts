@@ -16,6 +16,8 @@ export const enUS: UiLanguage = Object.freeze({
   expandNavigation: 'Expand navigation',
   collapseNavigation: 'Collapse navigation',
   resizePanel: 'Resize panel',
+  expandPanel: 'Expand panel',
+  collapsePanel: 'Collapse panel',
   verticalScrollbar: 'Vertical scroll',
   horizontalScrollbar: 'Horizontal scroll',
   locale: 'en-US',

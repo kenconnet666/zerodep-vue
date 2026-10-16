@@ -21,6 +21,12 @@ import {
   Anchor,
   Affix,
   BackTop,
+  Popover,
+  Tooltip,
+  Drawer,
+  Menu,
+  Breadcrumb,
+  Sidebar,
   Icon,
   useCss,
 } from '../../src/index.ts';
@@ -60,6 +66,8 @@ const Demo = _component(() => {
   const inspector = ref(false);
   const showInspector = ref(true);
   const splitScroll = shallowRef<ScrollbarInstance>();
+  const drawer = ref(false);
+  const secondDrawer = ref(false);
   return (
     <main
       dir={rtl.value ? 'rtl' : 'ltr'}
@@ -187,6 +195,107 @@ const Demo = _component(() => {
         </CollapseItem>
       </Collapse>
       <Divider class={s.marginBlock('_large')}>分割工作区</Divider>
+      <Menu
+        aria-label="顶部导航"
+        orientation="horizontal"
+        variant="line"
+        activeKey="dashboard"
+        items={[
+          { key: 'dashboard', label: '仪表盘', href: '#dashboard' },
+          {
+            key: 'tools',
+            label: '更多工具',
+            children: [
+              { key: 'export', label: '导出记录', href: '#export' },
+              { key: 'history', label: '查看历史', href: '#history' },
+            ],
+          },
+        ]}
+      />
+      <Breadcrumb
+        maxItems={3}
+        items={[
+          { key: 'home', label: '首页', href: '#' },
+          { key: 'space', label: '工作区', href: '#space' },
+          { key: 'settings', label: '设置', href: '#settings' },
+          { key: 'current', label: '布局组件' },
+        ]}
+      />
+      <Flex
+        class={s
+          .height('18em')
+          .marginBlock('_medium')
+          .borderStyle('solid')
+          .borderWidth('0.0625em')
+          .borderColor('_border')}
+      >
+        <Sidebar header="导航示例" aria-label="演示导航">
+          <Menu
+            activeKey="overview"
+            items={[
+              { key: 'overview', label: '概览', href: '#section-one', icon: Search },
+              {
+                key: 'settings',
+                label: '设置',
+                icon: Search,
+                children: [
+                  { key: 'profile', label: '个人资料', href: '#profile' },
+                  { key: 'team', label: '团队设置', href: '#team' },
+                ],
+              },
+              { key: 'separator', type: 'divider' },
+              { key: 'disabled', label: '暂不可用', disabled: true },
+            ]}
+          />
+          <input aria-label="侧栏草稿" placeholder="跨断点保留内容" />
+        </Sidebar>
+        <div class={s.padding('_large')}>侧边导航在窄屏转为抽屉，内容实例保持不变。</div>
+      </Flex>
+      <Flex gap="_small" class={s.marginBlock('_medium')}>
+        <Popover label="快捷设置" trigger={(props) => <Button {...props}>打开浮层</Button>}>
+          <input aria-label="浮层输入" />
+          <Popover label="子浮层" trigger={(props) => <Button {...props}>打开子浮层</Button>}>
+            <Button>子层操作</Button>
+          </Popover>
+        </Popover>
+        <Tooltip
+          content="这是一条简短说明"
+          trigger={(props) => (
+            <Button {...props} variant="outline">
+              悬停提示
+            </Button>
+          )}
+        />
+        <Button
+          onClick={() => {
+            drawer.value = true;
+          }}
+        >
+          打开抽屉
+        </Button>
+      </Flex>
+      <Drawer open={drawer} title="工作区设置">
+        <Sidebar media="" showToggle={false} class={s.height('5em')}>
+          <Popover label="内联侧栏浮层" trigger={(props) => <Button {...props}>侧栏内浮层</Button>}>
+            <Button>侧栏浮层操作</Button>
+          </Popover>
+        </Sidebar>
+        <input aria-label="抽屉输入" />
+        <Popover label="抽屉中的浮层" trigger={(props) => <Button {...props}>抽屉内浮层</Button>}>
+          <Button>浮层内动作</Button>
+        </Popover>
+        <Button
+          onClick={() => {
+            secondDrawer.value = true;
+          }}
+        >
+          打开第二层抽屉
+        </Button>
+        <Drawer open={secondDrawer} title="第二层">
+          <input aria-label="第二层输入" />
+        </Drawer>
+        <div class={s.height('60em')}>可滚动的设置内容</div>
+      </Drawer>
       <Button
         onClick={() => {
           showInspector.value = !showInspector.value;

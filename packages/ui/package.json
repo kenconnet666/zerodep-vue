@@ -22,6 +22,7 @@
     "check": "tsc --noEmit -p tsconfig.json",
     "build": "tsc -p tsconfig.build.json && node build.mjs",
     "test": "vitest run --config vitest.config.ts",
+    "test:browser": "playwright test --config playwright.config.ts",
     "test:watch": "vitest --config vitest.config.ts"
   },
   "peerDependencies": {
@@ -39,6 +40,7 @@
     "@floating-ui/dom": "catalog:",
     "@internationalized/date": "catalog:",
     "@lucide/icons": "catalog:",
+    "@playwright/test": "catalog:",
     "@zerodep-vue/compiler": "workspace:*",
     "@zerodep-vue/core": "workspace:*",
     "decimal.js": "catalog:",

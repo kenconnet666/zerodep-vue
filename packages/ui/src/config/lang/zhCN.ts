@@ -16,6 +16,8 @@ export const zhCN: UiLanguage = Object.freeze({
   expandNavigation: '展开导航',
   collapseNavigation: '收窄导航',
   resizePanel: '调整面板大小',
+  expandPanel: '展开面板',
+  collapsePanel: '收起面板',
   verticalScrollbar: '纵向滚动',
   horizontalScrollbar: '横向滚动',
   locale: 'zh-CN',

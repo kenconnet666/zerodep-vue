@@ -193,3 +193,29 @@ test('split SSR supports Fragment and prototype-looking names without mounting o
   expect(html).toContain('第一块');
   expect(html).toContain('第二块');
 });
+
+test('simultaneously reopening panes reserves all saved sizes before redistributing remaining space', async () => {
+  const sizes = ref<Readonly<Record<string, number>>>({ a: 20, b: 20, c: 30, d: 30 });
+  const a = ref(false);
+  const b = ref(false);
+  const wrapper = mount(
+    _component(() => (
+      <Split sizes={sizes}>
+        <SplitPane name="a" collapsed={a} />
+        <SplitPane name="b" collapsed={b} />
+        <SplitPane name="c" />
+        <SplitPane name="d" />
+      </Split>
+    )),
+  );
+  cleanup.push(() => wrapper.unmount());
+  a.value = true;
+  b.value = true;
+  await nextTick();
+  sizes.value = { a: 0, b: 0, c: 60, d: 40 };
+  await nextTick();
+  a.value = false;
+  b.value = false;
+  await nextTick();
+  expect(sizes.value).toEqual({ a: 20, b: 20, c: 36, d: 24 });
+});

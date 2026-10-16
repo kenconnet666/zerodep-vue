@@ -1,5 +1,6 @@
 import { _component, bx, cx } from '@zerodep-vue/core';
 import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown } from '@lucide/icons';
+import type { LucideIconData } from '@lucide/icons';
 import {
   Comment,
   Fragment,
@@ -210,25 +211,31 @@ export const Split = _component(
       watch(
         () => JSON.stringify(panes.value.map((pane) => [pane.props.name, collapsed(pane)])),
         () => {
+          const opening = new Map<string, number>();
           for (const pane of panes.value) {
             const name = pane.props.name;
             const current = collapsed(pane);
             const previous = collapseStates.get(name);
             collapseStates.set(name, current);
-            if (previous && !current) {
-              const desired = restored.get(name) ?? 100 / panes.value.length;
-              const actual = record();
-              const others = panes.value.filter(
-                (item) => item.props.name !== name && !collapsed(item),
-              );
-              const total = others.reduce((sum, item) => sum + actual[item.props.name]!, 0);
-              actual[name] = desired;
-              for (const item of others)
-                actual[item.props.name] = total
-                  ? (actual[item.props.name]! / total) * (100 - desired)
-                  : (100 - desired) / others.length;
-              sizes.value = actual;
-            }
+            if (previous && !current)
+              opening.set(name, restored.get(name) ?? 100 / panes.value.length);
+          }
+          // 同一轮展开多块时一起保留快照，不能让后恢复的项再次缩小前一项。
+          if (opening.size) {
+            const actual = record();
+            const desired = Array.from(opening.values()).reduce((sum, value) => sum + value, 0);
+            const reserved = Math.min(100, desired);
+            for (const [name, value] of opening)
+              actual[name] = desired ? (value / desired) * reserved : 0;
+            const others = panes.value.filter(
+              (item) => !opening.has(item.props.name) && !collapsed(item),
+            );
+            const total = others.reduce((sum, item) => sum + actual[item.props.name]!, 0);
+            for (const item of others)
+              actual[item.props.name] = total
+                ? (actual[item.props.name]! / total) * (100 - reserved)
+                : (100 - reserved) / others.length;
+            sizes.value = actual;
           }
           const names = new Set(panes.value.map((pane) => pane.props.name));
           for (const name of collapseStates.keys())
@@ -505,43 +512,42 @@ export const Split = _component(
                   onPointerdown={(event) => pointerdown(event, index)}
                   onKeydown={(event) => keydown(event, index)}
                 />
-                {[pane, panes.value[index + 1]!].map(
-                  (item, side) =>
-                    item.props.collapsible && (
-                      <Button
-                        key={item.props.name}
-                        type="button"
-                        tone="neutral"
-                        variant="soft"
-                        iconOnly
-                        density="compact"
-                        disabled={disabled}
-                        aria-label={`${item.props.label ?? item.props.name}: ${collapsed(item) ? lang.expandNavigation : lang.collapseNavigation}`}
-                        aria-expanded={!collapsed(item)}
-                        aria-controls={`${id}-${encodeURIComponent(item.props.name)}`}
-                        icon={
-                          vertical.value
-                            ? (side === 0) !== collapsed(item)
-                              ? ChevronUp
-                              : ChevronDown
-                            : ((side === 0) !== collapsed(item)) !== metrics.value.rtl
-                              ? ChevronLeft
-                              : ChevronRight
-                        }
-                        class={s
-                          .position('absolute')
-                          .zIndex(1)
-                          .fontSize('0.75em')
-                          .minHeight('1.5em')
-                          .padding(0)
-                          .top(bx(vertical.value ? '-0.5em' : `calc(50% + ${(side - 1) * 1.5}em)`))
-                          .insetInlineStart(
-                            bx(vertical.value ? `calc(50% + ${(side - 1) * 1.5}em)` : '-0.5em'),
-                          )}
-                        onClick={() => collapse(item)}
-                      />
-                    ),
-                )}
+                {[pane, panes.value[index + 1]!].map((item, side) => {
+                  if (!item.props.collapsible) return null;
+                  const towardStart = collapsed(item) ? side === 1 : side === 0;
+                  let icon: LucideIconData;
+                  if (vertical.value) icon = towardStart ? ChevronUp : ChevronDown;
+                  else {
+                    const towardLeft = metrics.value.rtl ? !towardStart : towardStart;
+                    icon = towardLeft ? ChevronLeft : ChevronRight;
+                  }
+                  return (
+                    <Button
+                      key={item.props.name}
+                      type="button"
+                      tone="neutral"
+                      variant="soft"
+                      iconOnly
+                      density="compact"
+                      disabled={disabled}
+                      aria-label={`${item.props.label ?? item.props.name}: ${collapsed(item) ? lang.expandPanel : lang.collapsePanel}`}
+                      aria-expanded={!collapsed(item)}
+                      aria-controls={`${id}-${encodeURIComponent(item.props.name)}`}
+                      icon={icon}
+                      class={s
+                        .position('absolute')
+                        .zIndex(1)
+                        .fontSize('0.75em')
+                        .minHeight('1.5em')
+                        .padding(0)
+                        .top(bx(vertical.value ? '-0.5em' : `calc(50% + ${(side - 1) * 1.5}em)`))
+                        .insetInlineStart(
+                          bx(vertical.value ? `calc(50% + ${(side - 1) * 1.5}em)` : '-0.5em'),
+                        )}
+                      onClick={() => collapse(item)}
+                    />
+                  );
+                })}
               </div>
             )}
           </Fragment>

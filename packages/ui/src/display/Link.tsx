@@ -8,12 +8,19 @@ export interface LinkProps
   extends TextProps, /* @vue-ignore */ Omit<AnchorHTMLAttributes, keyof TextProps> {
   /** 原生导航地址；执行操作应使用按钮。 */
   href: string;
+  /** 禁用时移除原生导航地址及 Tab 停靠点，并阻止点击回调。 */
+  disabled?: boolean;
 }
 
 /** 原生 a，保留浏览器导航、键盘和修饰键行为。 */
 export const Link = _component(
   ({
     href,
+    disabled = false,
+    tabindex,
+    onClick,
+    onAuxclick,
+    'aria-disabled': ariaDisabled,
     target,
     rel,
     color,
@@ -38,6 +45,7 @@ export const Link = _component(
       .lineHeight(bx(lineHeight))
       .select('&:hover', s.color('_primaryHover').color(bx(color)))
       .select('&:active', s.color('_primaryPressed').color(bx(color)))
+      .select('&[aria-disabled="true"]', s.color('_textDisabled').cursor('not-allowed'))
       .select(
         '&:focus-visible',
         s
@@ -53,7 +61,17 @@ export const Link = _component(
     return (
       <a
         {...rest}
-        href={href}
+        href={disabled ? undefined : href}
+        tabindex={disabled ? -1 : tabindex}
+        aria-disabled={disabled || ariaDisabled}
+        onClick={(event) => {
+          if (disabled) event.preventDefault();
+          else onClick?.(event);
+        }}
+        onAuxclick={(event) => {
+          if (disabled) event.preventDefault();
+          else onAuxclick?.(event);
+        }}
         target={target}
         rel={rel === undefined && target?.toLowerCase() === '_blank' ? 'noopener' : rel}
         class={cx(style, className)}

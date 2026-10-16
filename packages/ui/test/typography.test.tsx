@@ -236,6 +236,29 @@ test('link rel defaults follow target updates while explicit rel and anchor attr
     expect(css()).toContain(selector);
 });
 
+test('disabled link removes native navigation for every pointer button and restores it reactively', async () => {
+  const disabled = ref(true);
+  const click = vi.fn((event: MouseEvent) => event.preventDefault());
+  const { wrapper } = render(
+    _component(() => (
+      <Link href="/detail" disabled={disabled.value} onClick={click} onAuxclick={click}>
+        详情
+      </Link>
+    )),
+  );
+  expect(wrapper.attributes('href')).toBeUndefined();
+  expect(wrapper.attributes('tabindex')).toBe('-1');
+  await wrapper.trigger('click');
+  await wrapper.trigger('auxclick', { button: 1 });
+  expect(click).not.toHaveBeenCalled();
+  disabled.value = false;
+  await nextTick();
+  expect(wrapper.attributes('href')).toBe('/detail');
+  expect(wrapper.attributes('tabindex')).toBeUndefined();
+  await wrapper.trigger('click', { ctrlKey: true });
+  expect(click).toHaveBeenCalledOnce();
+});
+
 test('plain Vue host slots stay reactive and untyped DOM replacement cannot replace children', async () => {
   const text = ref('first');
   const Host = defineComponent(() => () => {
@@ -310,7 +333,7 @@ function typeContracts() {
   <Heading as="div" />;
   // @ts-expect-error 导航地址必须明确。
   <Link />;
-  // @ts-expect-error 链接不模拟禁用按钮。
+  // 禁用链接保留地址输入，但不向 DOM 输出可导航 href。
   <Link href="/detail" disabled />;
   // @ts-expect-error 样式 Props 使用普通值，调用处读取 Ref。
   <Text size={ref(18)} />;

@@ -389,7 +389,7 @@ export const Scrollbar = _component(
           <div
             {...slotRest(slotContent)}
             ref={content}
-            class={cx(s.display('flow-root').minWidth('100%'), slotContent?.class)}
+            class={cx(s.display('flow-root').boxSizing('border-box').minWidth('100%'), slotContent?.class)}
           >
             {children}
           </div>

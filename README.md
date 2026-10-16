@@ -250,9 +250,7 @@ export const Description = _component(() => {
 
 可选 `onOverflowChange(overflowing)` 在首次可测量及实际裁剪状态变化时调用；展开时为 `false`，不可测量的隐藏内容不提前报告。它可供调用方组合提示等交互，组件不内置浮层、复制或编辑功能。只有启用展开或溢出回调时才创建观察器；容器尺寸、内容、继承样式和字体加载变化会合并到下一动画帧测量，卸载时取消回调并释放观察器。SSR 不读取 DOM 尺寸，首屏保留完整内容，hydration 后才决定是否显示省略控制。
 
-## 开发与验证
-
-### 布局、按钮与滚动基础
+## UI 布局、导航与交互
 
 `Split` / `SplitPane` 支持多面板、嵌套、指针与键盘调整以及可选折叠。直接子节点仅接受 SplitPane（允许 Fragment），每块有唯一 `name`；`sizes` 是按名称保存百分比的可写 `Ref<Readonly<Record<string, number>>>`，顺序变化不会错配尺寸。省略项均分剩余比例。Pane 的 `min/max` 接受明确的 `px/em/rem/%`（或数字 0）；百分比相对扣除内边距、分隔条后的可用长度，em 相对 Split 字号。容器太小时按比例压缩最小值，最大值总和不足时放宽以铺满。每根分隔条只调整相邻两块，不把拖动传给远端面板。
 
@@ -322,12 +320,41 @@ const expandedKeys = ref<readonly string[]>(['filters']);
 
 主题已补充独立的逻辑方向间距组、`opacity._ripple`、`zIndex._affix` 和 `zIndex._floating`。本包的浏览器验收页面通过 `pnpm --filter @zerodep-vue/ui dev:components` 启动，默认地址为 `http://127.0.0.1:4176`。
 
+### 浮层与导航
+
+`Popover` 与 `Tooltip` 共用定位面板、浮层关闭顺序和 Teleport 继承处理。`trigger` 是显式渲染函数，将收到的绑定展开到一个可聚焦原生元素或 Button 上；不自动克隆任意 VNode。Popover 是非模态 dialog，通过 `label` 或 `slotPanel.aria-labelledby` 命名，默认聚焦第一个控件。`open` 使用可写 Ref；`placement/offset/matchWidth` 控制定位，`closeOnEscape/closeOnOutside/closeOnFocusOutside` 控制关闭。定位在打开期间随滚动和尺寸更新，越界时翻转和避让。子层优先处理 Escape，关闭后按焦点归属恢复触发器；外部点击和焦点切换不会被强行拉回。
+
+```tsx
+<Popover label="筛选条件" trigger={(props) => <Button {...props}>打开筛选</Button>}>
+  {/* 可交互内容 */}
+</Popover>
+<Tooltip content="刷新当前数据" trigger={(props) => <Button {...props}>刷新</Button>} />
+```
+
+Tooltip 用于简短说明，保留触发器焦点，同时合并触发器悬停、面板悬停和键盘焦点；`openDelay/closeDelay` 单位 ms。它不承载可交互内容，较长或可操作内容使用 Popover。两个组件通过 `slotPanel` 定制面板属性；Popover 的长内容复用浮动 Scrollbar。
+
+`Drawer` 用原生 `dialog.showModal()` 负责模态焦点和背景隔离，按文档引用计数锁定页面滚动；子浮层挂在所属 dialog 内。`open` 是可写 Ref，`placement="start|end|top|bottom"` 使用逻辑方向，`size` 决定展开方向尺寸。支持 title、label、footer 和 `slotPanel/slotHeader/slotBody/slotScrollbar/slotFooter/slotClose`。正文默认使用 Scrollbar，已有滚动容器可设置 `scrollable={false}`。默认关闭后保留内容，`unmountOnHide` 可选择卸载；`inline` 模式只显示正文，不启用模态交互，模式切换保留同一内容实例。模态层在客户端挂载后打开，SSR 不输出已激活的模态状态。
+
+`Menu` 保留站点导航的 nav/list/link/disclosure 语义；原生链接保留新标签、修饰键和下载能力，不依赖路由库。`items` 支持普通项、分组、分隔线，key 在整棵树中唯一；条目可配置 label、href、icon、disabled、children 和独立 slotLink。`activeKey` 控制当前项，未提供时保存最近激活项，`onSelect` 可接入路由。`orientation="horizontal|vertical"`、`collapsed`、`density`、`variant="soft|line"` 控制排列与外观，slotList、slotItem、slotIcon 提供节点属性。禁用链接复用 Link.disabled：移除 DOM href、Tab 停靠并阻止激活回调，避免中键和右键仍能导航。
+
+Menu 的 `expandedKeys`、`accordion`、`onExpandedChange` 只管理垂直内联分组的持久展开状态；横向与收窄模式使用临时 Popover，选择或焦点离开后关闭，切回内联时保留原展开项。带 href 的内联分组提供独立链接和展开按钮；浮层分组将父链接放在子菜单首部。组件不实现应用命令菜单的 `menu/menuitem` 键盘模型。
+
+`Breadcrumb` 使用有序列表，最后一项标记 `aria-current="page"`；`maxItems` 为 0 时全部显示，至少为 3 时可把中间项折叠到 Popover。条目通过 key、label、href、slotLink 配置，separator 可自定义。
+
+`Sidebar` 组合 Drawer、Scrollbar、Button，桌面 `collapsed` 与窄屏 `open` 使用两个独立 Ref。默认在 `(max-width: 48rem)` 切换到抽屉，`media=""` 禁用此切换；支持 width、collapsedWidth、header、footer、showToggle 以及 slotHeader、slotFooter、slotContent、slotToggle、slotDrawer。内容通过同一 Teleport 移动，跨断点保留输入 DOM 和子组件状态。后代 Menu 在未显式提供 collapsed 时自动继承侧栏收窄状态；窄屏恢复完整导航。
+
+实现参考 [WAI-ARIA 导航披露模式](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/)、[Window Splitter](https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/)、[Slider](https://www.w3.org/WAI/ARIA/apg/patterns/slider/)、[原生 dialog](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal) 与 [Floating UI DOM](https://floating-ui.com/docs/computeposition)。当前边界为单值 Slider、相邻面板调整、原生 sticky、普通站点导航；多滑块输入、跨远端面板推挤和应用命令菜单不混入这些 API。
+
+## 开发与验证
+
 默认在本地检查，只运行本次修改直接相关的测试和必要的 LSP 诊断，不例行运行全仓类型检查、构建或全量测试：
 
 ```powershell
 pnpm lsp:setup
 pnpm lsp:inspect packages/ui/src/config/Provider.tsx
 pnpm --filter @zerodep-vue/ui test test/provider.test.tsx
+pnpm --filter @zerodep-vue/ui exec playwright install chromium
+pnpm --filter @zerodep-vue/ui test:browser
 ```
 
 包专用命令直接通过 `pnpm --filter <包名>` 执行；根 `package.json` 只保留工作区聚合构建/检查、格式化、打包和 LSP 工具。共享 TypeScript 基础与构建选项保留在根配置，各包配置负责自己的源码和测试范围。
@@ -336,7 +363,7 @@ pnpm --filter @zerodep-vue/ui test test/provider.test.tsx
 
 `lsp:setup` 从 `.codex/config.example.toml` 生成被忽略的本机配置。MCP 名为 `zerodep_vue_lsp`，提供 diagnostics、hover、definitions、references、completions；配置生成、独立 stdio 验证与重启后会话可调用是三个不同状态。
 
-[远程 CI](.github/workflows/ci.yml) 负责完整类型检查、编译器与上游对照、core 运行时、TSX 作者测试、UI 两种编译模式、构建打包和 Linux/Windows LSP。项目源码保持严格类型检查；`skipLibCheck` 跳过第三方声明内部检查，不再维护第三方声明补丁。
+[远程 CI](.github/workflows/ci.yml) 负责完整类型检查、编译器与上游对照、core 运行时、TSX 作者测试、UI 两种编译模式、Chromium 交互回归、构建打包和 Linux/Windows LSP。浏览器测试配置和用例位于 UI 包，验证实际布局宽度、指针拖动、键盘焦点、嵌套浮层和跨断点内容保留；它们与 jsdom 单测互补。已有本机 Chrome 时可在当前命令进程设置 `PLAYWRIGHT_CHANNEL=chrome` 运行，不必另外下载 Chromium。项目源码保持严格类型检查；`skipLibCheck` 跳过第三方声明内部检查，不再维护第三方声明补丁。
 
 后续组件交互、浏览器与安装消费验证围绕 `packages/ui` 建立。旧的独立夹具、Naive UI 构建和浏览器验收已移除；当前 CI 通过只代表现有测试通过，不能作为这些覆盖已恢复或组件库已完成的证据。
 

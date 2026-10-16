@@ -120,6 +120,23 @@ jobs:
           UI_MODE: ${{ matrix.mode }}
         run: pnpm --filter @zerodep-vue/ui test --mode "$UI_MODE"
 
+  browser:
+    name: UI browser interactions
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - run: pnpm --filter @zerodep-vue/ui exec playwright install --with-deps chromium
+      - run: pnpm --filter @zerodep-vue/ui test:browser
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: failure()
+        with:
+          name: ui-browser-${{ github.sha }}
+          path: packages/ui/test-results/playwright/
+          if-no-files-found: ignore
+          retention-days: 7
+
   build:
     name: Build and package artifacts
     runs-on: ubuntu-latest
@@ -168,7 +185,7 @@ jobs:
   ci:
     name: CI result
     if: always()
-    needs: [format, types, compiler, upstream, core, authoring, ui, build, language]
+    needs: [format, types, compiler, upstream, core, authoring, ui, browser, build, language]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:

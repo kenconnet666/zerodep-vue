@@ -16,6 +16,7 @@ catalog:
   '@internationalized/date': 3.12.4
   '@lucide/icons': 1.56.0
   '@modelcontextprotocol/sdk': 1.30.0
+  '@playwright/test': 1.64.1
   '@types/convert-source-map': 2.0.3
   '@types/node': 24.13.5
   '@vue/babel-helper-vue-transform-on': 3.0.0

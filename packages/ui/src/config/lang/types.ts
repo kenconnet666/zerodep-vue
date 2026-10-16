@@ -28,6 +28,10 @@ export interface UiLanguage {
   readonly collapseNavigation: string;
   /** 分割条没有显式面板标签时的名称。 */
   readonly resizePanel: string;
+  /** 展开分割面板。 */
+  readonly expandPanel: string;
+  /** 收起分割面板。 */
+  readonly collapsePanel: string;
   /** 可键盘操作的纵向滚动滑块名称。 */
   readonly verticalScrollbar: string;
   /** 可键盘操作的横向滚动滑块名称。 */
