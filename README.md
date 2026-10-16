@@ -354,7 +354,7 @@ pnpm lsp:setup
 pnpm lsp:inspect packages/ui/src/config/Provider.tsx
 pnpm --filter @zerodep-vue/ui test test/provider.test.tsx
 pnpm --filter @zerodep-vue/ui exec playwright install chromium
-pnpm --filter @zerodep-vue/ui test:browser
+pnpm --filter @zerodep-vue/ui test:browser --project chromium -g "scrollbars preserve width"
 ```
 
 包专用命令直接通过 `pnpm --filter <包名>` 执行；根 `package.json` 只保留工作区聚合构建/检查、格式化、打包和 LSP 工具。共享 TypeScript 基础与构建选项保留在根配置，各包配置负责自己的源码和测试范围。
@@ -363,7 +363,9 @@ pnpm --filter @zerodep-vue/ui test:browser
 
 `lsp:setup` 从 `.codex/config.example.toml` 生成被忽略的本机配置。MCP 名为 `zerodep_vue_lsp`，提供 diagnostics、hover、definitions、references、completions；配置生成、独立 stdio 验证与重启后会话可调用是三个不同状态。
 
-[远程 CI](.github/workflows/ci.yml) 负责完整类型检查、编译器与上游对照、core 运行时、TSX 作者测试、UI 两种编译模式、Chromium 交互回归、构建打包和 Linux/Windows LSP。浏览器测试配置和用例位于 UI 包，验证实际布局宽度、指针拖动、键盘焦点、嵌套浮层和跨断点内容保留；它们与 jsdom 单测互补。已有本机 Chrome 时可在当前命令进程设置 `PLAYWRIGHT_CHANNEL=chrome` 运行，不必另外下载 Chromium。项目源码保持严格类型检查；`skipLibCheck` 跳过第三方声明内部检查，不再维护第三方声明补丁。
+[远程 CI](.github/workflows/ci.yml) 负责完整类型检查、编译器与上游对照、core 运行时、TSX 作者测试、UI 两种编译模式、开发/生产 × Chromium/Firefox 交互回归、构建打包及 Linux/Windows 的 LSP 和安装消费。浏览器测试复用 UI 包的同一页面，验证实际布局、指针拖动、键盘焦点、嵌套浮层和跨断点内容保留；`UI_BROWSER_MODE=production` 先构建再启动预览，默认使用开发服务器。已有本机 Chrome 时可在当前命令进程设置 `PLAYWRIGHT_CHANNEL=chrome` 并选择 `--project chromium`。项目源码保持严格类型检查；`skipLibCheck` 跳过第三方声明内部检查，不再维护第三方声明补丁。
+
+`pnpm --filter @zerodep-vue/ui test:consumer` 使用当前 SHA 的 `test-results/packages` tarball，在仓库外临时安装三个包和显式 peer，依次检查发布声明与中文提示、Vite 客户端/SSR 构建、无 DOM 的 SSR、生产客户端 hydration 和事件更新。临时目录退出时逐项清理，报告和消费者锁文件保存在 UI 的 `test-results/consumer`。CI 消费任务依赖同一提交的 build artifact，不重新构建工作区，也不启用源码条件。检查脚本和探针属于 UI 包，没有额外的工作区工程。
 
 后续组件交互、浏览器与安装消费验证围绕 `packages/ui` 建立。旧的独立夹具、Naive UI 构建和浏览器验收已移除；当前 CI 通过只代表现有测试通过，不能作为这些覆盖已恢复或组件库已完成的证据。
 
@@ -371,19 +373,19 @@ pnpm --filter @zerodep-vue/ui test:browser
 
 ## 实现状态与下一步
 
-以下审查以当前源码、测试入口和 CI 配置为依据。已有实现与待补验收分别记录；测试通过不能替代尚未建立的覆盖，也不代表组件库已全部完成。
+以下审查以当前源码、测试入口和 CI 配置为依据。安装消费、生产浏览器和交互组件声明检查已接入 CI；是否通过以对应 SHA 的运行报告为准，不代表组件库已全部完成。
 
-| 范围            | 已有实现与验证                                                                                                                                     | 仍需补齐                                                                                                               |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| compiler / core | Vue JSX v3.0.0 源码 fork 与上游对照；TSX 作者语义、CSS/主题、资源生命周期、SSR、HMR 和 DevTools 的现有单测；双模式作者测试及 Linux/Windows LSP     | 当前包结构在仓库外的安装、声明与运行时消费验证                                                                         |
-| 配置与展示      | Provider、Light/DarkTheme、zhCN/enUS；Icon、Text、Heading、Paragraph、Link、Ellipsis；主题继承、原生属性、部分组件 SSR/hydration 与资源释放单测    | 新增交互组件的声明消费与浏览器无障碍回归                                                                               |
-| 布局与输入基础  | Flex、Grid/GridItem、Divider、Scrollbar、Collapse/CollapseItem/CollapseTransition、Affix、BackTop、Anchor、Split/SplitPane、Button、Ripple、Slider | 表单输入与字段状态仍未实现；当前 Slider 不构成完整表单底座                                                             |
-| 浮层与导航      | Popover、Tooltip、Drawer、Menu、Breadcrumb、Sidebar；共享定位、关闭栈、指针所有权与滚动工具，已有嵌套关闭、焦点和跨断点内容保留回归                | 更完整的禁用/卸载/重新打开状态组合、生产构建及多浏览器验证                                                             |
-| CI 与交付       | 格式、三包类型检查、core/compiler/UI 测试、构建、打包与跨平台 LSP；浏览器包含 3 个组合交互用例                                                     | Playwright 当前仅覆盖 Vite 开发服务器、优化编译和 Chromium；打包只验证文件、导出、许可与源码映射，尚未执行隔离安装消费 |
+| 范围            | 已有实现与验证                                                                                                                                     | 仍需补齐                                                            |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| compiler / core | Vue JSX v3.0.0 源码 fork 与上游对照；TSX 作者语义、CSS/主题、资源生命周期、SSR、HMR 和 DevTools 的现有单测；双模式作者测试及 Linux/Windows LSP     | 持续核对安装消费者对当前提交的声明与运行时报告                      |
+| 配置与展示      | Provider、Light/DarkTheme、zhCN/enUS；Icon、Text、Heading、Paragraph、Link、Ellipsis；主题继承、原生属性、部分组件 SSR/hydration 与资源释放单测    | 新组件按同等标准加入公开声明与交互验收                              |
+| 布局与输入基础  | Flex、Grid/GridItem、Divider、Scrollbar、Collapse/CollapseItem/CollapseTransition、Affix、BackTop、Anchor、Split/SplitPane、Button、Ripple、Slider | 表单输入与字段状态仍未实现；当前 Slider 不构成完整表单底座          |
+| 浮层与导航      | Popover、Tooltip、Drawer、Menu、Breadcrumb、Sidebar；共享定位、关闭栈、指针所有权与滚动工具，已有嵌套关闭、焦点、禁用重开和跨断点回归              | 随真实组件用法继续补充状态组合                                      |
+| CI 与交付       | 格式、三包类型检查、core/compiler/UI 测试、公开组件声明、构建打包、跨平台 LSP/安装消费；开发/生产 × Chromium/Firefox                               | 每项验收都与当前 SHA 的 CI 报告关联；新功能同步增加消费和浏览器场景 |
 
 本轮修正了 Link/Scrollbar 把 Vue 合并的原生事件数组当单个函数调用的问题，回归覆盖事件顺序、禁用、`preventDefault()` 和 `stopImmediatePropagation()`。原生事件继续交给 Vue DOM 层分发，业务回调仍采用组件现有契约。Tooltip 还修正了“指针进入面板后禁用，再启用并离开触发器”时残留悬停状态导致面板不关闭的问题。
 
-后续先完成已有能力的验收，再扩展新组件；以下均为待实施计划：
+实施顺序如下；前两项的检查流程已建立，后续功能逐项接入同一验收链路：
 
 1. **补齐交付验收。** 在 UI 包维护安装消费脚本，由 CI 的 build 产物驱动 Linux/Windows 消费任务，并纳入 CI result。运行时创建有明确所有权的仓库外临时消费者，直接安装三个 tarball，禁用源码条件，验证 dist JS/d.ts、显式 peer、单 Vue 实例、中文类型提示和未知主题名负向诊断，以及 Vite 客户端构建与 SSR/hydration。退出时清理临时工程；不恢复独立 fixtures 工程。完成条件是同一 SHA 的产物、消费报告和 CI 汇总全部通过。
 2. **补齐交互验收。** 复用 UI 浏览器页面覆盖生产构建，并增加 Firefox 与现有 Chromium 的关键交互回归。优先检查嵌套浮层的 Escape/Tab/焦点恢复、Tooltip 禁用与重新进入、Sidebar 跨断点、Scrollbar 实际尺寸、Slider/Split 的 RTL 与拖动取消、减少动态效果，以及原生事件组合。声明发射检查从现有展示/配置组件扩展到已导出的交互组件；新增任务仍由 CI 并行承担。

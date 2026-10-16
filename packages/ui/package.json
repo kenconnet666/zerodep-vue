@@ -19,10 +19,13 @@
   "sideEffects": false,
   "scripts": {
     "dev:components": "vite --config browser.config.ts",
+    "build:components": "vite build --config browser.config.ts",
+    "preview:components": "vite preview --config browser.config.ts",
     "check": "tsc --noEmit -p tsconfig.json",
     "build": "tsc -p tsconfig.build.json && node build.mjs",
     "test": "vitest run --config vitest.config.ts",
     "test:browser": "playwright test --config playwright.config.ts",
+    "test:consumer": "node verify-consumer.mjs",
     "test:watch": "vitest --config vitest.config.ts"
   },
   "peerDependencies": {

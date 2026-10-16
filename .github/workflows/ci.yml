@@ -121,19 +121,34 @@ jobs:
         run: pnpm --filter @zerodep-vue/ui test --mode "$UI_MODE"
 
   browser:
-    name: UI browser interactions
+    name: UI browser (${{ matrix.mode }}, ${{ matrix.browser }})
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        mode: [development, production]
+        browser: [chromium, firefox]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
-      - run: pnpm --filter @zerodep-vue/ui exec playwright install --with-deps chromium
-      - run: pnpm --filter @zerodep-vue/ui test:browser
+      - name: Install selected browser
+        env:
+          UI_BROWSER: ${{ matrix.browser }}
+        run: pnpm --filter @zerodep-vue/ui exec playwright install --with-deps "$UI_BROWSER"
+      - name: Verify browser interactions
+        env:
+          UI_BROWSER_MODE: ${{ matrix.mode }}
+          UI_BROWSER: ${{ matrix.browser }}
+        run: pnpm --filter @zerodep-vue/ui test:browser --project "$UI_BROWSER"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: failure()
+        if: always()
         with:
-          name: ui-browser-${{ github.sha }}
-          path: packages/ui/test-results/playwright/
+          name: ui-browser-${{ matrix.mode }}-${{ matrix.browser }}-${{ github.sha }}
+          path: |
+            packages/ui/test-results/playwright/
+            packages/ui/test-results/browser-report.json
           if-no-files-found: ignore
           retention-days: 7
 
@@ -158,6 +173,32 @@ jobs:
             test-results/packages/pack.json
             packages/core/test-results/css-bundle.json
           if-no-files-found: error
+          retention-days: 7
+
+  consumer:
+    name: Installed consumer (${{ matrix.os }})
+    needs: build
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: packages-${{ github.sha }}
+          path: .
+      - run: pnpm --filter @zerodep-vue/ui test:consumer
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: consumer-${{ matrix.os }}-${{ github.sha }}
+          path: packages/ui/test-results/consumer/
+          if-no-files-found: warn
           retention-days: 7
 
   language:
@@ -185,7 +226,8 @@ jobs:
   ci:
     name: CI result
     if: always()
-    needs: [format, types, compiler, upstream, core, authoring, ui, browser, build, language]
+    needs:
+      [format, types, compiler, upstream, core, authoring, ui, browser, build, consumer, language]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:

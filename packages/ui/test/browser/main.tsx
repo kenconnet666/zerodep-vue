@@ -68,6 +68,7 @@ const Demo = _component(() => {
   const splitScroll = shallowRef<ScrollbarInstance>();
   const drawer = ref(false);
   const secondDrawer = ref(false);
+  const tooltipDisabled = ref(false);
   return (
     <main
       dir={rtl.value ? 'rtl' : 'ltr'}
@@ -260,12 +261,20 @@ const Demo = _component(() => {
         </Popover>
         <Tooltip
           content="这是一条简短说明"
+          disabled={tooltipDisabled.value}
           trigger={(props) => (
             <Button {...props} variant="outline">
               悬停提示
             </Button>
           )}
         />
+        <Button
+          onClick={() => {
+            tooltipDisabled.value = !tooltipDisabled.value;
+          }}
+        >
+          切换提示禁用
+        </Button>
         <Button
           onClick={() => {
             drawer.value = true;

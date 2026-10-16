@@ -7,5 +7,6 @@ export default defineConfig({
   plugins: [vitePlugin({ optimize: true })],
   resolve: { conditions: ['zerodep-vue-source'] },
   server: { host: '127.0.0.1', strictPort: true, port: 4176 },
+  preview: { host: '127.0.0.1', strictPort: true, port: 4176 },
   build: { outDir: '../../test-results/browser', emptyOutDir: false },
 });

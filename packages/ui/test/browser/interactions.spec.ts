@@ -12,6 +12,37 @@ test.afterEach(({ page }) => {
   expect(pageErrors.get(page)).toEqual([]);
 });
 
+test('tooltip survives disable while hovered and theme, RTL and reduced motion remain reactive', async ({
+  page,
+}) => {
+  const trigger = page.getByRole('button', { name: '悬停提示', exact: true });
+  await trigger.hover();
+  const tooltip = page.getByRole('tooltip');
+  await expect(tooltip).toBeVisible();
+  await tooltip.hover();
+  const toggle = page.getByRole('button', { name: '切换提示禁用', exact: true });
+  await toggle.evaluate((element) => (element as HTMLButtonElement).click());
+  await expect(tooltip).toHaveCount(0);
+  await toggle.evaluate((element) => (element as HTMLButtonElement).click());
+  await trigger.hover();
+  await expect(tooltip).toBeVisible();
+  await toggle.hover();
+  await expect(tooltip).toHaveCount(0);
+  const button = page.getByRole('button', { name: 'solid primary', exact: true });
+  const color = await button.evaluate((element) => getComputedStyle(element).backgroundColor);
+  await page.getByRole('button', { name: '切换主题', exact: true }).click();
+  await expect
+    .poll(() => button.evaluate((element) => getComputedStyle(element).backgroundColor))
+    .not.toBe(color);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(button).toHaveCSS('transition-duration', '0s');
+  await page.getByRole('button', { name: '切换方向', exact: true }).click();
+  const slider = page.getByRole('slider', { name: '音量' });
+  await slider.focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(slider).toHaveAttribute('aria-valuenow', '29');
+});
+
 test('scrollbars preserve width, padded floating content does not overflow, and Tab leaves the popup', async ({
   page,
 }) => {
