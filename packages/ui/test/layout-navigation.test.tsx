@@ -43,6 +43,7 @@ test('back top and anchor compose native actions without swallowing child handle
         <h2 id="anchor-target">目标</h2>
         <Anchor
           target={container}
+          history="none"
           items={[
             {
               href: '#anchor-target',
@@ -67,6 +68,10 @@ test('back top and anchor compose native actions without swallowing child handle
   expect(container.scrollTo).not.toHaveBeenCalled();
   expect(wrapper.findAll('#root-list')).toHaveLength(1);
   expect(wrapper.get('button').attributes('aria-label')).toBe('回到顶部');
+  click.mockImplementation(() => {});
+  await wrapper.get('a').trigger('click');
+  expect(click).toHaveBeenCalledTimes(3);
+  expect(container.scrollTo).toHaveBeenCalledOnce();
 });
 
 test('button preserves explicit busy state while loading overrides it', async () => {

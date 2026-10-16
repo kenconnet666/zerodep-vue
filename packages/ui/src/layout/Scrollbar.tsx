@@ -380,16 +380,20 @@ export const Scrollbar = _component(
           aria-labelledby={labelledBy}
           data-zv-scroll-viewport=""
           class={cx(viewportStyle, slotViewport?.class)}
-          onScroll={(event) => {
+          onScroll={() => {
             schedule();
             reveal();
-            onScroll?.(event);
           }}
+          // 外部 onScroll 也可能是 Vue 合并的数组，保留在原生视口的事件分发中。
+          {...(onScroll ? { onScroll } : {})}
         >
           <div
             {...slotRest(slotContent)}
             ref={content}
-            class={cx(s.display('flow-root').boxSizing('border-box').minWidth('100%'), slotContent?.class)}
+            class={cx(
+              s.display('flow-root').boxSizing('border-box').minWidth('100%'),
+              slotContent?.class,
+            )}
           >
             {children}
           </div>

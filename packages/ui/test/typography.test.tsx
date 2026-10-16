@@ -259,6 +259,51 @@ test('disabled link removes native navigation for every pointer button and resto
   expect(click).toHaveBeenCalledOnce();
 });
 
+test.each(['click', 'auxclick'] as const)(
+  'link forwards merged %s listeners with native cancellation and reactive disabled state',
+  async (type) => {
+    const disabled = ref(false);
+    const stop = ref(false);
+    const calls: string[] = [];
+    const first = vi.fn((event: MouseEvent) => {
+      calls.push('first');
+      event.preventDefault();
+      if (stop.value) event.stopImmediatePropagation();
+    });
+    const second = vi.fn((event: MouseEvent) => {
+      calls.push('second');
+      expect(event.defaultPrevented).toBe(true);
+      expect(event.ctrlKey).toBe(true);
+    });
+    const listeners = type === 'click' ? { onClick: first } : { onAuxclick: first };
+    const { wrapper } = render(
+      _component(() => (
+        <Link
+          {...listeners}
+          href="/detail"
+          disabled={disabled.value}
+          onClick={type === 'click' ? second : undefined}
+          onAuxclick={type === 'auxclick' ? second : undefined}
+        >
+          详情
+        </Link>
+      )),
+    );
+    await wrapper.trigger(type, { ctrlKey: true, button: type === 'click' ? 0 : 1 });
+    expect(calls).toEqual(['first', 'second']);
+    expect(first.mock.calls[0]![0]).toBe(second.mock.calls[0]![0]);
+    disabled.value = true;
+    await nextTick();
+    await wrapper.trigger(type);
+    expect(calls).toEqual(['first', 'second']);
+    disabled.value = false;
+    stop.value = true;
+    await nextTick();
+    await wrapper.trigger(type);
+    expect(calls).toEqual(['first', 'second', 'first']);
+  },
+);
+
 test('plain Vue host slots stay reactive and untyped DOM replacement cannot replace children', async () => {
   const text = ref('first');
   const Host = defineComponent(() => () => {

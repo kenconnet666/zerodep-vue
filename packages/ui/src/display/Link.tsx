@@ -18,8 +18,8 @@ export const Link = _component(
     href,
     disabled = false,
     tabindex,
-    onClick,
-    onAuxclick,
+    onClick = () => {},
+    onAuxclick = () => {},
     'aria-disabled': ariaDisabled,
     target,
     rel,
@@ -58,20 +58,15 @@ export const Link = _component(
         '@media (forced-colors: active)',
         s.select('&:focus-visible', s.outlineColor('Highlight')),
       );
+    // JSX spread 可能合并出处理器数组，直接交给 Vue DOM 事件层保留顺序和取消语义。
     return (
       <a
         {...rest}
         href={disabled ? undefined : href}
         tabindex={disabled ? -1 : tabindex}
         aria-disabled={disabled || ariaDisabled}
-        onClick={(event) => {
-          if (disabled) event.preventDefault();
-          else onClick?.(event);
-        }}
-        onAuxclick={(event) => {
-          if (disabled) event.preventDefault();
-          else onAuxclick?.(event);
-        }}
+        onClick={disabled ? (event) => event.preventDefault() : onClick}
+        onAuxclick={disabled ? (event) => event.preventDefault() : onAuxclick}
         target={target}
         rel={rel === undefined && target?.toLowerCase() === '_blank' ? 'noopener' : rel}
         class={cx(style, className)}

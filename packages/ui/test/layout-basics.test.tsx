@@ -13,6 +13,7 @@ import {
   GridItem,
   LightTheme,
   Provider,
+  Scrollbar,
 } from '../src/index.ts';
 import type { ButtonProps } from '../src/index.ts';
 
@@ -20,6 +21,40 @@ const cleanup: (() => void)[] = [];
 afterEach(() => {
   while (cleanup.length) cleanup.pop()!();
   vi.restoreAllMocks();
+});
+
+test('scrollbar forwards merged scroll listeners to the native viewport in order', async () => {
+  const calls: string[] = [];
+  let stop = false;
+  const listeners = {
+    onScroll(event: Event) {
+      calls.push('first');
+      if (stop) event.stopImmediatePropagation();
+    },
+  };
+  const last = vi.fn((event: Event) => {
+    calls.push('last');
+    expect(event.currentTarget).toBe(viewport.element);
+  });
+  const wrapper = mount(
+    _component(() => (
+      <Scrollbar
+        {...listeners}
+        onScroll={last}
+        slotViewport={{ onScroll: () => calls.push('viewport') }}
+      >
+        内容
+      </Scrollbar>
+    )),
+  );
+  cleanup.push(() => wrapper.unmount());
+  const viewport = wrapper.get('[data-zv-scroll-viewport]');
+  await viewport.trigger('scroll');
+  expect(calls).toEqual(['viewport', 'first', 'last']);
+  stop = true;
+  await viewport.trigger('scroll');
+  expect(calls).toEqual(['viewport', 'first', 'last', 'viewport', 'first']);
+  expect(last).toHaveBeenCalledOnce();
 });
 
 test('layout props stay reactive, forward native attributes and keep direct children', async () => {
