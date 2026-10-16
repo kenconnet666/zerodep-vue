@@ -1,5 +1,8 @@
 import { onScopeDispose, shallowRef } from 'vue';
 
+// 一个文档只允许一条轨道拥有拖动；避免嵌套轨道恢复了另一次拖动的 user-select。
+const owners = new WeakMap<Document, () => void>();
+
 /** 每次拖动独占其监听与捕获；取消、丢失捕获和卸载共用同一释放路径。 */
 export function usePointerDrag() {
   const dragging = shallowRef(false);
@@ -15,6 +18,7 @@ export function usePointerDrag() {
     if (!(element instanceof HTMLElement)) return;
     cancel();
     const document = element.ownerDocument;
+    owners.get(document)?.();
     const view = document.defaultView;
     const pointerId = event.pointerId;
     let finished = false;
@@ -36,12 +40,16 @@ export function usePointerDrag() {
       view?.removeEventListener('blur', blur);
       if (element.hasPointerCapture?.(pointerId)) element.releasePointerCapture(pointerId);
       document.documentElement.style.userSelect = priorSelection;
+      owners.delete(document);
       dragging.value = false;
       cancel = () => {};
       end?.(cancelled);
     };
     const pointerUp = (next: PointerEvent) => {
-      if (next.pointerId === pointerId) finish(false);
+      if (next.pointerId === pointerId) {
+        move(next);
+        finish(false);
+      }
     };
     const pointerCancel = (next: PointerEvent) => {
       if (next.pointerId === pointerId) finish(true);
@@ -51,6 +59,7 @@ export function usePointerDrag() {
     };
     const blur = () => finish(true);
     cancel = () => finish(true);
+    owners.set(document, cancel);
     dragging.value = true;
     event.preventDefault();
     element.focus({ preventScroll: true });
@@ -59,7 +68,12 @@ export function usePointerDrag() {
     document.addEventListener('pointercancel', pointerCancel);
     element.addEventListener('lostpointercapture', lostCapture);
     view?.addEventListener('blur', blur);
-    element.setPointerCapture?.(pointerId);
+    // 指针可能在启动期间已取消；文档监听仍能正确完成生命周期。
+    try {
+      element.setPointerCapture?.(pointerId);
+    } catch {
+      /* 无活动指针时不建立捕获。 */
+    }
   }
   return { dragging, start, cancel: () => cancel() };
 }

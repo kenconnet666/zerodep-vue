@@ -16,6 +16,7 @@ import type { ElementProps, ElementSlotProps } from '../config/props.ts';
 import { useCss, useLang } from '../config/Provider.tsx';
 import { inlineScroll, scrollTargetKey, setInlineScroll } from '../interaction/scroll.ts';
 import { usePointerDrag } from '../interaction/pointer.ts';
+import { measureTrack, trackProgress } from '../interaction/track.ts';
 
 export interface ScrollbarProps extends ElementProps {
   /** 默认同时允许横纵滚动。 */
@@ -251,21 +252,19 @@ export const Scrollbar = _component(
       const rail = direction === 'x' ? horizontalRail.value : verticalRail.value;
       if (!rail) return;
       measure();
-      const initial = direction === 'x' ? geometry.xValue : geometry.yValue;
-      const travel = direction === 'x' ? geometry.xTravel : geometry.yTravel;
       const range = direction === 'x' ? geometry.xRange : geometry.yRange;
-      const rect = rail.getBoundingClientRect();
-      const scale =
-        direction === 'x' ? rect.width / rail.clientWidth : rect.height / rail.clientHeight;
-      const origin = direction === 'x' ? event.clientX : event.clientY;
-      if (!travel || !Number.isFinite(scale) || !scale) return;
+      const thumb = event.currentTarget;
+      if (!(thumb instanceof HTMLElement)) return;
+      const track = measureTrack(rail, thumb, direction === 'y', direction === 'x' && rtl.value);
+      const box = thumb.getBoundingClientRect();
+      const grab = direction === 'x' ? event.clientX - box.left : event.clientY - box.top;
+      if (track.length <= track.thumb) return;
       start(
         event,
         (next) => {
-          const delta = ((direction === 'x' ? next.clientX : next.clientY) - origin) / scale;
           moveTo(
             direction,
-            initial + (delta * (direction === 'x' && rtl.value ? -1 : 1) * range) / travel,
+            trackProgress(direction === 'x' ? next.clientX : next.clientY, track, grab) * range,
           );
         },
         () => reveal(),

@@ -127,6 +127,7 @@ export const Button = _component(
       iconPlacement = 'start',
       disabled = false,
       loading = false,
+      'aria-busy': ariaBusy,
       ripple = true,
       slotIcon,
       slotLoading,
@@ -297,7 +298,7 @@ export const Button = _component(
         ref={element}
         type={type}
         disabled={disabled || loading}
-        aria-busy={loading || undefined}
+        aria-busy={loading || ariaBusy}
         class={cx(
           style,
           spacing[density],

@@ -254,6 +254,42 @@ export const Description = _component(() => {
 
 ### 布局、按钮与滚动基础
 
+`Split` / `SplitPane` 支持多面板、嵌套、指针与键盘调整以及可选折叠。直接子节点仅接受 SplitPane（允许 Fragment），每块有唯一 `name`；`sizes` 是按名称保存百分比的可写 `Ref<Readonly<Record<string, number>>>`，顺序变化不会错配尺寸。省略项均分剩余比例。Pane 的 `min/max` 接受明确的 `px/em/rem/%`（或数字 0）；百分比相对扣除内边距、分隔条后的可用长度，em 相对 Split 字号。容器太小时按比例压缩最小值，最大值总和不足时放宽以铺满。每根分隔条只调整相邻两块，不把拖动传给远端面板。
+
+```tsx
+const sizes = ref<Readonly<Record<string, number>>>({ navigation: 25, content: 75 });
+<Split sizes={sizes} class={s.height('30em')}>
+  <SplitPane name="navigation" label="导航" min="10em" collapsible>
+    导航内容
+  </SplitPane>
+  <SplitPane name="content" min="15em">
+    <Scrollbar height="100%">工作区内容</Scrollbar>
+  </SplitPane>
+</Split>;
+```
+
+`resizable={false}` 禁止拖动该面板；`collapsed` 可传可写 Ref，内部按钮和外部状态切换共用尺寸恢复逻辑。分隔条支持方向键、Shift 加速、Home/End 与 Enter 折叠主面板，折叠按钮可独立键盘访问。`onSizesChange` 通知实际交互比例，`onResizeStart/onResizeEnd` 提供前后面板名称与输入来源，取消拖动恢复原尺寸并通过 `cancelled` 标识结束。`slotSeparator` 定制分隔条，`slotContent` 定制 Pane 内容。滚动按需组合 Scrollbar，不自动给每块面板创建滚动容器。
+
+`Affix` 使用原生 sticky，`side="top|bottom"` 和 `offset` 决定粘附边缘；浏览器选择最近滚动祖先，并受父容器边界约束。祖先 overflow 和容器高度会影响粘附，不提供跨容器 fixed 补偿。`BackTop` 组合 Button，按 `threshold` 显示并只滚动其 `target`；`Anchor` 组合 Link，通过 `items` 提供可嵌套页内目录、真实片段链接和 `aria-current="location"`。滚动目标都支持元素、Window、Ref 或 getter，省略时继承 Scrollbar 或最近滚动祖先；默认平滑滚动，尊重减少动态效果。BackTop 的浮动位置由 `insetInlineEnd/insetBlockEnd/class` 控制，与滚动目标独立；Anchor 的 `offset` 单位 px，点击时通过 `history="push|replace|none"` 决定地址更新，修饰键及新标签行为保留原生语义。
+
+`Slider` 是单值滑轨，`value` 使用可写 `Ref<number>`，支持 `min/max/step`、水平/竖向、RTL、只读和禁用。`variant="line"` 是细线圆柄，`variant="rail"` 是宽轨道。`trackClick={false}` 只关闭轨道定位，仍保留拖动与键盘操作。指针抓取位置保持不变；取消拖动恢复原值，正常释放才调用 `onValueCommit`，数值变化调用 `onValueChange`。外部越界值裁剪显示但不自动反写；非法范围或非正步长抛出 `RangeError`，末端 `max` 始终可达。水平左右键按视觉方向变化，竖向上键增大；Home/End 到端点，PageUp/PageDown 跨十个步长。
+
+```tsx
+const progress = ref(0);
+<Slider
+  value={progress}
+  variant="rail"
+  trackClick={false}
+  aria-label="拖动进度"
+  slotThumb={{ class: s.borderRadius('_small') }}
+  onValueCommit={(value) => submitProgress(value)}
+>
+  拖动滑块至末端
+</Slider>;
+```
+
+轨道、填充、滑块和提示内容容器分别用 `slotTrack`、`slotFill`、`slotThumb`、`slotLabel` 属性定制；`thumb` 可提供装饰图标，`children` 提供提示，均不应嵌入交互控件。名称通过 `aria-label/aria-labelledby` 传给滑块，`formatValueText` 可提供带单位的读值。Slider 与 Scrollbar 共用指针生命周期和坐标换算，但分别保持数值输入和原生滚动语义。验证码页面可组合滑轨与业务校验；组件提交进度本身不表示验证成功。
+
 `Flex` 提供一维布局，`Grid` / `GridItem` 提供原生二维轨道和跨行跨列，`Divider` 提供水平或垂直分隔。它们默认继承字号，样式值直接复用 `CssValue`，`class` 最后组合；响应式布局继续用原生 CSS `repeat/minmax`、媒体条件和容器查询。
 
 `Button` 默认是 `type="button"` 的原生按钮并带水波纹，`variant` 支持 `solid`、`soft`、`outline`、`dashed`、`text`，`tone` 支持 `neutral`、`primary`、`info`、`success`、`warning`、`danger`。`size` 只控制字号，`density="compact|normal|comfortable"` 控制几何尺寸；`shape="default|round|circle"`、`iconOnly`、`block` 和 `iconPlacement` 负责外形和排列。仅图标按钮应提供 `aria-label`。加载时保留宽度与可访问名称，阻止激活；`color`、`backgroundColor`、`borderColor` 的显式值在各交互状态中保持。

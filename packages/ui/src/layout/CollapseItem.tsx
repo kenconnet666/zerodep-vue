@@ -27,7 +27,7 @@ export interface CollapseItemProps extends Omit<ElementProps, 'title'> {
   slotHeader?: ElementSlotProps;
   slotTrigger?: Omit<
     ButtonProps,
-    'children' | 'disabled' | 'type' | 'aria-controls' | 'aria-expanded'
+    'children' | 'disabled' | 'type' | 'block' | 'id' | 'aria-controls' | 'aria-expanded'
   >;
   slotIcon?: Omit<IconProps, 'icon' | 'rotate' | 'aria-hidden'>;
   slotContent?: ElementSlotProps;

@@ -1,4 +1,4 @@
-import { createApp, computed, ref } from 'vue';
+import { createApp, computed, ref, shallowRef } from 'vue';
 import { Search } from '@lucide/icons';
 import { _component, createCssHost } from '@zerodep-vue/core';
 import {
@@ -15,9 +15,16 @@ import {
   Paragraph,
   Provider,
   Scrollbar,
+  Slider,
+  Split,
+  SplitPane,
+  Anchor,
+  Affix,
+  BackTop,
+  Icon,
   useCss,
 } from '../../src/index.ts';
-import type { ButtonProps } from '../../src/index.ts';
+import type { ButtonProps, ScrollbarInstance } from '../../src/index.ts';
 
 const dark = ref(false);
 const rtl = ref(false);
@@ -42,6 +49,17 @@ const Demo = _component(() => {
   const overflow = ref(false);
   const loading = ref(false);
   const expanded = ref<readonly string[]>(['a']);
+  const sliderValue = ref(30);
+  const slideProgress = ref(0);
+  const submitted = ref('尚未提交');
+  const splitSizes = ref<Readonly<Record<string, number>>>({
+    navigation: 25,
+    content: 50,
+    inspector: 25,
+  });
+  const inspector = ref(false);
+  const showInspector = ref(true);
+  const splitScroll = shallowRef<ScrollbarInstance>();
   return (
     <main
       dir={rtl.value ? 'rtl' : 'ltr'}
@@ -140,6 +158,25 @@ const Demo = _component(() => {
           </div>
         )}
       </Scrollbar>
+      <Divider class={s.marginBlock('_large')}>滑轨</Divider>
+      <div class={s.maxWidth('32em')}>
+        <Slider value={sliderValue} aria-label="音量" formatValueText={(value) => `${value}%`} />
+        <p>当前值：{sliderValue.value}</p>
+        <Slider
+          value={slideProgress}
+          variant="rail"
+          trackClick={false}
+          aria-label="拖动进度"
+          thumb={<Icon icon={Search} aria-hidden={true} />}
+          slotThumb={{ 'data-testid': 'slide-handle' }}
+          onValueCommit={(value) => {
+            submitted.value = `已提交进度 ${value}%`;
+          }}
+        >
+          拖动滑块至末端
+        </Slider>
+        <p role="status">{submitted.value}</p>
+      </div>
       <Collapse expandedKeys={expanded} class={s.maxWidth('42em')}>
         <CollapseItem name="a" title="可折叠面板">
           <Paragraph>展开与收起保持状态，并可用方向键导航标题。</Paragraph>
@@ -149,6 +186,51 @@ const Demo = _component(() => {
           第二个面板的内容。
         </CollapseItem>
       </Collapse>
+      <Divider class={s.marginBlock('_large')}>分割工作区</Divider>
+      <Button
+        onClick={() => {
+          showInspector.value = !showInspector.value;
+        }}
+      >
+        切换检查面板
+      </Button>
+      <Split
+        sizes={splitSizes}
+        data-testid="split"
+        class={s
+          .height('25em')
+          .padding('1em')
+          .borderStyle('solid')
+          .borderWidth('0.0625em')
+          .borderColor('_border')}
+      >
+        <SplitPane name="navigation" label="目录" min="8em" collapsible>
+          <Anchor
+            items={[
+              { href: '#section-one', label: '概览' },
+              { href: '#section-two', label: '详细信息' },
+            ]}
+            target={() => splitScroll.value?.viewport}
+          />
+        </SplitPane>
+        <SplitPane name="content" min="12em">
+          <Scrollbar ref={splitScroll} height="100%" aria-label="工作区内容">
+            <Affix class={s.backgroundColor('_surface').padding('1em')}>固定工具栏</Affix>
+            <section id="section-one" class={s.padding('1em').minHeight('18em')}>
+              概览内容，当前分配 {Math.round(splitSizes.value.content ?? 0)}%
+            </section>
+            <section id="section-two" class={s.padding('1em').minHeight('25em')}>
+              详细信息
+            </section>
+            <BackTop threshold={100} class={s.insetInlineEnd('3em')} />
+          </Scrollbar>
+        </SplitPane>
+        {showInspector.value && (
+          <SplitPane name="inspector" label="检查面板" min="8em" collapsed={inspector} collapsible>
+            检查面板
+          </SplitPane>
+        )}
+      </Split>
     </main>
   );
 });
