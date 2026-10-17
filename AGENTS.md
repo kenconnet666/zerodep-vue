@@ -29,7 +29,7 @@
 - UI Provider 的 theme 按“CSS 属性组 → 主题名”局部覆盖，lang 按文案、locale、timeZone 字段局部覆盖；未提供或 undefined 的字段持续继承父级。完整主题或语言预设覆盖其全部字段，theme/lang 均支持对象、Ref 和 computed；对象来源使用 Vue reactive，后代视图只读。
 - Provider.tsx 集中管理上下文注入与 useCss/useTheme/useLang，默认使用白色 LightTheme、简体中文 zhCN 和 Asia/Shanghai。Provider 渲染 div，消费 theme、lang、children 后通过 rest 显式转发原生属性、事件和样式；class 支持 CssInput。Provider 不承担格式化校验。
 - UI 的语言配置及类型放在 src/config/lang；主题统一接口 UiTheme、公共实现 BaseTheme 与显式实现接口的 LightTheme/DarkTheme 放在 src/config/theme。这两个目录按多语言、多主题职责保留，不因当前实现数量少而展平。
-- 主题 token 使用 FontSizeTokens、UiColors 等具名接口，保留显式成员与中文说明；成员值复用对应 CSS 属性的原始值类型并支持 Ref。系统关键字在 core 的链式参数类型中合并，不向空主题槽复制运行时字典；源主题可响应式修改，Provider 的后代视图保持只读。
+- 主题 token 使用 FontSizeTokens、UiColors 等具名接口，保留显式成员与中文说明；UiTheme 各属性组显式使用 `SystemKeywords['属性名'] & 对应Tokens`，将系统属性契约与 UI token 分开声明再交叉组合。成员值复用对应 CSS 属性的原始值类型并支持 Ref；源主题可响应式修改，Provider 的后代视图保持只读。
 - UI 组件默认继承字号，内部高度、间距、圆角、边框和阴影优先使用 em，随当前字号等比缩放；主题字号刻度使用 rem 作为页面基准。行高、字重、透明度、层级保持无单位，时长使用 ms，不机械替换所有数字。
 - UI 直接使用 Zod 4，不接入其他校验兼容层或自建校验 DSL。第三方运行时依赖作为显式 peer，开发版本由 catalog 固定，不从 UI 重新导出。
 - 图标使用 @lucide/icons 原始数据，由自有组件渲染，不安装现成 Lucide Vue 组件或注册全量图标。业务值使用 Decimal、CalendarDate/Time 等明确类型；输入草稿与业务值分离，不修改 Decimal 全局配置。
