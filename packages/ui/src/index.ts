@@ -77,6 +77,23 @@ export { Provider, useCss, useTheme, useLang } from './config/Provider.tsx';
 export type { ProviderProps } from './config/Provider.tsx';
 export { BaseTheme } from './config/theme/BaseTheme.ts';
 export type { UiTheme, UiThemeInput } from './config/theme/types.ts';
+export type {
+  UiColors,
+  FontFamilyTokens,
+  FontSizeTokens,
+  FontWeightTokens,
+  LineHeightTokens,
+  HeightTokens,
+  SpacingTokens,
+  BorderRadiusTokens,
+  BorderWidthTokens,
+  StrokeWidthTokens,
+  BoxShadowTokens,
+  OpacityTokens,
+  TransitionDurationTokens,
+  TimingFunctionTokens,
+  ZIndexTokens,
+} from './config/theme/tokens.ts';
 export { LightTheme } from './config/theme/LightTheme.ts';
 export { DarkTheme } from './config/theme/DarkTheme.ts';
 export { zhCN } from './config/lang/zhCN.ts';

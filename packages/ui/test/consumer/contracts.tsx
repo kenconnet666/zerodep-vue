@@ -7,6 +7,7 @@ import {
   Drawer,
   Field,
   Input,
+  LightTheme,
   Menu,
   RadioGroup,
   Scrollbar,
@@ -16,12 +17,25 @@ import {
   Textarea,
   useCss,
   useField,
+  type FontSizeTokens,
+  type UiThemeInput,
 } from '@zerodep-vue/ui';
 
 const s = useCss();
 s.overflow('hidden');
 s.color('_primaryHover');
 s.color(bx('_primary'));
+s.fontSize('_medium');
+s.fontSize('medium');
+const fontSize: FontSizeTokens = new LightTheme().fontSize;
+fontSize._medium = ref('large');
+const theme: UiThemeInput = {
+  fontSize: { _medium: 'medium' },
+  fontWeight: { _regular: 'normal' },
+  lineHeight: { _normal: 'normal' },
+  zIndex: { _modal: 'auto' },
+};
+theme.fontSize = { _medium: ref(undefined) };
 const chain = s.display('flex').color('_primary').padding('_medium');
 chain.color('_danger');
 <Button density="compact" slotContent={{ 'data-test': 'value' }} />;
@@ -47,6 +61,14 @@ void FormProbe;
 <Split sizes={ref({ main: 100 })} />;
 // @ts-expect-error 发布声明仍严格检查未知主题名。
 s.color('_missing');
+// @ts-expect-error 完整字号字段仍须为具体 CSS 值。
+fontSize._medium = undefined;
+// @ts-expect-error 原始值类型不能因复用 CSS 类型而放宽。
+fontSize._medium = true;
+// @ts-expect-error 过渡时长须保留单位。
+const invalidTheme: UiThemeInput = { transitionDuration: { _fast: 100 } };
+// @ts-expect-error 主题输入保留完整成员名检查。
+const missingTheme: UiThemeInput = { fontSize: { _missing: '1rem' } };
 // @ts-expect-error 动态绑定同样保留主题约束。
 s.color(bx('_missing'));
 // @ts-expect-error 发布声明中的连续调用仍保留主题约束。

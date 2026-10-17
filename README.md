@@ -59,7 +59,7 @@ WebStorm 2026.3 实测需要在 **Settings → Languages & Frameworks → TypeSc
 
 `Provider` 渲染一个 `div`，通过 Vue 组件树向下传递 `theme` 和 `lang`。消费配置与 `children` 后，其余 Props 通过 `...rest` 显式转发到根 div，包括原生属性、事件、`style` 和支持链式 CSS 的 `class`。`lang` 是 UI 语言配置，不作为 HTML 的 lang 属性透传；嵌套 Provider 会产生嵌套 div。默认使用白色主题 `LightTheme`、简体中文 `zhCN` 和上海时区 `Asia/Shanghai`。后代在 setup 中调用 UI 包的 `useCss()`、`useTheme()` 和 `useLang()`；主题和语言都是稳定的只读 reactive 对象，直接读取字段，无需 `.value`。
 
-实现位于 `packages/ui/src/config`：`Provider.tsx` 集中管理上下文注入、读取和配置继承；`lang/` 收纳语言配置和类型；`theme/types.ts` 定义统一 `UiTheme` 接口，`BaseTheme` 提供公共值，`LightTheme`、`DarkTheme` 继承它并显式 `implements UiTheme`。所有主题必须提供完整配色和阴影，公共属性组属于各自实例。
+实现位于 `packages/ui/src/config`：`Provider.tsx` 集中管理上下文注入、读取和配置继承；`lang/` 收纳语言配置和类型；`theme/types.ts` 定义统一 `UiTheme` 接口，`theme/tokens.ts` 用 `FontSizeTokens`、`UiColors` 等具名接口保留主题成员的中文说明和声明位置。各成员复用对应 CSS 属性的原始值类型，因此配置字号、字重等值时也有系统关键字补全；完整字段须有具体值，局部输入的 `undefined` 继续表示继承。core 在链式作者参数中合并系统关键字和主题名，`SystemKeywords` 的空主题槽不携带运行时关键字字典。`BaseTheme` 提供公共值，`LightTheme`、`DarkTheme` 继承它并显式 `implements UiTheme`。所有主题必须提供完整配色和阴影，公共属性组属于各自实例。
 
 ```tsx
 import { reactive } from 'vue';

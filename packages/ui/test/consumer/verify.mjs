@@ -70,6 +70,8 @@ switch (phase) {
       for (const [call, value, text] of [
         ["s.overflow('hidden')", 'hidden', '裁剪溢出'],
         ["s.color('_primaryHover')", '_primaryHover', '主操作的悬停色'],
+        ["s.fontSize('_medium')", '_medium', '中等字号'],
+        ["s.fontSize('medium')", 'medium', 'font-size 的原生 medium 值'],
       ]) {
         const position = source.indexOf(call) + call.indexOf(`'${value}'`) + 2;
         const definitions = enhanced.getDefinitionAtPosition(file, position);
@@ -95,6 +97,20 @@ switch (phase) {
             .includes(text),
         );
       }
+      // 安装后的声明也须保留配置值补全，不能只在源码路径下通过。
+      for (const [expression, value, expected] of [
+        ["_medium: 'medium'", 'medium', ['medium', 'large']],
+        ["_regular: 'normal'", 'normal', ['normal', 'bold']],
+        ["_normal: 'normal'", 'normal', ['normal', 'inherit']],
+        ["_modal: 'auto'", 'auto', ['auto', 'inherit']],
+      ]) {
+        const position = source.indexOf(expression) + expression.indexOf(`'${value}'`) + 2;
+        const completions = service.getCompletionsAtPosition(file, position, {});
+        assert(completions, expression);
+        const names = new Set(completions.entries.map((entry) => entry.name));
+        for (const keyword of expected) assert(names.has(keyword), `${expression}: ${keyword}`);
+      }
+      report.themeValueCompletions = true;
       report.diagnostics = 0;
       const memberPosition = source.indexOf("chain.color('_danger')") + 'chain.'.length;
       const members = enhanced.getCompletionsAtPosition(file, memberPosition, {});

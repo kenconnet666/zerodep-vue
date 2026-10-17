@@ -12,7 +12,8 @@ test(
     const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
     const file = resolve(root, 'packages/ui/test/__literal_navigation_probe__.tsx');
     const source = `import { bx } from '@zerodep-vue/core';
-import { useCss } from '../src/index.ts';
+import { ref } from 'vue';
+import { useCss, LightTheme, type FontSizeTokens, type UiThemeInput } from '../src/index.ts';
 const s = useCss();
 s.overflow('hidden');
 s.borderStyle('hidden');
@@ -27,6 +28,25 @@ s.width(undefined);
 s.color(bx('_primary'));
 s.overflow(bx('hidden'));
 s.transform('translateX(10px)');
+s.fontSize('_medium');
+s.fontSize('medium');
+const fontSize: FontSizeTokens = new LightTheme().fontSize;
+fontSize._medium = ref('large');
+const theme: UiThemeInput = {
+  fontSize: { _medium: 'medium' },
+  fontWeight: { _regular: 'normal' },
+  lineHeight: { _normal: 'normal' },
+  zIndex: { _modal: 'auto' },
+};
+theme.fontSize = { _medium: ref(undefined) };
+// @ts-expect-error 主题值不能混入其他原始值类型。
+fontSize._medium = true;
+// @ts-expect-error 完整主题字段不能为空，局部输入才允许 undefined 恢复继承。
+fontSize._medium = undefined;
+// @ts-expect-error 过渡时长必须带单位，不能接收数值。
+const invalidTheme: UiThemeInput = { transitionDuration: { _fast: 100 } };
+// @ts-expect-error 具名 token 接口不放宽未知成员。
+const missingTheme: UiThemeInput = { fontSize: { _missing: '1rem' } };
 const chain = s.display('flex').color('_primary').padding('_medium');
 chain.color('_danger');
 // @ts-expect-error 连续调用后仍保留主题名检查。
@@ -104,23 +124,19 @@ s.width(true);
       for (const [call, value, target, container, documentation] of [
         ["s.overflow('hidden')", 'hidden', 'literal-values.ts', 'OverflowValues', '裁剪溢出'],
         ["s.borderStyle('hidden')", 'hidden', 'literal-values.ts', 'BorderStyleValues', '边框'],
-        [
-          "s.color('_primaryHover')",
-          '_primaryHover',
-          'types.ts',
-          'UiTheme.color',
-          '主操作的悬停色',
-        ],
-        [
-          "s.outlineColor('_focusRing')",
-          '_focusRing',
-          'types.ts',
-          'UiTheme.color',
-          '键盘焦点轮廓颜色',
-        ],
+        ["s.color('_primaryHover')", '_primaryHover', 'tokens.ts', 'UiColors', '主操作的悬停色'],
+        ["s.outlineColor('_focusRing')", '_focusRing', 'tokens.ts', 'UiColors', '键盘焦点轮廓颜色'],
         ["s.font('inherit')", 'inherit', 'literal-values.ts', 'CssWideValues', '父元素'],
         ["s.overflow(bx('hidden'))", 'hidden', 'literal-values.ts', 'OverflowValues', '裁剪溢出'],
-        ["s.color(bx('_primary'))", '_primary', 'types.ts', 'UiTheme.color', '主操作色'],
+        ["s.color(bx('_primary'))", '_primary', 'tokens.ts', 'UiColors', '主操作色'],
+        ["s.fontSize('_medium')", '_medium', 'tokens.ts', 'FontSizeTokens', '中等字号'],
+        [
+          "s.fontSize('medium')",
+          'medium',
+          'literal-values.ts',
+          'FontSizeValues',
+          'font-size 的原生 medium 值',
+        ],
       ]) {
         const position = source.indexOf(call) + call.indexOf(`'${value}'`) + 2;
         const definitions = enhanced.getDefinitionAtPosition(file, position);
@@ -148,6 +164,20 @@ s.width(true);
           ts.displayPartsToString(details.documentation),
           ts.displayPartsToString(hover.documentation),
         );
+      }
+      // 配置值直接复用对应 CSS 属性；原生 TS 服务也应提示关键字，不依赖插件补齐。
+      for (const [expression, value, expected] of [
+        ["_medium: 'medium'", 'medium', ['medium', 'large', 'smaller']],
+        ["_regular: 'normal'", 'normal', ['normal', 'bold', 'bolder']],
+        ["_normal: 'normal'", 'normal', ['normal', 'inherit']],
+        ["_modal: 'auto'", 'auto', ['auto', 'inherit']],
+      ]) {
+        const position = source.indexOf(expression) + expression.indexOf(`'${value}'`) + 2;
+        const names = new Set(
+          service.getCompletionsAtPosition(file, position, {}).entries.map((entry) => entry.name),
+        );
+        for (const keyword of expected) assert(names.has(keyword), `${expression}: ${keyword}`);
+        assert(!names.has('_medium'), '配置接收具体 CSS 值，不把主题名作为间接引用');
       }
     } finally {
       service.dispose();
