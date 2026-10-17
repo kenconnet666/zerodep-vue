@@ -111,7 +111,10 @@ export const Tooltip = _component(
             scrollable={false}
             restoreFocus={false}
             closeOnFocusOutside={false}
-            class={cx(s.maxWidth('24em'), slotPanel?.class)}
+            class={cx(
+              s.maxWidth('24em').paddingBlock('_small').paddingInline('_medium'),
+              slotPanel?.class,
+            )}
             onPointerenter={() => {
               panelHovered = true;
               clearTimeout(timer);

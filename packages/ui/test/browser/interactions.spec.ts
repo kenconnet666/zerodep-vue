@@ -12,6 +12,86 @@ test.afterEach(({ page }) => {
   expect(pageErrors.get(page)).toEqual([]);
 });
 
+test('select keeps portal focus, keyboard selection, native forms and bounded scrolling', async ({
+  page,
+}) => {
+  const form = page.getByTestId('selection-form');
+  const trigger = form.getByRole('button', { name: /负责人/ });
+  await trigger.focus();
+  await trigger.press('ArrowDown');
+  const list = page.getByRole('listbox', { name: '负责人', exact: true });
+  await expect(list).toBeFocused();
+  await expect(page.getByTestId('selection-touched')).toHaveText('false');
+  await list.press('ArrowDown');
+  await expect(page.getByRole('option', { name: '用户 3', exact: true })).toHaveAttribute(
+    'data-active',
+    'true',
+  );
+  await expect(page.getByTestId('selection-value')).toHaveText('none');
+  await list.press('End');
+  await expect(page.getByRole('option', { name: '用户 30', exact: true })).toBeInViewport();
+  expect(
+    await page.getByTestId('selection-scroll').evaluate((element) => element.scrollTop),
+  ).toBeGreaterThan(0);
+  await list.press('Enter');
+  await expect(trigger).toBeFocused();
+  await expect(page.getByTestId('selection-value')).toHaveText('30');
+  expect(
+    await form.evaluate((element) => new FormData(element as HTMLFormElement).get('assignee')),
+  ).toBe('user:30');
+  await trigger.press('ArrowUp');
+  await expect(list).toBeFocused();
+  await list.press('Home');
+  await list.press('Escape');
+  await expect(trigger).toBeFocused();
+  await expect(page.getByTestId('selection-value')).toHaveText('30');
+  await trigger.click();
+  await expect(list).toBeFocused();
+  await list.press('Tab');
+  await expect(form.getByRole('button', { name: '清空', exact: true })).toBeFocused();
+  await expect(page.getByTestId('selection-touched')).toHaveText('false');
+  await page.keyboard.press('Tab');
+  await expect(page.getByTestId('after-select')).toBeFocused();
+  await expect(page.getByTestId('selection-touched')).toHaveText('true');
+  await trigger.click();
+  await expect(list).toBeFocused();
+  await list.press('Shift+Tab');
+  await expect(page.getByTestId('before-select')).toBeFocused();
+  await form.getByRole('button', { name: '重置选择', exact: true }).click();
+  await expect(page.getByTestId('selection-value')).toHaveText('none');
+});
+
+test('selection preserves missing values, readonly and nested modal ownership', async ({
+  page,
+}) => {
+  const section = page.getByTestId('selection-section');
+  const trigger = section.getByRole('button', { name: /负责人/ });
+  await trigger.click();
+  await page.getByRole('option', { name: '用户 1', exact: true }).click();
+  await section.getByRole('button', { name: '切换选择数据', exact: true }).click();
+  await expect(trigger).toContainText('用户 1');
+  await trigger.click();
+  await expect(page.getByText('暂无选项', { exact: true })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await section.getByRole('button', { name: '切换选择只读状态', exact: true }).click();
+  await trigger.focus();
+  await trigger.press('ArrowDown');
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  await section.getByRole('button', { name: '切换选择原生禁用', exact: true }).click();
+  await expect(trigger).toBeDisabled();
+  await section.getByRole('button', { name: '打开选择抽屉', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: '选择抽屉', exact: true });
+  const nested = dialog.getByRole('button', { name: /抽屉用户/ });
+  await nested.click();
+  const list = dialog.getByRole('listbox');
+  await expect(list).toBeFocused();
+  await list.press('Escape');
+  await expect(dialog).toBeVisible();
+  await expect(nested).toBeFocused();
+  await nested.press('Escape');
+  await expect(dialog).toBeHidden();
+});
+
 test('text input keeps IME drafts, native form submission, reset and clear focus', async ({
   page,
 }) => {

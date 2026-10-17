@@ -10,6 +10,8 @@ export interface UiLanguage {
   readonly validationFailed: string;
   /** 正在加载时的文案。 */
   readonly loading: string;
+  /** 选择列表没有可用数据时的提示。 */
+  readonly noOptions: string;
   /** 展开被省略的完整内容。 */
   readonly expand: string;
   /** 收起已展开的内容。 */

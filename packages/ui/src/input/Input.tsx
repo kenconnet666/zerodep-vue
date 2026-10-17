@@ -5,19 +5,19 @@ import { useCss } from '../config/Provider.tsx';
 import { callCallbacks } from '../interaction/callbacks.ts';
 import { slotRest } from '../config/props.ts';
 import type { DataAttributes, ElementSlotProps } from '../config/props.ts';
-import { TextControlFrame } from './TextControlFrame.tsx';
-import type { TextControlAppearance } from './TextControlFrame.tsx';
+import { ControlFrame } from './ControlFrame.tsx';
+import type { ControlAppearance } from './ControlFrame.tsx';
 import { textControlStyle, useTextControl } from './text-control.ts';
 import type { TextValueProps } from './text-control.ts';
 
 export interface InputProps
   extends
     TextValueProps,
-    TextControlAppearance,
+    ControlAppearance,
     DataAttributes,
     /* @vue-ignore */ Omit<
       InputHTMLAttributes,
-      keyof TextControlAppearance | keyof TextValueProps | 'type'
+      keyof ControlAppearance | keyof TextValueProps | 'type'
     > {
   /** 只接收文本类输入；数字和日期的业务值由专门组件管理。 */
   type?: 'text' | 'search' | 'password' | 'email' | 'url' | 'tel';
@@ -52,6 +52,7 @@ export const Input = _component(
     onValueCommit,
     onValueReset,
     onClear,
+    onFocusout,
     disabled = false,
     readonly: readOnly = false,
     form,
@@ -76,7 +77,7 @@ export const Input = _component(
       clear: () => callCallbacks(onClear),
     });
     return (
-      <TextControlFrame
+      <ControlFrame
         {...{
           size,
           width,
@@ -99,6 +100,7 @@ export const Input = _component(
         disabled={disabled}
         readOnly={readOnly}
         onClear={control.clear}
+        onFocusout={onFocusout}
       >
         <input
           {...slotRest(slotInput)}
@@ -106,7 +108,7 @@ export const Input = _component(
           ref={inputRef}
           type={type}
           form={form}
-          data-zv-text-value=""
+          data-zv-control-value=""
           disabled={disabled}
           readonly={readOnly}
           aria-invalid={status === 'error' || ariaInvalid}
@@ -114,7 +116,7 @@ export const Input = _component(
           class={cx(textControlStyle(s), slotInput?.class)}
           onChange={control.commit}
         />
-      </TextControlFrame>
+      </ControlFrame>
     );
   },
 );

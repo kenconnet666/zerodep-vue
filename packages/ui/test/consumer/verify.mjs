@@ -111,6 +111,14 @@ switch (phase) {
         for (const keyword of expected) assert(names.has(keyword), `${expression}: ${keyword}`);
       }
       report.themeValueCompletions = true;
+      const selectionKey = source.indexOf('getKey={(item) => item.id}') + 2;
+      assert(
+        ts
+          .displayPartsToString(enhanced.getQuickInfoAtPosition(file, selectionKey)?.documentation)
+          .includes('集合内唯一的稳定键'),
+        'Generic selection props must retain Chinese documentation in installed declarations.',
+      );
+      report.genericSelectionProps = true;
       report.diagnostics = 0;
       const memberPosition = source.indexOf("chain.color('_danger')") + 'chain.'.length;
       const members = enhanced.getCompletionsAtPosition(file, memberPosition, {});
@@ -210,6 +218,7 @@ switch (phase) {
     const title = document.querySelector('#title');
     const button = document.querySelector('#increment');
     const input = document.querySelector('#query');
+    const selectedUser = document.querySelector('#user');
     const messages = [];
     const warn = console.warn;
     const error = console.error;
@@ -229,6 +238,7 @@ switch (phase) {
       assert.equal(document.querySelector('#title'), title);
       assert.equal(document.querySelector('#increment'), button);
       assert.equal(document.querySelector('#query'), input);
+      assert.equal(document.querySelector('#user'), selectedUser);
       assert.equal(input.value, 'installed');
       assert.equal(document.querySelector('#count').textContent, '0');
       button.click();
@@ -249,15 +259,23 @@ switch (phase) {
       document.querySelector('input[type="radio"][value="weekly"]').click();
       await mounted.nextTick();
       const form = document.querySelector('#fields');
+      const nativeSelect = form.querySelector('select[name="user"]');
+      nativeSelect.selectedIndex = 2;
+      nativeSelect.dispatchEvent(new dom.window.Event('change', { bubbles: true }));
+      await mounted.nextTick();
+      assert.equal(document.querySelector('#user-value').textContent, '2');
       const submitted = new dom.window.FormData(form);
       assert.equal(submitted.get('accepted'), 'on');
       assert.equal(submitted.get('notifications'), 'on');
       assert.equal(submitted.get('frequency'), 'weekly');
+      assert.equal(submitted.get('user'), '2');
       form.reset();
       await Promise.resolve();
       await mounted.nextTick();
       assert.equal(input.value, 'installed');
       assert.equal(accepted.checked, false);
+      assert.equal(document.querySelector('#user-value').textContent, '1');
+      assert.equal(new dom.window.FormData(form).get('user'), '1');
       assert.equal(document.querySelector('input[type="radio"][value="daily"]').checked, true);
       input.value = '';
       input.dispatchEvent(new dom.window.Event('input', { bubbles: true }));

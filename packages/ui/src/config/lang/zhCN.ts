@@ -7,6 +7,7 @@ export const zhCN: UiLanguage = Object.freeze({
   clear: '清空',
   validationFailed: '校验暂未完成，请重试',
   loading: '加载中',
+  noOptions: '暂无选项',
   expand: '展开全文',
   collapse: '收起',
   close: '关闭',

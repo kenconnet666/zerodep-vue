@@ -275,7 +275,7 @@ const query = ref('');
 
 `Textarea` 使用同样的字符串模型、外观、清空和表单重置契约，保留换行。`rows` 默认 3 且必须为正整数；`resize` 默认 vertical，`minHeight/maxHeight` 接收 CSS 属性值。原生节点属性通过 `slotTextarea` 定制，`inputRef` 接收 `Ref<HTMLTextAreaElement | null | undefined>`。
 
-两个组件组合内部的 TextControlFrame，并共用 useTextControl、原生节点样式和 useFormReset。外观层继续组合 Button/Icon，slotPrefix、slotSuffix、slotClear 逐层转发，外部 class 最后组合；Input/Textarea 各自持有实际 DOM、原生属性和 v-model。复杂组件的 `slotX` 只是节点属性 Props，不使用 Vue 插槽协议。业务回调接受单个函数或只读函数数组，逐个按顺序调用，支持上层 Props 展开时 Vue 的回调合并。
+两个组件组合内部的 ControlFrame，并共用 useTextControl、原生节点样式和 useFormReset。外观层继续组合 Button/Icon，slotPrefix、slotSuffix、slotClear 逐层转发，外部 class 最后组合；Input/Textarea 各自持有实际 DOM、原生属性和 v-model。onFocusout 在焦点离开整个控件时通知，清空与装饰节点属于同一控件；原生叶子的事件可通过 slotInput/slotTextarea 读取。复杂组件的 `slotX` 只是节点属性 Props，不使用 Vue 插槽协议。业务回调接受单个函数或只读函数数组，逐个按顺序调用，支持上层 Props 展开时 Vue 的回调合并。
 
 `Checkbox` 和 `Switch` 共享布尔 Ref、原生表单生命周期与 ChoiceControlFrame，标记分别组合 Icon 或滑块。`value` 默认 false，`resetValue` 默认初始值；`formValue` 是提交字符串，默认 on，与布尔模型分离。`readonly` 保留焦点与表单提交并阻止切换，`disabled` 使用原生禁用语义；Checkbox 的 `indeterminate` 受控，既不修改 value，也不改变提交值。`inputRef` 接收真实 input，`slotInput/slotIndicator/slotLabel` 逐层转发，Switch 另有 `slotThumb`。Switch 使用原生 checkbox 的键盘与表单行为，通过 role=switch 表达开关语义。
 
@@ -295,6 +295,45 @@ const field = useField(name, z.string().trim().min(1, '请填写姓名'), {
 ```
 
 默认 `validateOn="blur"` 在首次离开整个控件后校验，之后随编辑更新；`change` 每次变化校验，`submit` 只由 `validate()` 主动触发。组内焦点切换不算离开。`output` 保存 Zod 的解析结果，不将 trim/transform 写回编辑草稿；`issues` 保留原生问题信息，校验自身抛错单独放入 failure。旧请求、reset 前的请求和卸载后的结果均不会覆盖新状态；pending、valid、touched、dirty 是只读 computed。dirty 使用 Object.is 与重置基准比较，对象值按整体替换更新。`reset()` 恢复基准，`reset(next)` 同时替换模型和基准；原生表单 reset 与这份基准一致。
+
+## UI 选择控件
+
+`Listbox` 和 `Select` 接收原始 `options: readonly T[]`、`getKey`、`getLabel` 及可写 `value: Ref<T | null>`；省略模型时每个实例独立保存 null。字符串、数字和完整业务对象使用同一契约。键必须是集合内唯一的字符串或有限数字，数字 1 与字符串 "1" 不同；null/undefined 不作为选项。`getLabel` 始终提供纯文本名称，自定义展示使用 `renderOption(option, { active, selected, disabled })`，不把按钮、链接等交互内容放进选项。禁用单项使用 `isOptionDisabled`。
+
+```tsx
+interface User {
+  id: number;
+  name: string;
+}
+const users = shallowRef<User[]>([
+  { id: 1, name: '小明' },
+  { id: 2, name: '小红' },
+]);
+const selectedUser = shallowRef<User | null>(null);
+<Select
+  value={selectedUser}
+  options={users.value}
+  getKey={(user) => user.id}
+  getLabel={(user) => user.name}
+  getFormValue={(user) => String(user.id)}
+  name="user"
+  aria-label="负责人"
+  placeholder="请选择负责人"
+  clearable
+/>;
+```
+
+选项整体刷新时按键识别选中项，显示当前列表里的最新标签，但不会自动替换模型对象；再次确认时交付当前选项对象。当前值暂时不在列表时，继续用模型对象显示和提交，不自动清空。`onValueChange` 仅在用户操作改变模型身份时通知，`onValueCommit` 表示本次用户确认的值，包括再次确认同项；change 回调可以同步回写模型，commit 仍表达本次用户意图。外部赋值、选项刷新和原生 reset 不触发 change/commit。
+
+`Listbox` 是可独立使用的单选列表，必须通过 `aria-label` 或 `aria-labelledby` 提供名称。DOM 焦点留在列表上，活动项通过 aria-activedescendant 表达，与业务选择分离；方向键、Home/End 和按区域语言的键入定位只移动活动项，Enter/空格确认。`activeKey` 可选地接收活动键 Ref，`elementRef` 接收列表 DOM。活动项被移除或禁用时回到可用的已选项或首项；无可用项时清空活动项。滚动只调整所属 Scrollbar 视口，不带动页面。`readonly` 保留导航并禁止提交，`disabled` 禁止交互。Listbox 本身是选项视图，表单提交和 reset 由 Select 承担。
+
+`Select` 组合 ControlFrame、Icon、独立 Listbox、Scrollbar 与内部 FloatingPanel，按钮负责开关，打开后焦点进入列表；普通 Popover 继续保持 dialog 语义。Enter/空格、方向键可打开，Home/End 打开到首/末可用项；Escape 取消活动项并恢复触发器，Tab/Shift+Tab 关闭并相对触发器继续页面焦点顺序。`open` 接收可写 Ref，`onOpenChange` 只通知内部交互，外部赋值不重复通知。禁用或只读时关闭，之后恢复可用不会自动重开。嵌套 Drawer 时面板归属当前模态层；触发器、清空按钮和 Teleport 列表属于同一字段焦点范围。
+
+Select 的视觉隐藏原生 select 负责 `name/form`、FormData、自动填充 change、required 和 reset；不使用对象递归隐藏字段。`getFormValue` 默认 `String(getKey(value))`，空选择提交空字符串。`resetValue` 省略时使用首次值，null 显式重置为空；reset 可被原生事件取消，未取消时通知 `onValueReset`。`readonly` 保留焦点与提交，并停用原生 required 校验，避免不可编辑空值阻断表单；disabled 和祖先 fieldset 的禁用遵循原生不提交规则。required 无效时焦点转到可见按钮，实际校验消息由 Field/Zod 负责。与 Field 组合时直接展开 `field.control`。
+
+外观复用 Input 的 variant/density/size/status/颜色、前后内容和清空属性。`renderValue` 定制当前值显示，`elementRef` 接收真实按钮；`slotTrigger/slotIcon/slotPanel/slotScrollbar/slotOption` 暴露相应子节点属性，内部 ID、角色和状态仍由组件管理。默认 `maxHeight="16em"`，空列表文案为当前语言的 `noOptions`，可用 `empty` 替换。所有公共入口保持普通 Props，泛型和中文说明随发布声明保留。
+
+交互取舍参考 [React Aria Select](https://react-spectrum.adobe.com/react-aria/Select.html)、[Headless UI Listbox](https://headlessui.com/react/listbox)、[Reka UI Select](https://reka-ui.com/docs/components/select) 与 [WAI-ARIA Listbox](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/)。当前实现为单选；Autocomplete、分组选项、多选、远程分页和虚拟化尚未实现。Autocomplete 后续保持输入焦点，并复用经实际需求确认的选项职责。
 
 ## UI 布局、导航与交互
 
@@ -425,25 +464,25 @@ pnpm --filter @zerodep-vue/ui test:browser --project chromium -g "scrollbars pre
 
 以下审查以当前源码、测试入口和 CI 配置为依据。安装消费、生产浏览器和交互组件声明检查已接入 CI；是否通过以对应 SHA 的运行报告为准，不代表组件库已全部完成。
 
-| 范围            | 已有实现与验收入口                                                                                                        | 下一步                                                            |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| compiler / core | Vue JSX v3.0.0 真实源码 fork；Props 作者入口、CSS/主题、资源生命周期、SSR/HMR；双模式作者测试与跨平台 LSP                 | 随真实组件组合补齐回归，保持普通 Vue 组件兼容边界                 |
-| 配置与展示      | Provider、Light/DarkTheme、zhCN/enUS；Icon、Text、Heading、Paragraph、Link、Ellipsis                                      | 组合 Alert、Tag/Badge、Empty、Skeleton，先确认实际复用与样式需求  |
-| 布局与交互      | Flex、Grid/GridItem、Divider、Scrollbar、Collapse、Affix、BackTop、Anchor、Split、Button、Ripple、Slider                  | 保持原生语义，继续验证主题、RTL、缩放与减少动画                   |
-| 表单基础        | Input/Textarea、Checkbox/Switch、RadioGroup、Field/useField；共享模型与 reset 工具，Zod 原生输入/输出、异步归属与错误说明 | 先建立 Listbox 的选项、焦点和键盘契约，再组合 Select/Autocomplete |
-| 浮层与导航      | Popover、Tooltip、Drawer、Menu、Breadcrumb、Sidebar；共享定位、关闭栈、指针所有权与滚动工具                               | 新输入组件复用浮层与 Scrollbar，保留各自的焦点责任                |
-| CI 与交付       | 三包类型/构建/打包、core/compiler/UI 测试、公开声明、跨平台 LSP/安装消费、开发/生产 × Chromium/Firefox                    | 结果按确切 SHA 核对；新增组件同步扩展消费与浏览器场景             |
+| 范围            | 已有实现与验收入口                                                                                                                       | 下一步                                                           |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| compiler / core | Vue JSX v3.0.0 真实源码 fork；Props 作者入口、CSS/主题、资源生命周期、SSR/HMR；双模式作者测试与跨平台 LSP                                | 随真实组件组合补齐回归，保持普通 Vue 组件兼容边界                |
+| 配置与展示      | Provider、Light/DarkTheme、zhCN/enUS；Icon、Text、Heading、Paragraph、Link、Ellipsis                                                     | 组合 Alert、Tag/Badge、Empty、Skeleton，先确认实际复用与样式需求 |
+| 布局与交互      | Flex、Grid/GridItem、Divider、Scrollbar、Collapse、Affix、BackTop、Anchor、Split、Button、Ripple、Slider                                 | 保持原生语义，继续验证主题、RTL、缩放与减少动画                  |
+| 表单基础        | Input/Textarea、Checkbox/Switch、RadioGroup、Listbox/Select、Field/useField；共享外观与 reset，稳定键对象值、Zod 原生输入/输出与错误说明 | 实现独立 Autocomplete，明确查询草稿、过滤与异步结果归属          |
+| 浮层与导航      | Popover、Tooltip、Drawer、Menu、Breadcrumb、Sidebar；共享定位、关闭栈、指针所有权与滚动工具                                              | 新输入组件复用浮层与 Scrollbar，保留各自的焦点责任               |
+| CI 与交付       | 三包类型/构建/打包、core/compiler/UI 测试、公开声明、跨平台 LSP/安装消费、开发/生产 × Chromium/Firefox                                   | 结果按确切 SHA 核对；新增组件同步扩展消费与浏览器场景            |
 
 原生事件交给 Vue DOM 层分发，业务通知通过共享 callCallbacks 按顺序处理合并后的函数。已建立的回归包括：中文输入法草稿与清空、原生 FormData/reset、回调合并、DOM 引用替换、Tooltip 禁用或触发器移除、单选组回调恢复旧值，以及 CSS null 清除。普通字段状态通过 Props 组合，不依赖组件实例或隐式查找子节点。
 
 接下来的实施顺序按依赖推进：
 
-1. **选择基础与上层输入。** 先实现可独立验收的 Listbox/选项视图，明确焦点移动、禁用项、选中值和可访问名称。Select 组合触发器、Popover、Listbox、Scrollbar；Autocomplete 再组合 Input 与同一选项基础，额外管理查询草稿、过滤和异步结果归属。选项业务值与键的公开契约先用真实场景评审，不预置万能数据源层。
+1. **上层选择输入。** Listbox 与单选 Select 已建立稳定键、对象业务值、焦点、表单和重置契约，并接入单元、浏览器及隔离消费验收。下一步实现独立 Autocomplete，组合 Input 与经真实复用确认的选项基础，额外管理查询草稿、过滤和异步结果归属，不预置万能数据源层。
 2. **表单组合与反馈。** 在多个 useField 的实际提交场景上确定 Form 的校验与重置调度；Alert/Empty 等视图复用 Text、Icon、Button。仅抽取多个组件确实共用的职责，子节点属性沿 slotX 普通 Props 逐层转发。
 3. **明确业务值的输入。** InputNumber 使用 Decimal，日期和时间输入使用 CalendarDate/Time；先完成草稿解析、提交、格式化和语言边界，再扩展 DatePicker/RangePicker。保持外部业务值与编辑草稿分离。
 4. **数据展示。** 先用基础表格验证行标识、列渲染和排序，选择功能复用 Checkbox，分页组合 Button。虚拟化、树表和复杂编辑在明确数据量与交互要求后扩展。
 
-每一阶段都保留同一条交付链路：相关文件的本地 LSP 与必要短测试、子代理独立复核、中文提交推送，再由 CI 执行全量与跨平台验收。运行中或排队的 CI 记为 pending，不以此前的绿色记录代替新代码验收。
+每一阶段都保留同一条交付链路：相关文件的本地 LSP 与必要短测试、只读子代理独立复核、中文提交推送，再由 CI 执行全量与跨平台验收。主代理统一修改代码；只有适合并发的研究与复审交给子代理，优先使用 gpt-6-luna。运行中或排队的 CI 记为 pending，不以此前的绿色记录代替新代码验收。
 
 ## 许可
 

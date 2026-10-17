@@ -20,6 +20,8 @@ import { usePointerDrag } from '../interaction/pointer.ts';
 import { measureTrack, trackProgress } from '../interaction/track.ts';
 
 export interface ScrollbarProps extends ElementProps {
+  /** 视口的 Tab 顺序；负值同时将滚动条滑块移出 Tab 顺序。 */
+  tabindex?: ElementProps['tabindex'];
   /** 实际滚动视口，通过普通 Ref Props 访问浏览器 scrollTo/scrollBy 等能力。 */
   viewportRef?: Ref<HTMLDivElement | null | undefined>;
   /** 默认同时允许横纵滚动。 */
@@ -382,7 +384,7 @@ export const Scrollbar = _component(
           <div
             {...slotRest(slotVerticalThumb)}
             role="scrollbar"
-            tabindex={vertical.value ? 0 : -1}
+            tabindex={vertical.value && Number(tabindex) >= 0 ? 0 : -1}
             aria-controls={viewportId}
             aria-label={lang.verticalScrollbar}
             aria-orientation="vertical"
@@ -419,7 +421,7 @@ export const Scrollbar = _component(
           <div
             {...slotRest(slotHorizontalThumb)}
             role="scrollbar"
-            tabindex={horizontal.value ? 0 : -1}
+            tabindex={horizontal.value && Number(tabindex) >= 0 ? 0 : -1}
             aria-controls={viewportId}
             aria-label={lang.horizontalScrollbar}
             aria-orientation="horizontal"

@@ -1,4 +1,4 @@
-import { ref, shallowRef } from 'vue';
+import { computed, ref, shallowRef } from 'vue';
 import { z } from 'zod';
 import { _component, bx } from '@zerodep-vue/core';
 import {
@@ -10,6 +10,8 @@ import {
   LightTheme,
   Menu,
   RadioGroup,
+  Select,
+  Listbox,
   Scrollbar,
   Slider,
   Split,
@@ -22,6 +24,32 @@ import {
 } from '@zerodep-vue/ui';
 
 const s = useCss();
+const users = [{ id: 1, name: 'Ada' }];
+const user = shallowRef<(typeof users)[number] | null>(null);
+<Select
+  options={users}
+  value={user}
+  getKey={(item) => item.id}
+  getLabel={(item) => item.name}
+  renderOption={(item, state) => (state.selected ? item.name : item.name.toUpperCase())}
+  onValueChange={(item) => item?.id}
+/>;
+<Listbox
+  options={users}
+  value={user}
+  getKey={(item) => item.id}
+  getLabel={(item) => item.name}
+  aria-label="用户"
+/>;
+// @ts-expect-error 发布声明保持业务值字段推断。
+<Select options={users} getKey={(item) => item.unknown} getLabel={(item) => item.name} />;
+<Select
+  options={users}
+  // @ts-expect-error 发布后的泛型组件仍要求可写 Ref。
+  value={computed(() => user.value)}
+  getKey={(item) => item.id}
+  getLabel={(item) => item.name}
+/>;
 s.overflow('hidden');
 s.color('_primaryHover');
 s.color(bx('_primary'));

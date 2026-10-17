@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, shallowRef } from 'vue';
 import { z } from 'zod';
 import { _component, bx } from '@zerodep-vue/core';
 import {
@@ -9,6 +9,7 @@ import {
   Input,
   Provider,
   RadioGroup,
+  Select,
   Switch,
   Text,
   Textarea,
@@ -22,6 +23,11 @@ const notes = ref('first\nsecond');
 const accepted = ref(false);
 const notifications = ref(true);
 const frequency = ref<'daily' | 'weekly'>('daily');
+const users = [
+  { id: 1, name: 'Ada' },
+  { id: 2, name: 'Grace' },
+];
+const selectedUser = shallowRef<(typeof users)[number] | null>(users[0]!);
 const Content = _component(() => {
   const s = useCss();
   const field = useField(text, z.string().min(1, '请输入查询内容'), { id: 'query', name: 'query' });
@@ -38,6 +44,17 @@ const Content = _component(() => {
         增加
       </Button>
       <form id="fields">
+        <Select
+          id="user"
+          value={selectedUser}
+          options={users}
+          getKey={(user) => user.id}
+          getLabel={(user) => user.name}
+          name="user"
+          aria-label="用户"
+          clearable
+        />
+        <output id="user-value">{selectedUser.value?.id ?? 'none'}</output>
         <Field state={field} label="查询">
           <Input {...field.control} clearable />
         </Field>

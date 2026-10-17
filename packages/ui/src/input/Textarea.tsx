@@ -7,19 +7,19 @@ import { callCallbacks } from '../interaction/callbacks.ts';
 import { slotRest } from '../config/props.ts';
 import type { DataAttributes, ElementSlotProps } from '../config/props.ts';
 import type { UiTheme } from '../config/theme/types.ts';
-import { TextControlFrame } from './TextControlFrame.tsx';
-import type { TextControlAppearance } from './TextControlFrame.tsx';
+import { ControlFrame } from './ControlFrame.tsx';
+import type { ControlAppearance } from './ControlFrame.tsx';
 import { textControlStyle, useTextControl } from './text-control.ts';
 import type { TextValueProps } from './text-control.ts';
 
 export interface TextareaProps
   extends
     TextValueProps,
-    TextControlAppearance,
+    ControlAppearance,
     DataAttributes,
     /* @vue-ignore */ Omit<
       TextareaHTMLAttributes,
-      keyof TextControlAppearance | keyof TextValueProps | 'rows'
+      keyof ControlAppearance | keyof TextValueProps | 'rows'
     > {
   /** 初始可见行数，默认 3，必须为正整数。 */
   rows?: number;
@@ -60,6 +60,7 @@ export const Textarea = _component(
     onValueCommit,
     onValueReset,
     onClear,
+    onFocusout,
     disabled = false,
     readonly: readOnly = false,
     form,
@@ -88,7 +89,7 @@ export const Textarea = _component(
       clear: () => callCallbacks(onClear),
     });
     return (
-      <TextControlFrame
+      <ControlFrame
         {...{
           size,
           width,
@@ -111,6 +112,7 @@ export const Textarea = _component(
         disabled={disabled}
         readOnly={readOnly}
         onClear={control.clear}
+        onFocusout={onFocusout}
         multiline
       >
         <textarea
@@ -119,7 +121,7 @@ export const Textarea = _component(
           ref={inputRef}
           form={form}
           rows={lineCount.value}
-          data-zv-text-value=""
+          data-zv-control-value=""
           disabled={disabled}
           readonly={readOnly}
           aria-invalid={status === 'error' || ariaInvalid}
@@ -133,7 +135,7 @@ export const Textarea = _component(
           )}
           onChange={control.commit}
         />
-      </TextControlFrame>
+      </ControlFrame>
     );
   },
 );

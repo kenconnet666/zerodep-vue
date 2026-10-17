@@ -34,6 +34,8 @@ import {
   Checkbox,
   Switch,
   RadioGroup,
+  Select,
+  Listbox,
   Field,
   useField,
   useCss,
@@ -58,6 +60,102 @@ const tones: NonNullable<ButtonProps['tone']>[] = [
   'warning',
   'danger',
 ];
+const SelectionExamples = _component(() => {
+  const s = useCss();
+  const initial = Array.from({ length: 30 }, (_, index) => ({
+    id: index + 1,
+    name: `用户 ${index + 1}`,
+  }));
+  const options = shallowRef(initial);
+  const selected = shallowRef<{ id: number; name: string } | null>(null);
+  const listValue = shallowRef<string | null>(null);
+  const field = useField(
+    selected,
+    z.object({ id: z.number(), name: z.string() }).nullable().refine(Boolean, '请选择用户'),
+    { name: 'assignee' },
+  );
+  const readonly = ref(false);
+  const nativeDisabled = ref(false);
+  const dialogOpen = ref(false);
+  return (
+    <section data-testid="selection-section" class={s.marginBlock('_large')}>
+      <Heading as="h2">选择控件</Heading>
+      <form data-testid="selection-form" onSubmit={(event) => event.preventDefault()}>
+        <button type="button" data-testid="before-select">
+          选择前
+        </button>
+        <fieldset disabled={nativeDisabled.value}>
+          <Field state={field} label="负责人">
+            <Select
+              {...field.control}
+              options={options.value}
+              getKey={(user) => user.id}
+              getLabel={(user) => user.name}
+              getFormValue={(user) => `user:${user.id}`}
+              isOptionDisabled={(user) => user.id === 2}
+              readonly={readonly.value}
+              clearable
+              placeholder="请选择"
+              width="15em"
+              maxHeight="10em"
+              slotScrollbar={{ slotViewport: { 'data-testid': 'selection-scroll' } }}
+            />
+          </Field>
+        </fieldset>
+        <button type="button" data-testid="after-select">
+          选择后
+        </button>
+        <button type="reset">重置选择</button>
+        <output data-testid="selection-value">{selected.value?.id ?? 'none'}</output>
+        <output data-testid="selection-touched">{String(field.touched.value)}</output>
+      </form>
+      <Button
+        onClick={() => {
+          options.value = options.value.length ? [] : initial;
+        }}
+      >
+        切换选择数据
+      </Button>
+      <Button
+        onClick={() => {
+          readonly.value = !readonly.value;
+        }}
+      >
+        切换选择只读状态
+      </Button>
+      <Button
+        onClick={() => {
+          nativeDisabled.value = !nativeDisabled.value;
+        }}
+      >
+        切换选择原生禁用
+      </Button>
+      <Listbox
+        value={listValue}
+        options={['Apple', 'Apricot', 'Banana']}
+        getKey={(item) => item}
+        getLabel={(item) => item}
+        aria-label="水果"
+      />
+      <Button
+        onClick={() => {
+          dialogOpen.value = true;
+        }}
+      >
+        打开选择抽屉
+      </Button>
+      <Drawer open={dialogOpen} title="选择抽屉">
+        <Select
+          value={selected}
+          options={initial}
+          getKey={(user) => user.id}
+          getLabel={(user) => user.name}
+          aria-label="抽屉用户"
+        />
+      </Drawer>
+    </section>
+  );
+});
 const Demo = _component(() => {
   const s = useCss();
   const overflow = ref(false);
@@ -105,6 +203,7 @@ const Demo = _component(() => {
       <Heading as="h1" size="_extraExtraLarge">
         布局与交互验收
       </Heading>
+      <SelectionExamples />
       <Flex gap="_small" wrap="wrap" class={s.marginBlock('_large')}>
         <Button
           onClick={() => {

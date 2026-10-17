@@ -69,7 +69,11 @@ test(
       );
       expect(program.getDeclarationDiagnostics(source)).toEqual([]);
       expect(result.diagnostics).toEqual([]);
-      expect(declaration).toContain('DefineSetupFnComponent<');
+      if (['Listbox.tsx', 'Select.tsx'].includes(basename(file))) {
+        // 高阶泛型保留为构造签名；不能把泛型组件收窄为一个 unknown Props 实例。
+        expect(declaration).toMatch(/new <T extends \{\}>/);
+        expect(declaration).toContain(`${basename(file, '.tsx')}Props<T>`);
+      } else expect(declaration).toContain('DefineSetupFnComponent<');
       expect(declaration).toContain('import("@zerodep-vue/core").AuthorProps');
       expect(declaration).not.toContain(`export declare const ${basename(file, '.tsx')}: any`);
       if (file.endsWith('Icon.tsx')) {

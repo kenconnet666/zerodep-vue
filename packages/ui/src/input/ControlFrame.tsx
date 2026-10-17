@@ -1,15 +1,16 @@
 import { _component, bx, cx } from '@zerodep-vue/core';
 import type { CssInput, CssValue } from '@zerodep-vue/core';
 import { X } from '@lucide/icons';
-import type { StyleValue, VNodeChild } from 'vue';
+import type { HTMLAttributes, Ref, StyleValue, VNodeChild } from 'vue';
 import { useCss, useLang } from '../config/Provider.tsx';
 import { slotRest } from '../config/props.ts';
 import type { ElementSlotProps } from '../config/props.ts';
 import type { UiTheme } from '../config/theme/types.ts';
 import { Button } from './Button.tsx';
 import type { ButtonProps } from './Button.tsx';
+import { callCallbacks } from '../interaction/callbacks.ts';
 
-export interface TextControlAppearance {
+export interface ControlAppearance {
   /** 继承字号，或使用主题字号；不对应 HTML input 的 size 属性。 */
   size?: CssValue<'fontSize', UiTheme>;
   width?: CssValue<'width', UiTheme>;
@@ -31,17 +32,21 @@ export interface TextControlAppearance {
   slotSuffix?: ElementSlotProps;
   slotClear?: Omit<ButtonProps, 'children' | 'type' | 'disabled' | 'loading' | 'icon'>;
 }
-interface TextControlFrameProps extends TextControlAppearance {
+interface ControlFrameProps extends ControlAppearance {
+  /** 上层组合控件用来判断包含 Teleport 面板的整体焦点边界。 */
+  elementRef?: Ref<HTMLSpanElement | null | undefined>;
   hasValue: boolean;
   disabled: boolean;
   readOnly: boolean;
   multiline?: boolean;
   onClear(): void;
+  /** 清空和装饰节点属于同一控件，只有焦点离开整体才通知。 */
+  onFocusout?: HTMLAttributes['onFocusout'];
   children?: VNodeChild;
 }
 
-/** 文本控件只共用外观与装饰节点；模型、原生属性和 ref 仍由具体控件持有。 */
-export const TextControlFrame = _component(
+/** 输入与选择控件共用外观、装饰节点和焦点边界；模型、原生属性和 ref 仍由具体控件持有。 */
+export const ControlFrame = _component(
   ({
     size,
     width,
@@ -64,8 +69,10 @@ export const TextControlFrame = _component(
     readOnly,
     multiline = false,
     onClear,
+    onFocusout,
+    elementRef,
     children,
-  }: TextControlFrameProps) => {
+  }: ControlFrameProps) => {
     const s = useCss();
     const lang = useLang();
     const control = s
@@ -104,7 +111,7 @@ export const TextControlFrame = _component(
           .outlineColor('_focusRing'),
       )
       .select(
-        '&:has([data-zv-text-value]:disabled)',
+        '&:has([data-zv-control-value]:disabled)',
         s.backgroundColor('_surfaceDisabled').color('_textDisabled').cursor('not-allowed'),
       )
       .select('@media (prefers-reduced-motion: reduce)', s.transitionDuration('0ms'))
@@ -132,7 +139,18 @@ export const TextControlFrame = _component(
       .borderColor(bx(borderColor));
     return (
       <span
-        data-zv-text-control=""
+        ref={elementRef}
+        data-zv-control=""
+        onFocusout={(event) => {
+          const next = event.relatedTarget;
+          if (
+            next instanceof Node &&
+            event.currentTarget instanceof Node &&
+            event.currentTarget.contains(next)
+          )
+            return;
+          callCallbacks(onFocusout, event);
+        }}
         style={style}
         class={cx(
           control,

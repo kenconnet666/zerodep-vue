@@ -9,7 +9,7 @@ import {
   hide,
 } from '@floating-ui/dom';
 import type { Placement } from '@floating-ui/dom';
-import { nextTick, onMounted, shallowRef, Teleport, watch } from 'vue';
+import { computed, nextTick, onMounted, shallowRef, Teleport, watch } from 'vue';
 import type { Ref } from 'vue';
 import { tabbable } from 'tabbable';
 import { useCss } from '../config/Provider.tsx';
@@ -20,8 +20,12 @@ import { usePortalStyle } from './portal.ts';
 import { callCallbacks } from './callbacks.ts';
 import type { Callback } from './callbacks.ts';
 import { Scrollbar } from '../layout/Scrollbar.tsx';
+import type { ScrollbarProps } from '../layout/Scrollbar.tsx';
+import { slotRest } from '../config/props.ts';
 
 export interface FloatingPanelProps extends ElementProps {
+  /** 面板 DOM 由 Vue 管理，上层可将它纳入自己的复合焦点边界。 */
+  elementRef?: Ref<HTMLDivElement | null | undefined>;
   open: Ref<boolean>;
   reference?: HTMLElement;
   placement?: Placement;
@@ -34,13 +38,16 @@ export interface FloatingPanelProps extends ElementProps {
   restoreFocus?: boolean;
   surface?: 'normal' | 'inverse';
   scrollable?: boolean;
+  /** 滚动面板的视口、内容和样式；不替换所属内容。 */
+  slotScrollbar?: Omit<ScrollbarProps, 'children'>;
   onClose?: Callback<[reason: OverlayCloseReason]>;
 }
 
-/** Popover/Tooltip 的共同面板；定位订阅只存在于可见期间。 */
+/** 浮层共用定位、层栈与可选滚动；内容语义和焦点策略由上层控件决定。 */
 export const FloatingPanel = _component(
   ({
     open,
+    elementRef = shallowRef<HTMLDivElement | null | undefined>(),
     reference,
     placement = 'bottom-start',
     offset = 8,
@@ -52,6 +59,7 @@ export const FloatingPanel = _component(
     restoreFocus = true,
     surface = 'normal',
     scrollable = true,
+    slotScrollbar,
     onClose,
     class: className,
     children,
@@ -60,7 +68,7 @@ export const FloatingPanel = _component(
     ...rest
   }: FloatingPanelProps) => {
     const s = useCss();
-    const panel = shallowRef<HTMLDivElement>();
+    const panel = computed(() => elementRef.value ?? undefined);
     const trigger = shallowRef(reference);
     watch(
       () => reference,
@@ -191,13 +199,18 @@ export const FloatingPanel = _component(
           ? focused === controls[0] || focused === element
           : focused === controls.at(-1));
       if (!leaving) return;
-      event.preventDefault();
       const scope = anchor.closest('dialog[open]') ?? anchor.ownerDocument.body;
       const outside = tabbable(scope).filter((control) => !element.contains(control));
       const index = outside.indexOf(anchor);
-      const next = event.shiftKey ? anchor : (outside[index + 1] ?? outside[0] ?? anchor);
+      const next = event.shiftKey ? anchor : outside[index + 1];
       if (closeOnFocusOutside) close('outside');
-      next.focus({ preventScroll: true });
+      if (next) {
+        event.preventDefault();
+        next.focus({ preventScroll: true });
+      } else {
+        // 页面末尾保留浏览器默认 Tab 行为，不循环回页面首个控件。
+        anchor.focus({ preventScroll: true });
+      }
     }
     return (
       <>
@@ -205,7 +218,7 @@ export const FloatingPanel = _component(
           <Teleport to={context.portal.value ?? trigger.value.ownerDocument.body}>
             <div
               {...rest}
-              ref={panel}
+              ref={elementRef}
               tabindex={-1}
               onKeydown={keydown}
               dir={appearance.value.direction}
@@ -239,14 +252,18 @@ export const FloatingPanel = _component(
             >
               {scrollable ? (
                 <Scrollbar
-                  tabindex={-1}
-                  class={s.flex('1 1 auto').minHeight(0)}
-                  slotContent={{ class: s.padding('_medium') }}
+                  {...slotRest(slotScrollbar)}
+                  tabindex={slotScrollbar?.tabindex ?? -1}
+                  class={cx(s.flex('1 1 auto').minHeight(0), slotScrollbar?.class)}
+                  slotContent={{
+                    ...slotScrollbar?.slotContent,
+                    class: cx(s.padding('_medium'), slotScrollbar?.slotContent?.class),
+                  }}
                 >
                   {children}
                 </Scrollbar>
               ) : (
-                <div class={s.paddingBlock('_small').paddingInline('_medium')}>{children}</div>
+                children
               )}
             </div>
           </Teleport>
