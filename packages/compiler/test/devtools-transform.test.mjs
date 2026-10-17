@@ -3,6 +3,7 @@ import test from 'node:test';
 import { vitePlugin as vueTsx } from '../src/index.ts';
 
 const source = `import { _component } from '@zerodep-vue/core';
+import { bx, cx } from '@zerodep-vue/core';
 import {ref} from 'vue';
 import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = createCssContext(new SystemKeywords());
@@ -11,8 +12,8 @@ const s = useCss();
 
 export const App = _component(()=>{
   const width=ref('20px');
-  const style=s(()=>({width:width.value}));
-  return <div css={{...{opacity:1}, width:width.value}}/>;
+  const style=s.width(bx(width.value));
+  return <div class={style}/>;
 });`;
 async function compile(command, ssr = false) {
   const plugin = vueTsx();
@@ -33,10 +34,9 @@ test('development traces keep source locations and the browser-only inspector en
   assert(result.code.includes('enableInspection'));
   const lines = source.split('\n');
   const line = lines.findIndex((text) => text.includes('width.value')) + 1;
-  const column = lines[line - 1].indexOf('s(') + 1;
-  assert.match(result.code, new RegExp(`line: ${line},\\s*column: ${column},\\s*kind: "css"`));
-  const partialLine = lines.findIndex((text) => text.includes('css={{')) + 1;
-  assert.match(result.code, new RegExp(`line: ${partialLine},\\s*column: \\d+,\\s*kind: "css"`));
+  const column = lines[line - 1].indexOf('width.value') + 1;
+  assert.match(result.code, new RegExp(`line: ${line},\\s*column: ${column},\\s*kind: "binding"`));
+  assert(result.code.includes('kind: "class"'));
   assert(JSON.parse(result.map).sources.includes('/project/App.tsx'));
 });
 test('production and SSR contain no inspection imports or source-location metadata', async () => {

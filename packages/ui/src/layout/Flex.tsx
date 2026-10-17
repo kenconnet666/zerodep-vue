@@ -1,8 +1,9 @@
+import { _component, bx, cx } from '@zerodep-vue/core';
 import type { CssValue } from '@zerodep-vue/core';
-import { _component } from '@zerodep-vue/core';
 import { useCss } from '../config/Provider.tsx';
 import type { ElementProps, LayoutTag } from '../config/props.ts';
 import type { UiTheme } from '../config/theme/types.ts';
+
 export interface FlexProps extends ElementProps {
   /** 原生容器标签，默认 div。 */
   as?: LayoutTag;
@@ -34,27 +35,26 @@ export const Flex = _component(
     gap,
     rowGap,
     columnGap,
-    css: cssProp,
+    class: className,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: FlexProps) => {
-    const css = useCss();
-    const style = css(() => ({
-      display: inline ? 'inline-flex' : 'flex',
-      minWidth: 0,
-      minHeight: 0,
-      flexDirection: direction,
-      flexWrap: wrap,
-      alignItems: align,
-      justifyContent: justify,
-      gap: gap,
-      rowGap: rowGap,
-      columnGap: columnGap,
-    }));
+    const s = useCss();
+    const style = s
+      .display(bx(inline ? 'inline-flex' : 'flex'))
+      .minWidth(0)
+      .minHeight(0)
+      .flexDirection(bx(direction))
+      .flexWrap(bx(wrap))
+      .alignItems(bx(align))
+      .justifyContent(bx(justify))
+      .gap(bx(gap))
+      .rowGap(bx(rowGap))
+      .columnGap(bx(columnGap));
     return (
-      <Tag css={[style, cssProp]} {...rest}>
+      <Tag {...rest} class={cx(style, className)}>
         {children}
       </Tag>
     );

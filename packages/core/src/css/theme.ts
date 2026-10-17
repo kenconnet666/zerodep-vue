@@ -1,26 +1,25 @@
-import type { InjectionKey, Ref, UnwrapNestedRefs } from 'vue';
 import {
-  getCurrentInstance,
-  hasInjectionContext,
-  inject,
   isRef,
-  provide,
-  reactive,
   unref,
+  reactive,
+  hasInjectionContext,
+  getCurrentInstance,
+  inject,
+  provide,
 } from 'vue';
-import { colorProperties } from './generated/metadata.ts';
+import type { Ref, InjectionKey, UnwrapNestedRefs } from 'vue';
+import { Css } from './generated/author.ts';
 import type { SystemKeywords } from './generated/system.ts';
-import type { CssFactory } from './object-types.ts';
-import { createCssFactory } from './object.ts';
-import type { ThemeReference, ThemeResolver } from './tokens.ts';
+import { colorProperties } from './generated/metadata.ts';
 import { THEME, THEME_SOURCE } from './tokens.ts';
+import type { ThemeReference, ThemeResolver } from './tokens.ts';
 import type { CssContext, ThemeSource } from './types.ts';
 
 const colors = new Set<string>(colorProperties);
 const invalidSource = 'createCssContext 需要继承 SystemKeywords 的真实主题实例或 Vue Ref。';
 
 interface ThemeEntry<T extends SystemKeywords> {
-  readonly author: CssFactory<T>;
+  readonly author: Css<T>;
   readonly theme: UnwrapNestedRefs<T>;
 }
 
@@ -39,11 +38,11 @@ export function createCssContext<T extends SystemKeywords>(source: ThemeSource<T
       // 与公开映射共用 Vue 缓存的代理，让通过 theme 修改成员也能更新现有样式。
       return reactive(theme);
     };
-    let author: CssFactory<T> | undefined;
+    let author: Css<T> | undefined;
     let theme: UnwrapNestedRefs<T> | undefined;
     const entry: ThemeEntry<T> = {
       get author() {
-        return (author ??= createCssFactory<T>(themeResolver(readTheme)));
+        return (author ??= new Css<T>(themeResolver(readTheme)));
       },
       get theme() {
         return (theme ??= isRef(value) ? liveTheme(readTheme) : readTheme());
@@ -59,7 +58,7 @@ export function createCssContext<T extends SystemKeywords>(source: ThemeSource<T
   return Object.freeze({
     useCss: () => current().author,
     useTheme: () => current().theme,
-    provideTheme(next: ThemeSource<T>): CssFactory<T> {
+    provideTheme(next: ThemeSource<T>): Css<T> {
       if (!getCurrentInstance()) throw new Error('provideTheme 必须在组件 setup 中调用。');
       const entry = entryFor(next);
       const author = entry.author;

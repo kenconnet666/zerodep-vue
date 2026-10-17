@@ -1,5 +1,3 @@
-import { setupDevToolsPlugin } from '@vue/devtools-api';
-import type { App, ComponentInternalInstance, VNode } from 'vue';
 import {
   computed,
   getCurrentInstance,
@@ -11,14 +9,17 @@ import {
   ssrContextKey,
   unref,
 } from 'vue';
+import type { App, ComponentInternalInstance, VNode } from 'vue';
+import { setupDevToolsPlugin } from '@vue/devtools-api';
+import { CLASS, isCssClass } from '../css/style-value.ts';
+import type { Declaration } from '../css/style-value.ts';
 import { ANIMATION, isAnimation } from '../css/animation-token.ts';
-import { isBinding } from '../css/bindings.ts';
-import type { CssHost } from '../css/host.ts';
-import { cssHostKey } from '../css/host.ts';
+import { TEMPLATE, isBinding, isTemplate } from '../css/bindings.ts';
+import { isThemeReference } from '../css/tokens.ts';
 import { setInspectionHooks } from '../css/inspection-hooks.ts';
 import type { ResolvedClass } from '../css/resolve.ts';
-import type { Declaration } from '../css/style-value.ts';
-import { isThemeReference } from '../css/tokens.ts';
+import type { CssHost } from '../css/host.ts';
+import { cssHostKey } from '../css/host.ts';
 import { cloneCssVNode as clone, createCssVNode as create, inspectCssVNode } from '../css/vnode.ts';
 
 export interface SourceLocation {
@@ -93,7 +94,8 @@ function bindingSnapshot(
   reads: ReadonlyMap<object, unknown>,
   active: boolean,
 ): BindingSnapshot[] {
-  return [value]
+  const parts = isTemplate(value) ? value[TEMPLATE] : [value];
+  return parts
     .filter((part) => isBinding(part) || isThemeReference(part))
     .map((part) => {
       const key = part as object;
@@ -127,19 +129,11 @@ function installInspectionHooks() {
         }),
         sources: parts
           .filter((part) => typeof part !== 'string')
-          .flatMap<CssSnapshot['sources'][number]>((part) => {
-            const groups = new Map<SourceLocation | undefined, Declaration[]>();
-            for (const declaration of part.declarations) {
-              const source =
-                (declaration.origin && locations.get(declaration.origin)) ??
-                locations.get(part.origin ?? part);
-              const entries = groups.get(source) ?? [];
-              entries.push(declaration);
-              groups.set(source, entries);
-            }
-            return [...groups].map(([source, declarations]) => ({
+          .map<CssSnapshot['sources'][number]>((part) => {
+            const source = locations.get(part);
+            return {
               ...(source ? { source } : {}),
-              declarations: declarations.map((declaration) => {
+              declarations: part.declarations.map((declaration) => {
                 let status: DeclarationSnapshot['status'] = '当前省略';
                 if (declaration.value === null) status = '清除标记';
                 else if (!active.has(declaration)) status = '被覆盖';
@@ -153,10 +147,10 @@ function installInspectionHooks() {
                   bindings: bindingSnapshot(declaration.value, reads, active.has(declaration)),
                 };
               }),
-            }));
+            };
           })
           .reduce<CssSnapshot['sources']>((groups, next) => {
-            // 相邻声明共享来源时合并展示，不暴露内部节点数量。
+            // 一条链的相邻声明共享来源，检查器按作者位置展示，不暴露内部节点数量。
             const previous = groups.at(-1);
             if (previous && previous.source === next.source)
               previous.declarations.push(...next.declarations);
@@ -195,16 +189,18 @@ export function traceCss<T>(value: T, source: SourceLocation): T {
   enableInspection();
   if (!value || typeof value !== 'object') return value;
   locations.set(value, source);
-  // 帧样式可能是延迟工厂，来源登记不能触发 CLASS getter 或再次消费用户代码。
-  if (isAnimation(value))
-    for (const frame of value[ANIMATION]) locations.set(frame.style, { ...source, name: frame.at });
+  if (isCssClass(value)) {
+    for (const part of value[CLASS])
+      if (typeof part !== 'string' && !locations.has(part)) locations.set(part, source);
+  } else if (isAnimation(value)) {
+    for (const frame of value[ANIMATION]) traceCss(frame.style, { ...source, name: frame.at });
+  }
   return value;
 }
 export function traceGlobal<T>(value: T, source: SourceLocation) {
   enableInspection();
   return computed(() => {
-    const input = unref(value);
-    const current = typeof input === 'function' ? input() : input;
+    const current = unref(value);
     if (current && typeof current === 'object') locations.set(current, source);
     return current;
   });

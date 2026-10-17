@@ -1,6 +1,7 @@
-import { _component, _div, _span } from '@zerodep-vue/core';
-import { useCss } from '../config/Provider.tsx';
+import { _component, bx, cx } from '@zerodep-vue/core';
 import type { ElementProps } from '../config/props.ts';
+import { useCss } from '../config/Provider.tsx';
+
 export interface DividerProps extends ElementProps {
   /** 分隔线方向，默认 horizontal。 */
   orientation?: 'horizontal' | 'vertical';
@@ -13,51 +14,43 @@ export const Divider = _component(
   ({
     orientation = 'horizontal',
     decorative = false,
-    css: cssProp,
+    class: className,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: DividerProps) => {
-    const css = useCss();
-    const style = css(() => ({
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.75em',
-      color: '_divider',
-      flexDirection: orientation === 'vertical' ? 'column' : 'row',
-      alignSelf: 'stretch',
-      flexShrink: 0,
-      minWidth: 0,
-      minHeight: 0,
-    }));
-    const line = css(() => ({
-      backgroundColor: 'currentColor',
-      flex: '1 1 auto',
-      minWidth: orientation === 'vertical' ? '0.0625em' : '1em',
-      minHeight: orientation === 'vertical' ? '1em' : '0.0625em',
-    }));
+    const s = useCss();
+    const style = s
+      .display('flex')
+      .alignItems('center')
+      .gap('0.75em')
+      .color('_divider')
+      .flexDirection(bx(orientation === 'vertical' ? 'column' : 'row'))
+      .alignSelf('stretch')
+      .flexShrink(0)
+      .minWidth(0)
+      .minHeight(0);
+    const line = s
+      .backgroundColor('currentColor')
+      .flex('1 1 auto')
+      .minWidth(bx(orientation === 'vertical' ? '0.0625em' : '1em'))
+      .minHeight(bx(orientation === 'vertical' ? '1em' : '0.0625em'));
     return (
-      <_div
-        css={[style, cssProp]}
+      <div
         {...rest}
         role={decorative ? 'none' : 'separator'}
         aria-orientation={decorative ? undefined : orientation}
+        class={cx(style, className)}
       >
-        <_span css={line} aria-hidden="true" />
+        <span aria-hidden="true" class={line} />
         {children != null && (
           <>
-            <_span
-              css={css({
-                color: '_textSecondary',
-              })}
-            >
-              {children}
-            </_span>
-            <_span css={line} aria-hidden="true" />
+            <span class={s.color('_textSecondary')}>{children}</span>
+            <span aria-hidden="true" class={line} />
           </>
         )}
-      </_div>
+      </div>
     );
   },
 );

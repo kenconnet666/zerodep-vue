@@ -1,12 +1,40 @@
-import type { Props, Slot, _div } from '@zerodep-vue/core';
+import type { CssInput } from '@zerodep-vue/core';
+import type { HTMLAttributes, VNodeChild } from 'vue';
 
-export type { DataAttributes } from '@zerodep-vue/core';
+/** HTML 与 SVG 共用的数据属性，也可通过 slotX 普通对象逐层转发。 */
+export interface DataAttributes {
+  /** 原生 data-* 属性也可通过 slotX 对象传入。 */
+  [name: `data-${string}`]: string | number | boolean | null | undefined;
+}
 
-/** 通用容器属性；内容只通过 children 提供，保留原生 class/style 与独立 css。 */
-export type ElementProps = Props<typeof _div, { innerHTML?: never; textContent?: never }>;
+/** UI 容器的公共原生属性；内容、class 与 DOM 替换入口使用统一约定。 */
+export interface ElementProps
+  extends DataAttributes, /* @vue-ignore */ Omit<HTMLAttributes, 'class'> {
+  /** 支持原生类名和链式 CSS，外部样式最后组合。 */
+  class?: CssInput;
+  /** 普通 TSX 内容，由 children Prop 传递。 */
+  children?: VNodeChild;
+  /** 内容由 children 管理。 */
+  innerHTML?: never;
+  textContent?: never;
+}
 
-/** 默认 div 的子节点属性；其他实际目标直接使用 Slot<typeof Target, Owned>。 */
-export type ElementSlotProps = Slot<typeof _div>;
+/** 复杂组件的原生子节点属性；内容仍由所属组件管理。 */
+export type ElementSlotProps = Omit<ElementProps, 'children'>;
+
+/** 子节点 class 显式最后组合；不允许透传入口替换组件管理的内容。 */
+export function slotRest<
+  Props extends { class?: CssInput; children?: unknown; innerHTML?: never; textContent?: never },
+>(slot: Props | undefined) {
+  const {
+    class: _class,
+    children: _children,
+    innerHTML: _innerHTML,
+    textContent: _textContent,
+    ...rest
+  } = slot ?? {};
+  return rest;
+}
 
 /** 布局容器可直接使用的常见原生语义标签。 */
 export type LayoutTag =

@@ -67,14 +67,8 @@ test(
         undefined,
         true,
       );
-      const diagnostics = [...program.getDeclarationDiagnostics(source), ...result.diagnostics].map(
-        (diagnostic) => ({
-          file: basename(file),
-          code: diagnostic.code,
-          message: ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'),
-        }),
-      );
-      expect(diagnostics).toEqual([]);
+      expect(program.getDeclarationDiagnostics(source)).toEqual([]);
+      expect(result.diagnostics).toEqual([]);
       expect(declaration).toContain('DefineSetupFnComponent<');
       expect(declaration).toContain('import("@zerodep-vue/core").AuthorProps');
       expect(declaration).not.toContain(`export declare const ${basename(file, '.tsx')}: any`);

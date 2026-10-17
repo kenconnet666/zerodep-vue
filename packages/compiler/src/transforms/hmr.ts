@@ -1,13 +1,82 @@
-import type { NodePath } from '@babel/core';
-import { addNamed } from '@babel/helper-module-imports';
-import * as t from '@babel/types';
 import { createHash } from 'node:crypto';
-import { coreModule, cssCallKind, importedName, propertyName } from './bindings.ts';
+import { addNamed } from '@babel/helper-module-imports';
+import type { NodePath, Scope } from '@babel/core';
+import * as t from '@babel/types';
+import { coreModule, importedName, propertyName } from './bindings.ts';
 
 export interface HotTransform {
   signature: string;
   compatible: string;
   managed: boolean;
+}
+
+/** 按声明节点去重，只沿未被重新赋值的局部变量追踪，避免循环别名和同名遮蔽。 */
+function stableDeclaration(
+  scope: Scope,
+  name: string,
+  seen: Set<t.Node>,
+): NodePath<t.VariableDeclarator> | undefined {
+  const binding = scope.getBinding(name);
+  if (!binding?.constant || !binding.path.isVariableDeclarator() || seen.has(binding.path.node))
+    return;
+  seen.add(binding.path.node);
+  return binding.path;
+}
+
+function context(scope: Scope, node: t.Node, seen = new Set<t.Node>()): boolean {
+  if (t.isCallExpression(node))
+    return importedName(scope, node.callee, coreModule) === 'createCssContext';
+  if (!t.isIdentifier(node)) return false;
+  const declaration = stableDeclaration(scope, node.name, seen);
+  if (!declaration) return false;
+  const { id, init } = declaration.node;
+  return !!init && t.isIdentifier(id) && context(declaration.scope, init, seen);
+}
+
+/** 按真实 binding 追踪独立入口、命名空间、主题上下文与解构别名，局部同名对象不接管。 */
+function entry(scope: Scope, node: t.Node, name: string, seen = new Set<t.Node>()): boolean {
+  if (name !== 'useCss' && importedName(scope, node, coreModule) === name) return true;
+  if (t.isMemberExpression(node)) return propertyName(node) === name && context(scope, node.object);
+  if (!t.isIdentifier(node)) return false;
+  const declaration = stableDeclaration(scope, node.name, seen);
+  if (!declaration) return false;
+  const { id, init } = declaration.node;
+  if (!init) return false;
+  if (t.isIdentifier(id)) return entry(declaration.scope, init, name, seen);
+  return (
+    t.isObjectPattern(id) &&
+    context(declaration.scope, init) &&
+    id.properties.some(
+      (item) =>
+        t.isObjectProperty(item) &&
+        propertyName(item) === name &&
+        t.isIdentifier(item.value, { name: node.name }),
+    )
+  );
+}
+
+/** 只追踪真实 useCss 来源、其别名及链式返回值；普通同名业务方法保持原语义。 */
+function author(scope: Scope, node: t.Node, seen = new Set<t.Node>()): boolean {
+  if (t.isCallExpression(node)) {
+    if (node.extra?.zerodepCssKind === 'class') return true;
+    if (entry(scope, node.callee, 'useCss')) return true;
+    return t.isMemberExpression(node.callee) && author(scope, node.callee.object, seen);
+  }
+  if (!t.isIdentifier(node)) return false;
+  const declaration = stableDeclaration(scope, node.name, seen);
+  if (!declaration) return false;
+  const init = declaration.node.init;
+  return !!init && author(declaration.scope, init, seen);
+}
+
+const cssEntries = new Map([
+  ['cx', 'class'],
+  ['keyframes', 'keyframes'],
+  ['globalCss', 'global'],
+]);
+export function cssCallKind(scope: Scope, node: t.Node): string | undefined {
+  for (const [name, kind] of cssEntries) if (entry(scope, node, name)) return kind;
+  if (t.isMemberExpression(node) && author(scope, node.object)) return 'class';
 }
 
 /** HMR 不依赖源码排版、位置或临时 raw 文本，只比较未被隔离的初始化结构。 */

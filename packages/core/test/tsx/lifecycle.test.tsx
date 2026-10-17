@@ -1,35 +1,32 @@
-import type { VueWrapper } from '@vue/test-utils';
-import { flushPromises, mount } from '@vue/test-utils';
-import {
-  SystemKeywords,
-  _b,
-  _button,
-  _component,
-  _div,
-  _i,
-  _input,
-  _p,
-  _span,
-  createCssContext,
-  createCssHost,
-  globalCss,
-  keyframes,
-} from '@zerodep-vue/core';
 import { afterEach, expect, test } from 'vitest';
-import type { Ref, VNodeChild } from 'vue';
+import { flushPromises, mount } from '@vue/test-utils';
+import type { VueWrapper } from '@vue/test-utils';
 import {
   KeepAlive,
-  Suspense,
-  Transition,
-  TransitionGroup,
   defineComponent,
   nextTick,
   onMounted,
   onScopeDispose,
   ref,
+  Suspense,
+  Transition,
+  TransitionGroup,
 } from 'vue';
+import type { Ref, VNodeChild } from 'vue';
+import {
+  _component,
+  bx,
+  createCssHost,
+  keyframes,
+  globalCss,
+  createCssContext,
+  SystemKeywords,
+} from '@zerodep-vue/core';
+
 const { useCss } = createCssContext(new SystemKeywords());
-const css = useCss();
+
+const s = useCss();
+
 const wrappers: VueWrapper[] = [];
 const containers: HTMLElement[] = [];
 afterEach(() => {
@@ -42,38 +39,16 @@ function environment() {
   document.head.appendChild(target);
   document.body.appendChild(mountTo);
   containers.push(target, mountTo);
-  return {
-    target,
-    mountTo,
-    host: createCssHost({
-      target,
-      maxUnusedRules: 0,
-    }),
-  };
+  return { target, mountTo, host: createCssHost({ target, maxUnusedRules: 0 }) };
 }
+
 test('Transition retains class and animation resources until its real DOM removal', async () => {
   const { host, target, mountTo } = environment();
   const visible = ref(true);
   let finish: (() => void) | undefined;
   const Leaf = _component(() => {
-    const fade = keyframes({
-      from: css({
-        opacity: 1,
-      }),
-      to: css({
-        opacity: 0,
-      }),
-    });
-    return (
-      <_div
-        css={css({
-          color: 'red',
-          animationName: fade,
-        })}
-      >
-        leaving
-      </_div>
-    );
+    const fade = keyframes({ from: s.opacity(1), to: s.opacity(0) });
+    return <div class={s.color('red').animationName(fade)}>leaving</div>;
   });
   const App = _component(() => (
     <Transition
@@ -87,12 +62,7 @@ test('Transition retains class and animation resources until its real DOM remova
   ));
   const wrapper = mount(App, {
     attachTo: mountTo,
-    global: {
-      plugins: [host],
-      stubs: {
-        transition: false,
-      },
-    },
+    global: { plugins: [host], stubs: { transition: false } },
   });
   wrappers.push(wrapper);
   const node = wrapper.get('div').element;
@@ -108,6 +78,7 @@ test('Transition retains class and animation resources until its real DOM remova
   expect(node.isConnected).toBe(false);
   expect(host.stats().ownedReferences).toBe(0);
 });
+
 test('KeepAlive preserves state and CSS leases across deactivation and cache eviction', async () => {
   const { host, mountTo } = environment();
   const current = ref('a');
@@ -120,16 +91,13 @@ test('KeepAlive preserves state and CSS leases across deactivation and cache evi
       disposed++;
     });
     return (
-      <_button
-        css={css(() => ({
-          width: count.value + 20,
-          color: name === 'a' ? 'red' : 'blue',
-        }))}
+      <button
         data-page={name}
+        class={s.width(bx(count.value + 20)).color(name === 'a' ? 'red' : 'blue')}
         onClick={() => count.value++}
       >
         {name}:{count.value}
-      </_button>
+      </button>
     );
   });
   const App = _component(() => (
@@ -137,12 +105,7 @@ test('KeepAlive preserves state and CSS leases across deactivation and cache evi
       <Page key={current.value} name={current.value} />
     </KeepAlive>
   ));
-  const wrapper = mount(App, {
-    attachTo: mountTo,
-    global: {
-      plugins: [host],
-    },
-  });
+  const wrapper = mount(App, { attachTo: mountTo, global: { plugins: [host] } });
   wrappers.push(wrapper);
   const first = wrapper.get('button').element;
   await wrapper.get('button').trigger('click');
@@ -164,19 +127,15 @@ test('KeepAlive preserves state and CSS leases across deactivation and cache evi
   expect(disposed).toBe(3);
   expect(host.stats().ownedReferences).toBe(0);
 });
+
 test('TransitionGroup keeps a departing row styled while keyed rows retain identity', async () => {
   const { host, mountTo } = environment();
   const rows = ref(['a', 'b']);
   let finish: (() => void) | undefined;
   const Row = _component(({ name }: { name: string }) => (
-    <_span
-      css={css({
-        color: 'green',
-      })}
-      data-row={name}
-    >
+    <span data-row={name} class={s.color('green')}>
       {name}
-    </_span>
+    </span>
   ));
   const App = _component(() => (
     <TransitionGroup
@@ -193,12 +152,7 @@ test('TransitionGroup keeps a departing row styled while keyed rows retain ident
   ));
   const wrapper = mount(App, {
     attachTo: mountTo,
-    global: {
-      plugins: [host],
-      stubs: {
-        'transition-group': false,
-      },
-    },
+    global: { plugins: [host], stubs: { 'transition-group': false } },
   });
   wrappers.push(wrapper);
   const a = wrapper.get('[data-row=a]').element;
@@ -218,6 +172,7 @@ test('TransitionGroup keeps a departing row styled while keyed rows retain ident
   await Promise.resolve();
   expect(host.stats().ownedReferences).toBe(1);
 });
+
 test('async setup updates shared state and clears its ordinary DOM Ref prop on removal', async () => {
   const { host, mountTo } = environment();
   let ready!: () => void;
@@ -236,13 +191,7 @@ test('async setup updates shared state and clears its ordinary DOM Ref prop on r
       });
       await gate;
       return (
-        <_input
-          css={css(() => ({
-            width: model.value.length * 10,
-          }))}
-          ref={inputRef}
-          v-model={model.value}
-        />
+        <input ref={inputRef} v-model={model.value} class={s.width(bx(model.value.length * 10))} />
       );
     },
   );
@@ -252,18 +201,12 @@ test('async setup updates shared state and clears its ordinary DOM Ref prop on r
   const App = _component(() => (
     <Suspense
       v-slots={{
-        default: () =>
-          visible.value ? <Async inputRef={input} model={model} /> : <_i>removed</_i>,
-        fallback: () => <_b>loading</_b>,
+        default: () => (visible.value ? <Async inputRef={input} model={model} /> : <i>removed</i>),
+        fallback: () => <b>loading</b>,
       }}
     />
   ));
-  const wrapper = mount(App, {
-    attachTo: mountTo,
-    global: {
-      plugins: [host],
-    },
-  });
+  const wrapper = mount(App, { attachTo: mountTo, global: { plugins: [host] } });
   wrappers.push(wrapper);
   expect(wrapper.text()).toBe('loading');
   ready();
@@ -281,6 +224,7 @@ test('async setup updates shared state and clears its ordinary DOM Ref prop on r
   expect(disposed).toBe(1);
   expect(host.stats().ownedReferences).toBe(0);
 });
+
 test('a cancelled pending async component releases setup resources and never mounts later', async () => {
   const { host, mountTo } = environment();
   let ready!: () => void;
@@ -296,37 +240,20 @@ test('a cancelled pending async component releases setup resources and never mou
     onScopeDispose(() => {
       disposed++;
     });
-    globalCss('pending-scope', {
-      ':root': css({
-        color: 'red',
-      }),
-    });
+    globalCss('pending-scope', { ':root': s.color('red') });
     await gate;
-    return (
-      <_div
-        css={css({
-          color: 'blue',
-        })}
-      >
-        late
-      </_div>
-    );
+    return <div class={s.color('blue')}>late</div>;
   });
   const visible = ref(true);
   const App = _component(() => (
     <Suspense
       v-slots={{
-        default: () => (visible.value ? <Pending /> : <_p>cancelled</_p>),
-        fallback: () => <_i>pending</_i>,
+        default: () => (visible.value ? <Pending /> : <p>cancelled</p>),
+        fallback: () => <i>pending</i>,
       }}
     />
   ));
-  const wrapper = mount(App, {
-    attachTo: mountTo,
-    global: {
-      plugins: [host],
-    },
-  });
+  const wrapper = mount(App, { attachTo: mountTo, global: { plugins: [host] } });
   wrappers.push(wrapper);
   expect(host.stats().globalRules).toBe(1);
   visible.value = false;
@@ -339,6 +266,7 @@ test('a cancelled pending async component releases setup resources and never mou
   expect(wrapper.text()).toBe('cancelled');
   expect(host.stats().ownedReferences).toBe(0);
 });
+
 test('native Vue template hosting reuses props, callbacks, nested children and DOM Ref props', async () => {
   const { host, mountTo } = environment();
   const element = ref<HTMLButtonElement | null>(null);
@@ -356,51 +284,28 @@ test('native Vue template hosting reuses props, callbacks, nested children and D
       onCommit: (value: string) => void;
     }) => {
       return (
-        <_button
-          css={css({
-            color: 'red',
-          })}
-          ref={elementRef}
-          {...rest}
-          onClick={() => onCommit(label)}
-        >
+        <button ref={elementRef} class={s.color('red')} {...rest} onClick={() => onCommit(label)}>
           {label}
           {children}
-        </_button>
+        </button>
       );
     },
   );
   const Host = defineComponent({
-    components: {
-      Action,
-    },
+    components: { Action },
     // 普通对象保留嵌套 Ref 身份，模板不会把它当作顶层模板 Ref 自动解包。
-    setup: () => ({
-      references: {
-        element,
-      },
-    }),
-    data: () => ({
-      label: 'template',
-      committed: '',
-    }),
+    setup: () => ({ references: { element } }),
+    data: () => ({ label: 'template', committed: '' }),
     template:
       '<Action :element-ref="references.element" class="host-class" :label="label" @commit="committed=$event"><i>slot</i></Action>',
   });
-  const wrapper = mount(Host, {
-    attachTo: mountTo,
-    global: {
-      plugins: [host],
-    },
-  });
+  const wrapper = mount(Host, { attachTo: mountTo, global: { plugins: [host] } });
   wrappers.push(wrapper);
   expect(wrapper.text()).toBe('templateslot');
   expect(wrapper.get('button').classes()).toContain('host-class');
   element.value!.focus();
   expect(document.activeElement).toBe(wrapper.get('button').element);
-  await wrapper.setData({
-    label: 'changed',
-  });
+  await wrapper.setData({ label: 'changed' });
   await wrapper.get('button').trigger('click');
   expect(wrapper.vm.committed).toBe('changed');
   expect(wrapper.text()).toBe('changedslot');

@@ -1,40 +1,37 @@
+import { _component, bx, cx } from '@zerodep-vue/core';
 import { Check, Minus } from '@lucide/icons';
-import type { Props, Slot } from '@zerodep-vue/core';
-import { _component, _input, _span } from '@zerodep-vue/core';
 import { ref, shallowRef } from 'vue';
+import type { InputHTMLAttributes } from 'vue';
 import { useCss } from '../config/Provider.tsx';
+import { slotRest } from '../config/props.ts';
+import type { DataAttributes, ElementSlotProps } from '../config/props.ts';
 import { Icon } from '../display/Icon.tsx';
 import { callCallbacks } from '../interaction/callbacks.ts';
-import type { ChoiceControlAppearance } from './ChoiceControlFrame.tsx';
 import { ChoiceControlFrame } from './ChoiceControlFrame.tsx';
-import type { ChoiceValueProps } from './choice-control.ts';
+import type { ChoiceControlAppearance } from './ChoiceControlFrame.tsx';
 import { choiceInputStyle, useChoiceControl } from './choice-control.ts';
-export type CheckboxProps = Props<
-  typeof _input,
-  ChoiceValueProps &
-    ChoiceControlAppearance & {
-      /** 受控混合态，只影响标记与无障碍读值，不改变 value 或表单提交值。 */
-      indeterminate?: boolean;
-      slotInput?: Slot<
-        typeof _input,
-        | 'type'
-        | 'value'
-        | 'checked'
-        | 'indeterminate'
-        | 'disabled'
-        | 'role'
-        | 'aria-checked'
-        | 'aria-readonly'
-        | 'aria-invalid'
-      >;
-      slotIndicator?: Slot<typeof _span, 'aria-hidden' | 'data-zv-choice-indicator'>;
-      type?: never;
-      checked?: never;
-      role?: never;
-      'aria-checked'?: never;
-      'aria-readonly'?: never;
-    }
->;
+import type { ChoiceValueProps } from './choice-control.ts';
+
+export interface CheckboxProps
+  extends
+    ChoiceValueProps,
+    ChoiceControlAppearance,
+    DataAttributes,
+    /* @vue-ignore */ Omit<
+      InputHTMLAttributes,
+      | keyof ChoiceValueProps
+      | keyof ChoiceControlAppearance
+      | 'type'
+      | 'checked'
+      | 'role'
+      | 'aria-checked'
+      | 'aria-readonly'
+    > {
+  /** 受控混合态，只影响标记与无障碍读值，不改变 value 或表单提交值。 */
+  indeterminate?: boolean;
+  slotInput?: Omit<ElementSlotProps, 'id' | 'role' | 'aria-checked' | 'aria-readonly'>;
+  slotIndicator?: Omit<ElementSlotProps, 'aria-hidden'>;
+}
 /** 原生 checkbox 保留标签、键盘和表单语义，标记使用自有 Icon。 */
 export const Checkbox = _component(
   ({
@@ -56,7 +53,6 @@ export const Checkbox = _component(
     onValueCommit,
     onValueReset,
     class: className,
-    css: cssProp,
     style,
     children,
     innerHTML: _innerHTML,
@@ -64,7 +60,7 @@ export const Checkbox = _component(
     'aria-invalid': ariaInvalid,
     ...rest
   }: CheckboxProps) => {
-    const css = useCss();
+    const s = useCss();
     const control = useChoiceControl({
       value: () => value,
       resetValue: () => resetValue,
@@ -78,30 +74,15 @@ export const Checkbox = _component(
     });
     return (
       <ChoiceControlFrame
+        {...{ size, color, readOnly, style, slotLabel }}
         class={className}
-        css={cssProp}
-        {...{
-          size,
-          color,
-          readOnly,
-          style,
-          slotLabel,
-        }}
         input={
-          <_input
-            css={css([
-              choiceInputStyle(css),
-              {
-                width: '1.125em',
-                height: '1.125em',
-              },
-            ])}
+          <input
             onClick={control.guard}
-            {...slotInput}
+            {...slotRest(slotInput)}
             {...rest}
             ref={inputRef}
             type="checkbox"
-            role="checkbox"
             value={formValue}
             checked={value.value}
             indeterminate={indeterminate}
@@ -109,77 +90,74 @@ export const Checkbox = _component(
             aria-checked={indeterminate ? 'mixed' : value.value}
             aria-readonly={readOnly || undefined}
             aria-invalid={status === 'error' || ariaInvalid}
+            class={cx(choiceInputStyle(s).width('1.125em').height('1.125em'), slotInput?.class)}
             onChange={control.change}
           />
         }
         indicator={
-          <_span
-            css={[
-              css(() => ({
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxSizing: 'border-box',
-                flexShrink: 0,
-                width: '1.125em',
-                height: '1.125em',
-                borderStyle: 'solid',
-                borderWidth: '0.0625em',
-                borderRadius: '0.25em',
-                color: '_textOnPrimary',
-                backgroundColor:
-                  value.value || indeterminate
-                    ? accentColor === undefined
-                      ? '_primary'
-                      : accentColor
-                    : '_surface',
-                borderColor:
-                  value.value || indeterminate
-                    ? accentColor === undefined
-                      ? '_primary'
-                      : accentColor
-                    : '_borderStrong',
-                transitionProperty: 'background-color, border-color',
-                transitionDuration: '_fast',
-                '&:where([data-zv-choice]:has(> input:enabled):hover > *)': {
-                  borderColor: accentColor === undefined ? '_primaryHover' : accentColor,
-                },
-                '@media (prefers-reduced-motion: reduce)': {
-                  transitionDuration: '0ms',
-                },
-                '@media (forced-colors: active)': {
-                  backgroundColor: value.value || indeterminate ? 'Highlight' : 'Canvas',
-                  borderColor: 'ButtonText',
-                  color: 'HighlightText',
-                },
-              })),
-              status === 'error' &&
-                css({
-                  borderColor: '_danger',
-                }),
-              status === 'warning' &&
-                css({
-                  borderColor: '_warning',
-                }),
-              status === 'success' &&
-                css({
-                  borderColor: '_success',
-                }),
-            ]}
-            {...slotIndicator}
+          <span
+            {...slotRest(slotIndicator)}
             aria-hidden={true}
             data-zv-choice-indicator=""
+            class={cx(
+              s
+                .display('inline-flex')
+                .alignItems('center')
+                .justifyContent('center')
+                .boxSizing('border-box')
+                .flexShrink(0)
+                .width('1.125em')
+                .height('1.125em')
+                .borderStyle('solid')
+                .borderWidth('0.0625em')
+                .borderRadius('0.25em')
+                .color('_textOnPrimary')
+                .backgroundColor(
+                  bx(
+                    value.value || indeterminate
+                      ? accentColor === undefined
+                        ? '_primary'
+                        : accentColor
+                      : '_surface',
+                  ),
+                )
+                .borderColor(
+                  bx(
+                    value.value || indeterminate
+                      ? accentColor === undefined
+                        ? '_primary'
+                        : accentColor
+                      : '_borderStrong',
+                  ),
+                )
+                .transitionProperty('background-color, border-color')
+                .transitionDuration('_fast')
+                .select(
+                  '&:where([data-zv-choice]:has(> input:enabled):hover > *)',
+                  s.borderColor(bx(accentColor === undefined ? '_primaryHover' : accentColor)),
+                )
+                .select('@media (prefers-reduced-motion: reduce)', s.transitionDuration('0ms'))
+                .select(
+                  '@media (forced-colors: active)',
+                  s
+                    .backgroundColor(bx(value.value || indeterminate ? 'Highlight' : 'Canvas'))
+                    .borderColor('ButtonText')
+                    .color('HighlightText'),
+                ),
+              status === 'error' && s.borderColor('_danger'),
+              status === 'warning' && s.borderColor('_warning'),
+              status === 'success' && s.borderColor('_success'),
+              slotIndicator?.class,
+            )}
           >
             <Icon
-              css={css(() => ({
-                visibility: value.value || indeterminate ? 'visible' : 'hidden',
-              }))}
               icon={indeterminate ? Minus : Check}
               size="0.875em"
               strokeWidth={3}
               aria-hidden={true}
+              class={s.visibility(bx(value.value || indeterminate ? 'visible' : 'hidden'))}
             />
-          </_span>
+          </span>
         }
       >
         {children}

@@ -1,33 +1,25 @@
-import { objectClass, staticCss } from '../../src/css/object.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { JSDOM } from 'jsdom';
 import { createCssHost } from '../../src/css/host.ts';
+
 import { resolveClass } from '../../src/css/resolve.ts';
-const resolve = (input) => resolveClass(objectClass(input));
+import { createCssContext, SystemKeywords } from '../../src/index.ts';
+const { useCss } = createCssContext(new SystemKeywords());
+
+const s = useCss();
+
 const rule = (color) => {
-  const resolved = resolve(
-    staticCss({
-      color: color,
-    }),
-  );
-  return {
-    name: resolved.ruleName,
-    cssText: resolved.cssText,
-  };
+  const resolved = resolveClass(s.color(color));
+  return { name: resolved.ruleName, cssText: resolved.cssText };
 };
+
 test('shared hosts protect active consumers and bound unused rules', () => {
   const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>');
   try {
     const target = dom.window.document.head;
-    const a = createCssHost({
-      target,
-      maxUnusedRules: 1,
-    });
-    const b = createCssHost({
-      target,
-      maxUnusedRules: 1,
-    });
+    const a = createCssHost({ target, maxUnusedRules: 1 });
+    const b = createCssHost({ target, maxUnusedRules: 1 });
     const releaseA = a.acquire(rule('red'));
     const releaseB = b.acquire(rule('red'));
     assert.equal(target.children.length, 1);
@@ -49,14 +41,10 @@ test('shared hosts protect active consumers and bound unused rules', () => {
     dom.window.close();
   }
 });
+
 test('SSR collectors isolate requests and browser acquisition adopts identical styles', () => {
-  const server = createCssHost({
-    target: null,
-    nonce: 'safe"nonce',
-  });
-  const other = createCssHost({
-    target: null,
-  });
+  const server = createCssHost({ target: null, nonce: 'safe"nonce' });
+  const other = createCssHost({ target: null });
   server.collect(rule('red'));
   other.collect(rule('blue'));
   assert(!server.cssText().includes('blue'));
@@ -67,10 +55,7 @@ test('SSR collectors isolate requests and browser acquisition adopts identical s
   try {
     const target = dom.window.document.head;
     const initial = target.firstElementChild;
-    const client = createCssHost({
-      target,
-      maxUnusedRules: 0,
-    });
+    const client = createCssHost({ target, maxUnusedRules: 0 });
     const release = client.acquire(rule('red'));
     assert.equal(target.children.length, 1);
     assert.equal(target.firstElementChild, initial);
@@ -83,15 +68,11 @@ test('SSR collectors isolate requests and browser acquisition adopts identical s
     dom.window.close();
   }
 });
+
 test('cached rules are restored after a reused ShadowRoot container is cleared', () => {
   const dom = new JSDOM('<!doctype html><html><body><div id="host"></div></body></html>');
-  const shadow = dom.window.document.getElementById('host').attachShadow({
-    mode: 'open',
-  });
-  const host = createCssHost({
-    target: shadow,
-    maxUnusedRules: 2,
-  });
+  const shadow = dom.window.document.getElementById('host').attachShadow({ mode: 'open' });
+  const host = createCssHost({ target: shadow, maxUnusedRules: 2 });
   try {
     const release = host.acquire(rule('red'));
     const original = shadow.firstElementChild;
@@ -106,12 +87,10 @@ test('cached rules are restored after a reused ShadowRoot container is cleared',
     dom.window.close();
   }
 });
+
 test('disposal continues after a callback fails and releases all host-owned rules', () => {
   const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>');
-  const host = createCssHost({
-    target: dom.window.document.head,
-    maxUnusedRules: 0,
-  });
+  const host = createCssHost({ target: dom.window.document.head, maxUnusedRules: 0 });
   try {
     host.acquire(rule('red'));
     host.acquireGlobal('page', 'body{color:blue;}');
@@ -142,10 +121,9 @@ test('disposal continues after a callback fails and releases all host-owned rule
     dom.window.close();
   }
 });
+
 test('disposal allows reentry and reports multiple failures after cleanup', () => {
-  const host = createCssHost({
-    target: null,
-  });
+  const host = createCssHost({ target: null });
   host.acquireGlobal('page', 'body{color:red;}');
   const first = new Error('first');
   const last = new Error('last');

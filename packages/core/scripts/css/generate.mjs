@@ -185,6 +185,7 @@ function keywordDoc(name, value, color) {
 
 const literalInterfaces = [];
 const literalProperties = [];
+const keywordProperties = [];
 const slotLines = [];
 const colorNames = [];
 const header =
@@ -236,7 +237,6 @@ for (const group of commonGroups) {
 }
 for (const property of properties) {
   const name = property.name;
-  const supported = supportedLegacyValues[name];
   // 字面量取原始泛型，防止 TLength=string 把 auto/颜色等候选折叠掉；数值边界取实际实例化类型。
   const type = checker.getTypeOfSymbolAtLocation(property, property.valueDeclaration);
   const concreteType = checker.getTypeOfPropertyOfType(concrete, name);
@@ -248,6 +248,7 @@ for (const property of properties) {
   );
   const shared = new Set(common.flatMap((group) => group.values));
   const literalName = name[0].toUpperCase() + name.slice(1) + 'Values';
+  keywordProperties.push(`readonly ${name}: ${literalName};`);
   literalInterfaces.push(
     `export interface ${literalName}` +
       (common.length ? ' extends ' + common.map((group) => group.name).join(', ') : '') +
@@ -255,12 +256,8 @@ for (const property of properties) {
         .filter((value) => !shared.has(value))
         .map(
           (value) =>
-            jsdoc(
-              keywordDoc(name, value, color) +
-                (supported && supported.value !== value
-                  ? '\n@deprecated 历史布局值；多行省略仅使用 vertical 兼容组合。'
-                  : ''),
-            ) + `readonly ${JSON.stringify(value)}: ${JSON.stringify(value)};`,
+            jsdoc(keywordDoc(name, value, color)) +
+            `readonly ${JSON.stringify(value)}: ${JSON.stringify(value)};`,
         )
         .join('\n')}\n}`,
   );
@@ -289,31 +286,55 @@ for (const property of properties) {
   );
   const comment = jsdoc(description(name));
   slotLines.push(comment + `declare readonly ${name}: {};`);
-  const authorComment = supported
-    ? jsdoc(
-        supported.description + '\n\n' + description(name, false) + '\n@see ' + supported.source,
-      )
-    : comment;
-  groups
-    .get(propertyGroup(name, svg, obsolete))
-    .push(authorComment + name + '?: CssDeclarationValue<' + JSON.stringify(name) + ', T>;');
+  const methodTags =
+    '\n@param value 当前属性值、主题名或 bx 绑定；undefined 跳过，null 清除当前属性。' +
+    '\n@returns 追加声明后的不可变样式链；保留主题和子类类型，不修改原链。';
+  const methodComment = jsdoc(description(name) + methodTags);
+  const keywordSignature = `${name}(value: KeywordInput<${JSON.stringify(name)}, T>): this`;
+  const signature = `${name}<const Value>(value: PropertyInput<${JSON.stringify(name)}, T, Value>): this`;
+  // 普通字面量先保留声明来源；后面的泛型重载仍拒绝未知主题名，不能退化为宽泛 string。
+  let overloads = methodComment + keywordSignature + ';\n' + methodComment + signature + ';\n';
+  const supported = supportedLegacyValues[name];
+  if (supported) {
+    assert(obsolete.has(name), `Compatibility overload needs an obsolete property: ${name}`);
+    assert(
+      literalValues(concreteType).includes(supported.value),
+      `Unknown compatibility value: ${name}`,
+    );
+    overloads =
+      jsdoc(
+        description(name, false) +
+          '\n\n' +
+          supported.description +
+          '\n@see ' +
+          supported.source +
+          methodTags,
+      ) +
+      `${name}(value: ${JSON.stringify(supported.value)}): this;\n` +
+      overloads;
+  }
+  groups.get(propertyGroup(name, svg, obsolete)).push(
+    overloads +
+      // 补全候选与已解析调用可能定位到不同签名；实现也携带完整文档，不能只依赖重载回退。
+      methodComment +
+      `${name}(value: PropertyValue<${JSON.stringify(name)}, T>): this { return this.write(${JSON.stringify(name)}, value); }`,
+  );
 }
 const outputs = {
   'literal-values.ts':
     header +
     `/** 保留字面量候选，同时接收原属性允许的自由 CSS 字符串。 */\ntype CssString = string & {};\n` +
     literalInterfaces.join('\n') +
+    `\n/** 各属性的关键字声明；普通重载通过 keyof 保留成员的导航与文档来源。 */\nexport interface PropertyKeywords {\n${keywordProperties.join('\n')}\n}\n` +
     `\n/** 各属性的原生输入值域；字面量说明只维护一份。 */\nexport interface PropertyValues {\n${literalProperties.join('\n')}\n}\n`,
   'system.ts':
     header +
     `import { THEME_SOURCE } from '../tokens.ts';\n` +
     `/** 主题扩展基类；属性槽仅作类型声明，子类定义 _ 开头的主题映射。 */\nexport class SystemKeywords {\nreadonly [THEME_SOURCE] = true as const;\n${slotLines.join('\n')}\n}\n`,
-  'declarations.ts':
+  'author.ts':
     header +
-    "import type { CssDeclarationValue } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\n" +
-    '/** CSS 对象的属性声明；中文说明和规范元数据由固定来源生成。 */\nexport interface CssDeclarations<T extends SystemKeywords = SystemKeywords> {\n' +
-    propertyGroups.map(([name]) => groups.get(name).join('\n')).join('\n') +
-    '\n}\n',
+    `import type { KeywordInput, PropertyInput, PropertyValue } from '../types.ts';\nimport type { SystemKeywords } from './system.ts';\nimport { CssAuthor } from '../author.ts';\n` +
+    `/** 不可变链式样式；每次调用返回新值，泛型 T 保留主题约束。 */\nexport class Css<T extends SystemKeywords = SystemKeywords> extends CssAuthor {\n${propertyGroups.map(([name]) => groups.get(name).join('\n')).join('\n')}\n}\n`,
   'metadata.ts':
     header +
     `/** 可回退到共享 color 主题组的属性；原生值本身无需运行时字典。 */\nexport const colorProperties = ${JSON.stringify(colorNames)} as const;\nexport type ColorProperty = (typeof colorProperties)[number];\n`,

@@ -1,12 +1,14 @@
-import type { Placement } from '@floating-ui/dom';
-import type { Slot } from '@zerodep-vue/core';
 import { _component } from '@zerodep-vue/core';
-import type { Ref, VNodeChild } from 'vue';
 import { ref, shallowRef, useId, watch } from 'vue';
+import type { Ref, VNodeChild } from 'vue';
+import type { Placement } from '@floating-ui/dom';
+import type { ElementSlotProps } from '../config/props.ts';
+import { slotRest } from '../config/props.ts';
 import { FloatingPanel } from '../interaction/FloatingPanel.tsx';
-import type { Callback } from '../interaction/callbacks.ts';
-import { callCallbacks } from '../interaction/callbacks.ts';
 import type { OverlayCloseReason } from '../interaction/layer.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
+
 export interface FloatingTriggerProps {
   elementRef: Ref<HTMLElement | null | undefined>;
   'aria-expanded'?: boolean;
@@ -35,25 +37,7 @@ export interface PopoverProps {
   closeOnOutside?: boolean;
   /** 焦点离开触发器与面板时关闭，默认 true。 */
   closeOnFocusOutside?: boolean;
-  slotPanel?: Slot<
-    typeof FloatingPanel,
-    | 'id'
-    | 'role'
-    | 'open'
-    | 'reference'
-    | 'placement'
-    | 'offset'
-    | 'matchWidth'
-    | 'focus'
-    | 'closeOnEscape'
-    | 'closeOnOutside'
-    | 'closeOnFocusOutside'
-    | 'onClose'
-    | 'tabindex'
-    | 'surface'
-    | 'scrollable'
-    | 'restoreFocus'
-  >;
+  slotPanel?: Omit<ElementSlotProps, 'id' | 'role' | 'tabindex'>;
   children?: VNodeChild;
   onOpenChange?: Callback<[open: boolean, reason: OverlayCloseReason]>;
 }
@@ -100,7 +84,7 @@ export const Popover = _component(
         })}
         {!disabled && (
           <FloatingPanel
-            {...slotPanel}
+            {...slotRest(slotPanel)}
             id={id}
             role="dialog"
             aria-label={slotPanel?.['aria-label'] ?? label}
@@ -113,6 +97,7 @@ export const Popover = _component(
             closeOnEscape={closeOnEscape}
             closeOnOutside={closeOnOutside}
             closeOnFocusOutside={closeOnFocusOutside}
+            class={slotPanel?.class}
             onClose={(reason) => callCallbacks(onOpenChange, false, reason)}
           >
             {children}

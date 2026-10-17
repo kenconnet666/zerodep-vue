@@ -1,23 +1,25 @@
-import type { Slot } from '@zerodep-vue/core';
-import { _component, _li, _nav, _ul } from '@zerodep-vue/core';
-import type { VNodeChild } from 'vue';
+import { _component, bx, cx } from '@zerodep-vue/core';
 import { shallowRef, watchPostEffect } from 'vue';
+import type { VNodeChild } from 'vue';
 import { useCss, useLang } from '../config/Provider.tsx';
-import type { ElementProps } from '../config/props.ts';
+import { slotRest } from '../config/props.ts';
+import type { ElementProps, ElementSlotProps } from '../config/props.ts';
 import { Link } from '../display/Link.tsx';
-import type { Callback } from '../interaction/callbacks.ts';
-import { callCallbacks } from '../interaction/callbacks.ts';
+import type { LinkProps } from '../display/Link.tsx';
 import { useMediaQuery } from '../interaction/media.ts';
-import type { ScrollTarget, ScrollTargetSource } from '../interaction/scroll.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
 import {
   isWindow,
   observeScroll,
   scrollElement,
-  scrollToElement,
   scrollTop,
+  scrollToElement,
   scrollViewport,
   useScrollTarget,
 } from '../interaction/scroll.ts';
+import type { ScrollTarget, ScrollTargetSource } from '../interaction/scroll.ts';
+
 export interface AnchorItem {
   /** 当前页面的片段标识，如 #installation；同时作为稳定 key。 */
   href: `#${string}`;
@@ -34,10 +36,10 @@ export interface AnchorProps extends Omit<ElementProps, 'children'> {
   history?: 'push' | 'replace' | 'none';
   onActiveChange?: Callback<[href: string | undefined]>;
   /** 只作用于根列表，避免递归列表复制同一 id。 */
-  slotList?: Slot<typeof _ul>;
+  slotList?: ElementSlotProps;
   /** 所有条目共享的属性，不分配重复 id。 */
-  slotItem?: Slot<typeof _li, 'id'>;
-  slotLink?: Slot<typeof Link, 'href' | 'aria-current' | 'id'>;
+  slotItem?: Omit<ElementSlotProps, 'id'>;
+  slotLink?: Omit<LinkProps, 'href' | 'children' | 'aria-current' | 'id'>;
 }
 
 /** 页内目录：保留原生链接，点击时只滚动指定容器。 */
@@ -53,12 +55,12 @@ export const Anchor = _component(
     slotItem,
     slotLink,
     'aria-label': label,
-    css: cssProp,
+    class: className,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: AnchorProps) => {
-    const css = useCss();
+    const s = useCss();
     const lang = useLang();
     const root = shallowRef<HTMLElement>();
     const active = shallowRef<string>();
@@ -77,10 +79,7 @@ export const Anchor = _component(
     };
     function measure(current: ScrollTarget) {
       const entries = flatten(items)
-        .map((item) => ({
-          item,
-          element: elementFor(item.href),
-        }))
+        .map((item) => ({ item, element: elementFor(item.href) }))
         .filter((entry) => entry.element && (isWindow(current) || current.contains(entry.element)))
         .map((entry) => ({
           href: entry.item.href,
@@ -120,11 +119,7 @@ export const Anchor = _component(
         });
       };
       const observer = new MutationObserver(schedule);
-      observer.observe(element, {
-        childList: true,
-        subtree: true,
-        characterData: true,
-      });
+      observer.observe(element, { childList: true, subtree: true, characterData: true });
       const resize =
         typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
       for (const item of flatten(items)) {
@@ -159,9 +154,7 @@ export const Anchor = _component(
       // 临时可编程焦点不进入 Tab 顺序，并保持上层原有 tabindex。
       const existing = element.getAttribute('tabindex');
       if (existing === null) element.setAttribute('tabindex', '-1');
-      element.focus({
-        preventScroll: true,
-      });
+      element.focus({ preventScroll: true });
       if (existing === null) element.removeAttribute('tabindex');
       scrollToElement(current, element, offset, reduced.value ? 'instant' : behavior);
       const view = element.ownerDocument.defaultView;
@@ -173,54 +166,53 @@ export const Anchor = _component(
       }
     }
     const list = (entries: readonly AnchorItem[], nested = false): VNodeChild => (
-      <_ul
-        css={css({
-          listStyleType: 'none',
-          margin: 0,
-          padding: 0,
-          paddingInlineStart: nested ? '1em' : 0,
-        })}
-        {...(nested ? undefined : slotList)}
+      <ul
+        {...slotRest(nested ? undefined : slotList)}
+        class={cx(
+          s
+            .listStyleType('none')
+            .margin(0)
+            .padding(0)
+            .paddingInlineStart(nested ? '1em' : 0),
+          !nested && slotList?.class,
+        )}
       >
         {entries.map((item) => (
-          <_li {...slotItem} key={item.href}>
+          <li {...slotRest(slotItem)} key={item.href} class={slotItem?.class}>
             <Link
-              css={css(() => ({
-                display: 'block',
-                paddingBlock: '0.375em',
-                paddingInline: '0.75em',
-                textDecorationLine: 'none',
-                borderInlineStartStyle: 'solid',
-                borderInlineStartWidth: '0.125em',
-                borderInlineStartColor: active.value === item.href ? '_primary' : '_divider',
-                color: active.value === item.href ? '_primary' : '_textSecondary',
-              }))}
-              {...slotLink}
+              {...slotRest(slotLink)}
               href={item.href}
               aria-current={active.value === item.href ? 'location' : undefined}
               onClick={(event) => activate(event, item)}
+              class={cx(
+                s
+                  .display('block')
+                  .paddingBlock('0.375em')
+                  .paddingInline('0.75em')
+                  .textDecorationLine('none')
+                  .borderInlineStartStyle('solid')
+                  .borderInlineStartWidth('0.125em')
+                  .borderInlineStartColor(bx(active.value === item.href ? '_primary' : '_divider'))
+                  .color(bx(active.value === item.href ? '_primary' : '_textSecondary')),
+                slotLink?.class,
+              )}
             >
               {item.label}
             </Link>
             {item.children?.length ? list(item.children, true) : null}
-          </_li>
+          </li>
         ))}
-      </_ul>
+      </ul>
     );
     return (
-      <_nav
-        css={[
-          css({
-            minWidth: 0,
-          }),
-          cssProp,
-        ]}
+      <nav
         {...rest}
         ref={root}
         aria-label={label ?? lang.navigation}
+        class={cx(s.minWidth(0), className)}
       >
         {list(items)}
-      </_nav>
+      </nav>
     );
   },
 );

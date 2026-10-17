@@ -1,12 +1,15 @@
-import type { CssValue, Slot } from '@zerodep-vue/core';
-import { _component, _div, _label } from '@zerodep-vue/core';
+import { _component, bx, cx } from '@zerodep-vue/core';
+import type { CssValue } from '@zerodep-vue/core';
 import type { VNodeChild } from 'vue';
 import { useCss, useLang } from '../config/Provider.tsx';
-import type { ElementProps } from '../config/props.ts';
+import { slotRest } from '../config/props.ts';
+import type { ElementProps, ElementSlotProps } from '../config/props.ts';
 import type { UiTheme } from '../config/theme/types.ts';
-import { Text } from '../display/Text.tsx';
 import { Grid } from '../layout/Grid.tsx';
+import { Text } from '../display/Text.tsx';
+import type { TextProps } from '../display/Text.tsx';
 import type { FieldViewState } from './useField.ts';
+
 export interface FieldProps extends ElementProps {
   /** 每个 state 关联一个控件；子控件显式展开 state.control。 */
   state: FieldViewState;
@@ -14,10 +17,10 @@ export interface FieldProps extends ElementProps {
   help?: VNodeChild;
   orientation?: 'vertical' | 'horizontal';
   labelWidth?: CssValue<'width', UiTheme>;
-  slotLabel?: Slot<typeof _label, 'id' | 'for'>;
-  slotControl?: Slot<typeof Grid, 'gap'>;
-  slotHelp?: Slot<typeof Text>;
-  slotError?: Slot<typeof Text, 'id'>;
+  slotLabel?: Omit<ElementSlotProps, 'id'>;
+  slotControl?: ElementSlotProps;
+  slotHelp?: Omit<TextProps, 'children'>;
+  slotError?: Omit<TextProps, 'children' | 'id'>;
 }
 
 /** 字段视图组合 Grid/Text；不扫描或克隆子节点，也不把校验调度放进渲染组件。 */
@@ -32,31 +35,28 @@ export const Field = _component(
     slotControl,
     slotHelp,
     slotError,
-    css: cssProp,
+    class: className,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: FieldProps) => {
-    const css = useCss();
+    const s = useCss();
     const lang = useLang();
     return (
       <Grid
-        css={cssProp}
         {...rest}
         columns={orientation === 'horizontal' ? 'auto minmax(0, 1fr)' : 'minmax(0, 1fr)'}
         gap="_small"
         align="start"
         aria-busy={state.pending.value || undefined}
+        class={className}
       >
-        <_label
-          css={css(() => ({
-            width: labelWidth,
-            fontWeight: '_medium',
-          }))}
-          {...slotLabel}
+        <label
+          {...slotRest(slotLabel)}
           id={state.labelId}
           for={state.id}
+          class={cx(s.width(bx(labelWidth)).fontWeight('_medium'), slotLabel?.class)}
         >
           <Text>{label}</Text>
           {state.required && (
@@ -65,18 +65,16 @@ export const Field = _component(
               *
             </Text>
           )}
-        </_label>
-        <Grid {...slotControl} gap="_extraSmall">
+        </label>
+        <Grid {...slotRest(slotControl)} gap="_extraSmall" class={slotControl?.class}>
           {children}
-          <_div id={state.descriptionId} aria-live="polite">
+          <div id={state.descriptionId} aria-live="polite">
             {help != null && (
               <Text
-                css={css({
-                  display: 'block',
-                })}
-                {...slotHelp}
+                {...slotRest(slotHelp)}
                 color={slotHelp?.color === undefined ? '_textSecondary' : slotHelp.color}
                 size={slotHelp?.size === undefined ? '0.875em' : slotHelp.size}
+                class={cx(s.display('block'), slotHelp?.class)}
               >
                 {help}
               </Text>
@@ -84,13 +82,11 @@ export const Field = _component(
             {Array.from(new Set(state.issues.value.map((issue) => issue.message))).map(
               (message) => (
                 <Text
-                  css={css({
-                    display: 'block',
-                  })}
                   key={message}
-                  {...slotError}
+                  {...slotRest(slotError)}
                   color={slotError?.color === undefined ? '_danger' : slotError.color}
                   size={slotError?.size === undefined ? '0.875em' : slotError.size}
+                  class={cx(s.display('block'), slotError?.class)}
                 >
                   {message}
                 </Text>
@@ -98,17 +94,15 @@ export const Field = _component(
             )}
             {state.failure.value && (
               <Text
-                css={css({
-                  display: 'block',
-                })}
-                {...slotError}
+                {...slotRest(slotError)}
                 color={slotError?.color === undefined ? '_danger' : slotError.color}
                 size={slotError?.size === undefined ? '0.875em' : slotError.size}
+                class={cx(s.display('block'), slotError?.class)}
               >
                 {lang.validationFailed}
               </Text>
             )}
-          </_div>
+          </div>
         </Grid>
       </Grid>
     );

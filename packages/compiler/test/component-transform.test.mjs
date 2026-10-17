@@ -265,7 +265,7 @@ test('default parameter order has located diagnostics but deferred callbacks can
   );
 });
 
-test('complex types stay with TypeScript and do not create runtime coercions', async () => {
+test('lexical type scopes preserve local shadows, outer aliases and enclosing generic constraints', async () => {
   const code = await compile(`
     import {_component} from '@zerodep-vue/core';
     interface Model { outer: string }
@@ -278,20 +278,11 @@ test('complex types stay with TypeScript and do not create runtime coercions', a
       return { Inner, Outer, Generic };
     }
   `);
-  assert.equal((code.match(/props: \{\}/g) ?? []).length, 3);
-  assert(!/type: (Boolean|String|Number)/.test(code));
-  const { Button } = await evaluate(`
-    import { _button, _component } from '@zerodep-vue/core';
-    import type { Props, Slot } from '@zerodep-vue/core';
-    type Model = Props<typeof _button, { slotIcon?: Slot<typeof _button>; enabled?: boolean }>;
-    export const Button = _component(({ enabled, slotIcon, ...rest }: Model) =>
-      <_button {...rest}>{String(enabled)}:{String(slotIcon?.disabled)}</_button>);
-  `);
-  assert.equal(await renderToString(createSSRApp(Button)), '<button>undefined:undefined</button>');
-  assert.equal(
-    await renderToString(createSSRApp(Button, { enabled: false, slotIcon: { disabled: true } })),
-    '<button>false:true</button>',
-  );
+  assert.match(code, /inner:\s*\{\s*type: Boolean/);
+  assert.match(code, /outer:\s*\{\s*type: String/);
+  assert.match(code, /generic:\s*\{\s*type: Number/);
+  assert.equal((code.match(/inner:\s*\{/g) ?? []).length, 1);
+  assert.equal((code.match(/outer:\s*\{/g) ?? []).length, 1);
 });
 
 test('editable model discovery respects prop aliases and nested shadowing', async () => {

@@ -51,8 +51,6 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
       - run: pnpm --filter @zerodep-vue/compiler test
-      - name: Verify CSS object types and component forwarding
-        run: pnpm --filter @zerodep-vue/ui probe:css types component
 
   upstream:
     name: Upstream (${{ matrix.mode }}, ${{ matrix.shard }}/2)
@@ -144,9 +142,6 @@ jobs:
           UI_BROWSER_MODE: ${{ matrix.mode }}
           UI_BROWSER: ${{ matrix.browser }}
         run: pnpm --filter @zerodep-vue/ui test:browser --project "$UI_BROWSER"
-      - name: Verify CSS values, selectors and SSR
-        if: matrix.mode == 'development' && matrix.browser == 'chromium'
-        run: pnpm --filter @zerodep-vue/ui probe:css browser ssr
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:

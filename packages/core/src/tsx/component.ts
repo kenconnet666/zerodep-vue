@@ -7,7 +7,6 @@ import type {
   WritableComputedRef,
 } from 'vue';
 import type { ComponentDirectives, ElementDirectives } from './directives.ts';
-import type { TypedProps } from './props.ts';
 
 declare const authorProps: unique symbol;
 
@@ -65,11 +64,10 @@ export type ManagedProps<P> = typeof authorProps extends keyof P
  * async setup 的 await 在返回分支之前完成；渲染保持同步，嵌套 async 事件回调不受影响。
  */
 // 无自定义 props 仍允许 Vue 的 class、style 和 key；只对自有组件禁用实例 ref。
-// 类型元数据放在 $props 内，保留单一构造签名，让 TS 继续传播泛型 setup 的类型参数。
 export function _component<Props extends object = {}>(
   setup: (props: Props) => VNodeChild | Promise<VNodeChild>,
-  options?: Pick<ComponentOptions, 'name'>,
-): DefineSetupFnComponent<Props & AuthorProps & Partial<TypedProps<Props>>> {
+  options?: Pick<ComponentOptions, 'name' | 'inheritAttrs'>,
+): DefineSetupFnComponent<Props & AuthorProps> {
   void setup;
   void options;
   throw new Error('[_component] 此调用需要 @zerodep-vue/compiler 转换；请检查 JSX 插件入口。');

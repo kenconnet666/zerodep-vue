@@ -1,13 +1,14 @@
-import type { Slot } from '@zerodep-vue/core';
-import { _component, _div } from '@zerodep-vue/core';
-import type { Ref, VNodeChild } from 'vue';
+import { _component, bx, cx } from '@zerodep-vue/core';
 import { computed, ref, shallowRef, watch } from 'vue';
+import type { Ref, VNodeChild } from 'vue';
 import { useCss } from '../config/Provider.tsx';
-import type { ElementProps } from '../config/props.ts';
-import type { Callback } from '../interaction/callbacks.ts';
-import { callCallbacks } from '../interaction/callbacks.ts';
+import { slotRest } from '../config/props.ts';
+import type { ElementProps, ElementSlotProps } from '../config/props.ts';
 import { usePointerDrag } from '../interaction/pointer.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
 import { measureTrack, trackProgress } from '../interaction/track.ts';
+
 export interface SliderProps extends Omit<ElementProps, 'onChange'> {
   /** 可写数值；省略时组件独立保存。外部越界值只在显示时裁剪，不反写来源。 */
   value?: Ref<number>;
@@ -30,24 +31,10 @@ export interface SliderProps extends Omit<ElementProps, 'onChange'> {
   thumb?: VNodeChild;
   /** 提供带单位等更易理解的辅助技术读值。 */
   formatValueText?: (value: number) => string;
-  slotTrack?: Slot<typeof _div, 'data-zv-slider-track'>;
-  slotFill?: Slot<typeof _div, 'aria-hidden' | 'data-zv-slider-fill'>;
-  slotThumb?: Slot<
-    typeof _div,
-    | 'role'
-    | 'tabindex'
-    | 'aria-label'
-    | 'aria-labelledby'
-    | 'aria-describedby'
-    | 'aria-valuemin'
-    | 'aria-valuemax'
-    | 'aria-valuenow'
-    | 'aria-valuetext'
-    | 'aria-orientation'
-    | 'aria-disabled'
-    | 'aria-readonly'
-  >;
-  slotLabel?: Slot<typeof _div, 'aria-hidden'>;
+  slotTrack?: ElementSlotProps;
+  slotFill?: ElementSlotProps;
+  slotThumb?: ElementSlotProps;
+  slotLabel?: ElementSlotProps;
   /** 仅用户输入导致数值变化时通知，取消拖动恢复旧值也会通知。 */
   onValueChange?: Callback<[value: number]>;
   /** 指针成功释放或键盘改变值后通知一次；取消与卸载不提交。 */
@@ -79,13 +66,13 @@ export const Slider = _component(
     'aria-describedby': describedBy,
     'aria-valuetext': valueText,
     tabindex = 0,
-    css: cssProp,
+    class: className,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: SliderProps) => {
-    const css = useCss();
+    const s = useCss();
     const track = shallowRef<HTMLDivElement>();
     const handle = shallowRef<HTMLDivElement>();
     const { dragging, start, cancel } = usePointerDrag();
@@ -158,9 +145,7 @@ export const Slider = _component(
           }
         } else callCallbacks(onValueCommit, current.value);
       });
-      knob.focus({
-        preventScroll: true,
-      });
+      knob.focus({ preventScroll: true });
       if (!onThumb) move(event);
     }
     function keydown(event: KeyboardEvent) {
@@ -206,160 +191,118 @@ export const Slider = _component(
       cancel();
       if (update(next)) callCallbacks(onValueCommit, current.value);
     }
-    const trackStyle = css(() => ({
-      position: 'relative',
-      boxSizing: 'border-box',
-      userSelect: 'none',
-      borderRadius: '_pill',
-      backgroundColor: '_surfaceMuted',
-      cursor: blocked.value ? 'not-allowed' : dragging.value ? 'grabbing' : 'pointer',
-      touchAction: vertical.value ? 'pan-x' : 'pan-y',
-      opacity: disabled ? '_disabled' : 1,
-    }));
-    const fillStyle = css({
-      position: 'absolute',
-      borderRadius: 'inherit',
-      backgroundColor: '_primary',
-      pointerEvents: 'none',
-      '@media (forced-colors: active)': {
-        backgroundColor: 'Highlight',
-      },
-    });
-    const thumbStyle = css(() => ({
-      position: 'absolute',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      boxSizing: 'border-box',
-      touchAction: 'none',
-      userSelect: 'none',
-      cursor: blocked.value ? 'not-allowed' : dragging.value ? 'grabbing' : 'grab',
-      color: '_primary',
-      backgroundColor: '_surface',
-      borderWidth: '0.125em',
-      borderStyle: 'solid',
-      borderColor: '_primary',
-      boxShadow: '_small',
-      '&:focus-visible': {
-        outlineStyle: 'solid',
-        outlineWidth: '0.125em',
-        outlineOffset: '0.125em',
-        outlineColor: '_focusRing',
-      },
-      '@media (forced-colors: active)': {
-        borderColor: 'Highlight',
-        color: 'Highlight',
-      },
-    }));
+    const trackStyle = s
+      .position('relative')
+      .boxSizing('border-box')
+      .userSelect('none')
+      .borderRadius('_pill')
+      .backgroundColor('_surfaceMuted')
+      .cursor(bx(blocked.value ? 'not-allowed' : dragging.value ? 'grabbing' : 'pointer'))
+      .touchAction(bx(vertical.value ? 'pan-x' : 'pan-y'))
+      .opacity(bx(disabled ? '_disabled' : 1));
+    const fillStyle = s
+      .position('absolute')
+      .borderRadius('inherit')
+      .backgroundColor('_primary')
+      .pointerEvents('none')
+      .select('@media (forced-colors: active)', s.backgroundColor('Highlight'));
+    const thumbStyle = s
+      .position('absolute')
+      .display('flex')
+      .alignItems('center')
+      .justifyContent('center')
+      .boxSizing('border-box')
+      .touchAction('none')
+      .userSelect('none')
+      .cursor(bx(blocked.value ? 'not-allowed' : dragging.value ? 'grabbing' : 'grab'))
+      .color('_primary')
+      .backgroundColor('_surface')
+      .borderWidth('0.125em')
+      .borderStyle('solid')
+      .borderColor('_primary')
+      .boxShadow('_small')
+      .select(
+        '&:focus-visible',
+        s
+          .outlineStyle('solid')
+          .outlineWidth('0.125em')
+          .outlineOffset('0.125em')
+          .outlineColor('_focusRing'),
+      )
+      .select('@media (forced-colors: active)', s.borderColor('Highlight').color('Highlight'));
     return (
-      <_div
-        css={[
-          css({
-            minWidth: 0,
-            padding: '0.375em',
-          }),
-          cssProp,
-        ]}
+      <div
         {...rest}
         data-zv-slider={variant}
         data-disabled={disabled || undefined}
         data-dragging={dragging.value || undefined}
+        class={cx(s.minWidth(0).padding('0.375em'), className)}
       >
-        <_div
-          css={[
-            trackStyle,
-            vertical.value
-              ? css({
-                  width: variant === 'rail' ? '2.5em' : '1.5em',
-                  height: '12em',
-                })
-              : css({
-                  width: '100%',
-                  height: variant === 'rail' ? '2.5em' : '1.5em',
-                }),
-            variant === 'line' &&
-              css(() => ({
-                backgroundColor: 'transparent',
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  borderRadius: '_pill',
-                  backgroundColor: '_borderStrong',
-                  inset: vertical.value ? '0 0.625em' : '0.625em 0',
-                },
-              })),
-          ]}
-          {...slotTrack}
+        <div
+          {...slotRest(slotTrack)}
           ref={track}
           data-zv-slider-track=""
+          class={cx(
+            trackStyle,
+            vertical.value
+              ? s.width(variant === 'rail' ? '2.5em' : '1.5em').height('12em')
+              : s.width('100%').height(variant === 'rail' ? '2.5em' : '1.5em'),
+            variant === 'line' &&
+              s.backgroundColor('transparent').select(
+                '&::before',
+                s
+                  .content('""')
+                  .position('absolute')
+                  .borderRadius('_pill')
+                  .backgroundColor('_borderStrong')
+                  .inset(bx(vertical.value ? '0 0.625em' : '0.625em 0')),
+              ),
+            slotTrack?.class,
+          )}
           onPointerdown={(event) => pointerdown(event, false)}
         >
-          <_div
-            css={[
-              fillStyle,
-              vertical.value
-                ? css(() => ({
-                    bottom: 0,
-                    left: variant === 'rail' ? 0 : '0.625em',
-                    width: variant === 'rail' ? '100%' : '0.25em',
-                    height: `${progress.value * 100}%`,
-                  }))
-                : css(() => ({
-                    insetInlineStart: 0,
-                    top: variant === 'rail' ? 0 : '0.625em',
-                    height: variant === 'rail' ? '100%' : '0.25em',
-                    width: `${progress.value * 100}%`,
-                  })),
-              variant === 'rail' &&
-                css({
-                  backgroundColor: '_primarySubtleBackground',
-                }),
-            ]}
-            {...slotFill}
+          <div
+            {...slotRest(slotFill)}
             aria-hidden={true}
             data-zv-slider-fill=""
+            class={cx(
+              fillStyle,
+              vertical.value
+                ? s
+                    .bottom(0)
+                    .left(variant === 'rail' ? 0 : '0.625em')
+                    .width(variant === 'rail' ? '100%' : '0.25em')
+                    .height(bx(`${progress.value * 100}%`))
+                : s
+                    .insetInlineStart(0)
+                    .top(variant === 'rail' ? 0 : '0.625em')
+                    .height(variant === 'rail' ? '100%' : '0.25em')
+                    .width(bx(`${progress.value * 100}%`)),
+              variant === 'rail' && s.backgroundColor('_primarySubtleBackground'),
+              slotFill?.class,
+            )}
           />
           {children != null && (
-            <_div
-              css={css({
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                pointerEvents: 'none',
-                color: '_textSecondary',
-              })}
-              {...slotLabel}
+            <div
+              {...slotRest(slotLabel)}
               aria-hidden={true}
+              class={cx(
+                s
+                  .position('absolute')
+                  .inset(0)
+                  .display('flex')
+                  .alignItems('center')
+                  .justifyContent('center')
+                  .pointerEvents('none')
+                  .color('_textSecondary'),
+                slotLabel?.class,
+              )}
             >
               {children}
-            </_div>
+            </div>
           )}
-          <_div
-            css={[
-              thumbStyle,
-              css({
-                width: variant === 'rail' ? '2.5em' : '1.5em',
-                height: variant === 'rail' ? '2.5em' : '1.5em',
-                borderRadius: variant === 'rail' ? '_small' : '_circle',
-              }),
-              vertical.value
-                ? css(() => ({
-                    left: 0,
-                    bottom: `${progress.value * 100}%`,
-                    transform: `translateY(${progress.value * 100}%)`,
-                  }))
-                : css(() => ({
-                    top: 0,
-                    insetInlineStart: `${progress.value * 100}%`,
-                    transform: `translateX(${-progress.value * 100}%)`,
-                    '&:dir(rtl)': {
-                      transform: `translateX(${progress.value * 100}%)`,
-                    },
-                  })),
-            ]}
-            {...slotThumb}
+          <div
+            {...slotRest(slotThumb)}
             ref={handle}
             role="slider"
             tabindex={disabled ? -1 : tabindex}
@@ -373,15 +316,33 @@ export const Slider = _component(
             aria-orientation={orientation}
             aria-disabled={disabled || undefined}
             aria-readonly={readOnly || undefined}
+            class={cx(
+              thumbStyle,
+              s
+                .width(variant === 'rail' ? '2.5em' : '1.5em')
+                .height(variant === 'rail' ? '2.5em' : '1.5em')
+                .borderRadius(variant === 'rail' ? '_small' : '_circle'),
+              vertical.value
+                ? s
+                    .left(0)
+                    .bottom(bx(`${progress.value * 100}%`))
+                    .transform(bx(`translateY(${progress.value * 100}%)`))
+                : s
+                    .top(0)
+                    .insetInlineStart(bx(`${progress.value * 100}%`))
+                    .transform(bx(`translateX(${-progress.value * 100}%)`))
+                    .select('&:dir(rtl)', s.transform(bx(`translateX(${progress.value * 100}%)`))),
+              slotThumb?.class,
+            )}
             onPointerdown={(event) => {
               pointerdown(event, true);
             }}
             onKeydown={keydown}
           >
             {thumb}
-          </_div>
-        </_div>
-      </_div>
+          </div>
+        </div>
+      </div>
     );
   },
 );

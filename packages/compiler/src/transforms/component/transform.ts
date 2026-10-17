@@ -1,10 +1,11 @@
-import type { NodePath, Scope } from '@babel/core';
 import { addNamed } from '@babel/helper-module-imports';
+import type { NodePath, Scope } from '@babel/core';
 import * as t from '@babel/types';
-import type { State } from '../../upstream/interface.ts';
-import { assertSynchronous, coreModule, importedName, propertyName } from '../bindings.ts';
+import { runtimeProps } from './types.ts';
 import { prepareDefaults } from './defaults.ts';
 import { writableModels } from './writes.ts';
+import type { State } from '../../upstream/interface.ts';
+import { assertSynchronous, coreModule, importedName, propertyName } from '../bindings.ts';
 
 type Binding = Scope['bindings'][string];
 
@@ -240,7 +241,7 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
     );
   prepareDefaults(fn);
   const writable = writableModels(fn);
-  const metadata = t.objectExpression([]);
+  const metadata = runtimeProps(call, fn.node, state);
   const first = fn.node.params[0];
   const context = fn.scope.generateUidIdentifier('context');
   const raw = fn.scope.generateUidIdentifier('rawProps');
@@ -263,6 +264,7 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
               t.cloneNode(property.argument),
               t.callExpression(addNamed(call, 'restProps', coreModule), [
                 t.cloneNode(props),
+                t.cloneNode(context),
                 t.arrayExpression(
                   first.properties.flatMap((item) =>
                     t.isObjectProperty(item) ? [t.stringLiteral(propertyName(item) ?? '')] : [],
@@ -329,10 +331,27 @@ function lower(call: NodePath<t.CallExpression>, state: State) {
       ),
     );
 
-  // 只声明解构实际消费的字段，不重建 TS 类型，也不借 Vue Boolean 转换改变普通 Props 值。
-  // 具名 props 和其余字段由 resolveProps 读取实时 attrs；复杂泛型只需 TypeScript 检查。
+  // metadata 只控制 Vue 的 props/attrs 分流与 Boolean 转换；实例默认值在 setup 内惰性求值。
   for (const key of consumed) {
-    metadata.properties.push(t.objectProperty(t.stringLiteral(key), t.nullLiteral(), true));
+    if (
+      !metadata.properties.some((item) => t.isObjectProperty(item) && propertyName(item) === key)
+    ) {
+      metadata.properties.push(
+        t.objectProperty(t.stringLiteral(key), t.objectExpression([]), true),
+      );
+    }
+  }
+  for (const item of metadata.properties) {
+    if (!t.isObjectProperty(item)) continue;
+    const key = propertyName(item);
+    if (!t.isObjectExpression(item.value)) continue;
+    if (key === 'children')
+      item.value = t.objectExpression([t.objectProperty(t.identifier('type'), t.nullLiteral())]);
+    if (defaults.some((value) => propertyName(value) === key)) {
+      item.value.properties.push(
+        t.objectProperty(t.identifier('default'), t.identifier('undefined')),
+      );
+    }
   }
 
   // 先划分作者代码，再加入自己的初始化，防止助手被放进 render 重复建立。

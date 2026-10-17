@@ -1,14 +1,15 @@
-import type { Slot } from '@zerodep-vue/core';
-import { _component, _input, _span } from '@zerodep-vue/core';
-import type { VNodeChild } from 'vue';
+import { _component, bx, cx } from '@zerodep-vue/core';
 import { shallowRef, watchPostEffect } from 'vue';
+import type { VNodeChild } from 'vue';
 import { useCss } from '../config/Provider.tsx';
-import type { Text } from '../display/Text.tsx';
-import type { Callback } from '../interaction/callbacks.ts';
+import { slotRest } from '../config/props.ts';
+import type { ElementSlotProps } from '../config/props.ts';
 import { callCallbacks } from '../interaction/callbacks.ts';
-import type { ChoiceControlAppearance } from './ChoiceControlFrame.tsx';
+import type { Callback } from '../interaction/callbacks.ts';
 import { ChoiceControlFrame } from './ChoiceControlFrame.tsx';
+import type { ChoiceControlAppearance } from './ChoiceControlFrame.tsx';
 import { choiceInputStyle } from './choice-control.ts';
+
 export interface RadioProps extends Omit<ChoiceControlAppearance, 'children' | 'slotLabel'> {
   /** 直接读取组的 Ref，使同一通知内恢复旧值也能同步原生同组按钮。 */
   isChecked(): boolean;
@@ -20,22 +21,9 @@ export interface RadioProps extends Omit<ChoiceControlAppearance, 'children' | '
   disabled: boolean;
   readOnly: boolean;
   label: VNodeChild;
-  slotInput?: Slot<
-    typeof _input,
-    | 'type'
-    | 'name'
-    | 'form'
-    | 'value'
-    | 'checked'
-    | 'required'
-    | 'disabled'
-    | 'aria-checked'
-    | 'id'
-    | 'role'
-    | 'aria-readonly'
-  >;
-  slotIndicator?: Slot<typeof _span, 'data-zv-choice-indicator' | 'aria-hidden' | 'id'>;
-  slotLabel?: Slot<typeof Text, 'id'>;
+  slotInput?: Omit<ElementSlotProps, 'id' | 'role' | 'aria-checked' | 'aria-readonly'>;
+  slotIndicator?: Omit<ElementSlotProps, 'id' | 'aria-hidden'>;
+  slotLabel?: Omit<NonNullable<ChoiceControlAppearance['slotLabel']>, 'id'>;
   onCheck: Callback<[]>;
 }
 
@@ -56,14 +44,13 @@ export const Radio = _component(
     accentColor,
     status,
     class: className,
-    css: cssProp,
     style,
     slotInput,
     slotIndicator,
     slotLabel,
     onCheck,
   }: RadioProps) => {
-    const css = useCss();
+    const s = useCss();
     const inputRef = shallowRef<HTMLInputElement | null>();
     const blocked = () => disabled || readOnly || !!inputRef.value?.matches(':disabled');
     watchPostEffect(() => {
@@ -75,24 +62,10 @@ export const Radio = _component(
     });
     return (
       <ChoiceControlFrame
+        {...{ size, color, readOnly, style, slotLabel }}
         class={className}
-        css={cssProp}
-        {...{
-          size,
-          color,
-          readOnly,
-          style,
-          slotLabel,
-        }}
         input={
-          <_input
-            css={css([
-              choiceInputStyle(css),
-              {
-                width: '1.125em',
-                height: '1.125em',
-              },
-            ])}
+          <input
             onClick={(event) => {
               if (blocked()) event.preventDefault();
             }}
@@ -103,7 +76,7 @@ export const Radio = _component(
               )
                 event.preventDefault();
             }}
-            {...slotInput}
+            {...slotRest(slotInput)}
             ref={inputRef}
             type="radio"
             name={name}
@@ -114,6 +87,7 @@ export const Radio = _component(
             disabled={disabled}
             aria-checked={isChecked()}
             aria-invalid={status === 'error' || slotInput?.['aria-invalid']}
+            class={cx(choiceInputStyle(s).width('1.125em').height('1.125em'), slotInput?.class)}
             onChange={(event) => {
               const input = inputRef.value;
               if (!input) return;
@@ -123,68 +97,59 @@ export const Radio = _component(
           />
         }
         indicator={
-          <_span
-            css={[
-              css(() => ({
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxSizing: 'border-box',
-                flexShrink: 0,
-                width: '1.125em',
-                height: '1.125em',
-                borderStyle: 'solid',
-                borderWidth: '0.0625em',
-                borderRadius: '_circle',
-                backgroundColor: '_surface',
-                borderColor: isChecked()
-                  ? accentColor === undefined
-                    ? '_primary'
-                    : accentColor
-                  : '_borderStrong',
-                transitionProperty: 'border-color',
-                transitionDuration: '_fast',
-                '&:where([data-zv-choice]:has(> input:enabled):hover > *)': {
-                  borderColor: accentColor === undefined ? '_primaryHover' : accentColor,
-                },
-                '@media (prefers-reduced-motion: reduce)': {
-                  transitionDuration: '0ms',
-                },
-                '@media (forced-colors: active)': {
-                  backgroundColor: 'Canvas',
-                  borderColor: 'ButtonText',
-                },
-              })),
-              status === 'error' &&
-                css({
-                  borderColor: '_danger',
-                }),
-              status === 'warning' &&
-                css({
-                  borderColor: '_warning',
-                }),
-              status === 'success' &&
-                css({
-                  borderColor: '_success',
-                }),
-            ]}
-            {...slotIndicator}
+          <span
+            {...slotRest(slotIndicator)}
             data-zv-choice-indicator=""
             aria-hidden={true}
+            class={cx(
+              s
+                .display('inline-flex')
+                .alignItems('center')
+                .justifyContent('center')
+                .boxSizing('border-box')
+                .flexShrink(0)
+                .width('1.125em')
+                .height('1.125em')
+                .borderStyle('solid')
+                .borderWidth('0.0625em')
+                .borderRadius('_circle')
+                .backgroundColor('_surface')
+                .borderColor(
+                  bx(
+                    isChecked()
+                      ? accentColor === undefined
+                        ? '_primary'
+                        : accentColor
+                      : '_borderStrong',
+                  ),
+                )
+                .transitionProperty('border-color')
+                .transitionDuration('_fast')
+                .select(
+                  '&:where([data-zv-choice]:has(> input:enabled):hover > *)',
+                  s.borderColor(bx(accentColor === undefined ? '_primaryHover' : accentColor)),
+                )
+                .select('@media (prefers-reduced-motion: reduce)', s.transitionDuration('0ms'))
+                .select(
+                  '@media (forced-colors: active)',
+                  s.backgroundColor('Canvas').borderColor('ButtonText'),
+                ),
+              status === 'error' && s.borderColor('_danger'),
+              status === 'warning' && s.borderColor('_warning'),
+              status === 'success' && s.borderColor('_success'),
+              slotIndicator?.class,
+            )}
           >
-            <_span
-              css={css(() => ({
-                width: '0.625em',
-                height: '0.625em',
-                borderRadius: '_circle',
-                backgroundColor: accentColor === undefined ? '_primary' : accentColor,
-                visibility: isChecked() ? 'visible' : 'hidden',
-                '@media (forced-colors: active)': {
-                  backgroundColor: 'Highlight',
-                },
-              }))}
+            <span
+              class={s
+                .width('0.625em')
+                .height('0.625em')
+                .borderRadius('_circle')
+                .backgroundColor(bx(accentColor === undefined ? '_primary' : accentColor))
+                .visibility(bx(isChecked() ? 'visible' : 'hidden'))
+                .select('@media (forced-colors: active)', s.backgroundColor('Highlight'))}
             />
-          </_span>
+          </span>
         }
       >
         {label}

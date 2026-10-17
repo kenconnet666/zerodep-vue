@@ -5,6 +5,7 @@ import { vitePlugin as vueTsx } from '../src/index.ts';
 
 test('render handler source maps point to author TSX in development, production and SSR', async () => {
   const source = `import { _component } from '@zerodep-vue/core';
+import { bx, cx } from '@zerodep-vue/core';
 import {ref} from 'vue';
 import { createCssContext, SystemKeywords } from '@zerodep-vue/core';
 const { useCss } = createCssContext(new SystemKeywords());
@@ -13,7 +14,7 @@ const s = useCss();
 
 export default _component(()=>{
   const count=ref(0);
-  return <button css={s({width:count.value})} onClick={()=>{throw new Error('mapped-throw')}}>test</button>;
+  return <button class={s.width(bx(count.value))} onClick={()=>{throw new Error('mapped-throw')}}>test</button>;
 });`;
   for (const [command, ssr] of [
     ['serve', false],

@@ -116,15 +116,13 @@ test('pure CSS clipping keeps complete content, native attrs and reactive line c
   expect(wrapper.get('em').text()).toBe('完整内容');
   expect(wrapper.find('button').exists()).toBe(false);
   expect(wrapper.get('span[id^="zv-ellipsis-"]').attributes('tabindex')).toBeUndefined();
-  expect(css()).toContain('white-space:var(');
-  expect(wrapper.get('span[id^="zv-ellipsis-"]').attributes('style')).toContain('nowrap');
+  expect(css()).toContain('white-space:nowrap');
   expect(ResizeProbe.instances).toHaveLength(0);
   lines.value = 3;
   text.value = '内容更新后仍然完整';
   await flushLayout();
   expect(wrapper.text()).toBe('内容更新后仍然完整');
-  expect(css()).toContain('-webkit-box-orient:var(');
-  expect(wrapper.get('span[id^="zv-ellipsis-"]').attributes('style')).toContain('vertical');
+  expect(css()).toContain('-webkit-box-orient:vertical');
   expect(css()).toContain('-webkit-line-clamp:');
   expect(css()).toContain('line-clamp:');
   expect(wrapper.get('span[id^="zv-ellipsis-"]').attributes('style')).toContain('3');

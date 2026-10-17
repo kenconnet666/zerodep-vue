@@ -1,6 +1,5 @@
-import type { CssValue, Slot } from '@zerodep-vue/core';
-import { _component, _div } from '@zerodep-vue/core';
-import type { Ref } from 'vue';
+import { _component, bx, cx } from '@zerodep-vue/core';
+import type { CssValue } from '@zerodep-vue/core';
 import {
   computed,
   onScopeDispose,
@@ -11,12 +10,15 @@ import {
   useId,
   watchPostEffect,
 } from 'vue';
-import { useCss, useLang } from '../config/Provider.tsx';
-import type { ElementProps } from '../config/props.ts';
+import type { Ref } from 'vue';
 import type { UiTheme } from '../config/theme/types.ts';
-import { usePointerDrag } from '../interaction/pointer.ts';
+import { slotRest } from '../config/props.ts';
+import type { ElementProps, ElementSlotProps } from '../config/props.ts';
+import { useCss, useLang } from '../config/Provider.tsx';
 import { inlineScroll, scrollTargetKey, setInlineScroll } from '../interaction/scroll.ts';
+import { usePointerDrag } from '../interaction/pointer.ts';
 import { measureTrack, trackProgress } from '../interaction/track.ts';
+
 export interface ScrollbarProps extends ElementProps {
   /** 实际滚动视口，通过普通 Ref Props 访问浏览器 scrollTo/scrollBy 等能力。 */
   viewportRef?: Ref<HTMLDivElement | null | undefined>;
@@ -31,36 +33,13 @@ export interface ScrollbarProps extends ElementProps {
   /** 滚动后保持显示的毫秒数，默认 800。 */
   hideDelay?: number;
   /** 原生滚动视口属性，内部 id、tabindex 和测量 ref 仍由组件管理。 */
-  slotViewport?: Slot<
-    typeof _div,
-    'id' | 'tabindex' | 'role' | 'aria-label' | 'aria-labelledby' | 'data-zv-scroll-viewport'
-  >;
+  slotViewport?: ElementSlotProps;
   /** 内容包装节点属性。 */
-  slotContent?: Slot<typeof _div>;
-  slotVerticalRail?: Slot<typeof _div, 'aria-hidden' | 'data-zv-scrollbar-rail'>;
-  slotHorizontalRail?: Slot<typeof _div, 'aria-hidden' | 'data-zv-scrollbar-rail'>;
-  slotVerticalThumb?: Slot<
-    typeof _div,
-    | 'role'
-    | 'tabindex'
-    | 'aria-controls'
-    | 'aria-label'
-    | 'aria-orientation'
-    | 'aria-valuemin'
-    | 'aria-valuemax'
-    | 'aria-valuenow'
-  >;
-  slotHorizontalThumb?: Slot<
-    typeof _div,
-    | 'role'
-    | 'tabindex'
-    | 'aria-controls'
-    | 'aria-label'
-    | 'aria-orientation'
-    | 'aria-valuemin'
-    | 'aria-valuemax'
-    | 'aria-valuenow'
-  >;
+  slotContent?: ElementSlotProps;
+  slotVerticalRail?: ElementSlotProps;
+  slotHorizontalRail?: ElementSlotProps;
+  slotVerticalThumb?: ElementSlotProps;
+  slotHorizontalThumb?: ElementSlotProps;
 }
 /** 原生滚动视口加半透明浮动滑块；溢出、显隐、拖动均不改变内容可用宽度。 */
 export const Scrollbar = _component(
@@ -72,7 +51,7 @@ export const Scrollbar = _component(
     maxHeight,
     thickness = '0.5em',
     hideDelay = 800,
-    css: cssProp,
+    class: className,
     slotViewport,
     slotContent,
     slotVerticalRail,
@@ -89,7 +68,7 @@ export const Scrollbar = _component(
     textContent: _textContent,
     ...rest
   }: ScrollbarProps) => {
-    const css = useCss();
+    const s = useCss();
     const lang = useLang();
     const root = shallowRef<HTMLDivElement>();
     const content = shallowRef<HTMLDivElement>();
@@ -300,72 +279,64 @@ export const Scrollbar = _component(
       event.stopPropagation();
       moveTo(direction, next);
     };
-    const rootStyle = css(() => ({
-      position: 'relative',
-      display: 'flex',
-      flexDirection: 'column',
-      minWidth: 0,
-      minHeight: 0,
-      height: height,
-      maxHeight: maxHeight,
-      overflow: 'hidden',
-      '&:hover > [data-zv-scrollbar-rail], &:focus-within > [data-zv-scrollbar-rail]': {
-        opacity: 1,
-      },
-    }));
-    const viewportStyle = css(() => ({
-      flex: '1 1 auto',
-      minWidth: 0,
-      minHeight: 0,
-      scrollbarWidth: 'none',
-      overflowX: axis === 'vertical' ? 'hidden' : 'auto',
-      overflowY: axis === 'horizontal' ? 'hidden' : 'auto',
-      '&::-webkit-scrollbar': {
-        display: 'none',
-      },
-      '&:focus-visible': {
-        outlineStyle: 'solid',
-        outlineColor: '_focusRing',
-        outlineWidth: '0.125em',
-        outlineOffset: '-0.125em',
-      },
-    }));
-    const railStyle = css(() => ({
-      position: 'absolute',
-      pointerEvents: 'none',
-      zIndex: 1,
-      opacity: always || active.value || dragging.value ? 1 : 0,
-      transitionProperty: 'opacity',
-      transitionDuration: '_fast',
-      '@media (prefers-reduced-motion: reduce)': {
-        transitionDuration: '0ms',
-      },
-    }));
-    const thumbStyle = css({
-      position: 'absolute',
-      pointerEvents: 'auto',
-      touchAction: 'none',
-      borderRadius: '_pill',
-      backgroundColor: '_scrollbar',
-      cursor: 'default',
-      '&:hover, &:active': {
-        backgroundColor: '_scrollbarHover',
-      },
-      '&:focus-visible': {
-        outlineColor: '_focusRing',
-        outlineStyle: 'solid',
-        outlineWidth: '0.125em',
-        outlineOffset: '0.0625em',
-      },
-      '@media (forced-colors: active)': {
-        backgroundColor: 'ButtonText',
-      },
-    });
+    const rootStyle = s
+      .position('relative')
+      .display('flex')
+      .flexDirection('column')
+      .minWidth(0)
+      .minHeight(0)
+      .height(bx(height))
+      .maxHeight(bx(maxHeight))
+      .overflow('hidden')
+      .select(
+        '&:hover > [data-zv-scrollbar-rail], &:focus-within > [data-zv-scrollbar-rail]',
+        s.opacity(1),
+      );
+    const viewportStyle = s
+      .flex('1 1 auto')
+      .minWidth(0)
+      .minHeight(0)
+      .scrollbarWidth('none')
+      .overflowX(bx(axis === 'vertical' ? 'hidden' : 'auto'))
+      .overflowY(bx(axis === 'horizontal' ? 'hidden' : 'auto'))
+      .select('&::-webkit-scrollbar', s.display('none'))
+      .select(
+        '&:focus-visible',
+        s
+          .outlineStyle('solid')
+          .outlineColor('_focusRing')
+          .outlineWidth('0.125em')
+          .outlineOffset('-0.125em'),
+      );
+    const railStyle = s
+      .position('absolute')
+      .pointerEvents('none')
+      .zIndex(1)
+      .opacity(bx(always || active.value || dragging.value ? 1 : 0))
+      .transitionProperty('opacity')
+      .transitionDuration('_fast')
+      .select('@media (prefers-reduced-motion: reduce)', s.transitionDuration('0ms'));
+    const thumbStyle = s
+      .position('absolute')
+      .pointerEvents('auto')
+      .touchAction('none')
+      .borderRadius('_pill')
+      .backgroundColor('_scrollbar')
+      .cursor('default')
+      .select('&:hover, &:active', s.backgroundColor('_scrollbarHover'))
+      .select(
+        '&:focus-visible',
+        s
+          .outlineColor('_focusRing')
+          .outlineStyle('solid')
+          .outlineWidth('0.125em')
+          .outlineOffset('0.0625em'),
+      )
+      .select('@media (forced-colors: active)', s.backgroundColor('ButtonText'));
     return (
-      <_div css={[rootStyle, cssProp]} {...rest} ref={root}>
-        <_div
-          css={viewportStyle}
-          {...slotViewport}
+      <div {...rest} ref={root} class={cx(rootStyle, className)}>
+        <div
+          {...slotRest(slotViewport)}
           ref={viewportRef}
           id={viewportId}
           tabindex={tabindex}
@@ -373,55 +344,43 @@ export const Scrollbar = _component(
           aria-label={label}
           aria-labelledby={labelledBy}
           data-zv-scroll-viewport=""
+          class={cx(viewportStyle, slotViewport?.class)}
           onScroll={() => {
             schedule();
             reveal();
           }}
           // 外部 onScroll 也可能是 Vue 合并的数组，保留在原生视口的事件分发中。
-          {...(onScroll
-            ? {
-                onScroll,
-              }
-            : {})}
+          {...(onScroll ? { onScroll } : {})}
         >
-          <_div
-            css={css({
-              display: 'flow-root',
-              boxSizing: 'border-box',
-              minWidth: '100%',
-            })}
-            {...slotContent}
+          <div
+            {...slotRest(slotContent)}
             ref={content}
+            class={cx(
+              s.display('flow-root').boxSizing('border-box').minWidth('100%'),
+              slotContent?.class,
+            )}
           >
             {children}
-          </_div>
-        </_div>
-        <_div
-          css={[
-            railStyle,
-            css(() => ({
-              display: vertical.value ? 'block' : 'none',
-              insetInlineEnd: '0.125em',
-              insetBlockStart: '0.125em',
-              insetBlockEnd: horizontal.value ? '1em' : '0.125em',
-              width: thickness,
-            })),
-          ]}
-          {...slotVerticalRail}
+          </div>
+        </div>
+        <div
+          {...slotRest(slotVerticalRail)}
           ref={verticalRail}
           data-zv-scrollbar-rail="vertical"
           aria-hidden={!vertical.value || undefined}
+          class={cx(
+            railStyle,
+            s
+              .display(bx(vertical.value ? 'block' : 'none'))
+              .insetInlineEnd('0.125em')
+              .insetBlockStart('0.125em')
+              .insetBlockEnd(bx(horizontal.value ? '1em' : '0.125em'))
+              .width(bx(thickness)),
+            slotVerticalRail?.class,
+          )}
         >
-          <_div
-            css={[
-              thumbStyle,
-              css(() => ({
-                width: '100%',
-                height: geometry.ySize,
-                top: geometry.y,
-              })),
-            ]}
-            {...slotVerticalThumb}
+          <div
+            {...slotRest(slotVerticalThumb)}
             role="scrollbar"
             tabindex={vertical.value ? 0 : -1}
             aria-controls={viewportId}
@@ -432,36 +391,33 @@ export const Scrollbar = _component(
             aria-valuenow={
               geometry.yRange ? Math.round((geometry.yValue / geometry.yRange) * 100) : 0
             }
+            class={cx(
+              thumbStyle,
+              s.width('100%').height(bx(geometry.ySize)).top(bx(geometry.y)),
+              slotVerticalThumb?.class,
+            )}
             onPointerdown={(event) => drag(event, 'y')}
             onKeydown={(event) => key(event, 'y')}
           />
-        </_div>
-        <_div
-          css={[
-            railStyle,
-            css(() => ({
-              display: horizontal.value ? 'block' : 'none',
-              insetInlineStart: '0.125em',
-              insetBlockEnd: '0.125em',
-              insetInlineEnd: vertical.value ? '1em' : '0.125em',
-              height: thickness,
-            })),
-          ]}
-          {...slotHorizontalRail}
+        </div>
+        <div
+          {...slotRest(slotHorizontalRail)}
           ref={horizontalRail}
           data-zv-scrollbar-rail="horizontal"
           aria-hidden={!horizontal.value || undefined}
+          class={cx(
+            railStyle,
+            s
+              .display(bx(horizontal.value ? 'block' : 'none'))
+              .insetInlineStart('0.125em')
+              .insetBlockEnd('0.125em')
+              .insetInlineEnd(bx(vertical.value ? '1em' : '0.125em'))
+              .height(bx(thickness)),
+            slotHorizontalRail?.class,
+          )}
         >
-          <_div
-            css={[
-              thumbStyle,
-              css(() => ({
-                height: '100%',
-                width: geometry.xSize,
-                insetInlineStart: geometry.x,
-              })),
-            ]}
-            {...slotHorizontalThumb}
+          <div
+            {...slotRest(slotHorizontalThumb)}
             role="scrollbar"
             tabindex={horizontal.value ? 0 : -1}
             aria-controls={viewportId}
@@ -472,11 +428,16 @@ export const Scrollbar = _component(
             aria-valuenow={
               geometry.xRange ? Math.round((geometry.xValue / geometry.xRange) * 100) : 0
             }
+            class={cx(
+              thumbStyle,
+              s.height('100%').width(bx(geometry.xSize)).insetInlineStart(bx(geometry.x)),
+              slotHorizontalThumb?.class,
+            )}
             onPointerdown={(event) => drag(event, 'x')}
             onKeydown={(event) => key(event, 'x')}
           />
-        </_div>
-      </_div>
+        </div>
+      </div>
     );
   },
 );

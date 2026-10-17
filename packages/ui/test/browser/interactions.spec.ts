@@ -107,10 +107,6 @@ test('fields compose native choice controls, validation, keyboard movement and r
 test('tooltip survives disable while hovered and theme, RTL and reduced motion remain reactive', async ({
   page,
 }) => {
-  await expect(page.getByRole('button', { name: 'dashed primary', exact: true })).toHaveCSS(
-    'border-top-style',
-    'dashed',
-  );
   const custom = page.getByTestId('button-colors');
   await custom.hover();
   await expect(custom).toHaveCSS('color', 'rgb(102, 51, 153)');

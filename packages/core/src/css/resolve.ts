@@ -1,18 +1,18 @@
-import { TokenType, tokenizer } from '@csstools/css-tokenizer';
 import unitless from '@emotion/unitless';
+import { TokenType, tokenizer } from '@csstools/css-tokenizer';
 import { normalizeClass } from 'vue';
-import type { CssAnimation } from './animation-token.ts';
-import { ANIMATION, isAnimation, isAnimationNames } from './animation-token.ts';
-import type { CssBinding } from './bindings.ts';
-import { BINDING, isBinding } from './bindings.ts';
 import { compose } from './composition.ts';
+import { CLASS, hasStableParts, isCssClass } from './style-value.ts';
+import type { ClassPart, ClassValue, CssClass, Declaration } from './style-value.ts';
+import { BINDING, TEMPLATE, isBinding, isTemplate } from './bindings.ts';
+import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
+import { declarationValue, inheritsVariables, scopedSelector, validateFragment } from './syntax.ts';
+import { THEME, isThemeReference } from './tokens.ts';
+import type { ThemeReference } from './tokens.ts';
+import { ANIMATION, hasStableAnimation, isAnimation } from './animation-token.ts';
+import type { CssAnimation } from './animation-token.ts';
 import type { CssRule } from './host.ts';
 import { inspectionHooks } from './inspection-hooks.ts';
-import type { ClassPart, ClassValue, CssClass, Declaration } from './style-value.ts';
-import { CLASS, hasStableParts, isCssClass } from './style-value.ts';
-import { declarationValue, inheritsVariables, scopedSelector, validateFragment } from './syntax.ts';
-import type { ThemeReference } from './tokens.ts';
-import { THEME, isThemeReference } from './tokens.ts';
 
 const wide = new Set(['initial', 'inherit', 'unset', 'revert', 'revert-layer']);
 const staticResults = new WeakMap<CssClass, ResolvedClass>();
@@ -25,6 +25,11 @@ interface PreparedDeclaration {
   parts: readonly [PreparedValue];
   important?: true;
 }
+interface EvaluatedTemplate {
+  values: unknown[];
+  text?: string;
+}
+
 export interface ResolvedClass {
   /** 包括 Vue 普通类名以及本次确定组合的结果类。 */
   className: string;
@@ -78,7 +83,7 @@ export function propertyName(property: string): string {
   return property.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase()).replace(/^ms-/, '-ms-');
 }
 
-function scalar(value: unknown, property?: string): string {
+function scalar(value: unknown, property?: string, checkSyntax = true): string {
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) throw new Error(`CSS ${property ?? '片段'} 不能使用非有限数字。`);
     const normalized = property?.replace(
@@ -95,7 +100,7 @@ function scalar(value: unknown, property?: string): string {
   }
   if (typeof value !== 'string')
     throw new Error(`CSS ${property ?? '片段'} 需要字符串或数字；Vue Ref 请读取 .value。`);
-  validateFragment(value);
+  if (checkSyntax) validateFragment(value);
   return value;
 }
 
@@ -146,8 +151,7 @@ export function resolveClass(
   const animation = (value: CssAnimation, property: string, literal: boolean): string => {
     if (!/^(?:-[a-z]+-)?animation(?:-name)?$/.test(propertyName(property)))
       throw new Error('动画引用只能用于 animation 或 animationName。');
-    // 帧可以持有普通可变对象或显式来源；每次消费都读取，不能缓存第一次的帧值。
-    dynamic = true;
+    dynamic ||= !hasStableAnimation(value);
     const mode = literal ? 'literal' : 'bound';
     const existing = animations.get(value) ?? {};
     if (existing[mode]) return existing[mode]!;
@@ -172,26 +176,8 @@ export function resolveClass(
     resources.push({ name, cssText: `@keyframes ${name}{${body}}` });
     return name;
   };
-  const renderValue = (value: unknown, declaration: Declaration, literal: boolean): string => {
-    const { property, resolveTheme } = declaration;
-    if (isAnimation(value)) return animation(value, property, literal);
-    if (isAnimationNames(value)) {
-      if (!/^(?:-[a-z]+-)?animation-name$/.test(propertyName(property)))
-        throw new Error('动画名称列表只能用于 animationName。');
-      return (
-        value
-          .map((name) => {
-            if (isAnimation(name)) return animation(name, property, literal);
-            const current =
-              resolveTheme && name.startsWith('_') ? read(resolveTheme(property, name)) : name;
-            // 空主题成员保留列表位置，避免 duration/delay 等对应项错位。
-            return current == null ? 'none' : scalar(current, property);
-          })
-          .join(', ') || 'none'
-      );
-    }
-    return scalar(value, property);
-  };
+  const renderValue = (value: unknown, property?: string, literal = false): string =>
+    isAnimation(value) ? animation(value, property ?? '', literal) : scalar(value, property);
   const evaluating = new Set<object>();
   const read = (input: CssBinding<unknown> | ThemeReference): unknown => {
     dynamic = true;
@@ -208,18 +194,56 @@ export function resolveClass(
     }
     return reads.get(input);
   };
-  const valueOf = (input: unknown, declaration: Declaration): unknown => {
+  const valueOf = (input: unknown, declaration: Declaration, fragment = false): unknown => {
     if (isThemeReference(input)) return read(input);
     if (!isBinding(input)) return input;
     const current = read(input);
-    return typeof current === 'string' && current.startsWith('_') && declaration.resolveTheme
+    return !fragment &&
+      typeof current === 'string' &&
+      current.startsWith('_') &&
+      declaration.resolveTheme
       ? read(declaration.resolveTheme(declaration.property, current))
       : current;
   };
-  const composed = compose(
-    parts,
-    (declaration) => valueOf(declaration.value, declaration) === undefined,
-  );
+  const templates = new Map<Declaration, EvaluatedTemplate | null | undefined>();
+  const templateOf = (input: CssTemplate, declaration: Declaration) => {
+    if (templates.has(declaration)) return templates.get(declaration);
+    const values: unknown[] = [];
+    for (const part of input[TEMPLATE]) {
+      const value = valueOf(part, declaration, true);
+      if (value === undefined) {
+        templates.set(declaration, undefined);
+        return undefined;
+      }
+      values.push(value);
+    }
+    if (values.some((value) => value === null)) {
+      templates.set(declaration, null);
+      return null;
+    }
+    let result: EvaluatedTemplate = { values };
+    if (!values.some(isAnimation)) {
+      let text = values.map((value) => scalar(value, undefined, false)).join('');
+      // 主题名只识别完整属性值；引号或 URL 内的 _ 文本仍然是普通内容。
+      if (text.startsWith('_') && declaration.resolveTheme) {
+        const value = read(declaration.resolveTheme(declaration.property, text));
+        if (value == null) {
+          templates.set(declaration, value);
+          return value;
+        }
+        text = scalar(value, declaration.property, false);
+      }
+      result = { values, text };
+    }
+    templates.set(declaration, result);
+    return result;
+  };
+  const composed = compose(parts, (declaration) => {
+    const input = declaration.value;
+    return isTemplate(input)
+      ? templateOf(input, declaration) === undefined
+      : valueOf(input, declaration) === undefined;
+  });
   const inheritance = new Map<string, boolean>();
   for (const declaration of composed.declarations) {
     const { value: input, property } = declaration;
@@ -232,9 +256,27 @@ export function resolveClass(
     if (isBinding(input) || isThemeReference(input)) {
       const current = valueOf(input, declaration);
       if (current == null) continue;
-      text = renderValue(current, declaration, literal);
+      text = renderValue(current, property, literal);
       bound = true;
-    } else text = renderValue(input, declaration, literal);
+    } else if (isTemplate(input)) {
+      const evaluated = templateOf(input, declaration);
+      if (!evaluated) continue;
+      // CSS var 替换的是 token，不是字符串；单位、引号和 URL 必须先组成完整值。
+      text =
+        evaluated.text ??
+        evaluated.values
+          .map((part, index) => {
+            if (isAnimation(part)) return animation(part, property, literal);
+            const original = input[TEMPLATE][index];
+            // 静态片段可以是不完整的括号前缀；完整声明会在拼接后统一检查。
+            if (isBinding(original) || isThemeReference(original))
+              return scalar(part, undefined, false);
+            return String(part);
+          })
+          .join('');
+      validateFragment(text);
+      bound = input[TEMPLATE].some((part) => isBinding(part) || isThemeReference(part));
+    } else text = renderValue(input, property, literal);
     const parsed = declarationValue(text);
     if (options.keyframe && parsed.important) throw new Error('关键帧不能使用 !important。');
     const keyword = cssWide(parsed.value);

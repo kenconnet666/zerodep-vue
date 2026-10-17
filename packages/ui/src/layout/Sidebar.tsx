@@ -1,18 +1,23 @@
+import { _component, bx, cx } from '@zerodep-vue/core';
+import type { CssValue } from '@zerodep-vue/core';
 import { ChevronLeft, ChevronRight } from '@lucide/icons';
-import type { CssValue, Slot } from '@zerodep-vue/core';
-import { _aside, _component, _div, _footer, _header } from '@zerodep-vue/core';
-import type { Ref, VNodeChild } from 'vue';
 import { computed, provide, ref } from 'vue';
+import type { Ref, VNodeChild } from 'vue';
 import { useCss, useLang } from '../config/Provider.tsx';
-import type { ElementProps } from '../config/props.ts';
+import { slotRest } from '../config/props.ts';
+import type { ElementProps, ElementSlotProps } from '../config/props.ts';
 import type { UiTheme } from '../config/theme/types.ts';
-import { Drawer } from '../feedback/Drawer.tsx';
 import { Button } from '../input/Button.tsx';
-import type { Callback } from '../interaction/callbacks.ts';
-import { callCallbacks } from '../interaction/callbacks.ts';
-import { useMediaQuery } from '../interaction/media.ts';
+import type { ButtonProps } from '../input/Button.tsx';
+import { Drawer } from '../feedback/Drawer.tsx';
+import type { DrawerProps } from '../feedback/Drawer.tsx';
 import { Scrollbar } from './Scrollbar.tsx';
+import type { ScrollbarProps } from './Scrollbar.tsx';
+import { useMediaQuery } from '../interaction/media.ts';
 import { sidebarCompactKey } from './sidebar-context.ts';
+import { callCallbacks } from '../interaction/callbacks.ts';
+import type { Callback } from '../interaction/callbacks.ts';
+
 export interface SidebarProps extends ElementProps {
   /** 桌面收窄与窄屏打开独立保存，不混用同一状态。 */
   collapsed?: Ref<boolean>;
@@ -24,11 +29,11 @@ export interface SidebarProps extends ElementProps {
   header?: VNodeChild;
   footer?: VNodeChild;
   showToggle?: boolean;
-  slotHeader?: Slot<typeof _header>;
-  slotFooter?: Slot<typeof _footer>;
-  slotContent?: Slot<typeof Scrollbar>;
-  slotToggle?: Slot<typeof Button, 'type' | 'iconOnly' | 'aria-expanded'>;
-  slotDrawer?: Slot<typeof Drawer, 'open' | 'inline' | 'scrollable' | 'unmountOnHide'>;
+  slotHeader?: ElementSlotProps;
+  slotFooter?: ElementSlotProps;
+  slotContent?: Omit<ScrollbarProps, 'children'>;
+  slotToggle?: Omit<ButtonProps, 'children' | 'type' | 'aria-expanded'>;
+  slotDrawer?: Omit<DrawerProps, 'open' | 'inline' | 'scrollable' | 'children' | 'unmountOnHide'>;
   onCollapsedChange?: Callback<[collapsed: boolean]>;
 }
 
@@ -50,42 +55,42 @@ export const Sidebar = _component(
     slotDrawer,
     onCollapsedChange,
     'aria-label': label,
-    css: cssProp,
+    class: className,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: SidebarProps) => {
-    const css = useCss();
+    const s = useCss();
     const lang = useLang();
     const mobile = useMediaQuery(() => media || 'not all');
     const compact = computed(() => !mobile.value && collapsed.value);
     provide(sidebarCompactKey, compact);
     return (
-      <_aside
-        css={[
-          css(() => ({
-            display: 'flex',
-            flexDirection: 'column',
-            flexShrink: 0,
-            minHeight: 0,
-            maxWidth: '100%',
-            width: mobile.value ? 'auto' : compact.value ? collapsedWidth : width,
-            backgroundColor: '_surface',
-          })),
-          cssProp,
-        ]}
+      <aside
         {...rest}
         aria-label={label ?? lang.navigation}
         data-zv-sidebar={mobile.value ? 'drawer' : 'inline'}
+        class={cx(
+          s
+            .display('flex')
+            .flexDirection('column')
+            .flexShrink(0)
+            .minHeight(0)
+            .maxWidth('100%')
+            .width(bx(mobile.value ? 'auto' : compact.value ? collapsedWidth : width))
+            .backgroundColor('_surface'),
+          className,
+        )}
       >
         {mobile.value && showToggle && (
           <Button
-            {...slotToggle}
+            {...slotRest(slotToggle)}
             type="button"
             icon={slotToggle?.icon ?? ChevronRight}
             aria-expanded={open.value}
             aria-label={slotToggle?.['aria-label'] ?? lang.expandNavigation}
+            class={slotToggle?.class}
             onClick={(event) => {
               if (!event.defaultPrevented) open.value = true;
             }}
@@ -101,47 +106,37 @@ export const Sidebar = _component(
           size={slotDrawer?.size ?? width}
           title={slotDrawer?.title ?? label ?? lang.navigation}
         >
-          <_div
-            css={css({
-              display: 'flex',
-              flexDirection: 'column',
-              flex: '1 1 auto',
-              minHeight: 0,
-              height: '100%',
-            })}
+          <div
+            class={s
+              .display('flex')
+              .flexDirection('column')
+              .flex('1 1 auto')
+              .minHeight(0)
+              .height('100%')}
           >
             {header != null && (
-              <_header
-                css={css({
-                  padding: '_small',
-                  flex: '0 0 auto',
-                })}
-                {...slotHeader}
+              <header
+                {...slotRest(slotHeader)}
+                class={cx(s.padding('_small').flex('0 0 auto'), slotHeader?.class)}
               >
                 {header}
-              </_header>
+              </header>
             )}
             <Scrollbar
-              css={css({
-                flex: '1 1 auto',
-                minHeight: 0,
-              })}
-              {...slotContent}
+              {...slotRest(slotContent)}
+              class={cx(s.flex('1 1 auto').minHeight(0), slotContent?.class)}
             >
               {children}
             </Scrollbar>
             {(footer != null || (!mobile.value && showToggle)) && (
-              <_footer
-                css={css({
-                  padding: '_small',
-                  flex: '0 0 auto',
-                })}
-                {...slotFooter}
+              <footer
+                {...slotRest(slotFooter)}
+                class={cx(s.padding('_small').flex('0 0 auto'), slotFooter?.class)}
               >
                 {footer}
                 {!mobile.value && showToggle && (
                   <Button
-                    {...slotToggle}
+                    {...slotRest(slotToggle)}
                     type="button"
                     variant={slotToggle?.variant ?? 'text'}
                     tone={slotToggle?.tone ?? 'neutral'}
@@ -152,6 +147,7 @@ export const Sidebar = _component(
                       slotToggle?.['aria-label'] ??
                       (compact.value ? lang.expandNavigation : lang.collapseNavigation)
                     }
+                    class={slotToggle?.class}
                     onClick={(event) => {
                       if (!event.defaultPrevented) {
                         collapsed.value = !collapsed.value;
@@ -160,11 +156,11 @@ export const Sidebar = _component(
                     }}
                   />
                 )}
-              </_footer>
+              </footer>
             )}
-          </_div>
+          </div>
         </Drawer>
-      </_aside>
+      </aside>
     );
   },
 );

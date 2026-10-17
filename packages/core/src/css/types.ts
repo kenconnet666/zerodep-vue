@@ -1,11 +1,11 @@
 import type * as CSS from 'csstype';
 import type { Ref, UnwrapNestedRefs } from 'vue';
-import type { CssAnimation, CssAnimationNames } from './animation-token.ts';
-import type { Scalar } from './bindings.ts';
-import type { PropertyValues } from './generated/literal-values.ts';
-import type { ColorProperty } from './generated/metadata.ts';
+import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
 import type { SystemKeywords } from './generated/system.ts';
-import type { CssFactory } from './object-types.ts';
+import type { ColorProperty } from './generated/metadata.ts';
+import type { PropertyKeywords, PropertyValues } from './generated/literal-values.ts';
+import type { Css } from './generated/author.ts';
+import type { CssAnimation } from './animation-token.ts';
 
 // 本文件只描述作者契约。运行时声明和 class 标记见 style-value.ts，不在这里保存缓存。
 export type Properties = CSS.Properties<Scalar>;
@@ -18,15 +18,12 @@ type ThemeNames<T extends SystemKeywords, Key extends PropertyName> = keyof T[Ke
 type ThemeLiteral<T extends SystemKeywords, Key extends PropertyName> =
   ThemeNames<T, Key> | (Key extends ColorProperty ? ThemeNames<T, 'color'> : never);
 
-/** 上下文已经检查 CSS 值域；额外只检查可识别的主题字面量，避免重复交叉大型关键字联合。 */
-export type CheckedCssValue<
-  Key extends PropertyName,
-  T extends SystemKeywords,
-  Value,
-> = Value extends readonly unknown[]
-  ? { [Index in keyof Value]: CheckedCssValue<Key, T, Value[Index]> }
-  : Value & (Exclude<Value, `_${string}`> | ThemeLiteral<T, Key>);
-
+/**
+ * 已知字面量使用普通重载，保留 keyof 成员的声明和中文说明，供编辑器精确定位。
+ * 此入口不能混入宽泛 string 或 Value 推断；自由值与 bx 继续由 PropertyInput 校验。
+ */
+export type KeywordInput<Key extends PropertyName, T extends SystemKeywords> =
+  keyof PropertyKeywords[Key] | ThemeLiteral<T, Key> | null | undefined;
 type AnimationProperty =
   | 'animation'
   | 'animationName'
@@ -40,12 +37,26 @@ export type CssValue<Key extends PropertyName, T extends SystemKeywords = System
   PropertyValues[Key] | ThemeLiteral<T, Key> | null;
 
 /** 作者入口还可直接接收动画引用。 */
-export type CssDeclarationValue<Key extends PropertyName, T extends SystemKeywords> =
-  | CssValue<Key, T>
-  | (Key extends AnimationProperty ? CssAnimation : never)
-  | (Key extends 'animationName' | 'WebkitAnimationName' | 'MozAnimationName'
-      ? CssAnimationNames
-      : never);
+type DirectPropertyValue<Key extends PropertyName, T extends SystemKeywords> =
+  CssValue<Key, T> | (Key extends AnimationProperty ? CssAnimation : never);
+/** 属性的完整值域；null 清除前项，原生值域中的 undefined 则保留前项。 */
+export type PropertyValue<Key extends PropertyName, T extends SystemKeywords = SystemKeywords> =
+  DirectPropertyValue<Key, T> | CssBinding<DirectPropertyValue<Key, T>> | CssTemplate;
+
+/** 自由 CSS 字符串保留，已知的 _ 名称必须属于当前主题，避免被宽泛 string 吞掉。 */
+type CheckedPropertyValue<Key extends PropertyName, T extends SystemKeywords, Value> =
+  Value extends CssBinding<infer Bound>
+    ? CssBinding<Exclude<Bound, `_${string}`> | ThemeLiteral<T, Key>>
+    : Exclude<Value, `_${string}`> | ThemeLiteral<T, Key>;
+
+/**
+ * 三个约束各司其职：Value 捕获本次字面量，PropertyValue 检查属性值域，最后检查主题名。
+ * 不能只用 PropertyValue：color 允许自由字符串，会同时放过 '_missing' 和 bx('_missing')。
+ */
+export type PropertyInput<Key extends PropertyName, T extends SystemKeywords, Value> = Value &
+  PropertyValue<Key, T> &
+  CheckedPropertyValue<Key, T, Value>;
+
 /** 常用伪类保留补全，函数伪类、属性选择器与条件在各作者入口共用。 */
 export type CssCondition =
   | CSS.Pseudos
@@ -56,6 +67,9 @@ export type CssCondition =
   | `@supports ${string}`
   | `@container ${string}`
   | '@starting-style';
+export type CustomPropertyValue =
+  Scalar | CssBinding<Scalar | null | undefined> | CssTemplate | null | undefined;
+
 type ThemeMemberValue<Key extends PropertyName> = ValueOrRef<Properties[Key] | null>;
 type CheckedTheme<T extends SystemKeywords> = T & {
   readonly [Key in PropertyName]: {
@@ -70,10 +84,10 @@ export type ThemeSource<T extends SystemKeywords> = ValueOrRef<T> & ValueOrRef<C
 
 /** 每个上下文拥有独立注入键，区域覆盖只影响自己的逻辑子树。 */
 export interface CssContext<T extends SystemKeywords> {
-  /** 取得当前区域的主题样式工厂；组件外使用默认来源，函数输入在消费时读取。 */
-  useCss(): CssFactory<T>;
+  /** 取得当前区域的不可变作者；组件外使用默认来源。 */
+  useCss(): Css<T>;
   /** 取得当前区域的响应式主题对象；成员按 Vue reactive 解包，来源替换后仍读取最新主题。 */
   useTheme(): UnwrapNestedRefs<T>;
   /** 在 setup 中向下提供主题，返回相同作者供当前组件使用。 */
-  provideTheme(source: ThemeSource<T>): CssFactory<T>;
+  provideTheme(source: ThemeSource<T>): Css<T>;
 }

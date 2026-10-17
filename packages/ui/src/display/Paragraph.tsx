@@ -1,12 +1,12 @@
+import { _component, bx, cx } from '@zerodep-vue/core';
 import type { CssValue } from '@zerodep-vue/core';
-import { _component, _p } from '@zerodep-vue/core';
 import { useCss } from '../config/Provider.tsx';
 import type { UiTheme } from '../config/theme/types.ts';
 import type { TextProps } from './Text.tsx';
 
 /** 原生段落；内容应为文字及行内元素，块级区域交给布局容器。 */
 export interface ParagraphProps extends TextProps {
-  /** CSS textAlign；支持 start/end，跟随当前文字方向。 */
+  /** 同 s.textAlign(...)；支持 start/end，跟随当前文字方向。 */
   textAlign?: CssValue<'textAlign', UiTheme>;
 }
 
@@ -18,30 +18,25 @@ export const Paragraph = _component(
     fontWeight,
     lineHeight,
     textAlign,
-    css: cssProp,
+    class: className,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: ParagraphProps) => {
-    const css = useCss();
-    const style = css(() => [
-      {
-        margin: 0,
-        lineHeight: '_normal',
-        color: color,
-        fontSize: size,
-        fontWeight: fontWeight,
-      },
-      {
-        lineHeight: lineHeight,
-        textAlign: textAlign,
-      },
-    ]);
+    const s = useCss();
+    const style = s
+      .margin(0)
+      .lineHeight('_normal')
+      .color(bx(color))
+      .fontSize(bx(size))
+      .fontWeight(bx(fontWeight))
+      .lineHeight(bx(lineHeight))
+      .textAlign(bx(textAlign));
     return (
-      <_p css={[style, cssProp]} {...rest}>
+      <p {...rest} class={cx(style, className)}>
         {children}
-      </_p>
+      </p>
     );
   },
 );

@@ -5,13 +5,16 @@ export const ANIMATION = Symbol.for('@zerodep-vue/core/animation/v1');
 export interface CssAnimation {
   readonly [ANIMATION]: readonly { readonly at: string; readonly style: CssClass }[];
 }
-/** animationName 的逗号分隔列表；可混用自有动画和已有 CSS 动画名称。 */
-export type CssAnimationNames = readonly (CssAnimation | string)[];
 export function isAnimation(value: unknown): value is CssAnimation {
   return !!value && typeof value === 'object' && ANIMATION in value;
 }
-export function isAnimationNames(value: unknown): value is CssAnimationNames {
-  return (
-    Array.isArray(value) && value.every((name) => typeof name === 'string' || isAnimation(name))
-  );
+
+// 只登记本库构造且帧结构稳定的描述；HMR 代理和外部 getter 不能继承静态缓存资格。
+const stableAnimations = new WeakSet<object>();
+export function markStableAnimation<Value extends CssAnimation>(value: Value): Value {
+  stableAnimations.add(value);
+  return value;
+}
+export function hasStableAnimation(value: CssAnimation): boolean {
+  return stableAnimations.has(value);
 }

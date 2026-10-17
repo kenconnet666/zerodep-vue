@@ -1,25 +1,26 @@
-import type { Placement } from '@floating-ui/dom';
+import { _component, bx, cx } from '@zerodep-vue/core';
 import {
   autoUpdate,
   computePosition,
-  flip,
   offset as floatingOffset,
-  hide,
+  flip,
   shift,
   size,
+  hide,
 } from '@floating-ui/dom';
-import { _component, _div } from '@zerodep-vue/core';
-import { tabbable } from 'tabbable';
+import type { Placement } from '@floating-ui/dom';
+import { nextTick, onMounted, shallowRef, Teleport, watch } from 'vue';
 import type { Ref } from 'vue';
-import { Teleport, nextTick, onMounted, shallowRef, watch } from 'vue';
+import { tabbable } from 'tabbable';
 import { useCss } from '../config/Provider.tsx';
 import type { ElementProps } from '../config/props.ts';
-import { Scrollbar } from '../layout/Scrollbar.tsx';
-import type { Callback } from './callbacks.ts';
-import { callCallbacks } from './callbacks.ts';
-import type { OverlayCloseReason } from './layer.ts';
 import { useLayer, useLayerContext } from './layer.ts';
+import type { OverlayCloseReason } from './layer.ts';
 import { usePortalStyle } from './portal.ts';
+import { callCallbacks } from './callbacks.ts';
+import type { Callback } from './callbacks.ts';
+import { Scrollbar } from '../layout/Scrollbar.tsx';
+
 export interface FloatingPanelProps extends ElementProps {
   open: Ref<boolean>;
   reference?: HTMLElement;
@@ -52,13 +53,13 @@ export const FloatingPanel = _component(
     surface = 'normal',
     scrollable = true,
     onClose,
-    css: cssProp,
+    class: className,
     children,
     innerHTML: _innerHTML,
     textContent: _textContent,
     ...rest
   }: FloatingPanelProps) => {
-    const css = useCss();
+    const s = useCss();
     const panel = shallowRef<HTMLDivElement>();
     const trigger = shallowRef(reference);
     watch(
@@ -77,9 +78,7 @@ export const FloatingPanel = _component(
           if (active) trigger.value = undefined;
         });
       },
-      {
-        flush: 'sync',
-      },
+      { flush: 'sync' },
     );
     const mounted = shallowRef(false);
     const context = useLayerContext(() => open.value);
@@ -125,10 +124,7 @@ export const FloatingPanel = _component(
       ([active, anchor, element], _old, cleanup) => {
         if (!active || !anchor || !element) {
           focusedPanel = undefined;
-          geometry.value = {
-            ...geometry.value,
-            visible: false,
-          };
+          geometry.value = { ...geometry.value, visible: false };
           return;
         }
         let live = true;
@@ -143,9 +139,7 @@ export const FloatingPanel = _component(
             middleware: [
               floatingOffset(offset),
               flip(),
-              shift({
-                padding: 8,
-              }),
+              shift({ padding: 8 }),
               size({
                 padding: 8,
                 apply({ availableWidth: width, availableHeight: height }) {
@@ -183,10 +177,7 @@ export const FloatingPanel = _component(
           stop();
         });
       },
-      {
-        flush: 'post',
-        immediate: true,
-      },
+      { flush: 'post', immediate: true },
     );
     function keydown(event: KeyboardEvent) {
       const element = panel.value;
@@ -206,79 +197,58 @@ export const FloatingPanel = _component(
       const index = outside.indexOf(anchor);
       const next = event.shiftKey ? anchor : (outside[index + 1] ?? outside[0] ?? anchor);
       if (closeOnFocusOutside) close('outside');
-      next.focus({
-        preventScroll: true,
-      });
+      next.focus({ preventScroll: true });
     }
     return (
       <>
         {mounted.value && trigger.value && context.active.value && (
           <Teleport to={context.portal.value ?? trigger.value.ownerDocument.body}>
-            <_div
-              css={[
-                css(() => [
-                  {
-                    position: 'fixed',
-                    left: geometry.value.x,
-                    top: geometry.value.y,
-                    width: 'max-content',
-                  },
-                  {
-                    width: geometry.value.width,
-                    maxWidth: geometry.value.maxWidth || 'calc(100vw - 1em)',
-                    maxHeight: geometry.value.maxHeight || 'calc(100dvh - 1em)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    overflow: 'hidden',
-                    visibility: geometry.value.visible ? 'visible' : 'hidden',
-                    fontSize: appearance.value.fontSize,
-                    fontFamily: appearance.value.fontFamily,
-                    lineHeight: appearance.value.lineHeight,
-                    boxSizing: 'border-box',
-                    borderRadius: '_medium',
-                    borderStyle: 'solid',
-                    borderWidth: '_thin',
-                    borderColor: '_border',
-                    backgroundColor: surface === 'inverse' ? '_surfaceInverse' : '_surfaceRaised',
-                    color: surface === 'inverse' ? '_textInverse' : '_textPrimary',
-                    boxShadow: '_medium',
-                    zIndex: surface === 'inverse' ? '_tooltip' : '_dropdown',
-                  },
-                ]),
-                cssProp,
-              ]}
+            <div
               {...rest}
               ref={panel}
               tabindex={-1}
               onKeydown={keydown}
               dir={appearance.value.direction}
+              class={cx(
+                s
+                  .position('fixed')
+                  .left(bx(geometry.value.x))
+                  .top(bx(geometry.value.y))
+                  .width('max-content')
+                  .width(bx(geometry.value.width))
+                  .maxWidth(bx(geometry.value.maxWidth || 'calc(100vw - 1em)'))
+                  .maxHeight(bx(geometry.value.maxHeight || 'calc(100dvh - 1em)'))
+                  .display('flex')
+                  .flexDirection('column')
+                  .overflow('hidden')
+                  .visibility(bx(geometry.value.visible ? 'visible' : 'hidden'))
+                  .fontSize(bx(appearance.value.fontSize))
+                  .fontFamily(bx(appearance.value.fontFamily))
+                  .lineHeight(bx(appearance.value.lineHeight))
+                  .boxSizing('border-box')
+                  .borderRadius('_medium')
+                  .borderStyle('solid')
+                  .borderWidth('_thin')
+                  .borderColor('_border')
+                  .backgroundColor(bx(surface === 'inverse' ? '_surfaceInverse' : '_surfaceRaised'))
+                  .color(bx(surface === 'inverse' ? '_textInverse' : '_textPrimary'))
+                  .boxShadow('_medium')
+                  .zIndex(bx(surface === 'inverse' ? '_tooltip' : '_dropdown')),
+                className,
+              )}
             >
               {scrollable ? (
                 <Scrollbar
-                  css={css({
-                    flex: '1 1 auto',
-                    minHeight: 0,
-                  })}
                   tabindex={-1}
-                  slotContent={{
-                    css: css({
-                      padding: '_medium',
-                    }),
-                  }}
+                  class={s.flex('1 1 auto').minHeight(0)}
+                  slotContent={{ class: s.padding('_medium') }}
                 >
                   {children}
                 </Scrollbar>
               ) : (
-                <_div
-                  css={css({
-                    paddingBlock: '_small',
-                    paddingInline: '_medium',
-                  })}
-                >
-                  {children}
-                </_div>
+                <div class={s.paddingBlock('_small').paddingInline('_medium')}>{children}</div>
               )}
-            </_div>
+            </div>
           </Teleport>
         )}
       </>

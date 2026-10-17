@@ -1,5 +1,5 @@
-import type { CssAnimation, CssAnimationNames } from './animation-token.ts';
-import type { CssBinding, Scalar } from './bindings.ts';
+import type { CssAnimation } from './animation-token.ts';
+import type { CssBinding, CssTemplate, Scalar } from './bindings.ts';
 import type { ThemeReference, ThemeResolver } from './tokens.ts';
 
 export const CLASS = Symbol.for('@zerodep-vue/core/class/v1');
@@ -11,15 +11,11 @@ export interface Declaration {
   readonly target: string;
   readonly conditions: readonly string[];
   readonly property: string;
-  readonly value:
-    Scalar | CssBinding<unknown> | ThemeReference | CssAnimation | CssAnimationNames | null;
+  readonly value: Scalar | CssBinding<unknown> | ThemeReference | CssAnimation | CssTemplate | null;
   readonly resolveTheme?: ThemeResolver;
-  /** 开发来源只携带描述身份；检查器不会重新读取用户代码。 */
-  readonly origin?: object;
 }
 export interface StyleSource {
   readonly declarations: readonly Declaration[];
-  readonly origin?: object;
 }
 export type ClassPart = StyleSource | string;
 
@@ -28,7 +24,11 @@ export interface CssClass {
   readonly [CLASS]: readonly ClassPart[];
 }
 
-/** 后端组合已经展开的声明与原生 class；不作为作者样式入口导出。 */
+/** 本库的组合输入。普通对象不能混入，避免把业务对象误当作条件类名。 */
+export type CssInput = CssClass | string | false | 0 | null | undefined | readonly CssInput[];
+/** 嵌套样式必须能重新限定选择器，所以不接收普通字符串类名。 */
+export type CssNestedInput = CssClass | false | 0 | null | undefined | readonly CssNestedInput[];
+/** Vue 兼容边界额外接受对象/布尔/数字；组件的外部样式参数仍使用 CssInput。 */
 export type ClassValue =
   | CssClass
   | string

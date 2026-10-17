@@ -26,8 +26,7 @@
     "test": "vitest run --config vitest.config.ts",
     "test:browser": "playwright test --config playwright.config.ts",
     "test:consumer": "node verify-consumer.mjs",
-    "test:watch": "vitest --config vitest.config.ts",
-    "probe:css": "node probe-css-authoring.mjs"
+    "test:watch": "vitest --config vitest.config.ts"
   },
   "peerDependencies": {
     "@floating-ui/dom": "catalog:",
